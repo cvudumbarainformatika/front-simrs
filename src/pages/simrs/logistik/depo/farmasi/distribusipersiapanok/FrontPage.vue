@@ -444,7 +444,12 @@
                   class="row justify-between no-wrap q-mt-xs text-green"
                 >
                   <div class="q-mr-xs">
-                    Diresepkan Dokter
+                    <div class="row">
+                      Diresepkan Dokter
+                    </div>
+                    <div class="row f-10 text-italic" v-if="!!rin.noresep">
+                      noresep : {{ rin?.noresep }}
+                    </div>
                   </div>
                   <div class="text-weight-bold">
                     {{ rin?.jumlah_resep }}

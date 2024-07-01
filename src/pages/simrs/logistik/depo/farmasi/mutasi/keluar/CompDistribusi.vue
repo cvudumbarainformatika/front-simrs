@@ -108,6 +108,8 @@
               val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
               val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
             ]"
+            :loading="store.loadingSimpan && (store.form.id === rin.id)"
+            :disable="store.loadingSimpan && (store.form.id === rin.id)"
             @focus="setNol(rin)"
             @keyup.enter="kirim(rin, row)"
             @update:model-value="setJumlah($event, rin)"
@@ -164,6 +166,7 @@
             label="Distribusikan"
             color="green"
             :loading="store.loadingSimpan && (store.form.id === rin.id)"
+            :disable="store.loadingSimpan && (store.form.id === rin.id)"
             @click="kirim(rin, row)"
           >
             <q-tooltip

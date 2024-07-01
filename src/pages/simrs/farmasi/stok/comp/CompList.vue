@@ -200,7 +200,7 @@
                 anchor="top middle"
                 self="center middle"
               >
-                Re-stok
+                Simpan Fisik
               </q-tooltip>
             </q-btn>
           </div>
@@ -275,7 +275,7 @@ function simpanFisik (row) {
   console.log('table param', date1, date2, table.params.to, diff)
   row.tglopname = table.params.to + ' 23:59:58'
   if (diff < -10) return notifErrVue('Stok Opname dapat di isi dari h-10')
-  // store.simpanFisik(row)
+  store.simpanFisik(row)
 }
 function editData (val) {
   // store.editData(val)

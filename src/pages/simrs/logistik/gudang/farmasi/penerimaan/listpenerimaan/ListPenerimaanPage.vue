@@ -435,39 +435,62 @@ import { useRouter } from 'vue-router'
 
 import { ref, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
+
 const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
+const penerimaanlangsung = usePenerimaanLangsungFarmasiStore()
 const router = useRouter()
 function tambahPenerimaan (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   console.log('val', val)
   // val.rinci = val?.penerimaanrinci
-  penerimaan.ambilPemesanan().then(resp => {
+  if (val.jenis_penerimaan === 'Pesanan') {
+    penerimaan.ambilPemesanan().then(resp => {
     // setTimeout(()=>{
 
-    // },200)
-    console.log('list resolve', resp)
-    console.log('filt pes', penerimaan.filteredPemesanans)
-    const gue = penerimaan.filteredPemesanans?.find(fil => fil.nopemesanan === val.nopemesanan)
-    if (gue) {
-      penerimaan.pemesananSelected(gue)
-      penerimaan.setForm('nopenerimaan', val?.nopenerimaan)
-      penerimaan.setForm('jenissurat', val?.jenissurat)
-      penerimaan.setForm('nomorsurat', val?.nomorsurat)
-      penerimaan.setForm('pengirim', val?.pengirim)
-      penerimaan.setForm('batasbayar', val?.batasbayar)
-      penerimaan.setForm('tglpenerimaan', val?.tglpenerimaan)
-      penerimaan.setForm('tglsurat', val?.tglsurat)
-      penerimaan.setDisp('batasbayar', val?.batasbayar)
-      penerimaan.setDisp('tanggal', val?.tglpenerimaan)
-      penerimaan.setDisp('surat', val?.tglsurat)
+      // },200)
+      console.log('list resolve', resp)
+      console.log('filt pes', penerimaan.filteredPemesanans)
+      const gue = penerimaan.filteredPemesanans?.find(fil => fil.nopemesanan === val.nopemesanan)
+      if (gue) {
+        penerimaan.pemesananSelected(gue)
+        penerimaan.setForm('nopenerimaan', val?.nopenerimaan)
+        penerimaan.setForm('jenissurat', val?.jenissurat)
+        penerimaan.setForm('nomorsurat', val?.nomorsurat)
+        penerimaan.setForm('pengirim', val?.pengirim)
+        penerimaan.setForm('batasbayar', val?.batasbayar)
+        penerimaan.setForm('tglpenerimaan', val?.tglpenerimaan)
+        penerimaan.setForm('tglsurat', val?.tglsurat)
+        penerimaan.setDisp('batasbayar', val?.batasbayar)
+        penerimaan.setDisp('tanggal', val?.tglpenerimaan)
+        penerimaan.setDisp('surat', val?.tglsurat)
 
-      console.log('penerimaan', penerimaan.form)
-      router.push({ path: '/gudang/farmasi/penerimaan/penerimaan', replace: true })
-    }
-    else return notifErrVue('Pesanan tidak ditemukan')
-  })
+        console.log('penerimaan', penerimaan.form)
+        router.push({ path: '/gudang/farmasi/penerimaan/penerimaan', replace: true })
+      }
+      else {
+        return notifErrVue('Pesanan tidak ditemukan')
+      }
+    })
+  }
+  else {
+    penerimaanlangsung.setForm('nopenerimaan', val?.nopenerimaan)
+    penerimaanlangsung.setForm('jenissurat', val?.jenissurat)
+    penerimaanlangsung.setForm('nomorsurat', val?.nomorsurat)
+    penerimaanlangsung.setForm('pengirim', val?.pengirim)
+    penerimaanlangsung.setForm('batasbayar', val?.batasbayar)
+    penerimaanlangsung.setForm('tglpenerimaan', val?.tglpenerimaan)
+    penerimaanlangsung.setForm('tglsurat', val?.tglsurat)
+    penerimaanlangsung.setForm('kdpbf', val?.kdpbf)
+    penerimaanlangsung.setForm('jenispenerimaan', val?.jenis_penerimaan)
+    penerimaanlangsung.setDisp('batasbayar', val?.batasbayar)
+    penerimaanlangsung.setDisp('tanggal', val?.tglpenerimaan)
+    penerimaanlangsung.setDisp('surat', val?.tglsurat)
+    penerimaanlangsung.rincis = val?.penerimaanrinci
+    router.push({ path: '/gudang/farmasi/penerimaan/penerimaanlangsung', replace: true })
+  }
 }
 // click
 function onClick (val) {

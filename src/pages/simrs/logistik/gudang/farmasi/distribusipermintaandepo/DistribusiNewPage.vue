@@ -180,6 +180,23 @@
           </div>
           <div class="col-auto">
             <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="col-auto">
+            <q-btn
               flat
               icon="icon-mat-hand-front-left"
               size="sm"
@@ -199,23 +216,42 @@
           </div>
         </div>
         <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
-        <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
-          <q-btn
-            flat
-            icon="icon-mat-done_all"
-            label="selesai"
-            dense
-            color="green"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="distribusikan(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div v-if="row.flag==='2'" class="row justify-between items-center" style="min-width: 150px;">
+          <div v-if="row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0" class="col-auto">
+            <q-btn
+              flat
+              icon="icon-mat-done_all"
+              label="selesai"
+              dense
+              color="green"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="distribusikan(row)"
             >
-              Distribusikan
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Distribusikan
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="col-auto">
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
         <div
           v-else
@@ -306,6 +342,7 @@ const dialogPrint = ref(null)
 // const data = ref({})
 // const isOpen = ref(false)
 function toPrint (val) {
+  console.log('print ', val)
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight

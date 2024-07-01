@@ -90,6 +90,12 @@
         <q-td key="stok_akhir" :props="props">
           {{ props?.cols[4]?.value }}
         </q-td>
+        <q-td key="stok_sekarang" :props="props">
+          {{ props?.cols[5]?.value }}
+        </q-td>
+        <q-td key="stok_fisik" :props="props">
+          {{ props?.cols[6]?.value }}
+        </q-td>
       </q-tr>
     </template>
   </q-table>
@@ -97,6 +103,7 @@
 
 <script setup>
 import { exportFile, useQuasar } from 'quasar'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useKartuStokFarmasiStore } from 'src/stores/simrs/farmasi/katustok'
 import { onMounted, ref } from 'vue'
 
@@ -105,7 +112,8 @@ const $q = useQuasar()
 const bulan = ref('Januari')
 const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
 const tahuns = ref([])
-
+const app = useAplikasiStore()
+const keteranganStok = ref('Stok Sekarang')
 const columnsx = [
   {
     name: 'nama_obat',
@@ -116,19 +124,39 @@ const columnsx = [
     key: 'nama_obat'
   },
   { name: 'saldo_awal', label: 'Saldo Awal', align: 'right', field: (row) => hitungSaldoAwal(row?.saldoawal), key: 'saldo_awal' },
-  { name: 'masuk', label: 'Stok Masuk', align: 'right', field: (row) => (hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row.kd_obat)) },
+  {
+    name: 'masuk',
+    label: 'Stok Masuk',
+    align: 'right',
+    field: (row) => (
+      hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row.kd_obat) +
+      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
+    )
+  },
   {
     name: 'keluar',
     label: 'Stok Keluar',
     align: 'right',
-    field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar) +
-      hitungResepRacikanKeluar(row?.resepkeluarracikan)
+    field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
+      hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
     )
   },
   {
     name: 'stok_akhir',
     label: 'Stok Akhir',
     field: (row) => hitungTotal(row),
+    align: 'right'
+  },
+  {
+    name: 'stok_sekarang',
+    label: keteranganStok.value,
+    field: (row) => stokSekarang(row),
+    align: 'right'
+  },
+  {
+    name: 'stok_fisik',
+    label: 'Stok Fisik',
+    field: (row) => stokFisik(row),
     align: 'right'
   }
 ]
@@ -196,11 +224,38 @@ function hitungMutasiKeluar (arr) {
 function hitungMutasiMasuk (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
 }
-function hitungResepKeluar (arr) {
-  const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+function hitungResepKeluar (arr, dist) {
+  if (app?.user?.kdruangansim === 'Gd-04010103') {
+    const noreseps = app?.user?.kdruangansim === 'Gd-04010103' ? dist?.map(m => m?.noresep) : []
+    // console.log('nores', noreseps)
+    const resepkeluar = arr?.filter(f => !noreseps.includes(f?.noresep))?.reduce((x, y) => parseFloat(x) + parseFloat(y?.jumlah), 0)
 
-  // console.log('returresep', jmlRetur)
-  return resepkeluar
+    return resepkeluar
+  }
+  else {
+    const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+
+    // console.log('returresep', jmlRetur)
+    return resepkeluar
+  }
+}
+function hitungDistribusi (arr) {
+  if (app?.user?.kdruangansim === 'Gd-04010103') {
+    const dsitribusi = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.keluar), 0)
+
+    // console.log('returresep', jmlRetur)
+    return dsitribusi
+  }
+  else return 0
+}
+function hitungReturDistribusi (arr) {
+  if (app?.user?.kdruangansim === 'Gd-04010103') {
+    const returDist = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.retur), 0)
+
+    // console.log('returresep', jmlRetur)
+    return returDist
+  }
+  else return 0
 }
 
 function hitungResepRacikanKeluar (arr) {
@@ -217,6 +272,49 @@ function returResep (arr, kodeObat) {
   return jmlRetur
 }
 
+function hitungPenyesuaianMasuk (arr) {
+  const penye = arr?.map(m => m?.ssw)
+  const masuk = []
+  penye?.forEach(e => {
+    const anu = e?.filter(f => f.penyesuaian > 0)
+    if (anu.length) {
+      anu.forEach(s => {
+        masuk.push(s)
+      })
+    }
+  })
+  return masuk?.reduce((x, y) => parseFloat(x) + parseFloat(y.penyesuaian), 0)
+}
+function hitungPenyesuaianKeluar (arr) {
+  const penye = arr?.map(m => m.ssw)
+  const keluar = []
+  penye?.forEach(e => {
+    const anu = e?.filter(f => f.penyesuaian < 0)
+    if (anu.length) {
+      anu.forEach(s => {
+        keluar.push(s)
+      })
+    }
+  })
+
+  return keluar?.reduce((x, y) => parseFloat(x) + parseFloat(-y.penyesuaian), 0)
+}
+
+function stokSekarang (arr) {
+  let jumlah = 0
+  if (arr?.saldoakhir?.length) {
+    keteranganStok.value = 'Stok Opname'
+    jumlah = arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  }
+  else {
+    keteranganStok.value = 'Stok Sekarang'
+    jumlah = arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  }
+  return jumlah
+}
+function stokFisik (arr) {
+  return arr?.fisik?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+}
 // function persiapanOperasiKeluar (arr) {
 //   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_distribusi), 0)
 // }
@@ -227,9 +325,9 @@ function hitungTotal (row) {
   // eslint-disable-next-line no-unused-vars
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars
-  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row?.kd_obat)
+  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row?.kd_obat) + hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
   // eslint-disable-next-line no-unused-vars
-  const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar) + hitungResepRacikanKeluar(row?.resepkeluarracikan)
+  const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) + hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
   // eslint-disable-next-line no-unused-vars
   const total = awal + masuk - keluar
   return total

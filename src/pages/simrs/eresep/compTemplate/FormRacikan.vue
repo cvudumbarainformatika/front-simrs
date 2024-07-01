@@ -72,6 +72,8 @@
             v-model="store.form.konsumsi"
             label="Dikonsumsi selama (hari)"
             dense
+
+            :rules="[numberValidationRule]"
             lazy-rules
             no-error-icon
             hide-bottom-space
@@ -219,6 +221,20 @@ function openDialog () {
 
 function satValid (val) {
   return (val !== null && val !== '') || ''
+}
+
+function numberValidationRule (val) {
+  if (val === '' || val === null) {
+    return 'Harap diisi'
+  }
+  if (isNaN(val)) {
+    return 'Input must be a valid number.'
+  }
+
+  if (val <= 0) {
+    return 'Input must be a positive number.'
+  }
+  return true
 }
 const jmlRacikEnter = () => {
   console.log('oooi')

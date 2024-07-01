@@ -72,10 +72,10 @@
               {{ hitungSaldoAwal(item?.saldoawal) ?? 0 }}
             </div>
             <div class="col-3 text-right text-primary">
-              {{ hitungPenerimaan(item?.penerimaanrinci) + hitungMutasiMasuk(item?.mutasimasuk) }}
+              {{ hitungPenerimaan(item?.penerimaanrinci) + hitungMutasiMasuk(item?.mutasimasuk) + hitungPenyesuaianMasuk(item?.stok) }}
             </div>
             <div class="col-3 text-right text-negative">
-              {{ hitungMutasiKeluar(item?.mutasikeluar) + hitungResepKeluar(item?.resepkeluar) }}
+              {{ hitungMutasiKeluar(item?.mutasikeluar) + hitungResepKeluar(item?.resepkeluar) + hitungPenyesuaianKeluar(item?.stok) }}
             </div>
 
             <div class="col-3 text-right text-teal text-weight-bold">
@@ -129,6 +129,17 @@ function hitungMutasiMasuk (arr) {
 }
 function hitungResepKeluar (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+}
+
+function hitungPenyesuaianMasuk (arr) {
+  const penye = arr?.map(m => m.ssw)?.filter(f => f.penyesuaian > 0)
+
+  return penye?.reduce((x, y) => parseFloat(x) + parseFloat(y.penyesuaian), 0)
+}
+function hitungPenyesuaianKeluar (arr) {
+  const penye = arr?.map(m => m.ssw)?.filter(f => f.penyesuaian < 0)
+
+  return penye?.reduce((x, y) => parseFloat(x) + parseFloat(y.penyesuaian), 0)
 }
 
 function exportToExcel (tableId, filename) {

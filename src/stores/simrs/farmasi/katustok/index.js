@@ -36,6 +36,17 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.items = resp.data.data
         this.params.rowsNumber = resp.data.total
         // console.log('kjkjsdfs', this.items)
+        if (this.items.length) {
+          this.items.forEach(it => {
+            if (it?.distribusipersiapan?.length) {
+              it?.distribusipersiapan.forEach(per => {
+                const nore = per.rinci.find(ri => ri.nopermintaan === per.nopermintaan)
+                per.noresep = nore?.noresep ?? ''
+                // console.log('per', per)
+              })
+            }
+          })
+        }
         console.log('kjkjsdfs', resp)
         this.loading = false
       }

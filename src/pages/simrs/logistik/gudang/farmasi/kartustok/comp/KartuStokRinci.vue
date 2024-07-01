@@ -201,24 +201,36 @@ const bentukArrBaru = computed(() => {
       total: 0
     }
   })
-
-  const resepkeluar = props?.item?.resepkeluar?.map(x => {
-    return {
-      tgl: x?.tgl_permintaan,
-      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
-      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Nomor resep ' + x?.noresep,
-      masuk: 0,
-      keluar: parseFloat(x?.jumlah),
-      total: 0
-    }
-  })
+  const noreseps = app?.user?.kdruangansim === 'Gd-04010103' ? props?.item?.distribusipersiapan.map(m => m?.noresep) : []
+  const resepkeluar = app?.user?.kdruangansim === 'Gd-04010103'
+    ? props?.item?.resepkeluar?.filter(f => !noreseps.includes(f.noresep))?.map(x => {
+      return {
+        tgl: x?.tgl_selesai,
+        tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
+        keterangan: 'Nomor resep ' + x?.noresep,
+        masuk: 0,
+        keluar: parseFloat(x?.jumlah),
+        total: 0
+      }
+    })
+    : props?.item?.resepkeluar?.map(x => {
+      return {
+        tgl: x?.tgl_selesai,
+        tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
+        keterangan: 'Nomor resep ' + x?.noresep,
+        masuk: 0,
+        keluar: parseFloat(x?.jumlah),
+        total: 0
+      }
+    })
 
   const resepracikankeluar = props?.item?.resepkeluarracikan?.map(x => {
     return {
-      tgl: x?.tgl_permintaan,
-      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
-      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      tgl: x?.tgl_selesai,
+      tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
       keterangan: 'Nomor resep ' + x?.noresep + ' (Racikan)',
       masuk: 0,
       keluar: parseFloat(x?.jumlah),
@@ -242,10 +254,55 @@ const bentukArrBaru = computed(() => {
     })
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
+  const penyesuaian = props?.item?.stok?.map(m => {
+    const arr = m.ssw
+    return arr.map(x => {
+      return {
+        tgl: x?.tgl_penyesuaian,
+        tanggal: date.formatDate(x?.tgl_penyesuaian, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_penyesuaian, 'HH:mm'),
+        keterangan: 'Koreksi Stok Awal ',
+        masuk: x?.penyesuaian > 0 ? parseFloat(x?.penyesuaian) : 0,
+        keluar: x?.penyesuaian < 0 ? parseFloat(-x?.penyesuaian) : 0,
+        total: 0
+      }
+    })
+    // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  })
+
+  const distribusi = app?.user?.kdruangansim === 'Gd-04010103'
+    ? props?.item?.distribusipersiapan?.map(x => {
+      return {
+        tgl: x?.tgl_distribusi,
+        tanggal: date.formatDate(x?.tgl_distribusi, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_distribusi, 'HH:mm'),
+        keterangan: x?.noresep === '' ? 'Nomor Permintaan ' + x?.nopermintaan : 'Nomor Permintaan ' + x?.nopermintaan + ', Diresepkan ' + x?.noresep,
+        masuk: 0,
+        keluar: parseFloat(x?.keluar),
+        total: 0
+      }
+    })
+    : []
+  const returdistribusi = app?.user?.kdruangansim === 'Gd-04010103'
+    ? props?.item?.distribusipersiapan.filter(f => parseFloat(f.retur) > 0)?.map(x => {
+      return {
+        tgl: x?.tgl_retur,
+        tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+        keterangan: 'Retur Nomor Permintaan ' + x?.nopermintaan,
+        masuk: parseFloat(x?.retur),
+        keluar: 0,
+        total: 0
+      }
+    })
+    : []
 
   console.log('ret', app)
+  console.log('user', app?.user?.kdruangansim)
 
-  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar, resepracikankeluar, returresep].flat(Infinity)
+  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk,
+    resepkeluar, resepracikankeluar, returresep, penyesuaian,
+    distribusi, returdistribusi].flat(Infinity)
 
   // const hasil = gabung.length ? gabung?.filter(x => x.masuk !== x.keluar)?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : [] // ini jika yg aneh tdk dimasukkan
   const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []

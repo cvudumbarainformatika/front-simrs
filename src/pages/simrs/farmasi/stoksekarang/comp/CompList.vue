@@ -174,6 +174,8 @@
       <!-- eslint-disable-next-line vue/no-unused-vars -->
       <template #cell-peny="{row}">
         <q-btn
+
+          v-if="role===1"
           label="Cek Stok"
           dense
           no-caps
@@ -186,6 +188,7 @@
       </template>
       <template #left-acttion="{row}">
         <div class="q-mr-md">
+          <!-- v-if="role===1" -->
           <q-btn
             flat
             class=""
@@ -213,7 +216,7 @@
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, computed } from 'vue'
 import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
 import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 
@@ -222,7 +225,9 @@ const store = UseFarmasiStokSekarangStore()
 const apps = useAplikasiStore()
 
 const DetailAlokasi = defineAsyncComponent(() => import('./DetailAlokasi.vue'))
-
+const role = computed(() => {
+  return apps?.user?.pegawai?.role_id
+})
 function cariGudang (val) {
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)

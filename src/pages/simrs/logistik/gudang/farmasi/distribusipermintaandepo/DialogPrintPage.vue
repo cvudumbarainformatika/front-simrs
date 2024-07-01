@@ -105,8 +105,11 @@
                 <div class="col-5 border-bottom border-left">
                   {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
                 </div>
-                <div class="col-1 border-bottom border-left">
-                  {{ det.distribusi===null?0:det.distribusi }}
+                <div v-if="parseFloat(item?.flag)>=3" class="col-1 border-bottom border-left">
+                  {{ det.distribusi===null?0:det?.distribusi }}
+                </div>
+                <div v-else class="col-1 border-bottom border-left">
+                  {{ det?.jumlahdiminta }}
                 </div>
                 <div
                   class="col-2 border-bottom border-left"

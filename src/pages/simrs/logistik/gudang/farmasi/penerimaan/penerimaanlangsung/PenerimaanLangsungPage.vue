@@ -476,7 +476,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('gudang', obj)
 })
 store.getInitialData()
-function setHargaNetto() {
+function setHargaNetto () {
   const isi = store.form.isi ?? 1
   const harga = store.form.harga ?? 0
   const diskon = store.form.diskon ?? 0
@@ -491,7 +491,8 @@ function setHargaNetto() {
   if (store.rincis.length) {
     const sub = store.rincis.map(m => parseFloat(m.subtotal)).reduce((a, b) => a + b, 0)
     totalPbf = sub + subtotal
-  } else {
+  }
+  else {
     totalPbf = subtotal
   }
 
@@ -511,7 +512,7 @@ function setHargaNetto() {
 
   console.log('form', store.form)
 }
-function setIsi(val) {
+function setIsi (val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('isi', temp)
   if (temp > 0) {
@@ -522,21 +523,21 @@ function setIsi(val) {
     }
   }
 }
-function setJumlah(val) {
+function setJumlah (val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('jml_terima_b', temp)
   setTimeout(() => {
     setHargaNetto()
   }, 100)
 }
-function setHarga(val) {
+function setHarga (val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('harga', temp)
   setTimeout(() => {
     setHargaNetto()
   }, 100)
 }
-function setDiskon(val) {
+function setDiskon (val) {
   const inc = val.includes('.')
   const ind = val.indexOf('.')
   const panj = val.length
@@ -552,7 +553,7 @@ function setDiskon(val) {
 //   if (!evt) setHargaNetNew('0', det, 'ppn')
 // }
 const adaPPN = ref(false)
-function setPpn(val) {
+function setPpn (val) {
   // const inc = val.includes('.')
   // const ind = val.indexOf('.')
   // const panj = val.length
@@ -590,7 +591,7 @@ function cariPihakTiga (val) {
   store.namaPihakKetiga = val
   store.cariPihatTiga(val)
 }
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -601,7 +602,7 @@ const cariObat = myDebounce((val) => {
   store.getDataObat(val)
 })
 
-function simpan() {
+function simpan () {
   console.log('from ', store.form)
   console.log('validasi ', validasi())
   if (validasi()) {
@@ -609,7 +610,7 @@ function simpan() {
     store.simpanPenerimaan().then(() => { resetValidation() })
   }
 }
-function kunci() {
+function kunci () {
   store.selesaiDanKunci().then(() => { resetValidation() })
 }
 
@@ -633,7 +634,7 @@ const refExp = ref(null)
 const refHarga = ref(null)
 const refBatch = ref(null)
 // const refHargaKcl = ref(null)
-function validasi() {
+function validasi () {
   // console.log('index', index)
   // console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
   // console.log('ref diterima', refJmlDiterima.value[index].refInput.validate())
@@ -666,7 +667,7 @@ function validasi() {
   ) return true
   else return false
 }
-function resetValidation() {
+function resetValidation () {
   if (refPbf.value) refPbf.value.$refs.refAuto.resetValidation()
   if (refJnsPenerimaan.value) refJnsPenerimaan.value.$refs.refAuto.resetValidation()
 

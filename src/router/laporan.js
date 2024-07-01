@@ -21,6 +21,11 @@ const laporan = {
       component: () => import('pages/simrs/laporan/keuangan/bill/IndexPage.vue')
     },
     {
+      path: '/laporan/keuangan/rekapbillbyruangan',
+      // name: 'laporan.keuangan.billrajal',
+      component: () => import('pages/simrs/laporan/keuangan/billrekapbyruangan/IndexPage.vue')
+    },
+    {
       path: '/laporan/keuangan/billpoli',
       // name: 'laporan.keuangan.billpoli',
       component: () => import('pages/simrs/laporan/keuangan/billpoli/IndexPage.vue')
