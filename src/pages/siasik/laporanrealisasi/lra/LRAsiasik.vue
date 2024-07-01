@@ -3,67 +3,69 @@
 <!-- eslint-disable space-before-function-paren -->
 <!-- eslint-disable space-before-function-paren -->
 <template>
-  <div class="container q-pl-sm q-pr-sm">
-    <div class="q-card q-mt-xs q-mt-ms">
-      <q-card class="q-pa-xs">
-        <div class="row bg-primary text-white q-pa-sm q-mb-xs q-mt-xs">
-          <div class="f-14 text-weight-bold">
-            Laporan Realisasi Anggaran | SIASIK
+  <div id="printMe">
+    <div class="container q-pl-sm q-pr-sm">
+      <div class="q-card q-mt-xs q-mt-ms">
+        <q-card class="q-pa-xs">
+          <div class="row bg-primary text-white q-pa-sm q-mb-xs q-mt-xs">
+            <div class="f-14 text-weight-bold">
+              Laporan Realisasi Anggaran | SIASIK
+            </div>
           </div>
-        </div>
-      </q-card>
-    </div>
-    <div class="q-card q-mt-sm">
-      <q-card class="q-pa-xs">
-        <div class="row justify-center q-pt-md">
-          <div class="row">
-            <div class="col-1">
-              <q-img
-                src="~assets/images/logo_kota_original.png"
-                spinner-color="white"
-                style="height: 3.3cm; width: 2.6cm"
-              />
-            </div>
-            <div class="col-10">
-              <div class="row justify-center text-h6">
-                PEMERINTAH KOTA PROBOLINGGO
-              </div>
-              <div class="row justify-center text-h7 text-weight-bold">
-                DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
-              </div>
-              <div class="row justify-center text-h5 text-weight-bold">
-                UOBK RSUD DOKTER MOHAMAD SALEH
-              </div>
-              <div class="row justify-center text-h8">
-                Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335)
-                432702
-              </div>
-              <div class="row justify-center text-h8 text-weight-bold">
-                PROBOLINGGO 67219
-              </div>
-            </div>
-            <div class="col-1">
-              <q-img
-                src="~assets/logos/logo-rsud.png"
-                spinner-color="white"
-                style="height: 3cm; width: 3cm"
-              />
-            </div>
+        </q-card>
+      </div>
+      <div class="q-card q-mt-sm q-pr-lg">
+        <q-card class="q-pa-xs">
+          <q-card-section>
+            <div class="row justify-center q-pt-md">
+              <div class="row">
+                <div class="col-1">
+                  <q-img
+                    src="~assets/images/logo_kota_original.png"
+                    spinner-color="white"
+                    style="height: 3.3cm; width: 2.6cm"
+                  />
+                </div>
+                <div class="col-10">
+                  <div class="row justify-center text-h6">
+                    PEMERINTAH KOTA PROBOLINGGO
+                  </div>
+                  <div class="row justify-center text-h7 text-weight-bold">
+                    DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+                  </div>
+                  <div class="row justify-center text-h5 text-weight-bold">
+                    UOBK RSUD DOKTER MOHAMAD SALEH
+                  </div>
+                  <div class="row justify-center text-h8">
+                    Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335)
+                    432702
+                  </div>
+                  <div class="row justify-center text-h8 text-weight-bold">
+                    PROBOLINGGO 67219
+                  </div>
+                </div>
+                <div class="col-1">
+                  <q-img
+                    src="~assets/logos/logo-rsud.png"
+                    spinner-color="white"
+                    style="height: 3cm; width: 3cm"
+                  />
+                </div>
 
-            <div class="col-12 q-pt-md">
-              <div class="row justify-center text-weight-bold">
-                Laporan Realisasi Anggaran Periode {{ store.display.dari + ' - ' + store.display.sampai }}
+                <div class="col-12 q-pt-md">
+                  <div class="row justify-center text-weight-bold">
+                    Laporan Realisasi Anggaran Periode {{ store.display.dari + ' - ' + store.display.sampai }}
+                  </div>
+                <!-- <div class="row justify-center text-weight-bold">
+                  Periode Bulan {{ bulan(store.params.bulan) }} {{ store.params.tahun }}
+                </div> -->
+                </div>
+                <div class="q-pl-lg" />
               </div>
-              <!-- <div class="row justify-center text-weight-bold">
-                Periode Bulan {{ bulan(store.params.bulan) }} {{ store.params.tahun }}
-              </div> -->
             </div>
-            <div class="q-pl-lg" />
-          </div>
-        </div>
+          </q-card-section>
 
-        <div class="row q-col-gutter-sm q-my-sm q-pl-lg">
-          <div class="col-2">
+          <div class="print-hide row middle q-pa-md q-gutter-md">
             <app-input-date-human
               :model="store.params.tgl"
               label="dari tangal"
@@ -73,10 +75,7 @@
               @db-model="tglDari"
               @set-display="setDari"
             />
-          </div>
-          <div class="col-2">
             <app-input-date-human
-              class="q-ml-md"
               :model="store.params.tglx"
               label="sampai tangal"
               outlined
@@ -85,8 +84,6 @@
               @db-model="tglSampai"
               @set-display="setSampai"
             />
-          </div>
-          <div class="col-2">
             <app-autocomplete
               v-model="store.params.bidang"
               label="Pilih Bidang"
@@ -97,8 +94,6 @@
               :source="store.bidangs"
               :loading="store.loading"
             />
-          </div>
-          <div class="col-2">
             <app-autocomplete
               v-model="store.params.kegiatan"
               label="Pilih Kegiatan"
@@ -106,163 +101,212 @@
               option-label="kegiatan"
               option-value="kodekegiatan"
               outlined
-              :source="store.bidangs"
+              :source="store.kegiatans"
               :loading="store.loading"
             />
-          </div>
-          <div>
-            <app-btn
-              label="Ambil Data"
-              :disable="store.loading"
-              :loading="store.loading"
-              @click="ambilData()"
-            />
-          </div>
-        </div>
-      </q-card>
-    </div>
-
-    <div class="q-card q-mt-sm">
-      <q-card class="q-pa-xs">
-        <template v-if="store.loading">
-          <div class="row justify-center">
-            <div class="q-gutter-md">
-              <q-spinner-pie
-                color="amber-13"
-                size="40px"
-              />
-              <q-spinner-pie
-                color="amber-13"
-                size="60px"
-              />
-              <q-spinner-pie
-                color="amber-13"
-                size="40px"
+            <div>
+              <app-btn
+                label="Ambil Data"
+                :disable="store.loading"
+                :loading="store.loading"
+                @click="ambilData()"
               />
             </div>
+            <div>
+              <q-btn
+                ref="refPrint"
+                v-print="printObj"
+                unelevated
+                color="dark"
+                round
+                size="sm"
+                icon="icon-mat-print"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
-        </template>
-        <template v-else>
-          <div class="row flex flex-center">
-            <table
-              class="table table-responsive"
-              style="font-size: 13px"
-            >
-              <thead class="align-middle text-center display-block">
-                <tr style="font-size: 14px">
-                  <th width="150px">
-                    Kode Rekening
-                  </th>
-                  <th width="500px">
-                    Uraian
-                  </th>
-                  <th>Anggaran (Rp.)</th>
-                  <th>Realisasi Sebelumnya (Rp.)</th>
-                  <th>Realisasi Sekarang (Rp.)</th>
-                  <th>Selisih (Rp.)</th>
-                  <th>(%)</th>
-                </tr>
-              </thead>
-              <tbody class="align-middle q-pl-sm">
-                <tr v-for="item in store.pendapatans" :key="item">
-                  <td class="text-left q-pl-sm q-pr-sm">
-                    <div> {{ item.kodeall3 }}  </div>
-                  </td>
-                  <td class="text-left q-pl-sm q-pr-sm">
-                    <div> {{ item.uraian }}  </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(store.realisasipends?.totalSebelumnya) }}</div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(store.realisasipends?.totalSekarang) }}</div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
-                  </td>
-                </tr>
-                <tr class="total text-bold">
-                  <td class="text-right q-pl-sm q-pr-sm" colspan="2">
-                    TOTAL PENDAPATAN
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.totalSebelumnya) }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.totalSekarang) }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
-                  </td>
-                </tr>
+        </q-card>
+      </div>
 
-                <tr v-for="item in store.items" :key="item">
-                  <td class="text-left q-pl-sm q-pr-sm">
-                    <div> {{ item.kodeall3 }} </div>
-                  </td>
-                  <td class="text-left q-pl-sm q-pr-sm">
-                    <div> {{ item.uraian }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(item.totalPagu) }} </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(item.totalRealisasiSebelumnya) }}</div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>
-                      {{ formattanpaRp(item.totalRealisasi) }}
-                    </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>
-                      {{ formattanpaRp(item.selisih) }}
-                    </div>
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    <div>
-                      {{ item.persen }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="total text-bold">
-                  <td class="text-right q-pl-sm q-pr-sm" colspan="2">
-                    TOTAL BELANJA
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalPagux ()) }}
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalRealisasiSebelumnya ()) }}
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalRealisasi ()) }}
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalSelisih ()) }}
-                  </td>
-                  <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalPersen ()) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="padding-bottom: 50px" />
-        </template>
-      </q-card>
+      <div class="q-card q-mt-sm">
+        <q-card class="q-pa-xs">
+          <template v-if="store.loading">
+            <div class="row justify-center">
+              <div class="q-gutter-md">
+                <q-spinner-pie
+                  color="amber-13"
+                  size="40px"
+                />
+                <q-spinner-pie
+                  color="amber-13"
+                  size="60px"
+                />
+                <q-spinner-pie
+                  color="amber-13"
+                  size="40px"
+                />
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="row flex flex-center" id="printMe">
+              <table
+                class="table table-responsive"
+                style="font-size: 13px"
+              >
+                <thead class="align-middle text-center display-block">
+                  <tr style="font-size: 14px">
+                    <th width="150px">
+                      Kode Rekening
+                    </th>
+                    <th width="500px">
+                      Uraian
+                    </th>
+                    <th>Anggaran (Rp.)</th>
+                    <th>Realisasi Sebelumnya (Rp.)</th>
+                    <th>Realisasi Sekarang (Rp.)</th>
+                    <th>Total Realisasi (Rp.)</th>
+                    <th>Selisih (Rp.)</th>
+                    <th>(%)</th>
+                  </tr>
+                </thead>
+                <tbody class="align-middle q-pl-sm">
+                  <tr v-for="item in store.pendapatans" :key="item">
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ item.kodeall3 }}  </div>
+                    </td>
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ item.uraian }}  </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalSebelumnya) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalSekarang) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalRealisasi) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
+                    </td>
+                  </tr>
+                  <tr class="total text-bold">
+                    <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                      TOTAL PENDAPATAN
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.totalSebelumnya) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.totalSekarang) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(store.realisasipends?.totalRealisasi) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
+                    </td>
+                  </tr>
+                  <tr v-for="item in store.items" :key="item">
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ item.kodeall3 }} </div>
+                    </td>
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ item.uraian }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(item.totalPagu) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(item.totalRealisasiSebelumnya) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>
+                        {{ formattanpaRp(item.totalRealisasi) }}
+                      </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>
+                        {{ formattanpaRp(item.RealisasiSemua) }}
+                      </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>
+                        {{ formattanpaRp(item.selisih) }}
+                      </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>
+                        {{ item.persen }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="total text-bold">
+                    <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                      TOTAL BELANJA
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.totalPagu) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.totalRealisasiSebelumnya) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.totalRealisasi) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.RealisasiSemua) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.selisih) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(store.items[0]?.persen) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="ttd" v-for="data in store.penggunaAnggaran" :key="data">
+              <div>
+                Probolinggo {{ store.display.sekarang }}
+              </div>
+              <div class="text-bold">
+                Pengguna Anggaran
+              </div>
+              <div style="padding-bottom: 40px" />
+              <div class="text-bold">
+                {{ data?.nama }}
+                <div class="garis-bawah" />
+              </div>
+              <div>
+                NIP. {{ data?.nip }}
+              </div>
+            </div>
+            <div style="padding-bottom: 80px" />
+          </template>
+        </q-card>
+      </div>
     </div>
   </div>
 </template>
@@ -271,7 +315,7 @@
 // import { date } from 'quasar'
 import { formattanpaRp } from 'src/modules/formatter'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 // import { ref } from 'vue'
 const store = useLaporanLraLaprealisasianggaranStore()
 store.getDataRealisasi()
@@ -297,33 +341,50 @@ function setSampai (val) {
   store.display.sampai = val
 }
 
-function totalPagux () {
-  const saldo = store.items
-  const totalanggaran = saldo[0]?.totalPagu
-  return totalanggaran
-}
-function totalRealisasiSebelumnya () {
-  const saldo = store.items
-  const totalpagu = saldo[0]?.totalRealisasiSebelumnya
-  return totalpagu
+const printed = ref(false)
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Laporan Realisasi Anggaran',
+  beforeOpenCallback (vue) {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback (vue) {
+    console.log('opened')
+  },
+  closeCallback (vue) {
+    printed.value = false
+    console.log('closePrint')
+  }
 }
 
-function totalRealisasi () {
-  const saldo = store.items
-  const totalpagu = saldo[0]?.totalRealisasi
-  return totalpagu
-}
+// function totalPagux () {
+//   const saldo = store.items
+//   const totalanggaran = saldo[0]?.totalPagu
+//   return totalanggaran
+// }
+// function totalRealisasiSebelumnya () {
+//   const saldo = store.items
+//   const totalpagu = saldo[0]?.totalRealisasiSebelumnya
+//   return totalpagu
+// }
 
-function totalSelisih () {
-  const saldo = store.items
-  const totalpagu = saldo[0]?.selisih
-  return totalpagu
-}
-function totalPersen () {
-  const saldo = store.items
-  const totalpagu = saldo[0]?.persen
-  return totalpagu
-}
+// function totalRealisasi () {
+//   const saldo = store.items
+//   const totalpagu = saldo[0]?.totalRealisasi
+//   return totalpagu
+// }
+
+// function totalSelisih () {
+//   const saldo = store.items
+//   const totalpagu = saldo[0]?.selisih
+//   return totalpagu
+// }
+// function totalPersen () {
+//   const saldo = store.items
+//   const totalpagu = saldo[0]?.persen
+//   return totalpagu
+// }
 function ambilData () {
   // store.hitungharidalamBulan();
   store.getDataRealisasi().then(() => {
@@ -358,5 +419,17 @@ tbody tr td{
 .total{
   background: #e6efff;
 }
-
+.ttd{
+  position: relative;
+  top: 30px;
+  left: 60%;
+  text-align: center;
+  justify-content: center;
+  width: 25%;
+  height: 100px;
+}
+.garis-bawah{
+  border-bottom: 2px solid black;
+  border-radius: 20px;
+}
 </style>
