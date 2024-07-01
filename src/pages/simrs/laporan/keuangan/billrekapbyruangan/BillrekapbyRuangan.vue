@@ -51,7 +51,7 @@
         >
           <!-- tombol print -->
           <template #header-right-before>
-            <q-btn
+            <!-- <q-btn
               ref="refPrint"
               v-print="printObj"
               unelevated
@@ -66,7 +66,7 @@
               >
                 Print
               </q-tooltip>
-            </q-btn>
+            </q-btn> -->
           </template>
           <template #header-left-after-search>
             <div class="row q-col-gutter-sm">
@@ -81,11 +81,42 @@
               </div>
               <div>
                 <app-input-date-human
-                  :model="to"
+                  :model="from"
                   label="sampai tanggal"
                   outlined
                   @db-model="setTo"
-                  @set-display="setToDisp"
+                  @set-display="setToFromDisp"
+                />
+              </div>
+              <div>
+                <q-select
+                  v-model="store.params.layanan"
+                  use-input
+                  fill-input
+                  hide-selected
+                  :options="layanan"
+                  dense
+                  outlined
+                  label="Pilih Layanan"
+                  transition-show="scale"
+                  transition-hide="scale"
+                  @update:model-value="(val) => isiLayananx(val)"
+                />
+              </div>
+              <div>
+                <q-select
+                  v-model="store.params.ruangan"
+                  use-input
+                  fill-input
+                  hide-selected
+                  option-value="kodepoli"
+                  option-label="kodepoli"
+                  :options="ruangan"
+                  dense
+                  outlined
+                  label="Pilih Ruangan"
+                  transition-show="scale"
+                  transition-hide="scale"
                 />
               </div>
             </div>
@@ -98,14 +129,36 @@
 <script setup>
 import { ref } from 'vue'
 import Customtable from '../../rekap/CustomTable.vue'
+import { useLaporanRekapBillByRuanganStore } from 'src/stores/simrs/laporan/keuangan/billbyruangan/billrekapbyruangan'
+
+const store = useLaporanRekapBillByRuanganStore()
 const to = ref(null)
+const from = ref(null)
+const layanan = ref(['IGD', 'RAWAT JALAN', 'RAWAT INAP'])
+const ruangan = ref(null)
+
+function isiLayananx (val) {
+  if (val === 'IGD') {
+    this.ruangan = store.igd
+  }
+  else if (val === 'RAWAT JALAN') {
+    this.ruangan = store.rajal
+  }
+}
+
 function setToDisp (vaal) {
   to.value = vaal
+}
+
+function setToFromDisp (vaal) {
+  from.value = vaal
 }
 
 function setTo (val) {
   console.log('wew', val)
 }
+
+store.getRuanganPoli()
 </script>
 
 <style lang="scss" scoped>
