@@ -113,6 +113,7 @@ const bulan = ref('Januari')
 const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
 const tahuns = ref([])
 const app = useAplikasiStore()
+const keteranganStok = ref('Stok Sekarang')
 const columnsx = [
   {
     name: 'nama_obat',
@@ -148,7 +149,7 @@ const columnsx = [
   },
   {
     name: 'stok_sekarang',
-    label: 'Stok Sekarang',
+    label: keteranganStok.value,
     field: (row) => stokSekarang(row),
     align: 'right'
   },
@@ -300,7 +301,16 @@ function hitungPenyesuaianKeluar (arr) {
 }
 
 function stokSekarang (arr) {
-  return arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  let jumlah = 0
+  if (arr?.saldoakhir?.length) {
+    keteranganStok.value = 'Stok Opname'
+    jumlah = arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  }
+  else {
+    keteranganStok.value = 'Stok Sekarang'
+    jumlah = arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  }
+  return jumlah
 }
 function stokFisik (arr) {
   return arr?.fisik?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)

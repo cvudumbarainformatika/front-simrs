@@ -205,9 +205,9 @@ const bentukArrBaru = computed(() => {
   const resepkeluar = app?.user?.kdruangansim === 'Gd-04010103'
     ? props?.item?.resepkeluar?.filter(f => !noreseps.includes(f.noresep))?.map(x => {
       return {
-        tgl: x?.tgl_permintaan,
-        tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
-        jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+        tgl: x?.tgl_selesai,
+        tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
         keterangan: 'Nomor resep ' + x?.noresep,
         masuk: 0,
         keluar: parseFloat(x?.jumlah),
@@ -216,9 +216,9 @@ const bentukArrBaru = computed(() => {
     })
     : props?.item?.resepkeluar?.map(x => {
       return {
-        tgl: x?.tgl_permintaan,
-        tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
-        jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+        tgl: x?.tgl_selesai,
+        tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
         keterangan: 'Nomor resep ' + x?.noresep,
         masuk: 0,
         keluar: parseFloat(x?.jumlah),
@@ -228,9 +228,9 @@ const bentukArrBaru = computed(() => {
 
   const resepracikankeluar = props?.item?.resepkeluarracikan?.map(x => {
     return {
-      tgl: x?.tgl_permintaan,
-      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
-      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      tgl: x?.tgl_selesai,
+      tanggal: date.formatDate(x?.tgl_selesai, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_selesai, 'HH:mm'),
       keterangan: 'Nomor resep ' + x?.noresep + ' (Racikan)',
       masuk: 0,
       keluar: parseFloat(x?.jumlah),
