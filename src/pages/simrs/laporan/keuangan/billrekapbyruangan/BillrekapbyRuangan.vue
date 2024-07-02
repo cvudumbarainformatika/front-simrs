@@ -72,7 +72,7 @@
             <div class="row q-col-gutter-sm">
               <div>
                 <app-input-date-human
-                  :model="to"
+                  :model="store.tanggal.from"
                   label="dari tanggal"
                   outlined
                   @db-model="setTo"
@@ -81,7 +81,7 @@
               </div>
               <div>
                 <app-input-date-human
-                  :model="from"
+                  :model="store.tanggal.to"
                   label="sampai tanggal"
                   outlined
                   @db-model="setTox"
@@ -139,11 +139,10 @@
 import { ref } from 'vue'
 import Customtable from '../../rekap/CustomTable.vue'
 import { useLaporanRekapBillByRuanganStore } from 'src/stores/simrs/laporan/keuangan/billbyruangan/billrekapbyruangan'
-import { date } from 'quasar'
 
 const store = useLaporanRekapBillByRuanganStore()
-const to = date.formatDate(Date.now(), 'DD MMMM YYYY')
-const from = date.formatDate(Date.now(), 'DD MMMM YYYY')
+// const to = date.formatDate(Date.now(), 'DD MMMM YYYY')
+// const from = date.formatDate(Date.now(), 'DD MMMM YYYY')
 const layanan = ref(['IGD', 'RAWAT JALAN', 'RAWAT INAP'])
 const ruangan = ref(null)
 // const koderuangan = ref(null)
@@ -179,11 +178,11 @@ function isiLayananx (val) {
 }
 
 function setToDisp (vaal) {
-  to.value = vaal
+  store.tanggal.from = vaal
 }
 
 function setToFromDisp (vaal) {
-  from.value = vaal
+  store.tanggal.to = vaal
 }
 
 function setTo (val) {
