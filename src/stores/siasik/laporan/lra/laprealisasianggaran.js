@@ -29,7 +29,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     kegiatans: [],
     paguAnggaran: [],
     mapRekening: [],
-    penggunaAnggaran: []
+    penggunaAnggaran: [],
+    pembiayaans: []
   }),
   actions: {
     setParameter (key, val) {
@@ -78,7 +79,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         return acc
       }, [])
       this.bidangs = bid
-      console.log('bidangfilt', this.params.bidang)
+      // console.log('bidangfilt', this.params.bidang)
     },
     filterKegiatan() {
       const data = this.kegiatans?.length
@@ -87,7 +88,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         )
         : []
       this.kegiatans = data
-      console.log('ddd', data)
+      // console.log('ddd', data)
     },
     getDataRealisasi() {
       this.loading = true
@@ -97,15 +98,16 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           console.log('realisasi', resp)
           if (resp.status === 200) {
             this.items = []
-            this.realisasipends = resp.data.realisasipendapatan
-            this.nilaipends = resp.data.nilaipendapatan
+            this.realisasipends = resp.data?.realisasipendapatan
+            this.nilaipends = resp.data?.nilaipendapatan
             this.items = resp.data
-            this.paguAnggaran(resp.data.belanja)
-            this.mapRekening(resp.data.belanja)
-            this.mapPendapatan(resp.data.pendapatan)
-            this.nilaiPendapatan(resp.data.nilaipendapatan)
-            this.realisasiPendapatan(resp.data.realisasipendapatan)
-            this.penggunaAnggaran = resp.data.pa
+            this.paguAnggaran(resp.data?.belanja)
+            this.mapRekening(resp.data?.belanja)
+            this.mapPendapatan(resp.data?.pendapatan)
+            this.nilaiPendapatan(resp.data?.nilaipendapatan)
+            this.realisasiPendapatan(resp.data?.realisasipendapatan)
+            this.rekPembiayaan(resp.data?.pembiayaan)
+            this.penggunaAnggaran = resp.data?.pa
             this.loading = false
             resolve(resp)
           }
@@ -168,6 +170,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       //   val[i].realpendapatan = val?.map((x) => parseInt(x.nilai)).reduce((a, b) => a + b, 0)
       //   console.log('real', val[i].realpendapatan)
       // }
+    },
+    rekPembiayaan(val) {
+      this.pembiayaans = val
     },
     paguAnggaran (val) {
       // this.items = []
