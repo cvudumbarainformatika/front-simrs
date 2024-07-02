@@ -84,7 +84,7 @@
                   :model="from"
                   label="sampai tanggal"
                   outlined
-                  @db-model="setTo"
+                  @db-model="setTox"
                   @set-display="setToFromDisp"
                 />
               </div>
@@ -97,6 +97,7 @@
                   :options="layanan"
                   dense
                   outlined
+                  clearable
                   label="Pilih Layanan"
                   transition-show="scale"
                   transition-hide="scale"
@@ -109,14 +110,22 @@
                   use-input
                   fill-input
                   hide-selected
-                  option-value="kodepoli"
-                  option-label="kodepoli"
+                  option-value="koderuangan"
+                  option-label="namaruangan"
                   :options="ruangan"
                   dense
                   outlined
                   label="Pilih Ruangan"
                   transition-show="scale"
                   transition-hide="scale"
+                />
+              </div>
+              <div>
+                <app-btn
+                  label="cari"
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @click="ambilData"
                 />
               </div>
             </div>
@@ -130,19 +139,42 @@
 import { ref } from 'vue'
 import Customtable from '../../rekap/CustomTable.vue'
 import { useLaporanRekapBillByRuanganStore } from 'src/stores/simrs/laporan/keuangan/billbyruangan/billrekapbyruangan'
+import { date } from 'quasar'
 
 const store = useLaporanRekapBillByRuanganStore()
-const to = ref(null)
-const from = ref(null)
+const to = date.formatDate(Date.now(), 'DD MMMM YYYY')
+const from = date.formatDate(Date.now(), 'DD MMMM YYYY')
 const layanan = ref(['IGD', 'RAWAT JALAN', 'RAWAT INAP'])
 const ruangan = ref(null)
+// const koderuangan = ref(null)
 
 function isiLayananx (val) {
+  store.params.ruangan = ''
+
   if (val === 'IGD') {
-    this.ruangan = store.igd
+    this.ruangan = [
+      {
+        koderuangan: 'POL014',
+        namaruangan: 'IGD'
+      }
+    ]
   }
   else if (val === 'RAWAT JALAN') {
-    this.ruangan = store.rajal
+    // this.ruangan = store.rajal.map(({ kodepoli, ...rest }) => ({ ...rest, koderuangan: kodepoli }))
+    this.ruangan = store.rajal.map(x => {
+      return {
+        koderuangan: x.kodepoli,
+        namaruangan: x.polirs
+      }
+    })
+  }
+  else if (val === 'RAWAT INAP') {
+    this.ruangan = store.ranap.map(x => {
+      return {
+        koderuangan: x.rs4,
+        namaruangan: x.rs5
+      }
+    })
   }
 }
 
@@ -155,10 +187,15 @@ function setToFromDisp (vaal) {
 }
 
 function setTo (val) {
-  console.log('wew', val)
+  store.params.tgldari = val
+}
+
+function setTox (val) {
+  store.params.tglsampai = val
 }
 
 store.getRuanganPoli()
+store.getRuanganRanap()
 </script>
 
 <style lang="scss" scoped>
