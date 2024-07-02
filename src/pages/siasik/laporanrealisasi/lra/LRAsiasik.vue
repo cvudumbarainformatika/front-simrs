@@ -284,6 +284,79 @@
                       {{ formattanpaRp(store.items[0]?.persen) }}
                     </td>
                   </tr>
+
+                  <tr class="total text-bold">
+                    <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                      SURPLUS / (DEFISIT)
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungPagu()) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSebelumnya()) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSekarang()) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungTotalRealisasi()) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSelisih()) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(HitungPersen()) }}
+                    </td>
+                  </tr>
+                  <tr v-for="rek in store.pembiayaans" :key="rek">
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ rek.kodeall3 }}  </div>
+                    </td>
+                    <td class="text-left q-pl-sm q-pr-sm">
+                      <div> {{ rek.uraian }}  </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                  </tr>
+                  <tr class="total text-bold">
+                    <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                      TOTAL PEMBIAYAAN
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div>{{ formattanpaRp(0) }}</div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      <div> {{ formattanpaRp(0) }} </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -295,9 +368,9 @@
                 Pengguna Anggaran
               </div>
               <div style="padding-bottom: 40px" />
-              <div class="text-bold">
+              <div class="underline text-bold">
                 {{ data?.nama }}
-                <div class="garis-bawah" />
+                <div class="garis-bawah" style="text-decoration-line: underline;" />
               </div>
               <div>
                 NIP. {{ data?.nip }}
@@ -357,7 +430,54 @@ const printObj = {
     console.log('closePrint')
   }
 }
-
+function hitungPagu () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.totalPagu
+  const PaguPendapatan = store.realisasipends?.totalPaguPendapatan
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
+function hitungSebelumnya () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.totalRealisasiSebelumnya
+  const PaguPendapatan = store.realisasipends?.totalSebelumnya
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
+function hitungSekarang () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.totalRealisasi
+  const PaguPendapatan = store.realisasipends?.totalSekarang
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
+function hitungTotalRealisasi () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.RealisasiSemua
+  const PaguPendapatan = store.realisasipends?.totalRealisasi
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
+function hitungSelisih () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.selisih
+  const PaguPendapatan = store.realisasipends?.selisih
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
+function HitungPersen () {
+  const saldo = store.items
+  const PaguBelanja = saldo[0]?.persen
+  const PaguPendapatan = store.realisasipends?.persen
+  const NilaiPagu = PaguPendapatan - PaguBelanja
+  // console.log('nilaipagu', NilaiPagu)
+  return NilaiPagu
+}
 // function totalPagux () {
 //   const saldo = store.items
 //   const totalanggaran = saldo[0]?.totalPagu
@@ -408,6 +528,7 @@ thead th{
   border-collapse: collapse;
   border-radius: 6px;
   border: 1px solid rgb(163, 163, 163);
+  font-size: 1em;
 }
 tbody tr td{
   height: 30px;
@@ -415,6 +536,7 @@ tbody tr td{
   border-collapse: collapse;
   border-radius: 6px;
   border: 1px solid rgb(163, 163, 163);
+  font-size: 1em;
 }
 .total{
   background: #e6efff;
@@ -428,8 +550,7 @@ tbody tr td{
   width: 25%;
   height: 100px;
 }
-.garis-bawah{
-  border-bottom: 2px solid black;
-  border-radius: 20px;
+.underline{
+  text-decoration-line: underline;
 }
 </style>
