@@ -97,10 +97,12 @@
                   :options="layanan"
                   dense
                   outlined
-                  clearable
                   label="Pilih Layanan"
                   transition-show="scale"
                   transition-hide="scale"
+                  :rules="[
+                    val => !!val || 'Harus diisi'
+                  ]"
                   @update:model-value="(val) => isiLayananx(val)"
                 />
               </div>
@@ -118,6 +120,9 @@
                   label="Pilih Ruangan"
                   transition-show="scale"
                   transition-hide="scale"
+                  :rules="[
+                    val => !!val && !!store.params.layanan || 'Harus diisi'
+                  ]"
                 />
               </div>
               <div>
@@ -159,13 +164,18 @@ function isiLayananx (val) {
     ]
   }
   else if (val === 'RAWAT JALAN') {
-    // this.ruangan = store.rajal.map(({ kodepoli, ...rest }) => ({ ...rest, koderuangan: kodepoli }))
     this.ruangan = store.rajal.map(x => {
       return {
         koderuangan: x.kodepoli,
         namaruangan: x.polirs
       }
     })
+    this.ruangan.unshift(
+      {
+        koderuangan: '1',
+        namaruangan: 'Semua Ruangan'
+      }
+    )
   }
   else if (val === 'RAWAT INAP') {
     this.ruangan = store.ranap.map(x => {
@@ -174,6 +184,12 @@ function isiLayananx (val) {
         namaruangan: x.rs5
       }
     })
+    this.ruangan.unshift(
+      {
+        koderuangan: '1',
+        namaruangan: 'Semua Ruangan'
+      }
+    )
   }
 }
 
