@@ -54,6 +54,25 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           console.log(err)
           this.loading = false
         })
+    },
+    initAmbilData () {
+      this.getAmbilData()
+    },
+    async getAmbilData () {
+      console.log('wew')
+      this.loading = true
+      const params = { params: this.params }
+      await api.get('v1/simrs/master/mruanganranap', params)
+        .then((resp) => {
+          this.loading = false
+          if (resp.status === 200) {
+            this.ranap = resp?.data
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
     }
   }
 })

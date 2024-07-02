@@ -94,6 +94,8 @@
                   use-input
                   fill-input
                   hide-selected
+                  option-value="kodelayanan"
+                  option-label="namalayanan"
                   :options="layanan"
                   dense
                   outlined
@@ -115,6 +117,8 @@
                   option-value="koderuangan"
                   option-label="namaruangan"
                   :options="ruangan"
+                  emit-value
+                  map-options
                   dense
                   outlined
                   label="Pilih Ruangan"
@@ -130,7 +134,7 @@
                   label="cari"
                   :loading="store.loading"
                   :disable="store.loading"
-                  @click="ambilData"
+                  @click="store.initAmbilData"
                 />
               </div>
             </div>
@@ -148,14 +152,27 @@ import { useLaporanRekapBillByRuanganStore } from 'src/stores/simrs/laporan/keua
 const store = useLaporanRekapBillByRuanganStore()
 // const to = date.formatDate(Date.now(), 'DD MMMM YYYY')
 // const from = date.formatDate(Date.now(), 'DD MMMM YYYY')
-const layanan = ref(['IGD', 'RAWAT JALAN', 'RAWAT INAP'])
+const layanan = ref([
+  {
+    kodelayanan: '1',
+    namalayanan: 'IGD'
+  },
+  {
+    kodelayanan: '2',
+    namalayanan: 'RAWAT JALAN'
+  },
+  {
+    kodelayanan: '3',
+    namalayanan: 'RAWAT INAP'
+  }
+])
 const ruangan = ref(null)
 // const koderuangan = ref(null)
 
 function isiLayananx (val) {
   store.params.ruangan = ''
-
-  if (val === 'IGD') {
+  console.log('sasa', val)
+  if (val.kodelayanan === '1') {
     this.ruangan = [
       {
         koderuangan: 'POL014',
@@ -163,7 +180,7 @@ function isiLayananx (val) {
       }
     ]
   }
-  else if (val === 'RAWAT JALAN') {
+  else if (val.kodelayanan === '2') {
     this.ruangan = store.rajal.map(x => {
       return {
         koderuangan: x.kodepoli,
@@ -177,7 +194,7 @@ function isiLayananx (val) {
       }
     )
   }
-  else if (val === 'RAWAT INAP') {
+  else if (val.kodelayanan === '3') {
     this.ruangan = store.ranap.map(x => {
       return {
         koderuangan: x.rs4,
