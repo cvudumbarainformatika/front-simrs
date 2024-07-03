@@ -14,6 +14,9 @@ export const useLaporanBukuTunaiStore = defineStore('laporan_bukutunai', {
       tahun: date.formatDate(Date.now(), 'YYYY')
       // per_page: 10,
     },
+    display: {
+      sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
+    },
     bulans: [
       { nama: 'Januari', value: '01' },
       { nama: 'Februari', value: '02' },
@@ -29,7 +32,8 @@ export const useLaporanBukuTunaiStore = defineStore('laporan_bukutunai', {
       { nama: 'Desember', value: '12' }
     ],
     hasilArray: [],
-    arrayTanggal: []
+    arrayTanggal: [],
+    pegawais: []
   }),
 
   actions: {
@@ -52,6 +56,7 @@ export const useLaporanBukuTunaiStore = defineStore('laporan_bukutunai', {
             this.items = []
             this.items = resp.data
             this.hitungharidalamBulan()
+            this.pegawais = resp.data?.pegawai
             this.loading = false
           }
         })
