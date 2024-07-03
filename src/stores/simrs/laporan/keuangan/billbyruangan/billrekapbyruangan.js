@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
 
 export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-by-ruangan', {
   state: () => ({
@@ -56,13 +57,18 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         })
     },
     initAmbilData () {
-      this.getAmbilData()
+      if (this.params.tgldari > this.params.tglsampai) {
+        return notifErrVue('Tanggal Dari Lebih Besar Dari Tanggal Sampai')
+      }
+      else {
+        this.getAmbilData()
+      }
     },
     async getAmbilData () {
       console.log('wew')
       this.loading = true
       const params = { params: this.params }
-      await api.get('v1/simrs/master/mruanganranap', params)
+      await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuangan', params)
         .then((resp) => {
           this.loading = false
           if (resp.status === 200) {

@@ -69,75 +69,84 @@
             </q-btn> -->
           </template>
           <template #header-left-after-search>
-            <div class="row q-col-gutter-sm">
-              <div>
-                <app-input-date-human
-                  :model="store.tanggal.from"
-                  label="dari tanggal"
-                  outlined
-                  @db-model="setTo"
-                  @set-display="setToDisp"
-                />
+            <q-form
+              ref="formRef"
+              class="row q-pa-md q-col-gutter-xs"
+              @submit="store.initAmbilData"
+            >
+              <div class="row q-col-gutter-sm">
+                <div>
+                  <app-input-date-human
+                    :model="store.tanggal.from"
+                    label="dari tanggal"
+                    outlined
+                    @db-model="setTo"
+                    @set-display="setToDisp"
+                  />
+                </div>
+                <div>
+                  <app-input-date-human
+                    :model="store.tanggal.to"
+                    label="sampai tanggal"
+                    outlined
+                    @db-model="setTox"
+                    @set-display="setToFromDisp"
+                  />
+                </div>
+                <div>
+                  <q-select
+                    v-model="store.params.layanan"
+                    use-input
+                    fill-input
+                    hide-selected
+                    option-value="kodelayanan"
+                    option-label="namalayanan"
+                    :options="layanan"
+                    emit-value
+                    map-options
+                    dense
+                    outlined
+                    label="Pilih Layanan"
+                    transition-show="scale"
+                    transition-hide="scale"
+                    :rules="[
+                      val => !!val || 'Harus diisi'
+                    ]"
+                    @update:model-value="(val) => isiLayananx(val)"
+                  />
+                </div>
+                <div>
+                  <q-select
+                    v-model="store.params.ruangan"
+                    use-input
+                    fill-input
+                    hide-selected
+                    option-value="koderuangan"
+                    option-label="namaruangan"
+                    :options="ruangan"
+                    emit-value
+                    map-options
+                    dense
+                    outlined
+                    label="Pilih Ruangan"
+                    transition-show="scale"
+                    transition-hide="scale"
+                    :rules="[
+                      val => !!val && !!store.params.layanan || 'Harus diisi'
+                    ]"
+                  />
+                </div>
+                <div>
+                  <q-btn
+                    label="Cari"
+                    type="submit"
+                    color="primary"
+                    :loading="store.loading"
+                    :disable="store.loading"
+                  />
+                </div>
               </div>
-              <div>
-                <app-input-date-human
-                  :model="store.tanggal.to"
-                  label="sampai tanggal"
-                  outlined
-                  @db-model="setTox"
-                  @set-display="setToFromDisp"
-                />
-              </div>
-              <div>
-                <q-select
-                  v-model="store.params.layanan"
-                  use-input
-                  fill-input
-                  hide-selected
-                  option-value="kodelayanan"
-                  option-label="namalayanan"
-                  :options="layanan"
-                  dense
-                  outlined
-                  label="Pilih Layanan"
-                  transition-show="scale"
-                  transition-hide="scale"
-                  :rules="[
-                    val => !!val || 'Harus diisi'
-                  ]"
-                  @update:model-value="(val) => isiLayananx(val)"
-                />
-              </div>
-              <div>
-                <q-select
-                  v-model="store.params.ruangan"
-                  use-input
-                  fill-input
-                  hide-selected
-                  option-value="koderuangan"
-                  option-label="namaruangan"
-                  :options="ruangan"
-                  emit-value
-                  map-options
-                  dense
-                  outlined
-                  label="Pilih Ruangan"
-                  transition-show="scale"
-                  transition-hide="scale"
-                  :rules="[
-                    val => !!val && !!store.params.layanan || 'Harus diisi'
-                  ]"
-                />
-              </div>
-              <div>
-                <app-btn
-                  label="cari"
-                  :loading="store.loading"
-                  :disable="store.loading"
-                  @click="store.initAmbilData"
-                />
-              </div>
-            </div>
+            </q-form>
           </template>
         </Customtable>
       </q-card-section>
@@ -171,8 +180,8 @@ const ruangan = ref(null)
 
 function isiLayananx (val) {
   store.params.ruangan = ''
-  console.log('sasa', val)
-  if (val.kodelayanan === '1') {
+  // console.log('sasa', val)
+  if (val === '1') {
     this.ruangan = [
       {
         koderuangan: 'POL014',
@@ -180,7 +189,7 @@ function isiLayananx (val) {
       }
     ]
   }
-  else if (val.kodelayanan === '2') {
+  else if (val === '2') {
     this.ruangan = store.rajal.map(x => {
       return {
         koderuangan: x.kodepoli,
@@ -194,7 +203,7 @@ function isiLayananx (val) {
       }
     )
   }
-  else if (val.kodelayanan === '3') {
+  else if (val === '3') {
     this.ruangan = store.ranap.map(x => {
       return {
         koderuangan: x.rs4,
