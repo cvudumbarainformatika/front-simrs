@@ -42,6 +42,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     emptyForm() {
       this.params.bidang = ''
       this.params.kegiatan = ''
+      this.params.tgl = ''
+      this.params.tglx = ''
     },
 
     // eslint-disable-next-line space-before-function-paren
