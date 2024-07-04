@@ -7,7 +7,14 @@
       <!-- </div> -->
       <div class="q-pa-sm row items-center justify-between">
         <div class="f-12">
-          Form Resep Dokter
+          <sistem-bayar-ganti
+            :pasien="pasien"
+            :disabled="store.listPemintaanSementara.length > 0 || store.listRacikan.length > 0"
+            :is-reset="isReset"
+          />
+          <!-- <div v-else>
+            Form Resep Dokter
+          </div> -->
         </div>
         <div>
           <q-btn
@@ -81,15 +88,17 @@
           />
         </div>
         <div v-else />
-        <div class="q-gutter-sm">
+        <div class="flex items-center q-gutter-sm">
+          <!-- <div>cari</div> -->
           <q-btn
+            v-if="store.form?.groupsistembayarlain !== '2'"
             push
             dense
             color="dark"
             label="Cari Template"
             no-caps
             @click="emits('openCariTemplate')"
-            class="q-px-md"
+            class="q-px-md glossy"
           >
             <q-tooltip class="bg-white text-primary">
               Cari Template tersimpan
@@ -152,7 +161,7 @@
                       />
                     </div>
                     <div class="col-3">
-                      <q-select
+                      <!-- <q-select
                         ref="refSigna"
                         v-model="signa"
                         label="Aturan Pakai"
@@ -167,6 +176,30 @@
                         no-error-icon
                         hide-bottom-space
                         hide-dropdown-icon
+                        :options="store.signas"
+                        @new-value="signaCreateValue"
+                        @update:model-value="signaSelected"
+                        @keyup.enter.stop="signaEnter"
+                      /> -->
+                      <q-select
+                        ref="refSigna"
+                        v-model="signa"
+                        label="Aturan Pakai"
+                        use-input
+                        fill-input
+                        hide-selected
+                        dense
+                        clearable
+                        standout="bg-yellow-3"
+                        option-label="signa"
+
+                        outlined
+                        :rules="[sigaValid]"
+                        lazy-rules
+                        no-error-icon
+                        hide-bottom-space
+                        hide-dropdown-icon
+                        @filter="store.getSigna"
                         :options="store.signas"
                         @new-value="signaCreateValue"
                         @update:model-value="signaSelected"
@@ -422,16 +455,22 @@
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
-          <q-btn v-if="depo !== 'ok'" color="teal" @click="emits('openTemplate')">
-            Buat Template
-          </q-btn>
+          <div v-if="store.form?.groupsistembayarlain !== '2'">
+            <q-btn
+              v-if="depo !== 'ok'"
+              color="teal"
+              @click="emits('openTemplate')"
+            >
+              Buat Template
+            </q-btn>
+          </div>
         </div>
         <div>
           <q-btn
             color="primary"
             :loading="store.loadingkirim"
             :disable="store.loadingkirim"
-            @click="store.selesaiResep"
+            @click="selesaiResep"
           >
             Kirim Resep
           </q-btn>
@@ -527,6 +566,7 @@ import { Dialog, date } from 'quasar'
 const emits = defineEmits(['openHistory', 'openTemplate', 'openCariTemplate'])
 
 const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
+const SistemBayarGanti = defineAsyncComponent(() => import('./compFormResep/SistemBayarGanti.vue'))
 
 const props = defineProps({
   pasien: { type: Object, default: null },
@@ -543,6 +583,8 @@ const permintaan = useResepPermintaanOperasiStore()
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
+
+const isReset = ref(false)
 
 function focusJumlah () {
   console.log('focus hy')
@@ -810,16 +852,20 @@ function sigaValid (val) {
 }
 function validate () {
   if (store?.form?.kodeobat !== '') {
-    const ob = store.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
-    if (ob.length && !Object.keys(store.namaObat)?.length) store.namaObat = ob[0]
+    const ob = store?.nonFilteredObat?.filter(o => o?.kodeobat === store?.form?.kodeobat)
+    // if (ob.length && !Object.keys(store?.namaObat)?.length) store.namaObat = ob[0]
+    if (ob.length) store.namaObat = ob[0]
     // console.log('non', store.nonFilteredObat)
   }
   if (store?.form?.aturan !== '') {
-    const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
-    if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
+    const sign = store?.signas?.filter(sig => sig?.signa === store?.form?.aturan)
+    // console.log('sign', sign)
+    // console.log('sign', signa.value)
+    // if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
+    if (sign.length) signa.value = sign[0]
     // console.log('at', store.signas, sign)
   }
-  if (store.form.tiperesep === 'iter' && store.dpPar === 'Gd-05010101') {
+  if (store?.form?.tiperesep === 'iter' && store?.dpPar === 'Gd-05010101') {
     if (store.form.iter_jml === '' || !store.form.iter_jml) {
       notifErrVue('Jumlah Iter belum di isi')
       return false
@@ -851,6 +897,7 @@ function ketEnter () {
     })
 }
 function simpanObat () {
+  console.log('simpan obat', store.form)
   if (validate()) {
     const form = store.form
     store.simpanObat(form)?.then(() => {
@@ -862,11 +909,25 @@ function simpanObat () {
   }
 }
 
+function selesaiResep () {
+  store.selesaiResep()
+  isReset.value = true
+  setTimeout(() => {
+    isReset.value = false
+  }, 100)
+}
+
 // add history eresep
 function historyOpen () {
   emits('openHistory')
   // store.getHistory(props.pasien?.norm)
 }
+
+// ==================================================================================khusus SISITEM BAYAR
+
+// function onChangeSistemBayar () {
+//   console.log('ok')
+// }
 
 onMounted(() => {
   // console.log('depo', props?.depo, props.pasien)

@@ -14,6 +14,7 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     gudangs: [],
     polis: [],
     ruangs: [],
+    sistemBayars: [],
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
@@ -31,6 +32,9 @@ export const useAplikasiStore = defineStore('aplikasiX', {
       this.loading = true
       this.items = storage.getApps('apps') ? storage.getApps('apps') : []
       this.loading = false
+    },
+    setSistemBayars (val) {
+      this.sistemBayars = val
     },
 
     setItems (val) {

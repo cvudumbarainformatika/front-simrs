@@ -17,7 +17,7 @@
         <q-item-section>
           <q-item-label>{{ item?.nama }}</q-item-label>
         </q-item-section>
-        <q-item-section side @click="emits('delete', item)">
+        <q-item-section side @click="hapusItem(item)">
           <q-btn flat icon="icon-mat-delete" color="negative" round size="sm" />
         </q-item-section>
       </q-item>
@@ -28,9 +28,11 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { useTemplateEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/templateeresep'
 import { ref } from 'vue'
 const store = useTemplateEResepStore()
+const $q = useQuasar()
 
 const classHover = ref(-1)
 
@@ -45,6 +47,23 @@ const emits = defineEmits(['select', 'delete'])
 
 const onMouseOver = (val) => {
   classHover.value = val
+}
+
+function hapusItem (val) {
+  $q.dialog({
+    title: 'Pemberitahuan',
+    message: `Apakah Template <strong>${val?.nama}</strong>  ini akan dihapus?`,
+    cancel: true,
+    html: true,
+    persistent: true
+  }).onOk(() => {
+    emits('delete', val)
+  }).onCancel(() => {
+    console.log('Cancel')
+    // selected.value = []
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
 }
 
 </script>

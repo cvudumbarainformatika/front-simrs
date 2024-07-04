@@ -111,7 +111,7 @@ const signOut = () => {
   store.logout()
 }
 
-function setting() {
+function setting () {
   if (apps?.user?.pegawai?.role_id === 1) {
     router.push({ path: '/settings/aplikasi', replace: true })
     // console.log('root')
