@@ -72,13 +72,18 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         .then((resp) => {
           this.loading = false
           if (resp.status === 200) {
-            this.ranap = resp?.data
+            const datahasil = resp?.data
+            this.sethasil(datahasil)
           }
         })
         .catch((err) => {
           console.log(err)
           this.loading = false
         })
+    },
+    sethasil (val) {
+      const admin = val.rstigalima[0]?.subtotal
+      console.log('sasa', admin)
     }
   }
 })
