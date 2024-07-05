@@ -178,6 +178,26 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
       })
     },
 
+    deleteTemplate (val) {
+      console.log('delete template', val)
+      const payload = {
+        id: val?.id
+      }
+
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/templateeresep/delete', payload)
+          .then(resp => {
+            console.log('delete template', resp)
+            this.templates = this.templates.filter(x => x?.id !== val?.id)
+            this.selectTemplate()
+            resolve(resp)
+          })
+          .catch((err) => {
+            console.log('err', err)
+          })
+      })
+    },
+
     async getTemplates (val) {
       const params = { params: { kodedepo: val } }
       // return new Promise(resolve => {

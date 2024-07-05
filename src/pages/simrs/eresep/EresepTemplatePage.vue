@@ -100,7 +100,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="template" class="fit overflow-hidden q-pa-none">
-                <ListTemplate v-if="store.templates.length" :items="store.templates" @select="store.selectTemplate" />
+                <ListTemplate v-if="store.templates.length" :items="store.templates" @select="store.selectTemplate" @delete="store.deleteTemplate" />
                 <div class="fit column flex-center bg-grey-4">
                   <div class="text-dark">
                     Belum ada template

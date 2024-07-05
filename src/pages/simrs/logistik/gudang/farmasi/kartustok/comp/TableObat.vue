@@ -121,7 +121,8 @@ const columnsx = [
     label: 'DETAIL OBAT',
     align: 'left',
     sortable: false,
-    key: 'nama_obat'
+    key: 'nama_obat',
+    field: 'nama_obat'
   },
   { name: 'saldo_awal', label: 'Saldo Awal', align: 'right', field: (row) => hitungSaldoAwal(row?.saldoawal), key: 'saldo_awal' },
   {
@@ -390,10 +391,15 @@ function wrapCsvValue (val, formatFn, row) {
   return `"${formatted}"`
 }
 
+// eslint-disable-next-line no-unused-vars
 function onRowClick (row) {
   console.log('onRowClick', row)
   store.setItem(row)
 }
+
+// function delokIsineProps (props) {
+//   console.log('props', props)
+// }
 
 </script>
 

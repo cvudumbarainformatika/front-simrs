@@ -739,15 +739,34 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
       // }
     },
-    async getSigna () {
-      this.loadingSigna = true
-      await api.get('v1/simrs/farmasinew/depo/get-signa')
-        .then(resp => {
-          this.loadingSigna = false
-          // console.log('signa', resp?.data)
-          this.signas = resp?.data
+    async getSigna (val, update, abort) {
+      // this.loadingSigna = true
+      // await api.get('v1/simrs/farmasinew/depo/get-signa')
+      // if (val?.length < 1) {
+      //   abort()
+      //   return
+      // }
+      const params = {
+        params: {
+          q: val ?? ''
+        }
+      }
+      const resp = await api.get('v1/simrs/master/signa/get-signa-autocomplete', params)
+      if (update !== undefined) {
+        update(() => {
+          this.signas = resp.data ?? []
         })
-        .catch(() => { this.loadingSigna = false })
+      }
+      else {
+        this.signas = resp.data
+      }
+
+      // .then(resp => {
+      //   // this.loadingSigna = false
+      //   // console.log('signa', resp?.data)
+      //   this.signas = resp?.data
+      // })
+      // .catch(() => { this.loadingSigna = false })
     },
     seveSigna () {
       this.loadingSaveSigna = true
@@ -870,6 +889,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       console.log('selesai', this.form)
       this.loadingkirim = true
       if (!this.form.noresep || this.form.noresep === '') {
+        this.loadingkirim = false
         if (this.noresep) this.setForm('noresep', this.noresep)
         else return notifErrVue('nomor resep tidak terekam, silahkan pilih nomor resep yang akan dikirim')
       }
