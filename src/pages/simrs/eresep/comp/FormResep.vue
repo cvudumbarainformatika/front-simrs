@@ -6,7 +6,7 @@
       <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
       <!-- </div> -->
       <div class="q-pa-sm row items-center justify-between">
-        <div class="f-12">
+        <div class="f-12" v-if="depo!=='rnp'">
           <sistem-bayar-ganti
             :pasien="pasien"
             :disabled="store.listPemintaanSementara.length > 0 || store.listRacikan.length > 0"
