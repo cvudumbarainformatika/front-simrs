@@ -30,7 +30,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     paguAnggaran: [],
     mapRekening: [],
     penggunaAnggaran: [],
-    pembiayaans: []
+    pembiayaans: [],
+    realisasiPembiayaans: [],
+    paguPembiayaans: []
   }),
   actions: {
     setParameter (key, val) {
@@ -100,13 +102,18 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
             this.items = []
             this.realisasipends = resp.data?.realisasipendapatan
             this.nilaipends = resp.data?.nilaipendapatan
+            this.realisasiPembiayaans = resp.data?.silpa
+            this.paguPembiayaans = resp.data?.silpa
             this.items = resp.data
+            this.pembiayaans = []
             this.paguAnggaran(resp.data?.belanja)
             this.mapRekening(resp.data?.belanja)
             this.mapPendapatan(resp.data?.pendapatan)
             this.nilaiPendapatan(resp.data?.nilaipendapatan)
             this.realisasiPendapatan(resp.data?.realisasipendapatan)
             this.rekPembiayaan(resp.data?.pembiayaan)
+            this.realisasiPembiayaan(resp.data?.silpa)
+            this.paguPembiayaan(resp.data?.silpa)
             this.penggunaAnggaran = resp.data?.pa
             this.loading = false
             resolve(resp)
@@ -174,6 +181,46 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     rekPembiayaan(val) {
       this.pembiayaans = val
     },
+    paguPembiayaan(val) {
+      const real = this.paguPembiayaans?.map((x) => parseFloat(x.nominal))
+      const total = {
+        totalPaguPembiayaan: real?.reduce((a, b) => a + b, 0)
+      }
+
+      this.paguPembiayaans = total
+    },
+    realisasiPembiayaan(val) {
+      const realSebelumnya = this.realisasiPembiayaans?.filter((x) => {
+        const tgl = new Date(x?.tanggal).getTime()
+        return tgl < new Date(this.params.tgl).getTime()
+      }).map((x) => parseFloat(x.nominal))
+
+      const realsekarang = this.realisasiPembiayaans?.filter((x) => {
+        const tgl = new Date(x?.tanggal).getTime()
+        return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
+      }).map((x) => parseFloat(x.nominal))
+
+      const totalPagu = this.paguPembiayaans?.map((x) => parseFloat(x.nominal)).reduce((a, b) => a + b, 0)
+
+      // console.log('klklkl', totalPagu)
+
+      const total = {
+        totalPaguPembiayaan: totalPagu,
+        totalSekarang: realsekarang?.reduce((a, b) => a + b, 0),
+        totalSebelumnya: realSebelumnya?.reduce((a, b) => a + b, 0),
+        totalRealisasi: realsekarang?.reduce((a, b) => a + b, 0) + realSebelumnya?.reduce((a, b) => a + b, 0),
+        selisih: totalPagu - (realSebelumnya?.reduce((a, b) => a + b, 0) + realsekarang?.reduce((a, b) => a + b, 0)),
+        persen: (((realSebelumnya?.reduce((a, b) => a + b, 0) + realsekarang?.reduce((a, b) => a + b, 0)) / totalPagu) * 100).toFixed(2)
+      }
+
+      this.realisasiPembiayaans = total
+      // console.log('realisasi', this.realisasiPembiayaans)
+      // for (let i = 0; i < val?.length; i++) {
+      //   val[i].realpendapatan = val?.map((x) => parseInt(x.nilai)).reduce((a, b) => a + b, 0)
+      //   console.log('real', val[i].realpendapatan)
+      // }
+    },
+
     paguAnggaran (val) {
       // this.items = []
       // const Anggaran = []

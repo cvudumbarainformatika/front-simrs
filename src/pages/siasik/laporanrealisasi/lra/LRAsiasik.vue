@@ -298,22 +298,22 @@
                       SURPLUS / (DEFISIT)
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(hitungPagu()) }}
+                      {{ formattanpaRp(hitungPagu().surplus_defisit) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(hitungSebelumnya()) }}
+                      {{ formattanpaRp(hitungSebelumnya().surplus_defisit) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(hitungSekarang()) }}
+                      {{ formattanpaRp(hitungSekarang().surplus_defisit) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(hitungTotalRealisasi()) }}
+                      {{ formattanpaRp(hitungTotalRealisasi().surplus_defisit) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(hitungSelisih()) }}
+                      {{ formattanpaRp(hitungSelisih().surplus_defisit) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(HitungPersen()) }}
+                      {{ formattanpaRp(HitungPersen().surplus_defisit) }}
                     </td>
                   </tr>
                   <tr v-for="rek in store.pembiayaans" :key="rek">
@@ -324,45 +324,68 @@
                       <div> {{ rek.uraian }}  </div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalPaguPembiayaan) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalSebelumnya) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalSekarang) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalRealisasi) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div> {{ formattanpaRp(store.realisasiPembiayaans?.selisih) }} </div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div> {{ formattanpaRp(store.realisasiPembiayaans?.persen) }} </div>
                     </td>
                   </tr>
                   <tr class="total text-bold">
                     <td class="text-right q-pl-sm q-pr-sm" colspan="2">
-                      TOTAL PEMBIAYAAN
+                      TOTAL PEMBIAYAAN (NETTO)
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalPaguPembiayaan) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalSebelumnya) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalSekarang) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div>{{ formattanpaRp(0) }}</div>
+                      <div>{{ formattanpaRp(store.realisasiPembiayaans?.totalRealisasi) }}</div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div> {{ formattanpaRp(store.realisasiPembiayaans?.selisih) }} </div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(0) }} </div>
+                      <div> {{ formattanpaRp(store.realisasiPembiayaans?.persen) }} </div>
+                    </td>
+                  </tr>
+                  <tr class="total text-bold">
+                    <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                      SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungPagu().silpa) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSebelumnya().silpa) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSekarang().silpa) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungTotalRealisasi().silpa) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(hitungSelisih().silpa) }}
+                    </td>
+                    <td class="text-right q-pl-sm q-pr-sm">
+                      {{ formattanpaRp(HitungPersen().silpa) }}
                     </td>
                   </tr>
                 </tbody>
@@ -404,6 +427,7 @@ store.realisasiPendapatan()
 // store.getDataPendapatan()
 onMounted(() => {
   store.getDataBidang()
+  // store.getDataRealisasi()
 })
 function tglDari (val) {
   store.setParameter('tgl', val)
@@ -438,49 +462,79 @@ function hitungPagu () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.totalPagu
   const PaguPendapatan = store.realisasipends?.totalPaguPendapatan
+  const pembiayaan = store.realisasiPembiayaans?.totalPaguPembiayaan
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 function hitungSebelumnya () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.totalRealisasiSebelumnya
   const PaguPendapatan = store.realisasipends?.totalSebelumnya
+  const pembiayaan = store.realisasiPembiayaans?.totalSebelumnya
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 function hitungSekarang () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.totalRealisasi
   const PaguPendapatan = store.realisasipends?.totalSekarang
+  const pembiayaan = store.realisasiPembiayaans?.totalSekarang
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 function hitungTotalRealisasi () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.RealisasiSemua
   const PaguPendapatan = store.realisasipends?.totalRealisasi
+  const pembiayaan = store.realisasiPembiayaans?.totalRealisasi
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 function hitungSelisih () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.selisih
   const PaguPendapatan = store.realisasipends?.selisih
+  const pembiayaan = store.realisasiPembiayaans?.selisih
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 function HitungPersen () {
   const saldo = store.items
   const PaguBelanja = saldo[0]?.persen
   const PaguPendapatan = store.realisasipends?.persen
+  const pembiayaan = store.realisasiPembiayaans?.persen
   const NilaiPagu = PaguPendapatan - PaguBelanja
+  const silpa = NilaiPagu + pembiayaan
   // console.log('nilaipagu', NilaiPagu)
-  return NilaiPagu
+  return {
+    surplus_defisit: NilaiPagu,
+    silpa
+  }
 }
 
 function ambilData () {
