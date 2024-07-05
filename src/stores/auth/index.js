@@ -146,9 +146,11 @@ export const useAuthStore = defineStore('auth', {
                 const user = resp?.data?.user
                 const aplikasi = resp?.data?.apps
                 const akses = resp?.data?.akses
+                const mSistemBayar = resp?.data?.mSistemBayar
                 apps.setUser(user)
                 apps.setItems(aplikasi)
                 apps.setAksesApps(akses)
+                apps.setSistemBayars(mSistemBayar)
                 setTimeout(() => { this.loading = false }, 200)
               }
               else {

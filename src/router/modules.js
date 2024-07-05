@@ -22,10 +22,11 @@ import satset from './satset'
 import kamaroperasi from './kamaroperasi'
 import rehabmedik from './rehabmedik'
 import hemodialisa from './hemodialisa'
+import siasik from './siasik'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
   kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset,
-  kamaroperasi, rehabmedik, hemodialisa
+  kamaroperasi, rehabmedik, hemodialisa, siasik
 }

@@ -182,7 +182,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
         // FILTER TRANSAKSI SEBELUMNYA
         const lsAwal = val[i].npdls_rinci?.filter((x) => {
-          const tgl = new Date(x?.headerls?.tglnpdls).getTime()
+          const tgl = new Date(x?.headerls?.npkrinci?.header?.tglpindahbuku
+          ).getTime()
           return tgl < new Date(this.params.tgl).getTime()
         })
         const pjrAwal = val[i].spjpanjar?.filter((x) => {
@@ -196,7 +197,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
         // FILTER TRANSAKSI SEKARANG
         const ls = val[i].npdls_rinci?.filter((x) => {
-          const tgl = new Date(x?.headerls?.tglnpdls).getTime()
+          const tgl = new Date(x?.headerls?.npkrinci?.header?.tglpindahbuku).getTime()
           return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
         })
         const pjr = val[i].spjpanjar?.filter((x) => {

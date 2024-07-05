@@ -117,7 +117,7 @@ async function filterFn (val, update, abort) {
   else return notifErrVue('depo tujuan tidak ditemukan')
 
   const param = {
-    groups: store?.pasien?.groups,
+    groups: store?.form?.groupsistembayarlain,
     kdruang: store.dpPar,
     q: val,
     tiperesep: store.form.tiperesep

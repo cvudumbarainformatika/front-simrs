@@ -154,6 +154,14 @@
               </div>
             </div>
           </template>
+          <template v-else-if="store.items.length === 0">
+            <div class="row flex flex-center">
+              <div class="kosong">
+                <div>Data Belum Ada</div>
+                <div>Silahkan Pilih Parameter</div>
+              </div>
+            </div>
+          </template>
 
           <template v-else>
             <div class="row flex flex-center" id="printMe">
@@ -391,15 +399,11 @@ import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/lapora
 import { onMounted, ref } from 'vue'
 // import { ref } from 'vue'
 const store = useLaporanLraLaprealisasianggaranStore()
-store.getDataRealisasi()
+
 store.realisasiPendapatan()
 // store.getDataPendapatan()
 onMounted(() => {
   store.getDataBidang()
-  // store.getSebelumnya()
-  // store.paguAnggaran()
-  // store.realisasiAnggaran()
-  // store.getBidang()
 })
 function tglDari (val) {
   store.setParameter('tgl', val)
@@ -478,33 +482,7 @@ function HitungPersen () {
   // console.log('nilaipagu', NilaiPagu)
   return NilaiPagu
 }
-// function totalPagux () {
-//   const saldo = store.items
-//   const totalanggaran = saldo[0]?.totalPagu
-//   return totalanggaran
-// }
-// function totalRealisasiSebelumnya () {
-//   const saldo = store.items
-//   const totalpagu = saldo[0]?.totalRealisasiSebelumnya
-//   return totalpagu
-// }
 
-// function totalRealisasi () {
-//   const saldo = store.items
-//   const totalpagu = saldo[0]?.totalRealisasi
-//   return totalpagu
-// }
-
-// function totalSelisih () {
-//   const saldo = store.items
-//   const totalpagu = saldo[0]?.selisih
-//   return totalpagu
-// }
-// function totalPersen () {
-//   const saldo = store.items
-//   const totalpagu = saldo[0]?.persen
-//   return totalpagu
-// }
 function ambilData () {
   // store.hitungharidalamBulan();
   store.getDataRealisasi().then(() => {
@@ -552,5 +530,14 @@ tbody tr td{
 }
 .underline{
   text-decoration-line: underline;
+}
+.kosong{
+  position: relative;
+  padding-top: 100px;
+  text-align: center;
+  justify-content: center;
+  width: 25%;
+  height: 270px;
+  font-size: 1.5em;
 }
 </style>

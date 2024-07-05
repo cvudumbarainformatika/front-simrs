@@ -29,7 +29,8 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       { nama: 'Desember', value: '12' }
     ],
     hasilArray: [],
-    arrayTanggal: []
+    arrayTanggal: [],
+    pegawais: []
   }),
 
   actions: {
@@ -51,6 +52,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
             this.hasilArray = []
             this.items = []
             this.items = resp.data
+            this.pegawais = resp.data?.pegawai
             this.hitungharidalamBulan()
             this.loading = false
           }
