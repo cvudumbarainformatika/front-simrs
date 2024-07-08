@@ -267,7 +267,7 @@ function hitungResepRacikanKeluar (arr) {
 
 function returResep (arr, kodeObat) {
   const arrreturResep = arr?.length ? arr.map(x => x.retur)?.reduce((a, b) => a.concat(b), []) : []
-  const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x?.rinci)?.reduce((a, b) => a.concat(b), []) : []
   const rinciWhereKode = rincianReturResep.length ? rincianReturResep?.filter(x => x.kdobat === kodeObat) : []
   const jmlRetur = rinciWhereKode?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
   return jmlRetur
