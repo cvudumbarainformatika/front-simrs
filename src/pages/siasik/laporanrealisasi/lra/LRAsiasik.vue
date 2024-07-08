@@ -362,7 +362,7 @@
                       <div> {{ formattanpaRp(store.realisasiPembiayaans?.selisih) }} </div>
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      <div> {{ formattanpaRp(store.realisasiPembiayaans?.persen) }} </div>
+                      <div> {{ store.realisasiPembiayaans?.persen }} </div>
                     </td>
                   </tr>
                   <tr class="total text-bold">
@@ -385,7 +385,7 @@
                       {{ formattanpaRp(hitungSelisih().silpa) }}
                     </td>
                     <td class="text-right q-pl-sm q-pr-sm">
-                      {{ formattanpaRp(HitungPersen().silpa) }}
+                      {{ HitungPersen().silpa }}
                     </td>
                   </tr>
                 </tbody>
@@ -525,11 +525,16 @@ function hitungSelisih () {
 }
 function HitungPersen () {
   const saldo = store.items
-  const PaguBelanja = saldo[0]?.persen
-  const PaguPendapatan = store.realisasipends?.persen
-  const pembiayaan = store.realisasiPembiayaans?.persen
-  const NilaiPagu = PaguPendapatan - PaguBelanja
-  const silpa = NilaiPagu + pembiayaan
+  const PaguBelanja = parseFloat(saldo[0]?.persen)
+  const PaguPendapatan = parseFloat(store.realisasipends?.persen)
+  const pembiayaan = parseFloat(store.realisasiPembiayaans?.persen)
+  const NilaiPagu = parseFloat(PaguPendapatan - PaguBelanja)
+  const silpa = parseFloat(NilaiPagu + pembiayaan)
+  console.log('1', PaguBelanja)
+  console.log('2', PaguPendapatan)
+  console.log('3', pembiayaan)
+  console.log('4', NilaiPagu)
+  console.log('5', silpa)
   // console.log('nilaipagu', NilaiPagu)
   return {
     surplus_defisit: NilaiPagu,

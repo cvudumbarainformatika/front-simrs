@@ -168,7 +168,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         totalSebelumnya: realSebelumnya?.reduce((a, b) => a + b, 0),
         totalRealisasi: real?.reduce((a, b) => a + b, 0) + realSebelumnya?.reduce((a, b) => a + b, 0),
         selisih: totalPagu - (realSebelumnya?.reduce((a, b) => a + b, 0) + real?.reduce((a, b) => a + b, 0)),
-        persen: (((realSebelumnya?.reduce((a, b) => a + b, 0) + real?.reduce((a, b) => a + b, 0)) / totalPagu) * 100).toFixed(2)
+        persen: (((realSebelumnya?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) + real?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) / parseFloat(totalPagu)) * 100).toFixed(2)
       }
 
       this.realisasipends = total
@@ -210,7 +210,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         totalSebelumnya: realSebelumnya?.reduce((a, b) => a + b, 0),
         totalRealisasi: realsekarang?.reduce((a, b) => a + b, 0) + realSebelumnya?.reduce((a, b) => a + b, 0),
         selisih: totalPagu - (realSebelumnya?.reduce((a, b) => a + b, 0) + realsekarang?.reduce((a, b) => a + b, 0)),
-        persen: (((realSebelumnya?.reduce((a, b) => a + b, 0) + realsekarang?.reduce((a, b) => a + b, 0)) / totalPagu) * 100).toFixed(2)
+        persen: (((realSebelumnya?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) + realsekarang?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) / parseFloat(totalPagu)) * 100).toFixed(2)
       }
 
       this.realisasiPembiayaans = total
@@ -278,7 +278,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         val[i].RealisasiSemua = val[i].totalRealisasi + val[i].totalRealisasiSebelumnya
         // NILAI SELISIH
         val[i].selisih = val[i].totalPagu - (val[i].totalRealisasiSebelumnya + val[i].totalRealisasi)
-        val[i].persen = ((val[i].totalRealisasiSebelumnya + val[i].totalRealisasi) / val[i].totalPagu * 100).toFixed(2)
+        val[i].persen = ((parseFloat(val[i].totalRealisasiSebelumnya) + parseFloat(val[i].totalRealisasi)) / parseFloat(val[i].totalPagu) * 100).toFixed(2)
         // console.log('xxxx', pagu)
         // Anggaran.push(pagu)
         // this.items = pagu
@@ -310,7 +310,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         totalRealisasi: realisasi.reduce((a, b) => a + b, 0),
         RealisasiSemua: realisasiSebelumnya.reduce((a, b) => a + b, 0) + realisasi.reduce((a, b) => a + b, 0),
         selisih: pagu.reduce((a, b) => a + b, 0) - realisasiSebelumnya.reduce((a, b) => a + b, 0) - realisasi.reduce((a, b) => a + b, 0),
-        persen: ((realisasiSebelumnya.reduce((a, b) => a + b, 0) + realisasi.reduce((a, b) => a + b, 0)) / pagu.reduce((a, b) => a + b, 0) * 100).toFixed(2)
+        persen: ((realisasiSebelumnya.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) + realisasi.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) / pagu.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) * 100).toFixed(2)
       }
       // console.log('lo lo lo', kode1)
       // KODE2
@@ -432,7 +432,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                 const tgl = new Date(x?.tglcontrapost).getTime()
                 return tgl < new Date(this.params.tgl).getTime()
               }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0) +
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0) +
             this.items?.filter((s) => s?.kode2?.kodeall2 === a)
               .map((x) => {
                 return (x?.npdls_rinci?.filter((x) => {
@@ -447,11 +447,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                   const tgl = new Date(x?.tglcontrapost).getTime()
                   return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
                 }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0)) /
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) /
               this.items?.filter((s) => s?.kode2?.kodeall2 === a)
                 .map((x) => {
                   return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
-                }).reduce((x, y) => x + y, 0)) * 100).toFixed(2)
+                }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) * 100).toFixed(2)
           }
         })
         : []
@@ -591,7 +591,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                 const tgl = new Date(x?.tglcontrapost).getTime()
                 return tgl < new Date(this.params.tgl).getTime()
               }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0) +
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0) +
             this.items?.filter((s) => s?.kode3?.kodeall2 === a)
               .map((x) => {
                 return (x?.npdls_rinci?.filter((x) => {
@@ -606,11 +606,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                   const tgl = new Date(x?.tglcontrapost).getTime()
                   return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
                 }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0)) /
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) /
               this.items?.filter((s) => s?.kode3?.kodeall2 === a)
                 .map((x) => {
                   return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
-                }).reduce((x, y) => x + y, 0)) * 100).toFixed(2)
+                }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) * 100).toFixed(2)
           }
         })
         : []
@@ -738,7 +738,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                 const tgl = new Date(x?.tglcontrapost).getTime()
                 return tgl < new Date(this.params.tgl).getTime()
               }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0) +
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0) +
             this.items?.filter((s) => s?.kode4?.kodeall2 === a)
               .map((x) => {
                 return (x?.npdls_rinci?.filter((x) => {
@@ -753,11 +753,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                   const tgl = new Date(x?.tglcontrapost).getTime()
                   return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
                 }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0)) /
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) /
               this.items?.filter((s) => s?.kode4?.kodeall2 === a)
                 .map((x) => {
                   return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
-                }).reduce((x, y) => x + y, 0)) * 100).toFixed(2)
+                }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) * 100).toFixed(2)
           }
         })
         : []
@@ -886,7 +886,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                 const tgl = new Date(x?.tglcontrapost).getTime()
                 return tgl < new Date(this.params.tgl).getTime()
               }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0) +
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0) +
             this.items?.filter((s) => s?.kode5?.kodeall2 === a)
               .map((x) => {
                 return (x?.npdls_rinci?.filter((x) => {
@@ -901,11 +901,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
                   const tgl = new Date(x?.tglcontrapost).getTime()
                   return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
                 }).reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
-              }).reduce((x, y) => x + y, 0)) /
+              }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) /
               this.items?.filter((s) => s?.kode5?.kodeall2 === a)
                 .map((x) => {
                   return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
-                }).reduce((x, y) => x + y, 0)) * 100).toFixed(2)
+                }).reduce((x, y) => parseFloat(x) + parseFloat(y), 0)) * 100).toFixed(2)
           }
         })
         : []
