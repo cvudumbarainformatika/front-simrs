@@ -216,6 +216,58 @@
               </q-item>
             </div>
           </template>
+          <template #cell-MakanPasien="{row}">
+            <div
+              v-if="row?.MakanPasien.length >= 0"
+            >
+              <q-item
+                v-for="(MakanPasien , mp) in row?.MakanPasien"
+                :key="mp"
+                class="list-move"
+              >
+                {{ MakanPasien?.namaruangan }} = {{ formatDouble(MakanPasien?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Oksigen="{row}">
+            <div
+              v-if="row?.Oksigen.length >= 0"
+            >
+              <q-item
+                v-for="(Oksigen , ok) in row?.Oksigen"
+                :key="ok"
+                class="list-move"
+              >
+                {{ Oksigen?.namaruangan }} = {{ formatDouble(Oksigen?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Keperawatan="{row}">
+            <div
+              v-if="row?.Keperawatan.length >= 0"
+            >
+              <q-item
+                v-for="(Keperawatan , kp) in row?.Keperawatan"
+                :key="kp"
+                class="list-move"
+              >
+                {{ Keperawatan?.namaruangan }} = {{ formatDouble(Keperawatan?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Laborat="{row}">
+            <div
+              v-if="row?.Laborat.length >= 0"
+            >
+              <q-item
+                v-for="(Laborat , lab) in row?.Laborat"
+                :key="lab"
+                class="list-move"
+              >
+                {{ Laborat?.namaruangan }} = {{ formatDouble(Laborat?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>

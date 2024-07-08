@@ -26,7 +26,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     ruangan: {
       koderuangan: null
     },
-    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan'],
+    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan', 'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat'],
     kolomhide: []
   }),
   actions: {
@@ -149,6 +149,70 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
               subtotal: temp
             }
             xxx.Visite.push(visiteum)
+          })
+        }
+
+        xxx.MakanPasien = []
+        const makans = filterDuplicateArrays(xxx?.makanpasien?.map(m => m?.rs8))
+        if (makans?.length) {
+          makans.sort()
+          makans.forEach(f => {
+            const temp = xxx?.makanpasien?.filter(m => m.rs8 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            const makanpas = {
+              kamar: f,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.MakanPasien.push(makanpas)
+          })
+        }
+
+        xxx.Oksigen = []
+        const oksigens = filterDuplicateArrays(xxx?.oksigen?.map(m => m?.rs8))
+        if (oksigens?.length) {
+          oksigens.sort()
+          oksigens.forEach(f => {
+            const temp = xxx?.oksigen?.filter(m => m.rs8 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            const woksigen = {
+              kamar: f,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Oksigen.push(woksigen)
+          })
+        }
+
+        xxx.Keperawatan = []
+        const kepers = filterDuplicateArrays(xxx?.keperawatan?.map(m => m?.rs8))
+        if (kepers?.length) {
+          kepers.sort()
+          kepers.forEach(f => {
+            const temp = xxx?.keperawatan?.filter(m => m.rs8 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            const keperawatanx = {
+              kamar: f,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Keperawatan.push(keperawatanx)
+          })
+        }
+
+        xxx.Laborat = []
+        const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.rs23))
+        if (laborats?.length) {
+          laborats.sort()
+          laborats.forEach(f => {
+            const temp = xxx?.laborat?.filter(m => m.rs23 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            const laboratssss = {
+              kamar: f,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Laborat.push(laboratssss)
           })
         }
       })
