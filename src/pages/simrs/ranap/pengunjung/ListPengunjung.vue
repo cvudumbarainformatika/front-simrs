@@ -50,7 +50,7 @@
               class="q-mb-sm"
               icon-right="icon-mat-eye"
               style="min-width: 120px;"
-              @click="bukaLayanan(item)"
+              @click="bukaLayananPage(item)"
             />
           </q-item-section>
         </q-item>
@@ -61,6 +61,7 @@
     <page-layanan-ranap
       v-model="store.pageLayanan"
       :pasien="pasien"
+      :loading="store.loadingLayanan"
     />
   </div>
 </template>
@@ -103,9 +104,13 @@ const timerJam = setInterval(() => {
   currTime.value = new Date()
 }, 1000)
 
-function bukaLayanan (item) {
+function bukaLayananPage (item) {
+  // console.log('item', item)
   pasien.value = item
-  store.bukaLayanan(true)
+  store.bukaLayanan(true, item)
+    .then((val) => {
+      pasien.value = val
+    })
 }
 
 onBeforeUnmount(() => {

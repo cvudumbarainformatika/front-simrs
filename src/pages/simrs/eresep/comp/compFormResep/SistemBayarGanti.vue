@@ -40,7 +40,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  console.log('pasien', props?.pasien)
+  // console.log('pasien', props?.pasien)
   // const pasienSistembayar = props.pasien?.kodesistembayar ?? null
   // const pasienGroupSistembayar = props.pasien?.groups ?? null
   // console.log('pasien kode sistem bayar', pasienSistembayar)
@@ -63,7 +63,7 @@ const sisByr = computed(() => {
 // const sisByrSekara
 
 const onChangeSistemBayar = (item) => {
-  console.log('ok computed', sisByr.value)
+  // console.log('ok computed', sisByr.value)
   sistemBayar.value = item
 }
 
@@ -75,6 +75,6 @@ watchEffect(() => {
     sistemBayar.value = sisByr.value[0]
   }
 
-  console.log('watch effect store', store.form)
+  // console.log('watch effect store', store.form)
 })
 </script>
