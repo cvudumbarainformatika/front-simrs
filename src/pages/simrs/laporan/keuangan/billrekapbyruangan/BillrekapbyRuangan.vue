@@ -190,6 +190,19 @@
               </q-item>
             </div>
           </template>
+          <template #cell-Visite="{row}">
+            <div
+              v-if="row?.Visite.length >= 0"
+            >
+              <q-item
+                v-for="(Visite , v) in row?.Visite"
+                :key="v"
+                class="list-move"
+              >
+                {{ Visite?.namaruangan }} = {{ formatDouble(Visite?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
           <template #cell-TindakanKeperawatan="{row}">
             <div
               v-if="row?.TindakanPerawat.length >= 0"
