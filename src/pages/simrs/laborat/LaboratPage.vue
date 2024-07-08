@@ -267,14 +267,14 @@ const optionFiltertBy = ref([
 const pemeriksaanLaborat = ref([])
 const totalPemeriksaanLaborat = ref(0)
 
-function changeSelected(val) {
+function changeSelected (val) {
   store.setPeriode(val)
 }
-function changeFiltered(val) {
+function changeFiltered (val) {
   store.setFilterBy(val)
 }
 
-function getProgress(row) {
+function getProgress (row) {
   const kunci = row.rs18 === '1'
   const progress = row.rs21
   const complete = row.rs26 === '1'
@@ -284,93 +284,100 @@ function getProgress(row) {
   return progress || complete ? 'Complete' : 'Menunggu Hasil ...'
 }
 
-function getNoRm(row) {
+function getNoRm (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
     return row.pasien_kunjungan_poli.rs1
-  } else {
+  }
+  else {
     if (krw) {
       return row.pasien_kunjungan_rawat_inap.rs1
     }
   }
   return 'kosong'
 }
-function getNama(row) {
+function getNama (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
     return row.pasien_kunjungan_poli.rs2
-  } else {
+  }
+  else {
     if (krw) {
       return row.pasien_kunjungan_rawat_inap.rs2
     }
   }
   return 'kosong'
 }
-function getKelamin(row) {
+function getKelamin (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
     return row.pasien_kunjungan_poli.rs17
-  } else {
+  }
+  else {
     if (krw) {
       return row.pasien_kunjungan_rawat_inap.rs17
     }
   }
   return '-'
 }
-function getUsia(row) {
+function getUsia (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   let usia = 0
   if (kp) {
     usia = row.pasien_kunjungan_poli.rs16
-  } else {
+  }
+  else {
     if (krw) {
       usia = row.pasien_kunjungan_rawat_inap.rs16
     }
   }
   return diffDate(usia)
 }
-function getBOD(row) {
+function getBOD (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   let BOD = 0
   if (kp) {
     BOD = row.pasien_kunjungan_poli.rs16
-  } else {
+  }
+  else {
     if (krw) {
       BOD = row.pasien_kunjungan_rawat_inap.rs16
     }
   }
   return dateBOD(BOD)
 }
-function getAlamat(row) {
+function getAlamat (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   let alamat = '-'
   if (kp) {
     alamat = row.pasien_kunjungan_poli.rs4 + ' - ' + row.pasien_kunjungan_poli.rs6
-  } else {
+  }
+  else {
     if (krw) {
       alamat = row.pasien_kunjungan_rawat_inap.rs4 + ' - ' + row.pasien_kunjungan_rawat_inap.rs6
     }
   }
   return alamat
 }
-function getImage(kelamin) {
+function getImage (kelamin) {
   return kelamin === 'Laki-laki'
     ? new URL('../../../assets/images/user-avatar.svg', import.meta.url).href
     : new URL('../../../assets/images/actress.svg', import.meta.url).href
 }
-function getLamaBaru(row) {
+function getLamaBaru (row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   let status = 0
   if (kp) {
     status = row.pasien_kunjungan_poli.rs31
-  } else {
+  }
+  else {
     if (krw) {
       status = row.pasien_kunjungan_rawat_inap.rs31
     }
@@ -379,24 +386,26 @@ function getLamaBaru(row) {
   return 'Baru'
 }
 
-function getRuangan(row) {
+function getRuangan (row) {
   const poli = row.poli
   const krw = row.kunjungan_rawat_inap
   if (poli) {
     return poli.rs2
-  } else {
+  }
+  else {
     if (krw) {
       return krw.ruangan.rs2
     }
   }
   return 'kosong'
 }
-function getSistemBayar(row) {
+function getSistemBayar (row) {
   const poli = row.poli
   const krw = row.kunjungan_rawat_inap
   if (poli) {
     return row.sb_kunjungan_poli ? row.sb_kunjungan_poli.rs2 : 'tdk ada'
-  } else {
+  }
+  else {
     if (krw) {
       if (row.kunjungan_rawat_inap) {
         return row.sb_kunjungan_rawat_inap ? row.sb_kunjungan_rawat_inap.rs2 : 'tdk ada'
@@ -410,7 +419,7 @@ function getSistemBayar(row) {
 const loadingEye = ref(false)
 const eye = ref(null)
 
-async function previewLaborat(x) {
+async function previewLaborat (x) {
   console.log('preview', x)
   loadingEye.value = true
   eye.value = x
@@ -447,20 +456,22 @@ async function previewLaborat(x) {
     modalDetailOpen.value = true
     loadingEye.value = false
     eye.value = null
-  } catch (error) {
+  }
+  catch (error) {
     loadingEye.value = false
     eye.value = null
   }
 }
 
-function groupBy(list, keyGetter) {
+function groupBy (list, keyGetter) {
   const map = new Map()
   list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {
       map.set(key, [item])
-    } else {
+    }
+    else {
       collection.push(item)
     }
   })
@@ -468,13 +479,14 @@ function groupBy(list, keyGetter) {
   return arr
 }
 
-function getTotal(arr) {
+function getTotal (arr) {
   const paket = arr.map(x => {
     const val = x.value
     let sum = 0
     if (x.name !== '') {
       sum = val[0].subtotal
-    } else {
+    }
+    else {
       for (let i = 0; i < val.length; i++) {
         sum = sum + val[i].subtotal
       }
@@ -490,7 +502,7 @@ function getTotal(arr) {
 const x = ref(null)
 const loadingKey = ref(false)
 
-async function kunciPermintaan(row) {
+async function kunciPermintaan (row) {
   console.log(row)
   if (row.rs18 === '1') {
     return notifErrVue('Maaf permintaan ini sudah terkunci dan terkirim ke LIS')
@@ -547,18 +559,20 @@ async function kunciPermintaan(row) {
         loadingKey.value = false
         row.rs18 = '1'
       })
-    } catch (error) {
+    }
+    catch (error) {
       x.value = null
       loadingKey.value = false
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error)
     x.value = null
     loadingKey.value = false
   }
 }
 
-function printHasil(row) {
+function printHasil (row) {
   // console.log(SERV, row)
   // if (!row.pemeriksaan_laborat) {
   //   return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
