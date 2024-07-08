@@ -130,7 +130,7 @@ const columnsx = [
     label: 'Stok Masuk',
     align: 'right',
     field: (row) => (
-      hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row.kd_obat) +
+      hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
       hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
     )
   },
@@ -265,13 +265,18 @@ function hitungResepRacikanKeluar (arr) {
   return resepkeluar
 }
 
-function returResep (arr, kodeObat) {
-  const arrreturResep = arr?.length ? arr.map(x => x.retur)?.reduce((a, b) => a.concat(b), []) : []
-  const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x?.rinci)?.reduce((a, b) => a.concat(b), []) : []
-  const rinciWhereKode = rincianReturResep.length ? rincianReturResep?.filter(x => x.kdobat === kodeObat) : []
-  const jmlRetur = rinciWhereKode?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
+function newReturResep (arr) {
+  const jmlRetur = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
+  // console.log('racikan', jmlRetur)
   return jmlRetur
 }
+// function returResep (arr, kodeObat) {
+//   const arrreturResep = arr?.length ? arr.map(x => x.retur)?.reduce((a, b) => a.concat(b), []) : []
+//   const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x?.rinci)?.reduce((a, b) => a.concat(b), []) : []
+//   const rinciWhereKode = rincianReturResep.length ? rincianReturResep?.filter(x => x?.kdobat === kodeObat) : []
+//   const jmlRetur = rinciWhereKode?.reduce((x, y) => parseFloat(x) + parseFloat(y?.jumlah_retur), 0)
+//   return jmlRetur
+// }
 
 function hitungPenyesuaianMasuk (arr) {
   const penye = arr?.map(m => m?.ssw)
@@ -326,7 +331,7 @@ function hitungTotal (row) {
   // eslint-disable-next-line no-unused-vars
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars
-  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row?.kd_obat) + hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
+  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep (row?.returpenjualan) + hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
   // eslint-disable-next-line no-unused-vars
   const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) + hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
   // eslint-disable-next-line no-unused-vars
