@@ -47,7 +47,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
             }
           })
         }
-        console.log('kjkjsdfs', resp?.data)
+        console.log('kjkjsdfs ', resp?.data)
         this.loading = false
       }
       else {
