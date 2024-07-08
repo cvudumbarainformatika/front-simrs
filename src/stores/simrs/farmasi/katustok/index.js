@@ -40,14 +40,14 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
           this.items.forEach(it => {
             if (it?.distribusipersiapan?.length) {
               it?.distribusipersiapan.forEach(per => {
-                const nore = per.rinci.find(ri => ri.nopermintaan === per.nopermintaan)
+                const nore = per?.rinci?.find(ri => ri.nopermintaan === per.nopermintaan)
                 per.noresep = nore?.noresep ?? ''
                 // console.log('per', per)
               })
             }
           })
         }
-        console.log('kjkjsdfs', resp)
+        console.log('kjkjsdfs ', resp?.data)
         this.loading = false
       }
       else {

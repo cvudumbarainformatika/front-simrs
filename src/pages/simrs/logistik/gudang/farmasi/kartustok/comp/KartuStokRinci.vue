@@ -237,21 +237,33 @@ const bentukArrBaru = computed(() => {
       total: 0
     }
   })
-  const returresep = props?.item?.resepkeluar?.map(x => {
-    const arr = x.retur
-    return arr.map(x => {
-      return {
+  // const returresep = props?.item?.resepkeluar?.map(x => {
+  //   const arr = x.retur
+  //   return arr.map(x => {
+  //     return {
+  //       tgl: x?.tgl_retur,
+  //       tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+  //       jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+  //       keterangan: 'Retur Resep ' + x?.noresep,
+  //       masuk: x?.rinci?.length
+  //         ? x.rinci.filter(y => y.kdobat === props.item?.kd_obat).reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah_retur), 0)
+  //         : 0,
+  //       keluar: 0,
+  //       total: 0
+  //     }
+  //   })
+  //   // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  // })
+  const returresep = props?.item?.returpenjualan?.map(x => {
+    return {
         tgl: x?.tgl_retur,
         tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
         jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
         keterangan: 'Retur Resep ' + x?.noresep,
-        masuk: x?.rinci?.length
-          ? x.rinci.filter(y => y.kdobat === props.item?.kd_obat).reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah_retur), 0)
-          : 0,
+        masuk: parseFloat(x?.jumlah_retur),
         keluar: 0,
         total: 0
       }
-    })
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
   const penyesuaian = props?.item?.stok?.map(m => {
