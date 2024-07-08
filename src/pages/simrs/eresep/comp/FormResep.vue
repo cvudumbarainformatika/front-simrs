@@ -6,7 +6,7 @@
       <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
       <!-- </div> -->
       <div class="q-pa-sm row items-center justify-between">
-        <div class="f-12" v-if="depo!=='rnp'">
+        <div class="f-12">
           <sistem-bayar-ganti
             :pasien="pasien"
             :disabled="store.listPemintaanSementara.length > 0 || store.listRacikan.length > 0"
@@ -934,7 +934,7 @@ onMounted(() => {
   // console.log('ref Obat', refObat.value)
   // refObat.value.showPopup()
   store.getSigna()
-  store.cariObat()
+  // store.cariObat()
   // refObat.value.focus()
   // refObat.value.showPopup()
 })

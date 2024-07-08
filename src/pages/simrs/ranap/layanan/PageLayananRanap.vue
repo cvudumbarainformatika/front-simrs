@@ -47,6 +47,7 @@
         <q-page-container>
           <q-page
             class="contain bg-grey-3"
+            v-if="!loading"
           >
             <Suspense
               :key="menu.comp"
@@ -74,6 +75,9 @@
               </template>
             </Suspense>
           </q-page>
+          <q-page v-else>
+            <AppLoader />
+          </q-page>
         </q-page-container>
       </q-layout>
     </q-card>
@@ -84,12 +88,17 @@
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 import HeaderLayout from './layoutcomp/HeaderLayout.vue'
 import LeftDrawer from './layoutcomp/LeftDrawer.vue'
+import AppLoader from 'src/components/~global/AppLoader.vue'
 
 const drawer = ref(false)
 defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 

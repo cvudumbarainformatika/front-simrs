@@ -256,14 +256,14 @@ const bentukArrBaru = computed(() => {
   // })
   const returresep = props?.item?.returpenjualan?.map(x => {
     return {
-        tgl: x?.tgl_retur,
-        tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
-        jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
-        keterangan: 'Retur Resep ' + x?.noresep,
-        masuk: parseFloat(x?.jumlah_retur),
-        keluar: 0,
-        total: 0
-      }
+      tgl: x?.tgl_retur,
+      tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+      keterangan: 'Retur Resep ' + x?.noresep,
+      masuk: parseFloat(x?.jumlah_retur),
+      keluar: 0,
+      total: 0
+    }
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
   const penyesuaian = props?.item?.stok?.map(m => {
