@@ -818,6 +818,26 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
             this.loadingPelayananInfoObat = false
           })
       })
+    },
+    simpanTglPelayananObat(val){
+      val.loading=true
+      const data={
+        id:val?.id,
+        tgl_pelayanan_obat:val?.tgl_pelayanan_obat
+      }
+      return new Promise(resolve=>{
+        api.post('v1/simrs/farmasinew/depo/simpan-tgl-pelayanan', data)
+        .then(resp=>{
+          val.loading=false
+          notifSuccess(resp)
+          resolve(resp)
+        })
+        .catch(()=>{
+          val.tgl_pelayanan_obat=null
+          val.loading=false
+        })
+      })
     }
+
   }
 })

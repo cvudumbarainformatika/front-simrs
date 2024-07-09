@@ -209,6 +209,9 @@ function myPrinting () {
 }
 
 function afterPrint () {
+  window.onafterprint = (event) => {
+  console.log("After print", event)
+}
   // const r = confirm('Press a button!')
   // if (r === true) {
   // router.push({ path: store.prevUrl ? store.prevUrl : '/history' })

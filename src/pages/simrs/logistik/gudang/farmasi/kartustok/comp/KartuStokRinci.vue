@@ -296,7 +296,7 @@ const bentukArrBaru = computed(() => {
     })
     : []
   const returdistribusi = app?.user?.kdruangansim === 'Gd-04010103'
-    ? props?.item?.distribusipersiapan.filter(f => parseFloat(f.retur) > 0)?.map(x => {
+    ? props?.item?.persiapanretur.filter(f => parseFloat(f.retur) > 0)?.map(x => {
       return {
         tgl: x?.tgl_retur,
         tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),

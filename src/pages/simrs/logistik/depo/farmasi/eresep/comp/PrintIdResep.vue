@@ -240,6 +240,9 @@ function printPage () {
 }
 
 function afterPrint () {
+  window.onafterprint = (event) => {
+  console.log("After print", event)
+}
   // const originalContents = document.body.innerHTML
 
   // document.body.innerHTML = cont
