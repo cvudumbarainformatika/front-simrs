@@ -288,7 +288,7 @@
                   icon="icon-mat-move_to_inbox"
                   :disable="store.loadingTerima && item?.loading"
                   :loading="store.loadingTerima && item?.loading"
-                  @click="store.terimaResep(item)"
+                  @click="terimaResep(item)"
                 >
                   <q-tooltip
                     class="primary"
@@ -644,6 +644,10 @@ const idResp = ref(null)
 const openIdPrint = ref(false)
 const printHeadOnly = ref(false)
 
+function terimaResep(item){
+  store.terimaResep(item)
+  printIdResep(item)
+}
 function printIdResep (val) {
   console.log(val)
   print.setResep(val)
