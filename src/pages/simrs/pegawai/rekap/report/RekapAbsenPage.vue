@@ -666,12 +666,13 @@ console.log('bulans', bulans(bulan))
 // console.log('tahun', daysInMonth(currentMonth.value, tahun.value))
 // console.log('rumus', rumusTerkecil())
 
-function nextMonth() {
+function nextMonth () {
   const month = currentMonth.value
   if (month >= 12) {
     currentMonth.value = 1
     tahun.value = tahun.value + 1
-  } else {
+  }
+  else {
     currentMonth.value = month + 1
   }
   // console.log('next', currentMonth.value)
@@ -679,12 +680,13 @@ function nextMonth() {
   const obj = store.rincian
   obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
 }
-function prevMonth() {
+function prevMonth () {
   const month = currentMonth.value
   if (month <= 1) {
     currentMonth.value = 12
     tahun.value = tahun.value - 1
-  } else {
+  }
+  else {
     currentMonth.value = month - 1
   }
   // console.log('next', currentMonth.value)
@@ -693,24 +695,25 @@ function prevMonth() {
   obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
 }
 
-function getSlotRinci(num) {
+function getSlotRinci (num) {
   return num <= 9 ? 'cell-0' + num.toString() : 'cell-' + num.toString()
 }
 
-function getTransaksiAbsen(num, data, jns) {
+function getTransaksiAbsen (num, data, jns) {
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
   const trans = data.filter(x => x.tanggal === cellDate)
   if (trans.length > 0) {
     if (jns === 'masuk') {
       return jamTnpDetik(trans[0].created_at)
-    } else {
+    }
+    else {
       return jamTnpDetik(trans[0].updated_at) === jamTnpDetik(trans[0].created_at) ? 'TAP' : jamTnpDetik(trans[0].updated_at)
     }
   }
   return ''
 }
-function getTransaksiAbsens(num, data) {
+function getTransaksiAbsens (num, data) {
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
   const trans = data.transaksi_absen.filter(x => x.tanggal === cellDate)
@@ -721,19 +724,22 @@ function getTransaksiAbsens(num, data) {
   // console.log('libur', libur)
   if (trans.length && !ijin) {
     return 'MSK'
-  } else {
+  }
+  else {
     if (ijin) {
       return ijin
-    } else if (libur.length) {
+    }
+    else if (libur.length) {
       return 'CB'
-    } else if (alpha) {
+    }
+    else if (alpha) {
       return 'A'
     }
     return 'L'
   }
 }
 
-function getAlpha(row) {
+function getAlpha (row) {
   // console.log('alpha', row)
   const days = daysInMonth(currentMonth.value, tahun.value)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
@@ -749,14 +755,18 @@ function getAlpha(row) {
 
     if (trans.length && !ijin) {
       absen[i] = 'M'
-    } else {
+    }
+    else {
       if (ijin) {
         absen[i] = 'I'
-      } else if (libur.length) {
+      }
+      else if (libur.length) {
         absen[i] = 'C'
-      } else if (alpha) {
+      }
+      else if (alpha) {
         absen[i] = 'A'
-      } else {
+      }
+      else {
         absen[i] = 'L'
       }
     }
@@ -769,12 +779,13 @@ function getAlpha(row) {
   return absensi
 }
 
-function getImage(kelamin, row) {
+function getImage (kelamin, row) {
   if (row.foto_pegawai === null || row.foto_pegawai === '') {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
-  } else {
+  }
+  else {
     // return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
     return row.foto_pegawai
   }
@@ -787,22 +798,22 @@ const changeRuang = (val) => {
   store.filterByRuang(val)
 }
 
-function hitungPercent(row) {
+function hitungPercent (row) {
   const hitung = (getMasuk(row) / rumusTerkecil(getIjin(row)))
   return hitung
 }
 
-function rumusTerkecil(libur) {
+function rumusTerkecil (libur) {
   const extra = libur + lhb.value
   const perbulan = (perwali.value * (daysInMonth(currentMonth.value, tahun.value) - extra)) / 7
   return perbulan.toFixed(1)
 }
 
-function getStatus(row) {
+function getStatus (row) {
   return !!row.user
 }
 
-function getIjin(row, fx) {
+function getIjin (row, fx) {
   const user = row.user
   if (user) {
     const ada = user.libur.length
@@ -819,7 +830,7 @@ function getIjin(row, fx) {
   return 0
 }
 
-function getAlphaRinci(num, row) {
+function getAlphaRinci (num, row) {
   // console.log('alpha', num)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
@@ -830,7 +841,7 @@ function getAlphaRinci(num, row) {
   return 0
 }
 
-function getIjinRinci(num, row) {
+function getIjinRinci (num, row) {
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
   // console.log('cellDate', cellDate)
@@ -846,7 +857,7 @@ function getIjinRinci(num, row) {
 
   return 0
 }
-function getMasuk(row) {
+function getMasuk (row) {
   const ada = row.transaksi_absen.length
   if (ada > 0) {
     const data = row.transaksi_absen
@@ -865,7 +876,8 @@ function getMasuk(row) {
       const waktuPulang = new Date(tglPulangServer + ' ' + jamPulangServer) > new Date(tglPulangServer + ' ' + kategoryPulang) ? tglPulangServer + ' ' + kategoryPulang : tglPulangServer + ' ' + jamPulangServer
       if (data[i].pulang === null || data[i].pulang === '') {
         hitung += 0
-      } else {
+      }
+      else {
         hitung += calcDate(waktuPulang, waktuMasuk, 'minutes') / 60
       }
     }
@@ -874,7 +886,7 @@ function getMasuk(row) {
   return 0
 }
 
-function getKurang(row) {
+function getKurang (row) {
   const ada = row.transaksi_absen.length
   if (ada) {
     const data = row.transaksi_absen
@@ -888,7 +900,8 @@ function getKurang(row) {
 
       if (terlambat) {
         hitung += calcDate(new Date(tglMasukServer + ' ' + jamMasukServer), new Date(tglMasukServer + ' ' + kategoryMasuk), 'minutes')
-      } else {
+      }
+      else {
         hitung += 0
       }
     }
@@ -899,7 +912,7 @@ function getKurang(row) {
   return toHoursAndMinutes(x)
 }
 
-function getRekapTerlambat(row) {
+function getRekapTerlambat (row) {
   // console.log('row', row)
   const days = daysInMonth(currentMonth.value, tahun.value)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
@@ -916,10 +929,12 @@ function getRekapTerlambat(row) {
         // const libur = user.libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
         const libur = user.libur.filter(x => x.tanggal === cellDate)
         ijin.push(libur.length ? 0 : trans[0] ? hitungTelat(trans[0]) : 0)
-      } else {
+      }
+      else {
         ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
       }
-    } else {
+    }
+    else {
       const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
       ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
     }
@@ -931,26 +946,29 @@ function getRekapTerlambat(row) {
   return ijin.reduce((x, y) => parseInt(x + y))
 }
 
-function getRekapTerlambatPercent(e) {
+function getRekapTerlambatPercent (e) {
   if (e > 0 && e <= 60) {
     return 5
-  } else if (e > 60 && e <= 120) {
+  }
+  else if (e > 60 && e <= 120) {
     return 10
-  } else if (e >= 121) {
+  }
+  else if (e >= 121) {
     return 20
-  } else {
+  }
+  else {
     return 0
   }
 }
-function getRekapTerlambatMinute(x) {
+function getRekapTerlambatMinute (x) {
   return toHoursAndMinutes(x)
 }
 
-function hitungTelat(x) {
+function hitungTelat (x) {
   const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
 
   let created = new Date(x?.created_at)
-  created = date.subtractFromDate(created, { minutes: 15 })
+  created = date.subtractFromDate(created, { minutes: 0 }) // 15 menit kompensasi sdh di ganti 0 tgl 9 jul 2024
 
   // const jamMasukServer = formatJam(created.setMinutes() + 15)
   const jamMasukServer = formatJam(created)
@@ -965,21 +983,21 @@ function hitungTelat(x) {
   return hitung
 }
 
-function toHoursAndMinutes(totalMinutes) {
+function toHoursAndMinutes (totalMinutes) {
   const hours = Math.floor(totalMinutes / 60)
   const minutes = totalMinutes % 60
   return `${hours > 0 ? ` ${hours} jam` : ''}
         ${minutes > 0 ? ` ${minutes.toFixed(0)} mnt` : ''}`
 }
 
-function getMasukHari(row) {
+function getMasukHari (row) {
   const ada = row.transaksi_absen.length
   return ada
 }
 
 const detailAbsensi = ref(null)
 const detailOrang = ref(null)
-function lihatDetailAbsensi(num, row) {
+function lihatDetailAbsensi (num, row) {
   const trans = row.transaksi_absen
   const bulan = currentMonth.value.toString().length <= 1 ? `0${currentMonth.value}` : currentMonth.value.toString()
   const tanggal = num.toString().length <= 1 ? `0${num}` : num.toString()
@@ -996,7 +1014,7 @@ const printObj = {
   popTitle: 'print Absensi',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...')
   },
