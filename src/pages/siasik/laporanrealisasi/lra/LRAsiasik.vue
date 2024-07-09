@@ -528,13 +528,8 @@ function HitungPersen () {
   const PaguBelanja = parseFloat(saldo[0]?.persen)
   const PaguPendapatan = parseFloat(store.realisasipends?.persen)
   const pembiayaan = parseFloat(store.realisasiPembiayaans?.persen)
-  const NilaiPagu = parseFloat(PaguPendapatan).toFixed(2) - parseFloat(PaguBelanja).toFixed(2)
+  const NilaiPagu = parseFloat(PaguPendapatan - PaguBelanja).toFixed(2)
   const silpa = parseFloat(NilaiPagu + pembiayaan).toFixed(2)
-  console.log('1', PaguBelanja)
-  console.log('2', PaguPendapatan)
-  console.log('3', pembiayaan)
-  console.log('4', NilaiPagu)
-  console.log('5', silpa)
   // console.log('nilaipagu', NilaiPagu)
   return {
     surplus_defisit: NilaiPagu,
