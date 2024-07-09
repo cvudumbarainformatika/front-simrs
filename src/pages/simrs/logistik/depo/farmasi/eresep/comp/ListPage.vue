@@ -172,6 +172,70 @@
               >
                 Tidak diberikan semua karena : {{ item?.alasan }}
               </div>
+              <!-- tgl pelayanan obat -->
+              <div v-if="item?.addTglPelayanan" class="row items-center q-col-gutter-xs">
+                <div class="col-10">
+                  <app-input-date 
+                  :model="item.tgl_pelayanan_obat"
+                  label="Tgl Pelayanan Obat"
+                  outlined
+                  valid
+                  :loading="item?.loading"
+                  :disable="item?.loading"
+                  @set-model="setTgl($event,item,'tgl_pelayanan_obat')"
+                  />
+                </div>
+                <div class="col-2">
+                  <q-btn 
+                  flat
+                  dense
+                  color="green"
+                  size="sm"
+                  icon="icon-mat-save"
+                  :loading="item?.loading"
+                  :disable="item?.loading"
+                  @click="saveTglPelayanan(item)"
+                  >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Simpan Tanggal Pelayanan Obat
+                  </q-tooltip>
+                </q-btn>
+                </div>
+              </div> 
+              <div v-if="!item?.addTglPelayanan && parseFloat(item?.flag)>=1" class="row items-center q-col-gutter-xs">
+                <div  class="col-10 f-10 text-negative">
+                  <div v-if="item?.tgl_pelayanan_obat">
+                    Tgl Pelayanan Obat : <span class="f-12">{{dateFullFormat(item?.tgl_pelayanan_obat)}}</span> 
+                  </div>
+                  <q-tooltip
+                    v-if="item?.tgl_pelayanan_obat"
+                    class="primary"
+                    :offset="[10, 10]"
+                    >
+                    Tanggal Pelayanan Obat
+                    </q-tooltip>
+                </div>
+                <div class="col-2">
+                    <q-btn 
+                    flat
+                    dense
+                    color="primary"
+                    size="sm"
+                    icon="icon-mat-add_circle"
+                    @click="addTglPelayanan(item)"
+                    >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Tambah Tanggal Pelayanan Obat
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+              </div> 
             </td>
             <td>
               <div class="row text-weight-bold">
@@ -199,14 +263,18 @@
               </div>
             </td>
             <td>
-              <q-chip
+              <div class="row">
+                <q-chip
                 square
                 class="f-10"
                 :color="color(item?.flag)"
                 text-color="white"
-              >
+                >
                 {{ status(item?.flag) }}
-              </q-chip>
+                </q-chip>
+              </div>
+                          
+              
             </td>
             <td class="text-end q-mr-sm">
               <div class="row no-wrap">
@@ -220,7 +288,7 @@
                   icon="icon-mat-move_to_inbox"
                   :disable="store.loadingTerima && item?.loading"
                   :loading="store.loadingTerima && item?.loading"
-                  @click="store.terimaResep(item)"
+                  @click="terimaResep(item)"
                 >
                   <q-tooltip
                     class="primary"
@@ -458,6 +526,22 @@ function panggil (item) {
   emits('panggilan', item)
   store.noreg = item?.noreg
 }
+// tanggal pelayanan obat start
+function setTgl(evt,item,key){
+  item[key]=evt
+}
+function addTglPelayanan(item){
+  item.addTglPelayanan=true
+}
+
+function saveTglPelayanan(item){
+  console.log('item', item);
+  store.simpanTglPelayananObat(item).then(()=>{
+    item.addTglPelayanan=false  
+  })
+  
+}
+// tanggal pelayanan obat end
 // const indexId = ref(0)
 function status (val) {
   let balik = ' Belum ada status'
@@ -560,6 +644,10 @@ const idResp = ref(null)
 const openIdPrint = ref(false)
 const printHeadOnly = ref(false)
 
+function terimaResep(item){
+  store.terimaResep(item)
+  printIdResep(item)
+}
 function printIdResep (val) {
   console.log(val)
   print.setResep(val)

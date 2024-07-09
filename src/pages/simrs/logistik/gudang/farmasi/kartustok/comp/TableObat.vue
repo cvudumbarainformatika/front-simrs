@@ -131,7 +131,7 @@ const columnsx = [
     align: 'right',
     field: (row) => (
       hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
-      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.distribusipersiapan)
+      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur)
     )
   },
   {

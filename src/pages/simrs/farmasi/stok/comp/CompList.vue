@@ -293,7 +293,7 @@ function tutup (val) {
   const date1 = new Date(table.now)
   const date2 = new Date(table.params.to + ' 23:59:59')
   const diff = date.getDateDiff(date1, date2, 'minutes')
-  // console.log('table param', date1, date2, table.params.to, diff)
-  return !(diff > 0)
+  // console.log('table param', date1, date2, table.params.to, diff,role.value)
+  return  role.value ===1 ? true : !(diff > 0) 
 }
 </script>
