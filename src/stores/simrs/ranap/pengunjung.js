@@ -23,7 +23,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     statuses: ['Belum Pulang', 'Pulang'],
     statusx: 'Belum Pulang',
     loading: false,
-    pageLayanan: false
+    pageLayanan: false,
+    loadingLayanan: false
   }),
 
   actions: {
@@ -55,8 +56,56 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       this.params.page = 1
       this.getData()
     },
-    bukaLayanan (val) {
+    bukaLayanan (val, pasien) {
       this.pageLayanan = val
+      this.loadingLayanan = true
+      const form = { noreg: pasien?.noreg }
+      // try {
+      //   const resp = await api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
+      //   console.log('ranap', resp)
+      //   this.loadingLayanan = false
+      //   if (resp.status === 200) {
+      //     // console.log('ranap', this.pasiens)
+      //     this.setPasien(pasien, resp.data)
+      //   }
+      // }
+      // catch (error) {
+      //   console.log('error buka layanan', error)
+      //   this.loadingLayanan = false
+      // }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
+          .then(resp => {
+            console.log('ranap', resp)
+            this.loadingLayanan = false
+            // if (resp.status === 200) {
+            this.setPasien(pasien, resp.data)
+            const indexPasien = this.pasiens.findIndex(x => x.noreg === pasien.noreg)
+            // this.pasiens[indexPasien] = resp.data
+            // }
+            resolve(this.pasiens[indexPasien])
+          })
+          .catch(err => {
+            console.log('error buka layanan', err)
+            this.loadingLayanan = false
+            reject(err)
+          })
+      })
+    },
+
+    setPasien (pasien, data) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === data?.noreg)
+      // this.pasiens[indexPasien] = data
+      // console.log('wew', this.pasiens[indexPasien])
+      if (findPasien.length) {
+        const datax = findPasien[0]
+        datax.newapotekrajal = data?.newapotekrajal
+        datax.diagnosa = data?.diagnosa
+        // datax.dokter = data?.datasimpeg?.nama
+        // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
+        // this.pageLayanan = false
+      }
     },
     getRuangan () {
       return new Promise((resolve, reject) => {

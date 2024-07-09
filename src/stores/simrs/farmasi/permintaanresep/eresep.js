@@ -87,11 +87,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const val = this?.pasien
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
       const diag = temp?.length ? temp.join(', ') : '-'
-      this.setForm('noreg', val.noreg)
-      this.setForm('norm', val.norm)
-      this.setForm('groupsistembayar', val.groups)
-      this.setForm('sistembayar', val.kodesistembayar ?? val?.kdsistembayar)
-      this.setForm('dokter', val.kodedokter)
+      this.setForm('noreg', val?.noreg)
+      this.setForm('norm', val?.norm)
+      this.setForm('groupsistembayar', val?.groups)
+      this.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
+      this.setForm('dokter', val?.kodedokter)
       this.setForm('diagnosa', diag ?? '-')
       // this.cariSimulasi(val?.noreg)
       // if (this?.depo === 'rjl') this.getBillRajal(val)

@@ -48,6 +48,12 @@
       <q-card-section>
         <Customtable
           :ada-cari="false"
+          :items="store.items"
+          :columns="store.kolom"
+          :column-hide="store.kolomhide"
+          :default-btn="false"
+          :right-action="false"
+          row-no
         >
           <!-- tombol print -->
           <template #header-right-before>
@@ -148,6 +154,120 @@
               </div>
             </q-form>
           </template>
+          <template #cell-Identitas="{row}">
+            Noreg : {{ row?.rs1 }} <br>
+            Norm : {{ row?.rs2 }} <br>
+            Tgl MRS : {{ row?.rs3 }} <br>
+            Tgl KRS : {{ row?.rs4 }}
+          </template>
+          <template #cell-Admin="{row}">
+            {{ row?.admin }}
+          </template>
+          <template #cell-AkomodasiKamar="{row}">
+            <q-item
+              v-for="(akomodasiruangan , n) in row?.akomodasiKamar"
+              :key="n"
+              class="list-move"
+            >
+              {{ akomodasiruangan?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+            </q-item>
+          </template>
+          <template #cell-TindakanDokter="{row}">
+            <!-- <q-item
+              v-for="(TindakanDokter , n) in row?.TindakanDokter"
+              :key="n"
+              class="list-move"
+            > -->
+            <div
+              v-if="row?.TindakanDokter.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanDokter , td) in row?.TindakanDokter"
+                :key="td"
+                class="list-move"
+              >
+                {{ TindakanDokter?.namaruangan }} = {{ formatDouble(TindakanDokter?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Visite="{row}">
+            <div
+              v-if="row?.Visite.length >= 0"
+            >
+              <q-item
+                v-for="(Visite , v) in row?.Visite"
+                :key="v"
+                class="list-move"
+              >
+                {{ Visite?.namaruangan }} = {{ formatDouble(Visite?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanKeperawatan="{row}">
+            <div
+              v-if="row?.TindakanPerawat.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanPerawat , tp) in row?.TindakanPerawat"
+                :key="tp"
+                class="list-move"
+              >
+                {{ TindakanPerawat?.namaruangan }} = {{ formatDouble(TindakanPerawat?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-MakanPasien="{row}">
+            <div
+              v-if="row?.MakanPasien.length >= 0"
+            >
+              <q-item
+                v-for="(MakanPasien , mp) in row?.MakanPasien"
+                :key="mp"
+                class="list-move"
+              >
+                {{ MakanPasien?.namaruangan }} = {{ formatDouble(MakanPasien?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Oksigen="{row}">
+            <div
+              v-if="row?.Oksigen.length >= 0"
+            >
+              <q-item
+                v-for="(Oksigen , ok) in row?.Oksigen"
+                :key="ok"
+                class="list-move"
+              >
+                {{ Oksigen?.namaruangan }} = {{ formatDouble(Oksigen?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Keperawatan="{row}">
+            <div
+              v-if="row?.Keperawatan.length >= 0"
+            >
+              <q-item
+                v-for="(Keperawatan , kp) in row?.Keperawatan"
+                :key="kp"
+                class="list-move"
+              >
+                {{ Keperawatan?.namaruangan }} = {{ formatDouble(Keperawatan?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Laborat="{row}">
+            <div
+              v-if="row?.Laborat.length >= 0"
+            >
+              <q-item
+                v-for="(Laborat , lab) in row?.Laborat"
+                :key="lab"
+                class="list-move"
+              >
+                {{ Laborat?.namaruangan }} = {{ formatDouble(Laborat?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
@@ -155,6 +275,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { formatDouble } from 'src/modules/formatter'
 import Customtable from '../../rekap/CustomTable.vue'
 import { useLaporanRekapBillByRuanganStore } from 'src/stores/simrs/laporan/keuangan/billbyruangan/billrekapbyruangan'
 
@@ -237,6 +358,7 @@ function setTox (val) {
 
 store.getRuanganPoli()
 store.getRuanganRanap()
+
 </script>
 
 <style lang="scss" scoped>

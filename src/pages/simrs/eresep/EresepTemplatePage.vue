@@ -341,6 +341,9 @@ function kirimOrder () {
   // console.log('kirim order racikan', obatRacikan)
   // console.log('kirim order', merged)
 
+  const diagnosa = props?.pasien?.diagnosa?.length ? props?.pasien?.diagnosa[0].masterdiagnosa?.rs1 : ''
+  const diagnosaisi = props?.pasien?.diagnosa?.length ? props?.pasien?.diagnosa[0].masterdiagnosa?.rs4 : ''
+
   const payload = {
     template_id: store?.templateSelected?.id,
     kodedepo: store?.dpPar,
@@ -348,7 +351,7 @@ function kirimOrder () {
     noreg: props?.pasien?.noreg,
     norm: props?.pasien?.norm,
     kdruangan: props?.pasien?.kodepoli,
-    diagnosa: props?.pasien?.diagnosa[0]?.masterdiagnosa?.rs1 + ' - ' + props?.pasien?.diagnosa[0]?.masterdiagnosa?.rs4,
+    diagnosa: diagnosa + ' - ' + diagnosaisi,
     kodeincbg: '',
     uraianinacbg: '',
     tarifina: '',
@@ -363,8 +366,15 @@ function kirimOrder () {
     .then(() => {
       emits('back')
     })
-  // console.log('payload', payload)
+
   // console.log('pasian', props.pasien)
+
+  // try {
+  //   console.log('payload', payload)
+  // }
+  // catch (error) {
+  //   console.log('error', error)
+  // }
 }
 
 watch(() => props.depo, (old, val) => {
