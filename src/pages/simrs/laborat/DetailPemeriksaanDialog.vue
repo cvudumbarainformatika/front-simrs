@@ -1,6 +1,6 @@
 <template>
-  <q-dialog>
-    <q-card style="width: 60vw; max-width: 70vw;">
+  <q-dialog @show="init">
+    <q-card style="width: 80vw; max-width: 90vw;">
       <q-card-section>
         <div class="text-h6">
           Permintaan Pemeriksaan
@@ -77,7 +77,7 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.rs27 }} {{ val.hasil }}
+                    {{ val.hasil }} <span class="text-negative">{{ val.lh }}</span>
                   </td>
                   <td
                     class="text-right"
@@ -143,7 +143,7 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.hasil }}
+                    {{ val.hasil }}  <span class="text-negative">{{ val.lh }}</span>
                   </td>
                   <td
                     class="text-right"
@@ -153,7 +153,7 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.pemeriksaan_laborat.satuan }}
+                    {{ val.pemeriksaan_laborat.satuan }} {{ val.pemeriksaan_laborat.rs27 }}
                   </td>
                   <td
                     class="text-right"
@@ -207,7 +207,7 @@
 
 <script setup>
 import { formatRp } from 'src/modules/formatter'
-defineProps({
+const props = defineProps({
   items: {
     type: Array,
     default: () => []
@@ -222,4 +222,10 @@ defineProps({
 //   console.log('dialog total', props.items[i])
 //   return 'TOTAL'
 // }
+
+// console.log('items', props.items)
+
+const init = () => {
+  console.log('init', props.items)
+}
 </script>

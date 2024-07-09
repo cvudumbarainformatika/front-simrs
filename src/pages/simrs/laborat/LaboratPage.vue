@@ -420,7 +420,7 @@ const loadingEye = ref(false)
 const eye = ref(null)
 
 async function previewLaborat (x) {
-  console.log('preview', x)
+  // console.log('preview', x)
   loadingEye.value = true
   eye.value = x
   try {
@@ -433,6 +433,7 @@ async function previewLaborat (x) {
           ({
             pemeriksaan_laborat: x.pemeriksaan_laborat,
             hasil: x.rs21,
+            lh: x.rs27,
             biaya: parseInt(x.rs6) + parseInt(x.rs13),
             subtotal: (parseInt(x.rs6) + parseInt(x.rs13)) * parseInt(x.rs5)
           })
