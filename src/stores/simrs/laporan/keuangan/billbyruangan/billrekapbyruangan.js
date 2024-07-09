@@ -201,11 +201,13 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         }
 
         xxx.Laborat = []
-        const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.rs23))
+        const laboratpaket = xxx?.laborat.filter(x => x.pemeriksaanlab.rs21 !== '')
+        const laborats = filterDuplicateArrays(laboratpaket.map(m => m?.rs23))
+        console.log('wew', laborats)
         if (laborats?.length) {
           laborats.sort()
           laborats.forEach(f => {
-            const temp = xxx?.laborat?.filter(m => m.rs23 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const temp = laboratpaket.filter(m => m.rs23 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
             const laboratssss = {
               kamar: f,
