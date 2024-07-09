@@ -202,21 +202,20 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
 
         xxx.Laborat = []
         const laboratpaket = xxx?.laborat.filter(x => x.pemeriksaanlab.rs21 !== '')
-        const laborats = [...new Set(laboratpaket)]
-        console.log('xxx', laborats)
-        if (laborats?.length) {
-          laborats.forEach(f => {
-            // const temp = laboratpaket.filter(m => m.rs2 === f)
+        console.log('xxx', laboratpaket)
+        // if (laborats?.length) {
+        //   laborats.forEach(f => {
+        // const temp = laboratpaket.filter(m => m.rs2 === f)
 
-            // const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
-            // const laboratssss = {
-            // kamar: f,
-            // namaruangan: namaRuangan?.rs5 ?? '-',
-            // subtotal: temp
-            // }
-            // xxx.Laborat.push(laboratssss)
-          })
-        }
+        // const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+        // const laboratssss = {
+        // kamar: f,
+        // namaruangan: namaRuangan?.rs5 ?? '-',
+        // subtotal: temp
+        // }
+        // xxx.Laborat.push(laboratssss)
+        // })
+        // }
       })
       this.items = val
       console.log('sasa', val)
