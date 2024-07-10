@@ -1064,7 +1064,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const racik = val?.permintaanracikan
       const kirimResep = []
       const kirimRacik = []
-      console.log('OBAT', obat)
 
       if (tipe === 'nonRacik') {
         if (resep.length) {
@@ -1165,7 +1164,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
               uraianinacbg: val?.uraianinacbg,
               diagnosa: val?.diagnosa,
-              lanjuTr: ''
+              lanjuTr: '',
+              tiperesep: val?.tiperesep
             }
             kirimResep.push(temp)
           })
@@ -1200,7 +1200,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         api.post('v1/simrs/pelayanan/copiresep', data)
           .then(resp => {
             this.loading = false
-            console.log('simpan ', resp?.data)
             notifSuccess(resp)
 
             const nota = resp?.data.map(item => item?.nota)
@@ -1208,8 +1207,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             this.noresep = nota[0]
 
             const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
-
-            console.log('PPP', newapotekrajal)
 
             if (newapotekrajal.length) {
               const lastIndex = newapotekrajal.length - 1
@@ -1276,13 +1273,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
 
     simpanCopyResepKonfirmasi (val, tipe, indexlist) {
-      console.log('KONFIRMASI', val)
-      // const apps = useAplikasiStore()
-      // const resep = val?.permintaanresep
-      // const racik = val?.permintaanracikan
       const kirimResep = []
-      // const kirimRacik = []
-      // console.log('OBAT', obat)
 
       if (tipe === 'nonRacik') {
         const temp = {
@@ -1374,7 +1365,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
           uraianinacbg: val?.uraianinacbg,
           diagnosa: val?.diagnosa,
-          lanjuTr: '1'
+          lanjuTr: '1',
+          tiperesep: val?.tiperesep
         }
         kirimResep.push(temp)
       }
@@ -1407,7 +1399,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         api.post('v1/simrs/pelayanan/copiresep', data)
           .then(resp => {
             this.loading = false
-            console.log('simpan ', resp?.data)
             notifSuccess(resp)
 
             const nota = resp?.data.map(item => item?.nota)

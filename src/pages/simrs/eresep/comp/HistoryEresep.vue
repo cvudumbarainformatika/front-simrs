@@ -61,7 +61,7 @@
                       Non Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101' && depo[0]?.value === items?.depo">
+                  <div class="col-auto" v-if="depo[0]?.value === items?.depo">
                     <q-btn
                       rounded
                       push
@@ -202,7 +202,7 @@
                       Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101' && depo[0]?.value === items?.depo">
+                  <div class="col-auto" v-if="depo[0]?.value === items?.depo">
                     <q-btn
                       rounded
                       push
@@ -219,7 +219,7 @@
                         anchor="top right"
                         self="top left"
                       >
-                        Copy resep
+                        Duplicate resep
                       </q-tooltip>
                     </q-btn>
                   </div>
@@ -329,7 +329,7 @@
                     </q-item-section>
                     <q-item-section side style="width:20%">
                       <div v-if="store.statusCopiedRacik[`${index}-${i}`] === true" class="row col-6 items-center text-green">
-                        Copy resep berhasil!
+                        Duplicate resep berhasil!
                       </div>
                       <div v-else-if="store.statusCopied[`${index}-${i}`] === false && store.pemberianObatCek[`${index}-${i}`] !== null" class="row col-6 items-center text-red">
                         <q-btn
@@ -350,7 +350,7 @@
                         </q-btn>
                       </div>
                       <div v-if="store.statusCopiedRacik[`${index}-${i}`] === false" class="row col-6 items-center text-red">
-                        Copy resep gagal! ({{ store.messageCopied[`${index}-${i}`] }})
+                        Duplicate resep gagal! ({{ store.messageCopied[`${index}-${i}`] }})
                       </div>
                     </q-item-section>
                   </q-item>
@@ -440,15 +440,7 @@ function pilihData (row) {
 
 // eslint-disable-next-line no-unused-vars
 function copyResep (val, indexlist, tipe) {
-  console.log('payload val', val)
-  // console.log('payload form', props?.depo)
-  // console.log('payload form2', val?.depo)
-
-  // const rincian = val?.rincian
   const permintaan = val?.permintaanresep
-
-  console.log('RES2', permintaan)
-  // const racik = val?.rincianracik
   const permintaanracik = val?.permintaanracikan
 
   if (tipe === 'nonRacik') {
@@ -460,7 +452,6 @@ function copyResep (val, indexlist, tipe) {
 }
 
 onMounted(() => {
-  // console.log('onMounted')
   store.getHistory(props?.pasien?.norm)
 })
 
