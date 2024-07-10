@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
-import { Dialog } from 'quasar'
+import { Dialog, date } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
   state: () => ({
@@ -73,7 +74,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     historys: [],
     statusCopied: [],
     statusCopiedRacik: [],
-    messageCopied: []
+    messageCopied: [],
+    pemberianObatCek: [],
+    permintaanResepDuplicate: []
     // section racikan end---
   }),
   actions: {
@@ -963,10 +966,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             this.historys = arr
             this.statusCopiedRacik = []
             this.statusCopied = []
+            this.pemberianObatCek = []
           }
           else {
             this.statusCopiedRacik = []
             this.statusCopied = []
+            this.pemberianObatCek = []
             this.historys = []
           }
         }
@@ -977,65 +982,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         // notifErr(error)
       }
     },
-
-    // BARU
-    simpanCopyResep (payload, indexform, indexlist, tipe) {
-      const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === this.form?.noresep)
-      if (resep) {
-        if (resep?.flag !== '') this.form.noresep = ''
-      }
-
-      console.log('obat', this?.pasien?.newapotekrajal)
-
-      this.loading = true
-      return new Promise((resolve, reject) => {
-        api.post('v1/simrs/pelayanan/copiresep', this.form)
-          .then(resp => {
-            this.loading = false
-            console.log('simpan ', resp?.data)
-            notifSuccess(resp)
-
-            if (!this.form.noresep || this.form.noresep === '' || this.noresep !== resp?.data?.nota) {
-              this.noreseps.push(resp?.data?.nota)
-              this.noresep = resp?.data?.nota
-            }
-            this.pasien.newapotekrajal = resp?.data?.newapotekrajal
-            this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
-
-            this.resetForm()
-            this.setForm('noresep', resp?.data?.nota)
-
-            this.setForm('lanjuTr', '')
-            resolve(resp)
-            this.cariObat()
-            const key = `${indexlist}-${indexform}`
-
-            if (tipe === 'racik') {
-              this.statusCopiedRacik[key] = true
-            }
-            else {
-              this.statusCopied[key] = true
-            }
-          })
-          .catch(error => {
-            this.resetForm()
-            console.error('Error in simpanCopyResep:', error)
-            this.loading = false
-            const key = `${indexlist}-${indexform}`
-
-            if (tipe === 'racik') {
-              this.statusCopiedRacik[key] = false
-            }
-            else {
-              this.statusCopied[key] = false
-            }
-
-            this.messageCopied[key] = error?.response?.data?.message
-            reject(error)
-          })
-      })
-    },
     openDialog (val) {
+      console.log('DIALOG', val)
       Dialog.create({
         title: 'Konfirmasi',
         message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
@@ -1055,6 +1003,481 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         .onOk(() => {
           this.setForm('lanjuTr', '1')
           this.simpanObat()
+        })
+    },
+
+    // BARU PUTRA DEV
+    cekObat (val, obat, indexlist, tipe) {
+      let kdobatArray = ''
+      if (obat.length) {
+        kdobatArray = obat.map(item => item?.kdobat)
+      }
+
+      const depo = this.depos.filter(pa => pa.jenis === this.depo)
+
+      if (depo[0]?.value === 'Gd-05010101') {
+        if (this.form?.tiperesep !== val?.tiperesep) {
+          return notifErrVue('Duplicate resep gagal, tipe resep tidak sama!!!')
+        }
+      }
+
+      if (depo[0]?.value !== 'Gd-02010104') {
+        if (this.pasien.groups !== val?.sistembayar?.groups) {
+          return notifErrVue('Maaf sistem bayar pasien dengan sistem bayar resep tidak sama')
+        }
+      }
+
+      if (depo.length) {
+        this.dpPar = depo[0]?.value
+      }
+      else return notifErrVue('depo tujuan tidak ditemukan')
+      const param = {
+        groups: this?.pasien?.groups,
+        kdruang: this.dpPar,
+        q: kdobatArray,
+        tiperesep: this.form.tiperesep
+      }
+
+      this.loadingObat = true
+      const params = { params: param }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/lihatstokobateresepBydokter', params)
+          .then(resp => {
+            this.loadingObat = false
+            this.nonFilteredObat = resp.data?.dataobat
+            this.Obats = val?.length ? this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase())) : this.nonFilteredObat
+            // console.log('hasil', this.nonFilteredObat, this.Obats)
+
+            this.simpanCopyResep(val, resp.data?.dataobat, indexlist, tipe)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingObat = false
+            this.Obats = []
+          })
+      })
+    // }
+    },
+    simpanCopyResep (val, obat, indexlist, tipe) {
+      const apps = useAplikasiStore()
+      const resep = val?.permintaanresep
+      const racik = val?.permintaanracikan
+      const kirimResep = []
+      const kirimRacik = []
+      console.log('OBAT', obat)
+
+      if (tipe === 'nonRacik') {
+        if (resep.length) {
+          resep.forEach(res => {
+            const obats = obat.find(ob => ob?.kdobat === res?.kdobat)
+            console.log(obats)
+            const temp = {
+              noresep: '',
+              aturan: res?.aturan,
+              diagnosa: val?.diagnosa,
+              dokter: apps?.user?.pegawai?.kdpegsimrs,
+              forkit: obats?.forkit,
+              fornas: obats?.fornas,
+              generik: obats?.generik,
+              groupsistembayar: val?.sistembayar?.groups,
+              jumlah_diminta: res?.jumlah,
+              jumlahdosis: res?.jumlah,
+              jumlah: res?.jumlah,
+              kandungan: res?.kandungan,
+              kdruangan: val?.ruangan,
+              keterangan: res?.keterangan,
+              kode50: res?.kode50,
+              kode108: res?.kode108,
+              kodedepo: val?.depo,
+              kodeincbg: val?.diagnosa,
+              kodeobat: res?.kdobat,
+              konsumsi: res?.konsumsi,
+              noreg: res?.noreg,
+              norm: val?.norm,
+              satuan_kcl: res?.mobat?.satuan_k,
+              sistembayar: val?.sistembayar?.rs1,
+              stokalokasi: obats?.alokasi,
+              tagihanrs: val?.tagihanrs,
+              tarifina: val?.tarifina,
+              uraian50: res?.uraian50,
+              uraian108: res?.uraian108,
+              uraianinacbg: val?.uraianinacbg,
+              iter_jml: val?.iter_jml,
+              tiperesep: val?.tiperesep,
+              jenisresep: 'nonRacikan',
+              tiperacikan: '',
+              lanjuTr: ''
+            }
+            kirimResep.push(temp)
+          })
+        }
+      }
+      else {
+        if (racik.length) {
+          racik.forEach(rac => {
+            const obats = obat.find(ob => ob?.kdobat === rac?.kdobat)
+            const temp = {
+              noresep: '',
+              noreg: rac?.noreg,
+              namaracikan: rac?.namaracikan,
+              tiperacikan: rac?.tiperacikan,
+              jumlahdibutuhkan: rac?.jumlahdibutuhkan,
+              aturan: rac?.aturan,
+              konsumsi: rac?.konsumsi,
+              keterangan: rac?.keterangan,
+              kodeobat: rac?.kdobat,
+              kandungan: rac?.kandungan,
+              forkit: obats?.forkit,
+              fornas: obats?.fornas,
+              generik: obats?.generik,
+              hpp: rac?.hpp,
+              harga_jual: rac?.harga_jual,
+              kode108: rac?.kode108,
+              uraian108: rac?.uraian108,
+              kode50: rac?.kode50,
+              uraian50: rac?.uraian50,
+              stokalokasi: obats?.alokasi,
+              dosismaksimum: rac?.dosismaksimum,
+              dosisobat: rac?.dosisobat,
+              jumlah: rac?.jumlah,
+              satuan_racik: rac?.satuan_racik,
+              keteranganx: rac?.keteranganx,
+
+              groupsistembayar: val?.sistembayar?.groups,
+              jenisresep: 'Racikan',
+
+              jumlahdiminta: rac?.jumlah,
+
+              jumlahdosis: rac?.jumlah,
+
+              kdruangan: val?.ruangan,
+
+              kodedepo: val?.depo,
+              kodeincbg: val?.diagnosa,
+
+              norm: val?.norm,
+              satuan_kcl: rac?.mobat?.satuan_k,
+
+              sistembayar: val?.sistembayar?.rs1,
+
+              tagihanrs: val?.tagihanrs,
+              tarifina: val?.tarifina,
+
+              uraianinacbg: val?.uraianinacbg,
+              diagnosa: val?.diagnosa,
+              lanjuTr: ''
+            }
+            kirimResep.push(temp)
+          })
+        }
+      }
+      const head = {
+        noreg: val?.noreg,
+        noresep_asal: val?.noresep,
+        tiperesep: val?.tiperesep,
+        iter_expired: val?.iter_expired,
+        norm: val?.norm,
+        tgl_permintaan: val?.tgl_permintaan,
+        tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        ruangan: val?.ruangan,
+        dokter: val?.dokter?.kdpegsimrs,
+        depo: val?.depo,
+        sistembayar: val?.sistembayar?.rs1,
+        diagnosa: val?.diagnosa,
+        kodeincbg: val?.diagnosa,
+        uraianinacbg: val?.uraianinacbg,
+        tarifina: val?.tarifina,
+        tagihanrs: val?.tagihanrs,
+        flag: '',
+        tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      }
+      const data = {
+        head, kirimResep, kirimRacik, groupsistembayar: val?.sistembayar?.groups, kddepo: val?.depo
+      }
+
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/copiresep', data)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan ', resp?.data)
+            notifSuccess(resp)
+
+            const nota = resp?.data.map(item => item?.nota)
+            this.noreseps.push(nota[0])
+            this.noresep = nota[0]
+
+            const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
+
+            console.log('PPP', newapotekrajal)
+
+            if (newapotekrajal.length) {
+              const lastIndex = newapotekrajal.length - 1
+              const lastItem = newapotekrajal[lastIndex]
+              this.pasien.newapotekrajal = lastItem
+            }
+
+            // this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === nota[0])
+            resolve(resp)
+
+            resp.data.forEach((element, index) => {
+              if (element?.messageError) {
+                if (tipe === 'racik') {
+                  if (element?.messageError?.cek) {
+                    const key = `${indexlist}-${index}`
+                    this.statusCopied[key] = false
+                    this.pemberianObatCek[key] = element?.messageError
+                    this.permintaanResepDuplicate[key] = data?.kirimResep[index]
+                  }
+                  else {
+                    const key = `${indexlist}-${index}`
+                    this.statusCopiedRacik[key] = false
+                    this.messageCopied[key] = element?.messageError
+                  }
+                }
+                else {
+                  if (element?.messageError?.cek) {
+                    const key = `${indexlist}-${index}`
+                    this.statusCopied[key] = false
+                    this.pemberianObatCek[key] = element?.messageError
+                    this.permintaanResepDuplicate[key] = data?.kirimResep[index]
+                  }
+                  else {
+                    const key = `${indexlist}-${index}`
+                    this.statusCopied[key] = false
+                    this.messageCopied[key] = element?.messageError
+                    this.pemberianObatCek[key] = null
+                  }
+                }
+              }
+              else {
+                if (tipe === 'racik') {
+                  const key = `${indexlist}-${index}`
+                  this.statusCopiedRacik[key] = true
+                  this.pemberianObatCek[key] = []
+                }
+                else {
+                  const key = `${indexlist}-${index}`
+                  this.statusCopied[key] = true
+                  this.pemberianObatCek[key] = []
+                }
+              }
+            })
+
+            this.cariObat()
+          })
+          .catch(error => {
+            this.resetForm()
+            console.error('Error in simpanCopyResep:', error)
+            this.loading = false
+            reject(error)
+          })
+      })
+    },
+
+    simpanCopyResepKonfirmasi (val, tipe, indexlist) {
+      console.log('KONFIRMASI', val)
+      // const apps = useAplikasiStore()
+      // const resep = val?.permintaanresep
+      // const racik = val?.permintaanracikan
+      const kirimResep = []
+      // const kirimRacik = []
+      // console.log('OBAT', obat)
+
+      if (tipe === 'nonRacik') {
+        const temp = {
+          noresep: this.noresep,
+          aturan: val?.aturan,
+          diagnosa: val?.diagnosa,
+          dokter: val?.dokter,
+          forkit: val?.forkit,
+          fornas: val?.fornas,
+          generik: val?.generik,
+          groupsistembayar: val?.groupsistembayar,
+          jumlah_diminta: val?.jumlah,
+          jumlahdosis: val?.jumlah,
+          jumlah: val?.jumlah,
+          kandungan: val?.kandungan,
+          kdruangan: val?.kdruangan,
+          keterangan: val?.keterangan,
+          kode50: val?.kode50,
+          kode108: val?.kode108,
+          kodedepo: val?.kodedepo,
+          kodeincbg: val?.diagnosa,
+          kodeobat: val?.kodeobat,
+          konsumsi: val?.konsumsi,
+          noreg: val?.noreg,
+          norm: val?.norm,
+          satuan_kcl: val?.satuan_kcl,
+          sistembayar: val?.sistembayar,
+          stokalokasi: val?.stokalokasi,
+          tagihanrs: val?.tagihanrs,
+          tarifina: val?.tarifina,
+          uraian50: val?.uraian50,
+          uraian108: val?.uraian108,
+          uraianinacbg: val?.uraianinacbg,
+          iter_jml: val?.iter_jml,
+          tiperesep: val?.tiperesep,
+          jenisresep: 'nonRacikan',
+          tiperacikan: '',
+          lanjuTr: '1'
+        }
+        kirimResep.push(temp)
+      }
+      else {
+        const temp = {
+          noresep: this.noresep,
+          noreg: val?.noreg,
+          namaracikan: val?.namaracikan,
+          tiperacikan: val?.tiperacikan,
+          jumlahdibutuhkan: val?.jumlahdibutuhkan,
+          aturan: val?.aturan,
+          konsumsi: val?.konsumsi,
+          keterangan: val?.keterangan,
+          kodeobat: val?.kdobat,
+          kandungan: val?.kandungan,
+          forkit: val?.forkit,
+          fornas: val?.fornas,
+          generik: val?.generik,
+          hpp: val?.hpp,
+          harga_jual: val?.harga_jual,
+          kode108: val?.kode108,
+          uraian108: val?.uraian108,
+          kode50: val?.kode50,
+          uraian50: val?.uraian50,
+          stokalokasi: val?.alokasi,
+          dosismaksimum: val?.dosismaksimum,
+          dosisobat: val?.dosisobat,
+          jumlah: val?.jumlah,
+          satuan_racik: val?.satuan_racik,
+          keteranganx: val?.keteranganx,
+
+          groupsistembayar: val?.groupsistembayar,
+          jenisresep: 'Racikan',
+
+          jumlahdiminta: val?.jumlah,
+
+          jumlahdosis: val?.jumlah,
+
+          kdruangan: val?.ruangan,
+
+          kodedepo: val?.depo,
+          kodeincbg: val?.diagnosa,
+
+          norm: val?.norm,
+          satuan_kcl: val?.satuan_kcl,
+
+          sistembayar: val?.sistembayar,
+
+          tagihanrs: val?.tagihanrs,
+          tarifina: val?.tarifina,
+
+          uraianinacbg: val?.uraianinacbg,
+          diagnosa: val?.diagnosa,
+          lanjuTr: '1'
+        }
+        kirimResep.push(temp)
+      }
+      const head = {
+        noreg: val?.noreg,
+        noresep_asal: val?.noresep,
+        tiperesep: val?.tiperesep,
+        iter_expired: '',
+        norm: val?.norm,
+        tgl_permintaan: val?.tgl_permintaan,
+        tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        ruangan: val?.kdruangan,
+        dokter: val?.dokter,
+        depo: val?.kodedepo,
+        sistembayar: val?.sistembayar,
+        diagnosa: val?.diagnosa,
+        kodeincbg: val?.diagnosa,
+        uraianinacbg: val?.uraianinacbg,
+        tarifina: val?.tarifina,
+        tagihanrs: val?.tagihanrs,
+        flag: '',
+        tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      }
+      const data = {
+        head, kirimResep, groupsistembayar: val?.groupsistembayar, kddepo: val?.kodedepo
+      }
+
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/copiresep', data)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan ', resp?.data)
+            notifSuccess(resp)
+
+            const nota = resp?.data.map(item => item?.nota)
+            this.noreseps.push(nota[0])
+            this.noresep = nota[0]
+
+            const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
+
+            if (newapotekrajal.length) {
+              const lastIndex = newapotekrajal.length - 1
+              const lastItem = newapotekrajal[lastIndex]
+              this.pasien.newapotekrajal = lastItem
+            }
+            // this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === nota[0])
+            resolve(resp)
+
+            resp.data.forEach((element, index) => {
+              if (element?.messageError) {
+                if (tipe === 'racik') {
+                  const key = `${indexlist}-${index}`
+                  this.statusCopiedRacik[key] = false
+                  this.messageCopied[key] = element?.messageError
+                }
+                else {
+                  const key = `${indexlist}-${index}`
+                  this.statusCopied[key] = false
+                  this.messageCopied[key] = element?.messageError
+                }
+              }
+              else {
+                if (tipe === 'racik') {
+                  const key = `${indexlist}-${index}`
+                  this.statusCopiedRacik[key] = true
+                }
+                else {
+                  const key = `${indexlist}`
+                  this.statusCopied[key] = true
+                }
+              }
+            })
+
+            this.cariObat()
+          })
+          .catch(error => {
+            this.resetForm()
+            console.error('Error in simpanCopyResep:', error)
+            this.loading = false
+            reject(error)
+          })
+      })
+    },
+    openDialogDuplicateResep (val, permintaanResepDuplicate, tipe, indexlist) {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
+        ok: {
+          push: true,
+          label: 'Lanjutkan',
+          'no-caps': true,
+          color: 'primary'
+        },
+        cancel: {
+          push: true,
+          label: 'Batal',
+          'no-caps': true,
+          color: 'dark'
+        }
+      })
+        .onOk(() => {
+          this.simpanCopyResepKonfirmasi(permintaanResepDuplicate, tipe, indexlist)
         })
     }
   }
