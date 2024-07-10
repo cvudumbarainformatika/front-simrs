@@ -61,7 +61,7 @@
                       Non Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101'">
+                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101' && depo[0]?.value === items?.depo">
                     <q-btn
                       rounded
                       push
@@ -202,7 +202,7 @@
                       Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101'">
+                  <div class="col-auto" v-if="depo[0]?.value === 'Gd-05010101' && depo[0]?.value === items?.depo">
                     <q-btn
                       rounded
                       push
