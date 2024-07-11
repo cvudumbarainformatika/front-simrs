@@ -545,7 +545,7 @@ function responTime(item){
   if(jam>0){
     const setelahJam=date.subtractFromDate(selesai,{hours:jam})    
     menit=date.getDateDiff(setelahJam,mulai, 'minutes')
-    console.log('menit', menit);
+    // console.log('menit', menit);
     if(menit>0){
     let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})      
     detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
@@ -586,7 +586,7 @@ function responTime(item){
   const dispDet=detik <= 9 ? '0'+detik:detik
   // const respon=date.getDateDiff(selesai,mulai, 'minutes')
   // const second=date.getDateDiff(selesai,mulai, 'seconds')
-  console.log('resp time', dispJam);
+  // console.log('resp time', dispJam);
   return 'Respon Time ' + dispJam + ':' + dispMen+':' + dispDet
 }
 function panggil (item) {
