@@ -121,8 +121,11 @@
                 {{ item?.noresep }} ({{ item?.sistembayar?.rs2?? '-' }})
               </div>
               <div class="row text-grey f-10">
-                <div>
-                  {{ dateFullFormat(item?.tgl_permintaan) }}
+                <div v-if="parseFloat(item?.flag)>0">
+                  {{ dateFull(item?.tgl_kirim) }}
+                </div>
+                <div v-if="item?.flag===''">
+                  {{ dateFull(item?.tgl_permintaan) }}
                 </div>
                 <div
                   v-if="item?.tiperesep==='iter' && item?.noresep_asal!==''"
@@ -273,8 +276,20 @@
                 {{ status(item?.flag) }}
                 </q-chip>
               </div>
-                          
-              
+              <!-- <div class="row f-10">
+                <div class="col-5">Dikirim : </div>
+                <div class="col-7">{{ dateFull(item?.tgl_kirim) }}</div>
+              </div> -->
+              <div class="row f-10">
+                {{ dateFull(item?.tgl_selesai) }}
+                <!-- <div class="col-5">Selesai : </div>
+                <div class="col-7"></div> -->
+              </div>
+              <div v-if="item?.flag==='3' || item?.flag==='4'" class="row f-10 text-italic">
+                <div >
+                  {{ responTime(item) }}
+                </div>
+              </div>
             </td>
             <td class="text-end q-mr-sm">
               <div class="row no-wrap">
@@ -503,11 +518,12 @@
 
 <script setup>
 // import { ref } from 'vue'
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat,dateFull } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
 import { defineAsyncComponent, ref } from 'vue'
+import { date } from 'quasar'
 
 const store = useEResepDepoFarmasiStore()
 const router = useRouter()
@@ -522,6 +538,60 @@ defineProps({
   }
 })
 const emits = defineEmits(['panggilan'])
+function responTime(item){
+  const mulai= new Date(item?.tgl_kirim)
+  const selesai=new Date(item?.tgl_selesai)  
+  let jam=date.getDateDiff(selesai,mulai, 'hours')
+  let menit=0
+  let detik=0
+  const dispJam=jam <= 9 ? '0'+jam:jam
+  if(jam>0){
+    const setelahJam=date.subtractFromDate(selesai,{hours:jam})    
+    menit=date.getDateDiff(setelahJam,mulai, 'minutes')
+    // console.log('menit', menit);
+    if(menit>0){
+    let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})      
+    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+    if(detik<0){
+      const det=detik
+      detik = 60+det
+      menit-=1
+    }
+   }else if(menit<0){
+    let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})    
+      const men=menit
+      menit=60+men
+      jam-=1
+    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+    if(detik<0){
+      const det=detik
+      detik = 60+det
+      menit-=1
+    }
+   }else{
+    detik=date.getDateDiff(selesai,mulai, 'seconds')
+   }
+  }else{    
+    menit=date.getDateDiff(selesai,mulai, 'minutes')
+   if(menit>0){
+    const setelahMinute=date.subtractFromDate(selesai,{minutes:menit})
+    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+    if(detik<0){
+      const det=detik
+      detik = 60+det
+      menit-=1
+    }
+   }else{
+    detik=date.getDateDiff(selesai,mulai, 'seconds')
+   }
+  }
+  const dispMen=menit <= 9 ? '0'+menit:menit
+  const dispDet=detik <= 9 ? '0'+detik:detik
+  // const respon=date.getDateDiff(selesai,mulai, 'minutes')
+  // const second=date.getDateDiff(selesai,mulai, 'seconds')
+  // console.log('resp time', dispJam);
+  return 'Respon Time ' + dispJam + ':' + dispMen+':' + dispDet
+}
 function panggil (item) {
   emits('panggilan', item)
   store.noreg = item?.noreg
