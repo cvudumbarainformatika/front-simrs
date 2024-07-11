@@ -26,7 +26,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     ruangan: {
       koderuangan: null
     },
-    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan', 'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs'],
+    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan', 'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs', 'KamarOperasiIgd', 'TindakanOperasi'],
     kolomhide: []
   }),
   actions: {
@@ -259,13 +259,45 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           kamaroperasiibss.sort()
           kamaroperasiibss.forEach(i => {
             const temp = xxx.kamaroperasiibs?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-            const namaRuangan = this.ranap.find(kd => kd.rs15 === i)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
             const kamaroperasiibssx = {
               kamar: i,
               namaruangan: namaRuangan?.rs5 ?? '-',
               subtotal: temp
             }
             xxx.Kamaroperasiibs.push(kamaroperasiibssx)
+          })
+        }
+
+        xxx.Kamaroperasiigd = []
+        const kamaroperasiigds = filterDuplicateArrays(xxx?.kamaroperasiigd.map(m => m?.rs15))
+        if (kamaroperasiigds?.length) {
+          kamaroperasiigds.sort()
+          kamaroperasiigds.forEach(i => {
+            const temp = xxx.kamaroperasiigd?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const kamaroperasiigdsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Kamaroperasiigd.push(kamaroperasiigdsx)
+          })
+        }
+
+        xxx.Tindakanoperasi = []
+        const tindakanoperasis = filterDuplicateArrays(xxx?.tindakanoperasi.map(m => m?.rs4))
+        if (tindakanoperasis?.length) {
+          tindakanoperasis.sort()
+          tindakanoperasis.forEach(i => {
+            const temp = xxx.tindakanendoscopy?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakanoperasisx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Tindakanoperasi.push(tindakanoperasisx)
           })
         }
       })

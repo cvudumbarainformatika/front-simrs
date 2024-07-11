@@ -307,6 +307,32 @@
               </q-item>
             </div>
           </template>
+          <template #cell-KamarOperasiIgd="{row}">
+            <div
+              v-if="row?.Kamaroperasiigd.length >= 0"
+            >
+              <q-item
+                v-for="(Kamaroperasiigd , okigd) in row?.Kamaroperasiigd"
+                :key="okigd"
+                class="list-move"
+              >
+                {{ Kamaroperasiigd?.namaruangan }} = {{ formatDouble(Kamaroperasiigd?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanOperasi="{row}">
+            <div
+              v-if="row?.Tindakanoperasi.length >= 0"
+            >
+              <q-item
+                v-for="(Tindakanoperasi , end) in row?.Tindakanoperasi"
+                :key="end"
+                class="list-move"
+              >
+                {{ EndosTindakanoperasicopy?.namaruangan }} = {{ formatDouble(Endoscopy?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
