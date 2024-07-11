@@ -268,6 +268,45 @@
               </q-item>
             </div>
           </template>
+          <template #cell-Radiologi="{row}">
+            <div
+              v-if="row?.Laborat.length >= 0"
+            >
+              <q-item
+                v-for="(Radiologi , rad) in row?.Radiologi"
+                :key="rad"
+                class="list-move"
+              >
+                {{ Radiologi?.namaruangan }} = {{ formatDouble(Radiologi?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Endoscopy="{row}">
+            <div
+              v-if="row?.Endoscopy.length >= 0"
+            >
+              <q-item
+                v-for="(Endoscopy , end) in row?.Endoscopy"
+                :key="end"
+                class="list-move"
+              >
+                {{ Endoscopy?.namaruangan }} = {{ formatDouble(Endoscopy?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-KamarOperasiIbs="{row}">
+            <div
+              v-if="row?.Kamaroperasiibs.length >= 0"
+            >
+              <q-item
+                v-for="(Kamaroperasiibs , kob) in row?.Kamaroperasiibs"
+                :key="kob"
+                class="list-move"
+              >
+                {{ Kamaroperasiibs?.namaruangan }} = {{ formatDouble(Kamaroperasiibs?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
