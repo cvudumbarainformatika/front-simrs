@@ -201,39 +201,25 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         }
 
         xxx.Laborat = []
-        const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.ruangan))
-        if (laborats?.length) {
-          laborats.sort()
-          laborats.forEach(f => {
-            const temp = xxx?.laborat?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+        const laboratpaket = xxx?.laborat
+        const laboratasnonpaket = xxx?.laboratnonpaket
+        const laboratall = laboratpaket.concat(laboratasnonpaket)
+        const laboratss = filterDuplicateArrays(laboratall?.map(m => m?.ruangan))
+        console.log('wew', laboratss)
+        //  const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.ruangan))
+        if (laboratss?.length) {
+          laboratss.sort()
+          laboratss.forEach(f => {
+            const temp = laboratall?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
             const laboratssss = {
-              kamar: laborats,
+              kamar: f,
               namaruangan: namaRuangan?.rs5 ?? '-',
               subtotal: temp
             }
             xxx.Laborat.push(laboratssss)
           })
         }
-        const laboratsx = filterDuplicateArrays(xxx?.laboratnonpaket?.map(m => m?.ruangan))
-
-        if (laboratsx?.length) {
-          laboratsx.sort()
-          laboratsx.forEach(f => {
-            const temp = xxx?.laboratnonpaket?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
-            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
-            // console.log('namaRuangan', namaRuangan)
-            const laboratssssx = {
-              kamar: laboratsx,
-              namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
-            }
-            xxx.Laborat.push(laboratssssx)
-          })
-        }
-
-        const laboratall = laborats.push(laboratsx)
-        console.log('xxx', laboratall)
       })
       this.items = val
       console.log('sasa', val)
