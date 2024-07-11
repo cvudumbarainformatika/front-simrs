@@ -9,6 +9,7 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require('quasar/wrappers')
+const { mergeConfig } = require('vite') // baru untuk docker
 
 module.exports = configure(function (ctx) {
   // console.log('module', ctx)
@@ -54,6 +55,7 @@ module.exports = configure(function (ctx) {
       },
 
       env: {
+        // NODE_OPTIONS: '--max-old-space-size=20480',
         API: ctx.dev
           ? 'http://localhost/api.laborat/public'
           : 'http://192.168.150.111:3507',
@@ -64,7 +66,9 @@ module.exports = configure(function (ctx) {
 
       },
 
-      vueRouterMode: 'history' // available values: 'hash', 'history'
+      // sourceMap: false, // baru buat docker
+
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -80,7 +84,11 @@ module.exports = configure(function (ctx) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        viteConf.build = mergeConfig(viteConf.build, {
+          chunkSizeWarningLimit: 750
+        })
+      }
       // viteVuePluginOptions: {},
 
       // vitePlugins: [
@@ -91,7 +99,11 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      port: ctx.mode.spa
+        ? 9000
+        : (ctx.mode.pwa ? 9100 : 9200),
       open: true // opens browser window automatically
+
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -116,9 +128,9 @@ module.exports = configure(function (ctx) {
       plugins: ['Notify', 'LocalStorage', 'Dialog', 'Loading', 'AppFullscreen', 'BottomSheet']
     },
 
-    animations: 'all', // --- includes all animations
+    // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    // animations: [],
+    animations: ['fadeIn', 'fadeOut', 'slideInLeft', 'slideInDown', 'slideInRight', 'slideInUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'slideOutUp', 'bounce', 'bounceIn', 'flip'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#property-sourcefiles
     // sourceFiles: {

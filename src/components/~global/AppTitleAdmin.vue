@@ -93,11 +93,11 @@ const router = useRouter()
 const route = useRoute()
 console.log('apptitleadmin', route)
 
-function prev() {
+function prev () {
   router.replace({ path: props.to })
 }
 
-function goTo() {
+function goTo () {
   router.replace({ name: 'lab.permintaan-luar', params: { page: 'form' } })
 }
 </script>
