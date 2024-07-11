@@ -201,22 +201,39 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         }
 
         xxx.Laborat = []
-        const laboratpaket = xxx?.laborat.filter(x => x.pemeriksaanlab.rs21 !== '')
-        const laborats = filterDuplicateArrays(laboratpaket.map(m => m?.rs23))
-        console.log('wew', laborats)
+        const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.ruangan))
         if (laborats?.length) {
           laborats.sort()
           laborats.forEach(f => {
-            const temp = laboratpaket.filter(m => m.rs23 === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const temp = xxx?.laborat?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
             const laboratssss = {
-              kamar: f,
+              kamar: laborats,
               namaruangan: namaRuangan?.rs5 ?? '-',
               subtotal: temp
             }
             xxx.Laborat.push(laboratssss)
           })
         }
+        const laboratsx = filterDuplicateArrays(xxx?.laboratnonpaket?.map(m => m?.ruangan))
+
+        if (laboratsx?.length) {
+          laboratsx.sort()
+          laboratsx.forEach(f => {
+            const temp = xxx?.laboratnonpaket?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            // console.log('namaRuangan', namaRuangan)
+            const laboratssssx = {
+              kamar: laboratsx,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Laborat.push(laboratssssx)
+          })
+        }
+
+        const laboratall = laborats.push(laboratsx)
+        console.log('xxx', laboratall)
       })
       this.items = val
       console.log('sasa', val)

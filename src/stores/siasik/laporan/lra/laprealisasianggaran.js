@@ -32,7 +32,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     penggunaAnggaran: [],
     pembiayaans: [],
     realisasiPembiayaans: [],
-    paguPembiayaans: []
+    paguPembiayaans: [],
+    kurangiKASs: []
   }),
   actions: {
     setParameter (key, val) {
@@ -104,6 +105,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
             this.nilaipends = resp.data?.nilaipendapatan
             this.realisasiPembiayaans = resp.data?.silpa
             this.paguPembiayaans = resp.data?.silpa
+            this.kurangiKASs = resp.data?.kurangikaskecil
             this.items = resp.data
             this.pembiayaans = []
             this.paguAnggaran(resp.data?.belanja)
@@ -150,6 +152,16 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
     // NILAI REALISASI PENDAPATAN
     realisasiPendapatan(val) {
+      const kasSebelumnya = this.kurangiKASs?.filter((x) => {
+        const tgl = new Date(x?.tanggalpengeluaran).getTime()
+        return tgl < new Date(this.params.tgl).getTime()
+      }).map((x) => parseFloat(x.nominal))
+
+      const kasSekarang = this.kurangiKASs?.filter((x) => {
+        const tgl = new Date(x?.tanggalpengeluaran).getTime()
+        return tgl >= new Date(this.params.tgl).getTime() && tgl <= new Date(this.params.tglx).getTime()
+      }).map((x) => parseFloat(x.nominal))
+
       const realSebelumnya = this.realisasipends?.filter((x) => {
         const tgl = new Date(x?.tgltrans).getTime()
         return tgl < new Date(this.params.tgl).getTime()
@@ -164,11 +176,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
       const total = {
         totalPaguPendapatan: totalPagu,
-        totalSekarang: real?.reduce((a, b) => a + b, 0),
-        totalSebelumnya: realSebelumnya?.reduce((a, b) => a + b, 0),
-        totalRealisasi: real?.reduce((a, b) => a + b, 0) + realSebelumnya?.reduce((a, b) => a + b, 0),
-        selisih: totalPagu - (realSebelumnya?.reduce((a, b) => a + b, 0) + real?.reduce((a, b) => a + b, 0)),
-        persen: (((realSebelumnya?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) + real?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) / parseFloat(totalPagu)) * 100).toFixed(2)
+        totalSekarang: real?.reduce((a, b) => a + b, 0) - kasSekarang?.reduce((a, b) => a + b, 0),
+        totalSebelumnya: realSebelumnya?.reduce((a, b) => a + b, 0) - kasSebelumnya?.reduce((a, b) => a + b, 0),
+        totalRealisasi: (real?.reduce((a, b) => a + b, 0) + realSebelumnya?.reduce((a, b) => a + b, 0)) - (kasSekarang?.reduce((a, b) => a + b, 0) + kasSebelumnya?.reduce((a, b) => a + b, 0)),
+        selisih: totalPagu - ((realSebelumnya?.reduce((a, b) => a + b, 0) + real?.reduce((a, b) => a + b, 0)) - (kasSekarang?.reduce((a, b) => a + b, 0) + kasSebelumnya?.reduce((a, b) => a + b, 0))),
+        persen: (((((realSebelumnya?.reduce((a, b) => a + b, 0) + real?.reduce((a, b) => a + b, 0)) - (kasSekarang?.reduce((a, b) => a + b, 0) + kasSebelumnya?.reduce((a, b) => a + b, 0)))) / parseFloat(totalPagu)) * 100).toFixed(2)
       }
 
       this.realisasipends = total

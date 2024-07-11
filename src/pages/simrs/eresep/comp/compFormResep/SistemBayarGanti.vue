@@ -46,6 +46,7 @@ onMounted(() => {
   // console.log('pasien kode sistem bayar', pasienSistembayar)
   // console.log('pasien group sistem bayar', pasienGroupSistembayar)
   sistemBayar.value = sisByr.value[0]
+  // console.log('ok computed', sisByr.value)
 })
 
 const sisByr = computed(() => {
@@ -53,7 +54,7 @@ const sisByr = computed(() => {
   // const pasienGroupSistembayar = props.pasien?.groups ?? null
 
   const masterSistemBayar = app.sistemBayars
-  const ocb = masterSistemBayar?.filter(x => (x?.nama.includes('UMUM') || x?.kode?.includes(pasienSistembayar)) && !x?.nama?.includes('COVID'))
+  const ocb = masterSistemBayar?.filter(x => (x?.nama.includes('UMUM') || x?.kode === pasienSistembayar) && !x?.nama?.includes('COVID'))
   // const a = masterSistemBayar?.find(x => x?.kode === pasienSistembayar && x?.groups === pasienGroupSistembayar)
   // const b = masterSistemBayar?.find(x => x?.kode === 'UMUM' && x?.groups === '2')
 
@@ -63,7 +64,6 @@ const sisByr = computed(() => {
 // const sisByrSekara
 
 const onChangeSistemBayar = (item) => {
-  // console.log('ok computed', sisByr.value)
   sistemBayar.value = item
 }
 

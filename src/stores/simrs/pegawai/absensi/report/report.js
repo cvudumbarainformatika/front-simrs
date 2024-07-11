@@ -15,7 +15,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       periode: null,
       q: '',
       page: 1,
-      per_page: 100,
+      per_page: 20,
       order_by: 'id',
       sort: 'desc'
     },
@@ -64,23 +64,25 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
   },
 
   actions: {
-    setPeriode(val) {
+    setPeriode (val) {
       this.params.periode = val
       this.getDataTable()
     },
-    filterByFlag(val) {
+    filterByFlag (val) {
       if (val !== 'all') {
         this.params.flag = val
-      } else {
+      }
+      else {
         delete this.params.flag
       }
 
       this.getDataTable()
     },
-    filterByRuang(val) {
+    filterByRuang (val) {
       if (val !== 'all') {
         this.params.ruang = val
-      } else {
+      }
+      else {
         delete this.params.ruang
       }
 
@@ -93,7 +95,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     setFilterBy (val) {
       this.params.filter_by = val
     },
-    enterSearch(val) {
+    enterSearch (val) {
       this.params.q = val
       this.getDataTable()
     },
@@ -121,7 +123,8 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       if (payload === 'default') {
         this.columns = []
         this.columns = this.defaultColumn
-      } else {
+      }
+      else {
         this.columns = []
         for (let index = 0; index < payload; index++) {
           this.columns[index] = index < 9 ? '0' + (index + 1) : (index + 1).toString()
@@ -130,7 +133,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       }
     },
 
-    refreshTable() {
+    refreshTable () {
       this.params.page = 1
       this.getDataTable()
     },
@@ -147,7 +150,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     //   }
     //   this.loading = false
     // },
-    getDataTable() {
+    getDataTable () {
       this.total = 0
       this.loading = true
       const params = { params: this.params }
@@ -155,7 +158,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         api.get('/v1/pegawai/absensi/report', params)
           .then((resp) => {
             if (resp.status === 200) {
-              // console.log('items', resp)
+              console.log('items', resp)
               this.items = resp.data.data
               this.meta = resp.data
               this.loading = false
@@ -185,7 +188,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         this.ruanganPrint = this.ruangan
       }
     },
-    async prota(periode) {
+    async prota (periode) {
       const params = {
         params: {
           periode
@@ -198,7 +201,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         this.protas = resp.data
       }
     },
-    async getDataPrint(periode) {
+    async getDataPrint (periode) {
       this.loadingDialog = true
       const params = { params: this.params }
       const resp = await api.get('/v1/pegawai/absensi/print', params)
@@ -210,11 +213,11 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       this.loadingDialog = false
     },
 
-    setSettings(key, value) {
+    setSettings (key, value) {
       this.settingsTable[key] = value
     },
 
-    setSorting(val) {
+    setSorting (val) {
       // console.log(val)
       this.sorting.head = val
       this.sorting.sortBy === 'desc'
@@ -226,42 +229,59 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
 
       if (val === 'A') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.TAKMASOK - b.TAKMASOK) : this.items = this.items.sort((a, b) => b.TAKMASOK - a.TAKMASOK)
-      } else if (val === 'kurang') {
+          ? this.items = this.items.sort((a, b) => a.TAKMASOK - b.TAKMASOK)
+          : this.items = this.items.sort((a, b) => b.TAKMASOK - a.TAKMASOK)
+      }
+      else if (val === 'kurang') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.TERLAMBAT - b.TERLAMBAT) : this.items = this.items.sort((a, b) => b.TERLAMBAT - a.TERLAMBAT)
-      } else if (val === 'CUTI') {
+          ? this.items = this.items.sort((a, b) => a.TERLAMBAT - b.TERLAMBAT)
+          : this.items = this.items.sort((a, b) => b.TERLAMBAT - a.TERLAMBAT)
+      }
+      else if (val === 'CUTI') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
-      } else if (val === 'IJIN') {
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI)
+          : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      }
+      else if (val === 'IJIN') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.IJIN - b.IJIN) : this.items = this.items.sort((a, b) => b.IJIN - a.IJIN)
-      } else if (val === 'CUTI') {
+          ? this.items = this.items.sort((a, b) => a.IJIN - b.IJIN)
+          : this.items = this.items.sort((a, b) => b.IJIN - a.IJIN)
+      }
+      else if (val === 'CUTI') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
-      } else if (val === 'SAKIT') {
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI)
+          : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      }
+      else if (val === 'SAKIT') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.SAKIT - b.SAKIT) : this.items = this.items.sort((a, b) => b.SAKIT - a.SAKIT)
-      } else if (val === 'DL') {
+          ? this.items = this.items.sort((a, b) => a.SAKIT - b.SAKIT)
+          : this.items = this.items.sort((a, b) => b.SAKIT - a.SAKIT)
+      }
+      else if (val === 'DL') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.DL - b.DL) : this.items = this.items.sort((a, b) => b.DL - a.DL)
-      } else if (val === 'CUTI') {
+          ? this.items = this.items.sort((a, b) => a.DL - b.DL)
+          : this.items = this.items.sort((a, b) => b.DL - a.DL)
+      }
+      else if (val === 'CUTI') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
-      } else if (val === 'DSPEN') {
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI)
+          : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      }
+      else if (val === 'DSPEN') {
         this.sorting.sortBy === 'asc'
-          ? this.items = this.items.sort((a, b) => a.DISPEN - b.DISPEN) : this.items = this.items.sort((a, b) => b.DISPEN - a.DISPEN)
+          ? this.items = this.items.sort((a, b) => a.DISPEN - b.DISPEN)
+          : this.items = this.items.sort((a, b) => b.DISPEN - a.DISPEN)
       }
 
       // // console.log('sorting', this.items)
     },
 
-    pushAlpha(id, jml) {
+    pushAlpha (id, jml) {
       const el = this.items.filter(x => x.id === id)[0]
       el.TAKMASOK = jml
     },
 
-    pushData(id, data) {
+    pushData (id, data) {
       const el = this.items.filter(x => x.id === id)[0]
       el.TERLAMBAT = data.TERLAMBAT
       el.TAKMASOK = data.TAKMASOK
