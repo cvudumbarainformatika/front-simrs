@@ -25,6 +25,7 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
 
       res.listRacikan = []
       let nilaiR = 0
+
       if (res?.permintaanracikan?.length) {
         res?.permintaanracikan.forEach(key => {
           nilaiR = parseFloat(key?.r)
@@ -72,10 +73,13 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           }
         })
       }
-      if (res.listRacikan.length) {
+      if (res?.listRacikan?.length) {
         res.listRacikan.forEach(a => {
           a.harga += nilaiR
         })
+      }
+      if(res?.asalpermintaanresep?.length && !res?.permintaanresep?.length){
+        res.permintaanresep=res?.asalpermintaanresep
       }
       if (res?.permintaanresep?.length) {
         res?.permintaanresep.forEach(key => {
@@ -85,6 +89,7 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           if (keluar) {
             key.jumlah = parseFloat(keluar?.jumlah)
             key.hargajual = parseFloat(keluar?.harga_jual)
+            key.done=true
           }
           // if (key.jumlahAwal !== key.jumlah) console.log('jumlah', key.jumlahAwal, key.jumlah)
           key.groupsistembayar = val?.sistembayar?.groups
@@ -99,7 +104,8 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
       const rac = res?.listRacikan?.map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
       res.subtotal = obat + rac
       this.resep = res
-      // console.log('print', res)
+
+      console.log('print', res)
     }
   }
 })

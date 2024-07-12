@@ -11,7 +11,7 @@
     :type="type"
   >
     <template v-if="append" #append>
-      <q-icon :name="appendIcon" size="xs" class="cursor-pointer" v-ripple @click="$emit('appendClick')"/>
+      <q-icon :name="appendIcon" size="xs" class="cursor-pointer" v-ripple @click="emits('appendClick')" />
     </template>
   </q-input>
 </template>
@@ -52,4 +52,6 @@ defineProps({
   }
 
 })
+
+const emits = defineEmits(['appendClick'])
 </script>

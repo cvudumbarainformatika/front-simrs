@@ -263,65 +263,65 @@
       </thead>
       <tbody v-if="!loading">
         <tr v-if="!items.length > 0 && inputCol">
-          <transition
+          <!-- <transition
             transition-show="fade"
             transition-hide="fade"
+          > -->
+          <td
+            :colspan="
+              rowImage === null
+                ? filterColumn.length + 2 + inputCol
+                : filterColumn.length + 3 + inputCol
+            "
           >
-            <td
-              :colspan="
-                rowImage === null
-                  ? filterColumn.length + 2 + inputCol
-                  : filterColumn.length + 3 + inputCol
-              "
+            <div
+              class="flex column flex-center bg-loading-bg__table"
+              style="height: 200px"
             >
-              <div
-                class="flex column flex-center bg-loading-bg__table"
-                style="height: 200px"
-              >
-                <div>
-                  <q-icon
-                    name="icon-mat-receipt_long"
-                    color="primary"
-                    size="60px"
-                  />
-                </div>
-                <div class="text-primary q-mt-sm">
-                  Data Belum Ada
-                </div>
+              <div>
+                <q-icon
+                  name="icon-mat-receipt_long"
+                  color="primary"
+                  size="60px"
+                />
               </div>
-            </td>
-          </transition>
+              <div class="text-primary q-mt-sm">
+                Data Belum Ada
+              </div>
+            </div>
+          </td>
+          <!-- </transition> -->
         </tr>
 
         <tr v-if="!items.length > 0 && !inputCol">
-          <transition
+          <!-- <transition
             transition-show="fade"
             transition-hide="fade"
+          > -->
+          <td
+            :colspan="
+              rowImage === null
+                ? filterColumn.length + 2
+                : filterColumn.length + 3
+            "
           >
-            <td
-              :colspan="
-                rowImage === null
-                  ? filterColumn.length + 2
-                  : filterColumn.length + 3
-              "
+            <div
+              class="flex column flex-center bg-loading-bg__table"
+              style="height: 300px"
             >
-              <div
-                class="flex column flex-center bg-loading-bg__table"
-                style="height: 300px"
-              >
-                <div>
-                  <q-icon
-                    name="icon-mat-receipt_long"
-                    color="primary"
-                    size="60px"
-                  />
-                </div>
-                <div class="text-primary q-mt-sm">
-                  Data Belum Ada
-                </div>
+              <div>
+                <q-icon
+                  name="icon-mat-receipt_long"
+                  color="primary"
+                  size="60px"
+                />
               </div>
-            </td>
-          </transition>
+              <div class="text-primary q-mt-sm">
+                Data Belum Ada
+              </div>
+            </div>
+          </td>
+          <!-- </transition> -->
         </tr>
 
         <tr
@@ -604,7 +604,8 @@ const setCheck = (x) => {
       arr.push(props.items[i].id)
     }
     selected.value = arr
-  } else {
+  }
+  else {
     selected.value = []
   }
 }

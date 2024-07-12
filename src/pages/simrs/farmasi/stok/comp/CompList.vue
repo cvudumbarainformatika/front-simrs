@@ -272,7 +272,7 @@ function simpanFisik (row) {
   const date1 = new Date(table.now)
   const date2 = new Date(table.params.to + ' 23:59:59')
   const diff = date.getDateDiff(date1, date2, 'days')
-  console.log('table param', date1, date2, table.params.to, diff)
+  // console.log('table param', date1, date2, table.params.to, diff)
   row.tglopname = table.params.to + ' 23:59:58'
   if (diff < -10) return notifErrVue('Stok Opname dapat di isi dari h-10')
   store.simpanFisik(row)

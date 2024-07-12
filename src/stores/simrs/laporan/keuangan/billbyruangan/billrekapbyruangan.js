@@ -26,7 +26,10 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     ruangan: {
       koderuangan: null
     },
-    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan', 'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat'],
+    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
+      'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
+      'KamarOperasiIgd', 'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
+      'Sedasi', 'TindakanCardio', 'TindakanEeg'],
     kolomhide: []
   }),
   actions: {
@@ -201,21 +204,185 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         }
 
         xxx.Laborat = []
-        const laboratpaket = xxx?.laborat.filter(x => x.pemeriksaanlab.rs21 !== '')
-        console.log('xxx', laboratpaket)
-        // if (laborats?.length) {
-        //   laborats.forEach(f => {
-        // const temp = laboratpaket.filter(m => m.rs2 === f)
+        const laboratpaket = xxx?.laborat
+        const laboratasnonpaket = xxx?.laboratnonpaket
+        const laboratall = laboratpaket.concat(laboratasnonpaket)
+        const laboratss = filterDuplicateArrays(laboratall?.map(m => m?.ruangan))
+        // console.log('wew', laboratss)
+        //  const laborats = filterDuplicateArrays(xxx?.laborat?.map(m => m?.ruangan))
+        if (laboratss?.length) {
+          laboratss.sort()
+          laboratss.forEach(f => {
+            const temp = laboratall?.filter(m => m.ruangan === f)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
+            const laboratssss = {
+              kamar: f,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Laborat.push(laboratssss)
+          })
+        }
 
-        // const namaRuangan = this.ranap.find(kd => kd.rs4 === f)
-        // const laboratssss = {
-        // kamar: f,
-        // namaruangan: namaRuangan?.rs5 ?? '-',
-        // subtotal: temp
-        // }
-        // xxx.Laborat.push(laboratssss)
-        // })
-        // }
+        xxx.Radiologi = []
+        const radiologis = filterDuplicateArrays(xxx?.transradiologi.map(m => m?.rs26))
+        if (radiologis?.length) {
+          radiologis.sort()
+          radiologis.forEach(i => {
+            const temp = xxx.transradiologi?.filter(x => x.rs26 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const radiosx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Radiologi.push(radiosx)
+          })
+        }
+
+        xxx.Endoscopy = []
+        const endoscopys = filterDuplicateArrays(xxx?.tindakanendoscopy.map(m => m?.rs4))
+        if (endoscopys?.length) {
+          endoscopys.sort()
+          endoscopys.forEach(i => {
+            const temp = xxx.tindakanendoscopy?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const endoscopysx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Endoscopy.push(endoscopysx)
+          })
+        }
+
+        xxx.Kamaroperasiibs = []
+        const kamaroperasiibss = filterDuplicateArrays(xxx?.kamaroperasiibs.map(m => m?.rs15))
+        if (kamaroperasiibss?.length) {
+          kamaroperasiibss.sort()
+          kamaroperasiibss.forEach(i => {
+            const temp = xxx.kamaroperasiibs?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const kamaroperasiibssx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Kamaroperasiibs.push(kamaroperasiibssx)
+          })
+        }
+
+        xxx.Kamaroperasiigd = []
+        const kamaroperasiigds = filterDuplicateArrays(xxx?.kamaroperasiigd.map(m => m?.rs15))
+        if (kamaroperasiigds?.length) {
+          kamaroperasiigds.sort()
+          kamaroperasiigds.forEach(i => {
+            const temp = xxx.kamaroperasiigd?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const kamaroperasiigdsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Kamaroperasiigd.push(kamaroperasiigdsx)
+          })
+        }
+
+        xxx.Tindakanoperasi = []
+        const tindakanoperasis = filterDuplicateArrays(xxx?.tindakanoperasi.map(m => m?.rs4))
+        if (tindakanoperasis?.length) {
+          tindakanoperasis.sort()
+          tindakanoperasis.forEach(i => {
+            const temp = xxx.tindakanoperasi?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakanoperasisx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Tindakanoperasi.push(tindakanoperasisx)
+          })
+        }
+
+        xxx.TindakanOperasiIgd = []
+        const tindakanoperasiigds = filterDuplicateArrays(xxx?.tindakanoperasiigd.map(m => m?.rs4))
+        if (tindakanoperasiigds?.length) {
+          tindakanoperasiigds.sort()
+          tindakanoperasiigds.forEach(i => {
+            const temp = xxx.tindakanoperasiigd?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakanoperasiigdsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.TindakanOperasiIgd.push(tindakanoperasiigdsx)
+          })
+        }
+
+        xxx.TindakanFisioterapi = []
+        const tindakanfisioterapis = filterDuplicateArrays(xxx?.tindakanfisioterapi.map(m => m?.rs4))
+        if (tindakanfisioterapis?.length) {
+          tindakanfisioterapis.sort()
+          tindakanfisioterapis.forEach(i => {
+            const temp = xxx.tindakanfisioterapi?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakanfisioterapisx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.TindakanFisioterapi.push(tindakanfisioterapisx)
+          })
+        }
+
+        xxx.TindakananastesidiLuarOkdanIcu = []
+        const tindakananastesidiluarokdanicus = filterDuplicateArrays(xxx?.tindakananastesidiluarokdanicu.map(m => m?.rs4))
+        if (tindakananastesidiluarokdanicus?.length) {
+          tindakananastesidiluarokdanicus.sort()
+          tindakananastesidiluarokdanicus.forEach(i => {
+            const temp = xxx.tindakananastesidiluarokdanicu?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakananastesidiluarokdanicusx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.TindakanFisioterapi.push(tindakananastesidiluarokdanicusx)
+          })
+        }
+
+        xxx.TindakanCardio = []
+        const tindakancardios = filterDuplicateArrays(xxx?.tindakancardio.map(m => m?.rs4))
+        if (tindakancardios?.length) {
+          tindakancardios.sort()
+          tindakancardios.forEach(i => {
+            const temp = xxx.tindakancardio?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakancardiosx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.TindakanCardio.push(tindakancardiosx)
+          })
+        }
+
+        xxx.TindakanEeg = []
+        const tindakaneegs = filterDuplicateArrays(xxx?.tindakaneeg.map(m => m?.rs4))
+        if (tindakaneegs?.length) {
+          tindakaneegs.sort()
+          tindakaneegs.forEach(i => {
+            const temp = xxx.tindakaneeg?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const tindakaneegsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.TindakanEeg.push(tindakaneegsx)
+          })
+        }
       })
       this.items = val
       console.log('sasa', val)

@@ -49,7 +49,7 @@ const $q = useQuasar()
 const store = useTemplateEResepStore()
 
 const DialogEdit = defineAsyncComponent(() => import('../compTemplate/DialogEdit.vue'))
-const props = defineProps({
+const pr = defineProps({
   items: {
     type: Array,
     default: () => []
@@ -93,7 +93,7 @@ function closeEdit () {
 
 function hapusItem (val) {
   const namaobat = val.row?.namaobat
-  const arr = store.items[props.sub.rowIndex].rincian
+  const arr = store.items[pr?.sub.rowIndex].rincian
   console.log('val', arr[val.rowIndex])
   $q.dialog({
     title: 'Pemberitahuan',
@@ -104,7 +104,7 @@ function hapusItem (val) {
   }).onOk(() => {
     // const params = { id: selected.value }
     // store.items?.splice(val.rowIndex, 1)
-    store.items[props.sub.rowIndex].rincian?.splice(val.rowIndex, 1)
+    store.items[pr?.sub.rowIndex].rincian?.splice(val.rowIndex, 1)
     store.updateListItems()
   }).onCancel(() => {
     console.log('Cancel')
@@ -116,7 +116,7 @@ function hapusItem (val) {
 
 function adaError (row) {
   // console.log('ada error', row)
-  const errs = store.errorsOrder?.racikan?.filter(x => x?.koderacikan === props.sub?.key)
+  const errs = store.errorsOrder?.racikan?.filter(x => x?.koderacikan === pr?.sub?.key)
   // const obats = errs?.length ? errs.rincian?.filter(x => x?.kodeobat?.includes(row?.kodeobat)) : []
   const obats = errs?.length ? errs[0].rincian?.filter(x => x?.kodeobat?.includes(row?.kodeobat)) : []
   // console.log('ada error sub', obats)

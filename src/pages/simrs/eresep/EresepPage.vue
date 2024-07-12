@@ -38,6 +38,7 @@
         <HistoryEresep
           :key="props?.pasien"
           :pasien="props?.pasien"
+          :depo="props?.depo"
           title="HISTORY E-RESEP"
         />
       </template>

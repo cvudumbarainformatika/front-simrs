@@ -88,7 +88,7 @@
         >
           <div class="">
             <div v-for="(rinc,i) in item?.permintaanresep" :key="i">
-              <div v-if="(item?.flag==='3'&&rinc?.done)||parseInt(item?.flag)<=2">
+              <div v-if="(item?.flag==='3' && rinc?.done) || parseInt(item?.flag)<=2">
                 <div class="row justify-between q-mb-xs">
                   <div class="col-shrink">
                     {{ i+1 }}
@@ -225,7 +225,7 @@ const qrUrl = computed(() => {
 // eslint-disable-next-line no-unused-vars
 // const cont = document.getElementById('endas')?.innerHTML
 function printPage () {
-  console.log('print ')
+  // console.log('print ')
   // setTimeout(function () {
   //   // const printContents = document.getElementById('printGueeee')?.innerHTML
   //   // const originalContents = document.body.innerHTML

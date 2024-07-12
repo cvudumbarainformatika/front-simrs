@@ -129,7 +129,7 @@
                 <div
                   class="col-2 text-right"
                 >
-                  <q-select
+                  <!-- <q-select
                     ref="refSigna"
                     v-model="signa"
                     label="Aturan Pakai"
@@ -148,7 +148,31 @@
                     @new-value="signaCreateValue"
                     @update:model-value="signaSelected"
                     @keyup.enter.stop="enterSigna"
-                  />
+                  /> -->
+                  <q-select
+                        ref="refSigna"
+                        v-model="signa"
+                        label="Aturan Pakai"
+                        use-input
+                        fill-input
+                        hide-selected
+                        dense
+                        clearable
+                        standout="bg-yellow-3"
+                        option-label="signa"
+
+                        outlined
+                        :rules="[sigaValid]"
+                        lazy-rules
+                        no-error-icon
+                        hide-bottom-space
+                        hide-dropdown-icon
+                        @filter="store.getSigna"
+                        :options="store.signas"
+                        @new-value="signaCreateValue"
+                        @update:model-value="signaSelected"
+                        @keyup.enter.stop="signaEnter"
+                      />
                 </div>
                 <div
                   class="col text-right"
@@ -640,10 +664,18 @@ function enterSat () {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
-function enterSigna () {
+
+// function enterSigna () {
+//   if (!signaNewVal.value) {
+//     refKet.value.focus()
+//     refKet.value.select()
+//   }
+// }
+function signaEnter () {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
+    // console.log('signa enter')
   }
 }
 function enterKet () {
