@@ -329,7 +329,72 @@
                 :key="end"
                 class="list-move"
               >
-                {{ EndosTindakanoperasicopy?.namaruangan }} = {{ formatDouble(Endoscopy?.subtotal) }} <br>
+                {{ Tindakanoperasi?.namaruangan }} = {{ formatDouble(Tindakanoperasi?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanOperasiIgd="{row}">
+            <div
+              v-if="row?.TindakanOperasiIgd.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanOperasiIgd , toi) in row?.TindakanOperasiIgd"
+                :key="toi"
+                class="list-move"
+              >
+                {{ TindakanOperasiIgd?.namaruangan }} = {{ formatDouble(TindakanOperasiIgd?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanFisioterapi="{row}">
+            <div
+              v-if="row?.TindakanFisioterapi.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanFisioterapi , tfi) in row?.TindakanFisioterapi"
+                :key="tfi"
+                class="list-move"
+              >
+                {{ TindakanFisioterapi?.namaruangan }} = {{ formatDouble(TindakanFisioterapi?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Sedasi="{row}">
+            <div
+              v-if="row?.TindakananastesidiLuarOkdanIcu.length >= 0"
+            >
+              <q-item
+                v-for="(TindakananastesidiLuarOkdanIcu , s) in row?.TindakananastesidiLuarOkdanIcu"
+                :key="s"
+                class="list-move"
+              >
+                {{ TindakananastesidiLuarOkdanIcu?.namaruangan }} = {{ formatDouble(TindakananastesidiLuarOkdanIcu?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanCardio="{row}">
+            <div
+              v-if="row?.TindakanCardio.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanCardio , tc) in row?.TindakanCardio"
+                :key="tc"
+                class="list-move"
+              >
+                {{ TindakanCardio?.namaruangan }} = {{ formatDouble(TindakanCardio?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-TindakanEeg="{row}">
+            <div
+              v-if="row?.TindakanEeg.length >= 0"
+            >
+              <q-item
+                v-for="(TindakanEeg , te) in row?.TindakanEeg"
+                :key="te"
+                class="list-move"
+              >
+                {{ TindakanEeg?.namaruangan }} = {{ formatDouble(TindakanEeg?.subtotal) }} <br>
               </q-item>
             </div>
           </template>
