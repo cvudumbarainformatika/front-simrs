@@ -5,11 +5,16 @@ export const useHistoryPasien = defineStore('history-pasien', {
   state: () => ({
     items: [],
     meta: null,
+    itemsEresep: [],
+    metaEresep: null,
     loading: false,
     params: {
       page: 1,
       per_page: 20,
       norm: ''
+    },
+    paramsEresep: {
+      noreg: ''
     },
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' },
@@ -26,7 +31,7 @@ export const useHistoryPasien = defineStore('history-pasien', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getData(pasien) {
+    async getData (pasien) {
       this.loading = true
       try {
         this.params.norm = pasien?.norm
@@ -39,8 +44,31 @@ export const useHistoryPasien = defineStore('history-pasien', {
           this.loading = false
         }
         this.loading = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loading = false
+      }
+    },
+    async getEresep (noreg) {
+      if (this.metaEresep === null) {
+        this.loading = true
+        try {
+          this.params.noreg = noreg
+          const params = { params: this.params }
+          const resp = await api.get('v1/simrs/pelayanan/listresepbynorm', params)
+          // console.log('history  ', resp)
+          if (resp.status === 200) {
+            this.itemsEresep = resp?.data?.data
+            this.loading = false
+
+            this.metaEresep = resp?.data // or you can push specific data from resp
+            console.log(this.metaEresep)
+          }
+          this.loading = false
+        }
+        catch (error) {
+          this.loading = false
+        }
       }
     }
   }
