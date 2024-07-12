@@ -3,22 +3,17 @@ const siasik = {
   component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    // { path: '', redirect: '/siasik/mboh' },
-    // {
-    //   path: '/satset/strukturorganisasi',
-    //   name: 'satset.strukturorganisasi',
-    //   component: () => import('pages/satset/strukturorganisasi/IndexPage.vue')
-    // },
-    // {
-    //   path: '/satset/location',
-    //   name: 'satset.location',
-    //   component: () => import('pages/satset/location/IndexPage.vue')
-    // },
-    // {
-    //   path: '/satset/practitioner',
-    //   name: 'satset.practitioner',
-    //   component: () => import('pages/satset/practitioner/IndexPage.vue')
-    // },
+    { path: '', name: 'siasik', redirect: '/laporan/dashboard' },
+    {
+      path: '/siasik/saldo/saldoawal',
+      // name: 'siasik.saldo',
+      component: () => import('pages/siasik/transaksi/saldo/saldoawal/IndexPage.vue')
+    },
+    {
+      path: '/siasik/saldo/silpa',
+      // name: 'siasik.saldo',
+      component: () => import('pages/siasik/transaksi/saldo/pembiayaan/IndexPage.vue')
+    },
     // {
     //   path: '/satset/kunjungan',
     //   name: 'satset.kunjungan',
