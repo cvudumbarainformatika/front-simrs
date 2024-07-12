@@ -121,10 +121,10 @@
                 {{ item?.noresep }} ({{ item?.sistembayar?.rs2?? '-' }})
               </div>
               <div class="row text-grey f-10">
-                <div v-if="parseFloat(item?.flag)>0">
+                <div v-if="parseFloat(item?.flag)>0 && item?.tiperesep!=='iter'">
                   {{ dateFull(item?.tgl_kirim) }}
                 </div>
-                <div v-if="item?.flag===''">
+                <div v-if="item?.flag==='' || (item?.tiperesep==='iter' && parseFloat(item?.flag)>0)">
                   {{ dateFull(item?.tgl_permintaan) }}
                 </div>
                 <div

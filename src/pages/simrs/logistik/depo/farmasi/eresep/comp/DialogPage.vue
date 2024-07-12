@@ -161,7 +161,7 @@
     </div>
 
     <div
-      v-if="store?.resep?.flag === '3' && store?.resep?.tiperesep === 'iter' && store?.resep?.noresep_asal===''"
+      v-if="parseFloat(store?.resep?.flag) >= 3 && store?.resep?.tiperesep === 'iter' && store?.resep?.noresep_asal===''"
       class="row justify-end q-mr-md q-my-sm"
     >
       <div class="col-auto">
@@ -309,7 +309,7 @@
     >
       <q-scroll-area style="height: 100%;">
         <div
-          v-if="store?.resep?.permintaanresep?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=5) || parseInt(store?.resep?.flag)<=3 ||store?.resep?.flag===''"
+          v-if="store?.resep?.permintaanresep?.length && ((store?.resep?.tiperesep === 'iter' && parseInt(store?.resep?.flag)<=2) || (store?.resep?.tiperesep !== 'iter' && (parseInt(store?.resep?.flag)<=8 || store?.resep?.flag==='')))"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -549,7 +549,7 @@
           </q-list>
         </div>
         <div
-          v-if="store?.resep?.listRacikan?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=3) || parseInt(store?.resep?.flag)<=3 || store?.resep?.flag===''"
+          v-if="store?.resep?.listRacikan?.length && ((store?.resep?.tiperesep === 'iter' && parseInt(store?.resep?.flag)<=2) || (store?.resep?.tiperesep !== 'iter' && (parseInt(store?.resep?.flag)<=5 || store?.resep?.flag==='')))"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -830,13 +830,13 @@
             </q-list>
           </div>
         </div>
-        <div v-if="store?.resep?.flag === '3' && store?.resep?.tiperesep === 'iter'">
+        <div v-if="(store?.resep?.flag === '3' || store?.resep?.flag === '4') && store?.resep?.tiperesep === 'iter'">
           <div v-if="store?.resep?.loadingGetIter || store.loadingCopy">
             <app-loading />
           </div>
           <div v-if="!store?.resep?.loadingGetIter && !store.loadingCopy">
             <div
-              v-if="store?.resep?.rincian?.length && parseInt(store?.resep?.flag) >= 3 && store?.resep?.tiperesep === 'iter'"
+              v-if="store?.resep?.rincian?.length && (store?.resep?.flag === '3' || store?.resep?.flag === '4') && store?.resep?.tiperesep === 'iter'"
               class="q-mt-sm"
             >
               <div class="row items-center">
@@ -987,7 +987,7 @@
                           </div>
                           <div v-if="store?.resep?.tiperesep==='iter' ">
                             <div v-if="(parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)) && store?.resep?.noresep_asal===''">
-                              Klik Copy Resep
+                              <q-checkbox v-model="rinc.diCopy" label="Copy Resep" />
                             </div>
                             <div v-if="(parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)) && store?.resep?.noresep_asal===''">
                               Tidak ada Alokasi
@@ -1043,7 +1043,7 @@
               </q-list>
             </div>
             <div
-              v-if="store?.resep?.rincianracik?.length && parseInt(store?.resep?.flag)>=3"
+              v-if="store?.resep?.rincianracik?.length && (store?.resep?.flag === '3' || store?.resep?.flag === '4')"
               class="q-mt-sm"
             >
               <div class="row items-center">
@@ -1488,6 +1488,7 @@ function updateJumlahObat (evt, rinc, item) {
 }
 function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
+  const tglKirim=date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
   console.log('resep', val)
   const resep = val?.rincian
   const racik = val?.rincianracik
@@ -1500,6 +1501,7 @@ function copyResep (val) {
       // console.log('50', res?.uraian50)
       // console.log('108', res?.uraian108)
       if (parseFloat(res.alokasi) < parseFloat(res.jumlah)) return
+      if(!res.diCopy) return
       const temp = {
         noreg: res?.noreg,
         kdobat: res?.kdobat,
@@ -1567,11 +1569,13 @@ function copyResep (val) {
     tarifina: val?.tarifina,
     tagihanrs: val?.tagihanrs,
     flag: '3',
-    tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+    tgl_kirim: tglKirim,
+    tgl_selesai: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
   }
   const data = {
     head, kirimResep, kirimRacik, groupsistembayar: val?.sistembayar?.groups, kddepo: val?.depo
   }
+  // console.log('copy', data);
   store.copyResep(data)
 }
 onMounted(() => {

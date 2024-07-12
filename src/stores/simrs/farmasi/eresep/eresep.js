@@ -222,7 +222,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           if (res.rincian.length > 0) {
             res.rincian.forEach(key => {
               key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
-
+              key.diCopy=true
               const stok = key.stok[0]
               const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
               const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
@@ -263,6 +263,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               }
               else {
                 const temp = {
+                  diCopy:true,
                   namaracikan: key?.namaracikan,
                   harga: key?.harga,
                   aturan: key?.aturan,
@@ -351,6 +352,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     metaniItem (item) {
       if (item.permintaanresep.length) {
         item.permintaanresep.forEach(resep => {
+          
           resep.kronis = resep?.mobat?.status_kronis
           const rinci = item?.rincian.filter(x => x.kdobat === resep.kdobat)
           // console.log('rinc', rinci, resep)
@@ -404,7 +406,6 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         api.post('v1/simrs/farmasinew/depo/ambil-iter', val)
           .then(resp => {
             val.loadingGetIter = false
-
             resolve(resp)
           })
           .catch(() => {
