@@ -141,10 +141,16 @@ const laporan = {
       component: () => import('pages/siasik/laporanrealisasi/lra/IndexPage.vue')
     },
 
+    // farmasi
     {
       path: '/laporan/farmasi/stok',
       // name: 'laporan.farmasi.stok',
       component: () => import('pages/simrs/laporan/farmasi/stok/IndexPage.vue')
+    },
+    {
+      path: '/laporan/farmasi/penerimaan',
+      // name: 'laporan.farmasi.penerimaan',
+      component: () => import('pages/simrs/laporan/farmasi/penerimaan/IndexPage.vue')
     },
 
     {
