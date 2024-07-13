@@ -29,7 +29,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
       'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
       'KamarOperasiIgd', 'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
-      'Sedasi', 'TindakanCardio', 'TindakanEeg'],
+      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar'],
     kolomhide: []
   }),
   actions: {
@@ -381,6 +381,54 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
               subtotal: temp
             }
             xxx.TindakanEeg.push(tindakaneegsx)
+          })
+        }
+
+        xxx.PsikologtransUmum = []
+        const psikologtransumums = filterDuplicateArrays(xxx?.psikologtransumum.map(m => m?.rs4))
+        if (psikologtransumums?.length) {
+          psikologtransumums.sort()
+          psikologtransumums.forEach(i => {
+            const temp = xxx.psikologtransumum?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const psikologtransumumsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.PsikologtransUmum.push(psikologtransumumsx)
+          })
+        }
+
+        xxx.Bdrs = []
+        const bdrss = filterDuplicateArrays(xxx?.bdrs.map(m => m?.rs14))
+        if (bdrss?.length) {
+          bdrss.sort()
+          bdrss.forEach(i => {
+            const temp = xxx.bdrs?.filter(x => x.rs14 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const bdrssx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Bdrs.push(bdrssx)
+          })
+        }
+
+        xxx.Penunjangkeluar = []
+        const penunjangkeluars = filterDuplicateArrays(xxx?.penunjangkeluar.map(m => m?.ruangan))
+        if (penunjangkeluars?.length) {
+          penunjangkeluars.sort()
+          penunjangkeluars.forEach(i => {
+            const temp = xxx.penunjangkeluar?.filter(x => x.ruangan === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const penunjangkeluarsx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Penunjangkeluar.push(penunjangkeluarsx)
           })
         }
       })
