@@ -29,7 +29,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
       'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
       'KamarOperasiIgd', 'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
-      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar'],
+      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi'],
     kolomhide: []
   }),
   actions: {
@@ -429,6 +429,25 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
               subtotal: temp
             }
             xxx.Penunjangkeluar.push(penunjangkeluarsx)
+          })
+        }
+
+        xxx.Farmasi = []
+        const farmasilamanonracikan = xxx?.apotekranaplalu
+        const farmasilamaracikan = xxx?.apotekranapracikanhederlalux
+        const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan)
+        const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.rs4))
+        if (farmasilamass?.length) {
+          farmasilamass.sort()
+          farmasilamass.forEach(i => {
+            const temp = farmasilama?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const farmasilamax = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: temp
+            }
+            xxx.Farmasi.push(farmasilamax)
           })
         }
       })

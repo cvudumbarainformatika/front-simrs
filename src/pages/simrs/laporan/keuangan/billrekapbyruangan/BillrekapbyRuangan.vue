@@ -437,6 +437,19 @@
               </q-item>
             </div>
           </template>
+          <template #cell-Farmasi="{row}">
+            <div
+              v-if="row?.Farmasi.length >= 0"
+            >
+              <q-item
+                v-for="(Farmasi , fr) in row?.Farmasi"
+                :key="fr"
+                class="list-move"
+              >
+                {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
