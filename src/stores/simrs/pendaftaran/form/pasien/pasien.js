@@ -97,7 +97,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     noantrian: ''
   }),
   actions: {
-    clearForm() {
+    clearForm () {
       const nomorAntr = this.noantrian
       this.form = {
         barulama: 'baru',
@@ -142,10 +142,10 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       }
       this.setNoAntrian(nomorAntr)
     },
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setNoAntrian(val) {
+    setNoAntrian (val) {
       console.log('antrian ', val)
       if (val) {
         const regex = /^\d+$/
@@ -163,7 +163,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         }
       }
     },
-    negaraSelected(val) {
+    negaraSelected (val) {
       // cnoantriannst index = findWithAttr(this.negaras, 'kd_negara', val)
       // const propinsi = this.negaras[index]
       this.wilayah.kd_negara = val
@@ -176,7 +176,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       // this.getProvinces()
     },
-    clearNegara() {
+    clearNegara () {
       delete this.form.negara
       delete this.form.propinsi
       delete this.form.kodepropinsi
@@ -217,7 +217,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.kecamatans = []
       this.kelurahans = []
     },
-    propinsiSelected(val) {
+    propinsiSelected (val) {
       const index = findWithAttr(this.propinsies, 'propinsi', val)
       const propinsi = this.propinsies[index]
       this.wilayah.propinsi = val
@@ -231,7 +231,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       // this.getKota()
     },
-    clearPropinsi() {
+    clearPropinsi () {
       delete this.form.propinsi
       delete this.form.kodepropinsi
       delete this.form.kabupatenkota
@@ -267,7 +267,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.kecamatans = []
       this.kelurahans = []
     },
-    kabupatenSelected(val) {
+    kabupatenSelected (val) {
       const index = findWithAttr(this.kabupatens, 'kotakabupaten', val)
       const kabupaten = this.kabupatens[index]
       console.log('kab', kabupaten)
@@ -282,7 +282,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       // this.getKec()
     },
-    clearKabupaten() {
+    clearKabupaten () {
       delete this.form.kabupatenkota
       delete this.form.kodekabupatenkota
       delete this.form.kecamatan
@@ -311,7 +311,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.kecamatans = []
       this.kelurahans = []
     },
-    kecamatanSelected(val) {
+    kecamatanSelected (val) {
       const index = findWithAttr(this.kecamatans, 'kotakabupaten', val)
       const kabupaten = this.kecamatans[index]
       this.wilayah.kecamatan.kotakabupaten = val
@@ -324,7 +324,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       }
       // this.getKels()
     },
-    clearKecamatan() {
+    clearKecamatan () {
       delete this.form.kecamatan
       delete this.form.kodekecamatan
       delete this.form.kelurahan
@@ -344,7 +344,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       this.kelurahans = []
     },
-    kelurahanSelected(val) {
+    kelurahanSelected (val) {
       const index = findWithAttr(this.kelurahans, 'kotakabupaten', val)
       const kabupaten = this.kelurahans[index]
       this.wilayah.kelurahan.kotakabupaten = val
@@ -356,7 +356,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         this.setForm('kelurahandomisili', kabupaten.wilayah)
       }
     },
-    clearKelurahan() {
+    clearKelurahan () {
       delete this.form.kelurahan
       delete this.form.kodekelurahan
       if (this.alamataDomisiliSama) {
@@ -369,7 +369,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.paramWilayah.kd_kelurahan = null
     },
 
-    negaraDomisiliSelected(val) {
+    negaraDomisiliSelected (val) {
       // const index = findWithAttr(this.negaras, 'kd_negara', val)
       // const propinsi = this.negaras[index]
       this.wilayahDomisili.kd_negara = val
@@ -379,7 +379,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       // this.getProvinces()
     },
-    clearNegaraDomisili() {
+    clearNegaraDomisili () {
       delete this.form.negaradomisili
       delete this.form.propinsidomisili
       delete this.form.kodepropinsidomisili
@@ -408,7 +408,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.domisiliKecamatans = []
       this.domisiliKelurahans = []
     },
-    propinsiDomisiliSelected(val) {
+    propinsiDomisiliSelected (val) {
       const index = findWithAttr(this.domisiliPropinsies, 'propinsi', val)
       console.log('index domisili', index)
       if (index >= 0) {
@@ -421,7 +421,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       // this.getKota()
     },
-    clearPropinsiDomisili() {
+    clearPropinsiDomisili () {
       delete this.form.propinsidomisili
       delete this.form.kodepropinsidomisili
       delete this.form.kabupatenkotadomisili
@@ -446,7 +446,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.domisiliKecamatans = []
       this.domisiliKelurahans = []
     },
-    kabupatenDomisiliSelected(val) {
+    kabupatenDomisiliSelected (val) {
       const index = findWithAttr(this.domisiliKabupatens, 'kotakabupaten', val)
       const kabupaten = this.domisiliKabupatens[index]
       this.wilayahDomisili.kotakabupaten = val
@@ -456,7 +456,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       this.getKec()
     },
-    clearKabupatenDomisili() {
+    clearKabupatenDomisili () {
       delete this.form.kabupatenkotadomisili
       delete this.form.kodekabupatenkotadomisili
       delete this.form.kecamatandomisili
@@ -476,7 +476,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.domisiliKecamatans = []
       this.domisiliKelurahans = []
     },
-    kecamatanDomisiliSelected(val) {
+    kecamatanDomisiliSelected (val) {
       const index = findWithAttr(this.domisiliKecamatans, 'kotakabupaten', val)
       const kabupaten = this.domisiliKecamatans[index]
       this.wilayahDomisili.kecamatan.kotakabupaten = val
@@ -485,7 +485,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.setForm('kecamatandomisili', kabupaten.wilayah)
       this.getKels()
     },
-    clearKecamatanDomisili() {
+    clearKecamatanDomisili () {
       delete this.form.kecamatandomisili
       delete this.form.kodekecamatandomisili
       delete this.form.kelurahandomisili
@@ -500,7 +500,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
       this.domisiliKelurahans = []
     },
-    kelurahanDomisiliSelected(val) {
+    kelurahanDomisiliSelected (val) {
       const index = findWithAttr(this.domisiliKelurahans, 'kotakabupaten', val)
       const kabupaten = this.domisiliKelurahans[index]
       this.wilayahDomisili.kelurahan.kotakabupaten = val
@@ -508,7 +508,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.setForm('kodekelurahandomisili', val)
       this.setForm('kelurahandomisili', kabupaten.wilayah)
     },
-    clearKelurahanDomisili() {
+    clearKelurahanDomisili () {
       delete this.form.kelurahandomisili
       delete this.form.kodekelurahandomisili
 
@@ -517,7 +517,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.paramWilayahDomisili.kd_kelurahan = null
     },
 
-    samakanAlamatDanDomisili(val) {
+    samakanAlamatDanDomisili (val) {
       if (val) {
         if (this.form.alamat) this.setForm('alamatdomisili', this.form.alamat)
         if (this.form.rt) this.setForm('rtdomisili', this.form.rt)
@@ -537,7 +537,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         this.domisiliKabupatens = this.kabupatens
         this.domisiliKecamatans = this.kecamatans
         this.domisiliKelurahans = this.kelurahans
-      } else {
+      }
+      else {
         if (this.form.alamatdomisili) delete this.form.alamatdomisili
         if (this.form.rtdomisili) delete this.form.rtdomisili
         if (this.form.rwdomisili) delete this.form.rwdomisili
@@ -559,7 +560,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       }
       console.log('form ', this.form)
     },
-    setTanggalLahir() {
+    setTanggalLahir () {
       const hariIni = Date.now()
       const tanggal = this.tanggal.tahun + '-' + this.tanggal.bulan + '-' + this.tanggal.hari
       const tahunini = parseInt(date.formatDate(hariIni, 'YYYY'))
@@ -580,7 +581,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.form.umurthn = (daysDiff < 0 && monthsDiff === 0) ? yearsDiff - 1 : (monthsDiff < 0 ? yearsDiff - 1 : yearsDiff)
       this.setForm('tgllahir', tanggal)
     },
-    lahirHariIni() {
+    lahirHariIni () {
       const hariIni = Date.now()
       this.form.tgllahir = date.formatDate(hariIni, 'YYYY-MM-DD')
       this.tanggal.hari = date.formatDate(hariIni, 'DD')
@@ -594,12 +595,13 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.setForm('tgllahir', tanggal)
     },
     // initial data
-    getInitialData() {
+    getInitialData () {
       this.setTanggalLahir()
       if (this.autocompleteStore.negaras.length) {
         this.negaras = this.autocompleteStore.negaras
         this.negaraSelected('62')
-      } else {
+      }
+      else {
         this.getNegara().then(() => {
           this.negaraSelected('62')
         })
@@ -608,7 +610,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       if (this.autocompleteStore.domisiliNegaras.length) {
         this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
         this.negaraDomisiliSelected('62')
-      } else {
+      }
+      else {
         this.getNegaraDomisili().then(() => {
           this.negaraDomisiliSelected('62')
         })
@@ -618,7 +621,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         this.propinsies = this.autocompleteStore.propinsies
         this.propinsiSelected('35')
         this.getKota()
-      } else {
+      }
+      else {
         this.getProvinces().then(() => {
           this.propinsiSelected('35')
           this.getKota()
@@ -629,7 +633,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         this.domisiliPropinsies = this.autocompleteStore.domisiliPropinsies
         this.propinsiDomisiliSelected('35')
         this.getKotaDomisili()
-      } else {
+      }
+      else {
         this.getProvincesDomisili().then(() => {
           this.propinsiDomisiliSelected('35')
           this.getKotaDomisili()
@@ -639,53 +644,61 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       if (this.autocompleteStore.agamas.length) {
         this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
         this.agamas = this.autocompleteStore.agamas
-      } else {
+      }
+      else {
         this.getAgama()
       }
 
       if (this.autocompleteStore.sapaans.length) {
         this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
         this.sapaans = this.autocompleteStore.sapaans
-      } else {
+      }
+      else {
         this.getSapaan()
       }
 
       if (this.autocompleteStore.kelamins.length) {
         this.kelamins = this.autocompleteStore.kelamins
-      } else {
+      }
+      else {
         this.getKelamin()
       }
 
       if (this.autocompleteStore.pendidikans.length) {
         this.pendidikans = this.autocompleteStore.pendidikans
-      } else {
+      }
+      else {
         this.getPendidikan()
       }
 
       if (this.autocompleteStore.statuspernikahans.length) {
         this.statuspernikahans = this.autocompleteStore.statuspernikahans
-      } else {
+      }
+      else {
         this.getStatusPernikahan()
       }
 
       if (this.autocompleteStore.pekerjaans.length) {
         this.pekerjaans = this.autocompleteStore.pekerjaans
-      } else {
+      }
+      else {
         this.getPekerjaan()
       }
       if (this.autocompleteStore.bahasas.length) {
         this.bahasas = this.autocompleteStore.bahasas
-      } else {
+      }
+      else {
         this.getBahasa()
       }
       if (this.autocompleteStore.hambatans.length) {
         this.hambatans = this.autocompleteStore.hambatans
-      } else {
+      }
+      else {
         this.getHambatan()
       }
     },
     // api related functions
-    async cekFingerBpjs(val) {
+    async cekFingerBpjs (val) {
       this.loadingListRujukan = true
       await api.post('v1/simrs/pendaftaran/cekfingerprint', val)
         .then(resp => {
@@ -697,7 +710,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           this.loadingListRujukan = false
         })
     },
-    async getPekerjaan() {
+    async getPekerjaan () {
       this.loading = true
       await api.get('v1/simrs/master/pekerjaan')
         .then(resp => {
@@ -707,7 +720,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
         .catch(() => { this.loading = false })
     },
-    async getStatusPernikahan() {
+    async getStatusPernikahan () {
       this.loading = true
       await api.get('v1/simrs/master/statuspernikahan')
         .then(resp => {
@@ -718,7 +731,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
         .catch(() => { this.loading = false })
     },
-    async getPendidikan() {
+    async getPendidikan () {
       this.loading = true
       await api.get('v1/simrs/master/pendidikan')
         .then(resp => {
@@ -728,7 +741,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
         .catch(() => { this.loading = false })
     },
-    async getKelamin() {
+    async getKelamin () {
       this.loading = true
       await api.get('v1/simrs/master/kelamin')
         .then(resp => {
@@ -744,7 +757,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           this.loading = false
         })
     },
-    async getSapaan() {
+    async getSapaan () {
       this.loading = true
       await api.get('v1/simrs/master/sapaan')
         .then(resp => {
@@ -754,7 +767,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
         .catch(() => { this.loading = false })
     },
-    async getAgama() {
+    async getAgama () {
       this.loading = true
       await api.get('v1/simrs/master/agama')
         .then(resp => {
@@ -783,6 +796,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       const param = { params: this.paramWilayah }
       await api.get('v1/simrs/master/getpropinsi', param)
         .then((resp) => {
+          console.log('provinsi', resp.data[0])
           this.loadingPropinsi = false
 
           this.propinsies = resp.data[0]
@@ -994,7 +1008,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           })
       })
     },
-    cekDulu(evt, val) {
+    cekDulu (evt, val) {
       const cari = evt.target.value
       if (cari !== '' && this.form.barulama === 'baru') {
         this.loadingNomorTrue(val)
@@ -1017,28 +1031,30 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
       }
     },
-    loadingNomorTrue(val) {
+    loadingNomorTrue (val) {
       this.loadingNorm = val === 'norm'
       this.loadingNik = val === 'nik'
       this.loadingNoka = val === 'noka'
     },
-    loadingNomorFalse() {
+    loadingNomorFalse () {
       this.loadingNorm = false
       this.loadingNik = false
       this.loadingNoka = false
     },
-    kasihNotif(val, pasien) {
+    kasihNotif (val, pasien) {
       if (val === 'norm') {
         notifErrVue('dan Noka : ' + pasien.rs46)
         notifErrVue('dengan NIK : ' + pasien.rs49)
         notifErrVue('atas nama : ' + pasien.rs2)
         notifErrVue('No Rm Sudah Ada ')
-      } else if (val === 'nik') {
+      }
+      else if (val === 'nik') {
         notifErrVue('dan Noka : ' + pasien.rs46)
         notifErrVue('dengan No Rm : ' + pasien.rs1)
         notifErrVue('atas nama : ' + pasien.rs2)
         notifErrVue('NIK Sudah Ada ')
-      } else if (val === 'noka') {
+      }
+      else if (val === 'noka') {
         notifErrVue('dan NIK : ' + pasien.rs49)
         notifErrVue('dengan No Rm : ' + pasien.rs1)
         notifErrVue('atas nama : ' + pasien.rs2)

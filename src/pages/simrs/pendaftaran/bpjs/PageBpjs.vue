@@ -209,30 +209,40 @@ const page = useRoute()
 const title = computed(() => {
   if (page.path === '/pendaftaran/bpjs/form') {
     return 'RAJAL BPJS || JKN'
-  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/kunjungan') {
     return 'LIST KUNJUNGAN'
-  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/listmjkn') {
     return 'LIST MOBILE JKN'
-  } else if (page.path === '/pendaftaran/bpjs/konsulan') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/konsulan') {
     return 'LIST PASIEN KONSULAN'
-  } else if (page.path === '/pendaftaran/bpjs/listsharing') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/listsharing') {
     return 'LIST SHARING PASIEN'
-  } else {
+  }
+  else {
     return 'MASTER PASIEN'
   }
 })
 const subtitle = computed(() => {
   if (page.path === '/pendaftaran/bpjs/form') {
     return 'Pendaftaran Pasien Baru Rajal BPJS || JKN'
-  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/kunjungan') {
     return 'List Kunjungan Pasien BPJS || JKN'
-  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/listmjkn') {
     return 'List Kunjungan dari m-JKN'
-  } else if (page.path === '/pendaftaran/bpjs/konsulan') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/konsulan') {
     return 'List Pasien Konsulan Antar Poli'
-  } else if (page.path === '/pendaftaran/bpjs/listsharing') {
+  }
+  else if (page.path === '/pendaftaran/bpjs/listsharing') {
     return 'List Sharing Pasien BPJS'
-  } else {
+  }
+  else {
     return 'Daftar Pasien'
   }
 })
@@ -243,11 +253,11 @@ const nomor = ref('')
 const curentAntrian = ref('')
 const curentAntrianLansia = ref('')
 const sisaAntrian = ref('')
-function toggleDraw() {
+function toggleDraw () {
   drawerRight.value = !drawerRight.value
   // panggil('Call')
 }
-function panggil(val) {
+function panggil (val) {
   const param = {
     params: {
       jenis: val

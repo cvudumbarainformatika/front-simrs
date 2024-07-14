@@ -255,20 +255,20 @@ import CustomTable from '../CustomTable.vue'
 
 const store = useSimrsLaporanRekapDataPasienStore()
 
-function setFrom(val) {
+function setFrom (val) {
   store.params.from = date.formatDate(val, 'YYYY-MM-DD')
   store.getDataTable()
 }
-function setFromDisp(val) {
+function setFromDisp (val) {
   store.tanggal.from = val
   console.log('params ', store.params)
   console.log('tanggal', store.tanggal)
 }
-function setTo(val) {
+function setTo (val) {
   store.params.to = date.formatDate(val, 'YYYY-MM-DD')
   store.getDataTable()
 }
-function setToDisp(val) {
+function setToDisp (val) {
   store.tanggal.to = val
   console.log('params ', store.params)
   console.log('tanggal', store.tanggal)
@@ -280,7 +280,7 @@ const printObj = {
   popTitle: 'Laporan Rekap',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...')
   },

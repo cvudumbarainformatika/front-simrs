@@ -197,7 +197,7 @@
             Diagnosa
           </div>
           <div class="col-9">
-            : {{ pasien?.diagnosa.length?pasien?.diagnosa[0].masterdiagnosa?.rs1 + ' - ' + pasien?.diagnosa[0].masterdiagnosa?.rs4 :'-' }}
+            : {{ pasien?.diagnosa?.length?pasien?.diagnosa[0].masterdiagnosa?.rs1 + ' - ' + pasien?.diagnosa[0].masterdiagnosa?.rs4 :'-' }}
           </div>
         </div>
         <div class="row items-center justify-between q-mb-xl">
@@ -235,7 +235,7 @@ const props = defineProps({
     default: null
   }
 })
-function editItem(val) {
+function editItem (val) {
   console.log('edit', val)
   const renc = val.rs4
   if (store.plann !== renc) {
@@ -283,42 +283,56 @@ function editItem(val) {
     }
   }
 }
-function setKepada(val) {
+function setKepada (val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
       return val?.kontrol?.namaDokter
-    } else { return '-' }
-  } else if (val?.rs4 === 'Konsultasi') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Konsultasi') {
     if (val?.masterpoli) {
       return val?.masterpoli?.rs2
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rawat Inap') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rawat Inap') {
     if (props.pasien) {
       return props.pasien.dokter
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return 'Poli ' + val?.transrujukan?.poli + ', ' + val?.transrujukan?.rs7
-    } else { return '-' }
+    }
+    else { return '-' }
   }
 }
-function setNomor(val) {
+function setNomor (val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
       return val?.kontrol?.noSuratKontrol
-    } else { return '-' }
-  } else if (val?.rs4 === 'Konsultasi') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Konsultasi') {
     if (val?.masterpoli) {
       return val?.masterpoli?.rs2
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rawat Inap') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rawat Inap') {
     if (val?.spri) {
       return val?.spri?.noSuratKontrol
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return val?.transrujukan?.rs3
-    } else { return '-' }
+    }
+    else { return '-' }
   }
 }
 onMounted(() => {
@@ -326,7 +340,7 @@ onMounted(() => {
   store.getMasterPoli()
 })
 
-function hapusItem(item) {
+function hapusItem (item) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

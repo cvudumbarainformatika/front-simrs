@@ -27,34 +27,45 @@ const foto = computed(() => {
     if (usiath <= 99 && usiath > 59) {
       // return new URL('../../assets/images/grandma.png', import.meta.url).href
       return new URL('../../assets/avatar/Grandma.jpg', import.meta.url).href
-    } else if (usiath <= 59 && usiath > 25) {
+    }
+    else if (usiath <= 59 && usiath > 25) {
       // return new URL('../../assets/images/user-girl.svg', import.meta.url).href
       return new URL('../../assets/avatar/Woman.jpg', import.meta.url).href
-    } else if (usiath <= 25 && usiath > 15) {
+    }
+    else if (usiath <= 25 && usiath > 15) {
       // return new URL('../../assets/images/user-girl2.svg', import.meta.url).href
       return new URL('../../assets/avatar/YoungGirl.jpg', import.meta.url).href
-    } else if (usiath <= 15 && usiath > 5) {
+    }
+    else if (usiath <= 15 && usiath > 5) {
       return new URL('../../assets/avatar/Childgirl.jpg', import.meta.url).href
-    } else if (usiath <= 5 && usiath >= 0) {
+    }
+    else if (usiath <= 5 && usiath >= 0) {
       return new URL('../../assets/avatar/Baby.jpg', import.meta.url).href
-    } else {
+    }
+    else {
       return new URL('../../assets/images/user-girl3.svg', import.meta.url).href
     }
-  } else {
+  }
+  else {
     if (usiath <= 99 && usiath > 59) {
       return new URL('../../assets/avatar/Granpa.jpg', import.meta.url).href
       // return new URL('../../assets/images/grandpa.svg', import.meta.url).href
-    } else if (usiath <= 59 && usiath > 25) {
+    }
+    else if (usiath <= 59 && usiath > 25) {
       return new URL('../../assets/avatar/Man.jpg', import.meta.url).href
       // return new URL('../../assets/images/user-man2.svg', import.meta.url).href
-    } else if (usiath <= 25 && usiath > 15) {
+    }
+    else if (usiath <= 25 && usiath > 15) {
       return new URL('../../assets/avatar/Youngman.jpg', import.meta.url).href
       // return new URL('../../assets/images/user-man.svg', import.meta.url).href
-    } else if (usiath <= 15 && usiath > 5) {
+    }
+    else if (usiath <= 15 && usiath > 5) {
       return new URL('../../assets/avatar/Childman.jpg', import.meta.url).href
-    } else if (usiath <= 5 && usiath >= 0) {
+    }
+    else if (usiath <= 5 && usiath >= 0) {
       return new URL('../../assets/avatar/Baby.jpg', import.meta.url).href
-    } else {
+    }
+    else {
       return new URL('../../assets/images/actor.svg', import.meta.url).href
     }
   }

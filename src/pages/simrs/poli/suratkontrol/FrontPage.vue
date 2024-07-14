@@ -98,11 +98,11 @@ const apps = useAplikasiStore()
 console.log('app', apps?.user?.pegawai?.poli)
 
 store.getAllSurat()
-function setTanggal(val) {
+function setTanggal (val) {
   store.setForm('tglrencanakontrol', val)
   store.getjadwalDokterDpjp()
 }
-function save() {
+function save () {
   console.log(store.form)
   store.simpanEdit()
 }

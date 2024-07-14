@@ -342,7 +342,7 @@ const showMenuPeriode = ref(false)
 const store = useListPendaftaranRanapStore()
 // console.log(store)
 
-function clearQ() {
+function clearQ () {
   store.params.q = ''
   store.setPage(1)
 }

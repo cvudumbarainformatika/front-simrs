@@ -23,6 +23,7 @@
     behavior="menu"
     transition-show="jump-up"
     transition-hide="jump-down"
+    :bottom-slots="hint !== null "
     @update:model-value="updateModel"
     @filter="filterFn"
     @focus="getFocus"
@@ -35,6 +36,9 @@
           No results
         </q-item-section>
       </q-item>
+    </template>
+    <template v-if="hint" #hint>
+      {{ props.hint }}
     </template>
   </q-select>
 </template>
@@ -52,7 +56,8 @@ const props = defineProps({
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
-  filterred: { type: Boolean, default: true }
+  filterred: { type: Boolean, default: true },
+  hint: { type: String, default: null }
 })
 const refAuto = ref(null)
 const optionx = ref(props.source)
