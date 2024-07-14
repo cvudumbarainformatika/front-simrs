@@ -398,6 +398,45 @@
               </q-item>
             </div>
           </template>
+          <template #cell-PsikologtransUmum="{row}">
+            <div
+              v-if="row?.PsikologtransUmum.length >= 0"
+            >
+              <q-item
+                v-for="(PsikologtransUmum , ps) in row?.PsikologtransUmum"
+                :key="ps"
+                class="list-move"
+              >
+                {{ PsikologtransUmum?.namaruangan }} = {{ formatDouble(PsikologtransUmum?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Bdrs="{row}">
+            <div
+              v-if="row?.Bdrs.length >= 0"
+            >
+              <q-item
+                v-for="(Bdrs , bd) in row?.Bdrs"
+                :key="bd"
+                class="list-move"
+              >
+                {{ Bdrs?.namaruangan }} = {{ formatDouble(Bdrs?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Penunjangkeluar="{row}">
+            <div
+              v-if="row?.Penunjangkeluar.length >= 0"
+            >
+              <q-item
+                v-for="(Penunjangkeluar , bd) in row?.Penunjangkeluar"
+                :key="bd"
+                class="list-move"
+              >
+                {{ Penunjangkeluar?.namaruangan }} = {{ formatDouble(Penunjangkeluar?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
