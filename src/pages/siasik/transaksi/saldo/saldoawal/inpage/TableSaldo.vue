@@ -35,6 +35,22 @@
       </div>
     </template>
     <template #top-right>
+      <q-btn
+        class="q-ml-sm"
+        unelevated
+        round
+        color="light"
+        size="sm"
+        icon="icon-mat-add"
+        @click="table.newData(!isOpen)"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Data Baru
+        </q-tooltip>
+      </q-btn>
       <!-- <q-btn
         flat
         icon="icon-my-file-excel"
@@ -80,6 +96,7 @@
         </q-td>
       </q-tr>
     </template>
+    <formInput v-model="table.isOpen" />
   </q-table>
 </template>
 
@@ -87,7 +104,10 @@
 import { onMounted, ref } from 'vue'
 import { useSaldoAwalStore } from 'src/stores/siasik/transaksi/saldo/saldoawal/saldoawal'
 import { formattanpaRp } from 'src/modules/formatter'
+import formInput from './FormInputSaldo.vue'
+import { useFormSaldo } from 'src/stores/siasik/transaksi/saldo/saldoawal/formsaldo'
 
+const table = useFormSaldo()
 const store = useSaldoAwalStore()
 const tahuns = ref([])
 const columnsx = [
