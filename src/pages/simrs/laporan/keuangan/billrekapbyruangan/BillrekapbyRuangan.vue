@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          REKAP TAGIHAN PASIEN RAWAT JALAN
+          REKAP TAGIHAN PASIEN PER RUANGAN
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-14">
           periode
@@ -446,7 +446,10 @@
                 :key="fr"
                 class="list-move"
               >
-                {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }} <br>
+                <div class="on-left">
+                  {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }}
+                </div>
+                <br>
               </q-item>
             </div>
           </template>

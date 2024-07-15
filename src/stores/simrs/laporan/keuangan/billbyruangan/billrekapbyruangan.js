@@ -47,6 +47,20 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           this.loading = false
         })
     },
+    async getTigaPuluhTarif () {
+      this.loading = true
+      await api.get('v1/simrs/master/listmasterpoli')
+        .then((resp) => {
+          this.loading = false
+          if (resp.status === 200) {
+            this.rajal = resp?.data
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
+    },
     async getRuanganRanap () {
       this.loading = true
       await api.get('v1/simrs/master/mruanganranap')
@@ -439,6 +453,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         const farmasiracikannew = xxx?.newfarmasiracikan
         const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan, farmasilamanonracikannew, farmasiracikannew)
         const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.ruangan))
+
         if (farmasilamass?.length) {
           farmasilamass.sort()
           farmasilamass.forEach(i => {
