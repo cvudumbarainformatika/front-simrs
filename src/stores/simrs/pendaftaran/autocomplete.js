@@ -29,65 +29,65 @@ export const usePendaftaranAutocompleteStore = defineStore('pendaftaranAutocompl
   persist: true,
   actions: {
     // bpjs
-    setAsalRujukan(val) {
+    setAsalRujukan (val) {
       this.asalrujukans = val
     },
-    setSistemBayar(val) {
+    setSistemBayar (val) {
       this.sistembayars1 = val
     },
-    setPoli(val) {
+    setPoli (val) {
       this.polis = val
     },
-    setJenisKarcis(val) {
+    setJenisKarcis (val) {
       this.jenisKarcises = val
     },
-    setJenisKunjungan(val) {
+    setJenisKunjungan (val) {
       this.jenisKunjungans = val
     },
-    setProsedur(val) {
+    setProsedur (val) {
       this.prosedurs = val
     },
-    setAssesmen(val) {
+    setAssesmen (val) {
       this.assesmens = val
     },
-    setPenunjang(val) {
+    setPenunjang (val) {
       this.penunjangs = val
     },
     // pasien
-    setBahasa(val) {
+    setBahasa (val) {
       this.bahasas = val
     },
-    setHamabatan(val) {
+    setHamabatan (val) {
       this.hambatans = val
     },
-    setNegara(val) {
+    setNegara (val) {
       this.negaras = val
     },
-    setNegaraDomisili(val) {
+    setNegaraDomisili (val) {
       this.domisiliNegaras = val
     },
-    setPropinsi(val) {
+    setPropinsi (val) {
       this.propinsies = val
     },
-    setPropinsiDomisili(val) {
+    setPropinsiDomisili (val) {
       this.domisiliPropinsies = val
     },
-    setStatusPenikahan(val) {
+    setStatusPenikahan (val) {
       this.statuspernikahans = val
     },
-    setPendidikan(val) {
+    setPendidikan (val) {
       this.pendidikans = val
     },
-    setPekerjaan(val) {
+    setPekerjaan (val) {
       this.pekerjaans = val
     },
-    setSapaan(val) {
+    setSapaan (val) {
       this.sapaans = val
     },
-    setKelamin(val) {
+    setKelamin (val) {
       this.kelamins = val
     },
-    setAgama(val) {
+    setAgama (val) {
       this.agamas = val
     }
   }

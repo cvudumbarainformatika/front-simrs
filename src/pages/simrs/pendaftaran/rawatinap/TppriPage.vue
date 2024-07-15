@@ -1,89 +1,83 @@
 <template>
-  <!-- <q-page> -->
-  <q-page class="fit q-pa-md absolute">
-    <template v-if="store.pasien">
-      <DetailsPasien />
-    </template>
-    <template v-else>
-      <div class="fit column relative-position">
+  <q-page class="fit q-pa-sm absolute" style="overflow: hidden;">
+    <q-card class="bg-transparent fit">
+      <div class="column fit q-pa-md">
         <div class="col-auto">
-          <HeaderComp />
+          <header-comp :menus="lists" :tab="tab" @go-to="pilihMenu" />
+          <q-separator class="q-my-sm" />
         </div>
         <div class="col full-height">
-          <template v-if="store.items?.length > 0">
-            <transition-group
-              appear
-
-              enter-active-class="animated fadeIn faster"
-              leave-active-class="animated fadeOut faster"
-            >
-              <list-pasien
-                v-if="!store.isViewList"
-                key="list-pasien"
-                :items="store.items"
-                :loading="store.loading"
-                @details="(val)=>store.pasien=val"
-              />
-              <thumbnail-view
-                v-else
-                key="thumbnail-view"
-                :items="store.items"
-                @details="(val)=>store.pasien=val"
-              />
-            </transition-group>
-          </template>
-          <div
+          <menu-comp v-if="tab?.name === 'tppri-page'" :lists="lists" @on-select="pilihMenu" />
+          <component
+            :is="tab?.comp"
             v-else
-            class="fit column flex-center"
-          >
-            <div class="text-h4 q-mb-xs">
-              🏷️
-            </div>
-            <div class="text-grey-8">
-              Data Tidak Ditemukan
-            </div>
-          </div>
-        </div>
-        <div class="absolute-bottom z-top">
-          <app-paginate-simple
-            v-if="store.meta"
-            :key="store.meta"
-            :meta="store.meta"
-            color="bg-grey-8"
-            @go-to="store.setPage"
           />
         </div>
       </div>
-    </template>
+    </q-card>
   </q-page>
-  <!-- </q-page> -->
 </template>
 
 <script setup>
-import HeaderComp from './comp/HeaderComp.vue'
-import ThumbnailView from './comp/ThumbnailView.vue'
+import { defineAsyncComponent, ref, onMounted, shallowRef } from 'vue'
+const HeaderComp = defineAsyncComponent(() => import('./compTppri/HeaderComp.vue'))
+const MenuComp = defineAsyncComponent(() => import('./compTppri/MenuComp.vue'))
 
-import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
-import { onMounted } from 'vue'
-import ListPasien from './comp/ListPasien.vue'
-import DetailsPasien from './comp/DetailsPasien.vue'
+const lists = ref([
+  {
+    name: 'tppri-page', // yg ini jangan diganti yaaa kalo diganti harus ganti computed di menuComp
+    icon: 'icon-mat-dashboard',
+    title: 'TPPRI PAGE',
+    subtitle: 'Halaman Menu Pendaftaran Rawat Inap',
+    color: 'indigo'
+  },
+  {
+    name: 'form-pendaftaran',
+    icon: 'icon-mat-assignment_ind',
+    title: 'Form Pendaftaran',
+    subtitle: 'Pendaftaran Pasien Rawat Inap',
+    color: 'green',
+    comp: shallowRef(defineAsyncComponent(() => import('./pagemenus/FormPendaftaran.vue')))
+  },
+  {
+    name: 'list-igd',
+    icon: 'icon-fa-laptop-medical-solid',
+    title: 'List IGD',
+    subtitle: 'Pasien tunggu Rawat Inap dari IGD',
+    color: 'cyan'
+  },
+  {
+    name: 'list-spri',
+    icon: 'icon-mat-medical_information',
+    title: 'List RAJAL SPRI',
+    subtitle: 'Pasien tunggu SPRI dari Rawat Jalan',
+    color: 'deep-orange'
+  },
+  {
+    name: 'history',
+    icon: 'icon-mat-dvr',
+    title: 'History',
+    subtitle: 'Riwayat Pendaftaran Rawat Inap',
+    color: 'blue-grey'
+  },
+  {
+    name: 'status-kamar',
+    icon: 'icon-mat-bedroom_parent',
+    title: 'Status Kamar',
+    subtitle: 'Daftar Kamar / BED Rawat Inap',
+    color: 'amber'
+  }
+])
 
-const store = useListPendaftaranRanapStore()
+const tab = ref(null)
 
 onMounted(() => {
-  store.getDataTable()
+  tab.value = lists.value[0]
 })
 
+const pilihMenu = (val) => {
+  tab.value = val
+  console.log('menu', val)
+}
+
 </script>
-
-<style lang="scss" scoped>
-
-.scroll {
-  scrollbar-width: none; /* untuk Firefox */
-}
-
-.scroll::-webkit-scrollbar {
-  display: none; /* untuk Chrome, Safari, dan Opera */
-}
-
-</style>

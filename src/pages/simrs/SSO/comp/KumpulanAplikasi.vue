@@ -172,7 +172,7 @@ const filterApps = computed(() => {
   if (akses === 'all') {
     return allApp
   }
-  const filt = akses.reduce(function(r, e) {
+  const filt = akses.reduce(function (r, e) {
     r[e.aplikasi_id] = (r[e.aplikasi_id] || 0) + e.aplikasi_id
     return r
   }, {})
@@ -190,7 +190,7 @@ onMounted(() => {
   // console.log('kumpulan akses', props.akses)
 })
 
-function goTo(item) {
+function goTo (item) {
   emits('goTo', item)
 }
 </script>

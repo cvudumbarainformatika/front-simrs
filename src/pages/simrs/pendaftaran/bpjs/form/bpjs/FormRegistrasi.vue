@@ -697,13 +697,13 @@ const refTujuanKunjungan = ref(null)
 const refSuplesi = ref(null)
 
 // list Surat kontrol
-function listSuratRujukan() {
+function listSuratRujukan () {
   emits('getListRujukan')
   store.rujukanPCareChecked = true
   store.rujukanRSChecked = true
 }
 // cek surat kontrol
-function cekSuratKontrolIni(evt) {
+function cekSuratKontrolIni (evt) {
   const val = evt.target.value
   console.log('cek surat kontol ini')
   if (!store.rujukanPostMRS) {
@@ -720,7 +720,7 @@ function cekSuratKontrolIni(evt) {
 }
 setSistembayar1('1')
 // assign surat kontrol ke form
-function assignSuratKontrol(val) {
+function assignSuratKontrol (val) {
   console.log('assign surat kontrol ', val)
 
   const findpoli = val.poliTujuan ? val.poliTujuan : ''
@@ -765,7 +765,7 @@ function assignSuratKontrol(val) {
     setNamaDiagnosa(val.sep.diagnosa)
   })
 }
-function cekSuratRujukanIni(evt) {
+function cekSuratRujukanIni (evt) {
   // console.log(evt.target.value)
   const val = evt.target.value
   if (!store.rujukanPostMRS) {
@@ -783,7 +783,8 @@ function cekSuratRujukanIni(evt) {
           console.log('jumlah sep p care', resp)
         // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
         })
-      } else {
+      }
+      else {
         if (!store.rujukanRSChecked) {
           store.cekRujukanRs(param).then(resp => {
             if (resp.metadata.code === '200') {
@@ -808,11 +809,11 @@ function cekSuratRujukanIni(evt) {
 //   emits('cekSuratRujukan')
 // }
 // cek surat kontrol
-function cekSuratKontrol() {
+function cekSuratKontrol () {
   emits('getListSuratKontrol')
 }
 // set kode Poli
-function setPoliTujuan(val) {
+function setPoliTujuan (val) {
   store.paramKarcis.kd_poli = val
   setFlagKarcis('Lama')
 
@@ -831,7 +832,7 @@ function setPoliTujuan(val) {
   })
 }
 // dpdjp selected
-function dpjpSelected(val) {
+function dpjpSelected (val) {
   console.log('dpjp selected ', val)
   store.dpjpSuratKontrol = val
   const index = findWithAttr(store.jadwalDpjps, 'dpjp', val)
@@ -843,11 +844,13 @@ function dpjpSelected(val) {
     store.setForm('namadokter', store.jadwalDpjps[index].namadokter)
     store.setForm('jampraktek', store.jadwalDpjps[index].jadwal)
     // console.log('form  ', store.form)
-  } else {
+  }
+  else {
     if (store.jadwalDpjps.length) {
       const dok = store.jadwalDpjps.map(e => e.namadokter)
       notifInfVue('Dokter Praktek hari ini : ' + dok)
-    } else {
+    }
+    else {
       notifInfVue('Dokter Praktek hari ini : tidak ditemukan')
     }
     notifInfVue('Pendaftaran Tetap bisa dilakukan, tetapi akan berpengaruh terhadap penilaian BPJS terhadap Rumah Sakit')
@@ -856,7 +859,7 @@ function dpjpSelected(val) {
   }
 }
 // set flag karcis
-function setFlagKarcis(val) {
+function setFlagKarcis (val) {
   // const index = findWithAttr(store.jenisKarcises, 'jeniskarcis', val)
   // const flag = store.jenisKarcises[index]
   // store.display.hargakarcis = flag.harga
@@ -869,7 +872,7 @@ function setFlagKarcis(val) {
 }
 // --- kecelakaan start ---
 // autocomplete kecelakaan
-function setKecelakaan(val) {
+function setKecelakaan (val) {
   store.setForm('tglKecelakaan', '')
   store.setForm('kodekecamatankecelakaan', '')
   store.setForm('kodekabupatenkecelakaan', '')
@@ -890,7 +893,8 @@ function setKecelakaan(val) {
   if (parseInt(val) >= 1) {
     store.setForm('tglKecelakaan', date.formatDate(Date.now(), 'YYYY-MM-DD'))
     store.display.tanggal.kecelakaan = date.formatDate(Date.now(), 'DD MMMM YYYY')
-  } else {
+  }
+  else {
     store.setForm('tglKecelakaan', '')
     store.setForm('kodekecamatankecelakaan', '')
     store.setForm('kodekabupatenkecelakaan', '')
@@ -904,7 +908,7 @@ function setKecelakaan(val) {
   }
   store.getPropinsiKecelakaan()
 }
-function setPropisiKecelakaan(val) {
+function setPropisiKecelakaan (val) {
   // propinsikecelakaan, kodepropinsikecelakaan
   store.paramKecelakaan.kodepropinsi = val
   const index = findWithAttr(store.propinsies, 'kode', val)
@@ -912,11 +916,12 @@ function setPropisiKecelakaan(val) {
     store.form.propinsikecelakaan = store.propinsies[index].nama
     store.form.kodepropinsikecelakaan = val
     store.getKabupatenKecelakaan()
-  } else {
+  }
+  else {
     notifErrVue('Propinsi tidak ditemukan')
   }
 }
-function setKabupatenKecelakaan(val) {
+function setKabupatenKecelakaan (val) {
   // propinsikecelakaan, kodepropinsikecelakaan
   store.paramKecelakaan.kodekabupaten = val
   const index = findWithAttr(store.kabupatens, 'kode', val)
@@ -924,11 +929,12 @@ function setKabupatenKecelakaan(val) {
     store.form.kabupatenkecelakaan = store.kabupatens[index].nama
     store.form.kodekabupatenkecelakaan = val
     store.getKecamatanKecelakaan()
-  } else {
+  }
+  else {
     notifErrVue('kabupaten tidak ditemukan')
   }
 }
-function setKecamatanKecelakaan(val) {
+function setKecamatanKecelakaan (val) {
   // propinsikecelakaan, kodepropinsikecelakaan
   store.paramKecelakaan.kodekecamatan = val
   const index = findWithAttr(store.kecamatans, 'kode', val)
@@ -936,16 +942,17 @@ function setKecamatanKecelakaan(val) {
     store.form.kecamatankecelakaan = store.kecamatans[index].nama
     store.form.kodekecamatankecelakaan = val
     console.log('form', store.form)
-  } else {
+  }
+  else {
     notifErrVue('Kecamatan tidak ditemukan')
   }
 }
 // tanggal kecelakaan
-function setTglKecelakaan(val) {
+function setTglKecelakaan (val) {
   store.setForm('tglKecelakaan', val)
   store.setForm('tglkejadian', val)
 }
-function setDispTglKecelakaan(val) {
+function setDispTglKecelakaan (val) {
   store.display.tanggal.kecelakaan = val
 }
 // cek no suplesi
@@ -959,7 +966,7 @@ function setDispTglKecelakaan(val) {
 // --- kecelakaan end ---
 // ---- PPK Rujukan start---
 // debounce function
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -971,24 +978,24 @@ const prosesChange = myDebounce((val) => {
   if (val !== '') findPpkRujukan(val)
 }
 )
-function setPpkRujukan(val) {
+function setPpkRujukan (val) {
   store.display.kode = val
   store.setForm('ppkRujukan', val)
   // console.log('set PPK rujukan', val)
 }
-function findPpkRujukan(val) {
+function findPpkRujukan (val) {
   // console.log('find PPK rujukan', val)
   // store.paramPpkRujukan = val
   store.getPpkRujukan(val)
 }
-function clearPpkRujukan() {
+function clearPpkRujukan () {
   store.display.kode = null
   delete store.form.ppkRujukan
   // console.log('val PPK rujukan', val)
 }
 // ---- PPK Rujukan end---
 // sistem bayar
-function setSistembayar1(val) {
+function setSistembayar1 (val) {
   // store.setForm('sistembayar', val)
   if (store.form.sistembayar) { delete store.form.sistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
@@ -999,7 +1006,7 @@ function setSistembayar1(val) {
   store.getSistemBayar2(val)
   console.log('form', store.form)
 }
-function setSistembayar(val) {
+function setSistembayar (val) {
   // val is rs2
   store.setForm('sistembayar', val)
   const index = findWithAttr(store.sistembayars, 'rs2', val)
@@ -1010,7 +1017,7 @@ function setSistembayar(val) {
   console.log('form', store.form)
 }
 // diagnosa
-function setKodeDiagnosa(val) {
+function setKodeDiagnosa (val) {
   const index = findWithAttr(store.diagnosaAwals, 'kode', val)
   // console.log('index kode', index)
   if (index >= 0) {
@@ -1022,7 +1029,7 @@ function setKodeDiagnosa(val) {
   store.display.diagnosa.kode = val
   store.setForm('kodediagnosa', val)
 }
-function setNamaDiagnosa(val) {
+function setNamaDiagnosa (val) {
   const index = findWithAttr(store.diagnosaAwals, 'nama', val)
   if (index >= 0) {
     const diag = store.diagnosaAwals[index]
@@ -1033,28 +1040,28 @@ function setNamaDiagnosa(val) {
   store.display.diagnosa.nama = val
   store.setForm('namadiagnosa', val)
 }
-function findKodeDiagnosa(val) {
+function findKodeDiagnosa (val) {
   store.paramDiagnosa.kodediagnosa = val
   store.getDiagnosaAwal()
 }
-function findNamaDiagnosa(val) {
+function findNamaDiagnosa (val) {
   store.paramDiagnosa.diagnosa = val
   store.getDiagnosaAwal()
 }
-function clearKodeDiagnosa(val) {
+function clearKodeDiagnosa (val) {
   store.display.diagnosa.kode = null
   store.setForm('kodediagnosa', null)
   store.display.diagnosa.nama = null
   store.setForm('namadiagnosa', null)
 }
-function clearNamaDiagnosa(val) {
+function clearNamaDiagnosa (val) {
   store.display.diagnosa.kode = null
   store.setForm('kodediagnosa', null)
   store.display.diagnosa.nama = null
   store.setForm('namadiagnosa', null)
 }
 // jenis kunjungan
-function setJenisKunjungan(val) {
+function setJenisKunjungan (val) {
   // tujuan kunjungan 0 jika rujukan yang sepnya 0, atau post Mrs atau kontrol
   // tujuan kunjungan 1 jika pasien mau ke penunjang langsung contoh rehab medis
   // tujuan kunjungan 2 khusus untuk form dpjp
@@ -1100,7 +1107,7 @@ function setJenisKunjungan(val) {
   }
 }
 // tujuan kunjungan
-function setTujuanKunjungan(val) {
+function setTujuanKunjungan (val) {
   console.log('tujuan kunjungan', val)
   store.setForm('tujuankunjungan', val)
   store.display.tujuankunjungan = val
@@ -1113,14 +1120,16 @@ function setTujuanKunjungan(val) {
     store.display.penunjang.kode = ''
     store.setForm('assesmentPel', '')
     store.display.assesment.kode = ''
-  } else if (val === '1') {
+  }
+  else if (val === '1') {
     store.setForm('flagprocedure', '0')
     store.display.prosedur.kode = '0'
     store.setForm('kdPenunjang', '10')
     store.display.penunjang.kode = '10'
     store.setForm('assesmentPel', '')
     store.display.assesment.kode = ''
-  } else if (val === '2') {
+  }
+  else if (val === '2') {
     store.setForm('flagprocedure', '')
     store.display.prosedur.kode = ''
     store.setForm('kdPenunjang', '')
@@ -1130,7 +1139,7 @@ function setTujuanKunjungan(val) {
   }
 }
 // prosedur
-function setProsedur(val) {
+function setProsedur (val) {
   store.setForm('flagprocedure', val)
   // if (val === '1') {
   //   store.setForm('assesmentPel', '5')
@@ -1140,33 +1149,33 @@ function setProsedur(val) {
   // }
 }
 // assesment
-function setAssesmentPelayanan(val) {
+function setAssesmentPelayanan (val) {
   store.setForm('assesmentPel', val)
 }
 // penunjang
-function setPenunjang(val) {
+function setPenunjang (val) {
   store.setForm('kdPenunjang', val)
 }
 // tanggal rujukan
-function setTglRujukan(val) {
+function setTglRujukan (val) {
   store.setForm('tglrujukan', val)
   // console.log('from tanggal rujukan', val)
 }
-function setDispTglRujukan(val) {
+function setDispTglRujukan (val) {
   store.display.tanggal.rujukan = val
   // console.log('disp tanggal rujukan', val)
 }
 // tanggal SEP
-function setTglSEP(val) {
+function setTglSEP (val) {
   store.setForm('tglsep', val)
   // console.log('from tanggal sep', val)
 }
-function setDispTglSEP(val) {
+function setDispTglSEP (val) {
   store.display.tanggal.sep = val
   // console.log('disp tanggal rujukan', val)
 }
 // reset validasi
-function resetValidation() {
+function resetValidation () {
   // autocomplete
   if (refAsalRujukan.value) refAsalRujukan.value.$refs.refAuto.resetValidation()
   if (refFlagKartu.value) refFlagKartu.value.$refs.refAuto.resetValidation()
@@ -1183,7 +1192,7 @@ function resetValidation() {
 }
 // validasi
 let valid = false
-function validasi() {
+function validasi () {
   // ref auto complete
   const asalRujukan = refAsalRujukan.value === null ? true : refAsalRujukan.value.$refs.refAuto.validate()
   const flagKartu = refFlagKartu.value == null ? true : refFlagKartu.value.$refs.refAuto.validate()
@@ -1200,22 +1209,24 @@ function validasi() {
   const noRujukan = refNoRujukan.value.$refs.refInput.validate()
   if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar &&
   noRujukan && NamaDiagnosa && KodeDiagnosa && JenisKunjungan &&
-  NoSuratKontrol && TujuanKunjungan) { valid = true } else { valid = false }
+  NoSuratKontrol && TujuanKunjungan) { valid = true }
+  else { valid = false }
 }
 // set
-function set() {
+function set () {
   validasi()
   if (valid) {
     emits('bisaSimpan', { form: store.form, save: true })
     return { form: store.form, save: true }
-  } else {
+  }
+  else {
     emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
     return { form: store.form, save: false }
   }
 }
 
-function validasiSuratKontrol() {
+function validasiSuratKontrol () {
   if (refNoSuratKontrol.value) refNoSuratKontrol.value.$refs.refInput.validate()
 }
 // expose function

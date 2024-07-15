@@ -71,7 +71,8 @@ const masterPlann = computed(() => {
         value: x?.planing
       }
       return obj
-    }) : []
+    })
+    : []
   return plans
 })
 const comp = [
