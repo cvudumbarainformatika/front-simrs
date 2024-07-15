@@ -241,7 +241,7 @@ const polis = computed(() => {
   } else {
     const split = aksesruangan.split('|')
     const filt=split?.filter(a=>a?.includes('POL'))
-    console.log('poli', split,filt);
+    // console.log('poli', split,filt);
     const res = []
     for (let i = 0; i < filt.length; i++) {
       const kd = filt[i]
