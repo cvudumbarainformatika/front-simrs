@@ -224,6 +224,7 @@
             outlined
             :source="store.kecamatans"
             class="col-6 q-my-xs"
+            @on-select="(val)=>autocompleteSelected(val, store.kecamatans,'kotakabupaten', 'refKecamatan', 'kecamatan')"
           />
           <app-autocomplete-new
             ref="refKelurahan"
@@ -235,6 +236,7 @@
             outlined
             :source="store.kelurahans"
             class="col-6 q-my-xs"
+            @on-select="(val)=>autocompleteSelected(val, store.kelurahans,'kotakabupaten', 'refKelurahan', 'kelurahan')"
           />
         </div>
       </div>
@@ -251,11 +253,12 @@
 
 <script setup>
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 const store = useFormPendaftaranRanapStore()
 
 const formRef = ref(null)
 const refNorm = ref(null)
+const refKelurahan = ref(null)
 const onSubmit = () => {
   console.log('simpan')
 }
@@ -287,7 +290,6 @@ onBeforeMount(() => {
 const gantiKewarganegaraan = e => {
   if (e === 'WNI') {
     store.paramWilayah.kd_negara = '62'
-    store.getNegara()
   }
   else {
     store.paramWilayah.kd_negara = ''
@@ -337,19 +339,19 @@ const cekKtp = e => {
     store.paramWilayah.kd_kotakabupaten = kabkota
     store.paramWilayah.kd_kecamatan = kec
 
-    store.getProvinces()
-      .then(() => {
-        store.pasien.propinsi = prov
-        store.getKota()
-          .then(() => {
-            store.pasien.kota = kabkota
-            store.getKec()
-              .then(() => {
-                store.pasien.kecamatan = kec
-                store.getKels()
-              })
-          })
-      })
+    // store.getProvinces()
+    //   .then(() => {
+    //     store.pasien.propinsi = prov
+    //     store.getKota()
+    //       .then(() => {
+    //         store.pasien.kota = kabkota
+    //         store.getKec()
+    //           .then(() => {
+    //             store.pasien.kecamatan = kec
+    //             store.getKels()
+    //           })
+    //       })
+    //   })
 
     const tahun = parseInt(thnNik) < parseInt(N) ? `20${thnNik}` : `19${thnNik}`
     const tglAsli = tglNik > 40 ? tglNik - 40 : tglNik
@@ -360,6 +362,29 @@ const cekKtp = e => {
     store.pasien.tanggallahir = `${tahun}-${blnNik}-${tgl}`
   }
 }
+
+const autocompleteSelected = (val, fromArr, objVal, el, model) => {
+  // console.log('val', val)
+  // console.log('arr', fromArr)
+  // console.log('el', el)
+  // console.log('oo', refKelurahan)
+  const index = fromArr.findIndex(x => x[objVal] === val)
+  console.log('index', index)
+  store.setForm(model, val)
+  // if (el === 'refKelurahan') refKelurahan.value.$refs.refAuto.blur()
+}
+
+watch(() => store.paramWilayah, (val) => {
+  // console.log('watch old', old)
+  console.log('watch new', val)
+  if (val.kd_negara === '62') {
+    store.getNegara()
+  }
+
+  if (val.kd_propinsi !== null || val.kd_propinsi !== '') {
+    store.getProvinces()
+  }
+}, { deep: true })
 </script>
 
 <style lang="scss" scoped>

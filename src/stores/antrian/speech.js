@@ -16,7 +16,7 @@ export const useSpeechStore = defineStore('speech', {
     setLoading (val) {
       this.isLoading = val
     },
-    setVoiceList(val) {
+    setVoiceList (val) {
       this.voiceList = val
     }
   }
