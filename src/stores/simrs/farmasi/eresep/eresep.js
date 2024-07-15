@@ -194,6 +194,11 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       this.removedItemId = []
       this.getDataTable()
     },
+    setSistembayar(val){
+      this.setParams('sistembayar',val)
+      // console.log('val', val);
+      this.getDataTable()
+    },
     customRound (num) {
       // Pisahkan bagian integer dan bagian desimal
       const integerPart = Math.floor(num)
