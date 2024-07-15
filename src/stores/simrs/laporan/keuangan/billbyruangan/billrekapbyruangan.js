@@ -435,17 +435,19 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         xxx.Farmasi = []
         const farmasilamanonracikan = xxx?.apotekranaplalu
         const farmasilamaracikan = xxx?.apotekranapracikanhederlalux
-        const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan)
-        const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.rs4))
+        const farmasilamanonracikannew = xxx?.newfarmasi
+        const farmasiracikannew = xxx?.newfarmasiracikan
+        const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan, farmasilamanonracikannew, farmasiracikannew)
+        const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.ruangan))
         if (farmasilamass?.length) {
           farmasilamass.sort()
           farmasilamass.forEach(i => {
-            const temp = farmasilama?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+            const temp = farmasilama?.filter(x => x.ruangan === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
             const farmasilamax = {
               kamar: i,
               namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
+              subtotal: isNaN(temp) ? '' : temp
             }
             xxx.Farmasi.push(farmasilamax)
           })
