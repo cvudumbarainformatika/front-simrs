@@ -64,25 +64,15 @@
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
-            <!-- <div
-              v-else-if="!!user?.pegawai?.depo_sim"
-              class="q-mr-sm text-primary"
-            >
-              {{ user?.pegawai?.depo_sim?.nama }}
-            </div> -->
+            
             <div
-              v-else-if="(rsim?.length===1&&rsim[0]!=='') || (rsim?.length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
+              v-else-if="(rsim?.length===1 && rsim[0]!=='') || (rsim?.length>1)"
               class="q-mr-sm text-primary"
             >
               <!-- style="max-width: 80%;" -->
               {{ poli(user?.pegawai) }}
             </div>
-            <!-- <div
-              v-else
-              class="q-mr-sm text-primary"
-            >
-              Tidak ada ruangan
-            </div> -->
+            
           </div>
           <div
             v-if="optionsGudang?.length >1"
@@ -102,22 +92,7 @@
                 @set-gudang="emit('setGudang',$event)"
               />
             </q-btn>
-            <!-- <app-autocomplete-new
-              ref="refObat"
-              :key="user.kdruangansim"
-              :model="user.kdruangansim"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kode"
-              label="Set Gudang / Depo"
-              outlined
-              bg-color="white"
-              :source="optionsGudang"
-              :loading="setting.loadingGudang"
-              @on-select="emit('setGudang',$event)"
-              @clear="emit('setGudang',null)"
-            />
-              -->
+            
           </div>
           <div
             v-if="optionsRuangans?.length >1"
@@ -137,21 +112,7 @@
                 @set-gudang="emit('setGudang',$event)"
               />
             </q-btn>
-            <!-- <app-autocomplete-new
-              ref="refObat"
-              :key="user.kdruangansim"
-              :model="user.kdruangansim"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kode"
-              label="Set Ruangan"
-              outlined
-              bg-color="white"
-              :source="optionsRuangans"
-              :loading="setting.loadingRuangSim"
-              @on-select="emit('setGudang',$event)"
-              @clear="emit('setGudang',null)"
-            /> -->
+            
           </div>
           <q-btn
             flat
@@ -232,12 +193,12 @@ onMounted(() => {
 function labelGd () {
   const anu = props?.gudangs.filter(gud => gud.kode === props.user?.kdruangansim)
   if (anu.length) return anu[0]?.nama
-  else return 'Tidak ada ruangan'
+  else return 'Gudang Tidak Dipilih'
 }
 function labelRu () {
   const anu = props?.ruangs?.filter(gud => gud.kode === props.user?.kdruangansim)
   if (anu.length) return anu[0]?.uraian
-  else return 'Tidak ada ruangan'
+  else return 'Ruangan Tidak Dipilih'
 }
 function poli (val) {
   let fin = null
@@ -247,13 +208,14 @@ function poli (val) {
     if (optionsPolis.value.length) {
       fin = optionsPolis.value.map(x => x.polirs).join(', ')
     }
-    else if (optionsGudang.value?.length) {
-      fin = optionsGudang.value.map(x => x.nama).join(', ')
-    }
-    else if (optionsRuangans.value?.length) {
-      fin = optionsRuangans.value.map(x => x.uraian).join(', ')
-    }
-    ruang = fin ?? 'Tidak ada Akses Ruangan'
+    // else if (optionsGudang.value?.length) {
+    //   fin = optionsGudang.value.map(x => x.nama).join(', ')
+    // }
+    // else if (optionsRuangans.value?.length) {
+    //   fin = optionsRuangans.value.map(x => x.uraian).join(', ')
+    // }
+    console.log('fin', fin);
+    ruang = fin ?? 'Tidak ada Akses Poli'
   }
   else {
     ruang = 'data ruangan tidak ditemukan'
