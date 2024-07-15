@@ -240,9 +240,11 @@ const polis = computed(() => {
     arr = setting.polis
   } else {
     const split = aksesruangan.split('|')
+    const filt=split?.filter(a=>a?.includes('POL'))
+    console.log('poli', split,filt);
     const res = []
-    for (let i = 0; i < split.length; i++) {
-      const kd = split[i]
+    for (let i = 0; i < filt.length; i++) {
+      const kd = filt[i]
       res.push(setting.polis.filter(x => x.kodepoli === kd)[0])
     }
 
