@@ -184,7 +184,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { api } from 'src/boot/axios'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
-import { antreanChannel } from 'src/modules/sockets'
+// import { antreanChannel } from 'src/modules/sockets'
+import { laravelEcho } from 'src/modules/newsockets'
 
 const drawerRight = ref(false)
 const style = useStyledStore()
@@ -285,20 +286,35 @@ function panggil (val) {
   })
 }
 
-antreanChannel.subscribed(() => {
-  console.log('subscribed antrean channel!!!')
-}).listen('.antrean', (e) => {
-  // console.log('listen to chanel antrean', e)
-  // console.log('listen to chanel antrean data', e.message)
-  if (e.message.nomorAntrian) {
+// antreanChannel.subscribed(() => {
+//   console.log('subscribed antrean channel!!!')
+// }).listen('.antrean', (e) => {
+//   // console.log('listen to chanel antrean', e)
+//   // console.log('listen to chanel antrean data', e.message)
+//   if (e.message.nomorAntrian) {
+//     curentAntrian.value = e.message.nomorAntrian
+//   }
+//   if (e.message.nomorAntrianLansia) {
+//     curentAntrianLansia.value = e.message.nomorAntrianLansia
+//   }
+// })
+function subscribedChannel () {
+  const channel = laravelEcho.private('private.notif.pendaftaran')
+  channel.subscribed(() => {
+    console.log('subscribed private.notif.pendaftaran channel !!!')
+  }).listen('.notif-message', (e) => {
+    console.log('listen notif', e)
+      if (e.message.nomorAntrian) {
     curentAntrian.value = e.message.nomorAntrian
   }
   if (e.message.nomorAntrianLansia) {
     curentAntrianLansia.value = e.message.nomorAntrianLansia
   }
-})
+  })
+}
 
 onMounted(() => {
+  subscribedChannel()
   console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
 })
