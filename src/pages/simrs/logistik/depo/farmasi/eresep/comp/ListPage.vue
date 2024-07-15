@@ -112,7 +112,8 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr :class="item?.flag===''?'bg-red-2':(item?.flag==='1'?'bg-light-blue-2':'')">
+          <tr :class="item?.flag===''?'bg-red-2':(item?.flag==='1'?'bg-light-blue-2':(item?.sistembayar?.groups==='2' && item?.lunas ?( n%2 === 0 ? 'bg-green-2' :'bg-green-3' ):''))">
+            <!-- <tr :class="item?.flag===''?'bg-red-2':(item?.flag==='1'?'bg-light-blue-2':'')"> -->
             <td width="5%">
               {{ n+1 }}
             </td>
@@ -291,8 +292,8 @@
                 </div>
               </div>
             </td>
-            <td class="text-end q-mr-sm">
-              <div class="row no-wrap">
+            <td class="q-mr-sm" >
+              <div class="row no-wrap text-end">
                 <!-- terima -->
                 <q-btn
                   v-if="item?.flag==='1'"
@@ -466,8 +467,10 @@
                   </q-tooltip>
                 </q-btn>
               </div>
-              <div v-if="ruangan==='Gd-05010101'" class="row no-wrap q-mt-sm">
+              <div  class="row no-wrap q-mt-sm">
+                <div class="col-6">                  
                 <q-btn
+                  v-if="ruangan==='Gd-05010101'"
                   dense
                   size="sm"
                   no-caps
@@ -480,6 +483,10 @@
                   :disable="loadingCall && store.noreg === item?.noreg"
                   @click="panggil( item)"
                 />
+                </div>
+              <div v-if="item?.lunas" class="col-6 text-weight-bold f-22 text-blue text-italic">
+                LUNAS
+              </div>
               </div>
             </td>
             <!-- <td class="text-end">

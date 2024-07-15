@@ -89,7 +89,10 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           if (keluar) {
             key.jumlah = parseFloat(keluar?.jumlah)
             key.hargajual = parseFloat(keluar?.harga_jual)
-            key.done=true
+            if(parseFloat(res?.flag)>2){
+              key.done=true
+            }
+            
           }
           // if (key.jumlahAwal !== key.jumlah) console.log('jumlah', key.jumlahAwal, key.jumlah)
           key.groupsistembayar = val?.sistembayar?.groups

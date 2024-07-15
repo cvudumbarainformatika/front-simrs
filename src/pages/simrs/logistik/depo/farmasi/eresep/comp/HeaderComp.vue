@@ -72,16 +72,40 @@
           map-options
           style="min-width: 150px;"
         />
-        <!-- @update:model-value="gantiPeriode" -->
-        <!-- <q-option-group
-          v-model="toFlag"
-          :options="flagOptions"
-          color="primary"
-          class="q-ml-sm"
+        <q-select
+          v-model="group"
           dense
-          type="checkbox"
-          inline
-        /> -->
+          outlined
+          dark
+          color="white"
+          :options="groups"
+          option-label="nama"
+          option-value="value"
+          label="Group Sistembayar"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+          @update:model-value="setGroupSistembayar"
+        />
+        <q-select
+          v-if="group"
+          v-model="sistembayar"
+          dense
+          outlined
+          dark
+          color="white"
+          :options="sistemBayars"
+          option-label="nama"
+          option-value="kode"
+          label="Sistembayar"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+          @update:model-value="setSistembayar"
+        />
+        
       </div>
       <div class="kanan">
         <!-- refresh Ids -->
@@ -172,9 +196,10 @@ import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
+import { useAplikasiStore } from 'src/stores/app/aplikasi';
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe','setSistembayar'])
 const props = defineProps({
   ruang: { type: String, default: '' },
   search: { type: String, default: '' },
@@ -186,6 +211,34 @@ const props = defineProps({
   flag: { type: String, default: '1' },
   tipe: { type: String, default: '' }
 })
+// filter sistem bayar start ---
+const group=ref(null)
+const groups=ref([  
+  {nama:'Semua', value:null},
+  {nama:'JKN', value:'1'},
+  {nama:'Mandiri', value:'2'},
+  {nama:'Tagihan', value:'3'},
+])
+const app=useAplikasiStore()
+const sistemBayars=computed(()=>{
+  return app?.sistemBayars?.filter(a=>a?.groups===group.value)
+})
+const sistembayar =ref(null)
+function setGroupSistembayar(val){
+  // console.log('set', val);
+  sistembayar.value=null
+  if(!val) emits('setSistembayar',null)
+  else if(val==='2') {
+    sistembayar.value='UMUM'
+    emits('setSistembayar','UMUM')
+  }
+}
+function setSistembayar(val){
+  // console.log('sistem', val);
+  emits('setSistembayar',val)
+  
+}
+// filter sistem bayar end ---
 
 function enterSearch (evt) {
   const val = evt?.target?.value
