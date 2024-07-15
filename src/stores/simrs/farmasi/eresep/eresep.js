@@ -504,6 +504,13 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           console.log('get data table', resp?.data)
           this.loading = false
           const data = resp?.data?.data ?? resp?.data
+          if(data?.length){
+            data.forEach(da=>{
+              const adaKwi=da.kwitansi?.find(kw=>kw?.nota?.includes(da?.noresep))
+              console.log('kw',adaKwi);
+              if(adaKwi) da.lunas = true
+            })
+          }
           this.items = data
           // if (this.removedItemId.length) {
           //   this.items = data.filter(x => !this.removedItemId.includes(x.id))
