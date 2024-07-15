@@ -91,7 +91,7 @@ function isValidInput (val) {
       return emailPattern.test(val) || 'email tidak valid'
     }
     if (props.valid?.min) {
-      return val?.length >= parseInt(props.valid?.min) || `Minimal ${props.valid?.min} characters`
+      return val?.length >= parseInt(props.valid?.min) || `Min ${props.valid?.min} char`
     }
     return (!!val) || 'Harap diisi'
   }

@@ -6,7 +6,7 @@
           <header-comp :menus="lists" :tab="tab" @go-to="pilihMenu" />
           <q-separator class="q-my-sm" />
         </div>
-        <div class="col full-height">
+        <div class="col full-height scroll">
           <menu-comp v-if="tab?.name === 'tppri-page'" :lists="lists" @on-select="pilihMenu" />
           <component
             :is="tab?.comp"
