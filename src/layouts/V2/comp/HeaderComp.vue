@@ -214,7 +214,7 @@ function poli (val) {
     // else if (optionsRuangans.value?.length) {
     //   fin = optionsRuangans.value.map(x => x.uraian).join(', ')
     // }
-    console.log('fin', fin);
+    // console.log('fin', fin);
     ruang = fin ?? 'Tidak ada Akses Poli'
   }
   else {
