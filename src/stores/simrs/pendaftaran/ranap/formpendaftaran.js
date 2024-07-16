@@ -28,13 +28,31 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       notelp: null,
       nohp: null,
       alamat: null,
+      // WNI
       rt: null,
       rw: null,
       kelurahan: null,
       kecamatan: null,
       kota: null,
       propinsi: null,
-      negara: null
+      negara: null,
+      kodepos: null,
+
+      // WNA
+      country: null,
+      city: null,
+      region: null,
+
+      // domisili
+      alamatDomisili: null,
+      rtDomisili: null,
+      rwDomisili: null,
+      kelurahanDomisili: null,
+      kecamatanDomisili: null,
+      kotaDomisili: null,
+      propinsiDomisili: null,
+      negaraDomisili: null,
+      kodeposDomisili: null
 
     },
     kodeKtp: {
@@ -66,7 +84,10 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     propinsies: [],
     kabupatens: [],
     kecamatans: [],
-    kelurahans: []
+    kelurahans: [],
+
+    countrys: [],
+    domisiliSama: true
 
   }),
   // getters: {
@@ -134,6 +155,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           this.negaras = resp.data[0]
           if (this.pasien.kewarganegaraan === 'WNI') {
             this.pasien.negara = this.negaras[0].kd_negara
+            this.pasien.negaraDomisili = this.negaras[0].kd_negara
           }
           else {
             this.pasien.negara = null
@@ -238,6 +260,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       await api.get('v1/simrs/master/getkecamatan', param)
         .then((resp) => {
           // )
+          console.log('kecamatan', resp.data[0])
           this.loadingKecamatan = false
           this.kecamatans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
@@ -251,6 +274,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       await api.get('v1/simrs/master/getkelurahan', param)
         .then((resp) => {
           // )
+          console.log('kelurahan', resp.data[0])
           this.loadingKelurahan = false
           this.kelurahans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
