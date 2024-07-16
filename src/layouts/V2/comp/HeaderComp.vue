@@ -187,7 +187,8 @@ const optionsPolis = computed(() => {
 })
 onMounted(() => {
   const temp = props.user?.pegawai?.kdruangansim.split('|')
-  if (!props.user?.kdruangansim && temp?.length) emit('setGudang', temp[0])
+  const ruang=temp.filter(a=>a.includes('R-'))
+  if (!props.user?.kdruangansim && temp?.length) emit('setGudang', ruang[0]??temp[0])
   // rsim.value = temp
 })
 function labelGd () {

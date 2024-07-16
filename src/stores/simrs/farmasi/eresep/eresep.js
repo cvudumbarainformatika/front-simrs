@@ -196,7 +196,15 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     },
     setSistembayar(val){
       this.setParams('sistembayar',val)
+      this.setParams('listsistembayar',null)
       // console.log('val', val);
+      this.getDataTable()
+    },
+    setListSistembayar(val){
+      const sisBa=val?.map(m=>m?.kode)
+      // console.log('val', sisBa);
+      this.setParams('listsistembayar',sisBa)
+      this.setParams('sistembayar',null)
       this.getDataTable()
     },
     customRound (num) {

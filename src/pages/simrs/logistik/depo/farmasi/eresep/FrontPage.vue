@@ -20,6 +20,7 @@
         @set-tipe="store.setTipe"
         @set-periode="(val)=>store.setPeriodik(val)"
         @set-sistembayar="store.setSistembayar"
+        @set-list-sistembayar="store.setListSistembayar"
       />
     </div>
     <q-card

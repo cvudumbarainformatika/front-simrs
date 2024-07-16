@@ -199,7 +199,7 @@ import { date } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi';
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe','setSistembayar'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe','setSistembayar','setListSistembayar'])
 const props = defineProps({
   ruang: { type: String, default: '' },
   search: { type: String, default: '' },
@@ -221,7 +221,11 @@ const groups=ref([
 ])
 const app=useAplikasiStore()
 const sistemBayars=computed(()=>{
-  return app?.sistemBayars?.filter(a=>a?.groups===group.value)
+  const data=app?.sistemBayars?.filter(a=>a?.groups===group.value)
+  data.unshift({
+    nama:'Semua', kode:null
+  })
+  return data
 })
 const sistembayar =ref(null)
 function setGroupSistembayar(val){
@@ -231,6 +235,8 @@ function setGroupSistembayar(val){
   else if(val==='2') {
     sistembayar.value='UMUM'
     emits('setSistembayar','UMUM')
+  }else{
+    emits('setListSistembayar',sistemBayars.value)
   }
 }
 function setSistembayar(val){
