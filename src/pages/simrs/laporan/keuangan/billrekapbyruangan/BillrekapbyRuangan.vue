@@ -53,6 +53,7 @@
           :column-hide="store.kolomhide"
           :default-btn="false"
           :right-action="false"
+          :loading="store.loading"
           row-no
         >
           <!-- tombol print -->
@@ -322,7 +323,7 @@
               </q-item>
             </div>
           </template>
-          <template #cell-KamarOperasiIgd="{row}">
+          <!-- <template #cell-KamarOperasiIgd="{row}">
             <div
               v-if="row?.Kamaroperasiigd.length >= 0"
             >
@@ -334,7 +335,7 @@
                 {{ Kamaroperasiigd?.namaruangan }} = {{ formatDouble(Kamaroperasiigd?.subtotal) }} <br>
               </q-item>
             </div>
-          </template>
+          </template> -->
           <template #cell-TindakanOperasi="{row}">
             <div
               v-if="row?.Tindakanoperasi.length >= 0"
@@ -517,7 +518,7 @@ const ruangan = ref([])
 
 function isiLayananx (val) {
   store.params.ruangan = ''
-  console.log('sasa', val)
+  // console.log('sasa', val)
   if (val === '1') {
     ruangan.value = [
       {

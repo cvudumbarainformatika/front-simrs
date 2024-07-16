@@ -29,7 +29,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     },
     kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
       'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
-      'KamarOperasiIgd', 'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
+      'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
       'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Total'],
     kolomhide: []
   }),
@@ -89,7 +89,6 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuangan', params)
         .then((resp) => {
-          this.loading = false
           if (resp.status === 200) {
             const datahasil = resp?.data
             this.sethasil(datahasil)
@@ -321,27 +320,27 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
             const kamaroperasiibssx = {
               kamar: i,
               namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
+              subtotal: temp ?? 0
             }
             xxx.Kamaroperasiibs.push(kamaroperasiibssx)
           })
         }
 
-        xxx.Kamaroperasiigd = []
-        const kamaroperasiigds = filterDuplicateArrays(xxx?.kamaroperasiigd.map(m => m?.rs15))
-        if (kamaroperasiigds?.length) {
-          kamaroperasiigds.sort()
-          kamaroperasiigds.forEach(i => {
-            const temp = xxx.kamaroperasiigd?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
-            const kamaroperasiigdsx = {
-              kamar: i,
-              namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
-            }
-            xxx.Kamaroperasiigd.push(kamaroperasiigdsx)
-          })
-        }
+        // xxx.Kamaroperasiigd = []
+        // const kamaroperasiigds = filterDuplicateArrays(xxx?.kamaroperasiigd.map(m => m?.rs15))
+        // if (kamaroperasiigds?.length) {
+        //   kamaroperasiigds.sort()
+        //   kamaroperasiigds.forEach(i => {
+        //     const temp = xxx.kamaroperasiigd?.filter(x => x.rs15 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+        //     const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+        //     const kamaroperasiigdsx = {
+        //       kamar: i,
+        //       namaruangan: namaRuangan?.rs5 ?? '-',
+        //       subtotal: parseInt(temp) ?? parseInt(0)
+        //     }
+        //     xxx.Kamaroperasiigd.push(kamaroperasiigdsx)
+        //   })
+        // }
 
         xxx.Tindakanoperasi = []
         const tindakanoperasis = filterDuplicateArrays(xxx?.tindakanoperasi.map(m => m?.rs4))
@@ -353,7 +352,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
             const tindakanoperasisx = {
               kamar: i,
               namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
+              subtotal: temp ?? 0
             }
             xxx.Tindakanoperasi.push(tindakanoperasisx)
           })
@@ -511,18 +510,21 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
 
         xxx.TotalAll = []
         const subtotalall = xxx.Farmasi.concat(xxx.Admin, xxx.akomodasiKamar, xxx.Biayamaterai, xxx.TindakanDokter,
-          xxx.Visite
+          xxx.Visite, xxx.TindakanPerawat,
+          xxx.MakanPasien, xxx.Oksigen, xxx.Keperawatan, xxx.Laborat, xxx.Radiologi, xxx.Endoscopy, xxx.Kamaroperasiibs,
+          xxx.TindakanOperasi
         )
         const totalallx = subtotalall.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
         const totalall = {
           subtotal: totalallx
         }
         xxx.TotalAll.push(totalall)
-        console.log('sasa', xxx)
+        console.log('sasa', xxx.KamarOperasiIgd)
       })
 
       this.items = val
-      // console.log('wew', val)
+      this.loading = false
+      console.log('wew', val)
     }
   }
 })
