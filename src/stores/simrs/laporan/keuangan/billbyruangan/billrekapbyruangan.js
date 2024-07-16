@@ -27,10 +27,10 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     ruangan: {
       koderuangan: null
     },
-    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
+    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
       'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
       'KamarOperasiIgd', 'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
-      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi'],
+      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Total'],
     kolomhide: []
   }),
   actions: {
@@ -104,16 +104,32 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       // console.log('sasa', val)
       val?.forEach(xxx => {
         xxx.Admin = []
+        // eslint-disable-next-line no-unused-vars
         const kelas = xxx?.rstigalimax[0]?.rs17
-        const modaltarif = this.tigapuluhtarif?.filter(x => x.rs3 === 'A1#')
+        const modaltarif = this.tigapuluhtarif?.find(x => x.rs3 === 'A1#')
         const namaRuangan = this.ranap.find(kd => kd.rs4 === xxx?.rstigalimax[0]?.rs16)
-        if (kelas === 3) {
-          const biaya = modaltarif.rs16
-          return biaya
+        let subtotalx = 0
+        if (kelas === '3') {
+          subtotalx = parseInt(modaltarif?.rs6) + parseInt(modaltarif?.rs7)
+        }
+        else if (kelas === '2') {
+          subtotalx = parseInt(modaltarif?.rs8) + parseInt(modaltarif?.rs9)
+        }
+        else if (kelas === '1' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
+          subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        }
+        else if (kelas === 'Utama') {
+          subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        }
+        else if (kelas === 'VIP') {
+          subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        }
+        else if (kelas === 'VVIP') {
+          subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
         }
         const adminsx = {
-          namaruangan: namaRuangan?.rs5 ?? '-'
-          // subtotal: biaya
+          namaruangan: namaRuangan?.rs5 ?? '-',
+          subtotal: subtotalx
         }
         xxx.Admin.push(adminsx)
 
@@ -142,7 +158,10 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           })
         }
 
-        xxx.biayamaterai = xxx?.biayamaterai[0]?.subtotal ?? 0
+        xxx.Biayamaterai = {
+          subtotal: xxx?.biayamaterai[0]?.subtotal ?? 0
+        }
+
         xxx.TindakanDokter = []
         const tindakandokters = filterDuplicateArrays(xxx?.tindakandokter?.map(m => m?.rs22))
         if (tindakandokters?.length) {
@@ -489,9 +508,21 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
             xxx.Farmasi.push(farmasilamax)
           })
         }
+
+        xxx.TotalAll = []
+        const subtotalall = xxx.Farmasi.concat(xxx.Admin, xxx.akomodasiKamar, xxx.Biayamaterai, xxx.TindakanDokter,
+          xxx.Visite
+        )
+        const totalallx = subtotalall.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+        const totalall = {
+          subtotal: totalallx
+        }
+        xxx.TotalAll.push(totalall)
+        console.log('sasa', xxx)
       })
+
       this.items = val
-      console.log('sasa', val)
+      // console.log('wew', val)
     }
   }
 })

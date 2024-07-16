@@ -166,7 +166,7 @@
               :key="a"
               class="list-move"
             >
-              {{ admin?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+              {{ admin?.namaruangan }} = {{ formatDouble(admin?.subtotal) }} <br>
             </q-item>
           </template>
           <template #cell-AkomodasiKamar="{row}">
@@ -176,6 +176,15 @@
               class="list-move"
             >
               {{ akomodasiruangan?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+            </q-item>
+          </template>
+          <template #cell-BiayaMatrei="{row}">
+            <q-item
+              v-for="(biayamaterai , n) in row?.biayamaterai"
+              :key="n"
+              class="list-move"
+            >
+              {{ biayamaterai?.namaruangan }} = {{ formatDouble(biayamaterai?.subtotal) }} <br>
             </q-item>
           </template>
           <template #cell-TindakanDokter="{row}">
@@ -459,6 +468,22 @@
               </q-item>
             </div>
           </template>
+          <template #cell-Total="{row}">
+            <div
+              v-if="row?.TotalAll.length >= 0"
+            >
+              <q-item
+                v-for="(TotalAll , t) in row?.TotalAll"
+                :key="t"
+                class="list-move"
+              >
+                <div class="on-left">
+                  Total {{ formatDouble(TotalAll?.subtotal) }}
+                </div>
+                <br>
+              </q-item>
+            </div>
+          </template>
         </Customtable>
       </q-card-section>
     </q-card>
@@ -487,12 +512,12 @@ const layanan = ref([
     namalayanan: 'RAWAT INAP'
   }
 ])
-const ruangan = ref(null)
+const ruangan = ref([])
 // const koderuangan = ref(null)
 
 function isiLayananx (val) {
   store.params.ruangan = ''
-  // console.log('sasa', val)
+  console.log('sasa', val)
   if (val === '1') {
     this.ruangan = [
       {
