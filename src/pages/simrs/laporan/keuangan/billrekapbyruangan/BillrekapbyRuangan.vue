@@ -161,7 +161,13 @@
             Tgl KRS : {{ row?.rs4 }}
           </template>
           <template #cell-Admin="{row}">
-            {{ row?.admin }}
+            <q-item
+              v-for="(admin , a) in row?.Admin"
+              :key="a"
+              class="list-move"
+            >
+              {{ admin?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+            </q-item>
           </template>
           <template #cell-AkomodasiKamar="{row}">
             <q-item
@@ -543,6 +549,7 @@ function setTox (val) {
 
 store.getRuanganPoli()
 store.getRuanganRanap()
+store.getTigaPuluhTarif()
 
 </script>
 

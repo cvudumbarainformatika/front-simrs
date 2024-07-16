@@ -10,6 +10,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     meta: {},
     ranap: [],
     rajal: [],
+    tigapuluhtarif: [],
     igd: 'POL014',
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -49,11 +50,11 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     },
     async getTigaPuluhTarif () {
       this.loading = true
-      await api.get('v1/simrs/master/listmasterpoli')
+      await api.get('v1/simrs/master/gettigapuluhtarif')
         .then((resp) => {
           this.loading = false
           if (resp.status === 200) {
-            this.rajal = resp?.data
+            this.tigapuluhtarif = resp?.data
           }
         })
         .catch((err) => {
@@ -100,9 +101,30 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         })
     },
     sethasil (val) {
-      console.log('sasa', val)
+      // console.log('sasa', val)
       val?.forEach(xxx => {
-        xxx.admin = xxx?.rstigalimax[0]?.subtotal ?? 0
+        xxx.Admin = []
+        const kelas = xxx?.rstigalimax[0]?.rs17
+        const modaltarif = this.tigapuluhtarif?.filter(x => x.rs3 === 'A1#')
+        const namaRuangan = this.ranap.find(kd => kd.rs4 === xxx?.rstigalimax[0]?.rs16)
+        if (kelas === 3) {
+          const biaya = modaltarif.rs16
+          return biaya
+        }
+        const adminsx = {
+          namaruangan: namaRuangan?.rs5 ?? '-'
+          // subtotal: biaya
+        }
+        xxx.Admin.push(adminsx)
+
+        // if (kelas === '3') {
+        //   const admins = {
+        //     namaruangan: namaRuangan?.rs5 ?? '-',
+        //     subtotal: 'wew'
+        //   }
+        //   xxx.Admin.push(admins)
+        // }
+
         xxx.akomodasiKamar = []
         // const kamars = Object.groupBy(xxx?.akomodasikamar, (m) => m.rs16)
         const kamars = filterDuplicateArrays(xxx?.akomodasikamar?.map(m => m?.rs16))
