@@ -10,6 +10,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     meta: {},
     ranap: [],
     rajal: [],
+    tigapuluhtarif: [],
     igd: 'POL014',
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -40,6 +41,20 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           this.loading = false
           if (resp.status === 200) {
             this.rajal = resp?.data
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
+    },
+    async getTigaPuluhTarif () {
+      this.loading = true
+      await api.get('v1/simrs/master/gettigapuluhtarif')
+        .then((resp) => {
+          this.loading = false
+          if (resp.status === 200) {
+            this.tigapuluhtarif = resp?.data
           }
         })
         .catch((err) => {
@@ -86,9 +101,30 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         })
     },
     sethasil (val) {
-      console.log('sasa', val)
+      // console.log('sasa', val)
       val?.forEach(xxx => {
-        xxx.admin = xxx?.rstigalimax[0]?.subtotal ?? 0
+        xxx.Admin = []
+        const kelas = xxx?.rstigalimax[0]?.rs17
+        const modaltarif = this.tigapuluhtarif?.filter(x => x.rs3 === 'A1#')
+        const namaRuangan = this.ranap.find(kd => kd.rs4 === xxx?.rstigalimax[0]?.rs16)
+        if (kelas === 3) {
+          const biaya = modaltarif.rs16
+          return biaya
+        }
+        const adminsx = {
+          namaruangan: namaRuangan?.rs5 ?? '-'
+          // subtotal: biaya
+        }
+        xxx.Admin.push(adminsx)
+
+        // if (kelas === '3') {
+        //   const admins = {
+        //     namaruangan: namaRuangan?.rs5 ?? '-',
+        //     subtotal: 'wew'
+        //   }
+        //   xxx.Admin.push(admins)
+        // }
+
         xxx.akomodasiKamar = []
         // const kamars = Object.groupBy(xxx?.akomodasikamar, (m) => m.rs16)
         const kamars = filterDuplicateArrays(xxx?.akomodasikamar?.map(m => m?.rs16))
@@ -435,17 +471,20 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         xxx.Farmasi = []
         const farmasilamanonracikan = xxx?.apotekranaplalu
         const farmasilamaracikan = xxx?.apotekranapracikanhederlalux
-        const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan)
-        const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.rs4))
+        const farmasilamanonracikannew = xxx?.newfarmasi
+        const farmasiracikannew = xxx?.newfarmasiracikan
+        const farmasilama = farmasilamanonracikan.concat(farmasilamaracikan, farmasilamanonracikannew, farmasiracikannew)
+        const farmasilamass = filterDuplicateArrays(farmasilama?.map(m => m?.ruangan))
+
         if (farmasilamass?.length) {
           farmasilamass.sort()
           farmasilamass.forEach(i => {
-            const temp = farmasilama?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
+            const temp = farmasilama?.filter(x => x.ruangan === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalx), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
             const farmasilamax = {
               kamar: i,
               namaruangan: namaRuangan?.rs5 ?? '-',
-              subtotal: temp
+              subtotal: isNaN(temp) ? '' : temp
             }
             xxx.Farmasi.push(farmasilamax)
           })

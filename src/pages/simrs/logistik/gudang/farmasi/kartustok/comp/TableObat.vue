@@ -331,14 +331,14 @@ function hitungTotal (row) {
   // eslint-disable-next-line no-unused-vars
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars
-  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) + 
+  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
   hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur)
   // eslint-disable-next-line no-unused-vars
-  const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) + 
+  const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
   hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
   // eslint-disable-next-line no-unused-vars
   const total = awal + masuk - keluar
-  return  total
+  return total
   // return awal + ' ' + masuk + ' ' + keluar+ ' ' + total
 }
 

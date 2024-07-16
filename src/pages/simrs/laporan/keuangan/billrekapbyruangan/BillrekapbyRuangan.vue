@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          REKAP TAGIHAN PASIEN RAWAT JALAN
+          REKAP TAGIHAN PASIEN PER RUANGAN
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-14">
           periode
@@ -161,7 +161,13 @@
             Tgl KRS : {{ row?.rs4 }}
           </template>
           <template #cell-Admin="{row}">
-            {{ row?.admin }}
+            <q-item
+              v-for="(admin , a) in row?.Admin"
+              :key="a"
+              class="list-move"
+            >
+              {{ admin?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+            </q-item>
           </template>
           <template #cell-AkomodasiKamar="{row}">
             <q-item
@@ -446,7 +452,10 @@
                 :key="fr"
                 class="list-move"
               >
-                {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }} <br>
+                <div class="on-left">
+                  {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }}
+                </div>
+                <br>
               </q-item>
             </div>
           </template>
@@ -540,6 +549,7 @@ function setTox (val) {
 
 store.getRuanganPoli()
 store.getRuanganRanap()
+store.getTigaPuluhTarif()
 
 </script>
 
