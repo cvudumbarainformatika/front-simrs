@@ -519,7 +519,7 @@
                         </div> -->
                       </div>
                     </div>
-                    <div v-if="store?.resep?.flag==='2'">
+                    <div v-if="parseInt(store?.resep?.flag)>='2'">
                       <q-btn
                         v-if="(!rinc?.obatkeluar) && !rinc?.done"
                         round
@@ -800,7 +800,7 @@
                       <div v-if="store?.resep?.flag==='3'">
                         Resep Sudah selesai
                       </div>
-                      <div v-if="store?.resep?.flag==='2'">
+                      <div v-if="parseInt(store?.resep?.flag)>=2">
                         <q-btn
                           v-if="!rinc?.obatkeluar"
                           round
@@ -1013,7 +1013,9 @@
                             </div>
                           </div>
                         </div>
-                        <div v-if="store?.resep?.flag==='2'">
+                        anu
+                        <div v-if="parseInt(store?.resep?.flag)>=2">
+                          anu
                           <q-btn
                             v-if="!rinc?.obatkeluar"
                             round
@@ -1278,7 +1280,7 @@
                               </div>
                             </div>
                           </div>
-                          <div v-if="store?.resep?.flag==='2'">
+                          <div v-if="parseInt(store?.resep?.flag)>=2">
                             <q-btn
                               v-if="!rinc?.obatkeluar"
                               round
