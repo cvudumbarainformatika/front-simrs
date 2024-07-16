@@ -519,7 +519,7 @@ function isiLayananx (val) {
   store.params.ruangan = ''
   console.log('sasa', val)
   if (val === '1') {
-    this.ruangan = [
+    ruangan.value = [
       {
         koderuangan: 'POL014',
         namaruangan: 'IGD'
@@ -527,13 +527,13 @@ function isiLayananx (val) {
     ]
   }
   else if (val === '2') {
-    this.ruangan = store.rajal.map(x => {
+    ruangan.value = store.rajal.map(x => {
       return {
         koderuangan: x.kodepoli,
         namaruangan: x.polirs
       }
     })
-    this.ruangan.unshift(
+    ruangan.value.unshift(
       {
         koderuangan: '1',
         namaruangan: 'Semua Ruangan'
