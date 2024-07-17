@@ -170,6 +170,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
 
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
+      this.form.unit_pengirim = pasien?.kodepoli
       // console.log('save', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaborat', this.form)
@@ -209,6 +210,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
+      this.form.unit_pengirim = pasien?.kodepoli
       // const arr = []
 
       this.form.details = []
