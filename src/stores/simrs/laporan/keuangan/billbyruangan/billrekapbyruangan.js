@@ -28,9 +28,9 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       koderuangan: null
     },
     kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
-      'MakanPasien', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
-      'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanOperasiIgd', 'TindakanFisioterapi',
-      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Total'],
+      'MakanPasien', 'AsuhanGizi', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
+      'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanFisioterapi',
+      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Ambulan', 'Total'],
     kolomhide: []
   }),
   actions: {
@@ -343,11 +343,11 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         // }
 
         xxx.Tindakanoperasi = []
-        const tindakanoperasis = filterDuplicateArrays(xxx?.tindakanoperasi.map(m => m?.rs4))
+        const tindakanoperasis = filterDuplicateArrays(xxx?.tindakanoperasi.map(m => m?.ruang))
         if (tindakanoperasis?.length) {
           tindakanoperasis.sort()
           tindakanoperasis.forEach(i => {
-            const temp = xxx.tindakanoperasi?.filter(x => x.rs4 === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const temp = xxx.tindakanoperasi?.filter(x => x.ruang === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
             const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
             const tindakanoperasisx = {
               kamar: i,
@@ -508,18 +508,53 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           })
         }
 
+        xxx.Ambulan = []
+        const ambulans = filterDuplicateArrays(xxx.ambulan?.map(m => m?.ruangan))
+
+        if (ambulans?.length) {
+          ambulans.sort()
+          ambulans.forEach(i => {
+            const temp = xxx.ambulan?.filter(x => x.ruangan === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const ambulansx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: isNaN(temp) ? '' : temp
+            }
+            xxx.Ambulan.push(ambulansx)
+          })
+        }
+
+        xxx.AsuhanGizi = []
+        const asuhangizis = filterDuplicateArrays(xxx.asuhangizi?.map(m => m?.ruangan))
+
+        if (asuhangizis?.length) {
+          asuhangizis.sort()
+          asuhangizis.forEach(i => {
+            const temp = xxx.asuhangizi?.filter(x => x.ruangan === i)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+            const namaRuangan = this.ranap.find(kd => kd.rs4 === i)
+            const asuhangizisx = {
+              kamar: i,
+              namaruangan: namaRuangan?.rs5 ?? '-',
+              subtotal: isNaN(temp) ? '' : temp
+            }
+            xxx.AsuhanGizi.push(asuhangizisx)
+          })
+        }
+
         xxx.TotalAll = []
         const subtotalall = xxx.Farmasi.concat(xxx.Admin, xxx.akomodasiKamar, xxx.Biayamaterai, xxx.TindakanDokter,
           xxx.Visite, xxx.TindakanPerawat,
           xxx.MakanPasien, xxx.Oksigen, xxx.Keperawatan, xxx.Laborat, xxx.Radiologi, xxx.Endoscopy, xxx.Kamaroperasiibs,
-          xxx.TindakanOperasi
+          xxx.Tindakanoperasi, xxx.TindakanOperasiIgd, xxx.TindakanFisioterapi,
+          xxx.TindakananastesidiLuarOkdanIcu, xxx.Ambulan, xxx.AsuhanGizi
         )
         const totalallx = subtotalall.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
         const totalall = {
           subtotal: totalallx
         }
         xxx.TotalAll.push(totalall)
-        console.log('sasa', xxx.KamarOperasiIgd)
+        console.log('sasa', xxx.TindakanOperasi)
       })
 
       this.items = val

@@ -185,7 +185,7 @@
               :key="n"
               class="list-move"
             >
-              {{ biayamaterai?.namaruangan }} = {{ formatDouble(biayamaterai?.subtotal) }} <br>
+              {{ formatDouble(biayamaterai?.subtotal) }} <br>
             </q-item>
           </template>
           <template #cell-TindakanDokter="{row}">
@@ -242,6 +242,19 @@
                 class="list-move"
               >
                 {{ MakanPasien?.namaruangan }} = {{ formatDouble(MakanPasien?.subtotal) }} <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-AsuhanGizi="{row}">
+            <div
+              v-if="row?.AsuhanGizi.length >= 0"
+            >
+              <q-item
+                v-for="(AsuhanGizi , mp) in row?.AsuhanGizi"
+                :key="mp"
+                class="list-move"
+              >
+                {{ AsuhanGizi?.namaruangan }} = {{ formatDouble(AsuhanGizi?.subtotal) }} <br>
               </q-item>
             </div>
           </template>
@@ -464,6 +477,22 @@
               >
                 <div class="on-left">
                   {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }}
+                </div>
+                <br>
+              </q-item>
+            </div>
+          </template>
+          <template #cell-Ambulan="{row}">
+            <div
+              v-if="row?.Ambulan.length >= 0"
+            >
+              <q-item
+                v-for="(Ambulan , fr) in row?.Ambulan"
+                :key="fr"
+                class="list-move"
+              >
+                <div class="on-left">
+                  {{ Ambulan?.namaruangan }} = {{ formatDouble(Ambulan?.subtotal) }}
                 </div>
                 <br>
               </q-item>
