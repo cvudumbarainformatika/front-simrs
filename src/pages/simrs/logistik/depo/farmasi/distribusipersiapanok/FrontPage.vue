@@ -618,7 +618,7 @@
         {{ store.dataToPrint?.pasien?.rs2 }} -  {{ store.dataToPrint?.pasien?.rs1 }} - {{ store.dataToPrint?.list?.sistembayar?.rs2 }}
       </div>
       <div class="row justify-start default-font q-ml-md">
-        {{ store.dataToPrint?.list.rs4 }} -  {{ store.dataToPrint?.list?.kunjunganranap?.relmasterruangranap?.rs2 ?? store.dataToPrint?.list?.kunjunganrajal?.relmpoli?.rs2 }}
+        {{ store.dataToPrint?.list?.rs4 }} -  {{ store.dataToPrint?.list?.kunjunganranap?.relmasterruangranap?.rs2 ?? store.dataToPrint?.list?.kunjunganrajal?.relmpoli?.rs2 }}
       </div>
       <div
         class="row justify-start q-mb-md default-font"

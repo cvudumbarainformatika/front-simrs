@@ -36,6 +36,131 @@
       @refresh="store.refreshTable"
       @on-click="onClick"
     >
+    <template #header-left-after-search>
+      <div class="q-ml-sm row">
+        <div class="col-auto">
+          <app-autocomplete-new
+            :model="store.param.jenispenerimaan"
+            autocomplete="nama"
+            option-label="nama"
+            option-value="nama"
+            label="Jenis Penerimaan"
+            outlined
+            dark
+            valid
+            :source="store.jenisPenerimaans"
+            @on-select="store.jenisPenerimaanSelected"
+            @clear="store.clearJenisPenerimaan"
+          />
+        </div>
+        <div class="col-auto q-ml-sm">
+          <q-btn
+            outline
+            color="grey-8"
+            class="bg-white"
+            no-caps
+          >
+            <div class="flex items-center q-mx-xs">
+              <div class="f-12 q-mr-sm">
+                {{ store.header.periode }}
+              </div>
+              <transition>
+                <q-icon
+                  :name="`${showMenuPeriode?'icon-mat-keyboard_arrow_up':'icon-mat-keyboard_arrow_down'}`"
+                  size="16px"
+                />
+              </transition>
+            </div>
+
+            <q-menu
+              @show="showMenuPeriode=true"
+              @hide="showMenuPeriode=false"
+            >
+              <div class="row no-wrap q-pa-sms">
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-for="item in store.periods"
+                    :key="item"
+                    clickable
+                    :active="item === store.header.periode"
+                    active-class="bg-primary text-white"
+                    :disable="item === 'Custom'"
+                    @click="store.setPeriode(item)"
+                  >
+                    <q-item-section>{{ item }}</q-item-section>
+                  </q-item>
+                </q-list>
+                <q-separator
+                  vertical
+                  inset
+                />
+
+                <div class="column">
+                  <div class="row q-pa-sm q-col-gutter-sm">
+                    <div class="col">
+                      <q-date
+                        v-model="store.param.from"
+                        minimal
+                        bordered
+                        flat
+                        mask="YYYY-MM-DD"
+                        @update:model-value="store.setPeriode('Custom')"
+                      />
+                      <div class="f-10 text-grey-8 q-mt-xs">
+                        DARI TANGGAL : <b>{{ store.param.from }}</b>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <q-date
+                        v-model="store.param.to"
+                        minimal
+                        bordered
+                        flat
+                        mask="YYYY-MM-DD"
+                        @update:model-value="store.setPeriode('Custom')"
+                      />
+                      <div class="f-10 text-grey-8 q-mt-xs">
+                        SAMPAI TANGGAL : <b>{{ store.param.to }}</b>
+                      </div>
+                    </div>
+                  </div>
+                  <q-separator />
+                  <div class="row q-pa-sm justify-end">
+                    <q-btn
+                      v-close-popup
+                      color="primary"
+                      label="Terapkan"
+                      push
+                      size="sm"
+                      @click="store.cariRencanaBeli"
+                    />
+                  </div>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
+        <div class="col-auto q-ml-sm">
+          <div v-if="store.items.length">
+            <download-excel
+              class="btn"
+              :data="store.items"
+              :fields="jsonFields"
+              :fetch="fetch"
+              :name="'Penerimaan '+ (store?.param?.jenispenerimaan ?? '') + ' '+ store?.param?.from + ' sd ' + store?.param?.to+'.xls'"
+            >
+              <app-btn
+                color="orange"
+                label="Download Excel"
+                icon="icon-mat-download"
+                push
+              />
+            </download-excel>                
+        </div>
+        </div>
+      </div>
+      
+    </template>
       <template #col-nopenerimaan>
         <div>Nomor</div>
       </template>
@@ -433,7 +558,7 @@
   />
 </template>
 <script setup>
-import { dateFullFormat, formatDouble } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble,formatDoubleKoma } from 'src/modules/formatter'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
@@ -449,6 +574,53 @@ const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
 const penerimaanlangsung = usePenerimaanLangsungFarmasiStore()
 const router = useRouter()
+
+const showMenuPeriode = ref(false)
+// excel
+
+const jsonFields = {
+  'No': 'no',
+  'Nomor Penerimaan': 'nopenerimaan',
+  'Nomor Pemesanan': 'nopemesanan',
+  'Jenis Penerimaan': 'jenis_penerimaan',
+  'Gudang': 'gudang',
+  'Tanggal Penerimaan': 'tgl_penerimaan',
+  'Tanggal Surat': 'tgl_surat',
+  'Batas Bayar': 'batas_bayar',
+  'Nomor Surat': 'nosurat',
+  'Jenis Surat': 'jenis_surat',
+  'Nomor Faktur': 'nofaktur',
+  'Penyedia': 'penyedia',
+  'Total': 'total',
+}
+function fetch () {
+  const data = []
+  store.items.forEach((item, i) => {
+    const temp = {}
+    let total=0
+    if(item?.faktur && item?.jenissurat==='Surat Jalan'){
+      total=formatDoubleKoma(parseFloat(item?.faktur?.total_faktur),2)
+    }else{
+      total=formatDoubleKoma(parseFloat(item?.total),2)
+    }
+    temp.no = i + 1
+    temp.nopenerimaan = item.nopenerimaan
+    temp.nopemesanan = item.nopemesanan
+    temp.jenis_penerimaan = item.jenis_penerimaan
+    temp.gudang = getGudang(item.gudang)
+    temp.tgl_penerimaan = dateFullFormat(item.tglpenerimaan)
+    temp.tgl_surat = dateFullFormat(item.tglsurat)
+    temp.batas_bayar = dateFullFormat(item.batasbayar)
+    temp.nosurat = item.jenissurat==='Faktur'?'':item?.nomorsurat
+    temp.jenis_surat = item.jenissurat    
+    temp.nofaktur = item.jenissurat==='Faktur'?item?.nomorsurat:item?.faktur?.no_faktur
+    temp.penyedia = item.pihakketiga?.nama
+    temp.total = total
+
+    data.push(temp)
+  })
+  return data
+}
 function tambahPenerimaan (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
