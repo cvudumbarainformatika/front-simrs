@@ -223,11 +223,11 @@ onMounted(() => {
 
 function saveOrderLaborat () {
   // INI diganti function baru
-  console.log('save', props.pasien)
-  // store.saveOrderLaboratBaru(props.pasien).then(() => {
-  //   // console.log(formRef.value)
-  //   formRef.value.resetValidation()
-  // })
+  // console.log('save', props.pasien)
+  store.saveOrderLaboratBaru(props.pasien).then(() => {
+    // console.log(formRef.value)
+    formRef.value.resetValidation()
+  })
 }
 
 function pilihPemeriksaans (val) {
