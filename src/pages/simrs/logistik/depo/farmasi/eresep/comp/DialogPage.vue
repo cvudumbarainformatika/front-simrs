@@ -521,7 +521,7 @@
                     </div>
                     <div v-if="parseInt(store?.resep?.flag)>='2'">
                       <q-btn
-                        v-if="(!rinc?.obatkeluar) && !rinc?.done"
+                        v-if="(!rinc?.obatkeluar) && !rinc?.done && parseInt(store?.resep?.flag)<5"
                         round
                         class="f-10 q-my-sm"
                         color="primary"
@@ -802,7 +802,7 @@
                       </div>
                       <div v-if="parseInt(store?.resep?.flag)>=2">
                         <q-btn
-                          v-if="!rinc?.obatkeluar"
+                          v-if="!rinc?.obatkeluar && parseInt(store?.resep?.flag)<5"
                           round
                           class="f-10 q-mr-sm"
                           color="primary"
@@ -1017,7 +1017,7 @@
                         <div v-if="parseInt(store?.resep?.flag)>=2">
                           anu
                           <q-btn
-                            v-if="!rinc?.obatkeluar"
+                            v-if="!rinc?.obatkeluar && parseInt(store?.resep?.flag)<5"
                             round
                             class="f-10 q-my-sm"
                             color="primary"
@@ -1282,7 +1282,7 @@
                           </div>
                           <div v-if="parseInt(store?.resep?.flag)>=2">
                             <q-btn
-                              v-if="!rinc?.obatkeluar"
+                              v-if="!rinc?.obatkeluar && parseInt(store?.resep?.flag)<5"
                               round
                               class="f-10 q-mr-sm"
                               color="primary"

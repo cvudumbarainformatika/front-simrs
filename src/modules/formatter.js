@@ -75,6 +75,16 @@ const formatDouble = (value, dg) => {
   }
   else { return 0 }
 }
+const formatDoubleKoma = (value, dg) => {
+  if (value !== null && value !== 0) {
+    return Number(value)
+      .toFixed(dg)
+      .replace('.', ',')
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1')
+      // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
+  }
+  else { return 0 }
+}
 
 const formattanpaRp = (value) => {
   if (value !== null) {
@@ -158,5 +168,6 @@ export {
   timeDiff,
   formatDouble,
   dayName,
-  formattanpaRp
+  formattanpaRp,
+  formatDoubleKoma
 }
