@@ -86,7 +86,7 @@ module.exports = configure(function (ctx) {
 
       extendViteConf (viteConf) {
         viteConf.build = mergeConfig(viteConf.build, {
-          chunkSizeWarningLimit: 750
+          chunkSizeWarningLimit: 5000
         })
       }
       // viteVuePluginOptions: {},

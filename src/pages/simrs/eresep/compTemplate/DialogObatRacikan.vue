@@ -1,7 +1,7 @@
 <template>
   <q-dialog
     persistent backdrop-filter="blur(4px)"
-    @beforeShow="initShow" @hide="initShow"
+    @before-show="initShow" @hide="initShow"
   >
     <q-card style="width:460px;">
       <q-bar>
