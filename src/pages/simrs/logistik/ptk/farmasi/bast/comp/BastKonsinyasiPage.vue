@@ -87,7 +87,14 @@
                 Jumlah BAST
               </div>
               <div class="col-8 text-weight-bold">
-                {{ isNaN(parseFloat(store.form.jumlah_bast)) ? 0 : formatRpDouble(store.form.jumlah_bast,2) }}
+                <!-- {{ isNaN(parseFloat(store.form.jumlah_bast)) ? 0 : formatRpDouble(store.form.jumlah_bast,2) }} -->
+                <app-input
+                    v-model="store.form.jumlah_bastx"
+                    outlined
+                    label="Jumlah BAST"
+                    dense
+                    valid
+                  />
               </div>
             </div>
           </div>
@@ -350,6 +357,7 @@ function updateHargaAll (evt, det, trm, key) {
   // jumlahkan semua nilai bast
   trm.subtotal_bast = trm.rinci.map(a => parseFloat(a.subtotal)).reduce((a, b) => a + b, 0)
   if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
+  store.form.jumlah_bastx = store.form.jumlah_bast
 }
 
 function itemClicked (val, i) {
@@ -374,6 +382,7 @@ function itemClicked (val, i) {
   }
   store.form.jumlah_bast = 0
   if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
+  store.form.jumlah_bastx = store.form.jumlah_bast
   console.log('clicked bottom', store.tampilPenerimaans)
 }
 const refTaBast = ref(null)
