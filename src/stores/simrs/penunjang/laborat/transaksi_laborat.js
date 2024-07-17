@@ -96,7 +96,7 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
       if (resp.status === 200) {
         this.total = resp.data
       }
-    }
+    },
     // async deletesData (payload) {
     //   const params = { id: payload }
     //   try {
@@ -109,5 +109,17 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
     //     notifErr(error.response)
     //   }
     // }
+    async dariWebSockets (nota) {
+      // const payload = { rs2: nota }
+      // await api.get('/v1/transaksi_laborats/update_complete', payload)
+      //   .then(resp => {
+      //     console.log('resp', resp)
+      //     if (resp.status === 200) {
+      //       const arr = this.items.filter(x => x.rs2 !== nota)
+      //       this.items = arr
+      //     }
+      //   })
+      console.log('nota', nota)
+    }
   }
 })

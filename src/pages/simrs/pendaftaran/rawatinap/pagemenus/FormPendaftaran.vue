@@ -4,7 +4,13 @@
       <q-card>
         <div class="row q-col-gutter-x-sm">
           <div class="col-2 q-pa-sm q-pl-md br-1">
-            <app-avatar-pasien width="100%" />
+            <app-avatar-pasien v-if="store.pasien.usia && store.pasien.tanggallahir && store.pasien.kelamin" width="100%" :pasien="store.pasien" />
+            <div v-else>
+              <q-img
+                src="~assets/images/nouser.png"
+                spinner-color="white"
+              />
+            </div>
           </div>
 
           <!-- <q-separator vertical spaced class="q-pa-none" /> -->
@@ -22,8 +28,8 @@
                 size="xs"
               />
             </div>
-            <app-input-simrs ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true}" />
-            <div class="flex q-gutter-sm full-width q-pb-sm" style="margin-top: -12px;">
+            <app-input-simrs ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true, number: true}" />
+            <div class="flex q-gutter-sm full-width q-pb-sm q-pt-xs" style="margin-top: -12px;">
               <div>Kewarganegaraan : </div>
               <q-radio
                 v-for="item in store.kewarganegaran"
@@ -37,7 +43,7 @@
               />
             </div>
             <div v-if="store.pasien.kewarganegaraan==='WNI'">
-              <app-input-simrs v-model="store.pasien.noktp" label="NIK / NO. KTP" :valid="{min: 16}" :autofocus="false" @update:model-value="cekKtp" />
+              <app-input-simrs v-model="store.pasien.noktp" label="NIK / NO. KTP" :valid="{min: 16, number: true}" :autofocus="false" />
             </div>
             <div v-else>
               <app-input-simrs v-model="store.pasien.paspor" label="NO. Passport" :valid="{required: true}" :autofocus="false" />
@@ -70,7 +76,6 @@
                   option-label="kelamin"
                   outlined
                   :source="store.kelamins"
-                  :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -439,7 +444,7 @@ const onReset = () => {
   refNorm.value.appInputSimrs.focus()
 }
 onMounted(() => {
-  // console.log('onMounted', Object.keys(store.pasien))
+  console.log('onMounted', refNorm.value)
   onReset()
   Promise.all([
     store.getKelamin(),
@@ -467,9 +472,17 @@ const gantiKewarganegaraan = e => {
   }
 }
 
+function isNumber (input) {
+  return !isNaN(input) && !isNaN(parseFloat(input))
+}
+
 const cekKtp = (e) => {
   // console.log('e', e)
   // Output NIK tidak valid
+  if (!isNumber(e)) {
+    console.log('nik tidak valid')
+    return
+  }
   const digit = e?.toString().length
   if (digit !== 16) {
     console.log('nik tidak valid')
@@ -538,6 +551,8 @@ const cekKtp = (e) => {
     // update store pasien
     store.pasien.kelamin = klmn
     store.pasien.tanggallahir = `${tahun}-${blnNik}-${tgl}`
+
+    store.cekPesertaBpjs('nik', nik)
   }
 }
 
@@ -650,11 +665,31 @@ function citySelected (val) {
   store.pasien.region = val.region
 }
 
+function hitungUsia (tanggalLahir) {
+  tanggalLahir = new Date(tanggalLahir)
+  const hariIni = new Date()
+  let usia = hariIni.getFullYear() - tanggalLahir.getFullYear()
+
+  if (hariIni.getMonth() < tanggalLahir.getMonth() || (hariIni.getMonth() === tanggalLahir.getMonth() && hariIni.getDate() < tanggalLahir.getDate())) {
+    usia--
+  }
+  store.pasien.usia = usia.toString()
+  return usia
+}
+
 watch(() => store.pasien.noktp, (val) => {
   // console.log('watch old', old)
-  console.log('watch new', val)
+  // console.log('watch new', val)
   if (val !== null && val !== '') {
     cekKtp(val)
+  }
+}, { deep: true })
+watch(() => store.pasien.tanggallahir, (val) => {
+  // console.log('watch old', old)
+
+  if (val !== null && val !== '') {
+    hitungUsia(val)
+    console.log('watch new', hitungUsia(val))
   }
 }, { deep: true })
 </script>
