@@ -571,7 +571,7 @@ function isiLayananx (val) {
     )
   }
   else if (val === '3') {
-    this.ruangan = store.ranap.map(x => {
+    ruangan.value = store.ranap.map(x => {
       return {
         koderuangan: x.rs4,
         namaruangan: x.rs5

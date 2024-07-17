@@ -27,10 +27,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     ruangan: {
       koderuangan: null
     },
-    kolom: ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
-      'MakanPasien', 'AsuhanGizi', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
-      'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanFisioterapi',
-      'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Ambulan', 'Total'],
+    kolom: [],
     kolomhide: []
   }),
   actions: {
@@ -81,17 +78,64 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         return notifErrVue('Tanggal Dari Lebih Besar Dari Tanggal Sampai')
       }
       else {
-        this.getAmbilData()
+        if (this.params.layanan === '1') {
+          if (this.params.ruangan === 'POL014') {
+            return notifErrVue('Untuk Laporan IGD belum Tersedia')
+          }
+        }
+        else if (this.params.layanan === '2') {
+          if (this.params.ruangan === '1') {
+            return notifErrVue('Untuk Laporan Rawat Jalan Semua belum Tersedia')
+          }
+          else {
+            return notifErrVue('Untuk Laporan Rawat Jalan Perpoli belum Tersedia')
+          }
+        }
+        else if (this.params.layanan === '3') {
+          if (this.params.ruangan === '1') {
+            this.items = []
+            this.kolom = []
+            this.getAmbilData()
+          }
+          else {
+            this.items = []
+            this.kolom = []
+            this.getAmbilDataperruangan()
+          }
+        }
       }
     },
     async getAmbilData () {
       this.loading = true
+      this.kolom = ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
+        'MakanPasien', 'AsuhanGizi', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
+        'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanFisioterapi',
+        'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Ambulan', 'Total']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuangan', params)
         .then((resp) => {
           if (resp.status === 200) {
             const datahasil = resp?.data
             this.sethasil(datahasil)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
+    },
+    async getAmbilDataperruangan () {
+      this.loading = true
+      this.kolom = ['Identitas', 'Admin', 'AkomodasiKamar', 'BiayaMatrei', 'TindakanDokter', 'Visite', 'TindakanKeperawatan',
+        'MakanPasien', 'AsuhanGizi', 'Oksigen', 'Keperawatan', 'Laborat', 'Radiologi', 'Endoscopy', 'KamarOperasiIbs',
+        'TindakanOperasi', 'TindakanOperasiIgd', 'TindakanFisioterapi',
+        'Sedasi', 'TindakanCardio', 'TindakanEeg', 'PsikologtransUmum', 'Bdrs', 'Penunjangkeluar', 'Farmasi', 'Ambulan', 'Total']
+      const params = { params: this.params }
+      await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuanganperruangan', params)
+        .then((resp) => {
+          if (resp.status === 200) {
+            const datahasil = resp?.data
+            this.sethasilperruangan(datahasil)
           }
         })
         .catch((err) => {
