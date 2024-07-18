@@ -530,7 +530,7 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
 import { defineAsyncComponent, ref } from 'vue'
-import { date } from 'quasar'
+// import { date } from 'quasar'
 
 const store = useEResepDepoFarmasiStore()
 const router = useRouter()
@@ -546,58 +546,60 @@ defineProps({
 })
 const emits = defineEmits(['panggilan'])
 function responTime(item){
-  const mulai= new Date(item?.tgl_kirim)
-  const selesai=new Date(item?.tgl_selesai)  
-  let jam=date.getDateDiff(selesai,mulai, 'hours')
-  let menit=0
-  let detik=0
-  const dispJam=jam <= 9 ? '0'+jam:jam
-  if(jam>0){
-    const setelahJam=date.subtractFromDate(selesai,{hours:jam})    
-    menit=date.getDateDiff(setelahJam,mulai, 'minutes')
-    // console.log('menit', menit);
-    if(menit>0){
-    let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})      
-    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
-    if(detik<0){
-      const det=detik
-      detik = 60+det
-      menit-=1
-    }
-   }else if(menit<0){
-    let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})    
-      const men=menit
-      menit=60+men
-      jam-=1
-    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
-    if(detik<0){
-      const det=detik
-      detik = 60+det
-      menit-=1
-    }
-   }else{
-    detik=date.getDateDiff(selesai,mulai, 'seconds')
-   }
-  }else{    
-    menit=date.getDateDiff(selesai,mulai, 'minutes')
-   if(menit>0){
-    const setelahMinute=date.subtractFromDate(selesai,{minutes:menit})
-    detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
-    if(detik<0){
-      const det=detik
-      detik = 60+det
-      menit-=1
-    }
-   }else{
-    detik=date.getDateDiff(selesai,mulai, 'seconds')
-   }
-  }
-  const dispMen=menit <= 9 ? '0'+menit:menit
-  const dispDet=detik <= 9 ? '0'+detik:detik
+  // const mulai= new Date(item?.tgl_kirim)
+  // const selesai=new Date(item?.tgl_selesai)  
+  // let jam=date.getDateDiff(selesai,mulai, 'hours')
+  // let menit=0
+  // let detik=0
+  // const dispJam=jam <= 9 ? '0'+jam:jam
+  // if(jam>0){
+  //   const setelahJam=date.subtractFromDate(selesai,{hours:jam})    
+  //   menit=date.getDateDiff(setelahJam,mulai, 'minutes')
+  //   // console.log('menit', menit);
+  //   if(menit>0){
+  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})      
+  //   detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+  //   if(detik<0){
+  //     const det=detik
+  //     detik = 60+det
+  //     menit-=1
+  //   }
+  //  }else if(menit<0){
+  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})    
+  //     const men=menit
+  //     menit=60+men
+  //     jam-=1
+  //   detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+  //   if(detik<0){
+  //     const det=detik
+  //     detik = 60+det
+  //     menit-=1
+  //   }
+  //  }else{
+  //   detik=date.getDateDiff(selesai,mulai, 'seconds')
+  //  }
+  // }else{    
+  //   menit=date.getDateDiff(selesai,mulai, 'minutes')
+  //  if(menit>0){
+  //   const setelahMinute=date.subtractFromDate(selesai,{minutes:menit})
+  //   detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
+  //   if(detik<0){
+  //     const det=detik
+  //     detik = 60+det
+  //     menit-=1
+  //   }
+  //  }else{
+  //   detik=date.getDateDiff(selesai,mulai, 'seconds')
+  //  }
+  // }
+  const dispJam=item?.rt_jam <= 9 ? '0'+item?.rt_jam:item?.rt_jam
+  const dispMen=item?.rt_menit <= 9 ? '0'+item?.rt_menit:item?.rt_menit
+  const dispDet=item?.rt_detik <= 9 ? '0'+item?.rt_detik:item?.rt_detik
   // const respon=date.getDateDiff(selesai,mulai, 'minutes')
   // const second=date.getDateDiff(selesai,mulai, 'seconds')
   // console.log('resp time', dispJam);
-  return 'Respon Time ' + dispJam + ':' + dispMen+':' + dispDet
+  // return 'Respon Time ' + dispJam + ':' + dispMen+':' + dispDet
+  return 'Respon Time ' + item?.rt_hari + ' hari ' + dispJam + ':' + dispMen+':' + dispDet
 }
 function panggil (item) {
   emits('panggilan', item)

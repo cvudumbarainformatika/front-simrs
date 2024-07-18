@@ -94,9 +94,9 @@
         <div class="row justify-start no-wrap q-my-xs">
           <div
             class="text-weight-bold"
-            :class="row.sistembayar === 'SEMUA'?'':(row.sistembayar === 'UMUM'?'text-primary':'text-deep-purple')"
+            :class="row.sistembayar === 'SEMUA'?'':(row.sistembayar === 'UMUM'?'text-primary':(row.sistembayar ==='BPJS'?'text-deep-purple':'text-negative'))"
           >
-            sistem bayar : {{ row.sistembayar==='SEMUA' ?'Semua':(row.sistembayar === 'UMUM'?'UMUM':'BPJS') }}
+            sistem bayar : {{ row.sistembayar==='SEMUA' ?'Semua':(row.sistembayar === 'UMUM'?'UMUM':(row.sistembayar ==='BPJS'?'BPJS':'kosong')) }}
           </div>
         </div>
       </template>
