@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref } from 'vue'
-
+// const bg = ref(false)
 const props = defineProps({
   label: {
     type: String,
@@ -86,14 +86,23 @@ function isValidInput (val) {
     return true
   }
   else {
-    if (props.valid?.email === 'email') {
+    if (props.valid?.email) {
       const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
       return emailPattern.test(val) || 'email tidak valid'
     }
-    if (props.valid?.min) {
+    else if (props.valid?.number) {
+      return (!isNaN(val) && !isNaN(parseFloat(val))) || 'Harus angka'
+    }
+    else if (props.valid?.min) {
       return val?.length >= parseInt(props.valid?.min) || `Min ${props.valid?.min} char`
     }
-    return (!!val) || 'Harap diisi'
+    else if (props.valid?.max) {
+      return val?.length <= parseInt(props.valid?.max) || `Max ${props.valid?.max} char`
+    }
+    else {
+      return (!!val) || 'Harap diisi'
+    }
   }
 }
+
 </script>

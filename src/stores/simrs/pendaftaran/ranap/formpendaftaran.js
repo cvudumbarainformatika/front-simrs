@@ -52,7 +52,10 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       kotaDomisili: null,
       propinsiDomisili: null,
       negaraDomisili: null,
-      kodeposDomisili: null
+      kodeposDomisili: null,
+
+      // ini numpang gak usah di insert ke database
+      usia: null
 
     },
     kodeKtp: {
@@ -87,7 +90,8 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     kelurahans: [],
 
     countrys: [],
-    domisiliSama: true
+    domisiliSama: true,
+    cekPeserta: null
 
   }),
   // getters: {
@@ -104,12 +108,24 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
 
       this.pasien.barulama = 'baru'
       this.pasien.kewarganegaraan = 'WNI'
-      this.pasien.noktp = 3574041305820002
+      // this.pasien.noktp = 3574041305820002
       this.pasien.bisabacatulis = 'Ya'
 
       this.paramWilayah.kd_negara = '62'
+
+      this.cekPeserta = null
     },
 
+    async cekPesertaBpjs (by, no) {
+      const params = { params: { by, no } }
+      await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
+        .then(resp => {
+          console.log('cekPesertaBpjs', resp.data)
+        })
+        .catch(err => {
+          console.log('cekPesertaBpjs', err)
+        })
+    },
     setForm (key, val) {
       this.pasien[key] = val
     },
