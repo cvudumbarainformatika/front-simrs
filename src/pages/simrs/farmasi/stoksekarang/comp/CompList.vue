@@ -188,8 +188,9 @@
       </template>
       <template #left-acttion="{row}">
         <div class="q-mr-md">
-          <!-- v-if="role===1" -->
+          
           <q-btn
+          v-if="role===1"
             flat
             class=""
             size="sm"
