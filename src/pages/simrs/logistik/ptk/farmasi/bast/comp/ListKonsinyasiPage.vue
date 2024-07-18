@@ -137,7 +137,7 @@
             BAST
           </div>
           <div :class="parseFloat(row?.jumlah_bast)>0?'text-weight-bold':''">
-            {{ formatDouble(row?.jumlah_bast,2)??0 }}
+            {{ (formatDouble(row?.jumlah_bastx,2)??formatDouble(row?.jumlah_bast,2))??0 }}
           </div>
         </div>
         <div class="row justify-between no-wrap">

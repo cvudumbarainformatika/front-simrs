@@ -140,7 +140,7 @@ const kdDisplay = computed(() => {
   return null
 })
 function panggil (row) {
-  console.log('row', row)
+  // console.log('row', row)
   const nama = (row?.datapasien?.nama_panggil) ? (row?.datapasien?.nama_panggil)?.toLowerCase() : ''
   const unit = 'Apotek  Rawat  Jalan'
   const noAntrean = row?.antrian?.nomor ? row?.antrian?.nomor.toUpperCase() : ''

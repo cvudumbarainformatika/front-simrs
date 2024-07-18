@@ -55,7 +55,7 @@
   <!-- perencanaan -->
   <div class="q-mt-sm">
     <!-- header -->
-    <div class="row q-col-gutter-md q-px-sm q-pb-md">
+    <div class="row q-col-gutter-md q-px-sm ">
       <div class="col-6">
         <div class="row q-mb-md q-ml-xs">
           <div class="col-12">
@@ -110,6 +110,23 @@
             />
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row justify-between items-center q-pb-md">
+      <div class="col-auto"></div>
+      <div class="col-auto text-right q-mr-md">
+        <q-btn 
+          icon="icon-mat-done_all"
+          size="sm"
+          color="negative"
+          :loading="store.loadingAnggap"
+          :disable="store.loadingAnggap"
+          @click="dianggapSelesai()"
+         >
+          <q-tooltip>
+            Rencana Pemesanan Dianggap Selesai
+          </q-tooltip>
+        </q-btn>
       </div>
     </div>
     <q-card>
@@ -464,6 +481,33 @@ function kirimRencana (val) {
       // })
     })
   }
+}
+
+// dianggap selesai
+function dianggapSelesai(){
+  
+  Dialog.create({
+    title:'Konfirmasi',
+    message:'Apakah Rencana Pemesanan Akan Dianggap Selesai?',
+    ok:{
+      push:true,
+      color:'primary',
+      label:'Ok',
+      'no-caps':true
+    },
+    cancel:{
+      push:true,
+      color:'dark',
+      label:'Batal',
+      'no-caps':true
+    }
+  })
+  .onOk(()=>{
+    // console.log(store.form)
+    store.anggapSelesaiRencana().then(() => {
+      table.rencanaSelected(store.form.no_rencbeliobat, 'form')
+    })
+  })
 }
 
 </script>

@@ -3,12 +3,14 @@ import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelPemesananObatStore } from './tabelObat'
 import { useListPemesananStore } from './listpesanan'
+import { notifSuccess } from 'src/modules/utils'
 
 export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   state: () => ({
     isOpen: false,
     loading: false,
     loadingPihakTiga: false,
+    loadingAnggap:false,
     items: [],
     param: {
       nopemesanan: '',
@@ -178,6 +180,21 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             this.loading = false
             val.loading = false
           })
+      })
+    },
+    anggapSelesaiRencana(){
+      this.loadingAnggap=true
+      return new Promise(resolve=>{
+        api.post('v1/simrs/farmasinew/pemesananobat/anggap-selesai',this.form)
+        .then(resp=>{
+          this.loadingAnggap=false
+          this.setClose()
+          notifSuccess(resp)
+          resolve(resp)
+        })
+        .catch(()=>{
+          this.loadingAnggap=false
+        })
       })
     }
   }

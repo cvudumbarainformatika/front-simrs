@@ -22,6 +22,11 @@
               Tanggal Perencananaan
             </div>
           </q-item-section>
+          <!-- <q-item-section>
+            <div class="text-right">
+              #
+            </div>
+          </q-item-section> -->
         </q-item>
         <q-item
           v-for="(item,i) in table.rencanas"
@@ -46,6 +51,20 @@
               {{ dateFullFormat(item?.tgl) }}
             </div>
           </q-item-section>
+          <!-- <q-item-section>
+            <div class="text-right">
+              <q-btn 
+                icon="icon-mat-done_all"
+                size="xs"
+                round
+                color="negative"
+              >
+                <q-tooltip>
+                  Dianggap Selesai
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </q-item-section> -->
         </q-item>
       </q-list>
     <!-- {{ table.rencanas }} -->
