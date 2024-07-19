@@ -6,9 +6,11 @@
     >
       <CompHeader
         :search="table.params.q"
+        :cari="table.params.obat"
         :per-page="table.params.per_page"
         @fullscreen="style.setComponentFull"
         @set-search="table.cariRencana"
+        @cari-obat="table.setCari"
         @set-row="table.setPerPage"
         @set-periode="table.setPeriodik"
         @refresh="table.getObatMauBeli"

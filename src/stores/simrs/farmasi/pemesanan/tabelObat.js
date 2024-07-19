@@ -149,6 +149,10 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         this.getObatMauBeli()
       }
     },
+    setCari(val){
+      this.setParam('obat', val)
+      this.getObatMauBeli()
+    },
     getInitialData () {
       this.getObatMauBeli()
     },

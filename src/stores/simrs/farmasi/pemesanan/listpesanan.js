@@ -38,6 +38,11 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },
+    setSearchObat(payload) {
+      this.setParam('obat', payload)
+      this.setParam('page', 1)
+      this.cariRencanaBeli()
+    },
     setPage(payload) {
       this.setParam('page', payload)
       this.cariRencanaBeli()

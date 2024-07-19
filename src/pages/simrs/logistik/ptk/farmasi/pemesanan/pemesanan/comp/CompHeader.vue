@@ -4,15 +4,27 @@
     :class="`${color} text-${textColor}`"
   >
     <div>
-      <q-input
-        v-model="q"
-        outlined
-        dark
-        color="white"
-        dense
-        placeholder="Cari No Perencanaan ..."
-        debounce="500"
-      />
+      <div class="row">
+        <q-input
+          v-model="q"
+          outlined
+          dark
+          color="white"
+          dense
+          placeholder="Cari No Perencanaan ..."
+          debounce="500"
+        />
+        <q-input
+          v-model="obat"
+          class="q-ml-sm"
+          outlined
+          dark
+          color="white"
+          dense
+          placeholder="Cari Obat ..."
+          debounce="500"
+        />
+      </div>
     </div>
     <div>
       <q-btn
@@ -149,7 +161,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh','cariObat'])
 const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   adaTanggal: {
@@ -169,6 +181,10 @@ const props = defineProps({
     default: 'white'
   },
   search: {
+    type: String,
+    default: ''
+  },
+  cari: {
     type: String,
     default: ''
   },
@@ -204,6 +220,14 @@ const q = computed({
   },
   set(newVal) {
     emits('setSearch', newVal)
+  }
+})
+const obat = computed({
+  get() {
+    return props.cari
+  },
+  set(newVal) {
+    emits('cariObat', newVal)
   }
 })
 </script>

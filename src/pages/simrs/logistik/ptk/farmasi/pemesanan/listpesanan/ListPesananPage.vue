@@ -37,6 +37,18 @@
       @on-click="onClick"
     >
       <template #header-left-after-search>
+        <div class="row items-center">
+          <q-input
+          v-model="store.param.obat"
+          class="q-ml-sm"
+          outlined
+          dark
+          color="white"
+          dense
+          placeholder="Cari Obat ..."
+          debounce="500"          
+          @update:model-value="store.setSearchObat"
+        />
         <div class="q-ml-xs text-white">
           <q-option-group
             v-model="store.param.gudang"
@@ -49,6 +61,8 @@
             @update:model-value="store.setGudang"
           />
         </div>
+        </div>
+        
       </template>
       <template #col-nopemesanan>
         <div>Nomor Pemesanan</div>
