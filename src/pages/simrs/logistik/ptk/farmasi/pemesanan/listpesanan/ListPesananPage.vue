@@ -210,6 +210,22 @@
         </div>
         <div v-if="row.flag">
           <q-btn
+          v-if="row.flag==='1'"
+            icon="icon-mat-done_all"
+            dense
+            color="negative"
+            :loading="row.loading"
+            :disable="row.loading"
+            @click="dianggapSelesai(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Pemesanan Dianggap Selesai
+            </q-tooltip>
+          </q-btn>
+          <q-btn
             flat
             icon="icon-mat-lock"
             dense
@@ -220,7 +236,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Rencana Pemesanan sudah di kunci
+              Pemesanan sudah di kunci
             </q-tooltip>
           </q-btn>
           <q-btn
@@ -264,6 +280,7 @@ import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesana
 import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
 import { ref, defineAsyncComponent } from 'vue'
 import CetakPemesananPage from './CetakPemesananPage.vue'
+import { Dialog } from 'quasar'
 
 // const style = useStyledStore()
 const store = useListPemesananStore()
@@ -271,6 +288,35 @@ const pemesanan = usePemesananObatStore()
 const table = useTabelPemesananObatStore()
 
 const CompDialog = defineAsyncComponent(() => import('../pemesanan/comp/CompDialog.vue'))
+
+// dianggap
+
+// dianggap selesai
+function dianggapSelesai(row){
+  
+  Dialog.create({
+    title:'Konfirmasi',
+    message:'Apakah Pemesanan Akan Dianggap Selesai?',
+    ok:{
+      push:true,
+      color:'primary',
+      label:'Ok',
+      'no-caps':true
+    },
+    cancel:{
+      push:true,
+      color:'dark',
+      label:'Batal',
+      'no-caps':true
+    }
+  })
+  .onOk(()=>{
+    console.log(row)
+    store.anggapSelesai(row).then(() => {
+      // table.rencanaSelected(store.form.no_rencbeliobat, 'form')
+    })
+  })
+}
 // click
 function onClick (val) {
   console.log('click', val)

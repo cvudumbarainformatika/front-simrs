@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListPemesananStore = defineStore('list_pemesanan_store', {
   state: () => ({
@@ -92,6 +93,24 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
           .catch(() => {
             this.loading = false
           })
+      })
+    },
+    anggapSelesai(val){
+      val.loading=true
+      const form={
+        nopemesanan:val?.nopemesanan
+      }
+      return new Promise(resolve=>{
+        api.post('v1/simrs/farmasinew/pemesananobat/anggap-selesai-pesanan',form)
+        .then(resp=>{
+          val.loading=false
+          this.cariRencanaBeli()
+          notifSuccess(resp)
+          resolve(resp)
+        })
+        .catch(()=>{
+          val.loading=false
+        })
       })
     }
   }
