@@ -59,12 +59,24 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       jnsBayar: null,
       kodesistembayar: null,
       diagnosaAwal: null,
+
+      // hakruang ,kelas untuk menentukan billing
       kamar: null,
+      kelas: null,
+      kode_ruang: null,
+      flag_ruang: null,
+      hakKelasBpjs: null,
+      indikatorPerubahanKelas: null,
+
+      // biaya
+      biaya_admin: 0,
+      biaya_kamar: 0,
 
       // ini numpang gak usah di insert ke database
       usia: null
 
     },
+
     kodeKtp: {
       prov: null, // 2 kode pertama
       kabKota: null, // 2 kode kedua
@@ -102,11 +114,12 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     openDialogPeserta: false,
 
     asalrujukans: [],
-    hakruangs: [],
+    // hakruangs: [],
     allSistemBayars: [],
     sistembayars: [],
     jnsSistemBayars: [],
-    kamars: []
+    kamars: [],
+    tarifs: []
 
   }),
   // getters: {
@@ -333,19 +346,19 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         })
     },
 
-    async getHakRuang () {
-      this.loading = true
-      await api.get('v1/simrs/master/hakruang')
-        .then(resp => {
-          this.loading = false
-          this.hakruangs = resp.data
-          // this.autocompleteStore.setAsalRujukan(resp.data)
-          console.log('hak ruang', resp.data)
-        })
-        .catch(() => {
-          this.loading = false
-        })
-    },
+    // async getHakRuang () {
+    //   this.loading = true
+    //   await api.get('v1/simrs/master/hakruang')
+    //     .then(resp => {
+    //       this.loading = false
+    //       this.hakruangs = resp.data
+    //       // this.autocompleteStore.setAsalRujukan(resp.data)
+    //       console.log('hak ruang', resp.data)
+    //     })
+    //     .catch(() => {
+    //       this.loading = false
+    //     })
+    // },
 
     // async getJnsSistemBayar () {
     //   this.loading = true
@@ -399,6 +412,20 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           console.log('kamar', resp.data)
           this.loading = false
           this.kamars = resp.data
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    async getMasterTarif () {
+      this.loading = true
+      await api.get('v1/simrs/master/gettigapuluhtarif')
+        .then(resp => {
+          console.log('master tarif', resp.data)
+          this.tarifs = resp.data
+          // this.loading = false
+          // this.kamars = resp.data
         })
         .catch(() => {
           this.loading = false
