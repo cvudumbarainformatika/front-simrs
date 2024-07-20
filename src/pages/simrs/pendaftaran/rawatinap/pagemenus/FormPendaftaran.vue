@@ -1,7 +1,11 @@
 <template>
   <q-form class="fit" ref="formRef" @submit="onSubmit" @reset="onReset">
     <div class="fit scroll">
-      <q-card>
+      <q-card square>
+        <q-bar class="bg-dark text-white">
+          <div>Biodata Pasien </div>
+          <q-space />
+        </q-bar>
         <div class="row q-col-gutter-x-sm">
           <div class="col-2 q-pa-sm q-pl-md br-1">
             <app-avatar-pasien v-if="store.pasien.usia && store.pasien.tanggallahir && store.pasien.kelamin" width="100%" :pasien="store.pasien" />
@@ -411,8 +415,70 @@
       </q-card>
 
       <q-separator />
-      <q-card v-for="n in 20" :key="n">
-        saf
+      <q-card square>
+        <q-bar class="bg-dark text-white">
+          <div>Registrasi / Penginap </div>
+          <q-space />
+        </q-bar>
+        <div class="row q-col-gutter-x-sm q-pa-sm">
+          <div class="col-3">
+            <!-- <app-input-simrs label="No. registrasi (automatis)" readonly /> -->
+            <app-autocomplete
+              ref="refAsalRujukan"
+              v-model="store.pasien.asalrujukan"
+              label="Asal Rujukan"
+              autocomplete="asalrujukan"
+              option-value="kode"
+              option-label="asalrujukan"
+              outlined
+              :source="store.asalrujukans"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+            />
+            <app-input-simrs label="Nama Penanggung Jawab" />
+            <app-input-simrs label="No Telp Penang Jawab" />
+          </div>
+          <div class="col-3">
+            <app-input-simrs label="Dokter Utama" />
+            <app-autocomplete
+              ref="refJnsSistemBayar"
+              v-model="store.pasien.jnsBayar"
+              label="Pilih Sistem Bayar"
+              autocomplete="sistembayar"
+              option-value="kode"
+              option-label="sistembayar"
+              outlined
+              :source="store.jnsSistemBayars"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+              @selected="(val)=>store.filterSistemBayar(val)"
+            />
+            <app-autocomplete
+              ref="refSistemBayar"
+              v-model="store.pasien.kodesistembayar"
+              label="Sistem Bayar"
+              autocomplete="sistembayar"
+              option-value="kode"
+              option-label="sistembayar"
+              outlined
+              :source="store.sistembayars"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+            />
+          </div>
+          <div class="col-4">
+            <!-- <app-input-simrs label="Diagnosa Awal" /> -->
+            <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" />
+            <app-input-simrs label="Hak Ruang" />
+            <app-input-simrs label="Cari Kamar Kosong" />
+          </div>
+          <div class="col-2">
+            <app-input-simrs label="Biaya Administrasi " />
+            <app-input-simrs label="Biaya Kamar" />
+            <app-input-simrs label="Jml Identitas" />
+          </div>
+        </div>
+        <div style="padding-bottom: 100px;" />
       </q-card>
     </div>
     <div class="absolute-bottom full-width bg-primary q-px-sm q-pa-sm">
@@ -421,13 +487,19 @@
         <q-btn type="submit" label="Simpan Pasien" color="white" text-color="black" dense class="q-px-md" />
       </div>
     </div>
+
+    <!-- DIALOG PESERTA -->
+    <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs" />
   </q-form>
 </template>
 
 <script setup>
 import { api } from 'src/boot/axios'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { defineAsyncComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
+
+const DialogPeserta = defineAsyncComponent(() => import('./compFormPendaftaran/DialogPeserta.vue'))
+const SelectDiagnosa = defineAsyncComponent(() => import('./compFormPendaftaran/SelectDiagnosa.vue'))
 const store = useFormPendaftaranRanapStore()
 
 const weather = ref(null)
@@ -447,6 +519,7 @@ onMounted(() => {
   console.log('onMounted', refNorm.value)
   onReset()
   Promise.all([
+    gantiKewarganegaraan('WNI'),
     store.getKelamin(),
     store.getSapaan(),
     store.getPendidikan(),
@@ -454,7 +527,9 @@ onMounted(() => {
     store.getBahasa(),
     store.getStatusPernikahan(),
     store.getPekerjaan(),
-    gantiKewarganegaraan('WNI')
+    store.getAsalRujukan(),
+    store.getHakRuang(),
+    store.getSistemBayar()
   ])
 })
 
@@ -675,6 +750,16 @@ function hitungUsia (tanggalLahir) {
   }
   store.pasien.usia = usia.toString()
   return usia
+}
+
+function copyDataFromBpjs () {
+  store.pasien.nama = store.cekPeserta?.nama
+  store.pasien.nokabpjs = store.cekPeserta?.noKartu
+  store.pasien.norm = store.cekPeserta?.mr?.noMR
+  store.pasien.notelp = store.cekPeserta?.mr?.noTelepon
+  store.pasien.nohp = store.cekPeserta?.mr?.noTelepon
+
+  store.openDialogPeserta = false
 }
 
 watch(() => store.pasien.noktp, (val) => {

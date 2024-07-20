@@ -54,6 +54,13 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       negaraDomisili: null,
       kodeposDomisili: null,
 
+      // registrasi
+      asalrujukan: null,
+      jnsBayar: null,
+      kodesistembayar: null,
+      diagnosaAwal: null,
+      kamar: null,
+
       // ini numpang gak usah di insert ke database
       usia: null
 
@@ -91,7 +98,15 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
 
     countrys: [],
     domisiliSama: true,
-    cekPeserta: null
+    cekPeserta: null,
+    openDialogPeserta: false,
+
+    asalrujukans: [],
+    hakruangs: [],
+    allSistemBayars: [],
+    sistembayars: [],
+    jnsSistemBayars: [],
+    kamars: []
 
   }),
   // getters: {
@@ -114,13 +129,18 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.paramWilayah.kd_negara = '62'
 
       this.cekPeserta = null
+      this.openDialogPeserta = false
     },
 
     async cekPesertaBpjs (by, no) {
       const params = { params: { by, no } }
       await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
         .then(resp => {
-          console.log('cekPesertaBpjs', resp.data)
+          if (resp.data.metadata.code === '200') {
+            this.cekPeserta = resp.data.result.peserta
+            this.openDialogPeserta = true
+            console.log('cekPesertaBpjs', this.cekPeserta)
+          }
         })
         .catch(err => {
           console.log('cekPesertaBpjs', err)
@@ -296,6 +316,92 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
           this.loadingKelurahan = false
+        })
+    },
+
+    async getAsalRujukan () {
+      this.loading = true
+      await api.get('v1/simrs/master/listasalrujukan')
+        .then(resp => {
+          this.loading = false
+          this.asalrujukans = resp.data
+          // this.autocompleteStore.setAsalRujukan(resp.data)
+          console.log('asal rujukan', resp.data)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    async getHakRuang () {
+      this.loading = true
+      await api.get('v1/simrs/master/hakruang')
+        .then(resp => {
+          this.loading = false
+          this.hakruangs = resp.data
+          // this.autocompleteStore.setAsalRujukan(resp.data)
+          console.log('hak ruang', resp.data)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    // async getJnsSistemBayar () {
+    //   this.loading = true
+    //   await api.get('v1/simrs/master/sistembayar')
+    //     .then(resp => {
+    //       this.loading = false
+    //       this.jnssistembayars = resp.data
+    //       // this.autocompleteStore.setSistemBayar(resp.data)
+    //       console.log('jenis sistem bayar', resp.data)
+    //     })
+    //     .catch(() => {
+    //       this.loading = false
+    //     })
+    // },
+    async getSistemBayar () {
+      this.loading = true
+      await api.get('v1/simrs/master/allsistembayar')
+        .then(resp => {
+          console.log('allsistembayar', resp.data)
+          this.loading = false
+          this.allSistemBayars = resp.data
+          // mapping sistembayar
+          const all = resp.data
+          this.jnsSistemBayars = all.length ? all.filter(a => a.hidden === '') : []
+          // console.log('aljnsl', this.jnsSistemBayars)
+          this.filterSistemBayars('all')
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    filterSistemBayar (kode) {
+      const all = this.allSistemBayars
+      let sb = []
+      if (all.length > 0) {
+        if (kode !== 'all') {
+          sb = all.length ? all.filter(a => a.groups === kode) : []
+        }
+        else {
+          sb = all.length ? all.filter(a => a.groups !== '') : []
+        }
+        this.sistembayars = sb
+      }
+    },
+
+    async getKamar () {
+      this.loading = true
+      await api.get('v1/simrs/master/kamar')
+        .then(resp => {
+          console.log('kamar', resp.data)
+          this.loading = false
+          this.kamars = resp.data
+        })
+        .catch(() => {
+          this.loading = false
         })
     }
 
