@@ -520,7 +520,7 @@
     <div class="absolute-bottom full-width bg-primary q-px-sm q-pa-sm">
       <div class="flex q-gutter-sm justify-start">
         <q-btn type="submit" label="Simpan Pasien" color="white" text-color="black" dense class="q-px-md" />
-        <q-btn label="Lihat Kamar" color="yellow-3" text-color="black" dense class="q-px-md" />
+        <q-btn label="Lihat Kamar" color="yellow-3" text-color="black" dense class="q-px-md" @click="previewListKamar" />
         <q-btn type="reset" label="Reset" color="dark" text-color="white" dense class="q-px-md" />
       </div>
     </div>
@@ -915,6 +915,10 @@ function pilihDokter (val) {
 //     return biaya
 //   }
 // }
+
+function previewListKamar () {
+  store.showKamar()
+}
 
 watch(() => store.pasien.noktp, (val) => {
   // console.log('watch old', old)

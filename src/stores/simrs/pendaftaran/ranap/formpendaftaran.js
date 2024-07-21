@@ -125,7 +125,8 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     jnsSistemBayars: [],
     kamars: [],
     tarifs: [],
-    dokters: []
+    dokters: [],
+    listKamars: []
 
   }),
   // getters: {
@@ -445,6 +446,19 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           console.log('dokter', resp.data)
           this.loading = false
           this.dokters = resp.data
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    async showKamar () {
+      this.loading = true
+      await api.get('v1/simrs/master/listviewkamar')
+        .then(resp => {
+          console.log('show kamar', resp.data)
+          this.loading = false
+          this.listKamars = resp.data
         })
         .catch(() => {
           this.loading = false
