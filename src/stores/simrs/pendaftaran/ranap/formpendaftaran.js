@@ -72,6 +72,11 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       biaya_admin: 0,
       biaya_kamar: 0,
 
+      // dokter
+      nama_dokter: null,
+      kd_dokter: null,
+      kd_dokter_bpjs: null,
+
       // ini numpang gak usah di insert ke database
       usia: null
 
@@ -119,7 +124,8 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     sistembayars: [],
     jnsSistemBayars: [],
     kamars: [],
-    tarifs: []
+    tarifs: [],
+    dokters: []
 
   }),
   // getters: {
@@ -426,6 +432,19 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           this.tarifs = resp.data
           // this.loading = false
           // this.kamars = resp.data
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+
+    async getDokter () {
+      this.loading = true
+      await api.get('v1/simrs/master/nakes/dokter')
+        .then(resp => {
+          console.log('dokter', resp.data)
+          this.loading = false
+          this.dokters = resp.data
         })
         .catch(() => {
           this.loading = false

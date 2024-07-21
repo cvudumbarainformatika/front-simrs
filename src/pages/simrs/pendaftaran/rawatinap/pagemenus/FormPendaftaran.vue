@@ -451,7 +451,19 @@
             <app-input-simrs label="No Telp Penang Jawab" />
           </div>
           <div class="col-4">
-            <app-input-simrs label="Dokter Utama" />
+            <app-autocomplete
+              ref="refDokter"
+              v-model="store.pasien.kd_dokter_bpjs"
+              label="Dokter"
+              autocomplete="nama"
+              option-value="kddpjp"
+              option-label="nama"
+              outlined
+              :source="store.dokters"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+              @selected="(val)=>pilihDokter(val)"
+            />
             <app-autocomplete
               ref="refJnsSistemBayar"
               v-model="store.pasien.jnsBayar"
@@ -494,7 +506,7 @@
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>pilihKamar(val)"
             />
-            <!-- <app-input-simrs label="Cari Kamar Kosong" /> -->
+            <app-input-simrs v-if="store.pasien.kelas !== store.pasien.hakKelasBpjs || !store.pasien.hakKelasBpjs === null" v-model="store.pasien.indikatorPerubahanKelas" label="Indikator Perubahan Kelas" />
           </div>
           <!-- <div class="col-2">
             <app-input-simrs v-model="store.pasien.biaya_admin" label="Biaya Administrasi " readonly />
@@ -506,14 +518,15 @@
       </q-card>
     </div>
     <div class="absolute-bottom full-width bg-primary q-px-sm q-pa-sm">
-      <div class="flex q-gutter-sm justify-end">
-        <q-btn type="reset" label="Reset" color="dark" text-color="white" dense class="q-px-md" />
+      <div class="flex q-gutter-sm justify-start">
         <q-btn type="submit" label="Simpan Pasien" color="white" text-color="black" dense class="q-px-md" />
+        <q-btn label="Lihat Kamar" color="yellow-3" text-color="black" dense class="q-px-md" />
+        <q-btn type="reset" label="Reset" color="dark" text-color="white" dense class="q-px-md" />
       </div>
     </div>
 
     <!-- DIALOG PESERTA -->
-    <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs" />
+    <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs()" />
   </q-form>
 </template>
 
@@ -554,7 +567,8 @@ onMounted(() => {
     store.getAsalRujukan(),
     // store.getHakRuang(),
     store.getSistemBayar(),
-    store.getKamar()
+    store.getKamar(),
+    store.getDokter()
     // store.getMasterTarif()
   ])
 })
@@ -786,6 +800,7 @@ function copyDataFromBpjs () {
   store.pasien.nohp = store.cekPeserta?.mr?.noTelepon
 
   store.pasien.hakKelasBpjs = store.cekPeserta?.hakKelas?.kode
+  store.pasien.jnsBayar = '1'
 
   store.openDialogPeserta = false
 }
@@ -797,6 +812,16 @@ function pilihKamar (val) {
   store.pasien.kode_ruang = obj?.rs4
   store.pasien.kelas = obj?.rs3
   store.pasien.flag_ruang = obj?.rs6
+
+  // cariBiayaAdministrasi()
+  // cariBiayaKamar()
+}
+function pilihDokter (val) {
+  const arr = store.dokters
+  const obj = arr.length ? arr.find(x => x.kddpjp === val) : null
+  // console.log('pilihKamar', obj)
+  store.pasien.nama_dokter = obj?.nama ?? null
+  store.pasien.kd_dokter = obj?.kdpegsimrs ?? null
 
   // cariBiayaAdministrasi()
   // cariBiayaKamar()
