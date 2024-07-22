@@ -158,7 +158,7 @@ import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienUmumStore()
 store.getInitialData()
-function setSistembayar1(val) {
+function setSistembayar1 (val) {
   // store.setForm('sistembayar1', val)
   if (store.form.kodesistembayar) { delete store.form.kodesistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
@@ -167,7 +167,7 @@ function setSistembayar1(val) {
   store.getSistemBayar2(val)
   console.log('form', store.form)
 }
-function setSistembayar(val) {
+function setSistembayar (val) {
   store.setForm('sistembayar', val)
   const index = findWithAttr(store.sistembayars, 'rs2', val)
   console.log('sistem bayar dua ', store.sistembayars[index])
@@ -185,7 +185,7 @@ const refDPJP = ref(null)
 const refPoliTujuan = ref(null)
 const refSistemBayar = ref(null)
 // reset validasi
-function resetValidation() {
+function resetValidation () {
   refAsalRujukan.value.$refs.refAuto.resetValidation()
   refFlagKartu.value.$refs.refAuto.resetValidation()
   refDPJP.value.$refs.refAuto.resetValidation()
@@ -194,29 +194,31 @@ function resetValidation() {
 }
 // validasi
 let valid = false
-function validasi() {
+function validasi () {
   const asalRujukan = refAsalRujukan.value.$refs.refAuto.validate()
   const flagKartu = refFlagKartu.value.$refs.refAuto.validate()
   const dpjp = refDPJP.value.$refs.refAuto.validate()
   // const dpjp = true
   const poliTujuan = refPoliTujuan.value.$refs.refAuto.validate()
   const sistemBayar = refSistemBayar.value.$refs.refAuto.validate()
-  if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) { valid = true } else { valid = false }
+  if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) { valid = true }
+  else { valid = false }
 }
 // set
-function set() {
+function set () {
   validasi()
   if (valid) {
     emits('bisaSimpan', { form: store.form, save: true })
     return { form: store.form, save: true }
-  } else {
+  }
+  else {
     emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
     return { form: store.form, save: false }
   }
 }
 // set kode Poli
-function setPoliTujuan(val) {
+function setPoliTujuan (val) {
   store.paramKarcis.kd_poli = val
   const index = findWithAttr(store.polis, 'kodepoli', val)
   setSistembayar1('2')
@@ -239,7 +241,7 @@ function setPoliTujuan(val) {
   store.getDokterDpjp()
 }
 // set flag karcis
-function setFlagKarcis(val) {
+function setFlagKarcis (val) {
   // const index = findWithAttr(store.jenisKarcises, 'jeniskarcis', val)
   // const flag = store.jenisKarcises[index]
   // store.display.hargakarcis = flag.harga

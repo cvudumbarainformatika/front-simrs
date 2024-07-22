@@ -147,10 +147,10 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     }
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    clearForm() {
+    clearForm () {
       this.form = {
         tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -219,7 +219,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       this.rujukanRSChecked = false
     },
     // initial data
-    getInitialData() {
+    getInitialData () {
       // if (this.autocompleteStore.asalrujukans.length) {
       //   this.asalrujukans = this.autocompleteStore.asalrujukans
       // } else {
@@ -228,25 +228,29 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
 
       if (this.autocompleteStore.sistembayars1.length) {
         this.sistembayars1 = this.autocompleteStore.sistembayars1
-      } else {
+      }
+      else {
         this.getSistemBayar()
       }
 
       if (this.autocompleteStore.polis.length) {
         this.polis = this.autocompleteStore.polis
-      } else {
+      }
+      else {
         this.getPoli()
       }
 
       if (this.autocompleteStore.jenisKarcises.length) {
         this.jenisKarcises = this.autocompleteStore.jenisKarcises
-      } else {
+      }
+      else {
         this.getJenisKarcis()
       }
 
       if (this.autocompleteStore.jenisKunjungans.length) {
         this.jenisKunjungans = this.autocompleteStore.jenisKunjungans
-      } else {
+      }
+      else {
         this.getJenisKunjungan()
       }
 
@@ -264,7 +268,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
 
       if (this.autocompleteStore.penunjangs.length) {
         this.penunjangs = this.autocompleteStore.penunjangs
-      } else {
+      }
+      else {
         this.getPenunjang()
       }
       // this.getDiagnosaAwal()
@@ -272,7 +277,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     // api related function
     // tempat kecelakaan -- start --
-    async getPropinsiKecelakaan() {
+    async getPropinsiKecelakaan () {
       this.loadingKecelakaan = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/provinsibpjs', this.paramKecelakaan)
         .then(resp => {
@@ -284,7 +289,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingKecelakaan = false
         })
     },
-    async getKabupatenKecelakaan() {
+    async getKabupatenKecelakaan () {
       this.loadingKecelakaan = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/kabupatenbpjs', this.paramKecelakaan)
         .then(resp => {
@@ -296,7 +301,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingKecelakaan = false
         })
     },
-    async getKecamatanKecelakaan() {
+    async getKecamatanKecelakaan () {
       this.loadingKecelakaan = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/kecamatanbpjs', this.paramKecelakaan)
         .then(resp => {
@@ -309,7 +314,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     // tempat kecelakaan -- end --
-    async getListSuplesi(val) {
+    async getListSuplesi (val) {
       this.loadingSuplesi = true
       this.tampilSuplesi = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/ceksuplesibpjs', val)
@@ -322,7 +327,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingSuplesi = false
         })
     },
-    async getListRujukanPCare(val) {
+    async getListRujukanPCare (val) {
       this.loadingListRujukan = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/listrujukanpcare', val)
         .then(resp => {
@@ -335,7 +340,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingListRujukan = false
         })
     },
-    async getListRujukanRs(val) {
+    async getListRujukanRs (val) {
       this.loadingListRujukanRS = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/listrujukanrs', val)
         .then(resp => {
@@ -348,7 +353,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingListRujukanRS = false
         })
     },
-    async getListSepMrs(val) {
+    async getListSepMrs (val) {
       this.loadingListRujukanMrs = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/listsepmrs', val)
         .then(resp => {
@@ -360,7 +365,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingListRujukanMrs = false
         })
     },
-    async getListRencanaKontrol(val) {
+    async getListRencanaKontrol (val) {
       this.loadingRencanaKontrol = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/rencanakontrolbpjs', val)
         .then(resp => {
@@ -372,7 +377,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingRencanaKontrol = false
         })
     },
-    async cekRujukanPeserta(val) {
+    async cekRujukanPeserta (val) {
       this.loading = true
       const param = { faskesasal: val }
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/faskesasalbpjs', param)
@@ -385,7 +390,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getListSuratKontrol(val) {
+    async getListSuratKontrol (val) {
       this.loadingSuratKontrol = true
       const param = { params: val }
       await api.get('v1/simrs/rekomdpjp/rekomdpjp', param)
@@ -398,7 +403,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingSuratKontrol = false
         })
     },
-    getjadwalDokterDpjp() {
+    getjadwalDokterDpjp () {
       this.jadwalDpjps = []
       this.loadingJadwalDokter = true
       // console.log('get jadwal dokter')
@@ -434,13 +439,15 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
                   this.setForm('namadokter', this.jadwalDpjps[index].namadokter)
                   this.setForm('jampraktek', this.jadwalDpjps[index].jadwal)
                   console.log('log form ', this.form)
-                } else {
+                }
+                else {
                   notifInfVue('Dokter ybs tidak ada di list Dokter yang praktek Hari ini, silakan pilih dokter yang lain')
                   if (this.jadwalDpjps.length) {
                     this.jadwalDpjps.forEach(a => {
                       notifInfVue('Dokter yang praktek hari ini : ' + a.namadokter)
                     })
-                  } else {
+                  }
+                  else {
                     notifInfVue('Dokter yang praktek hari ini : tidak Ditemukan')
                   }
                 }
@@ -453,7 +460,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    getDokterDpjp() {
+    getDokterDpjp () {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
@@ -476,7 +483,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    async getKarcisPoli() {
+    async getKarcisPoli () {
       this.loading = true
       const param = { params: this.paramKarcis }
       await api.get('v1/simrs/pendaftaran/getkarcispoli', param)
@@ -496,7 +503,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getPpkRujukan(val) {
+    async getPpkRujukan (val) {
       this.loadingPpkRujukan = true
       const param = { faskesasal: val }
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/faskesasalbpjs', param)
@@ -509,7 +516,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingPpkRujukan = false
         })
     },
-    async getPenunjang() {
+    async getPenunjang () {
       this.loading = true
       await api.get('v1/simrs/bpjs/master/penunjangbpjs')
         .then(resp => {
@@ -524,7 +531,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getAssesmen() {
+    async getAssesmen () {
       this.loading = true
       await api.get('v1/simrs/bpjs/master/assesmenbpjs')
         .then(resp => {
@@ -536,7 +543,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getProsedur() {
+    async getProsedur () {
       this.loading = true
       await api.get('v1/simrs/bpjs/master/procedurebpjs')
         .then(resp => {
@@ -548,7 +555,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getJenisKunjungan() {
+    async getJenisKunjungan () {
       this.loading = true
       await api.get('v1/simrs/bpjs/master/jeniskunjunganbpjs')
         .then(resp => {
@@ -560,7 +567,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    getDiagnosaAwal() {
+    getDiagnosaAwal () {
       this.loadingdiagnosa = true
       // const param = { params: this.paramDiagnosa }
       return new Promise(resolve => {
@@ -576,7 +583,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    async getJenisKarcis() {
+    async getJenisKarcis () {
       this.loading = true
       await api.get('v1/simrs/master/jeniskartukarcis')
         .then(resp => {
@@ -588,7 +595,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getPoli() {
+    async getPoli () {
       this.loading = true
       await api.get('v1/simrs/master/listmasterpoli')
         .then(resp => {
@@ -600,7 +607,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getSistemBayar() {
+    async getSistemBayar () {
       this.loadingsistembayar = true
       await api.get('v1/simrs/master/sistembayar')
         .then(resp => {
@@ -613,7 +620,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingsistembayar = false
         })
     },
-    async getSistemBayar2(val) {
+    async getSistemBayar2 (val) {
       const param = { params: { sistembayar1: val } }
       this.loadingsistembayar = true
       await api.get('v1/simrs/master/sistembayar2', param)
@@ -642,7 +649,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     //       this.loading = false
     //     })
     // },
-    getJumlahSep(val) {
+    getJumlahSep (val) {
       const params = { params: val }
       this.suratKontrolChecked = false
       this.rencanaKontrolValid = false
@@ -666,7 +673,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    cekRujukanPcare(val) {
+    cekRujukanPcare (val) {
       const params = { params: val }
       this.suratKontrolChecked = false
       this.loadingCekBpjs = true
@@ -686,7 +693,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    cekRujukanRs(val) {
+    cekRujukanRs (val) {
       const params = { params: val }
       this.suratKontrolChecked = false
       this.loadingCekBpjs = true
@@ -706,7 +713,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    cekSuratKontrol(val) {
+    cekSuratKontrol (val) {
       const params = { params: val }
       this.suratKontrolChecked = true
       this.loadingCekBpjs = true
@@ -734,18 +741,22 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
                   this.form.norujukan = rujukan
                   this.rencanaKontrolValid = true
                 })
-              } else {
+              }
+              else {
                 notifErrVue('Nomor Rujukan tidak ditemukan')
               }
-            } else {
+            }
+            else {
               this.loadingCekBpjs = false
               if (rujukan) {
                 if (rujukan !== this.form.norujukan) {
                   notifErrVue('Nomor Rujukan tidak sama')
-                } else {
+                }
+                else {
                   this.rencanaKontrolValid = true
                 }
-              } else {
+              }
+              else {
                 notifErrVue('Nomor rujukan Tidak ditemukan')
               }
             }
@@ -759,7 +770,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    simpanRegistrasi() {
+    simpanRegistrasi () {
       // const router = useRouter()
 
       return new Promise(resolve => {
@@ -790,7 +801,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
       })
     },
-    buatSep() {
+    buatSep () {
       return new Promise(resolve => {
         this.loading = true
         api.post('v1/simrs/bridgingbpjs/pendaftaran/createsep', this.form)

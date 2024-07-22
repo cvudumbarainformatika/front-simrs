@@ -25,10 +25,10 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     dpjps: []
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    clearForm() {
+    clearForm () {
       this.form = {
         tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       }
@@ -40,7 +40,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
       }
     },
     // initial data
-    getInitialData() {
+    getInitialData () {
       // this.getAsalRujukan()
       // this.getSistemBayar()
       // this.getPoli()
@@ -48,31 +48,35 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
 
       if (this.autocompleteStore.asalrujukans.length) {
         this.asalrujukans = this.autocompleteStore.asalrujukans
-      } else {
+      }
+      else {
         this.getAsalRujukan()
       }
 
       if (this.autocompleteStore.sistembayars1.length) {
         this.sistembayars1 = this.autocompleteStore.sistembayars1
-      } else {
+      }
+      else {
         this.getSistemBayar()
       }
 
       if (this.autocompleteStore.polis.length) {
         this.polis = this.autocompleteStore.polis
-      } else {
+      }
+      else {
         this.getPoli()
       }
 
       if (this.autocompleteStore.jenisKarcises.length) {
         this.jenisKarcises = this.autocompleteStore.jenisKarcises
-      } else {
+      }
+      else {
         this.getJenisKarcis()
       }
     },
 
     // api related function
-    async getDokterDpjp() {
+    async getDokterDpjp () {
       this.loading = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
         .then(resp => {
@@ -92,7 +96,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getKarcisPoli() {
+    async getKarcisPoli () {
       this.loading = true
       const param = { params: this.paramKarcis }
       await api.get('v1/simrs/pendaftaran/getkarcispoli', param)
@@ -112,7 +116,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getJenisKarcis() {
+    async getJenisKarcis () {
       this.loading = true
       await api.get('v1/simrs/master/jeniskartukarcis')
         .then(resp => {
@@ -124,7 +128,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getPoli() {
+    async getPoli () {
       this.loading = true
       await api.get('v1/simrs/master/listmasterpoli')
         .then(resp => {
@@ -136,7 +140,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getSistemBayar() {
+    async getSistemBayar () {
       this.loading = true
       await api.get('v1/simrs/master/sistembayar')
         .then(resp => {
@@ -149,7 +153,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getSistemBayar2(val) {
+    async getSistemBayar2 (val) {
       const param = { params: { sistembayar1: val } }
       this.loading = true
       await api.get('v1/simrs/master/sistembayar2', param)
@@ -166,7 +170,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    async getAsalRujukan() {
+    async getAsalRujukan () {
       this.loading = true
       await api.get('v1/simrs/master/listasalrujukan')
         .then(resp => {
@@ -179,7 +183,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
         })
     },
-    simpanRegistrasi() {
+    simpanRegistrasi () {
       return new Promise(resolve => {
         this.loading = true
         api.post('v1/simrs/pendaftaran/simpandaftar', this.form)

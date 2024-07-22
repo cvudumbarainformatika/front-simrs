@@ -1,7 +1,11 @@
 <template>
   <q-form class="fit" ref="formRef" @submit="onSubmit" @reset="onReset">
     <div class="fit scroll">
-      <q-card>
+      <q-card square>
+        <q-bar class="bg-dark text-white">
+          <div>Biodata Pasien </div>
+          <q-space />
+        </q-bar>
         <div class="row q-col-gutter-x-sm">
           <div class="col-2 q-pa-sm q-pl-md br-1">
             <app-avatar-pasien v-if="store.pasien.usia && store.pasien.tanggallahir && store.pasien.kelamin" width="100%" :pasien="store.pasien" />
@@ -10,6 +14,18 @@
                 src="~assets/images/nouser.png"
                 spinner-color="white"
               />
+            </div>
+
+            <!-- STatus Bpjs -->
+            <div v-if="store.pasien.nokabpjs">
+              <div class="text-weight-bold q-my-sm">
+                PESERTS BPJS
+              </div>
+              <q-separator class="q-my-sm" />
+              <div class="text-weight-bold">
+                HAK KELAS : {{ store.pasien.hakKelasBpjs }}
+              </div>
+              <q-separator class="q-my-sm" />
             </div>
           </div>
 
@@ -411,23 +427,116 @@
       </q-card>
 
       <q-separator />
-      <q-card v-for="n in 20" :key="n">
-        saf
+      <q-card square>
+        <q-bar class="bg-dark text-white">
+          <div>Registrasi / Penginap </div>
+          <q-space />
+        </q-bar>
+        <div class="row q-col-gutter-x-sm q-pa-sm">
+          <div class="col-4">
+            <!-- <app-input-simrs label="No. registrasi (automatis)" readonly /> -->
+            <app-autocomplete
+              ref="refAsalRujukan"
+              v-model="store.pasien.asalrujukan"
+              label="Asal Rujukan"
+              autocomplete="asalrujukan"
+              option-value="kode"
+              option-label="asalrujukan"
+              outlined
+              :source="store.asalrujukans"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+            />
+            <app-input-simrs label="Nama Penanggung Jawab" />
+            <app-input-simrs label="No Telp Penang Jawab" />
+          </div>
+          <div class="col-4">
+            <app-autocomplete
+              ref="refDokter"
+              v-model="store.pasien.kd_dokter_bpjs"
+              label="Dokter"
+              autocomplete="nama"
+              option-value="kddpjp"
+              option-label="nama"
+              outlined
+              :source="store.dokters"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+              @selected="(val)=>pilihDokter(val)"
+            />
+            <app-autocomplete
+              ref="refJnsSistemBayar"
+              v-model="store.pasien.jnsBayar"
+              label="Pilih Sistem Bayar"
+              autocomplete="sistembayar"
+              option-value="kode"
+              option-label="sistembayar"
+              outlined
+              :source="store.jnsSistemBayars"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+              @selected="(val)=>store.filterSistemBayar(val)"
+            />
+            <app-autocomplete
+              ref="refSistemBayar"
+              v-model="store.pasien.kodesistembayar"
+              label="Sistem Bayar"
+              autocomplete="sistembayar"
+              option-value="kode"
+              option-label="sistembayar"
+              outlined
+              :source="store.sistembayars"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+            />
+          </div>
+          <div class="col-4">
+            <!-- <app-input-simrs label="Diagnosa Awal" /> -->
+            <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" />
+            <app-autocomplete
+              ref="refHakRuang"
+              v-model="store.pasien.kamar"
+              label="Hak Ruang"
+              autocomplete="rs2"
+              option-value="rs1"
+              option-label="rs2"
+              outlined
+              :source="store.kamars"
+              class="q-mb-xs"
+              :rules="[val => (!!val) || 'Harap diisi',]"
+              @selected="(val)=>pilihKamar(val)"
+            />
+            <app-input-simrs v-if="store.pasien.kelas !== store.pasien.hakKelasBpjs || !store.pasien.hakKelasBpjs === null" v-model="store.pasien.indikatorPerubahanKelas" label="Indikator Perubahan Kelas" />
+          </div>
+          <!-- <div class="col-2">
+            <app-input-simrs v-model="store.pasien.biaya_admin" label="Biaya Administrasi " readonly />
+            <app-input-simrs v-model="store.pasien.biaya_kamar" label="Biaya Kamar" readonly />
+            <app-input-simrs label="Jml Identitas" />
+          </div> -->
+        </div>
+        <div style="padding-bottom: 100px;" />
       </q-card>
     </div>
     <div class="absolute-bottom full-width bg-primary q-px-sm q-pa-sm">
-      <div class="flex q-gutter-sm justify-end">
-        <q-btn type="reset" label="Reset" color="dark" text-color="white" dense class="q-px-md" />
+      <div class="flex q-gutter-sm justify-start">
         <q-btn type="submit" label="Simpan Pasien" color="white" text-color="black" dense class="q-px-md" />
+        <q-btn label="Lihat Kamar" color="yellow-3" text-color="black" dense class="q-px-md" @click="previewListKamar" />
+        <q-btn type="reset" label="Reset" color="dark" text-color="white" dense class="q-px-md" />
       </div>
     </div>
+
+    <!-- DIALOG PESERTA -->
+    <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs()" />
   </q-form>
 </template>
 
 <script setup>
 import { api } from 'src/boot/axios'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { defineAsyncComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
+
+const DialogPeserta = defineAsyncComponent(() => import('./compFormPendaftaran/DialogPeserta.vue'))
+const SelectDiagnosa = defineAsyncComponent(() => import('./compFormPendaftaran/SelectDiagnosa.vue'))
 const store = useFormPendaftaranRanapStore()
 
 const weather = ref(null)
@@ -447,6 +556,7 @@ onMounted(() => {
   console.log('onMounted', refNorm.value)
   onReset()
   Promise.all([
+    gantiKewarganegaraan('WNI'),
     store.getKelamin(),
     store.getSapaan(),
     store.getPendidikan(),
@@ -454,7 +564,12 @@ onMounted(() => {
     store.getBahasa(),
     store.getStatusPernikahan(),
     store.getPekerjaan(),
-    gantiKewarganegaraan('WNI')
+    store.getAsalRujukan(),
+    // store.getHakRuang(),
+    store.getSistemBayar(),
+    store.getKamar(),
+    store.getDokter()
+    // store.getMasterTarif()
   ])
 })
 
@@ -675,6 +790,134 @@ function hitungUsia (tanggalLahir) {
   }
   store.pasien.usia = usia.toString()
   return usia
+}
+
+function copyDataFromBpjs () {
+  store.pasien.nama = store.cekPeserta?.nama
+  store.pasien.nokabpjs = store.cekPeserta?.noKartu
+  store.pasien.norm = store.cekPeserta?.mr?.noMR
+  store.pasien.notelp = store.cekPeserta?.mr?.noTelepon
+  store.pasien.nohp = store.cekPeserta?.mr?.noTelepon
+
+  store.pasien.hakKelasBpjs = store.cekPeserta?.hakKelas?.kode
+  store.pasien.jnsBayar = '1'
+
+  store.openDialogPeserta = false
+}
+
+function pilihKamar (val) {
+  const arr = store.kamars
+  const obj = arr.length ? arr.find(x => x.rs1 === val) : null
+  // console.log('pilihKamar', obj)
+  store.pasien.kode_ruang = obj?.rs4
+  store.pasien.kelas = obj?.rs3
+  store.pasien.flag_ruang = obj?.rs6
+
+  // cariBiayaAdministrasi()
+  // cariBiayaKamar()
+}
+function pilihDokter (val) {
+  const arr = store.dokters
+  const obj = arr.length ? arr.find(x => x.kddpjp === val) : null
+  // console.log('pilihKamar', obj)
+  store.pasien.nama_dokter = obj?.nama ?? null
+  store.pasien.kd_dokter = obj?.kdpegsimrs ?? null
+
+  // cariBiayaAdministrasi()
+  // cariBiayaKamar()
+}
+
+// function cariBiayaAdministrasi () {
+//   if (store.pasien.kode_ruang && store.pasien.kelas) {
+//     const arr = store.tarifs
+//     const tarifs = arr.length ? arr.find(x => x.rs3 === 'A1#') : null
+//     console.log('tarifs', tarifs)
+//     const kelas = store.pasien.kelas
+//     let biaya1 = 0
+//     let biaya2 = 0
+//     if (kelas === '3' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
+//       biaya1 = tarifs?.rs8
+//       biaya2 = tarifs?.rs9
+//     }
+//     else if (kelas === '2') {
+//       biaya1 = tarifs?.rs11
+//       biaya2 = tarifs?.rs12
+//     }
+//     else if (kelas === '1') {
+//       biaya1 = tarifs?.rs14
+//       biaya2 = tarifs?.rs15
+//     }
+//     else if (kelas === 'U') {
+//       biaya1 = tarifs?.rs17
+//       biaya2 = tarifs?.rs18
+//     }
+//     else if (kelas === 'VIP') {
+//       biaya1 = tarifs?.rs20
+//       biaya2 = tarifs?.rs21
+//     }
+//     else if (kelas === 'VVIP') {
+//       biaya1 = tarifs?.rs23
+//       biaya2 = tarifs?.rs24
+//     }
+
+//     const biaya = biaya1 + biaya2
+//     store.pasien.biaya_admin = biaya1
+//     console.log('biaya1', biaya1)
+//     console.log('biaya2', biaya2)
+//     return biaya
+//   }
+// }
+
+// function cariBiayaKamar () {
+//   if (store.pasien.kode_ruang && store.pasien.kelas) {
+//     const arr = store.tarifs
+//     let tarifs = null
+//     if (store.pasien.flag_ruang === 'ISO') {
+//       tarifs = arr.length ? arr.find(x => x.rs3 === 'B1#' && x.rs4.includes(store.pasien.kode_ruang + '|') && x.rs5.includes(store.pasien.flag_ruang + '|')) : null
+//     }
+//     else {
+//       tarifs = arr.length ? arr.find(x => x.rs3 === 'B1#' && x.rs4.includes(store.pasien.kode_ruang + '|') && x.rs5.includes(store.pasien.kelas + '|')) : null
+//     }
+
+//     console.log('tarifs', tarifs)
+//     const kelas = store.pasien.kelas
+//     let biaya1 = 0
+//     let biaya2 = 0
+//     if (kelas === '3' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
+//       biaya1 = tarifs?.rs8
+//       biaya2 = tarifs?.rs9
+//     }
+//     else if (kelas === '2') {
+//       biaya1 = tarifs?.rs11
+//       biaya2 = tarifs?.rs12
+//     }
+//     else if (kelas === '1') {
+//       biaya1 = tarifs?.rs14
+//       biaya2 = tarifs?.rs15
+//     }
+//     else if (kelas === 'U') {
+//       biaya1 = tarifs?.rs17
+//       biaya2 = tarifs?.rs18
+//     }
+//     else if (kelas === 'VIP') {
+//       biaya1 = tarifs?.rs20
+//       biaya2 = tarifs?.rs21
+//     }
+//     else if (kelas === 'VVIP') {
+//       biaya1 = tarifs?.rs23
+//       biaya2 = tarifs?.rs24
+//     }
+
+//     const biaya = biaya1 + biaya2
+//     store.pasien.biaya_kamar = biaya1
+//     console.log('biaya kamar1', biaya1)
+//     console.log('biaya kamar2', biaya2)
+//     return biaya
+//   }
+// }
+
+function previewListKamar () {
+  store.showKamar()
 }
 
 watch(() => store.pasien.noktp, (val) => {
