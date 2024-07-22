@@ -72,34 +72,44 @@
         </div>
       </template>
       <template #cell-stok="{row}">
-        <div class="row no-wrap text-italic">
-          {{ cariGudang(row.kdruang) }}
-          <!-- {{ store?.disp?.kdruang }} -->
+        <div v-if="row?.total===null" class="text-weight-bold f-18">
+          Belum Ada Stok
         </div>
-        <div class="row no-wrap text-weight-bold  items-end">
-          <div>
-            {{ row.total }}
+        <div v-else>
+          <div class="row no-wrap text-italic">
+            {{ cariGudang(row.kdruang) }}
+            <!-- {{ store?.disp?.kdruang }} -->
           </div>
-          <div class="q-ml-sm f-10 text-italic">
-            ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+          <div class="row no-wrap text-weight-bold  items-end">
+            <div>
+              {{ row.total }}
+            </div>
+            <div class="q-ml-sm f-10 text-italic">
+              ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+            </div>
           </div>
-        </div>
-        <div class="row no-wrap text-italic f-10">
-          {{ row.harga? 'Rp ' + formatRp( row.harga ): 'Harga tidak ditemukan' }}
-        </div>
-        <div class="row no-wrap text-italic f-10">
-          {{ row.tglexp ?'exp : ' + dateFullFormat( row.tglexp ):'tanggal expired tidak ditemukan' }}
+          <div class="row no-wrap text-italic f-10">
+            {{ row.harga? 'Rp ' + formatRp( row.harga ): 'Harga tidak ditemukan' }}
+          </div>
+          <div class="row no-wrap text-italic f-10">
+            {{ row.tglexp ?'exp : ' + dateFullFormat( row.tglexp ):'tanggal expired tidak ditemukan' }}
+          </div>
         </div>
       </template>
       <template #cell-stokalokasi="{row}">
-        <div
-          class="row no-wrap text-weight-bold  items-end"
-        >
-          <div>
-            {{ row?.minvalue }}
-          </div>
-          <div class="q-ml-sm f-10 text-italic">
-            ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+        <div v-if="row?.minvalue===null" class="text-weight-bold">
+          Belum Ada min
+        </div>
+        <div v-else>
+          <div
+            class="row no-wrap text-weight-bold  items-end"
+          >
+            <div>
+              {{ row?.minvalue }}
+            </div>
+            <div class="q-ml-sm f-10 text-italic">
+              ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+            </div>
           </div>
         </div>
       </template>
