@@ -471,7 +471,7 @@
 </q-expansion-item> -->
             <q-item
               v-for="(obat, j) in store?.listRincianRacikan"
-              :key="j"
+              :key="obat"
               style="padding:4px 16px;"
             >
               <!-- {{ j }} {{ obat }} -->

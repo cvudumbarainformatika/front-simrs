@@ -874,6 +874,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               }
               this.pasien.newapotekrajal = resp?.data?.newapotekrajal
               this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
+              this.setResep(this.noresep)
 
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
