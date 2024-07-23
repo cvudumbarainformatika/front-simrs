@@ -42,6 +42,7 @@
                 :label="item"
                 dense
                 size="xs"
+                @update:model-value="(val)=>gantiBaruLama(val)"
               />
             </div>
             <app-input-simrs ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true, number: true}" />
@@ -193,7 +194,7 @@
 
             <div class="row q-mb-xs q-col-gutter-xs">
               <app-input-simrs v-model="store.pasien.notelp" label="No. Telp" :autofocus="false" class-tambahan="col-6" />
-              <app-input-simrs v-model="store.pasien.nohp" label="No. HP" :autofocus="false" class-tambahan="col-6" :valid="{required: true}" />
+              <app-input-simrs v-model="store.pasien.nohp" label="No. HP" :autofocus="false" class-tambahan="col-6" :valid="{required: true, number: true}" />
             </div>
             <div class="text-weight-bold q-my-xs">
               Alamat (KTP / SIM / Paspor / Kitas)
@@ -447,8 +448,8 @@
               class="q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
             />
-            <app-input-simrs label="Nama Penanggung Jawab" />
-            <app-input-simrs label="No Telp Penang Jawab" />
+            <app-input-simrs v-model="store.pasien.nama_penanggungjawab" label="Nama Penanggung Jawab" />
+            <app-input-simrs v-model="store.pasien.notelp_penanggungjawab" label="No Telp Penang Jawab" />
           </div>
           <div class="col-4">
             <app-autocomplete
@@ -464,31 +465,49 @@
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>pilihDokter(val)"
             />
-            <app-autocomplete
-              ref="refJnsSistemBayar"
-              v-model="store.pasien.jnsBayar"
-              label="Pilih Sistem Bayar"
-              autocomplete="sistembayar"
-              option-value="kode"
-              option-label="sistembayar"
-              outlined
-              :source="store.jnsSistemBayars"
-              class="q-mb-xs"
-              :rules="[val => (!!val) || 'Harap diisi',]"
-              @selected="(val)=>store.filterSistemBayar(val)"
-            />
-            <app-autocomplete
-              ref="refSistemBayar"
-              v-model="store.pasien.kodesistembayar"
-              label="Sistem Bayar"
-              autocomplete="sistembayar"
-              option-value="kode"
-              option-label="sistembayar"
-              outlined
-              :source="store.sistembayars"
-              class="q-mb-xs"
-              :rules="[val => (!!val) || 'Harap diisi',]"
-            />
+            <div class="row q-col-gutter-x-xs">
+              <div class="col-5">
+                <app-autocomplete
+                  ref="refJnsSistemBayar"
+                  v-model="store.pasien.jnsBayar"
+                  label="Pilih Sistem Bayar"
+                  autocomplete="sistembayar"
+                  option-value="kode"
+                  option-label="sistembayar"
+                  outlined
+                  :source="store.jnsSistemBayars"
+                  class="q-mb-xs"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="(val)=>store.filterSistemBayar(val)"
+                />
+              </div>
+              <div class="col-7">
+                <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.pasien.kodesistembayar"
+                  label="Sistem Bayar"
+                  autocomplete="sistembayar"
+                  option-value="kode"
+                  option-label="sistembayar"
+                  outlined
+                  :source="store.sistembayars"
+                  class="q-mb-xs"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+              </div>
+              <app-autocomplete
+                ref="refCategoryKasus"
+                v-model="store.pasien.kodesistembayar"
+                label="Kategori Kasus"
+                autocomplete="uraian"
+                option-value="kode"
+                option-label="uraian"
+                outlined
+                :source="store.categories"
+                class="q-mb-xs col-12"
+                :rules="[val => (!!val) || 'Harap diisi',]"
+              />
+            </div>
           </div>
           <div class="col-4">
             <!-- <app-input-simrs label="Diagnosa Awal" /> -->
@@ -527,6 +546,9 @@
 
     <!-- DIALOG PESERTA -->
     <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs()" />
+    <!-- DIALOG KAMAR -->
+    <dialog-show-kamar v-model="store.openDialogShowKamar" :items="store.listKamars" :loading="store.loadingShowKamar" @close="store.openDialogShowKamar = false" />
+    <dialog-cari-pasien v-model="store.openDialogCariPasien" @close="store.openDialogCariPasien = false" />
   </q-form>
 </template>
 
@@ -537,6 +559,8 @@ import { defineAsyncComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
 
 const DialogPeserta = defineAsyncComponent(() => import('./compFormPendaftaran/DialogPeserta.vue'))
 const SelectDiagnosa = defineAsyncComponent(() => import('./compFormPendaftaran/SelectDiagnosa.vue'))
+const DialogShowKamar = defineAsyncComponent(() => import('./compFormPendaftaran/DialogShowKamar.vue'))
+const DialogCariPasien = defineAsyncComponent(() => import('./compFormPendaftaran/DialogCariPasien.vue'))
 const store = useFormPendaftaranRanapStore()
 
 const weather = ref(null)
@@ -568,7 +592,8 @@ onMounted(() => {
     // store.getHakRuang(),
     store.getSistemBayar(),
     store.getKamar(),
-    store.getDokter()
+    store.getDokter(),
+    store.getJenisKasus()
     // store.getMasterTarif()
   ])
 })
@@ -808,7 +833,7 @@ function copyDataFromBpjs () {
 function pilihKamar (val) {
   const arr = store.kamars
   const obj = arr.length ? arr.find(x => x.rs1 === val) : null
-  // console.log('pilihKamar', obj)
+  console.log('pilihKamar', obj)
   store.pasien.kode_ruang = obj?.rs4
   store.pasien.kelas = obj?.rs3
   store.pasien.flag_ruang = obj?.rs6
@@ -917,7 +942,15 @@ function pilihDokter (val) {
 // }
 
 function previewListKamar () {
+  store.openDialogShowKamar = true
   store.showKamar()
+}
+
+const gantiBaruLama = (val) => {
+  console.log('barulama', val)
+  if (val === 'lama') {
+    store.openDialogCariPasien = true
+  }
 }
 
 watch(() => store.pasien.noktp, (val) => {
@@ -935,6 +968,28 @@ watch(() => store.pasien.tanggallahir, (val) => {
     console.log('watch new', hitungUsia(val))
   }
 }, { deep: true })
+
+watch(() => store.pasien.jnsBayar, (val) => {
+  if (val !== null) {
+    store.filterSistemBayar(val)
+  }
+})
+watch(() => store.pasien.alamat, () => {
+  if (store.domisiliSama === true) {
+    store.pasien.alamatDomisili = store.pasien.alamat
+  }
+})
+watch(() => store.pasien.rt, () => {
+  if (store.domisiliSama === true) {
+    store.pasien.rtDomisili = store.pasien.rt
+  }
+})
+watch(() => store.pasien.rw, () => {
+  if (store.domisiliSama === true) {
+    store.pasien.rwDomisili = store.pasien.rw
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>

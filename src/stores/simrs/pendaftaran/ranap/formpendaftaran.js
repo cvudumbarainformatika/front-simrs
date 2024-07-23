@@ -58,6 +58,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       asalrujukan: null,
       jnsBayar: null,
       kodesistembayar: null,
+      kategoriKasus: null,
       diagnosaAwal: null,
 
       // hakruang ,kelas untuk menentukan billing
@@ -76,6 +77,9 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       nama_dokter: null,
       kd_dokter: null,
       kd_dokter_bpjs: null,
+
+      nama_penanggungjawab: null,
+      notelp_penanggungjawab: null,
 
       // ini numpang gak usah di insert ke database
       usia: null
@@ -126,7 +130,11 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     kamars: [],
     tarifs: [],
     dokters: [],
-    listKamars: []
+    listKamars: [],
+    categories: [],
+    openDialogShowKamar: false,
+    loadingShowKamar: false,
+    openDialogCariPasien: false
 
   }),
   // getters: {
@@ -453,16 +461,43 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     },
 
     async showKamar () {
-      this.loading = true
+      this.loadingShowKamar = true
       await api.get('v1/simrs/master/listviewkamar')
         .then(resp => {
           console.log('show kamar', resp.data)
-          this.loading = false
+          this.loadingShowKamar = false
           this.listKamars = resp.data
         })
         .catch(() => {
-          this.loading = false
+          this.loadingShowKamar = false
         })
+    },
+
+    async getJenisKasus () {
+      // this.loadingShowKamar = true
+      await api.get('v1/simrs/master/jeniskasus')
+        .then(resp => {
+          console.log('jenis kasus', resp.data)
+          // this.loadingShowKamar = false
+          this.categories = resp.data
+        })
+        .catch(() => {
+          // this.loadingShowKamar = false
+        })
+    },
+    async simpanPasien () {
+      // this.loadingShowKamar = true
+
+      console.log('form', this.pasien)
+      // await api.post('v1/simrs/master/jeniskasus')
+      //   .then(resp => {
+      //     console.log('jenis kasus', resp.data)
+      //     // this.loadingShowKamar = false
+      //     this.categories = resp.data
+      //   })
+      //   .catch(() => {
+      //     // this.loadingShowKamar = false
+      //   })
     }
 
   }

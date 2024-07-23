@@ -186,13 +186,13 @@ const emits = defineEmits(['hide', 'gantiPasien'])
 //   bpjs: { type: Boolean, default: false }
 // })
 
-function hiddenDialog() {
+function hiddenDialog () {
   dialog.setSearch('')
   emits('hide')
 }
 
 // eslint-disable-next-line no-unused-vars
-function pilihPasienIni(val) {
+function pilihPasienIni (val) {
   emits('gantiPasien')
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
@@ -251,7 +251,8 @@ function pilihPasienIni(val) {
         regis.setForm('ppkRujukan', rujukan.kode)
       }
     })
-  } else {
+  }
+  else {
     notifErrVue('Noka Pasien kosong, tidak bisa dilakukan cek pasien')
   }
   // }
@@ -272,7 +273,8 @@ function pilihPasienIni(val) {
     if (!val.kodemapagama) {
       store.setForm('kodemapagama', store.agamas[indexAgama].kodemapping)
     }
-  } else {
+  }
+  else {
     store.display.kode = '8'
   }
   // pekerjaan
@@ -287,7 +289,8 @@ function pilihPasienIni(val) {
       if (indexkelamin >= 0) {
         store.setForm('kodekelamin', store.kelamins[indexkelamin].kode)
       }
-    } else {
+    }
+    else {
       store.setForm('kodekelamin', val.kd_kelamin)
     }
   }
