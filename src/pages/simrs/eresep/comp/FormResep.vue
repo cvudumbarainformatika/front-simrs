@@ -851,7 +851,7 @@ function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
 function validate () {
-  if (!store?.form?.tiperesep && props.depo !== 'rjl') {
+  if (!store?.form?.tiperesep && props.depo === 'rjl') {
     notifErrVue('Tipe Resep Belum Dipilih')
     return false
   }
