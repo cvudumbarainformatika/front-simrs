@@ -23,15 +23,22 @@
         </q-select>
       </div>
     </div>
+    <div class="row q-py-sm">
+      <forminput />
+    </div>
+    <div class="row q-py-sm">
+      <listbelum />
+    </div>
   </div>
 </template>
 <script setup>
 import { usePenjualanBebasFarmasiStore } from 'src/stores/simrs/farmasi/penjualanbebas/penjualanbebas'
-import { onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 const store = usePenjualanBebasFarmasiStore()
 const rsl = ref(null)
 const optionRs = ref([])
-
+const forminput = shallowRef(defineAsyncComponent(() => import('./FormInputObat.vue')))
+const listbelum = shallowRef(defineAsyncComponent(() => import('./ListObatBelum.vue')))
 function filterRsLain (val, update) {
   console.log(val)
   const ada = store.pihakTigas.filter(f => f?.nama?.toLowerCase()?.includes(val?.toLowerCase()))

@@ -2,7 +2,23 @@
   <div
     class="column full-height q-ma-sm"
   >
-    <div class="column full-height">
+    <div v-if="!bisa">
+      <div
+        class="bg-yellow-2 wrap columns content-center"
+        style="height: 90vh; width: 100%;"
+      >
+        <div class="text-negative text-center">
+          <q-icon
+            name="icon-mat-warning"
+            size="100px"
+          />
+        </div>
+        <div class="text-negative f-20  text-center">
+          Tidak Bisa Melakukan Penjualan Langsung
+        </div>
+      </div>
+    </div>
+    <div v-if="bisa" class="column full-height">
       <div class="col-auto bg-red">
         <q-tabs
           v-model="tab"
@@ -43,7 +59,9 @@
   </div>
 </template>
 <script setup>
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 
 const tab = ref('rs')
 const optionTabs = ref([
@@ -58,4 +76,26 @@ const cekPanel = () => {
   const arr = optionTabs.value?.find(a => a.name === ganti)
   return arr?.compo ?? ''
 }
+
+const apps = useAplikasiStore()
+const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
+const bisa = ref(false)
+onMounted(() => {
+  const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
+
+  if (depo.length) bisa.value = true
+  else notifErrVue('Tidak boleh melakukan Penjualan bebas')
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
+  const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  const depo = depos.filter(a => a.value === obj)
+  console.log('depos', depos)
+  if (depo.length) bisa.value = true
+  else {
+    bisa.value = false
+    notifErrVue('Tidak boleh melakukan Penjualan bebas')
+  }
+})
 </script>
