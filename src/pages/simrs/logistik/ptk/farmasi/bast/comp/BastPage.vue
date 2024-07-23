@@ -89,12 +89,12 @@
               <div class="col-8 text-weight-bold">
                 <!-- {{ isNaN(parseFloat(store.form.jumlah_bast)) ? 0 : formatRpDouble(store.form.jumlah_bast,2) }} -->
                 <app-input
-                    v-model="store.form.jumlah_bastx"
-                    outlined
-                    label="Jumlah BAST"
-                    dense
-                    valid
-                  />
+                  v-model="store.form.jumlah_bastx"
+                  outlined
+                  label="Jumlah BAST"
+                  dense
+                  valid
+                />
               </div>
             </div>
           </div>

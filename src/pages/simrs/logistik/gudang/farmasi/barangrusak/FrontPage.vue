@@ -72,7 +72,7 @@ const barStyle = ref({
   opacity: 0.2
 })
 
-function gantiHalaman(val) {
+function gantiHalaman (val) {
   if (menu.value.name !== val) {
     const anu = menus.value.find(a => a.name === val)
     if (anu) menu.value = anu
@@ -82,18 +82,22 @@ function gantiHalaman(val) {
 const title = computed(() => {
   if (menu.value.name === 'bast') {
     return 'HALAMAN BARANG RUSAK'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'LIST BARANG RUSAK'
-  } else {
+  }
+  else {
     return 'BARANG RUSAK'
   }
 })
 const subtitle = computed(() => {
   if (menu.value.name === 'bast') {
     return 'Form Barang Rusak'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'List Barang Rusak'
-  } else {
+  }
+  else {
     return 'Barang Rusak'
   }
 })
