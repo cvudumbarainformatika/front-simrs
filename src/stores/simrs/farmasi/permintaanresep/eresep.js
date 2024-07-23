@@ -19,7 +19,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     form: {
       keterangan: '-',
       jumlah_diminta: 1,
-      tiperesep: 'normal'
+      tiperesep: ''
     },
     listPemintaanSementara: [],
     signas: [],
@@ -109,7 +109,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const kodeincbg = this.form?.kodeincbg ?? '-'
       const uraianinacbg = this.form?.uraianinacbg ?? '-'
       const tarifina = this.form?.tarifina ?? 0
-      const tiperesep = this.form?.tiperesep ?? 'normal'
+      const tiperesep = this.form?.tiperesep ?? ''
       const jenisresep = this.form?.jenisresep ?? '-'
       const kdruangan = this.form?.kdruangan ?? '-'
 

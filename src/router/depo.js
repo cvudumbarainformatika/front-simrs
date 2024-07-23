@@ -99,6 +99,11 @@ const depo = {
           path: '/depo/farmasi/stokopname',
           // name: 'farmasi.stokmindepo',
           component: () => import('pages/simrs/farmasi/stok/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/penjualan',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/logistik/depo/farmasi/penjualanbebas/IndexPage.vue')
         }
       ]
     },
