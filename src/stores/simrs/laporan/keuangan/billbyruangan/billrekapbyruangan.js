@@ -95,7 +95,8 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           if (this.params.ruangan === '1') {
             this.items = []
             this.kolom = []
-            this.getAmbilData()
+            // this.getAmbilData()
+            this.getambildatasemuaranap()
           }
           else {
             this.items = []
@@ -104,6 +105,23 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           }
         }
       }
+    },
+    async getambildatasemuaranap () {
+      this.loading = true
+      this.kolom = ['NamaRuangan', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'TindakanKeperawatan',
+        'Keperawatan', 'Total']
+      const params = { params: this.params }
+      await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuanganperruangan', params)
+        .then((resp) => {
+          if (resp.status === 200) {
+            const datahasil = resp?.data
+            this.sethasilx(datahasil)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
     },
     async getAmbilData () {
       this.loading = true
@@ -604,6 +622,15 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       this.items = val
       this.loading = false
       console.log('wew', val)
+    },
+    sethasilx (val) {
+      console.log('xxx', val)
+      val?.forEach(wew => {
+        wew.Admin = []
+        const kelas = wew?.rstigalimax[0]?.rs17
+        console.log('wew', kelas)
+      })
     }
+
   }
 })
