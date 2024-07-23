@@ -1017,14 +1017,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
 
       if (depo[0]?.value === 'Gd-05010101') {
-        if (this.form?.tiperesep !== val?.tiperesep) {
-          return notifErrVue('Duplicate resep gagal, tipe resep tidak sama!!!')
+        if (this.form?.tiperesep !== 'normal') {
+          return notifErrVue('Maaf tidak bisa duplicate resep selain tipe resep normal!!!')
         }
       }
 
       if (depo[0]?.value !== 'Gd-02010104') {
         if (this.pasien.groups !== val?.sistembayar?.groups) {
-          return notifErrVue('Maaf sistem bayar pasien dengan sistem bayar resep tidak sama')
+          return notifErrVue('Maaf sistem bayar pasien, tidak sama dengan sistem bayar resep yang diduplicate!!!')
+        }
+
+        if (this.form.groupsistembayarlain !== val?.sistembayar?.groups) {
+          return notifErrVue('Maaf sistem bayar yang dipilih, tidak sama dengan sistem bayar resep yang diduplicate!!!')
         }
       }
 
@@ -1063,8 +1067,35 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const apps = useAplikasiStore()
       const resep = val?.permintaanresep
       const racik = val?.permintaanracikan
+      const rinracik = val?.rincianracik
       const kirimResep = []
       const kirimRacik = []
+      let kdruang = ''
+      let tagihanRs = 0
+      const depo = this.depos.filter(pa => pa.jenis === this.depo)
+
+      if (depo[0]?.value === 'Gd-04010102') {
+        kdruang = this.pasien?.kdruangan
+      }
+      else if (depo[0]?.value === 'Gd-04010103') {
+        kdruang = this.pasien?.kdruangan
+      }
+      else {
+        kdruang = this.pasien?.kodepoli
+      }
+
+      if (depo[0]?.value === 'Gd-05010101') {
+        const kunjRajal = useKasirRajalListKunjunganStore()
+        const param = { noreg: val?.noreg }
+        kunjRajal.getBill(param).then(resp => {
+          tagihanRs = resp?.data?.totalall
+          // console.log('bill', resp?.data)
+          // console.log('form', this.form)
+        })
+      }
+
+      const temp = this.pasien?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+      const diag = temp?.length ? temp.join(', ') : '-'
 
       if (tipe === 'nonRacik') {
         if (resep.length) {
@@ -1074,34 +1105,34 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             const temp = {
               noresep: '',
               aturan: res?.aturan,
-              diagnosa: val?.diagnosa,
+              diagnosa: diag,
               dokter: apps?.user?.pegawai?.kdpegsimrs,
               forkit: obats?.forkit,
               fornas: obats?.fornas,
               generik: obats?.generik,
-              groupsistembayar: val?.sistembayar?.groups,
+              groupsistembayar: this.pasien?.groups,
               jumlah_diminta: res?.jumlah,
               jumlahdosis: res?.jumlah,
               jumlah: res?.jumlah,
               kandungan: res?.kandungan,
-              kdruangan: val?.ruangan,
+              kdruangan: kdruang,
               keterangan: res?.keterangan,
               kode50: res?.kode50,
               kode108: res?.kode108,
-              kodedepo: val?.depo,
-              kodeincbg: val?.diagnosa,
+              kodedepo: depo[0]?.value,
+              kodeincbg: '-',
               kodeobat: res?.kdobat,
               konsumsi: res?.konsumsi,
-              noreg: res?.noreg,
-              norm: val?.norm,
+              noreg: this.pasien?.noreg,
+              norm: this.pasien?.norm,
               satuan_kcl: res?.mobat?.satuan_k,
-              sistembayar: val?.sistembayar?.rs1,
+              sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
               stokalokasi: obats?.alokasi,
-              tagihanrs: val?.tagihanrs,
-              tarifina: val?.tarifina,
+              tagihanrs: tagihanRs,
+              tarifina: 0,
               uraian50: res?.uraian50,
               uraian108: res?.uraian108,
-              uraianinacbg: val?.uraianinacbg,
+              uraianinacbg: '-',
               iter_jml: val?.iter_jml,
               tiperesep: val?.tiperesep,
               jenisresep: 'nonRacikan',
@@ -1113,12 +1144,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         }
       }
       else {
-        if (racik.length) {
-          racik.forEach(rac => {
-            const obats = obat.find(ob => ob?.kdobat === rac?.kdobat)
+        if (rinracik.length) {
+          rinracik.forEach(racikan => {
+            const obats = obat.find(ob => ob?.kdobat === racikan?.kdobat)
+            const rac = racik.find(ob => ob?.kdobat === racikan?.kdobat)
             const temp = {
               noresep: '',
-              noreg: rac?.noreg,
+              noreg: this.pasien?.noreg,
               namaracikan: rac?.namaracikan,
               tiperacikan: rac?.tiperacikan,
               jumlahdibutuhkan: rac?.jumlahdibutuhkan,
@@ -1142,29 +1174,20 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               jumlah: rac?.jumlah,
               satuan_racik: rac?.satuan_racik,
               keteranganx: rac?.keteranganx,
-
-              groupsistembayar: val?.sistembayar?.groups,
+              groupsistembayar: this.pasien?.groups,
               jenisresep: 'Racikan',
-
               jumlahdiminta: rac?.jumlah,
-
               jumlahdosis: rac?.jumlah,
-
-              kdruangan: val?.ruangan,
-
-              kodedepo: val?.depo,
-              kodeincbg: val?.diagnosa,
-
-              norm: val?.norm,
+              kdruangan: kdruang,
+              kodedepo: depo[0]?.value,
+              kodeincbg: '-',
+              norm: this.pasien?.norm,
               satuan_kcl: rac?.mobat?.satuan_k,
-
-              sistembayar: val?.sistembayar?.rs1,
-
-              tagihanrs: val?.tagihanrs,
-              tarifina: val?.tarifina,
-
-              uraianinacbg: val?.uraianinacbg,
-              diagnosa: val?.diagnosa,
+              sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
+              tagihanrs: tagihanRs,
+              tarifina: 0,
+              uraianinacbg: '-',
+              diagnosa: diag,
               lanjuTr: '',
               tiperesep: val?.tiperesep
             }
@@ -1173,27 +1196,27 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         }
       }
       const head = {
-        noreg: val?.noreg,
+        noreg: this.pasien?.noreg,
         noresep_asal: val?.noresep,
         tiperesep: val?.tiperesep,
         iter_expired: val?.iter_expired,
-        norm: val?.norm,
-        tgl_permintaan: val?.tgl_permintaan,
+        norm: this.pasien?.norm,
         tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-        ruangan: val?.ruangan,
-        dokter: val?.dokter?.kdpegsimrs,
-        depo: val?.depo,
-        sistembayar: val?.sistembayar?.rs1,
-        diagnosa: val?.diagnosa,
-        kodeincbg: val?.diagnosa,
-        uraianinacbg: val?.uraianinacbg,
-        tarifina: val?.tarifina,
-        tagihanrs: val?.tagihanrs,
+        ruangan: kdruang,
+        kdruangan: kdruang,
+        dokter: apps?.user?.pegawai?.kdpegsimrs,
+        depo: depo[0]?.value,
+        sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
+        diagnosa: diag,
+        kodeincbg: '-',
+        uraianinacbg: '-',
+        tarifina: 0,
+        tagihanrs: tagihanRs,
         flag: '',
         tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       }
       const data = {
-        head, kirimResep, kirimRacik, groupsistembayar: val?.sistembayar?.groups, kddepo: val?.depo
+        head, kirimResep, kirimRacik, groupsistembayar: this.pasien?.groups, kddepo: depo[0]?.value
       }
 
       this.loading = true
@@ -1223,13 +1246,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
                 if (tipe === 'racik') {
                   if (element?.messageError?.cek) {
                     const key = `${indexlist}-${index}`
-                    this.statusCopied[key] = false
+                    this.statusCopiedRacik[key] = false
                     this.pemberianObatCek[key] = element?.messageError
                     this.permintaanResepDuplicate[key] = data?.kirimResep[index]
                   }
                   else {
                     const key = `${indexlist}-${index}`
                     this.statusCopiedRacik[key] = false
+                    this.pemberianObatCek[key] = null
                     this.messageCopied[key] = element?.messageError
                   }
                 }
@@ -1275,6 +1299,33 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
     simpanCopyResepKonfirmasi (val, tipe, indexlist) {
       const kirimResep = []
+      const apps = useAplikasiStore()
+      let kdruang = ''
+      let tagihanRs = 0
+      const depo = this.depos.filter(pa => pa.jenis === this.depo)
+
+      if (depo[0]?.value === 'Gd-04010102') {
+        kdruang = this.pasien?.kdruangan
+      }
+      else if (depo[0]?.value === 'Gd-04010103') {
+        kdruang = this.pasien?.kdruangan
+      }
+      else {
+        kdruang = this.pasien?.kodepoli
+      }
+
+      if (depo[0]?.value === 'Gd-05010101') {
+        const kunjRajal = useKasirRajalListKunjunganStore()
+        const param = { noreg: val?.noreg }
+        kunjRajal.getBill(param).then(resp => {
+          tagihanRs = resp?.data?.totalall
+          // console.log('bill', resp?.data)
+          // console.log('form', this.form)
+        })
+      }
+
+      const temp = this.pasien?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+      const diag = temp?.length ? temp.join(', ') : '-'
 
       if (tipe === 'nonRacik') {
         const temp = {
@@ -1285,29 +1336,29 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           forkit: val?.forkit,
           fornas: val?.fornas,
           generik: val?.generik,
-          groupsistembayar: val?.groupsistembayar,
+          groupsistembayar: this.pasien?.groups,
           jumlah_diminta: val?.jumlah,
           jumlahdosis: val?.jumlah,
           jumlah: val?.jumlah,
           kandungan: val?.kandungan,
-          kdruangan: val?.kdruangan,
+          kdruangan: kdruang,
           keterangan: val?.keterangan,
           kode50: val?.kode50,
           kode108: val?.kode108,
-          kodedepo: val?.kodedepo,
-          kodeincbg: val?.diagnosa,
+          kodedepo: depo[0]?.value,
+          kodeincbg: diag,
           kodeobat: val?.kodeobat,
           konsumsi: val?.konsumsi,
-          noreg: val?.noreg,
-          norm: val?.norm,
+          noreg: this.pasien?.noreg,
+          norm: this.pasien?.norm,
           satuan_kcl: val?.satuan_kcl,
-          sistembayar: val?.sistembayar,
+          sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
           stokalokasi: val?.stokalokasi,
-          tagihanrs: val?.tagihanrs,
-          tarifina: val?.tarifina,
+          tagihanrs: tagihanRs,
+          tarifina: 0,
           uraian50: val?.uraian50,
           uraian108: val?.uraian108,
-          uraianinacbg: val?.uraianinacbg,
+          uraianinacbg: '-',
           iter_jml: val?.iter_jml,
           tiperesep: val?.tiperesep,
           jenisresep: 'nonRacikan',
@@ -1319,14 +1370,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       else {
         const temp = {
           noresep: this.noresep,
-          noreg: val?.noreg,
+          noreg: this.pasien?.noreg,
           namaracikan: val?.namaracikan,
           tiperacikan: val?.tiperacikan,
           jumlahdibutuhkan: val?.jumlahdibutuhkan,
           aturan: val?.aturan,
           konsumsi: val?.konsumsi,
           keterangan: val?.keterangan,
-          kodeobat: val?.kdobat,
+          kodeobat: val?.kodeobat,
           kandungan: val?.kandungan,
           forkit: val?.forkit,
           fornas: val?.fornas,
@@ -1343,51 +1394,42 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           jumlah: val?.jumlah,
           satuan_racik: val?.satuan_racik,
           keteranganx: val?.keteranganx,
-
-          groupsistembayar: val?.groupsistembayar,
+          groupsistembayar: this.pasien?.groups,
           jenisresep: 'Racikan',
-
           jumlahdiminta: val?.jumlah,
-
           jumlahdosis: val?.jumlah,
-
-          kdruangan: val?.ruangan,
-
-          kodedepo: val?.depo,
-          kodeincbg: val?.diagnosa,
-
-          norm: val?.norm,
+          kdruangan: kdruang,
+          kodedepo: depo[0]?.value,
+          kodeincbg: '-',
+          norm: this.pasien?.norm,
           satuan_kcl: val?.satuan_kcl,
-
-          sistembayar: val?.sistembayar,
-
-          tagihanrs: val?.tagihanrs,
-          tarifina: val?.tarifina,
-
-          uraianinacbg: val?.uraianinacbg,
-          diagnosa: val?.diagnosa,
+          sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
+          tagihanrs: tagihanRs,
+          tarifina: 0,
+          uraianinacbg: '-',
+          diagnosa: diag,
           lanjuTr: '1',
           tiperesep: val?.tiperesep
         }
         kirimResep.push(temp)
       }
       const head = {
-        noreg: val?.noreg,
+        noreg: this.pasien?.noreg,
         noresep_asal: val?.noresep,
         tiperesep: val?.tiperesep,
         iter_expired: '',
         norm: val?.norm,
-        tgl_permintaan: val?.tgl_permintaan,
         tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-        ruangan: val?.kdruangan,
-        dokter: val?.dokter,
-        depo: val?.kodedepo,
-        sistembayar: val?.sistembayar,
-        diagnosa: val?.diagnosa,
-        kodeincbg: val?.diagnosa,
-        uraianinacbg: val?.uraianinacbg,
-        tarifina: val?.tarifina,
-        tagihanrs: val?.tagihanrs,
+        ruangan: kdruang,
+        kdruangan: kdruang,
+        dokter: apps?.user?.pegawai?.kdpegsimrs,
+        depo: depo[0]?.value,
+        sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
+        diagnosa: diag,
+        kodeincbg: '-',
+        uraianinacbg: '-',
+        tarifina: 0,
+        tagihanrs: tagihanRs,
         flag: '',
         tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       }
@@ -1419,24 +1461,28 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             resp.data.forEach((element, index) => {
               if (element?.messageError) {
                 if (tipe === 'racik') {
-                  const key = `${indexlist}-${index}`
+                  const key = `${indexlist}`
                   this.statusCopiedRacik[key] = false
+                  this.pemberianObatCek[key] = element?.messageError
                   this.messageCopied[key] = element?.messageError
                 }
                 else {
-                  const key = `${indexlist}-${index}`
+                  const key = `${indexlist}`
+                  this.pemberianObatCek[key] = element?.messageError
                   this.statusCopied[key] = false
                   this.messageCopied[key] = element?.messageError
                 }
               }
               else {
                 if (tipe === 'racik') {
-                  const key = `${indexlist}-${index}`
+                  const key = `${indexlist}`
                   this.statusCopiedRacik[key] = true
+                  this.pemberianObatCek[key] = []
                 }
                 else {
                   const key = `${indexlist}`
                   this.statusCopied[key] = true
+                  this.pemberianObatCek[key] = []
                 }
               }
             })
