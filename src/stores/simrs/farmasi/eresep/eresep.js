@@ -194,17 +194,17 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       this.removedItemId = []
       this.getDataTable()
     },
-    setSistembayar(val){
-      this.setParams('sistembayar',val)
-      this.setParams('listsistembayar',null)
+    setSistembayar (val) {
+      this.setParams('sistembayar', val)
+      this.setParams('listsistembayar', null)
       // console.log('val', val);
       this.getDataTable()
     },
-    setListSistembayar(val){
-      const sisBa=val?.map(m=>m?.kode)
+    setListSistembayar (val) {
+      const sisBa = val?.map(m => m?.kode)
       // console.log('val', sisBa);
-      this.setParams('listsistembayar',sisBa)
-      this.setParams('sistembayar',null)
+      this.setParams('listsistembayar', sisBa)
+      this.setParams('sistembayar', null)
       this.getDataTable()
     },
     customRound (num) {
@@ -235,7 +235,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           if (res.rincian.length > 0) {
             res.rincian.forEach(key => {
               key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
-              key.diCopy=true
+              key.diCopy = true
               const stok = key.stok[0]
               const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
               const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
@@ -276,7 +276,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               }
               else {
                 const temp = {
-                  diCopy:true,
+                  diCopy: true,
                   namaracikan: key?.namaracikan,
                   harga: key?.harga,
                   aturan: key?.aturan,
@@ -365,7 +365,6 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     metaniItem (item) {
       if (item.permintaanresep.length) {
         item.permintaanresep.forEach(resep => {
-          
           resep.kronis = resep?.mobat?.status_kronis
           const rinci = item?.rincian.filter(x => x.kdobat === resep.kdobat)
           // console.log('rinc', rinci, resep)
@@ -512,11 +511,11 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           console.log('get data table', resp?.data)
           this.loading = false
           const data = resp?.data?.data ?? resp?.data
-          if(data?.length){
-            data.forEach(da=>{
-              const adaKwi=da.kwitansi?.find(kw=>kw?.nota?.includes(da?.noresep))
-              console.log('kw',adaKwi);
-              if(adaKwi) da.lunas = true
+          if (data?.length) {
+            data.forEach(da => {
+              const adaKwi = da.kwitansi?.find(kw => kw?.nota?.includes(da?.noresep))
+              console.log('kw', adaKwi)
+              if (adaKwi) da.lunas = true
             })
           }
           this.items = data
@@ -840,23 +839,23 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           })
       })
     },
-    simpanTglPelayananObat(val){
-      val.loading=true
-      const data={
-        id:val?.id,
-        tgl_pelayanan_obat:val?.tgl_pelayanan_obat
+    simpanTglPelayananObat (val) {
+      val.loading = true
+      const data = {
+        id: val?.id,
+        tgl_pelayanan_obat: val?.tgl_pelayanan_obat
       }
-      return new Promise(resolve=>{
+      return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/simpan-tgl-pelayanan', data)
-        .then(resp=>{
-          val.loading=false
-          notifSuccess(resp)
-          resolve(resp)
-        })
-        .catch(()=>{
-          val.tgl_pelayanan_obat=null
-          val.loading=false
-        })
+          .then(resp => {
+            val.loading = false
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            val.tgl_pelayanan_obat = null
+            val.loading = false
+          })
       })
     }
 
