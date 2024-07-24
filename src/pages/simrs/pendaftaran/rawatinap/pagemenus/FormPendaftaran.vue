@@ -208,7 +208,7 @@
               <app-input-simrs v-model="store.pasien.rw" label="RW" :autofocus="false" :valid="{min: 3}" class-tambahan="col-3 q-my-xs" />
               <app-autocomplete-new
                 ref="refNegara"
-                :model="store.pasien.negara"
+                :model="store.paramWilayah.kd_negara"
                 label="Negara"
                 autocomplete="wilayah"
                 option-value="kd_negara"
@@ -216,10 +216,11 @@
                 outlined
                 :source="store.negaras"
                 class="col-6 q-my-xs"
+                @on-select="(val)=> store.paramWilayah.kd_negara=val"
               />
               <app-autocomplete-new
                 ref="refPropinsi"
-                :model="store.pasien.propinsi"
+                :model="store.paramWilayah.kd_propinsi"
                 label="Propinsi"
                 autocomplete="wilayah"
                 option-value="propinsi"
@@ -227,17 +228,21 @@
                 outlined
                 :source="store.propinsies"
                 class="col-10 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.propinsies,'propinsi', 'refPropinsi', 'propinsi')"
+                @on-select="(val)=>autocompleteSelected(val, store.propinsies,'propinsi', 'refPropinsi', 'propinsi', 'wilayah')"
                 @clear="()=> {
                   store.pasien.propinsi=null
                   store.pasien.kota=null
                   store.pasien.kecamatan=null
                   store.pasien.kelurahan=null
+                  store.paramWilayah.kd_propinsi=null
+                  store.paramWilayah.kd_kotakabupaten=null
+                  store.paramWilayah.kd_kecamatan=null
+                  store.paramWilayah.kd_kelurahan=null
                 }"
               />
               <app-autocomplete-new
                 ref="refKabupaten"
-                :model="store.pasien.kota"
+                :model="store.paramWilayah.kd_kotakabupaten"
                 label="kabupaten / kota"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -245,16 +250,19 @@
                 outlined
                 :source="store.kabupatens"
                 class="col-10 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kabupatens,'kotakabupaten', 'refKabupaten', 'kota')"
+                @on-select="(val)=>autocompleteSelected(val, store.kabupatens,'kotakabupaten', 'refPropinsi', 'kota', 'wilayah')"
                 @clear="()=> {
                   store.pasien.kota=null
                   store.pasien.kecamatan=null
                   store.pasien.kelurahan=null
+                  store.paramWilayah.kd_kotakabupaten=null
+                  store.paramWilayah.kd_kecamatan=null
+                  store.paramWilayah.kd_kelurahan=null
                 }"
               />
               <app-autocomplete-new
                 ref="refKecamatan"
-                :model="store.pasien.kecamatan"
+                :model="store.paramWilayah.kd_kecamatan"
                 label="Kecamatan"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -262,15 +270,17 @@
                 outlined
                 :source="store.kecamatans"
                 class="col-6 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kecamatans,'kotakabupaten', 'refKecamatan', 'kecamatan')"
+                @on-select="(val)=>autocompleteSelected(val, store.kecamatans,'kotakabupaten', 'refKecamatan', 'kecamatan', 'wilayah')"
                 @clear="()=> {
                   store.pasien.kecamatan=null
                   store.pasien.kelurahan=null
+                  store.paramWilayah.kd_kecamatan=null
+                  store.paramWilayah.kd_kelurahan=null
                 }"
               />
               <app-autocomplete-new
                 ref="refKelurahan"
-                :model="store.pasien.kelurahan"
+                :model="store.paramWilayah.kd_kelurahan"
                 label="Kelurahan"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -278,8 +288,11 @@
                 outlined
                 :source="store.kelurahans"
                 class="col-6 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kelurahans,'kotakabupaten', 'refKelurahan', 'kelurahan')"
-                @clear="store.pasien.kelurahan=null"
+                @on-select="(val)=>autocompleteSelected(val, store.kelurahans,'kotakabupaten', 'refKelurahan', 'kelurahan', 'wilayah')"
+                @clear="()=> {
+                  store.pasien.kelurahan=null
+                  store.paramWilayah.kd_kelurahan=null
+                }"
               />
               <app-input-simrs
                 v-model="store.pasien.kodepos" label="Kode Pos" :autofocus="false" class-tambahan="col-5" @update:model-value="(val)=> {
@@ -339,7 +352,7 @@
             <q-separator />
             <div class="flex items-center q-gutter-sm full-width q-mb-sm">
               <div>Sama dg Alamat KTP ? : </div>
-              <q-checkbox v-model="store.domisiliSama" size="sm" />
+              <q-checkbox v-model="store.domisiliSama" size="sm" @update:model-value="setDomisiliSama" />
             </div>
 
             <app-input-simrs v-model="store.pasien.alamatDomisili" type="textarea" label="Alamat Lengkap" :autofocus="false" :valid="{required: true}" class-tambahan="col-12" />
@@ -348,7 +361,7 @@
               <app-input-simrs v-model="store.pasien.rwDomisili" label="RW" :autofocus="false" :valid="{min: 3}" class-tambahan="col-6 q-my-xs" />
               <app-autocomplete-new
                 ref="refNegara"
-                :model="store.pasien.negaraDomisili"
+                :model="store.paramWilayahDomisili.kd_negara"
                 label="Negara"
                 autocomplete="wilayah"
                 option-value="kd_negara"
@@ -356,10 +369,11 @@
                 outlined
                 :source="store.negaras"
                 class="col-12 q-my-xs"
+                @on-select="(val)=>store.paramWilayahDomisili.kd_negara=val"
               />
               <app-autocomplete-new
                 ref="refPropinsi"
-                :model="store.pasien.propinsiDomisili"
+                :model="store.paramWilayahDomisili.kd_propinsi"
                 label="Propinsi"
                 autocomplete="wilayah"
                 option-value="propinsi"
@@ -367,7 +381,7 @@
                 outlined
                 :source="store.propinsies"
                 class="col-12 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.propinsies,'propinsi', 'refPropinsi', 'propinsiDomisili')"
+                @on-select="(val)=>autocompleteSelected(val, store.propinsies,'propinsi', 'refPropinsi', 'propinsiDomisili', 'wilayah')"
                 @clear="()=> {
                   store.pasien.propinsiDomisili=null
                   store.pasien.kotaDomisili=null
@@ -377,7 +391,7 @@
               />
               <app-autocomplete-new
                 ref="refKabupaten"
-                :model="store.pasien.kotaDomisili"
+                :model="store.paramWilayahDomisili.kd_kotakabupaten"
                 label="kabupaten / kota"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -385,7 +399,7 @@
                 outlined
                 :source="store.kabupatens"
                 class="col-12 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kabupatens,'kotakabupaten', 'refKabupaten', 'kotaDomisili')"
+                @on-select="(val)=>autocompleteSelected(val, store.kabupatens,'kotakabupaten', 'refKabupaten', 'kotaDomisili', 'wilayah')"
                 @clear="()=> {
                   store.pasien.kotaDomisili=null
                   store.pasien.kecamatanDomisili=null
@@ -394,7 +408,7 @@
               />
               <app-autocomplete-new
                 ref="refKecamatan"
-                :model="store.pasien.kecamatanDomisili"
+                :model="store.paramWilayahDomisili.kd_kecamatan"
                 label="Kecamatan"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -402,7 +416,7 @@
                 outlined
                 :source="store.kecamatans"
                 class="col-12 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kecamatans,'kotakabupaten', 'refKecamatan', 'kecamatanDomisili')"
+                @on-select="(val)=>autocompleteSelected(val, store.kecamatans,'kotakabupaten', 'refKecamatan', 'kecamatanDomisili','wilayah')"
                 @clear="()=> {
                   store.pasien.kecamatanDomisili=null
                   store.pasien.kelurahanDomisili=null
@@ -410,7 +424,7 @@
               />
               <app-autocomplete-new
                 ref="refKelurahan"
-                :model="store.pasien.kelurahanDomisili"
+                :model="store.paramWilayahDomisili.kd_kelurahan"
                 label="Kelurahan"
                 autocomplete="wilayah"
                 option-value="kotakabupaten"
@@ -418,7 +432,7 @@
                 outlined
                 :source="store.kelurahans"
                 class="col-8 q-my-xs"
-                @on-select="(val)=>autocompleteSelected(val, store.kelurahans,'kotakabupaten', 'refKelurahan', 'kelurahanDomisili')"
+                @on-select="(val)=>autocompleteSelected(val, store.kelurahans,'kotakabupaten', 'refKelurahan', 'kelurahanDomisili', 'wilayah')"
                 @clear="store.pasien.kelurahanDomisili=null"
               />
               <app-input-simrs v-model="store.pasien.kodeposDomisili" label="Kode Pos" :autofocus="false" class-tambahan="col-4 q-my-xs" />
@@ -497,7 +511,7 @@
               </div>
               <app-autocomplete
                 ref="refCategoryKasus"
-                v-model="store.pasien.kodesistembayar"
+                v-model="store.pasien.kategoriKasus"
                 label="Kategori Kasus"
                 autocomplete="uraian"
                 option-value="kode"
@@ -548,14 +562,14 @@
     <dialog-peserta v-model="store.openDialogPeserta" :peserta="store.cekPeserta" @ok="copyDataFromBpjs()" />
     <!-- DIALOG KAMAR -->
     <dialog-show-kamar v-model="store.openDialogShowKamar" :items="store.listKamars" :loading="store.loadingShowKamar" @close="store.openDialogShowKamar = false" />
-    <dialog-cari-pasien v-model="store.openDialogCariPasien" @close="store.openDialogCariPasien = false" />
+    <dialog-cari-pasien v-model="store.openDialogCariPasien" @selected="selectPasien" />
   </q-form>
 </template>
 
 <script setup>
 import { api } from 'src/boot/axios'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
-import { defineAsyncComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { defineAsyncComponent, onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue'
 
 const DialogPeserta = defineAsyncComponent(() => import('./compFormPendaftaran/DialogPeserta.vue'))
 const SelectDiagnosa = defineAsyncComponent(() => import('./compFormPendaftaran/SelectDiagnosa.vue'))
@@ -568,7 +582,7 @@ const formRef = ref(null)
 const refNorm = ref(null)
 const refKelurahan = ref(null)
 const onSubmit = () => {
-  console.log('simpan')
+  console.log('simpan', store.pasien)
 }
 
 const onReset = () => {
@@ -605,7 +619,6 @@ onBeforeMount(() => {
 const gantiKewarganegaraan = e => {
   if (e === 'WNI') {
     store.paramWilayah.kd_negara = '62'
-    store.getNegara()
   }
   else {
     store.paramWilayah.kd_negara = ''
@@ -663,30 +676,11 @@ const cekKtp = (e) => {
     store.paramWilayah.kd_kotakabupaten = kabkota
     store.paramWilayah.kd_kecamatan = kec
 
-    store.getProvinces()
-      .then(() => {
-        store.pasien.propinsi = prov
-        store.pasien.propinsiDomisili = prov
-        store.getKota()
-          .then(() => {
-            store.pasien.kota = kabkota
-            store.pasien.kotaDomisili = kabkota
-            store.getKec()
-              .then(() => {
-                store.pasien.kecamatan = kec
-                store.pasien.kecamatanDomisili = kec
-                store.getKels()
-                  .then(() => {
-                    store.pasien.kelurahan = null
-                    store.pasien.kelurahanDomisili = null
-                  })
-              })
-          })
-      })
+    autoGetServer(prov, kabkota, kec)
 
     const tahun = parseInt(thnNik) < parseInt(N) ? `20${thnNik}` : `19${thnNik}`
     const tglAsli = tglNik > 40 ? tglNik - 40 : tglNik
-    const tgl = tglAsli < 10 ? `0${tglAsli}` : tglAsli
+    const tgl = tglAsli < 10 ? `${tglAsli}` : tglAsli
 
     // update store pasien
     store.pasien.kelamin = klmn
@@ -696,33 +690,87 @@ const cekKtp = (e) => {
   }
 }
 
-const autocompleteSelected = (val, fromArr, objVal, el, model) => {
-  // console.log('val', val)
+const autoGetServer = (prov, kabkota, kec) => {
+  store.getProvinces()
+    .then(() => {
+      const xx = store.propinsies.filter(item => item.propinsi === prov)
+      store.pasien.propinsi = xx[0]?.wilayah ?? null
+      store.pasien.propinsiDomisili = xx[0]?.wilayah ?? null
+      store.getKota()
+        .then(() => {
+          const xx = store.kabupatens.filter(item => item.kotakabupaten === kabkota)
+          store.pasien.kota = xx[0]?.wilayah ?? null
+          store.pasien.kotaDomisili = xx[0]?.wilayah ?? null
+          store.getKec()
+            .then(() => {
+              const xx = store.kecamatans.filter(item => item.kotakabupaten === kec)
+              store.pasien.kecamatan = xx[0]?.wilayah ?? null
+              store.pasien.kecamatanDomisili = xx[0]?.wilayah ?? null
+              store.getKels()
+                .then(() => {
+                  store.pasien.kelurahan = null
+                  store.pasien.kelurahanDomisili = null
+                })
+            })
+        })
+    })
+}
+
+const setDomisiliSama = (val) => {
+  if (val) {
+    // store.pasien.alamatDomisili = store.pasien.alamat
+    // store.pasien.kotaDomisili = store.pasien.kota
+    // store.pasien.kecamatanDomisili = store.pasien.kecamatan
+    // store.pasien.kelurahanDomisili = store.pasien.kelurahan
+    // store.pasien.rtDomisili = store.pasien.rt
+    // store.pasien.rwDomisili = store.pasien.rw
+    // store.pa
+  }
+}
+
+const autocompleteSelected = (val, fromArr, objVal, el, model, key) => {
+  console.log('val', val)
+  // store.setForm(model, val)
   // console.log('arr', fromArr)
   // console.log('el', el)
   // console.log('model', model)
-  const index = fromArr.findIndex(x => x[objVal] === val)
-  console.log('index', index)
-  store.setForm(model, val)
+  const finder = fromArr.length ? fromArr.filter(x => x[objVal] === val) : []
+  // console.log('index', finder)
+  store.pasien[model] = finder[0][key] ?? null
+  if (store.domisiliSama) {
+    store.pasien[model + 'Domisili'] = finder[0][key] ?? null
+  }
+
   if (model === 'kelurahan') {
-    if (store.domisiliSama) store.pasien.kelurahanDomisili = val
+    store.paramWilayah.kd_kelurahan = val
+    if (store.domisiliSama) store.paramWilayahDomisili.kd_kelurahan = val
   }
   if (model === 'kecamatan') {
     store.paramWilayah.kd_kecamatan = val
-    store.domisiliSama ? store.pasien.kecamatanDomisili = val : store.pasien.kecamatanDomisili = null
+    // store.paramWilayahDomisili.kd_kecamatan = val
+    store.domisiliSama ? store.paramWilayahDomisili.kd_kecamatan = val : store.paramWilayahDomisili.kd_kecamatan = null
     store.getKels()
       .then(() => {
+        store.paramWilayah.kd_kelurahan = null
         store.pasien.kelurahan = null
-        if (store.domisiliSama) store.pasien.kelurahanDomisili = null
+        if (store.domisiliSama) {
+          store.paramWilayahDomisili.kd_kelurahan = null
+          store.pasien.kelurahanDomisili = null
+        }
       })
   }
   if (model === 'kota') {
     store.paramWilayah.kd_kotakabupaten = val
+    store.domisiliSama ? store.paramWilayahDomisili.kd_kotakabupaten = val : store.paramWilayahDomisili.kd_kotakabupaten = null
     store.getKec()
       .then(() => {
+        store.paramWilayah.kd_kecamatan = null
+        store.paramWilayah.kd_kelurahan = null
         store.pasien.kecamatan = null
         store.pasien.kelurahan = null
         if (store.domisiliSama) {
+          store.paramWilayahDomisili.kd_kecamatan = null
+          store.paramWilayahDomisili.kd_kelurahan = null
           store.pasien.kecamatanDomisili = null
           store.pasien.kelurahanDomisili = null
         }
@@ -730,12 +778,21 @@ const autocompleteSelected = (val, fromArr, objVal, el, model) => {
   }
   if (model === 'propinsi') {
     store.paramWilayah.kd_propinsi = val
+    store.domisiliSama ? store.paramWilayahDomisili.kd_propinsi = val : store.paramWilayahDomisili.kd_propinsi = null
     store.getKota()
       .then(() => {
+        store.paramWilayah.kd_kotakabupaten = null
+        store.paramWilayah.kd_kecamatan = null
+        store.paramWilayah.kd_kelurahan = null
+
         store.pasien.kota = null
         store.pasien.kecamatan = null
         store.pasien.kelurahan = null
         if (store.domisiliSama) {
+          store.paramWilayahDomisili.kd_kotakabupaten = null
+          store.paramWilayahDomisili.kd_kecamatan = null
+          store.paramWilayahDomisili.kd_kelurahan = null
+
           store.pasien.kotaDomisili = null
           store.pasien.kecamatanDomisili = null
           store.pasien.kelurahanDomisili = null
@@ -746,15 +803,18 @@ const autocompleteSelected = (val, fromArr, objVal, el, model) => {
   // if (el === 'refKelurahan') refKelurahan.value.$refs.refAuto.blur()
 
   // DOMISILI
+  if (model === 'kelurahanDomisili') {
+    store.paramWilayahDomisili.kd_kelurahan = val
+  }
   if (model === 'kecamatanDomisili') {
-    store.paramWilayah.kd_kecamatan = val
+    store.paramWilayahDomisili.kd_kecamatan = val
     store.getKels()
       .then(() => {
         store.pasien.kelurahanDomisili = null
       })
   }
-  if (model === 'kota') {
-    store.paramWilayah.kd_kotakabupaten = val
+  if (model === 'kotaDomisili') {
+    store.paramWilayahDomisili.kd_kotakabupaten = val
     store.getKec()
       .then(() => {
         // if (store.domisiliSama) {
@@ -763,8 +823,8 @@ const autocompleteSelected = (val, fromArr, objVal, el, model) => {
         // }
       })
   }
-  if (model === 'propinsi') {
-    store.paramWilayah.kd_propinsi = val
+  if (model === 'propinsiDomisili') {
+    store.paramWilayahDomisili.kd_propinsi = val
     store.getKota()
       .then(() => {
         // store.pasien.kota = null
@@ -948,21 +1008,25 @@ function previewListKamar () {
 
 const gantiBaruLama = (val) => {
   console.log('barulama', val)
-  if (val === 'lama') {
+  if (val === 'Lama') {
     store.openDialogCariPasien = true
   }
 }
 
+const selectPasien = (val) => {
+  store.setFormFromServer(val)
+    .then(() => {
+      autoGetServer(val.kodepropinsi, val.kodekabupatenkota, val.kodekecamatan)
+    })
+}
+
 watch(() => store.pasien.noktp, (val) => {
-  // console.log('watch old', old)
-  // console.log('watch new', val)
   if (val !== null && val !== '') {
     cekKtp(val)
   }
 }, { deep: true })
-watch(() => store.pasien.tanggallahir, (val) => {
-  // console.log('watch old', old)
 
+watch(() => store.pasien.tanggallahir, (val) => {
   if (val !== null && val !== '') {
     hitungUsia(val)
     console.log('watch new', hitungUsia(val))
@@ -987,6 +1051,78 @@ watch(() => store.pasien.rt, () => {
 watch(() => store.pasien.rw, () => {
   if (store.domisiliSama === true) {
     store.pasien.rwDomisili = store.pasien.rw
+  }
+})
+
+watch(() => store.paramWilayah.kd_negara, (obj) => {
+  if (obj) {
+    store.getNegara().then(() => {
+      store.getProvinces()
+    })
+  }
+})
+
+// watch(() => store.paramWilayah.kd_propinsi, (obj) => {
+//   // console.log('watch', obj)
+//   if (obj) {
+//     const cari = store.propinsies.filter(x => x?.propinsi === obj)
+//     store.pasien.propinsi = cari[0]?.wilayah
+//     console.log('cari', cari)
+//     store.getKota()
+//       .then(() => {
+//         store.paramWilayah.kd_kotakabupaten = null
+//         store.paramWilayah.kd_kecamatan = null
+//         store.paramWilayah.kd_kelurahan = null
+//         store.pasien.kota = null
+//         store.pasien.kecamatan = null
+//         store.pasien.kelurahan = null
+//         if (store.domisiliSama) {
+//           store.paramWilayahDomisili.kd_kotakabupaten = null
+//           store.paramWilayahDomisili.kd_kecamatan = null
+//           store.paramWilayahDomisili.kd_kelurahan = null
+//           store.pasien.kotaDomisili = null
+//           store.pasien.kecamatanDomisili = null
+//           store.pasien.kelurahanDomisili = null
+//         }
+//       })
+//   }
+// }, { deep: true })
+// watch(() => store.paramWilayah.kd_kotakabupaten, (obj) => {
+//   console.log('watch kota kabupaten', obj)
+//   if (obj) {
+//     if (store.kabupatens.length) {
+//       const cari = store.kabupatens.filter(x => x?.kotakabupaten === obj)
+//       store.pasien.kota = cari[0]?.wilayah
+//       console.log('cari', cari)
+//       store.getKec()
+//         .then(() => {
+//           store.paramWilayah.kd_kecamatan = null
+//           store.paramWilayah.kd_kelurahan = null
+//           store.pasien.kecamatan = null
+//           store.pasien.kelurahan = null
+//           if (store.domisiliSama) {
+//             store.paramWilayahDomisili.kd_kecamatan = null
+//             store.paramWilayahDomisili.kd_kelurahan = null
+//             store.pasien.kecamatanDomisili = null
+//             store.pasien.kelurahanDomisili = null
+//           }
+//         })
+//     }
+//   }
+// }, { deep: true })
+
+watchEffect(() => {
+  if (store.domisiliSama === true) {
+    store.paramWilayahDomisili.kd_negara = store.paramWilayah.kd_negara
+    store.paramWilayahDomisili.kd_propinsi = store.paramWilayah.kd_propinsi
+    store.paramWilayahDomisili.kd_kotakabupaten = store.paramWilayah.kd_kotakabupaten
+    store.paramWilayahDomisili.kd_kecamatan = store.paramWilayah.kd_kecamatan
+    store.paramWilayahDomisili.kd_kelurahan = store.paramWilayah.kd_kelurahan
+
+    store.pasien.alamatDomisili = store.pasien.alamat
+    store.pasien.rtDomisili = store.pasien.rt
+    store.pasien.rwDomisili = store.pasien.rw
+    store.pasien.kodeposDomisili = store.pasien.kodepos
   }
 })
 

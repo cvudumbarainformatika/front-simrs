@@ -99,9 +99,18 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       kd_negara: null,
       kd_propinsi: null,
       kd_kotakabupaten: null,
-      kd_kecamatan: null
+      kd_kecamatan: null,
+      kd_kelurahan: null
     },
-    statusPasiens: ['baru', 'lama'],
+
+    paramWilayahDomisili: {
+      kd_negara: null,
+      kd_propinsi: null,
+      kd_kotakabupaten: null,
+      kd_kecamatan: null,
+      kd_kelurahan: null
+    },
+    statusPasiens: ['Baru', 'Lama'],
     kewarganegaran: ['WNI', 'WNA'],
     bisabacatulis: ['Ya', 'Tidak'],
     kelamins: [],
@@ -149,7 +158,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         this.setForm(el, null)
       }
 
-      this.pasien.barulama = 'baru'
+      this.pasien.barulama = 'Baru'
       this.pasien.kewarganegaraan = 'WNI'
       // this.pasien.noktp = 3574041305820002
       this.pasien.bisabacatulis = 'Ya'
@@ -158,6 +167,119 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
 
       this.cekPeserta = null
       this.openDialogPeserta = false
+    },
+
+    setFormFromServer (val) {
+      this.pasien = {
+        barulama: val.baru ?? 'Baru',
+        norm: val.norm ?? null,
+        kewarganegaraan: 'WNI',
+        noktp: val.nik ?? null,
+        paspor: null,
+        idsatset: null,
+        nokabpjs: val.nokabpjs ?? null,
+        nama: val.nama ?? null,
+        ibukandung: val.namaibukandung ?? null,
+        tempatlahir: val.templahir ?? null,
+        tanggallahir: val.tgllahir ?? null,
+        kelamin: val.kelamin ?? null,
+        sapaan: val.spaan ?? null,
+        pendidikan: val.pendidikan ?? null,
+        agama: val.agama ?? null,
+        agamalain: null,
+        suku: val.suku ?? null,
+        bahasa: val.bahasa ?? null,
+        bisabacatulis: val.bacatulis ?? 'Ya',
+        statuspernikahan: val.statuspernikahan ?? null,
+        pekerjaan: val.pekerjaan ?? null,
+        notelp: val.noteleponrumah ?? null,
+        nohp: val.noteleponhp ?? null,
+
+        alamat: val.alamat ?? null,
+        // WNI
+        rt: val.rt ?? null,
+        rw: val.rw ?? null,
+
+        kelurahan: null,
+        kecamatan: null,
+        kota: null,
+        propinsi: null,
+        negara: null,
+        kodepos: val.kodepos ?? null,
+
+        // WNA
+        country: null,
+        city: null,
+        region: null,
+
+        // domisili
+        alamatDomisili: val.alamatdomisili ?? null,
+        rtDomisili: val.rtdomisili ?? null,
+        rwDomisili: val.rwdomisili ?? null,
+
+        kelurahanDomisili: null,
+        kecamatanDomisili: null,
+        kotaDomisili: null,
+        propinsiDomisili: null,
+        negaraDomisili: null,
+        kodeposDomisili: val.kodeposdomisili ?? null,
+
+        // registrasi
+        asalrujukan: null,
+        jnsBayar: null,
+        kodesistembayar: null,
+        kategoriKasus: null,
+        diagnosaAwal: null,
+
+        // hakruang ,kelas untuk menentukan billing
+        kamar: null,
+        kelas: null,
+        kode_ruang: null,
+        flag_ruang: null,
+        hakKelasBpjs: null,
+        indikatorPerubahanKelas: null,
+
+        // biaya
+        biaya_admin: 0,
+        biaya_kamar: 0,
+
+        // dokter
+        nama_dokter: null,
+        kd_dokter: null,
+        kd_dokter_bpjs: null,
+
+        nama_penanggungjawab: null,
+        notelp_penanggungjawab: null
+
+      }
+
+      this.paramWilayah = {
+        kd_negara: val.negara ?? '62',
+        kd_propinsi: val.kodepropinsi ?? null,
+        kd_kotakabupaten: val.kodekabupatenkota ?? null,
+        kd_kecamatan: val.kodekecamatan ?? null,
+        kd_kelurahan: val.kodekelurahan ?? null
+      }
+      this.paramWilayahDomisili = {
+        kd_negara: val.negaradomisili ?? '62',
+        kd_propinsi: val.propinsidomisili ?? null,
+        kd_kotakabupaten: val.kabupatenkotadomisili ?? null,
+        kd_kecamatan: val.kecamatandomisili ?? null,
+        kd_kelurahan: val.kelurahandomisili ?? null
+      }
+
+      if (val.alamat === val.alamatdomisili) {
+        this.domisiliSama = true
+      }
+      else {
+        this.domisiliSama = false
+      }
+
+      console.log('form', this.pasien)
+      this.openDialogCariPasien = false
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
     },
 
     async cekPesertaBpjs (by, no) {
@@ -218,8 +340,10 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           // )
           this.negaras = resp.data[0]
           if (this.pasien.kewarganegaraan === 'WNI') {
-            this.pasien.negara = this.negaras[0].kd_negara
-            this.pasien.negaraDomisili = this.negaras[0].kd_negara
+            this.paramWilayah.kd_negara = this.negaras[0].kd_negara
+            this.paramWilayahDomisili.kd_negara = this.negaras[0].kd_negara
+            this.pasien.negara = this.negaras[0].wilayah
+            this.pasien.negaraDomisili = this.negaras[0].wilayah
           }
           else {
             this.pasien.negara = null
