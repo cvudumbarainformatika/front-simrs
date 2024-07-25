@@ -325,7 +325,15 @@
                   Total
                 </div>
                 <div class="deta text-weight-bold">
-                  {{ formatRpDouble(pesan?.subtotal_bast,2) }}
+                  <!-- {{ formatRpDouble(pesan?.subtotal_bast,2) }} -->
+                  <app-input
+                    v-model="pesan.subtotal_bast"
+                    outlined
+                    label="Jumlah"
+                    dense
+                    valid
+                    @update:model-value="updateSubtotal()"
+                  />
                 </div>
               </div>
             </div>
@@ -402,7 +410,7 @@ function updateHargaAll (evt, det, trm, key) {
   det.harga_netto = hargaPembelian
   det.harga_netto_kecil = hargaPembelian / isi
   det.nilai_retur = det.jumlah_retur * det.harga_netto_kecil
-  det.subtotal = subtotal
+  det.subtotalx = subtotal
 
   det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
 
@@ -411,7 +419,10 @@ function updateHargaAll (evt, det, trm, key) {
   if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
   store.form.jumlah_bastx = store.form.jumlah_bast
 }
-
+function updateSubtotal () {
+  if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
+  store.form.jumlah_bastx = store.form.jumlah_bast
+}
 function itemClicked (val, i) {
   console.log('item clicked', val)
   // val.checked = !val.checked
