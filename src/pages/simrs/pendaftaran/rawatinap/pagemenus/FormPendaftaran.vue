@@ -94,6 +94,10 @@
                   outlined
                   :source="store.kelamins"
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @update:model-value="(val)=>{
+                    const cek = store.kelamins?.filter(el => el.kelamin === val)
+                    store.pasien.kd_kelamin = cek[0]?.kode ?? ''
+                  }"
                 />
               </div>
             </div>
@@ -118,6 +122,10 @@
                 outlined
                 :source="store.pendidikans"
                 :rules="[val => (!!val) || 'Harap diisi',]"
+                @update:model-value="(val)=>{
+                  const cek = store.pendidikans?.filter(el => el.pendidikan === val)
+                  store.pasien.kd_pendidikan = cek[0]?.kode ?? ''
+                }"
               />
             </div>
             <div class="row q-col-gutter-xs q-my-xs">
@@ -125,12 +133,16 @@
                 v-model="store.pasien.agama"
                 label="Agama"
                 autocomplete="kode"
-                option-value="kode"
+                option-value="keterangan"
                 option-label="keterangan"
                 outlined
                 :source="store.agamas"
                 :rules="[val => (!!val) || 'Harap diisi',]"
                 class="col-6"
+                @update:model-value="(val)=>{
+                  const cek = store.agamas?.filter(el => el.keterangan === val)
+                  store.pasien.kd_agama = cek[0]?.kodemapping ?? ''
+                }"
               />
               <app-input-simrs v-if="store.pasien.agama==='8'" v-model="store.pasien.agamalain" label="Jelaskan" :autofocus="false" :valid="{required: true}" class="col-6" />
             </div>
@@ -189,6 +201,10 @@
                 :source="store.pekerjaans"
                 :rules="[val => (!!val) || 'Harap diisi',]"
                 class="col-6"
+                @update:model-value="(val)=>{
+                  const cek = store.pekerjaans?.filter(el => el.pekerjaan === val)
+                  store.pasien.kd_pekerjaan = cek[0]?.kode ?? ''
+                }"
               />
             </div>
 
@@ -582,7 +598,8 @@ const formRef = ref(null)
 const refNorm = ref(null)
 const refKelurahan = ref(null)
 const onSubmit = () => {
-  console.log('simpan', store.pasien)
+  // console.log('simpan', store.pasien)
+  store.simpanPasien()
 }
 
 const onReset = () => {
@@ -591,7 +608,7 @@ const onReset = () => {
   refNorm.value.appInputSimrs.focus()
 }
 onMounted(() => {
-  console.log('onMounted', refNorm.value)
+  // console.log('onMounted', refNorm.value)
   onReset()
   Promise.all([
     gantiKewarganegaraan('WNI'),
@@ -717,15 +734,8 @@ const autoGetServer = (prov, kabkota, kec) => {
 }
 
 const setDomisiliSama = (val) => {
-  if (val) {
-    // store.pasien.alamatDomisili = store.pasien.alamat
-    // store.pasien.kotaDomisili = store.pasien.kota
-    // store.pasien.kecamatanDomisili = store.pasien.kecamatan
-    // store.pasien.kelurahanDomisili = store.pasien.kelurahan
-    // store.pasien.rtDomisili = store.pasien.rt
-    // store.pasien.rwDomisili = store.pasien.rw
-    // store.pa
-  }
+  // if (val) {
+  // }
 }
 
 const autocompleteSelected = (val, fromArr, objVal, el, model, key) => {

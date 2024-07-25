@@ -16,15 +16,19 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       tempatlahir: null,
       tanggallahir: null,
       kelamin: null,
+      kd_kelamin: null,
       sapaan: null,
       pendidikan: null,
+      kd_pendidikan: null,
       agama: null,
+      kd_agama: null,
       agamalain: null,
       suku: null,
       bahasa: null,
       bisabacatulis: null,
       statuspernikahan: null,
       pekerjaan: null,
+      kd_pekerjaan: null,
       notelp: null,
       nohp: null,
       alamat: null,
@@ -192,6 +196,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         bisabacatulis: val.bacatulis ?? 'Ya',
         statuspernikahan: val.statuspernikahan ?? null,
         pekerjaan: val.pekerjaan ?? null,
+        // kd_pekerjaan: val.kd_pekerjaan ?? null,
         notelp: val.noteleponrumah ?? null,
         nohp: val.noteleponhp ?? null,
 
@@ -359,6 +364,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       // this.loading = true
       await api.get('v1/simrs/master/pendidikan')
         .then(resp => {
+          console.log('pendidikan', resp.data)
           // this.loading = false
           this.pendidikans = resp.data
           // this.autocompleteStore.setPendidikan(resp.data)
@@ -372,6 +378,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.loading = true
       await api.get('v1/simrs/master/agama')
         .then(resp => {
+          console.log('agama', resp.data)
           this.loading = false
           this.agamas = resp.data
           // this.autocompleteStore.setAgama(resp.data)
@@ -407,6 +414,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.loading = true
       await api.get('v1/simrs/master/pekerjaan')
         .then(resp => {
+          console.log('pekerjaan', resp.data)
           this.loading = false
           this.pekerjaans = resp.data
           // this.autocompleteStore.setPekerjaan(resp.data)
@@ -612,7 +620,23 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     async simpanPasien () {
       // this.loadingShowKamar = true
 
-      console.log('form', this.pasien)
+      // console.log('form', this.pasien)
+
+      // const form = this.pasien
+      this.pasien.kd_negara = this.paramWilayah.kd_negara
+      this.pasien.kd_propinsi = this.paramWilayah.kd_propinsi
+      this.pasien.kd_kotakabupaten = this.paramWilayah.kd_kotakabupaten
+      this.pasien.kd_kecamatan = this.paramWilayah.kd_kecamatan
+      this.pasien.kd_kelurahan = this.paramWilayah.kd_kelurahan
+
+      this.pasien.kd_negara_dom = this.paramWilayahDomisili.kd_negara
+      this.pasien.kd_propinsi_dom = this.paramWilayahDomisili.kd_propinsi
+      this.pasien.kd_kotakabupaten_dom = this.paramWilayahDomisili.kd_kotakabupaten
+      this.pasien.kd_kecamatan_dom = this.paramWilayahDomisili.kd_kecamatan
+      this.pasien.kd_kelurahan_dom = this.paramWilayahDomisili.kd_kelurahan
+
+      console.log('pasien', this.pasien)
+
       // await api.post('v1/simrs/master/jeniskasus')
       //   .then(resp => {
       //     console.log('jenis kasus', resp.data)
