@@ -856,7 +856,7 @@ function validate () {
     return false
   }
   else {
-    store.form.tiperesep = 'normal'
+    if (props.depo !== 'rjl') store.form.tiperesep = 'normal'
   }
   if (store?.form?.kodeobat !== '') {
     const ob = store?.nonFilteredObat?.filter(o => o?.kodeobat === store?.form?.kodeobat)

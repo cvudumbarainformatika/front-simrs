@@ -179,58 +179,58 @@
               <!-- tgl pelayanan obat -->
               <div v-if="item?.addTglPelayanan" class="row items-center q-col-gutter-xs">
                 <div class="col-10">
-                  <app-input-date 
-                  :model="item.tgl_pelayanan_obat"
-                  label="Tgl Pelayanan Obat"
-                  outlined
-                  valid
-                  :loading="item?.loading"
-                  :disable="item?.loading"
-                  @set-model="setTgl($event,item,'tgl_pelayanan_obat')"
+                  <app-input-date
+                    :model="item.tgl_pelayanan_obat"
+                    label="Tgl Pelayanan Obat"
+                    outlined
+                    valid
+                    :loading="item?.loading"
+                    :disable="item?.loading"
+                    @set-model="setTgl($event,item,'tgl_pelayanan_obat')"
                   />
                 </div>
                 <div class="col-2">
-                  <q-btn 
-                  flat
-                  dense
-                  color="green"
-                  size="sm"
-                  icon="icon-mat-save"
-                  :loading="item?.loading"
-                  :disable="item?.loading"
-                  @click="saveTglPelayanan(item)"
+                  <q-btn
+                    flat
+                    dense
+                    color="green"
+                    size="sm"
+                    icon="icon-mat-save"
+                    :loading="item?.loading"
+                    :disable="item?.loading"
+                    @click="saveTglPelayanan(item)"
                   >
-                  <q-tooltip
-                    class="primary"
-                    :offset="[10, 10]"
-                  >
-                    Simpan Tanggal Pelayanan Obat
-                  </q-tooltip>
-                </q-btn>
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Simpan Tanggal Pelayanan Obat
+                    </q-tooltip>
+                  </q-btn>
                 </div>
-              </div> 
+              </div>
               <div v-if="!item?.addTglPelayanan && parseFloat(item?.flag)>=1" class="row items-center q-col-gutter-xs">
-                <div  class="col-10 f-10 text-negative">
+                <div class="col-10 f-10 text-negative">
                   <div v-if="item?.tgl_pelayanan_obat">
-                    Tgl Pelayanan Obat : <span class="f-12">{{dateFullFormat(item?.tgl_pelayanan_obat)}}</span> 
+                    Tgl Pelayanan Obat : <span class="f-12">{{ dateFullFormat(item?.tgl_pelayanan_obat) }}</span>
                   </div>
                   <q-tooltip
                     v-if="item?.tgl_pelayanan_obat"
                     class="primary"
                     :offset="[10, 10]"
-                    >
+                  >
                     Tanggal Pelayanan Obat
-                    </q-tooltip>
+                  </q-tooltip>
                 </div>
                 <div class="col-2">
-                    <q-btn 
+                  <q-btn
                     flat
                     dense
                     color="primary"
                     size="sm"
                     icon="icon-mat-add_circle"
                     @click="addTglPelayanan(item)"
-                    >
+                  >
                     <q-tooltip
                       class="primary"
                       :offset="[10, 10]"
@@ -239,7 +239,7 @@
                     </q-tooltip>
                   </q-btn>
                 </div>
-              </div> 
+              </div>
             </td>
             <td>
               <div class="row text-weight-bold">
@@ -269,12 +269,12 @@
             <td>
               <div class="row">
                 <q-chip
-                square
-                class="f-10"
-                :color="color(item?.flag)"
-                text-color="white"
+                  square
+                  class="f-10"
+                  :color="color(item?.flag)"
+                  text-color="white"
                 >
-                {{ status(item?.flag) }}
+                  {{ status(item?.flag) }}
                 </q-chip>
               </div>
               <!-- <div class="row f-10">
@@ -287,12 +287,12 @@
                 <div class="col-7"></div> -->
               </div>
               <div v-if="item?.flag==='3' || item?.flag==='4'" class="row f-10 text-italic">
-                <div >
+                <div>
                   {{ responTime(item) }}
                 </div>
               </div>
             </td>
-            <td class="q-mr-sm" >
+            <td class="q-mr-sm">
               <div class="row no-wrap text-end">
                 <!-- terima -->
                 <q-btn
@@ -364,7 +364,23 @@
                     Print resep
                   </q-tooltip>
                 </q-btn>
-
+                <!-- print resep to pdf-->
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 4"
+                  round
+                  class="f-10 q-mr-sm"
+                  color="primary"
+                  text-color="white"
+                  icon="icon-mat-download"
+                  @click="printResepToPdf(item)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Download Resep
+                  </q-tooltip>
+                </q-btn>
                 <!-- selesai -->
                 <q-btn
                   v-if="item?.flag==='2' && (item?.semuaresep && item?.semuaracik)"
@@ -467,26 +483,26 @@
                   </q-tooltip>
                 </q-btn>
               </div>
-              <div  class="row no-wrap q-mt-sm">
-                <div class="col-6">                  
-                <q-btn
-                  v-if="ruangan==='Gd-05010101'"
-                  dense
-                  size="sm"
-                  no-caps
-                  color="accent"
-                  label="PANGGIL"
-                  class="q-mb-lg"
-                  icon-right="icon-mat-volume_up"
-                  style="min-width: 120px;"
-                  :loading="loadingCall && store.noreg === item?.noreg"
-                  :disable="loadingCall && store.noreg === item?.noreg"
-                  @click="panggil( item)"
-                />
+              <div class="row no-wrap q-mt-sm">
+                <div class="col-6">
+                  <q-btn
+                    v-if="ruangan==='Gd-05010101'"
+                    dense
+                    size="sm"
+                    no-caps
+                    color="accent"
+                    label="PANGGIL"
+                    class="q-mb-lg"
+                    icon-right="icon-mat-volume_up"
+                    style="min-width: 120px;"
+                    :loading="loadingCall && store.noreg === item?.noreg"
+                    :disable="loadingCall && store.noreg === item?.noreg"
+                    @click="panggil( item)"
+                  />
                 </div>
-              <div v-if="item?.lunas" class="col-6 text-weight-bold f-22 text-blue text-italic">
-                LUNAS
-              </div>
+                <div v-if="item?.lunas" class="col-6 text-weight-bold f-22 text-blue text-italic">
+                  LUNAS
+                </div>
               </div>
             </td>
             <!-- <td class="text-end">
@@ -521,11 +537,19 @@
     :head="printHeadOnly"
     @close="openIdPrint=false"
   />
+
+  <commpResepToPdf
+    ref="pdfResp"
+    v-model="openPrintPdf"
+    :item="itemToPrint"
+    :head="printHeadOnly"
+    @close="openPrintPdf=false"
+  />
 </template>
 
 <script setup>
 // import { ref } from 'vue'
-import { dateFullFormat,dateFull } from 'src/modules/formatter'
+import { dateFullFormat, dateFull } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
@@ -545,19 +569,19 @@ defineProps({
   }
 })
 const emits = defineEmits(['panggilan'])
-function responTime(item){
+function responTime (item) {
   // const mulai= new Date(item?.tgl_kirim)
-  // const selesai=new Date(item?.tgl_selesai)  
+  // const selesai=new Date(item?.tgl_selesai)
   // let jam=date.getDateDiff(selesai,mulai, 'hours')
   // let menit=0
   // let detik=0
   // const dispJam=jam <= 9 ? '0'+jam:jam
   // if(jam>0){
-  //   const setelahJam=date.subtractFromDate(selesai,{hours:jam})    
+  //   const setelahJam=date.subtractFromDate(selesai,{hours:jam})
   //   menit=date.getDateDiff(setelahJam,mulai, 'minutes')
   //   // console.log('menit', menit);
   //   if(menit>0){
-  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})      
+  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})
   //   detik=date.getDateDiff(setelahMinute,mulai, 'seconds')
   //   if(detik<0){
   //     const det=detik
@@ -565,7 +589,7 @@ function responTime(item){
   //     menit-=1
   //   }
   //  }else if(menit<0){
-  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})    
+  //   let setelahMinute=date.subtractFromDate(setelahJam,{minutes:menit})
   //     const men=menit
   //     menit=60+men
   //     jam-=1
@@ -578,7 +602,7 @@ function responTime(item){
   //  }else{
   //   detik=date.getDateDiff(selesai,mulai, 'seconds')
   //  }
-  // }else{    
+  // }else{
   //   menit=date.getDateDiff(selesai,mulai, 'minutes')
   //  if(menit>0){
   //   const setelahMinute=date.subtractFromDate(selesai,{minutes:menit})
@@ -592,33 +616,32 @@ function responTime(item){
   //   detik=date.getDateDiff(selesai,mulai, 'seconds')
   //  }
   // }
-  const dispJam=item?.rt_jam <= 9 ? '0'+item?.rt_jam:item?.rt_jam
-  const dispMen=item?.rt_menit <= 9 ? '0'+item?.rt_menit:item?.rt_menit
-  const dispDet=item?.rt_detik <= 9 ? '0'+item?.rt_detik:item?.rt_detik
+  const dispJam = item?.rt_jam <= 9 ? '0' + item?.rt_jam : item?.rt_jam
+  const dispMen = item?.rt_menit <= 9 ? '0' + item?.rt_menit : item?.rt_menit
+  const dispDet = item?.rt_detik <= 9 ? '0' + item?.rt_detik : item?.rt_detik
   // const respon=date.getDateDiff(selesai,mulai, 'minutes')
   // const second=date.getDateDiff(selesai,mulai, 'seconds')
   // console.log('resp time', dispJam);
   // return 'Respon Time ' + dispJam + ':' + dispMen+':' + dispDet
-  return 'Respon Time ' + item?.rt_hari + ' hari ' + dispJam + ':' + dispMen+':' + dispDet
+  return 'Respon Time ' + item?.rt_hari + ' hari ' + dispJam + ':' + dispMen + ':' + dispDet
 }
 function panggil (item) {
   emits('panggilan', item)
   store.noreg = item?.noreg
 }
 // tanggal pelayanan obat start
-function setTgl(evt,item,key){
-  item[key]=evt
+function setTgl (evt, item, key) {
+  item[key] = evt
 }
-function addTglPelayanan(item){
-  item.addTglPelayanan=true
+function addTglPelayanan (item) {
+  item.addTglPelayanan = true
 }
 
-function saveTglPelayanan(item){
-  console.log('item', item);
-  store.simpanTglPelayananObat(item).then(()=>{
-    item.addTglPelayanan=false  
+function saveTglPelayanan (item) {
+  console.log('item', item)
+  store.simpanTglPelayananObat(item).then(() => {
+    item.addTglPelayanan = false
   })
-  
 }
 // tanggal pelayanan obat end
 // const indexId = ref(0)
@@ -722,8 +745,12 @@ const itemPrintId = ref(null)
 const idResp = ref(null)
 const openIdPrint = ref(false)
 const printHeadOnly = ref(false)
+const commpResepToPdf = defineAsyncComponent(() => import('./ResepToClaimPage.vue'))
+const openPrintPdf = ref(false)
+const itemToPrint = ref(null)
+const pdfResp = ref(null)
 
-function terimaResep(item){
+function terimaResep (item) {
   store.terimaResep(item)
   printIdResep(item)
 }
@@ -746,6 +773,107 @@ function printHeadResep (val) {
   setTimeout(() => {
     idResp.value.printPage()
   }, 200)
+}
+// eslint-disable-next-line no-unused-vars
+function printResepToPdf (val) {
+  console.log(val)
+  setResepToPdf(val)
+  itemPrintId.value = print.resep
+  openPrintPdf.value = true
+  // setTimeout(() => {
+  //   pdfResp.value.printPage()
+  // }, 200)
+}
+function setResepToPdf (val) {
+  console.log('val')
+  const res = val
+
+  res.listRacikan = []
+  let nilaiR = 0
+
+  if (res?.permintaanracikan?.length) {
+    res?.permintaanracikan.forEach(key => {
+      nilaiR = parseFloat(key?.r)
+      key.jumlahobatAwal = parseFloat(key?.jumlahobat)
+      key.jumlahresepAwal = parseFloat(key?.jumlahresep)
+      key.jumlahdibutuhkanAwal = key?.jumlahdibutuhkan
+
+      // const racikankeluar = res?.rincianracik?.find(rac => rac?.namaracikan === key?.namaracikan && rac?.kdobat === key?.kdobat)
+      // console.log('racik', key, racikankeluar)
+      // if (racikankeluar) {
+      //   key.jumlah = parseFloat(racikankeluar.jumlah)
+      //   key.harga_jual = parseFloat(racikankeluar?.harga_jual)
+      //   key.jumlahdibutuhkan = parseFloat(racikankeluar?.jumlahdibutuhkan)
+      // }
+      // key.jumlahresep = key.jumlah
+      // if (parseInt(key?.mobat?.kelompok_psikotropika) === 1) {
+      //   key.jumlahobat = this.customRound(key.jumlah)
+      // }
+      // else key.jumlahobat = Math.ceil(key.jumlah)
+      const namaracikan = key?.namaracikan
+      // key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual))// + parseFloat(key?.r)
+
+      key.groupsistembayar = val?.sistembayar?.groups
+      const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
+      if (adaList.length) {
+        adaList[0].rincian.push(key)
+        const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+        adaList[0].harga = harga
+      }
+      else {
+        const temp = {
+          namaracikan: key?.namaracikan,
+          harga: key?.harga,
+          aturan: key?.aturan,
+          keterangan: key?.keterangan,
+          tiperacikan: key?.tiperacikan,
+          konsumsi: key?.konsumsi,
+          satuan_racik: key?.satuan_racik,
+          jumlahdibutuhkan: key?.jumlahdibutuhkan,
+          jumlahdibutuhkanAwal: key?.jumlahdibutuhkanAwal,
+          etiket: false,
+          rincian: [key]
+        }
+        res.listRacikan.push(temp)
+      }
+    })
+  }
+  if (res?.listRacikan?.length) {
+    res.listRacikan.forEach(a => {
+      a.harga += nilaiR
+    })
+  }
+  if (res?.asalpermintaanresep?.length && !res?.permintaanresep?.length) {
+    res.permintaanresep = res?.asalpermintaanresep
+  }
+  if (res?.permintaanresep?.length) {
+    res?.permintaanresep.forEach(key => {
+      key.jumlahAwal = parseFloat(key?.jumlah)
+      // const keluar = res?.rincian?.find(ri => ri.kdobat === key.kdobat)
+      // console.log('permintaan', keluar)
+      // if (keluar) {
+      //   key.jumlah = parseFloat(keluar?.jumlah)
+      //   key.hargajual = parseFloat(keluar?.harga_jual)
+      //   if (parseFloat(res?.flag) > 2) {
+      //     key.done = true
+      //   }
+      // }
+      // if (key.jumlahAwal !== key.jumlah) console.log('jumlah', key.jumlahAwal, key.jumlah)
+      key.groupsistembayar = val?.sistembayar?.groups
+      key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+
+      key.etiket = false
+    })
+  }
+  // let obat = 0
+  // if (parseInt(res.flag) <= 2) obat = res?.permintaanresep?.map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+  // else obat = res?.permintaanresep?.filter(f => f.done).map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+  // const rac = res?.listRacikan?.map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+  // res.subtotal = obat + rac
+
+  console.log('print', res)
+
+  itemToPrint.value = res
 }
 // function closePrintId () {
 //   console.log('print id close')

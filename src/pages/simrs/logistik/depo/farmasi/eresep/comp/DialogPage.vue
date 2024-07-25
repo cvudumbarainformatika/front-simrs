@@ -1490,7 +1490,7 @@ function updateJumlahObat (evt, rinc, item) {
 }
 function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
-  const tglKirim=date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+  const tglKirim = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
   console.log('resep', val)
   const resep = val?.rincian
   const racik = val?.rincianracik
@@ -1503,7 +1503,7 @@ function copyResep (val) {
       // console.log('50', res?.uraian50)
       // console.log('108', res?.uraian108)
       if (parseFloat(res.alokasi) < parseFloat(res.jumlah)) return
-      if(!res.diCopy) return
+      if (!res.diCopy) return
       const temp = {
         noreg: res?.noreg,
         kdobat: res?.kdobat,

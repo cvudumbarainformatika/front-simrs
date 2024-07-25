@@ -1,4 +1,4 @@
-function addStyles(win, styles) {
+function addStyles (win, styles) {
   styles.forEach((style) => {
     const link = win.document.createElement('link')
     link.setAttribute('rel', 'stylesheet')
@@ -9,7 +9,7 @@ function addStyles(win, styles) {
 }
 
 const VueHtmlToPaper = {
-  install(app, options = {}) {
+  install (app, options = {}) {
     app.config.globalProperties.$htmlToPaper = (
       el,
       localOptions,
