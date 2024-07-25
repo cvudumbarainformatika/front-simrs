@@ -37,6 +37,7 @@
             {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
           </div>
         </div>
+        <div class="row items-center  q-mt-md q-mx-md justify-between" />
         <div class="row items-center q-mb-md q-ml-md">
           <div>
             <q-chip
@@ -46,6 +47,14 @@
               text-color="white"
             >
               {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
+            </q-chip>
+            <q-chip
+              square
+              class="f-10"
+              color="blue"
+              text-color="white"
+            >
+              {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.sistembayar?.rs2 }}
             </q-chip>
             <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
           </div>
