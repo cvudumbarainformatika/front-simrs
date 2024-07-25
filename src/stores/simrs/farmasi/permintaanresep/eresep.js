@@ -1171,7 +1171,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               stokalokasi: obats?.alokasi,
               dosismaksimum: rac?.dosismaksimum,
               dosisobat: rac?.dosisobat,
-              jumlah: rac?.jumlah,
+              jumlah: racikan?.jumlah,
               satuan_racik: rac?.satuan_racik,
               keteranganx: rac?.keteranganx,
               groupsistembayar: this.pasien?.groups,
