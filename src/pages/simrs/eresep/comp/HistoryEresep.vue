@@ -61,7 +61,7 @@
                       Non Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === items?.depo">
+                  <div class="col-auto" v-if="depo[0]?.value === items?.depo && depo[0]?.value !== 'Gd-04010103'">
                     <q-btn
                       rounded
                       push
@@ -202,15 +202,17 @@
                       Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }}) | {{ items?.sistembayar?.rs2 }}
                     </div>
                   </div>
-                  <div class="col-auto" v-if="depo[0]?.value === items?.depo">
+                  <div class="col-auto" v-if="depo[0]?.value === items?.depo && depo[0]?.value !== 'Gd-04010103'">
                     <q-btn
                       rounded
                       push
-                      label="Copy resep"
+                      label="Duplicate resep"
                       class="f-12 q-mr-sm"
                       color="green"
                       text-color="white"
                       icon="icon-mat-copy_all"
+                      :disable="store.loading || store.loadingkirim"
+                      :loading="store.loading"
                       @click="copyResep(store?.historys[index], index, 'racik')"
                     >
                       <q-tooltip
@@ -331,7 +333,7 @@
                       <div v-if="store.statusCopiedRacik[`${index}-${i}`] === true" class="row col-6 items-center text-green">
                         Duplicate resep berhasil!
                       </div>
-                      <div v-else-if="store.statusCopied[`${index}-${i}`] === false && store.pemberianObatCek[`${index}-${i}`] !== null" class="row col-6 items-center text-red">
+                      <div v-else-if="store.statusCopiedRacik[`${index}-${i}`] === false && store.pemberianObatCek[`${index}-${i}`] !== null" class="row col-6 items-center text-red">
                         <q-btn
                           label="Konfirmasi pemberian obat"
                           class="f-10 q-mr-sm"
@@ -349,7 +351,7 @@
                           </q-tooltip>
                         </q-btn>
                       </div>
-                      <div v-if="store.statusCopiedRacik[`${index}-${i}`] === false" class="row col-6 items-center text-red">
+                      <div v-else-if="store.statusCopiedRacik[`${index}-${i}`] === false" class="row col-6 items-center text-red">
                         Duplicate resep gagal! ({{ store.messageCopied[`${index}-${i}`] }})
                       </div>
                     </q-item-section>

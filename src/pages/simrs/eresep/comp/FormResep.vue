@@ -851,9 +851,12 @@ function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
 function validate () {
-  if (!store?.form?.tiperesep) {
+  if (!store?.form?.tiperesep && props.depo === 'rjl') {
     notifErrVue('Tipe Resep Belum Dipilih')
     return false
+  }
+  else {
+    store.form.tiperesep = 'normal'
   }
   if (store?.form?.kodeobat !== '') {
     const ob = store?.nonFilteredObat?.filter(o => o?.kodeobat === store?.form?.kodeobat)
