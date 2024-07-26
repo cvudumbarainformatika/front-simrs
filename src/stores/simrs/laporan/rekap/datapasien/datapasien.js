@@ -40,7 +40,7 @@ export const useSimrsLaporanRekapDataPasienStore = defineStore('simrs_laporan_re
     columnHide: ['id']
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
     setPerPage (payload) {
@@ -52,7 +52,7 @@ export const useSimrsLaporanRekapDataPasienStore = defineStore('simrs_laporan_re
       this.params.page = 1
       this.getDataTable()
     },
-    bulanSelected(val) {
+    bulanSelected (val) {
       console.log('val', val)
       this.params.bulan = val
       const from = date.adjustDate(this.params.from, { month: val })
@@ -62,11 +62,11 @@ export const useSimrsLaporanRekapDataPasienStore = defineStore('simrs_laporan_re
       console.log('params', this.params)
     },
     // init data
-    getInitialData() {
+    getInitialData () {
       this.getDataTable()
     },
     // get data api
-    getDataTable() {
+    getDataTable () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {

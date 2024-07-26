@@ -152,6 +152,11 @@ const laporan = {
       // name: 'laporan.farmasi.penerimaan',
       component: () => import('pages/simrs/laporan/farmasi/penerimaan/IndexPage.vue')
     },
+    {
+      path: '/laporan/farmasi/hutang',
+      // name: 'laporan.farmasi.hutang',
+      component: () => import('pages/simrs/laporan/farmasi/hutang/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',

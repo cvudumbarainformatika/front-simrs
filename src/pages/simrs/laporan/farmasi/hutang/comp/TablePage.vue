@@ -2,19 +2,15 @@
   <div class="app-table f-12">
     <!-- title option table -->
     <div class="print-only">
-      <!-- <div class=""> -->
       <slot
         name="header-for-print"
       />
     </div>
-    <div
-      class="flex items-center justify-between q-py-sm print-hide"
-      :class="useFull?'bg-primary round-edge':''"
-    >
+    <div class="flex items-center justify-between q-mb-md  print-hide">
       <!-- title -->
       <!-- <div class="title-table q-pr-sm f-14 text-bold">
-        {{ title }}
-      </div> -->
+          {{ title }}
+        </div> -->
       <div class="col-one flex items-center">
         <div v-if="adaCari">
           <q-input
@@ -22,11 +18,10 @@
             outlined
             class="search-big"
             borderless
-            :debounce="debounce"
+            debounce="500"
             clearable
             dense
-            :dark="useFull?true:false"
-            :placeholder="textCari"
+            placeholder="Search..."
             @keydown.enter.prevent="searchEnter"
           >
             <template #prepend>
@@ -66,10 +61,8 @@
         </q-btn>
         <!-- refresh Ids -->
         <q-btn
-          v-if="adaRefresh"
           unelevated
           round
-          :color="useFull?'yellow':'blue-grey'"
           size="sm"
           icon="icon-mat-refresh"
           @click="emits('refresh')"
@@ -83,7 +76,6 @@
         </q-btn>
         <!-- per page -->
         <q-btn
-          v-if="adaPerPage"
           class="q-ml-sm"
           unelevated
           color="orange"
@@ -125,8 +117,7 @@
           </q-menu>
         </q-btn>
         <!-- filter table -->
-        <q-btn
-          v-if="adaFilter"
+        <!-- <q-btn
           class="q-ml-sm"
           unelevated
           color="indigo"
@@ -165,14 +156,14 @@
               </q-item>
             </q-list>
           </q-menu>
-        </q-btn>
+        </q-btn> -->
         <!-- data baru -->
         <q-btn
           v-if="addData && adaTambah"
           class="q-ml-sm"
           unelevated
           round
-          :color="useFull?'green':'primary'"
+          color="primary"
           size="sm"
           icon="icon-mat-add"
           @click="emits('newData')"
@@ -184,24 +175,6 @@
             Data Baru
           </q-tooltip>
         </q-btn>
-        <!-- style -->
-        <q-btn
-          v-if="useFull"
-          flat
-          :icon="!style.componentfull ? 'icon-mat-open_in_full' : 'icon-mat-close_fullscreen'"
-          round
-          :color="style.componentfull ? 'green' : 'white'"
-          size="12px"
-          class="q-ml-md"
-          @click="style.setComponentFull"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
-          >
-            Full Screen
-          </q-tooltip>
-        </q-btn>
       </div>
     </div>
     <q-separator />
@@ -211,7 +184,7 @@
       dense
       flat
       bordered
-      :separator="separator"
+      separator="cell"
       class="screenwide"
     >
       <thead>
@@ -235,10 +208,8 @@
             width="5%"
             class="text-left"
           >
-            <div class="row items-center text-weight-bold">
-              <div class="col-grow text-left">
-                No
-              </div>
+            <div class="text-weight-bold">
+              No
             </div>
           </th>
           <th
@@ -282,46 +253,42 @@
             </div>
           </th>
           <th
-            v-if="defaultBtn"
+            v-if="rightAction"
             class="text-right"
           >
-            #
-          </th>
-          <th
-            v-if="!defaultBtn"
-            class="text-right"
-          >
-            <slot name="not-default" />
+            <div class="">
+              #
+            </div>
           </th>
         </tr>
-        <tr v-if="topRow">
+        <tr v-if="!enableHead">
           <slot name="top-row" />
         </tr>
       </thead>
       <tbody v-if="!loading">
         <tr v-if="!items.length > 0">
-          <!-- <transition
+          <transition
             transition-show="fade"
             transition-hide="fade"
-          > -->
-          <td :colspan="rowImage === null? filterColumn.length + 2 : filterColumn.length + 3">
-            <div
-              class="flex column flex-center bg-loading-bg__table"
-              style="height:300px"
-            >
-              <div>
-                <q-icon
-                  name="icon-mat-receipt_long"
-                  color="primary"
-                  size="60px"
-                />
+          >
+            <td :colspan="rowImage === null? filterColumn.length + 1 : filterColumn.length + 1">
+              <div
+                class="flex column flex-center bg-loading-bg__table"
+                style="height:300px"
+              >
+                <div>
+                  <q-icon
+                    name="icon-mat-receipt_long"
+                    color="primary"
+                    size="60px"
+                  />
+                </div>
+                <div class="text-primary q-mt-sm">
+                  Data Belum Ada
+                </div>
               </div>
-              <div class="text-primary q-mt-sm">
-                Data Belum Ada
-              </div>
-            </div>
-          </td>
-          <!-- </transition> -->
+            </td>
+          </transition>
         </tr>
         <template
           v-for="(item, i) in items"
@@ -330,7 +297,7 @@
         >
           <tr
             class="text-left"
-            :class="clickAble ? (item.highlight===true ? 'bg-light-blue-2 cursor-pointer' :(i%2===1?'bg-blue-grey-2 cursor-pointer':'cursor-pointer')):(i%2===1?'bg-blue-grey-2':'')"
+            :class="clickAble ? item.highlight===true? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
             @click="clickAble?clicked(item,i):''"
           >
             <td v-if="isChecked">
@@ -344,18 +311,10 @@
             </td>
             <td
               v-if="rowNo"
+              width="5%"
               class="text-left"
             >
               {{ i+1 }}
-            </td>
-            <td
-              v-if="rowImage !== null"
-              class="text-left"
-            >
-              <slot
-                :name="'cell-default-img'"
-                :row="item"
-              />
             </td>
             <td
               v-for="( col, idx ) in filterColumn"
@@ -370,7 +329,10 @@
                 {{ item[col] }}
               </slot>
             </td>
-            <td class="text-right">
+            <td
+              v-if="leftBtn"
+              class="text-right"
+            >
               <div class="row justify-end items-center">
                 <!-- class="q-ml-md" -->
                 <slot
@@ -415,7 +377,7 @@
                   </q-btn>
                 </div>
 
-                <div>
+                <div v-else>
                   <slot
                     name="custom-btn"
                     :row="item"
@@ -433,7 +395,8 @@
             </td>
           </tr>
         </template>
-        <tr v-if="bottomRow">
+
+        <tr>
           <slot name="bottom-row" />
         </tr>
       </tbody>
@@ -465,7 +428,7 @@
     </div>
     <!-- Pagination -->
     <AppPaginationTable
-      v-if="items.length > 0 && adaPaginasi && !simplePaginasi"
+      v-if="items.length > 0"
       class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
@@ -473,376 +436,42 @@
       @next="emits('goto', meta.current_page + 1)"
       @prev="emits('goto', meta.current_page - 1)"
     />
-    <!-- simle paginate -->
-    <div
-      v-if="simplePaginasi"
-      class="row items-center justify-between q-pa-sm"
-      :class="`${color} text-${textColor}`"
-    >
-      <div>
-        <div class="row items-center">
-          <q-btn
-            flat
-            :color="textColor"
-            icon="icon-mat-skip_previous"
-            size="sm"
-            round
-            :disable="meta.current_page===1"
-            @click="emits('goto',1)"
-          />
-          <q-btn
-            flat
-            :color="textColor"
-            icon="icon-mat-chevron_left"
-            size="sm"
-            round
-            :disable="meta.current_page===1"
-            @click="emits('goto',meta.current_page-1)"
-          />
-          <div class="q-px-sm">
-            <div
-              v-if="meta.total !==0"
-              classs="row items-center"
-            >
-              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }}  </span> data ke -  {{ meta.from }} sampai data ke -  <span class="text-weight-bold">{{ meta.to }}</span> </span> |
-            </div>
-            <div v-else>
-              Tidak Ada Data
-            </div>
-          </div>
-          <q-btn
-            flat
-            :color="textColor"
-            icon="icon-mat-chevron_right"
-            size="sm"
-            round
-            :disable="!meta.next_page_url"
-            @click="emits('goto',meta.current_page+1)"
-          />
-          <!-- <q-btn
-            flat
-            :color="textColor"
-            icon="icon-mat-skip_next"
-            size="sm"
-            round
-            :disable="meta.current_page===lastPage"
-            @click="emits('goTo',meta.last_page)"
-          /> -->
-        </div>
-      </div>
-      <!-- <div class="q-pr-xl">
-        <q-badge
-          outline
-          align="middle"
-          color="orange"
-          class="q-mr-xs f-20 text-weight-bold"
-        >
-          {{ meta.total }}
-        </q-badge> TOTAL DATA DITEMUKAN
-      </div> -->
-    </div>
-    <!-- tanda tangan -->
-    <div v-if="tandaTangan">
-      <div class="q-my-md">
-        <div class="row q-mb-md">
-          <div class="col-4" />
-          <div class="col-4" />
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ pojokKananAtas }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kiriAtasSatu }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ tengahAtasSatu }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kananAtasSatu }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kiriAtasDua }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ tengahAtasDua }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kananAtasDua }}
-            </div>
-          </div>
-        </div>
-        <div class="row q-mt-xl text-weight-bold">
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kiriBawahSatu }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ tengahBawahSatu }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kananBawahSatu }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kiriBawahDua }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ tengahBawahDua }}
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              {{ kananBawahDua }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="q-my-md print-hide">
-        <div class="row ">
-          <div class="col-4" />
-          <div class="col-4" />
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="pojokKananAtas"
-                label="tanggal"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kiriAtasSatu"
-                label="kiri atas satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="tengahAtasSatu"
-                label="tengah atas satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kananAtasSatu"
-                label="kanan atas satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kiriAtasDua"
-                label="kiri atas dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="tengahAtasDua"
-                label="tengah atas dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kananAtasDua"
-                label="kanan atas dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kiriBawahSatu"
-                label="kiri bawah satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="tengahBawahSatu"
-                label="tengah bawah satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kananBawahSatu"
-                label="kanan bawah satu"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kiriBawahDua"
-                label="kiri bawah dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="tengahBawahDua"
-                label="tengah bawah dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="text-center f-10">
-              <app-input
-                v-model="kananBawahDua"
-                label="kanan bawah dua"
-                valid
-                outlined
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
-import { date, useQuasar } from 'quasar'
-import { useStyledStore } from 'src/stores/app/styled'
-
-const style = useStyledStore()
+import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 const props = defineProps({
   addData: { type: Boolean, default: true },
   title: { type: String, default: '' },
-  separator: { type: String, default: 'horizontal' },
-  debounce: { type: String, default: '700' },
-  textCari: { type: String, default: 'Cari ...' },
   loading: { type: Boolean, default: false },
   columns: { type: Array, default: () => [] },
   columnHide: { type: Array, default: () => [] },
   items: { type: Array, default: () => [] },
   meta: { type: Object, default: () => {} },
   rowImage: { type: String, default: null },
-  tandaTangan: { type: Boolean, default: false },
   rowNo: { type: Boolean, default: false },
-  topRow: { type: Boolean, default: false },
-  adaPaginasi: { type: Boolean, default: true },
-  simplePaginasi: { type: Boolean, default: false },
-  bottomRow: { type: Boolean, default: false },
   perPage: { type: Number, default: 12 },
   orderBy: { type: String, default: 'id' },
   sort: { type: String, default: 'desc' },
   toSearch: { type: String, default: '' },
   isChecked: { type: Boolean, default: false },
-  defaultBtn: { type: Boolean, default: true },
-  adaEdit: { type: Boolean, default: true },
-  adaDelete: { type: Boolean, default: true },
-  adaTambah: { type: Boolean, default: true },
-  adaCari: { type: Boolean, default: true },
-  adaRefresh: { type: Boolean, default: true },
-  adaPerPage: { type: Boolean, default: true },
-  adaFilter: { type: Boolean, default: true },
+  defaultBtn: { type: Boolean, default: false },
+  adaEdit: { type: Boolean, default: false },
+  adaDelete: { type: Boolean, default: false },
+  adaTambah: { type: Boolean, default: false },
+  adaCari: { type: Boolean, default: false },
   clickAble: { type: Boolean, default: false },
+  leftBtn: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
-  useFull: { type: Boolean, default: false },
-  textSize: { type: Number, default: 12 },
-  color: {
-    type: String,
-    default: 'bg-primary'
-  },
-  textColor: {
-    type: String,
-    default: 'white'
-  }
+  rightAction: { type: Boolean, default: false },
+  textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
-// text tanda tangan start
 
-const kiriAtasSatu = ref('Mengetahui')
-const kiriAtasDua = ref('Kepala Bagian Umum')
-const kiriBawahSatu = ref('Jumadi, S.Sos, MM')
-const kiriBawahDua = ref('NIP . 19691223 199302 1 002')
-
-const tengahAtasSatu = ref('')
-const tengahAtasDua = ref('Pejabat Teknik Kegiatan')
-const tengahBawahSatu = ref('Yuliana, S.A.P')
-const tengahBawahDua = ref('NIP. 19740304 200801 2 005')
-
-const kananAtasSatu = ref('')
-const kananAtasDua = ref('Petugas Bagian Barang')
-const kananBawahSatu = ref('SARWANI')
-const kananBawahDua = ref('NIP. 19760311 200801 1 008')
-
-const pojokKananAtas = ref('Probolinggo, ' + date.formatDate(Date.now(), 'DD MMMM YYYY'))
-
-// text tanda tangan end
 // const per_page = ref(5)
 const refCellTable = ref(null)
 const options = ref([5, 10, 20, 50, 100, 1000])
@@ -889,7 +518,7 @@ const heightCell = ref(0)
 onMounted(() => {
   // console.log(props.columns)
   heightCell.value = refCellTable.value.$el.clientHeight * props.perPage
-//   console.log(refCellTable.value.$el.clientHeight * props.perPage)
+  //   console.log(refCellTable.value.$el.clientHeight * props.perPage)
 })
 watch(filterCheckbox, (obk) => {
   for (let i = 0; i < obk.length; i++) {
@@ -904,7 +533,7 @@ watch(selectColumn, () => {
   setCheck(checkAll.value)
 })
 watch(() => props.items, (obj) => {
-//   console.log('Watch items', obj)
+  //   console.log('Watch items', obj)
   selected.value = []
 })
 
@@ -961,85 +590,81 @@ const ts = computed(() => (props.textSize).toString() + 'px')
 const pts = computed(() => (props.textSize - 2).toString() + 'px')
 </script>
 
-<style lang="scss" scoped>
+  <style lang="scss" scoped>
 
-$fs : v-bind(ts);
-$pfs: v-bind(pts);
+  $fs : v-bind(ts);
+  $pfs: v-bind(pts);
 
-@mixin width-full($full: true) {
-  @if $full {
-    max-width: 100% !important;
-  }
-}
-@mixin wrap($full: true) {
-  @if $full {
-    padding:10px 10px;
-      white-space: normal !important;
-        word-wrap: normal !important;
-        hyphens: manual;
-  } @else {
-    padding:8px 10px;
-  }
-}
-
-.round-edge{
-  padding: 10px;
-  border-radius: 5px 5px 0px 0px;
-}
-.app-table {
-  width: 100%; /* print width */
-  font-size:$fs;
-
-  // .q-table{
-  //   @include width-full($full: true);
-  // }
-  .q-table {
-    max-width: 100% !important;
-  }
-  // .q-table td {
-  //   padding: 10px 10px;
-  //   font-size: $fs;
-  // }
-  // .q-table th {
-  //   padding:15px 10px;
-  //   font-size: $fs;
-  // }
-  .q-table td {
-      font-size:$fs;
-      @include wrap($full: false);
-    }
-    .q-table th {
-      font-size:$fs;
-      @include wrap($full: false);
-    }
-}
-
-@media print {
-  .app-table {
-    width: 100%; /* print width */
-    font-size:$pfs;
-
-    .q-table {
-        max-width: 100% !important;
-      }
-    .q-table td {
-      padding: 5px 5px;
-      font-size: $pfs;
-        white-space: normal !important;
-        word-wrap: normal !important;
-        hyphens: manual;
-    }
-    .q-table th {
-      padding:5px 5px;
-      font-size:$pfs;
-      white-space: normal !important;
-        word-wrap: normal !important;
-        hyphens: manual;
-    }
-
-    .screenwide{
+  @mixin width-full($full: true) {
+    @if $full {
       max-width: 100% !important;
     }
   }
-}
-</style>
+  @mixin wrap($full: true) {
+    @if $full {
+      padding:10px 10px;
+        white-space: normal !important;
+          word-wrap: normal !important;
+          hyphens: manual;
+    } @else {
+      padding:8px 10px;
+    }
+  }
+
+  .app-table {
+    width: 100%; /* print width */
+    font-size:$fs;
+
+    // .q-table{
+    //   @include width-full($full: true);
+    // }
+    .q-table {
+      max-width: 100% !important;
+    }
+    // .q-table td {
+    //   padding: 10px 10px;
+    //   font-size: $fs;
+    // }
+    // .q-table th {
+    //   padding:15px 10px;
+    //   font-size: $fs;
+    // }
+    .q-table td {
+        font-size:$fs;
+        @include wrap($full: false);
+      }
+      .q-table th {
+        font-size:$fs;
+        @include wrap($full: false);
+      }
+  }
+
+  @media print {
+    .app-table {
+      width: 100%; /* print width */
+      font-size:$pfs;
+
+      .q-table {
+          max-width: 100% !important;
+        }
+      .q-table td {
+        padding: 5px 5px;
+        font-size: $pfs;
+         white-space: normal !important;
+          word-wrap: normal !important;
+          hyphens: manual;
+      }
+      .q-table th {
+        padding:5px 5px;
+        font-size:$pfs;
+        white-space: normal !important;
+          word-wrap: normal !important;
+          hyphens: manual;
+      }
+
+      .screenwide{
+        max-width: 100% !important;
+      }
+    }
+  }
+  </style>
