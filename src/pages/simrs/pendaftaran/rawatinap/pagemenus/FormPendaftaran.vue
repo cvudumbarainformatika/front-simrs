@@ -45,7 +45,11 @@
                 @update:model-value="(val)=>gantiBaruLama(val)"
               />
             </div>
-            <app-input-simrs ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true, number: true}" />
+            <app-input-simrs
+              ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true, number: true}"
+              :error-from-server="store.errors.norm"
+              @update:model-value="store.errors.norm = null"
+            />
             <div class="flex q-gutter-sm full-width q-pb-sm q-pt-xs" style="margin-top: -12px;">
               <div>Kewarganegaraan : </div>
               <q-radio
@@ -60,7 +64,11 @@
               />
             </div>
             <div v-if="store.pasien.kewarganegaraan==='WNI'">
-              <app-input-simrs v-model="store.pasien.noktp" label="NIK / NO. KTP" :valid="{min: 16, number: true}" :autofocus="false" />
+              <app-input-simrs
+                v-model="store.pasien.noktp" label="NIK / NO. KTP" :valid="{min: 16, number: true}" :autofocus="false"
+                :error-from-server="store.errors.noktp"
+                @update:model-value="store.errors.noktp = null"
+              />
             </div>
             <div v-else>
               <app-input-simrs v-model="store.pasien.paspor" label="NO. Passport" :valid="{required: true}" :autofocus="false" />
@@ -480,8 +488,6 @@
             />
             <app-input-simrs v-model="store.pasien.nama_penanggungjawab" label="Nama Penanggung Jawab" />
             <app-input-simrs v-model="store.pasien.notelp_penanggungjawab" label="No Telp Penang Jawab" />
-          </div>
-          <div class="col-4">
             <app-autocomplete
               ref="refDokter"
               v-model="store.pasien.kd_dokter_bpjs"
@@ -495,7 +501,10 @@
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>pilihDokter(val)"
             />
+          </div>
+          <div class="col-4">
             <div class="row q-col-gutter-x-xs">
+              <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" />
               <div class="col-5">
                 <app-autocomplete
                   ref="refJnsSistemBayar"
@@ -541,21 +550,89 @@
           </div>
           <div class="col-4">
             <!-- <app-input-simrs label="Diagnosa Awal" /> -->
-            <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" />
-            <app-autocomplete
-              ref="refHakRuang"
-              v-model="store.pasien.kamar"
-              label="Hak Ruang"
-              autocomplete="rs2"
-              option-value="rs1"
-              option-label="rs2"
-              outlined
-              :source="store.kamars"
-              class="q-mb-xs"
-              :rules="[val => (!!val) || 'Harap diisi',]"
-              @selected="(val)=>pilihKamar(val)"
-            />
-            <app-input-simrs v-if="store.pasien.kelas !== store.pasien.hakKelasBpjs || !store.pasien.hakKelasBpjs === null" v-model="store.pasien.indikatorPerubahanKelas" label="Indikator Perubahan Kelas" />
+
+            <div class="row q-col-gutter-xs">
+              <!-- <q-btn dense color="primary" class="col-12 full-width q-ma-xs" @click="previewListKamar">
+                Cari Ruangan
+              </q-btn> -->
+              <app-autocomplete
+                ref="refHakRuang"
+                v-model="store.pasien.hakruang"
+                label="Hak Ruang"
+                autocomplete="rs2"
+                option-value="rs1"
+                option-label="rs2"
+                outlined
+                :source="store.kamars"
+                class="q-mb-xs col-12"
+                :rules="[val => (!!val) || 'Harap diisi',]"
+                @selected="(val)=>pilihRuang(val)"
+              />
+              <div class="flex q-gutter-sm full-width q-mb-sm">
+                <div>Titipkan Pasien ? : </div>
+                <q-radio
+                  v-for="item in store.titipans"
+                  :key="item"
+                  v-model="store.pasien.isTitipan"
+                  :val="item"
+                  :label="item"
+                  dense
+                  size="xs"
+                  @update:model-value="(val)=>{
+                    if (val==='Ya') {
+                      store.pasien.kode_ruang= null
+                    }
+                  }"
+                />
+              </div>
+              <app-autocomplete
+                v-if="store.pasien.isTitipan ==='Ya'"
+                ref="refKodeRuang"
+                v-model="store.pasien.kode_ruang"
+                label="Pilih Ruangan"
+                autocomplete="rs2"
+                option-value="rs1"
+                option-label="rs2"
+                outlined
+                :source="store.kamars"
+                class="q-mb-xs col-12"
+                :rules="[val => (!!val) || 'Harap diisi',]"
+                @selected="(val)=>pilihRuang(val)"
+              />
+              <app-autocomplete
+                ref="refGrupKamar"
+                v-model="store.pasien.kamar"
+                label="Pilih Kamar"
+                autocomplete="label"
+                option-value="value"
+                option-label="label"
+                outlined
+                :source="grupKamar"
+                class="q-mb-xs col-8"
+                :rules="[val => (!!val) || 'Harap diisi',]"
+                @selected="(val)=>pilihKamar(val)"
+              />
+              <app-autocomplete
+                ref="refKamar"
+                v-model="store.pasien.no_bed"
+                label="NO BED"
+                autocomplete="rs2"
+                option-value="rs5"
+                option-label="rs2"
+                outlined
+                :source="kamars"
+                class="q-mb-xs col-4"
+                :rules="[val => (!!val) || 'Harap diisi',]"
+              />
+              <!-- <app-input-simrs v-model="store.pasien.ruang" label="Ruang" class="col-12" readonly :valid="{ required: true }" />
+              <app-input-simrs v-model="store.pasien.kamar" label="Kamar" class="col-8" readonly :valid="{ required: true }" />
+              <app-input-simrs v-model="store.pasien.no_bed" label="BED" class="col-4" readonly :valid="{ required: true }" /> -->
+              <app-input-simrs
+                v-if="store.pasien.kelas !== store.pasien.hakKelasBpjs || !store.pasien.hakKelasBpjs === null" v-model="store.pasien.indikatorPerubahanKelas"
+                label="Indikator Perubahan Kelas"
+                class="col-6"
+              />
+            </div>
           </div>
           <!-- <div class="col-2">
             <app-input-simrs v-model="store.pasien.biaya_admin" label="Biaya Administrasi " readonly />
@@ -597,6 +674,8 @@ const weather = ref(null)
 const formRef = ref(null)
 const refNorm = ref(null)
 const refKelurahan = ref(null)
+const grupKamar = ref([])
+const kamars = ref([])
 const onSubmit = () => {
   // console.log('simpan', store.pasien)
   store.simpanPasien()
@@ -900,17 +979,66 @@ function copyDataFromBpjs () {
   store.openDialogPeserta = false
 }
 
-function pilihKamar (val) {
+// eslint-disable-next-line no-unused-vars
+function pilihRuang (val) {
+  store.pasien.kamar = null
   const arr = store.kamars
   const obj = arr.length ? arr.find(x => x.rs1 === val) : null
-  console.log('pilihKamar', obj)
-  store.pasien.kode_ruang = obj?.rs4
-  store.pasien.kelas = obj?.rs3
-  store.pasien.flag_ruang = obj?.rs6
+  console.log('pilihRuang', obj)
+  const group = obj?.rs4 ?? null
+  // const kodeRuang = obj?.rs1 ?? null
+  const kelas = obj?.rs3 ?? null
+  const flag = obj?.rs6 ?? null
+
+  // store.pasien.kode_ruang = kodeRuang
+  store.pasien.kelas = kelas
+  store.pasien.flag_ruang = flag
+  store.pasien.group = group
+
+  store.showKamar()
+    .then(() => {
+      grupKamar.value = []
+      kamars.value = []
+      const pilihan = store.listKamars.find(x => x.groups === group)
+      console.log('pilihan', pilihan)
+      const kamarsx = pilihan?.kamars?.length
+        ? pilihan?.kamars?.filter(x => {
+          return x.rs6 === group && (x?.rs5 === `${group + kelas}` || x?.rs5 === '-')
+        })
+        : []
+      console.log('kamars', kamars)
+      const mapKamar = kamarsx?.length ? kamarsx?.map(x => x.rs1) : []
+      const grup = [...new Set(mapKamar)]
+      // grupKamar.value = grup
+      console.log('grup', grup)
+      // const thumb = []
+      for (let i = 0; i < grup.length; i++) {
+        const el = grup[i]
+        // const anggotaKamar = kamarsx?.filter(x => x.rs1 === el)?.sort((x, y) => x.rs2 - y.rs2)
+        // const anggotaKamar = kamarsx?.find(x => x.rs1 === el)
+
+        // thumb.push(anggotaKamar ?? null)
+        grupKamar.value.push({
+          label: el,
+          value: el
+        })
+      }
+      // kamars.value = thumb
+    })
 
   // cariBiayaAdministrasi()
   // cariBiayaKamar()
 }
+
+function pilihKamar (val) {
+  console.log('pilihKamar', val)
+  const arr = store.listKamars?.find(x => x.groups === store.pasien.group)?.kamars || []
+  // console.log('arr', arr)
+  const lists = arr?.length ? arr?.filter(x => x.rs1 === val) : []
+  console.log('lihatKamar', lists)
+  kamars.value = lists
+}
+
 function pilihDokter (val) {
   const arr = store.dokters
   const obj = arr.length ? arr.find(x => x.kddpjp === val) : null
@@ -1072,55 +1200,6 @@ watch(() => store.paramWilayah.kd_negara, (obj) => {
   }
 })
 
-// watch(() => store.paramWilayah.kd_propinsi, (obj) => {
-//   // console.log('watch', obj)
-//   if (obj) {
-//     const cari = store.propinsies.filter(x => x?.propinsi === obj)
-//     store.pasien.propinsi = cari[0]?.wilayah
-//     console.log('cari', cari)
-//     store.getKota()
-//       .then(() => {
-//         store.paramWilayah.kd_kotakabupaten = null
-//         store.paramWilayah.kd_kecamatan = null
-//         store.paramWilayah.kd_kelurahan = null
-//         store.pasien.kota = null
-//         store.pasien.kecamatan = null
-//         store.pasien.kelurahan = null
-//         if (store.domisiliSama) {
-//           store.paramWilayahDomisili.kd_kotakabupaten = null
-//           store.paramWilayahDomisili.kd_kecamatan = null
-//           store.paramWilayahDomisili.kd_kelurahan = null
-//           store.pasien.kotaDomisili = null
-//           store.pasien.kecamatanDomisili = null
-//           store.pasien.kelurahanDomisili = null
-//         }
-//       })
-//   }
-// }, { deep: true })
-// watch(() => store.paramWilayah.kd_kotakabupaten, (obj) => {
-//   console.log('watch kota kabupaten', obj)
-//   if (obj) {
-//     if (store.kabupatens.length) {
-//       const cari = store.kabupatens.filter(x => x?.kotakabupaten === obj)
-//       store.pasien.kota = cari[0]?.wilayah
-//       console.log('cari', cari)
-//       store.getKec()
-//         .then(() => {
-//           store.paramWilayah.kd_kecamatan = null
-//           store.paramWilayah.kd_kelurahan = null
-//           store.pasien.kecamatan = null
-//           store.pasien.kelurahan = null
-//           if (store.domisiliSama) {
-//             store.paramWilayahDomisili.kd_kecamatan = null
-//             store.paramWilayahDomisili.kd_kelurahan = null
-//             store.pasien.kecamatanDomisili = null
-//             store.pasien.kelurahanDomisili = null
-//           }
-//         })
-//     }
-//   }
-// }, { deep: true })
-
 watchEffect(() => {
   if (store.domisiliSama === true) {
     store.paramWilayahDomisili.kd_negara = store.paramWilayah.kd_negara
@@ -1133,6 +1212,10 @@ watchEffect(() => {
     store.pasien.rtDomisili = store.pasien.rt
     store.pasien.rwDomisili = store.pasien.rw
     store.pasien.kodeposDomisili = store.pasien.kodepos
+  }
+
+  if (store.pasien.isTitipan === 'Tidak') {
+    store.pasien.kode_ruang = store.pasien.hakruang
   }
 })
 
