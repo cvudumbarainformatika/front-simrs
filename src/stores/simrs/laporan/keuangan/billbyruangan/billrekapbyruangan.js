@@ -627,9 +627,50 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       console.log('xxx', val)
       val?.forEach(wew => {
         wew.Admin = []
-        const kelas = wew?.rstigalimax[0]?.rs17
-        console.log('wew', kelas)
+        wew?.kunjunganranap?.forEach(kunj => {
+          const kelas = kunj?.kelas
+          const modaltarif = this.tigapuluhtarif?.find(x => x.rs3 === 'A1#')
+          let subtotalx = 0
+          if (kelas === '3') {
+            subtotalx = parseInt(modaltarif?.rs6) + parseInt(modaltarif?.rs7)
+          }
+          else if (kelas === '2') {
+            subtotalx = parseInt(modaltarif?.rs8) + parseInt(modaltarif?.rs9)
+          }
+          else if (kelas === '1' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
+            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+          }
+          else if (kelas === 'Utama') {
+            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+          }
+          else if (kelas === 'VIP') {
+            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+          }
+          else if (kelas === 'VVIP') {
+            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+          }
+          const adminsx = {
+            koderuangan: kunj?.koderuang,
+            namaruangan: kunj?.namaruangan,
+            subtotal: subtotalx
+          }
+          wew.Admin.push(adminsx)
+        })
+
+        wew.AkomodasiKamar = []
+        wew.akomodasiKamar?.forEach(akom => {
+          const akomodasix = {
+            koderuangan: akom?.rs16,
+            namaruangan: akom?.rs16,
+            subtotal: akom?.subtotal
+          }
+          console.log('arie', akomodasix)
+          wew.AkomodasiKamar.push(akomodasix)
+        })
       })
+      this.items = val
+      this.loading = false
+      console.log('sasasasad', val)
     }
 
   }

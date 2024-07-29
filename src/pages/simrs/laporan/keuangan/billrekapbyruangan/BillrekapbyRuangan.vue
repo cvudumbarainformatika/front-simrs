@@ -53,7 +53,7 @@
           :column-hide="store.kolomhide"
           :default-btn="false"
           :right-action="false"
-          :loading="store.loading"
+
           row-no
         >
           <!-- tombol print -->
@@ -155,11 +155,8 @@
               </div>
             </q-form>
           </template>
-          <template #cell-Identitas="{row}">
-            Noreg : {{ row?.rs1 }} <br>
-            Norm : {{ row?.rs2 }} <br>
-            Tgl MRS : {{ row?.rs3 }} <br>
-            Tgl KRS : {{ row?.rs4 }}
+          <template #cell-NamaRuangan="{row}">
+            {{ row?.rs2 }} ( {{ row?.rs5 }} )
           </template>
           <template #cell-Admin="{row}">
             <q-item
@@ -167,352 +164,17 @@
               :key="a"
               class="list-move"
             >
-              {{ admin?.namaruangan }} = {{ formatDouble(admin?.subtotal) }} <br>
+              {{ formatDouble(admin?.subtotal) }}
             </q-item>
           </template>
-          <template #cell-AkomodasiKamar="{row}">
+          <template #cell-Akomadasikamar="{row}">
             <q-item
-              v-for="(akomodasiruangan , n) in row?.akomodasiKamar"
-              :key="n"
+              v-for="(akomodasi , akom) in row?.AkomodasiKamar"
+              :key="akom"
               class="list-move"
             >
-              {{ akomodasiruangan?.namaruangan }} = {{ formatDouble(akomodasiruangan?.subtotal) }} <br>
+              {{ formatDouble(akomodasi?.subtotal) }}
             </q-item>
-          </template>
-          <template #cell-BiayaMatrei="{row}">
-            <q-item
-              v-for="(biayamaterai , n) in row?.biayamaterai"
-              :key="n"
-              class="list-move"
-            >
-              {{ formatDouble(biayamaterai?.subtotal) }} <br>
-            </q-item>
-          </template>
-          <template #cell-TindakanDokter="{row}">
-            <!-- <q-item
-              v-for="(TindakanDokter , n) in row?.TindakanDokter"
-              :key="n"
-              class="list-move"
-            > -->
-            <div
-              v-if="row?.TindakanDokter.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanDokter , td) in row?.TindakanDokter"
-                :key="td"
-                class="list-move"
-              >
-                {{ TindakanDokter?.namaruangan }} = {{ formatDouble(TindakanDokter?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Visite="{row}">
-            <div
-              v-if="row?.Visite.length >= 0"
-            >
-              <q-item
-                v-for="(Visite , v) in row?.Visite"
-                :key="v"
-                class="list-move"
-              >
-                {{ Visite?.namaruangan }} = {{ formatDouble(Visite?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-TindakanKeperawatan="{row}">
-            <div
-              v-if="row?.TindakanPerawat.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanPerawat , tp) in row?.TindakanPerawat"
-                :key="tp"
-                class="list-move"
-              >
-                {{ TindakanPerawat?.namaruangan }} = {{ formatDouble(TindakanPerawat?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-MakanPasien="{row}">
-            <div
-              v-if="row?.MakanPasien.length >= 0"
-            >
-              <q-item
-                v-for="(MakanPasien , mp) in row?.MakanPasien"
-                :key="mp"
-                class="list-move"
-              >
-                {{ MakanPasien?.namaruangan }} = {{ formatDouble(MakanPasien?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-AsuhanGizi="{row}">
-            <div
-              v-if="row?.AsuhanGizi.length >= 0"
-            >
-              <q-item
-                v-for="(AsuhanGizi , mp) in row?.AsuhanGizi"
-                :key="mp"
-                class="list-move"
-              >
-                {{ AsuhanGizi?.namaruangan }} = {{ formatDouble(AsuhanGizi?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Oksigen="{row}">
-            <div
-              v-if="row?.Oksigen.length >= 0"
-            >
-              <q-item
-                v-for="(Oksigen , ok) in row?.Oksigen"
-                :key="ok"
-                class="list-move"
-              >
-                {{ Oksigen?.namaruangan }} = {{ formatDouble(Oksigen?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Keperawatan="{row}">
-            <div
-              v-if="row?.Keperawatan.length >= 0"
-            >
-              <q-item
-                v-for="(Keperawatan , kp) in row?.Keperawatan"
-                :key="kp"
-                class="list-move"
-              >
-                {{ Keperawatan?.namaruangan }} = {{ formatDouble(Keperawatan?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Laborat="{row}">
-            <div
-              v-if="row?.Laborat.length >= 0"
-            >
-              <q-item
-                v-for="(Laborat , lab) in row?.Laborat"
-                :key="lab"
-                class="list-move"
-              >
-                {{ Laborat?.namaruangan }} = {{ formatDouble(Laborat?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Radiologi="{row}">
-            <div
-              v-if="row?.Laborat.length >= 0"
-            >
-              <q-item
-                v-for="(Radiologi , rad) in row?.Radiologi"
-                :key="rad"
-                class="list-move"
-              >
-                {{ Radiologi?.namaruangan }} = {{ formatDouble(Radiologi?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Endoscopy="{row}">
-            <div
-              v-if="row?.Endoscopy.length >= 0"
-            >
-              <q-item
-                v-for="(Endoscopy , end) in row?.Endoscopy"
-                :key="end"
-                class="list-move"
-              >
-                {{ Endoscopy?.namaruangan }} = {{ formatDouble(Endoscopy?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-KamarOperasiIbs="{row}">
-            <div
-              v-if="row?.Kamaroperasiibs.length >= 0"
-            >
-              <q-item
-                v-for="(Kamaroperasiibs , kob) in row?.Kamaroperasiibs"
-                :key="kob"
-                class="list-move"
-              >
-                {{ Kamaroperasiibs?.namaruangan }} = {{ formatDouble(Kamaroperasiibs?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <!-- <template #cell-KamarOperasiIgd="{row}">
-            <div
-              v-if="row?.Kamaroperasiigd.length >= 0"
-            >
-              <q-item
-                v-for="(Kamaroperasiigd , okigd) in row?.Kamaroperasiigd"
-                :key="okigd"
-                class="list-move"
-              >
-                {{ Kamaroperasiigd?.namaruangan }} = {{ formatDouble(Kamaroperasiigd?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template> -->
-          <template #cell-TindakanOperasi="{row}">
-            <div
-              v-if="row?.Tindakanoperasi.length >= 0"
-            >
-              <q-item
-                v-for="(Tindakanoperasi , end) in row?.Tindakanoperasi"
-                :key="end"
-                class="list-move"
-              >
-                {{ Tindakanoperasi?.namaruangan }} = {{ formatDouble(Tindakanoperasi?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-TindakanOperasiIgd="{row}">
-            <div
-              v-if="row?.TindakanOperasiIgd.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanOperasiIgd , toi) in row?.TindakanOperasiIgd"
-                :key="toi"
-                class="list-move"
-              >
-                {{ TindakanOperasiIgd?.namaruangan }} = {{ formatDouble(TindakanOperasiIgd?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-TindakanFisioterapi="{row}">
-            <div
-              v-if="row?.TindakanFisioterapi.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanFisioterapi , tfi) in row?.TindakanFisioterapi"
-                :key="tfi"
-                class="list-move"
-              >
-                {{ TindakanFisioterapi?.namaruangan }} = {{ formatDouble(TindakanFisioterapi?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Sedasi="{row}">
-            <div
-              v-if="row?.TindakananastesidiLuarOkdanIcu.length >= 0"
-            >
-              <q-item
-                v-for="(TindakananastesidiLuarOkdanIcu , s) in row?.TindakananastesidiLuarOkdanIcu"
-                :key="s"
-                class="list-move"
-              >
-                {{ TindakananastesidiLuarOkdanIcu?.namaruangan }} = {{ formatDouble(TindakananastesidiLuarOkdanIcu?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-TindakanCardio="{row}">
-            <div
-              v-if="row?.TindakanCardio.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanCardio , tc) in row?.TindakanCardio"
-                :key="tc"
-                class="list-move"
-              >
-                {{ TindakanCardio?.namaruangan }} = {{ formatDouble(TindakanCardio?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-TindakanEeg="{row}">
-            <div
-              v-if="row?.TindakanEeg.length >= 0"
-            >
-              <q-item
-                v-for="(TindakanEeg , te) in row?.TindakanEeg"
-                :key="te"
-                class="list-move"
-              >
-                {{ TindakanEeg?.namaruangan }} = {{ formatDouble(TindakanEeg?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-PsikologtransUmum="{row}">
-            <div
-              v-if="row?.PsikologtransUmum.length >= 0"
-            >
-              <q-item
-                v-for="(PsikologtransUmum , ps) in row?.PsikologtransUmum"
-                :key="ps"
-                class="list-move"
-              >
-                {{ PsikologtransUmum?.namaruangan }} = {{ formatDouble(PsikologtransUmum?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Bdrs="{row}">
-            <div
-              v-if="row?.Bdrs.length >= 0"
-            >
-              <q-item
-                v-for="(Bdrs , bd) in row?.Bdrs"
-                :key="bd"
-                class="list-move"
-              >
-                {{ Bdrs?.namaruangan }} = {{ formatDouble(Bdrs?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Penunjangkeluar="{row}">
-            <div
-              v-if="row?.Penunjangkeluar.length >= 0"
-            >
-              <q-item
-                v-for="(Penunjangkeluar , bd) in row?.Penunjangkeluar"
-                :key="bd"
-                class="list-move"
-              >
-                {{ Penunjangkeluar?.namaruangan }} = {{ formatDouble(Penunjangkeluar?.subtotal) }} <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Farmasi="{row}">
-            <div
-              v-if="row?.Farmasi.length >= 0"
-            >
-              <q-item
-                v-for="(Farmasi , fr) in row?.Farmasi"
-                :key="fr"
-                class="list-move"
-              >
-                <div class="on-left">
-                  {{ Farmasi?.namaruangan }} = {{ formatDouble(Farmasi?.subtotal) }}
-                </div>
-                <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Ambulan="{row}">
-            <div
-              v-if="row?.Ambulan.length >= 0"
-            >
-              <q-item
-                v-for="(Ambulan , fr) in row?.Ambulan"
-                :key="fr"
-                class="list-move"
-              >
-                <div class="on-left">
-                  {{ Ambulan?.namaruangan }} = {{ formatDouble(Ambulan?.subtotal) }}
-                </div>
-                <br>
-              </q-item>
-            </div>
-          </template>
-          <template #cell-Total="{row}">
-            <div
-              v-if="row?.TotalAll.length >= 0"
-            >
-              <q-item
-                v-for="(TotalAll , t) in row?.TotalAll"
-                :key="t"
-                class="list-move"
-              >
-                <div class="on-left">
-                  Total {{ formatDouble(TotalAll?.subtotal) }}
-                </div>
-                <br>
-              </q-item>
-            </div>
           </template>
         </Customtable>
       </q-card-section>
@@ -577,7 +239,7 @@ function isiLayananx (val) {
         namaruangan: x.rs5
       }
     })
-    this.ruangan.unshift(
+    ruangan.value.unshift(
       {
         koderuangan: '1',
         namaruangan: 'Semua Ruangan'
