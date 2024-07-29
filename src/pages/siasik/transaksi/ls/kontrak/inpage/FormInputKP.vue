@@ -32,6 +32,7 @@
           v-model="store.form.termin"
           label="Termin"
           outlined
+          :autofocus="false"
         />
       </div>
       <div class="q-pa-md q-gutter-y-md" style="width: 50%;">
@@ -39,6 +40,7 @@
           v-model="store.form.nokontrakx"
           label="No. Kontrak"
           outlined
+          :autofocus="false"
           :valid="{required: true}"
         />
         <app-autocomplete
@@ -76,6 +78,7 @@
           label="Nilai Kontrak"
           v-model="store.form.nilaikontrak"
           outlined
+          :autofocus="false"
           :valid="{required:true, number:true}"
         />
         <div class="float-right">
@@ -83,7 +86,7 @@
             label="Simpan"
             :disable="store.loading"
             :loading="store.loading"
-            @click="onSubmit()"
+            @click="onSimpan()"
           />
         </div>
       </div>
@@ -122,19 +125,19 @@ onMounted(() => {
 // const termin = (val) => {
 //   store.setForm('termin', val)
 // }
-// function onSimpan () {
-//   store.simpanKontrak()
-//   // .then(() => {
-//   //   store.emptyForm()
-//   // })
-// }
-const onSubmit = () => {
+function onSimpan () {
   store.simpanKontrak()
-  // store.simpanKontrak().then(() => {
-  //   if (formKP.value != null) {
-  //     formKP.value.resetValidation()
-  //   }
-  // })
+    .then(() => {
+      store.emptyForm()
+    })
+}
+const onSubmit = () => {
+  // store.simpanKontrak()
+  store.simpanKontrak().then(() => {
+    if (formKP.value != null) {
+      formKP.value.resetValidation()
+    }
+  })
 }
 const onReset = () => {
   formKP.value.resetValidation()

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const formKontrakPekerjaan = defineStore('form_Kontrak', {
+export const formKontrakPekerjaan = defineStore('form_KontrakPekerjaan', {
   state: () => ({
     loading: false,
     reqs: {
@@ -72,7 +72,7 @@ export const formKontrakPekerjaan = defineStore('form_Kontrak', {
     // },
     setForm (key, val) {
       this.form[key] = val
-      // console.log('form', this.form)
+      console.log('form', this.form)
     },
     emptyForm () {
       this.form = {}
@@ -97,8 +97,7 @@ export const formKontrakPekerjaan = defineStore('form_Kontrak', {
       console.log('fooorm', this.form)
       this.loading = true
       return new Promise((resolve, reject) => {
-        api
-          .get('/v1/transaksi/belanja_ls/simpankontrak', this.form)
+        api.post('/v1/transaksi/kontrak/simpankontrak', this.form)
           .then((resp) => {
             console.log('isian', resp)
             this.loading = false
