@@ -11,11 +11,13 @@
     :readonly="readonly"
     :disable="disable"
     :type="type"
-    :rules="[isValidInput]"
+    :rules="[requiredRule, minRule, maxRule, emailRule, isNumberRule]"
     :lazy-rules="lazyRules"
     hide-bottom-space
     :hint="hint"
     :hide-hint="!hint"
+    :error="errorFromServer?.length > 0"
+    :error-message="errorFromServer?.length ? errorFromServer[0]: null"
     @update:model-value="emits('update:modelValue', $event)"
   >
     <template v-if="append" #append>
@@ -71,6 +73,10 @@ const props = defineProps({
   hint: {
     type: String,
     default: null
+  },
+  errorFromServer: {
+    type: [Array, Object, Boolean],
+    default: null
   }
 
 })
@@ -81,28 +87,56 @@ const appInputSimrs = ref(null)
 
 defineExpose({ appInputSimrs })
 
-function isValidInput (val) {
+const requiredRule = (val) => {
   if (props.valid === null) {
     return true
   }
-  else {
-    if (props.valid?.email) {
-      const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
-      return emailPattern.test(val) || 'email tidak valid'
-    }
-    else if (props.valid?.number) {
-      return (!isNaN(val) && !isNaN(parseFloat(val))) || 'Harus angka'
-    }
-    else if (props.valid?.min) {
-      return val?.length >= parseInt(props.valid?.min) || `Min ${props.valid?.min} char`
-    }
-    else if (props.valid?.max) {
-      return val?.length <= parseInt(props.valid?.max) || `Max ${props.valid?.max} char`
-    }
-    else {
-      return (!!val) || 'Harap diisi'
-    }
+  return (val && val.length > 0) || 'Harap diisi'
+}
+
+const minRule = (val) => {
+  if (props.valid === null) {
+    return true
   }
+  if (!props.valid?.min) {
+    return true
+  }
+  return (val && val.length >= parseInt(props.valid?.min)) || `Min ${props.valid?.min} char`
+}
+
+const maxRule = (val) => {
+  if (props.valid === null) {
+    return true
+  }
+  if (!props.valid?.max) {
+    return true
+  }
+  return (val && val.length <= parseInt(props.valid?.max)) || `Max ${props.valid?.max} char`
+}
+
+const emailRule = (val) => {
+  if (props.valid === null) {
+    return true
+  }
+  if (!props.valid?.email) {
+    return true
+  }
+  return isValidMail(val) || 'email tidak valid'
+}
+
+const isNumberRule = (val) => {
+  if (props.valid === null) {
+    return true
+  }
+  if (!props.valid?.number) {
+    return true
+  }
+  return (!isNaN(val) && !isNaN(parseFloat(val))) || 'Harus angka'
+}
+
+const isValidMail = (val) => {
+  const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
+  return emailPattern.test(val)
 }
 
 </script>

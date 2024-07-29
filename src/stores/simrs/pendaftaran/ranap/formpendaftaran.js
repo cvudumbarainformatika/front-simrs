@@ -66,9 +66,15 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       diagnosaAwal: null,
 
       // hakruang ,kelas untuk menentukan billing
+
+      hakruang: null,
+      isTitipan: 'Tidak',
+      titipan: null,
       kamar: null,
+      no_bed: null,
       kelas: null,
       kode_ruang: null,
+      group: null,
       flag_ruang: null,
       hakKelasBpjs: null,
       indikatorPerubahanKelas: null,
@@ -117,6 +123,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     statusPasiens: ['Baru', 'Lama'],
     kewarganegaran: ['WNI', 'WNA'],
     bisabacatulis: ['Ya', 'Tidak'],
+    titipans: ['Ya', 'Tidak'],
     kelamins: [],
     sapaans: [],
     negaras: [],
@@ -147,7 +154,9 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     categories: [],
     openDialogShowKamar: false,
     loadingShowKamar: false,
-    openDialogCariPasien: false
+    openDialogCariPasien: false,
+
+    errors: []
 
   }),
   // getters: {
@@ -156,6 +165,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
   actions: {
 
     initForm () {
+      this.errors = []
       const keys = Object.keys(this.pasien)
       for (let i = 0; i < keys.length; i++) {
         const el = keys[i]
@@ -166,6 +176,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.pasien.kewarganegaraan = 'WNI'
       // this.pasien.noktp = 3574041305820002
       this.pasien.bisabacatulis = 'Ya'
+      this.pasien.isTitipan = 'Tidak'
 
       this.paramWilayah.kd_negara = '62'
 
@@ -174,6 +185,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     },
 
     setFormFromServer (val) {
+      this.errors = []
       this.pasien = {
         barulama: val.baru ?? 'Baru',
         norm: val.norm ?? null,
@@ -586,6 +598,10 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           console.log('dokter', resp.data)
           this.loading = false
           this.dokters = resp.data
+
+          return new Promise((resolve, reject) => {
+            resolve(resp)
+          })
         })
         .catch(() => {
           this.loading = false
@@ -618,11 +634,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         })
     },
     async simpanPasien () {
-      // this.loadingShowKamar = true
-
-      // console.log('form', this.pasien)
-
-      // const form = this.pasien
+      this.errors = []
       this.pasien.kd_negara = this.paramWilayah.kd_negara
       this.pasien.kd_propinsi = this.paramWilayah.kd_propinsi
       this.pasien.kd_kotakabupaten = this.paramWilayah.kd_kotakabupaten
@@ -637,15 +649,21 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
 
       console.log('pasien', this.pasien)
 
-      // await api.post('v1/simrs/master/jeniskasus')
-      //   .then(resp => {
-      //     console.log('jenis kasus', resp.data)
-      //     // this.loadingShowKamar = false
-      //     this.categories = resp.data
-      //   })
-      //   .catch(() => {
-      //     // this.loadingShowKamar = false
-      //   })
+      // const payload = {
+      //   barulama: 'baru',
+      //   norm: '000084',
+      //   noktp: '3574034606530002'
+      // }
+
+      await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byform', this.pasien)
+        .then(resp => {
+          console.log('jenis kasus', resp.data)
+        })
+        .catch((err) => {
+          const bag = err.response?.status === 422 ? err.response?.data?.errors : []
+          this.errors = bag
+          console.log('err', err.response.status)
+        })
     }
 
   }

@@ -14,6 +14,11 @@ const siasik = {
       // name: 'siasik.saldo',
       component: () => import('pages/siasik/transaksi/saldo/pembiayaan/IndexPage.vue')
     },
+    {
+      path: '/siasik/ls/kontrak',
+      // name: 'siasik.saldo',
+      component: () => import('pages/siasik/transaksi/ls/kontrak/IndexPage.vue')
+    },
     // {
     //   path: '/satset/kunjungan',
     //   name: 'satset.kunjungan',
