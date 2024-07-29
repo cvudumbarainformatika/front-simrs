@@ -1014,7 +1014,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         kdobatArray = obat.map(item => item?.kdobat)
       }
 
-      const depo = this.depos.filter(pa => pa.jenis === this.depo)
+      const depo = this.depos.filter(pa => pa.value === val?.depo)
 
       if (depo[0]?.value === 'Gd-05010101') {
         if (this.form?.tiperesep !== 'normal') {
@@ -1022,15 +1022,15 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         }
       }
 
-      if (depo[0]?.value !== 'Gd-02010104') {
-        if (this.pasien.groups !== val?.sistembayar?.groups) {
-          return notifErrVue('Maaf sistem bayar pasien, tidak sama dengan sistem bayar resep yang diduplicate!!!')
-        }
-
-        if (this.form.groupsistembayarlain !== val?.sistembayar?.groups) {
-          return notifErrVue('Maaf sistem bayar yang dipilih, tidak sama dengan sistem bayar resep yang diduplicate!!!')
-        }
+      // if (depo[0]?.value !== 'Gd-02010104') {
+      if (this.pasien.groups !== val?.sistembayar?.groups) {
+        return notifErrVue('Maaf sistem bayar pasien, tidak sama dengan sistem bayar resep yang diduplicate!!!')
       }
+
+      if (this.form.groupsistembayarlain !== val?.sistembayar?.groups) {
+        return notifErrVue('Maaf sistem bayar yang dipilih, tidak sama dengan sistem bayar resep yang diduplicate!!!')
+      }
+      // }
 
       if (depo.length) {
         this.dpPar = depo[0]?.value
@@ -1072,7 +1072,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const kirimRacik = []
       let kdruang = ''
       let tagihanRs = 0
-      const depo = this.depos.filter(pa => pa.jenis === this.depo)
+      const depo = this.depos.filter(pa => pa.value === val?.depo)
 
       if (depo[0]?.value === 'Gd-04010102') {
         kdruang = this.pasien?.kdruangan
@@ -1391,11 +1391,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           stokalokasi: val?.alokasi,
           dosismaksimum: val?.dosismaksimum,
           dosisobat: val?.dosisobat,
-          jumlah: val?.jumlah,
           satuan_racik: val?.satuan_racik,
           keteranganx: val?.keteranganx,
           groupsistembayar: this.pasien?.groups,
           jenisresep: 'Racikan',
+          jumlah: val?.jumlah,
           jumlahdiminta: val?.jumlah,
           jumlahdosis: val?.jumlah,
           kdruangan: kdruang,

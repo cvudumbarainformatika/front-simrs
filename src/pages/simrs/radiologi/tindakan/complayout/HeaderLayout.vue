@@ -126,7 +126,7 @@
           outline
           color="orange"
         >
-          {{ pasien?.ruangan??'---' }}
+          {{ pasien?.poli??'---' }}
         </q-badge>
       </div>
     </q-toolbar-title>
