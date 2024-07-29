@@ -607,7 +607,10 @@ function simpan () {
   console.log('validasi ', validasi())
   if (validasi()) {
     if (!store.form.kdruang) store.setForm('kdruang', store.form.gudang)
-    store.simpanPenerimaan().then(() => { resetValidation() })
+    store.simpanPenerimaan().then(() => {
+      adaPPN.value = false
+      resetValidation()
+    })
   }
 }
 function kunci () {
