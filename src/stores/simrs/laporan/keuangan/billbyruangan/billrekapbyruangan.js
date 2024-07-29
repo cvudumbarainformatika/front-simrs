@@ -109,7 +109,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     async getambildatasemuaranap () {
       this.loading = true
       this.kolom = ['NamaRuangan', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'TindakanKeperawatan',
-        'Keperawatan', 'Total']
+        'AsuhanKeperawatan', 'Visite', 'Total']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuanganperruangan', params)
         .then((resp) => {
@@ -624,49 +624,107 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       console.log('wew', val)
     },
     sethasilx (val) {
-      console.log('xxx', val)
       val?.forEach(wew => {
-        wew.Admin = []
-        wew?.kunjunganranap?.forEach(kunj => {
-          const kelas = kunj?.kelas
-          const modaltarif = this.tigapuluhtarif?.find(x => x.rs3 === 'A1#')
-          let subtotalx = 0
-          if (kelas === '3') {
-            subtotalx = parseInt(modaltarif?.rs6) + parseInt(modaltarif?.rs7)
-          }
-          else if (kelas === '2') {
-            subtotalx = parseInt(modaltarif?.rs8) + parseInt(modaltarif?.rs9)
-          }
-          else if (kelas === '1' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
-            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
-          }
-          else if (kelas === 'Utama') {
-            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
-          }
-          else if (kelas === 'VIP') {
-            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
-          }
-          else if (kelas === 'VVIP') {
-            subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
-          }
-          const adminsx = {
-            koderuangan: kunj?.koderuang,
-            namaruangan: kunj?.namaruangan,
-            subtotal: subtotalx
-          }
-          wew.Admin.push(adminsx)
-        })
+        val.Ruangan = []
+        // const namaRuangan = this.ranap.find(kd => kd.rs4 === wew.rs4)
+        // console.log('sasas', namaRuangan)
+        const ruangans = val.group((ruangan) => ruangan.rs5)
+        const ruangansx = {
+          subtotal: ruangans
+        }
+        val.Ruangan.push(ruangansx)
+        // wew.Admin = []
+        // wew?.kunjunganranap?.forEach(kunj => {
+        //   const kelas = kunj?.kelas
+        //   const modaltarif = this.tigapuluhtarif?.find(x => x.rs3 === 'A1#')
+        //   let subtotalx = 0
+        //   if (kelas === '3') {
+        //     subtotalx = parseInt(modaltarif?.rs6) + parseInt(modaltarif?.rs7)
+        //   }
+        //   else if (kelas === '2') {
+        //     subtotalx = parseInt(modaltarif?.rs8) + parseInt(modaltarif?.rs9)
+        //   }
+        //   else if (kelas === '1' || kelas === 'IC' || kelas === 'ICC' || kelas === 'NICU' || kelas === 'IN') {
+        //     subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        //   }
+        //   else if (kelas === 'Utama') {
+        //     subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        //   }
+        //   else if (kelas === 'VIP') {
+        //     subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        //   }
+        //   else if (kelas === 'VVIP') {
+        //     subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+        //   }
+        //   const adminsx = {
+        //     koderuangan: kunj?.koderuang,
+        //     namaruangan: kunj?.namaruangan,
+        //     subtotal: subtotalx
+        //   }
+        //   console.log('sasasasasasas', adminsx)
+        //   wew.Admin.push(adminsx)
+        // })
 
-        wew.AkomodasiKamar = []
-        wew.akomodasiKamar?.forEach(akom => {
-          const akomodasix = {
-            koderuangan: akom?.rs16,
-            namaruangan: akom?.rs16,
-            subtotal: akom?.subtotal
-          }
-          console.log('arie', akomodasix)
-          wew.AkomodasiKamar.push(akomodasix)
-        })
+        // wew.AkomodasiKamar = []
+        // wew.akomodasikamar?.forEach(akom => {
+        //   const akomodasix = {
+        //     koderuangan: akom?.rs16,
+        //     namaruangan: akom?.rs16,
+        //     subtotal: akom?.subtotal
+        //   }
+        //   console.log('arie', akomodasix)
+        //   wew.AkomodasiKamar.push(akomodasix)
+        // })
+
+        // wew.TindakanDokter = []
+        // wew.tindakandokter?.forEach(td => {
+        //   const tindakandokterx = {
+        //     koderuangan: td?.rs16,
+        //     namaruangan: td?.rs16,
+        //     subtotal: td?.subtotal
+        //   }
+        //   wew.TindakanDokter.push(tindakandokterx)
+        // })
+
+        // wew.TindakanKeperawatan = []
+        // wew.tindakanperawat?.forEach(tp => {
+        //   const tindakankep = {
+        //     koderuangan: tp?.rs8,
+        //     namaruangan: wew?.rs5,
+        //     subtotal: tp?.subtotal
+        //   }
+        //   wew.TindakanKeperawatan.push(tindakankep)
+        // })
+
+        // wew.Asuhankeperawatan = []
+        // wew.keperawatan?.forEach(askep => {
+        //   const keperawatanz = {
+        //     koderuangan: askep?.rs8,
+        //     namaruangan: wew?.rs5,
+        //     subtotal: askep?.subtotal
+        //   }
+
+        //   wew.Asuhankeperawatan.push(keperawatanz)
+        // })
+
+        // wew.Visite = []
+        // wew.visiteumum?.forEach(visite => {
+        //   const visitex = {
+        //     koderuangan: visite?.rs8,
+        //     namaruangan: wew?.rs5,
+        //     subtotal: visite?.subtotal
+        //   }
+
+        //   wew.Visite.push(visitex)
+        // })
+
+        // xxx.TotalAll = []
+        // const subtotalall = xxx.Farmasi.concat(xxx.Admin, xxx.akomodasiKamar, xxx.Biayamaterai, xxx.TindakanDokter,
+        //   xxx.Visite, xxx.TindakanPerawat,
+        //   xxx.MakanPasien, xxx.Oksigen, xxx.Keperawatan, xxx.Laborat, xxx.Radiologi, xxx.Endoscopy, xxx.Kamaroperasiibs,
+        //   xxx.Tindakanoperasi, xxx.TindakanOperasiIgd, xxx.TindakanFisioterapi,
+        //   xxx.TindakananastesidiLuarOkdanIcu, xxx.Ambulan, xxx.AsuhanGizi
+        // )
       })
       this.items = val
       this.loading = false

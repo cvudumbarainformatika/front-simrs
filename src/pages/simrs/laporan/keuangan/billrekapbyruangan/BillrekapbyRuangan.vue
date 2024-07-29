@@ -156,7 +156,13 @@
             </q-form>
           </template>
           <template #cell-NamaRuangan="{row}">
-            {{ row?.rs2 }} ( {{ row?.rs5 }} )
+            <q-item
+              v-for="(ruanganas , r) in row?.Ruangan"
+              :key="r"
+              class="list-move"
+            >
+              {{ ruanganas }}
+            </q-item>
           </template>
           <template #cell-Admin="{row}">
             <q-item
@@ -164,16 +170,52 @@
               :key="a"
               class="list-move"
             >
-              {{ formatDouble(admin?.subtotal) }}
+              {{ formatDouble(admin) }}
             </q-item>
           </template>
-          <template #cell-Akomadasikamar="{row}">
+          <template #cell-AkomodasiKamar="{row}">
             <q-item
               v-for="(akomodasi , akom) in row?.AkomodasiKamar"
               :key="akom"
               class="list-move"
             >
               {{ formatDouble(akomodasi?.subtotal) }}
+            </q-item>
+          </template>
+          <template #cell-TindakanDokter="{row}">
+            <q-item
+              v-for="(tindakandok , td) in row?.TindakanDokter"
+              :key="td"
+              class="list-move"
+            >
+              {{ formatDouble(tindakandok?.subtotal) }}
+            </q-item>
+          </template>
+          <template #cell-TindakanKeperawatan="{row}">
+            <q-item
+              v-for="(tindakankep , tp) in row?.TindakanKeperawatan"
+              :key="tp"
+              class="list-move"
+            >
+              {{ formatDouble(tindakankep?.subtotal) }}
+            </q-item>
+          </template>
+          <template #cell-AsuhanKeperawatan="{row}">
+            <q-item
+              v-for="(askep , as) in row?.Asuhankeperawatan"
+              :key="as"
+              class="list-move"
+            >
+              {{ formatDouble(askep?.subtotal) }}
+            </q-item>
+          </template>
+          <template #cell-Visite="{row}">
+            <q-item
+              v-for="(visite , v) in row?.Visite"
+              :key="v"
+              class="list-move"
+            >
+              {{ formatDouble(visite?.subtotal) }}
             </q-item>
           </template>
         </Customtable>
