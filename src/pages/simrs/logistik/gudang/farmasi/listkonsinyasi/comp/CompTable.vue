@@ -170,12 +170,12 @@ function setCheck (evt, item) {
       subtotal: item?.subtotal
 
     }
-    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep && a.nopermintaan === item.nopermintaan)
     if (index < 0) store.form.items.push(temp)
   }
   else {
     // console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep && a.nopermintaan === item.nopermintaan)
     // console.log('not checked', index)
     console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
@@ -189,7 +189,7 @@ function simpan () {
   store.setForm('tgl_trans', tlg + hrs)
   store.setForm('jumlah_konsi', jumlahKonsi)
   console.log('simpan', store.form)
-  store.simpanList()
+  // store.simpanList()
 }
 </script>
 <style lang="scss" scoped>
