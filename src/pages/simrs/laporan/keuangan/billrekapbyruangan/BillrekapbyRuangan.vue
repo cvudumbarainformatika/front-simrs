@@ -10,6 +10,7 @@
               style="height: 3.56cm; max-width: 2.86cm"
             />
           </div>
+
           <div class="col-8">
             <div class="row justify-center f-18">
               PEMERINTAH KOTA PROBOLINGGO
@@ -53,7 +54,7 @@
           :column-hide="store.kolomhide"
           :default-btn="false"
           :right-action="false"
-
+          :loading="store.loading"
           row-no
         >
           <!-- tombol print -->
@@ -152,71 +153,40 @@
                     :disable="store.loading"
                   />
                 </div>
+                <div>
+                  <q-btn
+                    label="ExportToExcel"
+                    outlined
+                    @click="exportexcel"
+                  />
+                </div>
               </div>
             </q-form>
           </template>
+
           <template #cell-NamaRuangan="{row}">
-            <q-item
-              v-for="(ruanganas , r) in row?.Ruangan"
-              :key="r"
-              class="list-move"
-            >
-              {{ ruanganas }}
-            </q-item>
+            {{ row?.namaruangan }}
           </template>
           <template #cell-Admin="{row}">
-            <q-item
-              v-for="(admin , a) in row?.Admin"
-              :key="a"
-              class="list-move"
-            >
-              {{ formatDouble(admin) }}
-            </q-item>
+            {{ formatDouble(row.Admin) }}
           </template>
           <template #cell-AkomodasiKamar="{row}">
-            <q-item
-              v-for="(akomodasi , akom) in row?.AkomodasiKamar"
-              :key="akom"
-              class="list-move"
-            >
-              {{ formatDouble(akomodasi?.subtotal) }}
-            </q-item>
+            {{ formatDouble(row?.AkomodasiKamar) }}
           </template>
           <template #cell-TindakanDokter="{row}">
-            <q-item
-              v-for="(tindakandok , td) in row?.TindakanDokter"
-              :key="td"
-              class="list-move"
-            >
-              {{ formatDouble(tindakandok?.subtotal) }}
-            </q-item>
+            {{ formatDouble(row?.TindakanDokter) }}
           </template>
           <template #cell-TindakanKeperawatan="{row}">
-            <q-item
-              v-for="(tindakankep , tp) in row?.TindakanKeperawatan"
-              :key="tp"
-              class="list-move"
-            >
-              {{ formatDouble(tindakankep?.subtotal) }}
-            </q-item>
+            {{ formatDouble(row?.TindakanKeperawatan) }}
           </template>
-          <template #cell-AsuhanKeperawatan="{row}">
-            <q-item
-              v-for="(askep , as) in row?.Asuhankeperawatan"
-              :key="as"
-              class="list-move"
-            >
-              {{ formatDouble(askep?.subtotal) }}
-            </q-item>
+          <template #cell-Askep="{row}">
+            {{ formatDouble(row?.Askep) }}
           </template>
           <template #cell-Visite="{row}">
-            <q-item
-              v-for="(visite , v) in row?.Visite"
-              :key="v"
-              class="list-move"
-            >
-              {{ formatDouble(visite?.subtotal) }}
-            </q-item>
+            {{ formatDouble(row?.Visite) }}
+          </template>
+          <template #cell-Total="{row}">
+            {{ formatDouble(row?.Total) }}
           </template>
         </Customtable>
       </q-card-section>
@@ -275,12 +245,12 @@ function isiLayananx (val) {
     )
   }
   else if (val === '3') {
-    ruangan.value = store.ranap.map(x => {
-      return {
-        koderuangan: x.rs4,
-        namaruangan: x.rs5
-      }
-    })
+    // ruangan.value = store.ranap.map(x => {
+    //   return {
+    //     koderuangan: x.rs4,
+    //     namaruangan: x.rs5
+    //   }
+    // })
     ruangan.value.unshift(
       {
         koderuangan: '1',
