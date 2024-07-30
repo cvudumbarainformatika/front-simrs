@@ -173,24 +173,39 @@
       </template>
       <!-- eslint-disable-next-line vue/no-unused-vars -->
       <template #cell-peny="{row}">
-        <q-btn
-
-          v-if="role===1"
-          label="Cek Stok"
-          dense
-          no-caps
-          color="negative"
-          push
-          :loading="row.loading"
-          :disable="row.loading"
-          @click="table.cekStok(row)"
-        />
+        <div class="row no-wrap">
+          <div class="col-auto">
+            <q-btn
+              v-if="role===1"
+              label="Cek Stok"
+              dense
+              no-caps
+              color="negative"
+              push
+              :loading="row.loading"
+              :disable="row.loading"
+              @click="table.cekStok(row)"
+            />
+          </div>
+          <div class="col-auto">
+            <q-btn
+              v-if="role===1"
+              label="cek penerimaan"
+              dense
+              no-caps
+              color="primary"
+              push
+              :loading="row.loadingCek"
+              :disable="row.loadingCek"
+              @click="table.cekPenerimaan(row)"
+            />
+          </div>
+        </div>
       </template>
       <template #left-acttion="{row}">
         <div class="q-mr-md">
-          
           <q-btn
-          v-if="role===1"
+            v-if="role===1"
             flat
             class=""
             size="sm"

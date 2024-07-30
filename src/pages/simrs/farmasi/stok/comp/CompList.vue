@@ -275,6 +275,7 @@ function simpanFisik (row) {
   // console.log('table param', date1, date2, table.params.to, diff)
   row.tglopname = table.params.to + ' 23:59:58'
   if (diff < -10) return notifErrVue('Stok Opname dapat di isi dari h-10')
+  if (diff > 7) return notifErrVue('Stok Opname dapat di isi sampai h+7')
   store.simpanFisik(row)
 }
 function editData (val) {
@@ -291,9 +292,14 @@ function getSelisih (row) {
 }
 function tutup (val) {
   const date1 = new Date(table.now)
+  // const date1 = new Date('2024/08/07')
   const date2 = new Date(table.params.to + ' 23:59:59')
-  const diff = date.getDateDiff(date1, date2, 'minutes')
+  // const diff = date.getDateDiff(date1, date2, 'minutes')
+  const diff = date.getDateDiff(date1, date2, 'days')
+  const minim = diff < 0 ? (diff >= -10 && !diff >= 0) : (diff <= 7)
+  // console.log('table param', diff, minim, (diff >= -10 && !diff >= 0), (diff <= 7))
   // console.log('table param', date1, date2, table.params.to, diff,role.value)
-  return  role.value ===1 ? true : !(diff > 0) 
+  // return role.value === 1 ? true : !(diff > 0)
+  return minim
 }
 </script>

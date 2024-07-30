@@ -161,6 +161,24 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
           })
           .catch(() => { val.loading = false })
       })
+    },
+    cekPenerimaan (val) {
+      val.loadingCek = true
+      const form = {
+        kdruang: this.params.kdruang,
+        kdobat: val?.kdobat
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/stok/cek-penerimaan', form)
+          .then(resp => {
+            val.loadingCek = false
+            console.log('penye ', resp?.data)
+            notifSuccess(resp)
+            // this.getDataTable()
+            resolve(resp)
+          })
+          .catch(() => { val.loadingCek = false })
+      })
     }
   }
 })
