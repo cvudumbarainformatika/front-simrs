@@ -29,10 +29,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="data">
-          <div class="text-h6">
-            Mails
-          </div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <ListKontrakPekerjaan />
         </q-tab-panel>
       </q-tab-panels>
 
@@ -64,7 +61,9 @@
 <script setup>
 import { ref } from 'vue'
 import FormInputKP from './inpage/FormInputKP.vue'
+import ListKontrakPekerjaan from './inpage/ListKontrakPekerjaan.vue'
 
 const tabdata = ref('forminput')
+// const listdata = ref('listkontrak')
 
 </script>
