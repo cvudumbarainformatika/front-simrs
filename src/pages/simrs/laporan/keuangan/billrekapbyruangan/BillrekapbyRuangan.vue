@@ -155,7 +155,6 @@
               </div>
             </q-form>
           </template>
-
           <template #cell-NamaRuangan="{row}">
             {{ row?.namaruangan }}
           </template>

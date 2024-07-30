@@ -21,8 +21,8 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     params: {
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      layanan: '',
-      ruangan: ''
+      layanan: ''
+      // ruangan: ''
     },
     ruangan: {
       koderuangan: null
@@ -93,14 +93,13 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
     },
     async getambildatasemuarajal () {
       this.loading = true
-      this.kolom = ['NamaRuangan', 'Admin', 'AkomodasiKamar', 'TindakanDokter', 'TindakanKeperawatan',
-        'Askep', 'Visite', 'Total']
+      this.kolom = ['NamaRuangan', 'Admin', 'KonsulAntarPoli', 'TindakanDokter', 'TindakanKeperawatan', 'Total']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/keuangan/allBillRekapByRuanganperPoli', params)
         .then((resp) => {
           if (resp.status === 200) {
             const datahasil = resp?.data
-            this.sethasilx(datahasil)
+            this.sethasilpoli(datahasil)
           }
         })
         .catch((err) => {
@@ -702,6 +701,34 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
         }
 
         this.items.push(kete)
+        this.loading = false
+      })
+    },
+    sethasilpoli (val) {
+      const kodepoli = filterDuplicateArrays(val.map(m => m.kodepoli))
+      kodepoli.sort()
+      kodepoli?.forEach(pol => {
+        const poli = val.filter(f => f.kodepoli === pol)
+        const TindakanDokter = []
+        poli?.forEach(xxx => {
+          console.log('sssssssss', poli)
+          xxx.Admin = 0
+          val?.adminpoli?.forEach(ad => {
+            if (parseFloat(val?.adminpoli) > 0)xxx.Admin = parseFloat(xxx.Admin) + parseFloat(val?.adminpoli?.subtotal)
+          })
+
+          xxx?.tindakandokter?.forEach(td => {
+            if (td) TindakanDokter.push(td)
+          })
+        })
+
+        const tampilpoli = {
+          namaruangan: val.find(g => g.kodepoli === pol).rs2,
+          // Admin: Admin.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0),
+          TindakanDokter: TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0)
+        }
+
+        this.items.push(tampilpoli)
         this.loading = false
       })
     }
