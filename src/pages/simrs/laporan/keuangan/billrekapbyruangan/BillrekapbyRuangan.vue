@@ -10,6 +10,7 @@
               style="height: 3.56cm; max-width: 2.86cm"
             />
           </div>
+
           <div class="col-8">
             <div class="row justify-center f-18">
               PEMERINTAH KOTA PROBOLINGGO
@@ -152,9 +153,17 @@
                     :disable="store.loading"
                   />
                 </div>
+                <div>
+                  <q-btn
+                    label="ExportToExcel"
+                    outlined
+                    @click="exportexcel"
+                  />
+                </div>
               </div>
             </q-form>
           </template>
+
           <template #cell-NamaRuangan="{row}">
             {{ row?.namaruangan }}
           </template>

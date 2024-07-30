@@ -645,6 +645,7 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           sa?.kunjunganranap?.forEach(kunj => {
             const kelas = kunj?.kelas
             const modaltarif = this.tigapuluhtarif?.find(x => x.rs3 === 'A1#')
+            console.log('fee', kelas)
             let subtotalx = 0
             if (kelas === '3') {
               subtotalx = parseInt(modaltarif?.rs6) + parseInt(modaltarif?.rs7)
@@ -656,16 +657,15 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
               subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
             }
             else if (kelas === 'Utama') {
-              subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+              subtotalx = parseInt(modaltarif?.rs12) + parseInt(modaltarif?.rs13)
             }
             else if (kelas === 'VIP') {
-              subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+              subtotalx = parseInt(modaltarif?.rs14) + parseInt(modaltarif?.rs15)
             }
             else if (kelas === 'VVIP') {
-              subtotalx = parseInt(modaltarif?.rs10) + parseInt(modaltarif?.rs11)
+              subtotalx = parseInt(modaltarif?.rs16) + parseInt(modaltarif?.rs17)
             }
-
-            if (parseFloat(subtotalx) > 0)sa.Admin = subtotalx
+            if (parseFloat(subtotalx) > 0)sa.Admin = parseFloat(sa.Admin) + parseFloat(subtotalx)
           })
 
           sa?.akomodasikamar?.forEach(akom => {
