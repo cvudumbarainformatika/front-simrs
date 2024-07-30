@@ -43,165 +43,166 @@
         />
       </div>
       <div class="col-one">
-        <!-- delete Ids -->
-        <slot
-          name="header-right-before"
-          class="q-ml-md"
-        />
-        <q-btn
-          v-if="selected.length>0"
-          unelevated
-          color="red"
-          round
-          size="sm"
-          icon="icon-mat-delete_sweep"
-          @click="deleteData()"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+        <div class="row no-wrap items-center">
+          <slot
+            name="header-right-before"
+            class="q-ml-md"
+          />
+          <q-btn
+            v-if="selected.length>0"
+            unelevated
+            color="red"
+            round
+            size="sm"
+            icon="icon-mat-delete_sweep"
+            @click="deleteData()"
           >
-            Hapus Data
-          </q-tooltip>
-        </q-btn>
-        <!-- refresh Ids -->
-        <q-btn
-          v-if="adaRefresh"
-          unelevated
-          round
-          :color="useFull?'yellow':'blue-grey'"
-          size="sm"
-          icon="icon-mat-refresh"
-          @click="emits('refresh')"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Hapus Data
+            </q-tooltip>
+          </q-btn>
+          <!-- refresh Ids -->
+          <q-btn
+            v-if="adaRefresh"
+            unelevated
+            round
+            :color="useFull?'yellow':'blue-grey'"
+            size="sm"
+            icon="icon-mat-refresh"
+            @click="emits('refresh')"
           >
-            Refresh Table
-          </q-tooltip>
-        </q-btn>
-        <!-- per page -->
-        <q-btn
-          v-if="adaPerPage"
-          class="q-ml-sm"
-          unelevated
-          color="orange"
-          round
-          size="sm"
-          icon="icon-mat-layers"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Refresh Table
+            </q-tooltip>
+          </q-btn>
+          <!-- per page -->
+          <q-btn
+            v-if="adaPerPage"
+            class="q-ml-sm"
+            unelevated
+            color="orange"
+            round
+            size="sm"
+            icon="icon-mat-layers"
           >
-            Filter Table
-          </q-tooltip>
-          <q-menu
-            transition-show="flip-left"
-            transition-hide="flip-right"
-            anchor="top left"
-            self="top right"
-          >
-            <q-list dense>
-              <q-item
-                v-for="(opt, i) in options"
-                :key="i"
-                v-ripple
-                tag="label"
-              >
-                <!-- <q-item-section> -->
-                <q-radio
-                  v-model="selectPerPage"
-                  size="xs"
-                  :val="opt"
-                  :label="opt + ' Baris'"
-                  color="primary"
-                />
-                <!-- </q-item-section> -->
-                <!-- <q-item-label /> -->
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-        <!-- filter table -->
-        <q-btn
-          v-if="adaFilter"
-          class="q-ml-sm"
-          unelevated
-          color="indigo"
-          round
-          size="sm"
-          icon="icon-mat-sort"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
-          >
-            Filter Table
-          </q-tooltip>
-          <q-menu
-            transition-show="flip-left"
-            transition-hide="flip-right"
-            class="q-pt-sm"
-          >
-            <q-list style="min-width: 131px">
-              <q-item
-                v-for="(head, index) in filterCheckbox"
-                :key="index"
-                v-ripple
-                tag="label"
-              >
-                <q-item-section avatar>
-                  <q-checkbox
-                    v-model="selectColumn"
-                    size="sm"
-                    dense
-                    :val="head"
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Filter Table
+            </q-tooltip>
+            <q-menu
+              transition-show="flip-left"
+              transition-hide="flip-right"
+              anchor="top left"
+              self="top right"
+            >
+              <q-list dense>
+                <q-item
+                  v-for="(opt, i) in options"
+                  :key="i"
+                  v-ripple
+                  tag="label"
+                >
+                  <!-- <q-item-section> -->
+                  <q-radio
+                    v-model="selectPerPage"
+                    size="xs"
+                    :val="opt"
+                    :label="opt + ' Baris'"
                     color="primary"
                   />
-                </q-item-section>
-                <q-item-section>{{ head }}</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-        <!-- data baru -->
-        <q-btn
-          v-if="addData && adaTambah"
-          class="q-ml-sm"
-          unelevated
-          round
-          :color="useFull?'green':'primary'"
-          size="sm"
-          icon="icon-mat-add"
-          @click="emits('newData')"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+                <!-- </q-item-section> -->
+                <!-- <q-item-label /> -->
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+          <!-- filter table -->
+          <q-btn
+            v-if="adaFilter"
+            class="q-ml-sm"
+            unelevated
+            color="indigo"
+            round
+            size="sm"
+            icon="icon-mat-sort"
           >
-            Data Baru
-          </q-tooltip>
-        </q-btn>
-        <!-- style -->
-        <q-btn
-          v-if="useFull"
-          flat
-          :icon="!style.componentfull ? 'icon-mat-open_in_full' : 'icon-mat-close_fullscreen'"
-          round
-          :color="style.componentfull ? 'green' : 'white'"
-          size="12px"
-          class="q-ml-md"
-          @click="style.setComponentFull"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Filter Table
+            </q-tooltip>
+            <q-menu
+              transition-show="flip-left"
+              transition-hide="flip-right"
+              class="q-pt-sm"
+            >
+              <q-list style="min-width: 131px">
+                <q-item
+                  v-for="(head, index) in filterCheckbox"
+                  :key="index"
+                  v-ripple
+                  tag="label"
+                >
+                  <q-item-section avatar>
+                    <q-checkbox
+                      v-model="selectColumn"
+                      size="sm"
+                      dense
+                      :val="head"
+                      color="primary"
+                    />
+                  </q-item-section>
+                  <q-item-section>{{ head }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+          <!-- data baru -->
+          <q-btn
+            v-if="addData && adaTambah"
+            class="q-ml-sm"
+            unelevated
+            round
+            :color="useFull?'green':'primary'"
+            size="sm"
+            icon="icon-mat-add"
+            @click="emits('newData')"
           >
-            Full Screen
-          </q-tooltip>
-        </q-btn>
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Data Baru
+            </q-tooltip>
+          </q-btn>
+          <!-- style -->
+          <q-btn
+            v-if="useFull"
+            flat
+            :icon="!style.componentfull ? 'icon-mat-open_in_full' : 'icon-mat-close_fullscreen'"
+            round
+            :color="style.componentfull ? 'green' : 'white'"
+            size="12px"
+            class="q-ml-md"
+            @click="style.setComponentFull"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Full Screen
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
     </div>
     <q-separator />

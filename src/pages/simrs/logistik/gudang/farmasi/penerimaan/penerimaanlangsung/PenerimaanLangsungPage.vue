@@ -477,6 +477,8 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 })
 store.getInitialData()
 function setHargaNetto () {
+  if (adaPPN.value === true) store.setForm('ppn', 11)
+  else store.setForm('ppn', 0)
   const isi = store.form.isi ?? 1
   const harga = store.form.harga ?? 0
   const diskon = store.form.diskon ?? 0
@@ -608,7 +610,7 @@ function simpan () {
   if (validasi()) {
     if (!store.form.kdruang) store.setForm('kdruang', store.form.gudang)
     store.simpanPenerimaan().then(() => {
-      adaPPN.value = false
+      // adaPPN.value = false
       resetValidation()
     })
   }

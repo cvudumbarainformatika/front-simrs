@@ -1,6 +1,7 @@
 <template>
-  <div class="q-pa-xs bg-white">
+  <div ref="content" class="q-pa-xs bg-white fullheight fullwidth">
     <app-table-extend
+      id="printMe"
       :columns="store.columns"
       :items="store.items"
       :meta="store.meta"
@@ -26,13 +27,40 @@
             @delete-ids="table.deletesData"
             -->
 
-      <!-- <template #header-left-after-search>
-        <div class="q-ml-md text-white">
-          <div class="row q-mb-xs q-ml-xs items-center">
-
-          </div>
+      <template #header-right-before>
+        <div class="q-mr-md text-white">
+          <!-- <q-btn
+            round
+            class="f-10 q-mr-sm"
+            color="dark"
+            text-color="white"
+            icon="icon-mat-download"
+            @click="printToPdf()"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Download PDF
+            </q-tooltip>
+          </q-btn> -->
+          <q-btn
+            v-print="printObj"
+            round
+            class="f-10 q-mr-sm"
+            color="dark"
+            text-color="white"
+            icon="icon-mat-print"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Print, pilih save as pdf
+            </q-tooltip>
+          </q-btn>
         </div>
-      </template> -->
+      </template>
       <template #col-nomor>
         <div>Nomor</div>
       </template>
@@ -299,6 +327,11 @@
 <script setup>
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListBastObatKonsinyasiStore } from 'src/stores/simrs/farmasi/konsinyasi/listbastkonsinyasi'
+import { ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { jsPDF } from 'jspdf'
+// eslint-disable-next-line no-unused-vars
+import html2canvas from 'html2canvas'
 
 const store = useListBastObatKonsinyasiStore()
 store.getInitialData()
@@ -308,4 +341,100 @@ function onClick (val) {
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
+
+// eslint-disable-next-line no-unused-vars
+const content = ref(null)
+// eslint-disable-next-line no-unused-vars
+function printToPdf () {
+  setTimeout(function () {
+    console.log('cont', content.value?.innerHtml)
+    // eslint-disable-next-line new-cap
+    const doc = new jsPDF({
+      orientation: 'l',
+      unit: 'px',
+      format: 'legal',
+      hotfixes: ['px_scaling']
+    })
+    const source = content.value
+
+    // doc.html(source, {
+    //   callback: function (pdf) {
+    //     doc.addImage(pathImg + pasien?.value.ttdpasien, 'JPEG', 15, 40, 200, 114)
+    //     // doc.output('datauri')
+    //     pdf.save()
+    //   }
+    // })
+    console.log('width', doc.internal.pageSize.getWidth())
+    html2canvas(source, {
+      width: doc.internal.pageSize.getWidth(),
+      height: doc.internal.pageSize.getHeight(),
+      logging: false,
+      letterRendering: 1,
+      allowTaint: false,
+      useCORS: false
+    }).then((canvas) => {
+      const img = canvas.toDataURL('image/jpeg', 0.8)
+
+      doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
+      doc.save('List ' + '.pdf')
+
+    //   const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
+      // const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.jpg', { type: 'application/jpg' })
+    //   simpanPdf(pdf)
+    })
+  }, 100)
+}
+const printObj = {
+  id: 'printMe',
+  popTitle: 'List Bast',
+  extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css'
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+
+}
 </script>
+<style lang="scss" scoped>
+$fs : 9px;
+.app-table {
+  width: 100%; /* print width */
+  font-size:$fs;
+
+  .q-table td {
+    padding-left: 10px;
+    font-size: $fs;
+  }
+  .q-table th {
+    padding-left: 10px;
+    font-size: $fs;
+  }
+}
+
+@media print {
+  .app-table {
+    width: 100%; /* print width */
+    font-size:$fs;
+
+    .q-table {
+        max-width: 100% !important;
+      }
+    .q-table td {
+      padding: 2px;
+      font-size: $fs;
+       white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+    .q-table th {
+      padding:2px;
+      font-size:$fs;
+      white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+
+    .screenwide{
+      max-width: 100% !important;
+    }
+  }
+}
+
+</style>

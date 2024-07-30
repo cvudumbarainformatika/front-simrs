@@ -9,7 +9,7 @@
       @ganti="gantiHead"
     />
 
-    <div :style="`height: calc(100vh - ${h}px)`">
+    <div :style="`height: calc(100% - ${h}px); `">
       <q-tab-panels
         v-model="head"
         animated
@@ -19,7 +19,7 @@
           v-for="(panel, n) in heads"
           :key="n"
           :name="panel.page"
-          class="full-height q-pa-none"
+          class="full-height q-pa-none q-mb-xl"
         >
           <component
             :is="cekPanel()"
