@@ -49,6 +49,7 @@
               ref="refNorm" v-model="store.pasien.norm" label="No. RM" :valid="{required: true, number: true}"
               :error-from-server="store.errors.norm"
               @update:model-value="store.errors.norm = null"
+              :lazy-rules="false"
             />
             <div class="flex q-gutter-sm full-width q-pb-sm q-pt-xs" style="margin-top: -12px;">
               <div>Kewarganegaraan : </div>
@@ -504,7 +505,7 @@
           </div>
           <div class="col-4">
             <div class="row q-col-gutter-x-xs">
-              <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" />
+              <select-diagnosa v-model="store.pasien.diagnosaAwal" class="q-mb-xs" :model="store.pasien.diagnosaAwal" @clear="store.pasien.diagnosaAwal=null" />
               <div class="col-5">
                 <app-autocomplete
                   ref="refJnsSistemBayar"
@@ -581,6 +582,11 @@
                   @update:model-value="(val)=>{
                     if (val==='Ya') {
                       store.pasien.kode_ruang= null
+                      store.pasien.kamar= null
+                      store.pasien.no_bed= null
+                    } else {
+                      store.pasien.kode_ruang= store.pasien.hakruang
+                      if(store.pasien.hakruang !== null) pilihRuang(store.pasien.hakruang)
                     }
                   }"
                 />
@@ -612,7 +618,18 @@
                 :rules="[val => (!!val) || 'Harap diisi',]"
                 @selected="(val)=>pilihKamar(val)"
               />
-              <app-autocomplete
+
+              <q-select
+                dense outlined standout="bg-yellow-3"
+                v-model="store.pasien.no_bed"
+                :options="kamars" label="NO BED"
+                option-value="rs2"
+                :option-label="opt=> Object(opt) === opt && 'rs2' in opt ? `${opt.rs2}  -  ${opt.kunjungan.length ? 'Terisi' : 'Kosong'}` : '- Null -'"
+                map-options
+                emit-value
+                class="q-mb-xs col-4"
+              />
+              <!-- <app-autocomplete
                 ref="refKamar"
                 v-model="store.pasien.no_bed"
                 label="NO BED"
@@ -623,15 +640,15 @@
                 :source="kamars"
                 class="q-mb-xs col-4"
                 :rules="[val => (!!val) || 'Harap diisi',]"
-              />
+              /> -->
               <!-- <app-input-simrs v-model="store.pasien.ruang" label="Ruang" class="col-12" readonly :valid="{ required: true }" />
               <app-input-simrs v-model="store.pasien.kamar" label="Kamar" class="col-8" readonly :valid="{ required: true }" />
               <app-input-simrs v-model="store.pasien.no_bed" label="BED" class="col-4" readonly :valid="{ required: true }" /> -->
-              <app-input-simrs
+              <!-- <app-input-simrs
                 v-if="store.pasien.kelas !== store.pasien.hakKelasBpjs || !store.pasien.hakKelasBpjs === null" v-model="store.pasien.indikatorPerubahanKelas"
                 label="Indikator Perubahan Kelas"
                 class="col-6"
-              />
+              /> -->
             </div>
           </div>
           <!-- <div class="col-2">
@@ -690,20 +707,8 @@ onMounted(() => {
   // console.log('onMounted', refNorm.value)
   onReset()
   Promise.all([
-    gantiKewarganegaraan('WNI'),
-    store.getKelamin(),
-    store.getSapaan(),
-    store.getPendidikan(),
-    store.getAgama(),
-    store.getBahasa(),
-    store.getStatusPernikahan(),
-    store.getPekerjaan(),
-    store.getAsalRujukan(),
-    // store.getHakRuang(),
-    store.getSistemBayar(),
-    store.getKamar(),
-    store.getDokter(),
-    store.getJenisKasus()
+    gantiKewarganegaraan('WNI')
+
     // store.getMasterTarif()
   ])
 })
@@ -969,9 +974,9 @@ function hitungUsia (tanggalLahir) {
 function copyDataFromBpjs () {
   store.pasien.nama = store.cekPeserta?.nama
   store.pasien.nokabpjs = store.cekPeserta?.noKartu
-  store.pasien.norm = store.cekPeserta?.mr?.noMR
-  store.pasien.notelp = store.cekPeserta?.mr?.noTelepon
-  store.pasien.nohp = store.cekPeserta?.mr?.noTelepon
+  store.pasien.norm = store.cekPeserta?.mr?.noMR ?? store.pasien.norm
+  store.pasien.notelp = store.cekPeserta?.mr?.noTelepon ?? store.pasien.notelp
+  store.pasien.nohp = store.cekPeserta?.mr?.noTelepon ?? store.pasien.nohp
 
   store.pasien.hakKelasBpjs = store.cekPeserta?.hakKelas?.kode
   store.pasien.jnsBayar = '1'
@@ -994,6 +999,9 @@ function pilihRuang (val) {
   store.pasien.kelas = kelas
   store.pasien.flag_ruang = flag
   store.pasien.group = group
+
+  store.pasien.kamar = null
+  store.pasien.no_bed = null
 
   store.showKamar()
     .then(() => {

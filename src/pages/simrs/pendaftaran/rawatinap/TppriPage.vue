@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
 import { defineAsyncComponent, ref, onMounted, shallowRef } from 'vue'
 const HeaderComp = defineAsyncComponent(() => import('./compTppri/HeaderComp.vue'))
 const MenuComp = defineAsyncComponent(() => import('./compTppri/MenuComp.vue'))
@@ -44,14 +45,16 @@ const lists = ref([
     icon: 'icon-fa-laptop-medical-solid',
     title: 'List IGD',
     subtitle: 'Pasien tunggu Rawat Inap dari IGD',
-    color: 'cyan'
+    color: 'cyan',
+    comp: shallowRef(defineAsyncComponent(() => import('./pagemenus/PageIgd.vue')))
   },
   {
     name: 'list-spri',
     icon: 'icon-mat-medical_information',
     title: 'List RAJAL SPRI',
     subtitle: 'Pasien tunggu SPRI dari Rawat Jalan',
-    color: 'deep-orange'
+    color: 'deep-orange',
+    comp: shallowRef(defineAsyncComponent(() => import('./pagemenus/PageRajal.vue')))
   },
   {
     name: 'history',
@@ -71,8 +74,26 @@ const lists = ref([
 
 const tab = ref(null)
 
+const store = useFormPendaftaranRanapStore()
+
 onMounted(() => {
   tab.value = lists.value[0]
+
+  Promise.all([
+    store.getKelamin(),
+    store.getSapaan(),
+    store.getPendidikan(),
+    store.getAgama(),
+    store.getBahasa(),
+    store.getStatusPernikahan(),
+    store.getPekerjaan(),
+    store.getAsalRujukan(),
+    // store.getHakRuang(),
+    store.getSistemBayar(),
+    store.getKamar(),
+    store.getDokter(),
+    store.getJenisKasus()
+  ])
 })
 
 const pilihMenu = (val) => {

@@ -37,6 +37,9 @@
         </q-item-section>
       </q-item>
     </template>
+    <template v-if="props.model" #append>
+      <q-icon name="icon-mat-cancel" @click.stop.prevent="emits('clear')" class="cursor-pointer" />
+    </template>
   </q-select>
 </template>
 
@@ -48,6 +51,16 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { ref } from 'vue'
 
 const store = usePermintaanEResepStore()
+
+const props = defineProps({
+  model: {
+    type: Object,
+    default: null
+  }
+})
+
+const emits = defineEmits(['clear'])
+
 // ngisi form
 const refAutocomplete = ref(null)
 function obatSelected (val) {

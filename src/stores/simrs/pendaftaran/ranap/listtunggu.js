@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
+import { useFormPendaftaranRanapStore } from './formpendaftaran'
+import { notifSuccessVue } from 'src/modules/utils'
 
 export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap', {
   state: () => ({
@@ -18,13 +20,46 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       status: 'Semua',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      sort: 'terbaru'
+      sort: 'terbaru',
+      unit: 'igd'
     },
+
     periods: ['Hari ini', 'Minggu ini', 'Bulan ini', 'Custom'],
     sorting: ['terbaru', 'terlama'],
     statuses: ['Semua', 'Terlayani', 'Menunggu'],
     isViewList: false,
-    pasien: null
+    pasien: null,
+    dialogSend: false,
+    cekPeserta: null,
+    form: {
+      noreg: null,
+      norm: null,
+      jnsBayar: null,
+      kodesistembayar: null,
+      kategoriKasus: null,
+      diagnosaAwal: null,
+
+      nama_dokter: null,
+      kd_dokter: null,
+      kd_dokter_bpjs: null,
+
+      // hakruang ,kelas untuk menentukan billing
+
+      hakruang: null,
+      isTitipan: 'Tidak',
+      titipan: null,
+      kamar: null,
+      no_bed: null,
+      kelas: null,
+      kode_ruang: null,
+      group: null,
+      flag_ruang: null,
+      hakKelasBpjs: null,
+      indikatorPerubahanKelas: null
+    },
+    grupKamars: [],
+    beds: [],
+    loadingSend: false
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
@@ -114,6 +149,172 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
       this.params.to = dateDbFormat(firstday)
       this.params.from = dateDbFormat(lastday)
+    },
+
+    formFromDialogSend (val) {
+      this.form = {
+        noreg: val.noreg ?? null,
+        norm: val.norm ?? null,
+        jnsBayar: val.groups ?? null,
+        kodesistembayar: val.kodesistembayar ?? null,
+        kategoriKasus: null,
+        diagnosaAwal: null,
+
+        nama_dokter: val?.dokter ?? null,
+        kd_dokter: val?.kodedokter ?? null,
+        kd_dokter_bpjs: null,
+
+        // hakruang ,kelas untuk menentukan billing
+
+        hakruang: val.koderuangan ?? null,
+        isTitipan: 'Tidak',
+        titipan: null,
+        kamar: null,
+        no_bed: null,
+        kelas: null,
+        kode_ruang: val.koderuangan ?? null,
+        group: null,
+        flag_ruang: null,
+        hakKelasBpjs: null,
+        indikatorPerubahanKelas: null
+      }
+
+      if (val.koderuangan || val.koderuangan !== null || val.koderuangan !== '') {
+        this.pilihRuang(val.koderuangan)
+      }
+      if (val.kodedokter || val.kodedokter !== null || val.kodedokter !== '') {
+        this.pilihDokter(val.kodedokter)
+      }
+    },
+
+    async cekPesertaBpjs (by, no) {
+      const params = { params: { by, no } }
+      await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
+        .then(resp => {
+          if (resp.data.metadata.code === '200') {
+            this.cekPeserta = resp.data.result.peserta
+            console.log('cekPesertaBpjs', this.cekPeserta)
+          }
+        })
+        .catch(err => {
+          console.log('cekPesertaBpjs', err)
+        })
+    },
+
+    // pilih kamar masih salah
+    pilihRuang (val) {
+      const pendaftaran = useFormPendaftaranRanapStore()
+      this.form.kamar = null
+      const arr = pendaftaran.kamars
+      const obj = arr.length ? arr.find(x => x.rs1 === val) : null
+      console.log('pilihRuang', obj)
+      const group = obj?.rs4 ?? null
+      // const kodeRuang = obj?.rs1 ?? null
+      const kelas = obj?.rs3 ?? null
+      const flag = obj?.rs6 ?? null
+
+      // this.form.kode_ruang = kodeRuang
+      this.form.kelas = kelas
+      this.form.flag_ruang = flag
+      this.form.group = group
+
+      this.form.kamar = null
+      this.form.no_bed = null
+
+      pendaftaran.showKamar()
+        .then(() => {
+          this.grupKamars = []
+          this.beds = []
+          const pilihan = pendaftaran.listKamars.find(x => x.groups === group)
+          console.log('pilihan', pilihan)
+          const kamarsx = pilihan?.kamars?.length
+            ? pilihan?.kamars?.filter(x => {
+              return x.rs6 === group && (x?.rs5 === `${group + kelas}` || x?.rs5 === '-')
+            })
+            : []
+          // console.log('kamars', this.kamars)
+          const mapKamar = kamarsx?.length ? kamarsx?.map(x => x.rs1) : []
+          const grup = [...new Set(mapKamar)]
+          // grupKamar.value = grup
+          console.log('grup', grup)
+          // const thumb = []
+          for (let i = 0; i < grup.length; i++) {
+            const el = grup[i]
+
+            this.grupKamars.push({
+              label: el,
+              value: el
+            })
+          }
+        })
+    },
+    pilihKamar (val) {
+      // console.log('pilihKamar', val)
+      const pendaftaran = useFormPendaftaranRanapStore()
+      const arr = pendaftaran.listKamars?.find(x => x?.groups === this.form.group)?.kamars || []
+      // console.log('arr', arr)
+      const lists = arr?.length ? arr?.filter(x => x.rs1 === val) : []
+      console.log('lihatKamar', lists)
+      this.form.no_bed = null
+      this.beds = lists
+    },
+
+    pilihDokter (val) {
+      const pendaftaran = useFormPendaftaranRanapStore()
+      const arr = pendaftaran.dokters
+      const obj = arr.length ? arr.find(x => x.kdpegsimrs === val) : null
+      // console.log('pilihKamar', obj)
+      this.form.nama_dokter = obj?.nama ?? null
+      this.form.kd_dokter = obj?.kdpegsimrs ?? null
+    },
+
+    async mutasiPasien () {
+      this.loadingSend = true
+      this.form.hakKelasBpjs = this.cekPeserta?.hakKelas?.kode ?? null
+
+      // console.log('mutasiPasien', this.form)
+      const noreg = this.form.noreg
+      await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byigd', this.form)
+        .then(resp => {
+          console.log('Simpan Pendaftaran by igd', resp.data)
+          this.loadingSend = false
+          if (resp.status === 200) {
+            notifSuccessVue('Pasien success dimutasikan ')
+            const findPasien = this.items.filter(x => x?.noreg === noreg)
+            if (findPasien.length) findPasien[0].status_masuk = this.form.norm
+            // this.initForm()
+          }
+        })
+        .catch((err) => {
+          this.loadingSend = false
+          // const bag = err.response?.status === 422 ? err.response?.data?.errors : []
+          // this.errors = bag
+          console.log('err', err)
+        })
+    },
+    async regPasien () {
+      this.loadingSend = true
+      this.form.hakKelasBpjs = this.cekPeserta?.hakKelas?.kode ?? null
+
+      // console.log('mutasiPasien', this.form)
+      this.form.noreg = null
+      await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byspri', this.form)
+        .then(resp => {
+          console.log('Simpan Pendaftaran by igd', resp.data)
+          this.loadingSend = false
+          if (resp.status === 200) {
+            notifSuccessVue('Pasien success dimutasikan ')
+            const findPasien = this.items.filter(x => x?.norm === this.form.norm)
+            if (findPasien.length) findPasien[0].status_masuk = this.form.norm
+            // this.initForm()
+          }
+        })
+        .catch((err) => {
+          this.loadingSend = false
+          // const bag = err.response?.status === 422 ? err.response?.data?.errors : []
+          // this.errors = bag
+          console.log('err', err)
+        })
     }
   }
 })
