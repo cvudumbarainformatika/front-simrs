@@ -710,22 +710,32 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
       kodepoli?.forEach(pol => {
         const poli = val.filter(f => f.kodepoli === pol)
         const TindakanDokter = []
+        let Admin = 0
+        let KonsulAntarPoli = 0
+        const TindakanKeperawatan = []
         poli?.forEach(xxx => {
-          console.log('sssssssss', poli)
-          xxx.Admin = 0
-          val?.adminpoli?.forEach(ad => {
-            if (parseFloat(val?.adminpoli) > 0)xxx.Admin = parseFloat(xxx.Admin) + parseFloat(val?.adminpoli?.subtotal)
-          })
+          if (xxx?.adminpoli?.subtotal > 0)Admin = parseFloat(Admin) + parseFloat(xxx?.adminpoli?.subtotal)
+          if (xxx?.konsulantarpoli?.subtotal > 0)KonsulAntarPoli = parseFloat(KonsulAntarPoli) + parseFloat(xxx?.konsulantarpoli?.subtotal)
 
           xxx?.tindakandokter?.forEach(td => {
             if (td) TindakanDokter.push(td)
+          })
+
+          xxx?.tindakanperawat?.forEach(tp => {
+            if (tp) TindakanKeperawatan.push(tp)
           })
         })
 
         const tampilpoli = {
           namaruangan: val.find(g => g.kodepoli === pol).rs2,
-          // Admin: Admin.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0),
-          TindakanDokter: TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0)
+          Admin,
+          KonsulAntarPoli,
+          TindakanDokter: TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0),
+          TindakanKeperawatan: TindakanKeperawatan.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0),
+          Total: Admin + KonsulAntarPoli +
+                TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0) +
+                 TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0) +
+                 TindakanKeperawatan.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0)
         }
 
         this.items.push(tampilpoli)
