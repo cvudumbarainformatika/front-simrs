@@ -1,10 +1,5 @@
 <template>
-  <!-- <q-page> -->
   <div class="fit">
-    <!-- <template v-if="store.pasien">
-      <DetailsPasien />
-    </template> -->
-    <!-- <template> -->
     <div class="fit column relative-position">
       <div class="col-auto">
         <HeaderComp />
@@ -70,44 +65,21 @@
         />
       </div>
     </div>
-    <!-- </template> -->
-
-    <!-- send pasien -->
-    <dialog-send-pasien v-model="store.dialogSend" :pasien="store.pasien" :key="store.pasien" />
   </div>
-  <!-- </q-page> -->
 </template>
 
 <script setup>
-import HeaderComp from './compRajal/HeaderComp.vue'
-import ThumbnailView from './compRajal/ThumbnailView.vue'
-
-import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
+import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history'
 import { defineAsyncComponent, onMounted } from 'vue'
-import ListPasien from './compRajal/ListPasien.vue'
-// import DetailsPasien from './compRajal/DetailsPasien.vue'
 
-// eslint-disable-next-line no-unused-vars
-const DetailsPasien = defineAsyncComponent(() => import('./compRajal/DetailsPasien.vue'))
-const DialogSendPasien = defineAsyncComponent(() => import('./compRajal/DialogSendPasien.vue'))
+const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
+const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
+const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
 
-const store = useListPendaftaranRanapStore()
+const store = useListHistoryPendaftaranRanapStore()
 
 onMounted(() => {
-  store.params.unit = 'rajal'
   store.getDataTable()
 })
 
 </script>
-
-<style lang="scss" scoped>
-
-.scroll {
-  scrollbar-width: none; /* untuk Firefox */
-}
-
-.scroll::-webkit-scrollbar {
-  display: none; /* untuk Chrome, Safari, dan Opera */
-}
-
-</style>

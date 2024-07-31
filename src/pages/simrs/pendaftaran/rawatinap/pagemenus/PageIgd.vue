@@ -1,5 +1,4 @@
 <template>
-  <!-- <q-page> -->
   <div class="fit">
     <!-- <template v-if="store.pasien">
       <DetailsPasien />
@@ -40,17 +39,25 @@
             />
           </transition-group>
         </template>
-        <div
-          v-else
-          class="fit column flex-center"
-        >
-          <div class="text-h4 q-mb-xs">
-            🏷️
+        <template v-else>
+          <div v-if="store.loading" class="fit column flex-center ">
+            <q-spinner-bars color="grey-6" size="3em" />
+            <div class="text-grey-8 q-mt-md">
+              Harap Tunggu ...
+            </div>
           </div>
-          <div class="text-grey-8">
-            Data Tidak Ditemukan
+          <div
+            class="fit column flex-center"
+            v-else
+          >
+            <div class="text-h4 q-mb-xs">
+              🏷️
+            </div>
+            <div class="text-grey-8">
+              Data Tidak Ditemukan
+            </div>
           </div>
-        </div>
+        </template>
       </div>
       <div class="absolute-bottom z-top">
         <app-paginate-simple
@@ -67,7 +74,6 @@
     <!-- send pasien -->
     <dialog-send-pasien v-model="store.dialogSend" :pasien="store.pasien" :key="store.pasien" />
   </div>
-  <!-- </q-page> -->
 </template>
 
 <script setup>
