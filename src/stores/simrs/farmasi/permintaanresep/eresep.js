@@ -76,7 +76,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     statusCopiedRacik: [],
     messageCopied: [],
     pemberianObatCek: [],
-    permintaanResepDuplicate: []
+    permintaanResepDuplicate: [],
+    noresepDuplicate: ''
     // section racikan end---
   }),
   actions: {
@@ -1009,6 +1010,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
     // BARU PUTRA DEV
     cekObat (val, obat, indexlist, tipe) {
+      this.loadingObat = true
       let kdobatArray = ''
       if (obat.length) {
         kdobatArray = obat.map(item => item?.kdobat)
@@ -1018,16 +1020,19 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
       if (depo[0]?.value === 'Gd-05010101') {
         if (this.form?.tiperesep !== 'normal') {
+          this.loading = false
           return notifErrVue('Maaf tidak bisa duplicate resep selain tipe resep normal!!!')
         }
       }
 
       // if (depo[0]?.value !== 'Gd-02010104') {
       if (this.pasien.groups !== val?.sistembayar?.groups) {
+        this.loading = false
         return notifErrVue('Maaf sistem bayar pasien, tidak sama dengan sistem bayar resep yang diduplicate!!!')
       }
 
       if (this.form.groupsistembayarlain !== val?.sistembayar?.groups) {
+        this.loading = false
         return notifErrVue('Maaf sistem bayar yang dipilih, tidak sama dengan sistem bayar resep yang diduplicate!!!')
       }
       // }
@@ -1043,7 +1048,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         tiperesep: this.form.tiperesep
       }
 
-      this.loadingObat = true
       const params = { params: param }
       return new Promise(resolve => {
         api.get('v1/simrs/pelayanan/lihatstokobateresepBydokter', params)
@@ -1057,12 +1061,36 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             resolve(resp)
           })
           .catch(() => {
+            this.loading = false
             this.loadingObat = false
             this.Obats = []
           })
       })
     // }
     },
+    // setResepCopi (val) {
+    //   this.noresepDuplicate = ''
+    //   this.listRacikan = []
+    //   this.listPemintaanSementara = []
+
+    //   if (val === '' || val === 'BARU') {
+    //     this.indexRacikan = -1
+    //     return
+    //   }
+    //   const reseps = this.pasien?.newapotekrajal
+
+    //   const resep = reseps.find(x => x.noresep === val)
+    //   this.indexRacikan = reseps.findIndex(x => x.noresep === val)
+    //   if (resep?.flag === '') {
+    //     this.noresepDuplicate =
+    //     if (resep?.permintaanresep?.length) this.setListArray(resep?.permintaanresep)
+    //     if (resep?.permintaanracikan?.length) this.setListRacikanArray(resep?.permintaanracikan)
+    //   }
+    //   else {
+    //     if (resep?.flag !== '') this.setListResep(resep)
+    //   }
+    //   // console.log('set resep', val, resep, this.form)
+    // },
     simpanCopyResep (val, obat, indexlist, tipe) {
       const apps = useAplikasiStore()
       const resep = val?.permintaanresep
@@ -1229,6 +1257,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             const nota = resp?.data.map(item => item?.nota)
             this.noreseps.push(nota[0])
             this.noresep = nota[0]
+            // this.setResepCopi(this.noresep)
 
             const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
 
@@ -1447,6 +1476,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             const nota = resp?.data.map(item => item?.nota)
             this.noreseps.push(nota[0])
             this.noresep = nota[0]
+            // this.setResepCopi(this.noresep)
 
             const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
 

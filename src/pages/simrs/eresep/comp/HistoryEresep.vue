@@ -442,6 +442,7 @@ function pilihData (row) {
 
 // eslint-disable-next-line no-unused-vars
 function copyResep (val, indexlist, tipe) {
+  store.loading = true
   const permintaan = val?.permintaanresep
   const permintaanracik = val?.permintaanracikan
 
@@ -455,6 +456,7 @@ function copyResep (val, indexlist, tipe) {
 
 onMounted(() => {
   store.getHistory(props?.pasien?.norm)
+  store.historys = null
 })
 
 watchEffect(() => {
