@@ -27,11 +27,11 @@
             </div>
             <div class="absolute bg-transparent q-mt-md">
               <q-card
-                :class="`q-pa-sm ${item?.status_masuk === item.norm? 'bg-teal' : 'bg-deep-orange-8'}`"
+                :class="`q-pa-sm ${item?.tunggu_ranap !== null? 'bg-teal' : 'bg-deep-orange-8'}`"
                 style="top:-15px; left: 0;"
               >
                 <div class="f-12 text-weight-bold">
-                  {{ item?.status_masuk === item.norm? 'Sudah dimutasikan' : 'Menunggu ...' }}
+                  {{ item?.tunggu_ranap !== null? 'Sudah dimutasikan' : 'Menunggu ...' }}
                 </div>
               </q-card>
             </div>

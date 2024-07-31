@@ -5,11 +5,11 @@
     class="q-my-lg bg-white shadow-q relative-position"
   >
     <q-card
-      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status_masuk === item.norm? 'bg-teal' : 'bg-deep-orange-8'}`"
+      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.tunggu_ranap !== null? 'bg-teal' : 'bg-deep-orange-8'}`"
       style="top:-15px; left: 0;"
     >
       <div class="f-10">
-        {{ item?.status_masuk === item.norm? 'Sudah dimutasikan' : 'Menunggu ...' }}
+        {{ item?.tunggu_ranap !== null? 'Sudah dimutasikan' : 'Menunggu ...' }}
       </div>
     </q-card>
     <div class="row items-center full-width">
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="col full-width flex wrap ellipsis">
-            <div v-if="item?.status_masuk!== item?.norm " class="f-10 text-grey-8">
+            <div v-if="item?.tunggu_ranap === null " class="f-10 text-grey-8">
               Rencana ke ..
             </div>
             <div v-else class="f-10 text-primary">
@@ -71,7 +71,7 @@
           </div>
           <div class="col-2 ">
             <div class="flex justify-end">
-              <q-btn v-if="item?.status_masuk !== item?.norm" flat class="bg-primary text-white" round icon="icon-mat-launch" dense @click="emits('send', item)">
+              <q-btn v-if="item?.tunggu_ranap === null" flat class="bg-primary text-white" round icon="icon-mat-launch" dense @click="emits('send', item)">
                 <q-tooltip class="bg-white text-primary">
                   Mutasikan Pasien
                 </q-tooltip>
