@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccessVue } from 'src/modules/utils'
 
 export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store', {
   state: () => ({
@@ -249,9 +250,14 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         diagnosaAwal: null,
 
         // hakruang ,kelas untuk menentukan billing
+        hakruang: null,
+        isTitipan: 'Tidak',
+        titipan: null,
         kamar: null,
+        no_bed: null,
         kelas: null,
         kode_ruang: null,
+        group: null,
         flag_ruang: null,
         hakKelasBpjs: null,
         indikatorPerubahanKelas: null,
@@ -292,7 +298,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
         this.domisiliSama = false
       }
 
-      console.log('form', this.pasien)
+      console.log('form', val)
       this.openDialogCariPasien = false
       return new Promise((resolve, reject) => {
         resolve()
@@ -612,9 +618,26 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.loadingShowKamar = true
       await api.get('v1/simrs/master/listviewkamar')
         .then(resp => {
-          console.log('show kamar', resp.data)
           this.loadingShowKamar = false
-          this.listKamars = resp.data
+          // console.log('show kamar resp', resp.data)
+          this.listKamars = []
+          const data = resp.data
+          for (let i = 0; i < data.length; i++) {
+            const el = data[i]
+            const kamars = el?.kamars
+            for (let x = 0; x < kamars.length; x++) {
+              const w = kamars[x]
+              const kunjungan = w?.kunjungan
+              if (w.rs5 !== '-') {
+                w.pasien = kunjungan?.filter(a => a.kd_kelas === w.rs5 || a.titipan === w.rs5)
+              }
+              else {
+                w.pasien = kunjungan
+              }
+            }
+          }
+          this.listKamars = data
+          console.log('show kamar', data)
         })
         .catch(() => {
           this.loadingShowKamar = false
@@ -633,6 +656,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           // this.loadingShowKamar = false
         })
     },
+
     async simpanPasien () {
       this.errors = []
       this.pasien.kd_negara = this.paramWilayah.kd_negara
@@ -657,12 +681,16 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
 
       await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byform', this.pasien)
         .then(resp => {
-          console.log('jenis kasus', resp.data)
+          console.log('Simpan Pendaftaran', resp.data)
+          if (resp.status === 200) {
+            notifSuccessVue('Pasien success didaftarkan ')
+            this.initForm()
+          }
         })
         .catch((err) => {
           const bag = err.response?.status === 422 ? err.response?.data?.errors : []
           this.errors = bag
-          console.log('err', err.response.status)
+          console.log('err', err.response)
         })
     }
 

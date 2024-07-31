@@ -36,10 +36,10 @@
           use-input
           hide-selected
           fill-input
-          input-debounce="200"
+          input-debounce="500"
           :options="options"
           @filter="filterFn"
-          placeholder="Min 2 character untuk pencarian pasien"
+          placeholder="Min 3 character untuk pencarian pasien"
           option-label="nama"
           option-value="norm"
           autofocus
@@ -166,7 +166,7 @@ function hiddenDialog () {
 }
 
 async function filterFn (val, update) {
-  if (val.length < 2) {
+  if (val.length < 3) {
     pasien.value = null
     update(() => {
       options.value = []

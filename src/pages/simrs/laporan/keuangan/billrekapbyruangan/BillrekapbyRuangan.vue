@@ -120,10 +120,9 @@
                     :rules="[
                       val => !!val || 'Harus diisi'
                     ]"
-                    @update:model-value="(val) => isiLayananx(val)"
                   />
                 </div>
-                <div>
+                <!-- <div>
                   <q-select
                     v-model="store.params.ruangan"
                     use-input
@@ -143,7 +142,7 @@
                       val => !!val && !!store.params.layanan || 'Harus diisi'
                     ]"
                   />
-                </div>
+                </div> -->
                 <div>
                   <q-btn
                     label="Cari"
@@ -153,40 +152,46 @@
                     :disable="store.loading"
                   />
                 </div>
-                <div>
-                  <q-btn
-                    label="ExportToExcel"
-                    outlined
-                    @click="exportexcel"
-                  />
-                </div>
               </div>
             </q-form>
           </template>
-
           <template #cell-NamaRuangan="{row}">
             {{ row?.namaruangan }}
           </template>
           <template #cell-Admin="{row}">
-            {{ formatDouble(row.Admin) }}
+            <div class="row justify-end">
+              {{ formatDouble(row.Admin) }}
+            </div>
           </template>
           <template #cell-AkomodasiKamar="{row}">
-            {{ formatDouble(row?.AkomodasiKamar) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.AkomodasiKamar) }}
+            </div>
           </template>
           <template #cell-TindakanDokter="{row}">
-            {{ formatDouble(row?.TindakanDokter) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.TindakanDokter) }}
+            </div>
           </template>
           <template #cell-TindakanKeperawatan="{row}">
-            {{ formatDouble(row?.TindakanKeperawatan) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.TindakanKeperawatan) }}
+            </div>
           </template>
           <template #cell-Askep="{row}">
-            {{ formatDouble(row?.Askep) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.Askep) }}
+            </div>
           </template>
           <template #cell-Visite="{row}">
-            {{ formatDouble(row?.Visite) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.Visite) }}
+            </div>
           </template>
           <template #cell-Total="{row}">
-            {{ formatDouble(row?.Total) }}
+            <div class="row justify-end">
+              {{ formatDouble(row?.Total) }}
+            </div>
           </template>
         </Customtable>
       </q-card-section>
@@ -205,60 +210,56 @@ const store = useLaporanRekapBillByRuanganStore()
 const layanan = ref([
   {
     kodelayanan: '1',
-    namalayanan: 'IGD'
-  },
-  {
-    kodelayanan: '2',
     namalayanan: 'RAWAT JALAN'
   },
   {
-    kodelayanan: '3',
+    kodelayanan: '2',
     namalayanan: 'RAWAT INAP'
   }
 ])
-const ruangan = ref([])
+// const ruangan = ref([])
 // const koderuangan = ref(null)
 
-function isiLayananx (val) {
-  store.params.ruangan = ''
-  // console.log('sasa', val)
-  if (val === '1') {
-    ruangan.value = [
-      {
-        koderuangan: 'POL014',
-        namaruangan: 'IGD'
-      }
-    ]
-  }
-  else if (val === '2') {
-    ruangan.value = store.rajal.map(x => {
-      return {
-        koderuangan: x.kodepoli,
-        namaruangan: x.polirs
-      }
-    })
-    ruangan.value.unshift(
-      {
-        koderuangan: '1',
-        namaruangan: 'Semua Ruangan'
-      }
-    )
-  }
-  else if (val === '3') {
-    // ruangan.value = store.ranap.map(x => {
-    //   return {
-    //     koderuangan: x.rs4,
-    //     namaruangan: x.rs5
-    //   }
-    // })
-    ruangan.value.unshift(
-      {
-        koderuangan: '1',
-        namaruangan: 'Semua Ruangan'
-      }
-    )
-  }
-}
+// function isiLayananx (val) {
+//   store.params.ruangan = ''
+//   // console.log('sasa', val)
+//   if (val === '1') {
+//     ruangan.value = [
+//       {
+//         koderuangan: 'POL014',
+//         namaruangan: 'IGD'
+//       }
+//     ]
+//   }
+//   else if (val === '2') {
+//     ruangan.value = store.rajal.map(x => {
+//       return {
+//         koderuangan: x.kodepoli,
+//         namaruangan: x.polirs
+//       }
+//     })
+//     ruangan.value.unshift(
+//       {
+//         koderuangan: '1',
+//         namaruangan: 'Semua Ruangan'
+//       }
+//     )
+//   }
+//   else if (val === '3') {
+//     // ruangan.value = store.ranap.map(x => {
+//     //   return {
+//     //     koderuangan: x.rs4,
+//     //     namaruangan: x.rs5
+//     //   }
+//     // })
+//     ruangan.value.unshift(
+//       {
+//         koderuangan: '1',
+//         namaruangan: 'Semua Ruangan'
+//       }
+//     )
+//   }
+// }
 
 function setToDisp (vaal) {
   store.tanggal.from = vaal
