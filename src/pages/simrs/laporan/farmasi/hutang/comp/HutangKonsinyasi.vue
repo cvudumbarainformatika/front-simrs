@@ -97,22 +97,19 @@
           <template #expand="{row}">
             <div class="row">
               <div class="col">
-                No Penerimaan
+                Pasien
               </div>
               <div class="col">
-                Diterima
+                Obat
               </div>
               <div class="col">
-                Dipakai
+                Jumlah
               </div>
               <div class="col">
-                Di Mintakan Faktur
+                Harga
               </div>
               <div class="col">
-                Di BAST
-              </div>
-              <div class="col">
-                Dibayar
+                Subtotal
               </div>
             </div>
             <!-- {{ row }} -->
