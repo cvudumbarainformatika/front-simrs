@@ -16,7 +16,7 @@
         NOMOR ANTRIAN ANDA :
       </div>
       <div class="text-h5 text-weight-bold q-mb-xs">
-        {{ route.query.nomor }}
+        {{ route.query?.nomor }}
       </div>
       <div class="garis" />
       <div class="garis" />
@@ -24,9 +24,9 @@
         Silahkan Menunggu Antrian di :
       </div>
       <div class="f-14 text-weight-bold">
-        {{ route.query.poli }}
+        {{ route.query?.poli }}
       </div>
-      <div>no.RM : {{ route.query.norm }}</div>
+      <div>no.RM : {{ route.query?.norm }}</div>
       <div v-if="route.query?.tgl">
         Tanggal Periksa : {{ route.query?.tgl }}
       </div>

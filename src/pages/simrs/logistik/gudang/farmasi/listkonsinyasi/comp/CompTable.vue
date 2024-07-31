@@ -147,7 +147,7 @@ const allChecked = computed({
 function setCheck (evt, item) {
   // console.log('ref')
   // console.log('evt', evt)
-  // console.log('item', item)
+  console.log('item', item)
   if (item.checked) {
     // item.dipakai = item.dipakai ?? 0
     const temp = {
@@ -160,7 +160,8 @@ function setCheck (evt, item) {
       dokter: item?.header?.resep?.dokter?.kdpegsimrs,
       noreg: item?.header?.noreg,
       norm: item?.header?.norm,
-      jumlah: item?.reseprinci?.jumlah,
+      // jumlah: item?.reseprinci?.jumlah,
+      jumlah: item?.jumlah_resep,
       harga: item?.penerimaan?.harga_kcl,
       diskon: item?.penerimaan?.diskon,
       ppn: item?.penerimaan?.ppn,
@@ -170,7 +171,9 @@ function setCheck (evt, item) {
       subtotal: item?.subtotal
 
     }
+    console.log('item', temp)
     const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep && a.nopermintaan === item.nopermintaan)
+    console.log('index', index)
     if (index < 0) store.form.items.push(temp)
   }
   else {
@@ -189,7 +192,7 @@ function simpan () {
   store.setForm('tgl_trans', tlg + hrs)
   store.setForm('jumlah_konsi', jumlahKonsi)
   console.log('simpan', store.form)
-  // store.simpanList()
+  store.simpanList()
 }
 </script>
 <style lang="scss" scoped>
