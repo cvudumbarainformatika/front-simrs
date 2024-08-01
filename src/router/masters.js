@@ -115,6 +115,11 @@ const masters = {
           path: '/master/general-consent/ranap',
           name: 'master.generalconsent.ranap',
           component: () => import('pages/simrs/master/generalconsent/ranap/IndexPage.vue')
+        },
+        {
+          path: '/master/general-consent/spri',
+          name: 'master.generalconsent.spri',
+          component: () => import('pages/simrs/master/generalconsent/spri/IndexPage.vue')
         }
       ]
     },
