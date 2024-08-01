@@ -10,7 +10,7 @@
       class="contentx"
     >
       <!-- kop -->
-      <my-kop-surat />
+      <my-kop-surat v-if="!tanpaKop" />
       <!-- content -->
       <div class="b-a q-mt-sm q-pa-sm">
         <div class="q-mb-sm">
@@ -296,7 +296,8 @@ const props = defineProps({
   editableMaster: { type: Boolean, default: false },
   cetak: { type: Boolean, default: false },
   isiPasien: { type: Object, default: null },
-  refresh: { type: Boolean, default: false }
+  refresh: { type: Boolean, default: false },
+  tanpaKop: { type: Boolean, default: false }
 })
 const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(props?.isiPasien)
 

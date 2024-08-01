@@ -27,7 +27,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
     ]
   }),
   actions: {
-    resetForm() {
+    resetForm () {
       this.setForm('kdtindakan', '')
       this.setForm('nmtindakan', '')
       const col = [
@@ -60,16 +60,16 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
         this.setForm(a, 0)
       })
     },
-    setOpen() {
+    setOpen () {
       this.isOpen = !this.isOpen
     },
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setPage(payload) {
+    setPage (payload) {
       this.params.page = payload
       this.getDataTable()
     },
@@ -94,7 +94,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
       this.setForm('flag', 'baru')
       console.log('new data', payload)
     },
-    editData(payload) {
+    editData (payload) {
       this.edit = true
       this.setOpen()
       const key = Object.keys(payload)
@@ -106,18 +106,18 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
       this.setForm('flag', 'edit')
       // console.log('edit data', key)
     },
-    deletesData(payload) {
+    deletesData (payload) {
       console.log('delete data', payload)
       const data = {
         kdtindakan: payload.kdtindakan
       }
       this.deleteData(data)
     },
-    getInitialData() {
+    getInitialData () {
       this.getDataTable()
     },
     // api related function
-    async getDataTable() {
+    async getDataTable () {
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/master/listtindakan', param)
@@ -129,7 +129,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
         })
         .catch(() => { this.loading = false })
     },
-    async saveForm() {
+    async saveForm () {
       this.loading = true
       await api.post('v1/simrs/master/simpanmastertindakan', this.form)
         .then(resp => {
@@ -141,7 +141,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
         })
         .catch(() => { this.loading = false })
     },
-    async deleteData(val) {
+    async deleteData (val) {
       this.loading = true
       await api.post('v1/simrs/master/hapusmastertindakan', val)
         .then(resp => {

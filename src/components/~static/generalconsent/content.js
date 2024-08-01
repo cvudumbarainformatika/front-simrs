@@ -2,7 +2,7 @@ import { api } from 'src/boot/axios'
 import { notifSuccessVue } from 'src/modules/utils'
 import { onMounted, ref } from 'vue'
 
-export function useContent(isiPasien) {
+export function useContent (isiPasien) {
   const items = ref([])
   const pasien = ref(null)
   const petugas = ref(null)
@@ -13,7 +13,7 @@ export function useContent(isiPasien) {
   const hubPasien = ref('2) (Hubungan dengan pasien)')
   const isOk = ref(false)
 
-  async function changeIsi(kelompok) {
+  async function changeIsi (kelompok) {
     const params = {
       kelompok,
       pernyataan: isi.value
@@ -25,12 +25,12 @@ export function useContent(isiPasien) {
       })
   }
 
-  function updateIsi(key, val) {
+  function updateIsi (key, val) {
     console.log('content', isi.value)
     console.log(key)
   }
 
-  function getDataIrja() {
+  function getDataIrja () {
     const params = {
       params: {
         kelompok: 'irja'
@@ -68,7 +68,7 @@ export function useContent(isiPasien) {
     //   })
   }
 
-  function getPasien() {
+  function getPasien () {
     pasien.value = isiPasien ?? null
   }
 

@@ -8,7 +8,6 @@
         <template v-if="store.items?.length > 0">
           <transition-group
             appear
-
             enter-active-class="animated fadeIn faster"
             leave-active-class="animated fadeOut faster"
           >
