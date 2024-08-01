@@ -25,7 +25,8 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
     sorting: ['terbaru', 'terlama'],
     statuses: ['Semua', 'Pulang', 'Belum Pulang'],
     isViewList: false,
-    pasien: null
+    pasien: null,
+    dialogSpri: false
 
   }),
   getters: {

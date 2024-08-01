@@ -24,13 +24,13 @@ export const useMasterDokumenPasienStore = defineStore('master-dokumen-pasien', 
           .then(resp => {
             if (resp.status === 200) {
               const data = resp.data.length ? resp.data[0] : null
-              console.log('dokumen data', data)
+              // console.log('dokumen data', data)
               if (data) {
                 this.kelompok = data.kelompok
                 this.isi = data.pernyataan ?? ''
               }
 
-              console.log('dokumen', this.isi)
+              // console.log('dokumen', this.isi)
             }
 
             resolve(resp)
@@ -48,7 +48,7 @@ export const useMasterDokumenPasienStore = defineStore('master-dokumen-pasien', 
       }
       await api.post('v1/simrs/pendaftaran/generalconscent/simpanmaster', params)
         .then(resp => {
-          console.log(resp)
+          // console.log(resp)
           notifSuccessVue('Data Sukses tersimpan')
         })
     }
