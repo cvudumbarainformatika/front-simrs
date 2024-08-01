@@ -43,7 +43,7 @@
           />
         </q-popup-edit>
 
-        <BottomTtd :pasien="null" />
+        <BottomTtd :pasien="props.pasien" />
       </div>
     </div>
   </div>
@@ -59,6 +59,10 @@ const props = defineProps({
   editableMaster: {
     type: Boolean,
     default: true
+  },
+  pasien: {
+    type: Object,
+    default: null
   }
 })
 
@@ -73,7 +77,20 @@ onMounted(() => {
 })
 
 function parse (html) {
-  return html
+  let str = html?.replace('{pasien}', `<b>${props.pasien?.nama_panggil ?? '-'}</b>`)
+  str = str?.replace('{norm}', `<b>${props.pasien?.norm ?? '-'}</b>`)
+  str = str?.replace('{tempat_lahir}', `<b>${props.pasien?.templahir ?? '-'}</b>`)
+  str = str?.replace('{tgl_lahir}', `<b>${props.pasien?.tgllahir ?? '-'}</b>`)
+  str = str?.replace('{kelamin}', `<b>${props.pasien?.kelamin ?? '-'}</b>`)
+  str = str?.replace('{alamat}', `${props.pasien?.alamat ?? '-'}`)
+  str = str?.replace('{ruang}', `<b>${props.pasien?.ruangan ?? '-'}</b>`)
+  str = str?.replace('{tipe}', `<b>${props.pasien?.group_ruangan ?? '-'}</b>`)
+  str = str?.replace('{status_operasional}', `<b>${props.pasien?.nomorbed ?? '-'}</b>`)
+
+  str = str?.replace('{indikator}', `<b>${props.pasien?.indikator ?? '-'}</b>`)
+  str = str?.replace('{kelas}', `<b>${props.pasien?.kelasruangan ?? '-'}</b>`)
+
+  return str
 }
 
 const saveWork = () => {

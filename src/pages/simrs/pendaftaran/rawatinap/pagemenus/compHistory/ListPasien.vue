@@ -16,7 +16,7 @@
             :key="i"
             :item="item"
             @details="(val)=>emits('details', val)"
-            @send="(val)=>emits('send', val)"
+            @spri="(val)=>emits('spri', val)"
           />
         </TransitionGroup>
       </template>
@@ -47,7 +47,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'send'])
+const emits = defineEmits(['details', 'spri'])
 </script>
 
 <style lang="scss" scoped>

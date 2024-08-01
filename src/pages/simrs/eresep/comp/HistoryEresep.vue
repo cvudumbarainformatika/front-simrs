@@ -292,7 +292,7 @@
                             class="row"
                           >
                             <div class="col-6">
-                              Dosis Resep :
+                              Dosis Resep : {{ `${index}-${i}` }}
                             </div>
                             <div class="col-4">
                               {{ items?.permintaanracikan[i]?.dosismaksimum }}
