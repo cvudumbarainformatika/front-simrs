@@ -32,7 +32,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
     dialogSend: false,
     cekPeserta: null,
     form: {
-      noreg: null,
+      noreglama: null,
       norm: null,
       jnsBayar: null,
       kodesistembayar: null,
@@ -153,7 +153,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
 
     formFromDialogSend (val) {
       this.form = {
-        noreg: val.noreg ?? null,
+        noreglama: val.noreg ?? null,
         norm: val.norm ?? null,
         jnsBayar: val.groups ?? null,
         kodesistembayar: val.kodesistembayar ?? null,
@@ -273,11 +273,13 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       this.form.hakKelasBpjs = this.cekPeserta?.hakKelas?.kode ?? null
 
       // console.log('mutasiPasien', this.form)
-      const noreg = this.form.noreg
+      const noreg = this.form.noreglama
+      this.form.noreg = noreg
       await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byigd', this.form)
         .then(resp => {
           console.log('Simpan Pendaftaran by igd', resp.data)
           this.loadingSend = false
+          this.dialogSend = false
           if (resp.status === 200) {
             notifSuccessVue('Pasien success dimutasikan ')
             const findPasien = this.items.filter(x => x?.noreg === noreg)
@@ -297,15 +299,18 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       this.form.hakKelasBpjs = this.cekPeserta?.hakKelas?.kode ?? null
 
       // console.log('mutasiPasien', this.form)
-      this.form.noreg = null
+      // this.form.noreg = null
       await api.post('v1/simrs/pendaftaran/ranap/simpanpendaftaran-byspri', this.form)
         .then(resp => {
           console.log('Simpan Pendaftaran by igd', resp.data)
           this.loadingSend = false
+          this.dialogSend = false
           if (resp.status === 200) {
             notifSuccessVue('Pasien success dimutasikan ')
-            const findPasien = this.items.filter(x => x?.norm === this.form.norm)
-            if (findPasien.length) findPasien[0].status_masuk = this.form.norm
+            const findPasien = this.items.filter(x => x?.noreg === this.form.noreglama)
+
+            const obj = { rs1: resp.data.noreg, rs22: '' }
+            if (findPasien.length) findPasien[0].tunggu_ranap = obj
             // this.initForm()
           }
         })

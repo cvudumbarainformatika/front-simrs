@@ -201,7 +201,7 @@
           <div class="q-pa-md row justify-between items-center">
             <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSend=false" /></div>
             <div>
-              <q-btn type="submit" label="Kirim Pasien" color="yellow-3" text-color="dark" />
+              <q-btn :loading="store.loadingSend" :disable="store.loadingSend" type="submit" label="Kirim Pasien" color="yellow-3" text-color="dark" />
             </div>
           </div>
         </q-card-section>

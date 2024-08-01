@@ -61,7 +61,8 @@ const lists = ref([
     icon: 'icon-mat-dvr',
     title: 'History',
     subtitle: 'Riwayat Pendaftaran Rawat Inap',
-    color: 'blue-grey'
+    color: 'blue-grey',
+    comp: shallowRef(defineAsyncComponent(() => import('./pagemenus/PageHistory.vue')))
   },
   {
     name: 'status-kamar',

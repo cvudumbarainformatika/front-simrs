@@ -5,21 +5,21 @@
     class="q-my-lg bg-white shadow-q relative-position"
   >
     <q-card
-      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.tunggu_ranap !== null? 'bg-teal' : 'bg-deep-orange-8'}`"
+      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status !== ''? 'bg-teal' : 'bg-deep-orange-8'}`"
       style="top:-15px; left: 0;"
     >
       <div class="f-10">
-        {{ item?.tunggu_ranap !== null? 'Sudah dimutasikan' : 'Menunggu ...' }}
+        {{ item?.status === ''? 'Belum Pulang' : 'Pulang' }}
       </div>
     </q-card>
     <div class="row items-center full-width">
-      <div class="col-5">
+      <div class="col-6">
         <div class="row fit q-pa-none items-center q-col-gutter-md">
           <div class="col-auto">
-            <q-avatar size="40px">
+            <q-avatar size="50px">
               <app-avatar-pasien
                 :pasien="item"
-                width="40px"
+                width="50px"
               />
             </q-avatar>
           </div>
@@ -30,6 +30,7 @@
             <div class="flex q-gutter-sm q-pt-xs">
               <div> <b>No. RM :</b> <span class="text-primary">{{ item?.norm }}</span></div>
               <div> <b>No. REG :</b> <span class="text-grey-8">{{ item?.noreg }}</span></div>
+              <div> <b>USIA :</b> <span class="text-grey-8">{{ item?.usia }}</span></div>
             </div>
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>
@@ -37,41 +38,47 @@
           </div>
         </div>
       </div>
-      <div class="col-7">
+      <div class="col-6">
         <div class="row items-center full-width q-col-gutter-md">
           <div class="col-4 ">
             <div class="text-blue">
               {{ item?.sistembayar }}
             </div>
-            <div class="text-grey-10 f-12">
-              {{ date.formatDate(item?.tgl_kunjungan, 'MMM DD, YYYY') }}
+            <div class="text-grey-10 f-12 q-mt-xs">
+              {{ date.formatDate(item?.tglmasuk, 'MMM DD, YYYY') }}
             </div>
             <div class="text-grey-6 f-10">
-              Jam : <b> {{ date.formatDate(item?.tgl_kunjungan, 'HH:mm') }}</b>
+              Jam : <b> {{ date.formatDate(item?.tglmasuk, 'HH:mm') }}</b>
             </div>
           </div>
-          <div class="col-3">
+          <!-- <div class="col-2">
             <div class="f-10 text-grey-8">
               dari
             </div>
             <div>
-              <span class="text-primary f-12">{{ item?.poli }}</span>
+              <span class="text-primary">{{ item?.poli }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="col full-width flex wrap ellipsis">
-            <div v-if="item?.tunggu_ranap === null " class="f-10 text-grey-8">
+            <!-- <div v-if="item?.status_masuk=== ''" class="f-10 text-grey-8">
               Rencana ke ..
             </div>
             <div v-else class="f-10 text-primary">
               Sudah dimutasikan ke
+            </div> -->
+            <div class="full-width ellipsis">
+              <strong class="text-primary">{{ item?.ruangan }}</strong>
+            </div>
+            <div class="full-width ellipsis q-mt-xs">
+              <span class="text-primary">{{ item?.ketruangan }}</span>
             </div>
             <div class="full-width ellipsis">
-              <span class="text-primary">{{ item?.ruangan ?? 'Belum Ada' }}</span>
+              <strong class="text-dark"> NO. BED :{{ item?.nomorbed }}</strong>
             </div>
           </div>
           <div class="col-2 ">
             <div class="flex justify-end">
-              <q-btn v-if="item?.tunggu_ranap === null" flat class="bg-primary text-white" round icon="icon-mat-launch" dense @click="emits('send', item)">
+              <!-- <q-btn v-if="item?.status_masuk !== item?.norm" flat class="bg-primary text-white" round icon="icon-mat-launch" dense @click="emits('send', item)">
                 <q-tooltip class="bg-white text-primary">
                   Mutasikan Pasien
                 </q-tooltip>
@@ -80,7 +87,7 @@
                 <q-tooltip class="bg-grey-5 text-dark">
                   Pasien sudah dimutasikan
                 </q-tooltip>
-              </q-btn>
+              </q-btn> -->
             </div>
           </div>
         </div>
