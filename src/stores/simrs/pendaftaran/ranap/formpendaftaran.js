@@ -618,7 +618,6 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.loadingShowKamar = true
       await api.get('v1/simrs/master/listviewkamar')
         .then(resp => {
-          this.loadingShowKamar = false
           // console.log('show kamar resp', resp.data)
           this.listKamars = []
           const data = resp.data
@@ -638,6 +637,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           }
           this.listKamars = data
           console.log('show kamar', data)
+          this.loadingShowKamar = false
         })
         .catch(() => {
           this.loadingShowKamar = false
