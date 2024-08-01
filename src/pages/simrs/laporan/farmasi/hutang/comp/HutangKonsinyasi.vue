@@ -58,59 +58,129 @@
           @find="store.setSearch"
           @on-click="click"
         >
-          <template #cell-tanggal="{row}">
-            {{ dateFullFormat(row.rs3) }}
+          <template #cell-PBF="{row}">
+            {{ row?.nama }}
           </template>
-          <template #cell-pasien="{row}">
-            {{ row.pasien_kunjungan_poli?row.pasien_kunjungan_poli.nama:row.pasien_kunjungan_rawat_inap.nama }}
-          </template>
-          <template #cell-masuk="{row}">
-            {{ row.rs11?row.rs11:'-' }}
-          </template>
-          <template #cell-keluar="{row}">
-            {{ row.rs12?row.rs12:'-' }}
-          </template>
-          <template #cell-lama="{row}">
-            {{ timeDiff(row.rs11,row.rs12) }}
-          </template>
-          <template #cell-regional="{row}">
-            <div
-              v-if="row.rs4==='Regional'"
-              class="text-center"
-            >
-              <q-avatar size="12px">
-                <img src="~assets/images/check.png">
-              </q-avatar>
+          <template #cell-Hutang="{row}">
+            <div class="row justify-end">
+              {{ formatDouble(row?.Hutang,2) }}
             </div>
           </template>
-          <template #cell-general="{row}">
-            <div
-              v-if="row.rs4!=='Regional'"
-              class="text-center"
-            >
-              <q-avatar size="12px">
-                <img src="~assets/images/check.png">
-              </q-avatar>
-            </div>
-          </template>
+
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template #expand="{row}">
-            <div class="row">
-              <div class="col">
-                Pasien
+            <div v-if="row?.dist?.length">
+              <div class="row f-14 text-weight-bold q-my-sm">
+                Detail Hutang sudah di list konsinyasi
               </div>
-              <div class="col">
-                Obat
+              <div class="row text-weight-bold bg-dark text-white items-center q-py-xs" style="border-bottom: 1px solid black;">
+                <div class="col-1">
+                  No
+                </div>
+                <div class="col-2 ">
+                  Pasien
+                </div>
+                <div class="col-1">
+                  Kode
+                </div>
+                <div class="col-3">
+                  Obat
+                </div>
+                <div class="col-1 text-right ">
+                  Jumlah
+                </div>
+                <div class="col-2 text-right">
+                  Harga
+                </div>
+                <div class="col-2 text-right ">
+                  Subtotal
+                </div>
               </div>
-              <div class="col">
-                Jumlah
+              <div v-for="(det,i) in row.dist" :key="det">
+                <div class="row no-wrap " style="border-bottom: 1px solid black;">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-2 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ det?.persiapan?.pasien?.rs2 }}
+                  </div>
+                  <div class="col-1 text-right" style="white-space: normal; overflow-wrap: normal;">
+                    <div class="q-mr-xs">
+                      {{ det?.kd_obat }}
+                    </div>
+                  </div>
+                  <div class="col-3 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ det?.nama_obat }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ det?.dipakai }}
+                  </div>
+                  <div class="col-2 text-right bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ formatDouble(det?.harga_net,2) }}
+                  </div>
+                  <div class="col-2 text-right " style="white-space: normal; overflow-wrap: normal;">
+                    {{ formatDouble(det?.sub,2) }}
+                  </div>
+                </div>
               </div>
-              <div class="col">
-                Harga
+            </div>
+            <div v-if="row?.list?.length">
+              <div class="row f-14 text-weight-bold q-my-sm">
+                Detail Hutang belum di list konsinyasi
               </div>
-              <div class="col">
-                Subtotal
+              <div class="row text-weight-bold bg-dark text-white items-center q-py-xs" style="border-bottom: 1px solid black;">
+                <div class="col-1">
+                  No
+                </div>
+                <div class="col-2 ">
+                  Pasien
+                </div>
+                <div class="col-1">
+                  Kode
+                </div>
+                <div class="col-3">
+                  Obat
+                </div>
+                <div class="col-1 text-right ">
+                  Jumlah
+                </div>
+                <div class="col-2 text-right">
+                  Harga
+                </div>
+                <div class="col-2 text-right ">
+                  Subtotal
+                </div>
               </div>
+              <div v-for="(det,i) in row.list" :key="det">
+                <div class="row no-wrap " style="border-bottom: 1px solid black;">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-2 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ det?.persiapan?.pasien?.rs2 }}
+                  </div>
+                  <div class="col-1 text-right" style="white-space: normal; overflow-wrap: normal;">
+                    <div class="q-mr-xs">
+                      {{ det?.kd_obat }}
+                    </div>
+                  </div>
+                  <div class="col-3 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ det?.nama_obat }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ det?.dipakai }}
+                  </div>
+                  <div class="col-2 text-right bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ formatDouble(det?.harga_net,2) }}
+                  </div>
+                  <div class="col-2 text-right " style="white-space: normal; overflow-wrap: normal;">
+                    {{ formatDouble(det?.sub,2) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="!row?.dist?.length && !row?.list?.length">
+              <app-no-data />
             </div>
             <!-- {{ row }} -->
           </template>
@@ -126,6 +196,7 @@
 <script setup>
 import { useLaporanHutangKonsinyasiFarmasiStore } from 'src/stores/simrs/laporan/farmasi/hutang/konsinyasi'
 import { defineAsyncComponent, onMounted, shallowRef } from 'vue'
+import { formatDouble } from 'src/modules/formatter'
 
 const store = useLaporanHutangKonsinyasiFarmasiStore()
 const TablePage = shallowRef(defineAsyncComponent(() => import('./TablePage.vue')))

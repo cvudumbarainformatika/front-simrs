@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+// import { filterDuplicateArrays } from 'src/modules/utils'
 
 export const useLaporanHutangKonsinyasiFarmasiStore = defineStore('laporan_hutang_konsinyasi_farmasi', {
   state: () => ({
@@ -11,7 +12,7 @@ export const useLaporanHutangKonsinyasiFarmasiStore = defineStore('laporan_hutan
       per_page: 10,
       page: 1
     },
-    columns: ['PBF', 'Hutang', 'Dibayar', 'Status'],
+    columns: ['PBF', 'Hutang'],
     columnHide: ['id']
   }),
   actions: {
@@ -54,6 +55,25 @@ export const useLaporanHutangKonsinyasiFarmasiStore = defineStore('laporan_hutan
     metaniData (resp) {
       this.items = resp?.data
       this.meta = resp?.meta
+      const dist = resp?.dist
+      const list = resp?.list
+      this.items?.forEach(it => {
+        it.dist = dist.filter(fi => fi.kdpbf === it.kode)
+        it.list = list.filter(fi => fi.kdpbf === it.kode)
+        it.dist?.forEach(fr => {
+          if (fr.sub === null) fr.sub = 0
+          // it.details.push(fr)
+        })
+        it.list?.forEach(fr => {
+          if (fr.sub === null) fr.sub = 0
+          // it.details.push(fr)
+        })
+        const htDist = it.dist.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+        const htList = it.list.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+        it.Hutang = htDist + htList
+      })
+
+      console.log('items ', this.items)
     }
   }
 })

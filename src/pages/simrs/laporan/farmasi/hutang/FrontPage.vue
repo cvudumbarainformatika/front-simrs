@@ -20,7 +20,7 @@
       </q-tabs>
     </div>
 
-    <div class="col-auto bg-yellow">
+    <div class="col-auto">
       <q-tab-panels
         v-model="tab"
         animated
