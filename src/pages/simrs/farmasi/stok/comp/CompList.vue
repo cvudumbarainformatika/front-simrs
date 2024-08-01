@@ -111,7 +111,7 @@
           </div>
           <div class="row no-wrap text-weight-bold  items-end">
             <div>
-              {{ row.total }}
+              {{ formatDouble(row.total,2) }}
             </div>
             <div class="q-ml-sm f-10 text-italic">
               ( {{ row.satuan_k ? row.satuan_k :'-' }} )
@@ -232,7 +232,7 @@
 <script setup>
 // eslint-disable-next-line no-unused-vars
 import { date } from 'quasar'
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble, formatRp } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
@@ -288,7 +288,8 @@ function editData (val) {
 function getSelisih (row) {
   const jumlah = !isNaN(parseFloat(row?.total)) ? parseFloat(row?.total) : 0
   const fisik = !isNaN(parseFloat(row?.fisik)) ? parseFloat(row?.fisik) : 0
-  return jumlah - fisik
+  const selisih = jumlah - fisik
+  return formatDouble(selisih, 2)
 }
 function tutup (val) {
   const date1 = new Date(table.now)
