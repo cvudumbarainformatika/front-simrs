@@ -41,7 +41,8 @@ const Header = defineAsyncComponent(() => import('./comp/PageHead.vue'))
 const head = ref('konsi')
 const heads = ref([
   { page: 'konsi', label: 'List Konsinyasi', color: 'deep-orange' },
-  { page: 'list', label: 'Konsinyasi Siap BAST ', color: 'green' }
+  { page: 'list', label: 'Konsinyasi Siap BAST ', color: 'green' },
+  { page: 'belum', label: 'Belum Masuk List', color: 'blue' }
 ])
 function gantiHead (val) {
   head.value = val
@@ -49,7 +50,8 @@ function gantiHead (val) {
 
 const comp = [
   { nama: 'konsi', page: defineAsyncComponent(() => import('./comp/ListBarangTerpakai.vue')) },
-  { nama: 'list', page: defineAsyncComponent(() => import('./comp/ListSiapBast.vue')) }
+  { nama: 'list', page: defineAsyncComponent(() => import('./comp/ListSiapBast.vue')) },
+  { nama: 'belum', page: defineAsyncComponent(() => import('./comp/ListBelumMasuk.vue')) }
 ]
 
 // console.log('comp', comp)
