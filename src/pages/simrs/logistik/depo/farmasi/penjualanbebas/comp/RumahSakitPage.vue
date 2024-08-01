@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="row q-py-sm">
-      <forminput />
+      <forminput tipe="rs" />
     </div>
     <div class="row q-py-sm">
       <listbelum />

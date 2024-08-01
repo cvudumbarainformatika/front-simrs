@@ -266,27 +266,27 @@ const refNpd = ref(null)
 const refTglCair = ref(null)
 const refJmlBayar = ref(null)
 
-function setTanggalByrDisp(val) {
+function setTanggalByrDisp (val) {
   store.setForm('tanggalByr', val)
 }
-function setTanggalByr(val) {
+function setTanggalByr (val) {
   console.log('tgl_pembayaran', val)
   store.setForm('tgl_pembayaran', val)
 }
-function setTanggalCairDisp(val) {
+function setTanggalCairDisp (val) {
   store.setForm('tanggalCair', val)
 }
-function setTanggalCair(val) {
+function setTanggalCair (val) {
   store.setForm('tgl_pencairan_npk', val)
 }
-function setJmBayar(evt) {
+function setJmBayar (evt) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   store.setForm('total_pembayaran', nilai)
 }
-function resetValidation() {
+function resetValidation () {
   refTglBayar.value.$refs.refInputDate.resetValidation()
   refTglCair.value.$refs.refInputDate.resetValidation()
 
@@ -294,7 +294,7 @@ function resetValidation() {
   refNpd.value.$refs.refInput.resetValidation()
   refJmlBayar.value.$refs.refInput.resetValidation()
 }
-function validate() {
+function validate () {
   console.log(refNoKwitansi.value.$refs.refInput)
   console.log(refTglBayar.value.$refs.refInputDate)
   const tglByr = refTglBayar.value.$refs.refInputDate.validate()
@@ -306,7 +306,7 @@ function validate() {
   if (tglByr && tglCair && noKwitansi && noNpd && noJmlBayar) return true
   else return false
 }
-function simpanPembayaran() {
+function simpanPembayaran () {
   if (!validate()) return notifErrVue('Periksa Kembali Input Anda')
   store.setForm('penerimaans', store.penerimaans)
   console.log(store.form)

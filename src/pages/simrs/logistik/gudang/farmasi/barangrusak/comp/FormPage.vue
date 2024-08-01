@@ -387,16 +387,17 @@ import { useFormBarangRusakStore } from 'src/stores/simrs/farmasi/barangrusak/fo
 import { ref, onUnmounted } from 'vue'
 
 const store = useFormBarangRusakStore()
-function updateJum(evt) {
+function updateJum (evt) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   const stok = store.form.stok
   if (nilai > stok) {
     notifErrVue('Jumlah Barang Rusak Tidak Boleh Melebihi Jumlah Stok')
     store.setForm('jumlah', stok)
-  } else store.setForm('jumlah', nilai)
+  }
+  else store.setForm('jumlah', nilai)
 }
 // auto
 const refObat = ref(null)
@@ -406,14 +407,14 @@ const refStatus = ref(null)
 // inp
 const refJumlah = ref(null)
 // eslint-disable-next-line no-unused-vars
-function resetvalidasi() {
+function resetvalidasi () {
   refObat.value?.$refs?.refAuto?.resetValidation()
   refBatch.value?.$refs?.refAuto?.resetValidation()
   refPenerimaan.value?.$refs?.refAuto?.resetValidation()
   refStatus.value?.$refs?.refAuto?.resetValidation()
   refJumlah.value?.$refs?.refInput?.resetValidation()
 }
-function validasi() {
+function validasi () {
   let obat = refObat.value?.$refs?.refAuto?.validate()
   let batch = refBatch.value?.$refs?.refAuto?.validate()
   let penerimaan = refPenerimaan.value?.$refs?.refAuto?.validate()
@@ -454,7 +455,7 @@ function validasi() {
   ) return true
   else return false
 }
-function simpan() {
+function simpan () {
   if (validasi()) {
     store.simpan().then(() => { resetvalidasi() })
   }
