@@ -425,7 +425,7 @@ function reguler (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   det[key] = nilai
   if (key === 'jumlah_retur' && nilai > det.jumlah_keluar) {
     det.jumlah_retur = det.jumlah_keluar

@@ -113,16 +113,16 @@
       </div>
     </div>
     <div class="row justify-between items-center q-pb-md">
-      <div class="col-auto"></div>
+      <div class="col-auto" />
       <div class="col-auto text-right q-mr-md">
-        <q-btn 
+        <q-btn
           icon="icon-mat-done_all"
           size="sm"
           color="negative"
           :loading="store.loadingAnggap"
           :disable="store.loadingAnggap"
           @click="dianggapSelesai()"
-         >
+        >
           <q-tooltip>
             Rencana Pemesanan Dianggap Selesai
           </q-tooltip>
@@ -436,7 +436,7 @@ function setHarga (evt, val) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   // const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
 
   val.harga = nilai
@@ -484,30 +484,29 @@ function kirimRencana (val) {
 }
 
 // dianggap selesai
-function dianggapSelesai(){
-  
+function dianggapSelesai () {
   Dialog.create({
-    title:'Konfirmasi',
-    message:'Apakah Rencana Pemesanan Akan Dianggap Selesai?',
-    ok:{
-      push:true,
-      color:'primary',
-      label:'Ok',
-      'no-caps':true
+    title: 'Konfirmasi',
+    message: 'Apakah Rencana Pemesanan Akan Dianggap Selesai?',
+    ok: {
+      push: true,
+      color: 'primary',
+      label: 'Ok',
+      'no-caps': true
     },
-    cancel:{
-      push:true,
-      color:'dark',
-      label:'Batal',
-      'no-caps':true
+    cancel: {
+      push: true,
+      color: 'dark',
+      label: 'Batal',
+      'no-caps': true
     }
   })
-  .onOk(()=>{
+    .onOk(() => {
     // console.log(store.form)
-    store.anggapSelesaiRencana().then(() => {
-      table.rencanaSelected(store.form.no_rencbeliobat, 'form')
+      store.anggapSelesaiRencana().then(() => {
+        table.rencanaSelected(store.form.no_rencbeliobat, 'form')
+      })
     })
-  })
 }
 
 </script>

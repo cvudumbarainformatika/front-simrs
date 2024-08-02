@@ -443,7 +443,7 @@ function setJumlahMinta (evt) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const jumlah = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const jumlah = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   const stok = parseFloat(store.form.stok) ?? 0
   const maks = parseFloat(store.form.mak_stok) ?? 0
   const bisaMinta = maks - stok

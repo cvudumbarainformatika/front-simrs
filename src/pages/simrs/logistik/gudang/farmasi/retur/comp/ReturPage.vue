@@ -585,44 +585,44 @@ const opsiRetur = ref([
   { label: 'Retur Uang', value: 'uang' }
 ])
 
-function getData() {
+function getData () {
   store.getDataMauRet().then(() => {
     refCariNoPenerimaan.value.$refs.refInput.focus()
   })
 }
-function setTanggalRusak(val) {
+function setTanggalRusak (val) {
   store.setForm('tgl_rusak', date.formatDate(val, 'YYYY-MM-DD'))
 }
-function setTanggalRusakDisp(val) {
+function setTanggalRusakDisp (val) {
   store.setForm('tanggalRusak', val)
 }
-function setTanggal(val) {
+function setTanggal (val) {
   store.setForm('tgl_retur', date.formatDate(val, 'YYYY-MM-DD'))
 }
-function setTanggalDisp(val) {
+function setTanggalDisp (val) {
   store.setForm('tanggal', val)
   console.log('form ', store.form)
 }
-function setTanggalFak(val) {
+function setTanggalFak (val) {
   store.setForm('tgl_faktur_retur_pbf', date.formatDate(val, 'YYYY-MM-DD'))
 }
-function setTanggalFakDisp(val) {
+function setTanggalFakDisp (val) {
   store.setForm('tanggalFak', val)
   console.log('form ', store.form)
 }
-function setTanggalKwi(val) {
+function setTanggalKwi (val) {
   store.setForm('tgl_kwitansi_pembayaran', date.formatDate(val, 'YYYY-MM-DD'))
 }
-function setTanggalKwiDisp(val) {
+function setTanggalKwiDisp (val) {
   store.setForm('tanggalKwi', val)
   console.log('form ', store.form)
 }
 
-function updateJum(evt, det, key) {
+function updateJum (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   det[key] = nilai
   if (key === 'jumlah_retur') {
     const jumlah = parseFloat(det.jumlah)
@@ -651,7 +651,7 @@ const refObat = ref(null)
 const refKondisi = ref(null)
 const refOpsiRetur = ref(null)
 
-function validasi(index, dibayar) {
+function validasi (index, dibayar) {
   // console.log(refKondisi.value)
   const taRetur = refTaRetur.value.$refs.refInputDate.validate()
   const taRusak = refTaRusak.value.$refs.refInputDate.validate()
@@ -664,7 +664,8 @@ function validasi(index, dibayar) {
     refNoKwiRet.value.$refs.refInput.resetValidation()
     taKwiRetur = true
     noKwiRet = true
-  } else {
+  }
+  else {
     taKwiRetur = refTaKwiRetur.value.$refs.refInputDate.validate()
     noKwiRet = refNoKwiRet.value.$refs.refInput.validate()
   }
@@ -689,7 +690,7 @@ function validasi(index, dibayar) {
   ) return true
   else return false
 }
-function simpan(index, item) {
+function simpan (index, item) {
   const dibayar = !!item.tgl_pembayaran
   console.log('form', store.form)
   if (validasi(index, dibayar)) {
@@ -704,11 +705,12 @@ function simpan(index, item) {
     store.setForm('tgl_exp', item.tgl_exp)
     store.setForm('flag_tbl_rusak', null)
     store.simpanRetur(item)
-  } else {
+  }
+  else {
     notifErrVue('Cek kembali input anda')
   }
 }
-function simpanRusak(index, item) {
+function simpanRusak (index, item) {
   if (refTaRetur.value.$refs.refInputDate.validate()) {
     // console.log('item', item)
     const subtotal = parseFloat(item.jumlah) * parseFloat(item.harga_net)
@@ -722,7 +724,8 @@ function simpanRusak(index, item) {
     store.setForm('flag_tbl_rusak', '1')
     store.simpanRetur(item)
     // console.log('form', store.form)
-  } else {
+  }
+  else {
     notifErrVue('periksa kembali input')
   }
 }

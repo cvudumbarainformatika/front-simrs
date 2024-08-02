@@ -11,7 +11,8 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
     form: {
       kd_obat: ''
     },
-    pihakTigas: []
+    pihakTigas: [],
+    signas: []
   }),
   actions: {
     setParams (key, val) {
@@ -36,6 +37,35 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
           })
           .catch(() => { this.loadingPihakTiga = false })
       })
+    },
+    async getSigna (val, update, abort) {
+      // this.loadingSigna = true
+      // await api.get('v1/simrs/farmasinew/depo/get-signa')
+      // if (val?.length < 1) {
+      //   abort()
+      //   return
+      // }
+      const params = {
+        params: {
+          q: val ?? ''
+        }
+      }
+      const resp = await api.get('v1/simrs/master/signa/get-signa-autocomplete', params)
+      if (update !== undefined) {
+        update(() => {
+          this.signas = resp.data ?? []
+        })
+      }
+      else {
+        this.signas = resp.data
+      }
+
+      // .then(resp => {
+      //   // this.loadingSigna = false
+      //   // console.log('signa', resp?.data)
+      //   this.signas = resp?.data
+      // })
+      // .catch(() => { this.loadingSigna = false })
     }
   }
 })

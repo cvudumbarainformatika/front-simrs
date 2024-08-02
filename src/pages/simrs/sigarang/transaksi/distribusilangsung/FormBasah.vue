@@ -115,7 +115,7 @@ const emits = defineEmits(['simpanList'])
 //   console.log('fokus', row, col)
 //   console.log('form', store.form)
 // }
-function setJmlDist(evt, val) {
+function setJmlDist (evt, val) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -125,13 +125,14 @@ function setJmlDist(evt, val) {
   if (jml > val.total_stok) {
     val.toDistribute = val.total_stok
     notifErrVue('jumlah dsitribusi tidak boleh melebihi jumlah stok')
-  } else {
+  }
+  else {
     val.toDistribute = jml
   }
 }
 const user = useAplikasiStore()
 const distRef = ref(null)
-function inputBlur(row, col) {
+function inputBlur (row, col) {
   store.setForm('kode_rs', row.kode)
   store.setForm('kode_satuan', row.kode_satuan)
   store.setForm('jumlah', row.toDistribute)

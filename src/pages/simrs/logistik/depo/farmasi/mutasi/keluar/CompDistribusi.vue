@@ -264,7 +264,7 @@ function setJumlah (evt, val) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
   const max = parseFloat(val?.mak_stok)
   const stok = parseFloat(val?.stok)

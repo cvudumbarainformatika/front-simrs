@@ -97,11 +97,16 @@ onMounted(() => {
 function myPrinting () {
   console.log('print ')
   window.print()
-  setTimeout(function () {
+  window.onafterprint = (event) => {
+    // console.log('After print')
     afterPrint()
-  }, 100)
+  }
+  // setTimeout(function () {
+  //   afterPrint()
+  // }, 100)
 }
 
+// eslint-disable-next-line no-unused-vars
 function afterPrint () {
   // const r = confirm('Press a button!')
   // if (r === true) {

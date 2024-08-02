@@ -543,7 +543,7 @@ function setDiskon (val) {
   const inc = val.includes('.')
   const ind = val.indexOf('.')
   const panj = val.length
-  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
+  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 2)) ? val : parseFloat(val))
   store.setForm('diskon', temp)
   setTimeout(() => {
     setHargaNetto()
@@ -559,7 +559,7 @@ function setPpn (val) {
   // const inc = val.includes('.')
   // const ind = val.indexOf('.')
   // const panj = val.length
-  // const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
+  // const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 2)) ? val : parseFloat(val))
   // store.setForm('ppn', temp)
   if (val) store.setForm('ppn', 11)
   if (!val) store.setForm('ppn', 0)

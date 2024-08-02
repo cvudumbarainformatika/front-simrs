@@ -335,7 +335,7 @@ function setNumber (evt, det) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   if (nilai > det.maxRs) {
     if (parseFloat(det.jumlahdirencanakan) > det.maxRs) det.jumlah_diverif = det.maxRs
     else det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)

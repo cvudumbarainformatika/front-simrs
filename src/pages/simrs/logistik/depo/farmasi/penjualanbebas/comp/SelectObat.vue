@@ -100,7 +100,7 @@ function obatSelected (val) {
   setForm('uraian108', val?.uraian108 ?? '-')
   setForm('kode50', val?.kode50 ?? '-')
   setForm('uraian50', val?.uraian50 ?? '-')
-  setForm('stokalokasi', val?.alokasi ?? '-')
+  setForm('harga_beli', val?.harga_beli ?? 0)
   emits('form', form)
 }
 function obatValid (val) {
@@ -115,13 +115,14 @@ async function filterFn (val, update, abort) {
 
   const param = {
     kdruang: props.depo,
-    q: val
+    q: val,
+    groups: '2'
   }
 
   const params = { params: param }
 
-  const resp = await api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
-  console.log('resp', resp)
+  const resp = await api.get('v1/simrs/farmasinew/penjualanbebas/cari-obat', params)
+  // console.log('resp', resp)
   const data = resp.data?.dataobat ?? []
 
   update(() => {

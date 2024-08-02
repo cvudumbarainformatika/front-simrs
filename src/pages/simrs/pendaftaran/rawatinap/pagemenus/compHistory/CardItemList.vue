@@ -78,12 +78,14 @@
           </div>
           <div class="col-2 ">
             <div class="flex justify-end">
-              <!-- <q-btn v-if="item?.status_masuk !== item?.norm" flat class="bg-primary text-white" round icon="icon-mat-launch" dense @click="emits('send', item)">
-                <q-tooltip class="bg-white text-primary">
-                  Mutasikan Pasien
+              <q-btn flat class="bg-primary text-white" round icon="icon-fa-file-regular" dense @click="emits('spri', item)">
+                <q-tooltip class="bg-dark text-white">
+                  <div class="flex flex-center items-center text-center">
+                    Dokumen SPRI yg hrs di tandatangani pasien
+                  </div>
                 </q-tooltip>
               </q-btn>
-              <q-btn v-else flat class="bg-grey-5 text-white" round icon="icon-mat-bedroom_parent" dense>
+              <!-- <q-btn v-else flat class="bg-grey-5 text-white" round icon="icon-mat-bedroom_parent" dense>
                 <q-tooltip class="bg-grey-5 text-dark">
                   Pasien sudah dimutasikan
                 </q-tooltip>
@@ -107,7 +109,7 @@ defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['details', 'send'])
+const emits = defineEmits(['details', 'spri'])
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,6 @@
         <template v-if="store.items?.length > 0">
           <transition-group
             appear
-
             enter-active-class="animated fadeIn faster"
             leave-active-class="animated fadeOut faster"
           >
@@ -18,9 +17,9 @@
               :items="store.items"
               :loading="store.loading"
               @details="(val)=>store.pasien=val"
-              @send="(val)=>{
+              @spri="(val)=>{
                 store.pasien = val
-                store.dialogSend = true
+                store.dialogSpri = true
               }"
             />
             <thumbnail-view
@@ -28,7 +27,7 @@
               key="thumbnail-view"
               :items="store.items"
               @details="(val)=>store.pasien=val"
-              @send="(val)=>{
+              @spri="(val)=>{
                 store.pasien = val
                 store.dialogSend = true
               }"
@@ -65,6 +64,12 @@
         />
       </div>
     </div>
+
+    <!-- dialog spri-->
+    <dialog-spri
+      v-model="store.dialogSpri"
+      :pasien="store.pasien"
+    />
   </div>
 </template>
 
@@ -75,6 +80,7 @@ import { defineAsyncComponent, onMounted } from 'vue'
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
 const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
 const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
+const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
 

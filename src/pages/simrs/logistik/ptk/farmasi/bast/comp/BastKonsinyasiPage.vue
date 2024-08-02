@@ -89,12 +89,12 @@
               <div class="col-8 text-weight-bold">
                 <!-- {{ isNaN(parseFloat(store.form.jumlah_bast)) ? 0 : formatRpDouble(store.form.jumlah_bast,2) }} -->
                 <app-input
-                    v-model="store.form.jumlah_bastx"
-                    outlined
-                    label="Jumlah BAST"
-                    dense
-                    valid
-                  />
+                  v-model="store.form.jumlah_bastx"
+                  outlined
+                  label="Jumlah BAST"
+                  dense
+                  valid
+                />
               </div>
             </div>
           </div>
@@ -330,7 +330,7 @@ function updateHargaAll (evt, det, trm, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   console.log('nilai', parseFloat(evt), isNaN(parseFloat(evt)))
   det[key] = nilai
 
