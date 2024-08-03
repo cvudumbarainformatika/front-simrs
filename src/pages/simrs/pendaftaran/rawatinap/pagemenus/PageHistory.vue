@@ -8,6 +8,7 @@
         <template v-if="store.items?.length > 0">
           <transition-group
             appear
+
             enter-active-class="animated fadeIn faster"
             leave-active-class="animated fadeOut faster"
           >
@@ -76,9 +77,10 @@
 <script setup>
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history'
 import { defineAsyncComponent, onMounted } from 'vue'
+import ListPasien from './compHistory/ListPasien.vue'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
-const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
+// const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
 const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
 
