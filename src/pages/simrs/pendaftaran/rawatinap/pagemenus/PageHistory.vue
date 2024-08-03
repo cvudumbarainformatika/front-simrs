@@ -34,7 +34,12 @@
               @details="(val)=>store.pasien=val"
               @spri="(val)=>{
                 store.pasien = val
-                store.dialogSend = true
+                store.dialogSpri = true
+              }"
+
+              @cetak-gelang="(val)=>{
+                store.pasien = val
+                store.dialogCetakGelang = true
               }"
             />
           </transition-group>

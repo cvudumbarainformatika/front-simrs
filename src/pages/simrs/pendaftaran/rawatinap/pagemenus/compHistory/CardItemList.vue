@@ -95,7 +95,7 @@
                     <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
                       <q-item-section>Cetak Gelang</q-item-section>
                     </q-item>
-                    <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
+                    <!-- <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
                       <q-item-section>Cetak Identitas</q-item-section>
                     </q-item>
                     <q-separator />
@@ -104,14 +104,6 @@
                     </q-item>
                     <q-item clickable v-close-popup @click="emits('halaman2', item)">
                       <q-item-section>Halaman 2</q-item-section>
-                    </q-item>
-                    <!-- <q-separator />
-                    <q-item clickable v-close-popup>
-                      <q-item-section>Settings</q-item-section>
-                    </q-item>
-                    <q-separator />
-                    <q-item clickable v-close-popup>
-                      <q-item-section>Help &amp; Feedback</q-item-section>
                     </q-item> -->
                   </q-list>
                 </q-menu>
