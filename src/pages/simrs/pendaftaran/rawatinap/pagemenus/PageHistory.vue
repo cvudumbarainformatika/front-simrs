@@ -22,6 +22,10 @@
                 store.pasien = val
                 store.dialogSpri = true
               }"
+              @cetak-gelang="(val)=>{
+                store.pasien = val
+                store.dialogCetakGelang = true
+              }"
             />
             <thumbnail-view
               v-else
@@ -70,6 +74,12 @@
     <dialog-spri
       v-model="store.dialogSpri"
       :pasien="store.pasien"
+      :key="store.pasien"
+    />
+    <dialog-cetak-gelang
+      v-model="store.dialogCetakGelang"
+      :pasien="store.pasien"
+      :key="store.pasien"
     />
   </div>
 </template>
@@ -83,6 +93,7 @@ const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.v
 // const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
 const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
+const DialogCetakGelang = defineAsyncComponent(() => import('./compHistory/DialogCetakGelang.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
 

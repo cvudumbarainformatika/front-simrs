@@ -9,7 +9,7 @@
         :class="`masonry-item cursor-pointer q-pa-none ${onHoverred===index? 'dimmed' : ''} `"
         @mouseover="onHoverred=index"
         @mouseleave="onHoverred=-1"
-        @click="emits('send',item)"
+        @click="emits('spri',item)"
       >
         <q-card :class="`card-masonry`">
           <app-avatar-pasien
@@ -80,7 +80,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'send'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
 
 </script>
 

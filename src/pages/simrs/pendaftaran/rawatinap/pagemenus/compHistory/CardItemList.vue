@@ -80,12 +80,41 @@
           </div>
           <div class="col-2 ">
             <div class="flex justify-end">
-              <q-btn flat class="bg-primary text-white" round icon="icon-fa-file-regular" dense @click="emits('spri', item)">
-                <q-tooltip class="bg-dark text-white">
+              <q-btn flat class="bg-primary text-white" round icon="icon-fa-file-regular" dense>
+                <!-- <q-tooltip class="bg-dark text-white">
                   <div class="flex flex-center items-center text-center">
-                    Dokumen SPRI yg hrs di tandatangani pasien
+                    Dokumen & Lainnya
                   </div>
-                </q-tooltip>
+                </q-tooltip> -->
+                <q-menu>
+                  <q-list style="min-width: 100px">
+                    <q-item clickable v-close-popup @click="emits('spri', item)">
+                      <q-item-section>Dokumen SPRI</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
+                      <q-item-section>Cetak Gelang</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
+                      <q-item-section>Cetak Identitas</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item clickable v-close-popup @click="emits('halaman1', item)">
+                      <q-item-section>Halaman 1</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('halaman2', item)">
+                      <q-item-section>Halaman 2</q-item-section>
+                    </q-item>
+                    <!-- <q-separator />
+                    <q-item clickable v-close-popup>
+                      <q-item-section>Settings</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item clickable v-close-popup>
+                      <q-item-section>Help &amp; Feedback</q-item-section>
+                    </q-item> -->
+                  </q-list>
+                </q-menu>
               </q-btn>
               <!-- <q-btn v-else flat class="bg-grey-5 text-white" round icon="icon-mat-bedroom_parent" dense>
                 <q-tooltip class="bg-grey-5 text-dark">
@@ -111,7 +140,7 @@ defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['details', 'spri'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
 </script>
 
 <style lang="scss" scoped>

@@ -144,11 +144,11 @@ onMounted(() => {
   imageSelected.value = null
 })
 
-function pageFull() {
+function pageFull () {
   style.setComponentFull()
 }
 
-async function insertComponent(name, props) {
+async function insertComponent (name, props) {
   const edit = refQeditor.value
   const render = renderC.value
   renderTheseComponent.value = name
@@ -159,13 +159,13 @@ async function insertComponent(name, props) {
   edit.focus()
 }
 
-function insertImage() {
+function insertImage () {
   dialogImage.value = true
 }
-function imageGetter(val) {
+function imageGetter (val) {
   imageSelected.value = val
 }
-function getImage() {
+function getImage () {
   // console.log(e)
 
   if (imageSelected.value === null) {
@@ -175,16 +175,16 @@ function getImage() {
 
   dialogImage.value = false
 }
-function uniqueI(prefix) {
+function uniqueI (prefix) {
   let uniqueId = null
   if (!uniqueId) uniqueId = (new Date()).getTime()
   return (prefix || 'id') + (uniqueId++)
 }
 
-function Saved() {
+function Saved () {
   console.log('ok')
 }
-function colorChange(cmd, name) {
+function colorChange (cmd, name) {
   const edit = refQeditor.value
   token.value.hide()
   edit.caret.restore()
@@ -193,10 +193,10 @@ function colorChange(cmd, name) {
   // console.log(edit)
 }
 
-function pasteCapture(evt) {
+function pasteCapture (evt) {
   console.log('paste', evt)
 }
-function dropCapture(evt) {
+function dropCapture (evt) {
   console.log('drop', evt)
 }
 

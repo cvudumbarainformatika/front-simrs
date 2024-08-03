@@ -17,6 +17,7 @@
             :item="item"
             @details="(val)=>emits('details', val)"
             @spri="(val)=>emits('spri', val)"
+            @cetak-gelang="(val)=>emits('cetakGelang', val)"
           />
         </TransitionGroup>
       </template>
@@ -47,7 +48,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'spri'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
 </script>
 
 <style lang="scss" scoped>
