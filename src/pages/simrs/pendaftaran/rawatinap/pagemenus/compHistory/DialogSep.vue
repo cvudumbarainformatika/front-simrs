@@ -1,6 +1,6 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)" @show="init">
-    <q-card style="min-width:40vw; max-width: 40vw;">
+    <q-card style="min-width:60vw; max-width: 60vw;">
       <q-bar class="bg-teal text-white">
         <div>Create SEP</div>
 
@@ -49,30 +49,40 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
-        BUAT SEP
-      </q-card-section>
-      <q-separator />
-      <q-card-section class="q-pa-none bg-teal text-white">
-        <div class="q-pa-md row justify-between items-center">
-          <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogCetakGelang=false" /></div>
-          <div>
-            <q-btn v-print="printObj" label="Print" color="yellow-3" text-color="dark" />
+      <q-form>
+        <q-card-section class="row q-col-gutter-sm">
+          <app-input-simrs
+            ref="refNokartu" v-model="sep.t_sep.noKartu" label="Nomor Kartu" :valid="{required: true}"
+            :error-from-server="sep.errors.norm"
+            @update:model-value="sep.errors.norm = null"
+            :lazy-rules="false"
+            class="col-4"
+          />
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="q-pa-none bg-teal text-white">
+          <div class="q-pa-md row justify-between items-center">
+            <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" /></div>
+            <div>
+              <q-btn label="Print" color="yellow-3" text-color="dark" />
+            </div>
           </div>
-        </div>
-      </q-card-section>
+        </q-card-section>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup>
+import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history.js'
 
 // import BarcodeGenerator from 'src/components/callComponents/BarcodeGenerator.vue'
 // import { ref } from 'vue'
 const store = useListHistoryPendaftaranRanapStore()
+const sep = useBuatSepRanapStore()
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -80,6 +90,12 @@ defineProps({
 })
 
 const init = () => {
-  console.log('init')
+  console.log('init', props.pasien)
+  sep.updateForm(props.pasien)
+  store.cekPesertaBpjs('nik', props.pasien?.nktp)
+    .then(() => {
+      // console.log('store.cekPeserta', store.cekPeserta)
+      // sep.updateForm(store.cekPeserta, props.pasien)
+    })
 }
 </script>

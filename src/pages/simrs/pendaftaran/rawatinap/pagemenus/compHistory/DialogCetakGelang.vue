@@ -49,7 +49,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <q-card-section class="q-pa-none">
         <!-- <div id="printMe" class="flex q-gutter-x-md items-center full-width">
           <BarcodeGenerator
             :value="pasien.norm"
@@ -71,30 +71,33 @@
             </div>
           </div>
         </div> -->
-        <div id="printMe" class="column q-gutter-y-md full-width">
-          <div class="f-12 ">
-            <div class="text-weight-bold">
-              NORM : {{ pasien.norm ?? '-' }}
+        <div class="column flex-center q-pa-lg bg-grey">
+          <div id="printMe" class="page-barcode bg-white column flex-center">
+            <div class="">
+              <div class="f-10">
+                <b>NORM : {{ pasien.norm ?? '-' }} </b> | <span>Usia : {{ pasien?.usia }}</span>
+              </div>
+              <div class="text-weight-bold f-10">
+                Nama : {{ pasien.nama }}
+              </div>
+              <div class="f-10">
+                Alamat : {{ pasien?.alamatbarcode ?? '-' }}
+              </div>
+              <!-- <div class="f-10">
+                Usia : {{ pasien?.usia }}
+              </div> -->
             </div>
-            <div class="f-14 text-weight-bold">
-              {{ pasien.nama }}
-            </div>
-            <div class="f-12">
-              Alamat : {{ pasien?.alamat }}
-            </div>
-            <div class="f-14">
-              Usia : {{ pasien?.usia }}
-            </div>
+            <BarcodeGenerator
+              :value="pasien.norm"
+              :format="'CODE128'"
+              :line-color="'#000'"
+              :width="2"
+              :height="15"
+              :element-tag="'img'"
+              :display-value="false"
+              class="self-start"
+            />
           </div>
-          <BarcodeGenerator
-            :value="pasien.norm"
-            :format="'CODE128'"
-            :line-color="'#000'"
-            :width="2"
-            :height="30"
-            :element-tag="'img'"
-            :display-value="false"
-          />
         </div>
       </q-card-section>
       <q-separator />
@@ -117,7 +120,7 @@ import BarcodeGenerator from 'src/components/callComponents/BarcodeGenerator.vue
 import { ref } from 'vue'
 const store = useListHistoryPendaftaranRanapStore()
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -125,7 +128,7 @@ defineProps({
 })
 
 const init = () => {
-  console.log('init')
+  console.log('init', props.pasien)
 }
 
 const printed = ref(false)
@@ -145,3 +148,18 @@ const printObj = {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.page-barcode {
+  margin:0mm 0mm 0mm 0mm;
+  padding-left:0mm;
+  padding-bottom:1mm;
+  width:70mm;
+  height:18mm;
+  border:0px dashed #000000;
+  font-size:11px;
+  // font-weight:bold;
+  // font-family:Arial;
+  vertical-align:middle;
+}
+</style>

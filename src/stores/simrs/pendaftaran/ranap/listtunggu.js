@@ -191,9 +191,14 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       const params = { params: { by, no } }
       await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
         .then(resp => {
-          if (resp.data.metadata.code === '200') {
-            this.cekPeserta = resp.data.result.peserta
-            console.log('cekPesertaBpjs', this.cekPeserta)
+          // if (resp.data.metadata.code === '200') {
+          //   this.cekPeserta = resp.data.result.peserta
+          //   console.log('cekPesertaBpjs', this.cekPeserta)
+          // }
+          const bpjs = resp?.data?.bpjs
+          // const rs = resp?.data?.rs
+          if (bpjs?.metadata?.code === '200') {
+            this.cekPeserta = resp?.data.bpjs.result.peserta
           }
         })
         .catch(err => {
@@ -207,7 +212,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       this.form.kamar = null
       const arr = pendaftaran.kamars
       const obj = arr.length ? arr.find(x => x.rs1 === val) : null
-      console.log('pilihRuang', obj)
+      // console.log('pilihRuang', obj)
       const group = obj?.groups ?? null
       // const kodeRuang = obj?.rs1 ?? null
       const kelas = obj?.rs3 ?? null

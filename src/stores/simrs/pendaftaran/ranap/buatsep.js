@@ -6,59 +6,105 @@ import { defineStore } from 'pinia'
 export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
   state: () => ({
     t_sep: {
-      noKartu: '0001112230666',
-      tglSep: '2017-10-18',
-      ppkPelayanan: '0301R001',
-      jnsPelayanan: '2',
-      klsRawat: '3',
-      noMR: '123456',
+      noKartu: '',
+      tglSep: '',
+      ppkPelayanan: '',
+      jnsPelayanan: '',
+      klsRawat: '',
+      noMR: '',
       rujukan: {
-        asalRujukan: '1',
-        tglRujukan: '2017-10-17',
-        noRujukan: '1234567',
-        ppkRujukan: '00010001'
+        asalRujukan: '',
+        tglRujukan: '',
+        noRujukan: '',
+        ppkRujukan: ''
       },
-      catatan: 'test',
-      diagAwal: 'A00.1',
+      catatan: '',
+      diagAwal: '',
       poli: {
-        tujuan: 'INT',
-        eksekutif: '0'
+        tujuan: '',
+        eksekutif: ''
       },
       cob: {
-        cob: '0'
+        cob: ''
       },
       katarak: {
-        katarak: '0'
+        katarak: ''
       },
       jaminan: {
-        lakaLantas: '0',
+        lakaLantas: '',
         penjamin: {
-          penjamin: '1',
-          tglKejadian: '2018-08-06',
-          keterangan: 'kll',
+          penjamin: '',
+          tglKejadian: '',
+          keterangan: '',
           suplesi: {
-            suplesi: '0',
-            noSepSuplesi: '0301R0010718V000001',
+            suplesi: '',
+            noSepSuplesi: '',
             lokasiLaka: {
-              kdPropinsi: '03',
-              kdKabupaten: '0050',
-              kdKecamatan: '0574'
+              kdPropinsi: '',
+              kdKabupaten: '',
+              kdKecamatan: ''
             }
           }
         }
       },
       skdp: {
-        noSurat: '000002',
-        kodeDPJP: '31661'
+        noSurat: '',
+        kodeDPJP: ''
       },
-      noTelp: '081919999',
-      user: 'Coba Ws'
-    }
+      noTelp: '',
+      user: ''
+    },
+
+    loading: false,
+    errors: [],
+    jnsPelayanans: [
+      { label: 'Rawat Inap', value: '1' },
+      { label: 'Rawat Jalan', value: '2' }
+    ],
+    klsRawats: [
+      { label: 'Kelas 1', value: '1' },
+      { label: 'Kelas 2', value: '2' },
+      { label: 'Kelas 3', value: '3' }
+    ],
+    asalRujukans: [
+      { label: 'Faskes 1', value: '1' },
+      { label: 'Faskes 2(Rs)', value: '2' }
+    ],
+    eksekutifs: [
+      { label: 'Tidak', value: '0' },
+      { label: 'Ya', value: '1' }
+    ],
+    cobs: [
+      { label: 'Tidak', value: '0' },
+      { label: 'Ya', value: '1' }
+    ],
+    kataraks: [
+      { label: 'Tidak', value: '0' },
+      { label: 'Ya', value: '1' }
+    ],
+    lakaLantas: [
+      { label: 'Tidak', value: '0' },
+      { label: 'Ya', value: '1' }
+    ],
+    penjamins: [
+      { label: 'Jasa Raharja PT', value: '1' },
+      { label: 'BPJS Ketenagakerjaan', value: '2' },
+      { label: 'Taspen PT', value: '3' },
+      { label: 'ASABRI PT', value: '4' }
+    ],
+    suplesis: [
+      { label: 'Tidak', value: '0' },
+      { label: 'Ya', value: '1' }
+    ]
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
   },
   actions: {
+    updateForm (pasien) {
+      console.log('from RS', pasien)
 
+      this.t_sep.noKartu = pasien.noKartu
+    }
   }
 })

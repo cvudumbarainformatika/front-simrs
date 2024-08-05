@@ -68,6 +68,7 @@
               class="col-5 q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>pendaftaran.filterSistemBayar(val)"
+              :key="store.form.jnsBayar"
             />
             <app-autocomplete
               ref="refSistemBayar"
@@ -80,6 +81,7 @@
               :source="pendaftaran.sistembayars"
               class="col-7 q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
+              :key="store.form.kodesistembayar"
             />
             <app-autocomplete
               v-if="pendaftaran.kamars.length > 0"
@@ -94,6 +96,7 @@
               class="q-mb-xs col-12"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>store.pilihRuang(val)"
+              :key="store.form.hakruang"
             />
             <div class="flex q-gutter-sm full-width q-mb-sm">
               <div>Titipkan Pasien ? : </div>
@@ -147,6 +150,7 @@
               class="q-mb-xs col-8"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>store.pilihKamar(val)"
+              :key="store.form.kamar"
             />
             <q-select
               :key="store.grupKamars"
@@ -181,6 +185,7 @@
               class="col-12 q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>store.pilihDokter(val)"
+              :key="store.form.kd_dokter"
             />
             <app-autocomplete
               ref="refCategoryKasus"
@@ -193,6 +198,7 @@
               :source="pendaftaran.categories"
               class="q-mb-xs col-12"
               :rules="[val => (!!val) || 'Harap diisi',]"
+              :key="store.form.kategoriKasus"
             />
           </div>
         </q-card-section>
@@ -213,6 +219,7 @@
 <script setup>
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
 import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
+import { watch } from 'vue'
 // import { onMounted } from 'vue'
 
 const store = useListPendaftaranRanapStore()
@@ -243,4 +250,10 @@ const sendPasien = () => {
 function pilihBed (val) {
   console.log('pilih bed', store.beds)
 }
+
+watch(() => store.form.jnsBayar, (val) => {
+  if (val !== null) {
+    pendaftaran.filterSistemBayar(val)
+  }
+})
 </script>
