@@ -1,8 +1,8 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)" @show="init">
-    <q-card style="min-width:30vw; max-width: 30vw;">
-      <q-bar class="bg-primary text-white">
-        <div>Cetak Gelang Pasien</div>
+    <q-card style="min-width:40vw; max-width: 40vw;">
+      <q-bar class="bg-teal text-white">
+        <div>Create SEP</div>
 
         <q-space />
 
@@ -50,55 +50,10 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <!-- <div id="printMe" class="flex q-gutter-x-md items-center full-width">
-          <BarcodeGenerator
-            :value="pasien.norm"
-            :format="'CODE128'"
-            :line-color="'#000'"
-            :width="2"
-            :height="60"
-            :element-tag="'img'"
-            :display-value="false"
-          />
-          <div class="f-12 text-weight-bold">
-            <div>NORM : {{ pasien.norm ?? '-' }}</div>
-            <div class="f-14">
-              {{ pasien.nama }}
-            </div>
-            <div>{{ pasien.tgllahir }}</div>
-            <div class="f-14">
-              RSUD dr. MOHAMAD SALEH
-            </div>
-          </div>
-        </div> -->
-        <div id="printMe" class="column q-gutter-y-md full-width">
-          <div class="f-12 ">
-            <div class="text-weight-bold">
-              NORM : {{ pasien.norm ?? '-' }}
-            </div>
-            <div class="f-14 text-weight-bold">
-              {{ pasien.nama }}
-            </div>
-            <div class="f-12">
-              Alamat : {{ pasien?.alamat }}
-            </div>
-            <div class="f-14">
-              Usia : {{ pasien?.usia }}
-            </div>
-          </div>
-          <BarcodeGenerator
-            :value="pasien.norm"
-            :format="'CODE128'"
-            :line-color="'#000'"
-            :width="2"
-            :height="30"
-            :element-tag="'img'"
-            :display-value="false"
-          />
-        </div>
+        BUAT SEP
       </q-card-section>
       <q-separator />
-      <q-card-section class="q-pa-none bg-primary text-white">
+      <q-card-section class="q-pa-none bg-teal text-white">
         <div class="q-pa-md row justify-between items-center">
           <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogCetakGelang=false" /></div>
           <div>
@@ -113,8 +68,8 @@
 <script setup>
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history.js'
 
-import BarcodeGenerator from 'src/components/callComponents/BarcodeGenerator.vue'
-import { ref } from 'vue'
+// import BarcodeGenerator from 'src/components/callComponents/BarcodeGenerator.vue'
+// import { ref } from 'vue'
 const store = useListHistoryPendaftaranRanapStore()
 
 defineProps({
@@ -126,22 +81,5 @@ defineProps({
 
 const init = () => {
   console.log('init')
-}
-
-const printed = ref(false)
-const printObj = {
-  id: 'printMe',
-  popTitle: 'Laporan Realisasi Anggaran',
-  beforeOpenCallback (vue) {
-    printed.value = true
-    console.log('wait...')
-  },
-  openCallback (vue) {
-    console.log('opened')
-  },
-  closeCallback (vue) {
-    printed.value = false
-    console.log('closePrint')
-  }
 }
 </script>

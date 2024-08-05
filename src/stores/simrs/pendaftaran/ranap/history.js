@@ -27,6 +27,7 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
     isViewList: false,
     pasien: null,
     dialogSpri: false,
+    dialogSep: false,
     dialogCetakGelang: false,
     dialogCetakIdentitas: false,
     dialogHalaman1: false,

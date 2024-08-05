@@ -26,6 +26,10 @@
                 store.pasien = val
                 store.dialogCetakGelang = true
               }"
+              @buat-sep="(val)=>{
+                store.pasien = val
+                store.dialogSep = true
+              }"
             />
             <thumbnail-view
               v-else
@@ -86,6 +90,11 @@
       :pasien="store.pasien"
       :key="store.pasien"
     />
+    <dialog-sep
+      v-model="store.dialogSep"
+      :pasien="store.pasien"
+      :key="store.pasien"
+    />
   </div>
 </template>
 
@@ -99,6 +108,7 @@ const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.v
 const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
 const DialogCetakGelang = defineAsyncComponent(() => import('./compHistory/DialogCetakGelang.vue'))
+const DialogSep = defineAsyncComponent(() => import('./compHistory/DialogSep.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
 

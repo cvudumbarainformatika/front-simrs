@@ -9,30 +9,90 @@ export default {
   name: 'BarcodeGenerator',
   // defining props and props type to be used in BarcodeGenerator component
   props: {
-    value: [String, Number],
-    format: [String],
-    width: [String, Number],
-    height: [String, Number],
+    value: {
+      type: [String, Number],
+      default: '123456789'
+    },
+    format: {
+      type: String,
+      default: 'CODE128'
+    },
+    width: {
+      type: [String, Number],
+      default: 2
+    },
+    height: {
+      type: [String, Number],
+      default: 60
+    },
     displayValue: {
       type: [String, Boolean],
       default: true
     },
-    text: [String, Number],
-    fontOptions: [String],
-    font: [String],
-    textAlign: [String],
-    textPosition: [String],
-    textMargin: [String, Number],
-    fontSize: [String, Number],
-    background: [String],
-    lineColor: [String],
-    margin: [String, Number],
-    marginTop: [String, Number],
-    marginBottom: [String, Number],
-    marginLeft: [String, Number],
-    marginRight: [String, Number],
-    flat: [Boolean],
-    ean128: [String, Boolean],
+    text: {
+      type: [String, Number],
+      default: 'Barcode'
+    },
+    fontOptions: {
+      type: String,
+      default: ''
+    },
+    font: {
+      type: String,
+      default: ''
+    },
+    textAlign: {
+      type: String,
+      default: 'center'
+    },
+    textPosition: {
+      type: String,
+      default: 'bottom'
+    },
+    textMargin: {
+      type: [String, Number],
+      default: 2
+    },
+    fontSize: {
+      type: [String, Number],
+      default: 12
+    },
+    background: {
+      type: String,
+      default: ''
+    },
+    lineColor: {
+      type: String,
+      default: ''
+    },
+    margin: {
+      type: [String, Number],
+      default: 0
+    },
+    marginTop: {
+      type: [String, Number],
+      default: 0
+    },
+    marginBottom: {
+      type: [String, Number],
+      default: 0
+    },
+    marginLeft: {
+      type: [String, Number],
+      default: 0
+    },
+    marginRight: {
+      type: [String, Number],
+      default: 0
+    },
+    flat: {
+      type: Boolean,
+      default: false
+    },
+    ean128: {
+      type: Boolean,
+      default: false
+    },
     elementTag: {
       type: String,
       default: 'svg',

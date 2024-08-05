@@ -208,7 +208,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       const arr = pendaftaran.kamars
       const obj = arr.length ? arr.find(x => x.rs1 === val) : null
       console.log('pilihRuang', obj)
-      const group = obj?.rs4 ?? null
+      const group = obj?.groups ?? null
       // const kodeRuang = obj?.rs1 ?? null
       const kelas = obj?.rs3 ?? null
       const flag = obj?.rs6 ?? null
@@ -232,7 +232,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
               return x.rs6 === group && (x?.rs5 === `${group + kelas}` || x?.rs5 === '-')
             })
             : []
-          // console.log('kamars', this.kamars)
+          console.log('kamars', this.kamars)
           const mapKamar = kamarsx?.length ? kamarsx?.map(x => x.rs1) : []
           const grup = [...new Set(mapKamar)]
           // grupKamar.value = grup

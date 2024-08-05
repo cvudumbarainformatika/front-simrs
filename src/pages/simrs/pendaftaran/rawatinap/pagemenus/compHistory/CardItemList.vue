@@ -37,6 +37,11 @@
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>
             </div>
+            <q-badge outline class="q-mt-sm q-px-md" dense :color="!item?.sep ? 'red' : 'primary'">
+              <div class="f-10">
+                {{ !item?.sep ? 'SEP BELUM TERBIT' : item?.sep }}
+              </div>
+            </q-badge>
           </div>
         </div>
       </div>
@@ -86,19 +91,19 @@
                     Dokumen & Lainnya
                   </div>
                 </q-tooltip> -->
-                <q-menu>
-                  <q-list style="min-width: 100px">
+                <q-menu style="min-width: 150px">
+                  <q-list style="min-width: 150px;">
                     <q-item clickable v-close-popup @click="emits('spri', item)">
-                      <q-item-section>Dokumen SPRI</q-item-section>
+                      <q-item-section>Cetak SPRI</q-item-section>
                     </q-item>
-                    <q-separator />
                     <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
                       <q-item-section>Cetak Gelang</q-item-section>
                     </q-item>
-                    <!-- <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
-                      <q-item-section>Cetak Identitas</q-item-section>
-                    </q-item>
                     <q-separator />
+                    <q-item clickable v-close-popup @click="emits('buatSep', item)">
+                      <q-item-section>{{ !item?.sep ? 'Buat SEP' : 'Cetak SEP' }}</q-item-section>
+                    </q-item>
+                    <!-- <q-separator />
                     <q-item clickable v-close-popup @click="emits('halaman1', item)">
                       <q-item-section>Halaman 1</q-item-section>
                     </q-item>
@@ -132,7 +137,7 @@ defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep'])
 </script>
 
 <style lang="scss" scoped>
