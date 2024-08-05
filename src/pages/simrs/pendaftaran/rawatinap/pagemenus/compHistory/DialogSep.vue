@@ -58,6 +58,10 @@
             :lazy-rules="false"
             class="col-4"
           />
+
+          <div class="col-12">
+            MASIH TAHAP PENGGARAPAN
+          </div>
         </q-card-section>
         <q-separator />
         <q-card-section class="q-pa-none bg-teal text-white">
