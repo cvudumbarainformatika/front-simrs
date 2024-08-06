@@ -1,7 +1,6 @@
 <template>
   <q-item
     v-ripple
-    clickable
     class="q-my-lg bg-white shadow-q relative-position"
   >
     <q-card
@@ -30,11 +29,19 @@
             <div class="flex q-gutter-sm q-pt-xs">
               <div> <b>No. RM :</b> <span class="text-primary">{{ item?.norm }}</span></div>
               <div> <b>No. REG :</b> <span class="text-grey-8">{{ item?.noreg }}</span></div>
-              <div> <b>USIA :</b> <span class="text-grey-8">{{ item?.usia }}</span></div>
+              <div> <b>NIK :</b> <span class="text-grey-8">{{ item?.nktp }}</span></div>
+            </div>
+            <div class="ellipsis text-grey-8 q-pt-xs">
+              <b>USIA : </b><i>{{ item?.usia }}</i>
             </div>
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>
             </div>
+            <q-badge outline class="q-mt-sm q-px-md" dense :color="!item?.sep ? 'red' : 'primary'">
+              <div class="f-10">
+                {{ !item?.sep ? 'SEP BELUM TERBIT' : item?.sep }}
+              </div>
+            </q-badge>
           </div>
         </div>
       </div>
@@ -69,7 +76,7 @@
             <div class="full-width ellipsis">
               <strong class="text-primary">{{ item?.ruangan }}</strong>
             </div>
-            <div class="full-width ellipsis q-mt-xs">
+            <div class="full-width ellipsis q-my-xs">
               <span class="text-primary">{{ item?.ketruangan }}</span>
             </div>
             <div class="full-width ellipsis">
@@ -78,12 +85,33 @@
           </div>
           <div class="col-2 ">
             <div class="flex justify-end">
-              <q-btn flat class="bg-primary text-white" round icon="icon-fa-file-regular" dense @click="emits('spri', item)">
-                <q-tooltip class="bg-dark text-white">
+              <q-btn flat class="bg-primary text-white" round icon="icon-fa-file-regular" dense>
+                <!-- <q-tooltip class="bg-dark text-white">
                   <div class="flex flex-center items-center text-center">
-                    Dokumen SPRI yg hrs di tandatangani pasien
+                    Dokumen & Lainnya
                   </div>
-                </q-tooltip>
+                </q-tooltip> -->
+                <q-menu style="min-width: 150px">
+                  <q-list style="min-width: 150px;">
+                    <q-item clickable v-close-popup @click="emits('spri', item)">
+                      <q-item-section>Cetak SPRI</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
+                      <q-item-section>Cetak Gelang</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item clickable v-close-popup @click="emits('buatSep', item)">
+                      <q-item-section>{{ !item?.sep ? 'Buat SEP' : 'Cetak SEP' }}</q-item-section>
+                    </q-item>
+                    <!-- <q-separator />
+                    <q-item clickable v-close-popup @click="emits('halaman1', item)">
+                      <q-item-section>Halaman 1</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('halaman2', item)">
+                      <q-item-section>Halaman 2</q-item-section>
+                    </q-item> -->
+                  </q-list>
+                </q-menu>
               </q-btn>
               <!-- <q-btn v-else flat class="bg-grey-5 text-white" round icon="icon-mat-bedroom_parent" dense>
                 <q-tooltip class="bg-grey-5 text-dark">
@@ -109,7 +137,7 @@ defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['details', 'spri'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep'])
 </script>
 
 <style lang="scss" scoped>

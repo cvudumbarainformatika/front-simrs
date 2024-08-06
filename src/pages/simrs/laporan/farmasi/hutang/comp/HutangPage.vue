@@ -47,10 +47,12 @@
         </div>
       </q-card-section>
       <q-card-section>
-        <CustomTable
+        <TablePage
           :ada-cari="false"
           :default-btn="false"
           :right-action="false"
+          :items="store.items"
+          :columns="store.kolom"
           row-no
         >
           <template #header-left-after-search>
@@ -112,15 +114,25 @@
               </div>
             </q-form>
           </template>
-        </CustomTable>
+          <template #cell-PBF="{row}">
+            {{ row?.PBF }}
+          </template>
+          <template #cell-Total="{row}">
+            <div class="row justify-end">
+              {{ formatDouble(row?.Total) }}
+            </div>
+          </template>
+        </TablePage>
       </q-card-section>
     </q-card>
   </q-page>
 </template>
 <script setup>
 import { ref } from 'vue'
-import CustomTable from '../../../rekap/CustomTable.vue'
+// import CustomTable from '../../../rekap/CustomTable.vue'
 import { usehutangObatPerTanggalStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggal'
+import TablePage from './TablePage.vue'
+import { formatDouble } from 'src/modules/formatter'
 
 const store = usehutangObatPerTanggalStore()
 const jenisreport = ref([

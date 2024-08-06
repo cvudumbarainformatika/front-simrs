@@ -59,6 +59,7 @@ module.exports = configure(function (ctx) {
         API: ctx.dev
           ? 'http://localhost/api.laborat/public'
           : 'http://192.168.150.111:3507',
+        // : 'http://192.168.150.111:3501',
 
         WSHOST: ctx.dev
           ? 'localhost'

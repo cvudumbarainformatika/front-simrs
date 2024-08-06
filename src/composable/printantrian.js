@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 
-export function usePrintAntrian() {
+export function usePrintAntrian () {
   const nomor = ref('----')
 
-  function setNomor(val) {
+  function setNomor (val) {
     nomor.value = val
   }
   return {

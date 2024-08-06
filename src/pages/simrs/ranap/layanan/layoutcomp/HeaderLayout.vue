@@ -166,6 +166,7 @@
       dense
       flat
       icon="icon-mat-close"
+      :disable="store.loading || store.loadingObat"
     >
       <q-tooltip class="bg-white text-primary">
         Close
@@ -177,6 +178,9 @@
 <script setup>
 import { api } from 'src/boot/axios'
 import { ref } from 'vue'
+import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+
+const store = usePermintaanEResepStore()
 
 const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'layananSelesai'])
 
