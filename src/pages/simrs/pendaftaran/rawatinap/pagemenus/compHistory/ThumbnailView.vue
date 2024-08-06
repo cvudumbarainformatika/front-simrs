@@ -5,11 +5,10 @@
         v-for="(item, index) in items"
         :key="index"
         v-ripple
-        clickable
         :class="`masonry-item cursor-pointer q-pa-none ${onHoverred===index? 'dimmed' : ''} `"
         @mouseover="onHoverred=index"
         @mouseleave="onHoverred=-1"
-        @click="emits('send',item)"
+        @click="emits('spri',item)"
       >
         <q-card :class="`card-masonry`">
           <app-avatar-pasien
@@ -49,6 +48,35 @@
           <!-- Isi card masonry -->
           <q-separator />
           <q-card-section class="q-pa-sm f-10">
+            <q-btn
+              fab
+              color="primary"
+              icon="icon-fa-file-regular"
+              class="absolute z-top"
+              style="top: 0; right: 12px; transform: translateY(-200%);"
+            >
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item clickable v-close-popup @click="emits('spri', item)">
+                    <q-item-section>Dokumen SPRI</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
+                    <q-item-section>Cetak Gelang</q-item-section>
+                  </q-item>
+                  <!-- <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
+                      <q-item-section>Cetak Identitas</q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item clickable v-close-popup @click="emits('halaman1', item)">
+                      <q-item-section>Halaman 1</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('halaman2', item)">
+                      <q-item-section>Halaman 2</q-item-section>
+                    </q-item> -->
+                </q-list>
+              </q-menu>
+            </q-btn>
             <div><b>No .RM</b> : {{ item?.norm }} <b>NOREG</b> : {{ item?.noreg }}</div>
             <div class="ellipsis-2-lines q-mt-xs">
               <b>ALAMAT</b> : {{ item?.alamat }}
@@ -80,7 +108,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'send'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
 
 </script>
 

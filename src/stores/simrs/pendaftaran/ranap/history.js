@@ -21,12 +21,19 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
       sort: 'terbaru'
     },
 
+    cekPeserta: null,
+
     periods: ['Hari ini', 'Minggu ini', 'Bulan ini', 'Custom'],
     sorting: ['terbaru', 'terlama'],
     statuses: ['Semua', 'Pulang', 'Belum Pulang'],
     isViewList: false,
     pasien: null,
-    dialogSpri: false
+    dialogSpri: false,
+    dialogSep: false,
+    dialogCetakGelang: false,
+    dialogCetakIdentitas: false,
+    dialogHalaman1: false,
+    dialogHalaman2: false
 
   }),
   getters: {
@@ -117,6 +124,37 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
       const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
       this.params.to = dateDbFormat(firstday)
       this.params.from = dateDbFormat(lastday)
+    },
+
+    async cekPesertaBpjs (by, no) {
+      const params = { params: { by, no } }
+      // await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
+      //   .then(resp => {
+      //     const bpjs = resp?.data?.bpjs
+      //     // const rs = resp?.data?.rs
+      //     if (bpjs.metadata.code === '200') {
+      //       this.cekPeserta = resp?.data.bpjs.result.peserta
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log('cekPesertaBpjs', err)
+      //   })
+
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
+          .then(resp => {
+            const bpjs = resp?.data?.bpjs
+            // const rs = resp?.data?.rs
+            if (bpjs.metadata.code === '200') {
+              this.cekPeserta = resp?.data.bpjs.result.peserta
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log('cekPesertaBpjs', err)
+            reject(err)
+          })
+      })
     }
 
   }
