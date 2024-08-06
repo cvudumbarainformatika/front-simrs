@@ -106,7 +106,11 @@
         />
       </div>
     </div>
-    <select-serahterima v-model="store.openDialogCariSerahterima" @selected="pilihSerahterima" />
+    <select-serahterima
+      v-model="store.openDialogCariSerahterima"
+      @selected="pilihSerahterima"
+      :key="carisrt.reqs.kodepenerima"
+    />
   </q-form>
 </template>
 
@@ -116,11 +120,15 @@ import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/f
 import { useLaporanBkuPtkStore } from 'src/stores/siasik/laporan/bku/bkuptk'
 import { formKontrakPekerjaan } from 'src/stores/siasik/transaksi/ls/kontrak/formkontrak'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
+import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
+
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
 const tarik = useLaporanLraLaprealisasianggaranStore()
 const ambil = formKontrakPekerjaan()
 const store = formNotaPermintaanDanaLS()
+const carisrt = dataBastFarmasi()
+
 const data = useLaporanBkuPtkStore()
 const formNpdLS = ref(null)
 
@@ -157,7 +165,10 @@ const serahTerima = (val) => {
 const pilihSerahterima = (val) => {
   store.setForm(val)
   // .then(() => {
-  //   autoGetServer(val.kodepropinsi, val.kodekabupatenkota, val.kodekecamatan)
+  //   const arr = carisrt.bastfarmasis
+  //   const obj = arr.length ? arr.find(x => x.nobast === val) : null
+
+  //   store.form.noserahterima = obj.nobast ?? ''
   // })
 }
 const onReset = () => {
@@ -185,6 +196,8 @@ function pilihPihaktiga (val) {
   // console.log('pilihPihaktiga', obj)
   store.form.penerima = obj?.nama ?? ''
   store.form.kodepenerima = obj?.kode ?? ''
+  carisrt.reqs.kodepenerima = val ?? ''
+  store.form.serahterimapekerjaan = '2'
   store.form.bank = obj?.bank ?? ''
   store.form.rekening = obj?.norek ?? ''
   store.form.npwp = obj?.npwp ?? ''

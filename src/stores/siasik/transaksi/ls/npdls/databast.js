@@ -8,7 +8,11 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
       q: '',
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 0
+      rowsNumber: 0,
+      kodepenerima: null
+    },
+    form: {
+      bast: null
     },
     bastfarmasis: []
   }),

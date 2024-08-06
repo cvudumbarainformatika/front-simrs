@@ -2,6 +2,7 @@
   <q-dialog
     class="q-mt-xl"
     @hide="hiddenDialog()"
+    @show="init()"
     backdrop-filter="blur(4px)"
     persistent
   >
@@ -97,6 +98,17 @@
                 <q-td key="jumlah_bastx" :props="props">
                   {{ formattanpaRp(props.row.jumlah_bastx) }}
                 </q-td>
+                <q-td>
+                  <div class="row justify-end">
+                    <q-btn
+                      outline
+                      size="sm"
+                      class="q-px-md"
+                      label="Pilih"
+                      @click="pilihDataSerahterima(props?.row.nobast)"
+                    />
+                  </div>
+                </q-td>
               </q-tr>
             </template>
           </q-table>
@@ -110,6 +122,10 @@
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import { onMounted, ref } from 'vue'
 import { formattanpaRp } from 'src/modules/formatter'
+// import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
+
+// const storeform = formNotaPermintaanDanaLS()
+const noBast = ref([])
 const store = dataBastFarmasi()
 function hiddenDialog () {
   console.log('hidden dialog')
@@ -124,18 +140,41 @@ const columnsx = [
   {
     name: 'jumlah_bastx',
     label: 'Nilai',
-    align: 'right',
+    align: 'center',
     field: 'jumlah_bastx'
+  },
+  {
+    name: 'Opsi',
+    label: 'Opsi',
+    align: 'center'
   }
 ]
 const columns = ref(columnsx)
 onMounted(() => {
-  store.getDataBast()
+  // store.getDataBast()
+
 })
+const init = () => {
+  store.getDataBast()
+}
 const clearSearch = () => {
   store.reqs.q = ''
   store.goToPage(1)
 }
+function pilihDataSerahterima (val) {
+  noBast.value = val
+  console.log('pilih serahtrima', noBast.value)
+}
+// const pilihSerahterima = (val) => {
+//   storeform.setForm(val)
+//   console.log('pilih dialog', storeform.setForm)
+//   // .then(() => {
+//   //   const arr = store.bastfarmasis
+//   //   const obj = arr.length ? arr.find(x => x.nobast === val) : null
+
+//   //   storeform.form.noserahterima = obj.nobast ?? ''
+//   // })
+// }
 </script>
 <style lang="scss">
 .my-sticky-header {
