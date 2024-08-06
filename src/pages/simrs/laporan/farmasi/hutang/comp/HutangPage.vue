@@ -53,7 +53,12 @@
           :right-action="false"
           :items="store.items"
           :columns="store.kolom"
+          :column-hide="store.columnHide"
+          :loading="store.loading"
           row-no
+          click-able
+          @on-click="click"
+          @refresh="store.refreshTable"
         >
           <template #header-left-after-search>
             <q-form
@@ -141,6 +146,10 @@ const jenisreport = ref([
     namareport: 'Laporan Hutang Pertanggal'
   }
 ])
+
+function click (val) {
+  val.item.expand = !val.item.expand
+}
 
 function setToDisp (vaal) {
   store.tanggal.from = vaal

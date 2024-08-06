@@ -7,6 +7,7 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
   state: () => ({
     loading: false,
     items: [],
+    detail: [],
     meta: {},
     kolom: [],
     tanggal: {
@@ -52,21 +53,30 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
           namapbfx,
           subtotalz
         }
+
         wew.push(xxx)
       })
-      const namapbff = filterDuplicateArrays(wew.map(m => m?.namapbfx))
+
+      const kodepbf = filterDuplicateArrays(wew.map(m => m?.kodepbf))
       const hasilglobal = []
-      namapbff.forEach(sasa => {
-        const subtotal = wew?.filter(m => m.namapbfx === sasa)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalz), 0)
+
+      kodepbf.forEach(sasa => {
+        const subtotal = wew?.filter(m => m.kodepbf === sasa)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalz), 0)
+        const pbfnama = wew.find(kd => kd.kodepbf === sasa)
         const hasilglobalzz = {
-          PBF: sasa,
+          kodepbfp: sasa,
+          PBF: pbfnama?.namapbfx,
           Total: subtotal
         }
         hasilglobal.push(hasilglobalzz)
       })
+      // const nopenrimaanhx = []
+
       this.items = hasilglobal
-      console.log('asli', this.items)
       this.loading = false
+    },
+    refreshTable () {
+      this.initAmbilData()
     }
   }
 })
