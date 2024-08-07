@@ -8,6 +8,7 @@
         <template v-if="store.items?.length > 0">
           <transition-group
             appear
+
             enter-active-class="animated fadeIn faster"
             leave-active-class="animated fadeOut faster"
           >
@@ -21,6 +22,14 @@
                 store.pasien = val
                 store.dialogSpri = true
               }"
+              @cetak-gelang="(val)=>{
+                store.pasien = val
+                store.dialogCetakGelang = true
+              }"
+              @buat-sep="(val)=>{
+                store.pasien = val
+                store.dialogSep = true
+              }"
             />
             <thumbnail-view
               v-else
@@ -29,7 +38,12 @@
               @details="(val)=>store.pasien=val"
               @spri="(val)=>{
                 store.pasien = val
-                store.dialogSend = true
+                store.dialogSpri = true
+              }"
+
+              @cetak-gelang="(val)=>{
+                store.pasien = val
+                store.dialogCetakGelang = true
               }"
             />
           </transition-group>
@@ -69,6 +83,17 @@
     <dialog-spri
       v-model="store.dialogSpri"
       :pasien="store.pasien"
+      :key="store.pasien"
+    />
+    <dialog-cetak-gelang
+      v-model="store.dialogCetakGelang"
+      :pasien="store.pasien"
+      :key="store.pasien"
+    />
+    <dialog-sep
+      v-model="store.dialogSep"
+      :pasien="store.pasien"
+      :key="store.pasien"
     />
   </div>
 </template>
@@ -76,11 +101,14 @@
 <script setup>
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history'
 import { defineAsyncComponent, onMounted } from 'vue'
+import ListPasien from './compHistory/ListPasien.vue'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
-const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
+// const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
 const ThumbnailView = defineAsyncComponent(() => import('./compHistory/ThumbnailView.vue'))
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
+const DialogCetakGelang = defineAsyncComponent(() => import('./compHistory/DialogCetakGelang.vue'))
+const DialogSep = defineAsyncComponent(() => import('./compHistory/DialogSep.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
 

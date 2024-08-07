@@ -309,15 +309,86 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       const params = { params: { by, no } }
       await api.get('v1/simrs/pendaftaran/ranap/cek-peserta-bpjs', params)
         .then(resp => {
-          if (resp.data.metadata.code === '200') {
-            this.cekPeserta = resp.data.result.peserta
+          console.log('cekPesertaBpjs', resp)
+          const bpjs = resp?.data?.bpjs
+          const rs = resp?.data?.rs
+          if (bpjs.metadata.code === '200') {
+            this.cekPeserta = resp?.data.bpjs.result.peserta
             this.openDialogPeserta = true
-            console.log('cekPesertaBpjs', this.cekPeserta)
           }
+          else {
+            this.cekPeserta = null
+            this.pasien.nama = null
+            this.pasien.nokabpjs = null
+            this.pasien.barulama = 'Baru'
+          }
+
+          if (rs) {
+            this.pasien.barulama = rs.baru
+            this.pasien.norm = rs?.norm ?? null
+            this.pasien.alamat = rs?.alamat ?? null
+            this.pasien.alamatDomisili = rs?.alamatdomisili ?? null
+            this.paramWilayah.kd_kelurahan = rs.kodekelurahan
+            this.paramWilayahDomisili.kd_kelurahan = rs.kelurahandomisili
+            this.pasien.agama = rs.agama
+            this.pasien.bacatulis = rs.bacatulis
+            this.pasien.bahasa = rs.bahasa
+            this.pasien.idsatset = rs.idsatset
+            this.pasien.kodepos = rs.kodepos
+            this.pasien.kodeposDomisili = rs.kodeposdomisili
+            this.pasien.ibukandung = rs.namaibukandung
+            this.pasien.nohp = rs.noteleponhp
+            this.pasien.notelp = rs.noteleponrumah
+            this.pasien.pekerjaan = rs.pekerjaan
+            this.pasien.pendidikan = rs.pendidikan
+            this.pasien.rt = rs.rt
+            this.pasien.rtDomisili = rs.rtdomisili
+            this.pasien.rw = rs.rw
+            this.pasien.rwDomisili = rs.rwdomisili
+            this.pasien.sapaan = rs.sapaan
+            this.pasien.statuspernikahan = rs.statuspernikahan
+            this.pasien.suku = rs.suku
+            this.pasien.tempatlahir = rs.templahir
+          }
+          if (!rs) {
+            this.resetFormPasienIfnotExist()
+          }
+          // if (resp.data.metadata.code === '200') {
+          //   this.cekPeserta = resp?.data.result.peserta
+          //   this.openDialogPeserta = true
+          // }
         })
         .catch(err => {
           console.log('cekPesertaBpjs', err)
         })
+    },
+
+    resetFormPasienIfnotExist () {
+      this.pasien.barulama = null
+      this.pasien.norm = null
+      this.pasien.alamat = null
+      this.pasien.alamatDomisili = null
+      this.paramWilayah.kd_kelurahan = null
+      this.paramWilayahDomisili.kd_kelurahan = null
+      this.pasien.agama = null
+      this.pasien.bacatulis = null
+      this.pasien.bahasa = null
+      this.pasien.idsatset = null
+      this.pasien.kodepos = null
+      this.pasien.kodeposDomisili = null
+      this.pasien.ibukandung = null
+      this.pasien.nohp = null
+      this.pasien.notelp = null
+      this.pasien.pekerjaan = null
+      this.pasien.pendidikan = null
+      this.pasien.rt = null
+      this.pasien.rtDomisili = null
+      this.pasien.rw = null
+      this.pasien.rwDomisili = null
+      this.pasien.sapaan = null
+      this.pasien.statuspernikahan = null
+      this.pasien.suku = null
+      this.pasien.tempatlahir = null
     },
     setForm (key, val) {
       this.pasien[key] = val
@@ -618,7 +689,6 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
       this.loadingShowKamar = true
       await api.get('v1/simrs/master/listviewkamar')
         .then(resp => {
-          this.loadingShowKamar = false
           // console.log('show kamar resp', resp.data)
           this.listKamars = []
           const data = resp.data
@@ -638,6 +708,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
           }
           this.listKamars = data
           console.log('show kamar', data)
+          this.loadingShowKamar = false
         })
         .catch(() => {
           this.loadingShowKamar = false

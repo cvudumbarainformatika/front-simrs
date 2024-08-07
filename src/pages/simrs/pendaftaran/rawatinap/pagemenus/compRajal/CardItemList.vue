@@ -1,7 +1,6 @@
 <template>
   <q-item
     v-ripple
-    clickable
     class="q-my-lg bg-white shadow-q relative-position"
   >
     <q-card
@@ -30,6 +29,7 @@
             <div class="flex q-gutter-sm q-pt-xs">
               <div> <b>No. RM :</b> <span class="text-primary">{{ item?.norm }}</span></div>
               <div> <b>No. REG :</b> <span class="text-grey-8">{{ item?.noreg }}</span></div>
+              <div> <b>NIK :</b> <span class="text-grey-8">{{ item?.nktp }}</span></div>
             </div>
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>

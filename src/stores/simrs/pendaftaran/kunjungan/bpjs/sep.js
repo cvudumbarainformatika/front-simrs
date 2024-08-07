@@ -9,10 +9,10 @@ export const useSepBpjsStore = defineStore('sep_bpjs', {
     isOpen: false
   }),
   actions: {
-    setOpen() {
+    setOpen () {
       this.isOpen = !this.isOpen
     },
-    async getSep(val) {
+    async getSep (val) {
       this.loading = true
       console.log('form', val)
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/re-createsep', val)
@@ -29,5 +29,6 @@ export const useSepBpjsStore = defineStore('sep_bpjs', {
           this.loading = false
         })
     }
+
   }
 })

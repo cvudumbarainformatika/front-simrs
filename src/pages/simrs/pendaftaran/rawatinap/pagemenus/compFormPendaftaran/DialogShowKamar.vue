@@ -1,5 +1,5 @@
 <template>
-  <q-dialog backdrop-filter="blur(4x)" @before-show="init" persistent>
+  <q-dialog backdrop-filter="blur(4px)" @show="init" persistent>
     <q-card style="width: 80vw; max-width: 80vw;" dark>
       <q-card-section class="q-py-sm q-px-md">
         <div class="row items-center justify-between">
