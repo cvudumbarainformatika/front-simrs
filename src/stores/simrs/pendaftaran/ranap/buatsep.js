@@ -65,7 +65,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
         noSurat: '',
         kodeDPJP: ''
       },
-      dpjpLayan: '', // (tidak diisi jika jnsPelayanan = "1" (RANAP)
+      dpjpLayan: null, // (tidak diisi jika jnsPelayanan = "1" (RANAP)
       noTelp: '',
       user: '',
       // ini tambahan untuk rs227
@@ -497,7 +497,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
           noSurat: '',
           kodeDPJP: ''
         },
-        dpjpLayan: '', // (tidak diisi jika jnsPelayanan = "1" (RANAP)
+        dpjpLayan: null, // (tidak diisi jika jnsPelayanan = "1" (RANAP)
         noTelp: '',
         user: '',
 

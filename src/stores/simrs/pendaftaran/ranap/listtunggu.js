@@ -255,11 +255,13 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
         })
     },
     pilihKamar (val) {
-      // console.log('pilihKamar', val)
       const pendaftaran = useFormPendaftaranRanapStore()
+      console.log('listKamar', pendaftaran.listKamars)
+      console.log('form', this.form)
       const arr = pendaftaran.listKamars?.find(x => x?.groups === this.form.group)?.kamars || []
       // console.log('arr', arr)
-      const lists = arr?.length ? arr?.filter(x => x.rs1 === val) : []
+      const kdRuang = this.form.isTitipan === 'Tidak' ? this.form.hakruang : this.form.kode_ruang
+      const lists = arr?.length ? arr?.filter(x => x.rs1 === val && (x.rs5 === kdRuang || x.rs5 === '-')) : []
       console.log('lihatKamar', lists)
       this.form.no_bed = null
       this.beds = lists
