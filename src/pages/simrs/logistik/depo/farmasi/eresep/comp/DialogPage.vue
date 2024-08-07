@@ -176,7 +176,7 @@
           class="primary"
           :offset="[10, 10]"
         >
-          History
+          History Pasien
         </q-tooltip>
       </q-btn>
     </div>
