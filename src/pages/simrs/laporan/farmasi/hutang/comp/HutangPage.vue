@@ -127,6 +127,70 @@
               {{ formatDouble(row?.Total) }}
             </div>
           </template>
+          <template #expand="{row}">
+            <div v-if="row?.rinci?.length">
+              <div class="row f-14 text-weight-bold q-my-sm">
+                Detail Hutang Obat
+              </div>
+              <div class="row text-weight-bold bg-dark text-white items-center q-py-xs" style="border-bottom: 1px solid black;">
+                <div class="col-1">
+                  No
+                </div>
+                <div class="col-2 ">
+                  No. Penerimaan
+                </div>
+                <div class="col-1">
+                  Kode
+                </div>
+                <div class="col-4">
+                  Obat
+                </div>
+                <div class="col-1 text-right ">
+                  Jumlah
+                </div>
+                <div class="col-1 text-right">
+                  Harga
+                </div>
+                <div class="col-1 text-right">
+                  PPN
+                </div>
+                <div class="col-1 text-right ">
+                  Subtotal
+                </div>
+              </div>
+              <div v-for="(rincix,i) in row.rinci" :key="rincix">
+                <div class="row no-wrap " style="border-bottom: 1px solid black;">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-2 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ rincix?.nopenerimaan }}
+                  </div>
+                  <div class="col-1 text-right" style="white-space: normal; overflow-wrap: normal;">
+                    <div class="q-mr-xs">
+                      {{ rincix?.kdobat }}
+                    </div>
+                  </div>
+                  <div class="col-4 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
+                    {{ rincix?.masterobat?.nama_obat }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ rincix?.jml_terima_b }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ formatDouble(rincix?.harga) }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ formatDouble(rincix?.ppn_rp) }}
+                  </div>
+                  <div class="col-1 text-right ">
+                    {{ formatDouble(rincix?.subtotal) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- {{ row }} -->
+          </template>
         </TablePage>
       </q-card-section>
     </q-card>

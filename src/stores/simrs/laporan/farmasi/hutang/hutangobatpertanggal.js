@@ -40,6 +40,7 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
         })
     },
     sethasil (val) {
+      console.log('val', val)
       const wew = []
       val.forEach(element => {
         const kodepbf = element?.kdpbf
@@ -73,6 +74,22 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
       // const nopenrimaanhx = []
 
       this.items = hasilglobal
+
+      this.items.forEach(k => {
+        k.rinci = []
+        const caripbf = k?.kodepbfp
+        const cariheder = val.filter(f => f.kdpbf === caripbf)
+        if (cariheder.length) {
+          cariheder.forEach(h => {
+            if (h.penerimaanrinci.length) {
+              h.penerimaanrinci.forEach(r => {
+                k.rinci.push(r)
+              })
+            }
+          })
+        }
+      })
+      // console.log('pbf', this.items)
       this.loading = false
     },
     refreshTable () {
