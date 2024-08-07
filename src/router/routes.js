@@ -50,6 +50,11 @@ const routes = [
         path: '/print/eresep',
         name: 'print.eresep',
         component: () => import('pages/simrs/print/PrintPermintaanResep.vue')
+      },
+      {
+        path: '/print/penigd',
+        name: 'print.penigd',
+        component: () => import('pages/simrs/print/PrintPermintaanResep.vue')
       }
     ]
   },

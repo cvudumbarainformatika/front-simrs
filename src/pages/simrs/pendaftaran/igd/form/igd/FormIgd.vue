@@ -52,12 +52,13 @@ const pelayanan = 'igd'
 
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
-function clearFormRegistrasi() {
+function clearFormRegistrasi () {
   register.clearForm()
+  refDataPasien.value.clearForm()
 }
 
 const style = useStyledStore()
-function simpanData(val) {
+function simpanData (val) {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   console.log(
@@ -72,12 +73,19 @@ function simpanData(val) {
     }
     console.log('form registrasi ', register.form)
     register.simpanRegistrasi().then(resp => {
-      // console.log(dataPasien)
+      cetakgelang(dataPasien.form)
+      clearFormRegistrasi()
+      console.log('sasasa', refDataPasien)
       // cetakgelang(dataPasien.form)
     })
   }
   // console.log('simpan value', refDataPasien.value)
   // console.log('form pasien ', pasien.form)
+}
+
+function cetakgelang (val) {
+  patien.value = val
+  cetakdialog.value = true
 }
 const patien = ref(null)
 
@@ -111,7 +119,7 @@ const patien = ref(null)
 // }
 
 // eslint-disable-next-line no-unused-vars
-function cetakidentitas() {
+function cetakidentitas () {
   console.log('form registrasi', pasien.form)
   Dialog.value = false
 }
