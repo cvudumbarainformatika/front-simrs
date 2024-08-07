@@ -336,7 +336,7 @@
                         <q-separator />
                       </div>
                       <div class="fit row no-wrap justify-evenly items-center content-center q-mt-md">
-                        <div
+                        <!-- <div
                           v-if="ruang==='Depo Habis Pakai'"
                           class="to-print-tt text-center"
                         >
@@ -364,7 +364,7 @@
                             NIP. 19661125 199603 2 003
                           </div>
                         </div>
-                        <div class="to-print-tt text-center">
+                         <div class="to-print-tt text-center">
                           <div class="q-mb-xl">
                             Petugas Barang
                           </div>
@@ -374,7 +374,7 @@
                           <div class="">
                             NIP. 19760311 200801 1 008
                           </div>
-                        </div>
+                        </div> -->
                         <div class="to-print-tt text-center">
                           <div class="q-mb-xl">
                             Kepala Bagian / Ka.ru
@@ -748,22 +748,23 @@
   </div>
 </template>
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { computed, ref } from 'vue'
 import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
 
-const apps = useAplikasiStore()
+// const apps = useAplikasiStore()
 
-const ruang = computed(() => {
-  const depo = apps.user.pegawai.depo ? apps.user.pegawai.depo.nama : false
+// const ruang = computed(() => {
+//   const depo = apps.user.pegawai.depo ? apps.user.pegawai.depo.nama : false
 
-  return depo
-})
+//   return depo
+// })
 
 const proxyDate = ref(null)
 const refDate = ref(null)
@@ -778,7 +779,7 @@ const updateProxy = () => {
 const today = new Date()
 const lastDay = date.formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0), 'YYYY/MM/DD')
 const firstDay = date.formatDate(Date.now(), 'YYYY/MM/01')
-function dateOption(val) {
+function dateOption (val) {
   return val >= firstDay && val <= lastDay
 }
 // date options end ----
@@ -842,7 +843,7 @@ const printObj = {
   popTitle: 'print Dsitribusi',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...', vue)
   },

@@ -54,6 +54,12 @@
                 <div class=" text-italic f-10">
                   {{ store.resep?.datapasien?.alamat?? '-' }}
                 </div>
+                <div v-if="store.resep?.kunjunganranap?.rs3" class="q-mt-xs text-weight-bold f-10 text-orange">
+                  MRS : {{ dateFull(store.resep?.kunjunganranap?.rs3) }}
+                </div>
+                <div v-if="store.resep?.kunjunganranap?.rs4" class=" text-weight-bold f-10 text-orange">
+                  KRS : {{ dateFull(store.resep?.kunjunganranap?.rs4) }}
+                </div>
               </div>
             </div>
           </div>
@@ -87,13 +93,30 @@
               {{ store?.resep?.ruanganranap?.rs2 }}
             </div>
             <div
-              v-if="store?.resep?.diagnosa"
+              v-if="store?.resep?.kunjunganranap"
               class="row"
             >
-              <div class="col-shrink q-mr-xs">
+              {{ store?.resep?.kunjunganranap?.rs6 }}
+            </div>
+            <div
+              v-if="store?.resep?.diagnosaigd"
+              class="row justify-between"
+            >
+              <div class="col-auto q-mr-sm">
+                diagnosa IGD :
+              </div>
+              <div class="col-auto" style="overflow-wrap: break-word;">
+                {{ store?.resep?.diagnosaigd }}
+              </div>
+            </div>
+            <div
+              v-if="store?.resep?.diagnosa"
+              class="row justify-between"
+            >
+              <div class="col-auto q-mr-xs">
                 diagnosa :
               </div>
-              <div class="col-grow">
+              <div class="col-auto">
                 {{ store?.resep?.diagnosa }}
               </div>
             </div>
@@ -134,6 +157,28 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="text-right q-mr-md q-my-sm"
+    >
+      <q-btn
+        round
+        push
+        label=""
+        class="f-12 q-mr-sm"
+        color="primary"
+        text-color="white"
+        icon="icon-mat-history"
+        :loading="histori.loading"
+        @click="openHistory=true"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          History
+        </q-tooltip>
+      </q-btn>
     </div>
     <div
       v-if="store?.resep?.flag==='2' && (store?.resep?.semuaresep && store?.resep?.semuaracik)"
@@ -305,7 +350,7 @@
     </div>
     <div
       class="column q-pa-sm "
-      :style="`height: calc(100vh - ${tinggiDetailPas+79}px);`"
+      :style="`height: calc(100vh - ${tinggiDetailPas+125}px);`"
     >
       <q-scroll-area style="height: 100%;">
         <div
@@ -1336,6 +1381,21 @@
     :resep="store.resep"
     @close="ranapOpen = false"
   />
+  <q-dialog
+    v-model="openHistory"
+    backdrop-filter="blur(4px) saturate(150%)"
+    full-width
+  >
+    <q-card style="width: 100vw; height: 100vh">
+      <q-card-section style=" height: calc(100vh - 100px)">
+        <historyPage
+          :key="store?.resep"
+          :pasien="store?.resep"
+          @close="openHistory=false"
+        />
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted, defineAsyncComponent } from 'vue'
@@ -1344,10 +1404,11 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 import { date } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { notifErrVue } from 'src/modules/utils'
+import { useHistoryPasien } from 'src/stores/simrs/pelayanan/poli/historypasien'
 
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
-
+const histori = useHistoryPasien()
 const rajalRinc = ref(null)
 const ranapRinc = ref([])
 const ranapWaktu = ref(null)
@@ -1355,11 +1416,13 @@ const rajalOpen = ref(false)
 const ranapOpen = ref(false)
 const refEtiketRajal = ref(null)
 const refEtiketRanap = ref(null)
+const openHistory = ref(false)
 
 const SudahAdaCopy = defineAsyncComponent(() => import('./SudahAdaCopy.vue'))
 const HistoryResepIter = defineAsyncComponent(() => import('./HistoryResepIter.vue'))
 const EtiketRajal = defineAsyncComponent(() => import('./EtiketRajal.vue'))
 const EtiketRanap = defineAsyncComponent(() => import('./EtiketRanap.vue'))
+const historyPage = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/complayout/RightDrawer.vue'))
 
 function openRajal (val) {
   // console.log('refEtiketRajal', refEtiketRajal.value)
@@ -1394,7 +1457,7 @@ function openRanap (wkt) {
   }, 200)
 }
 const pageRef = ref()
-const tinggiDetailPas = ref(160)
+const tinggiDetailPas = ref(180)
 const h = ref(0)
 // const h = computed(() => {
 //   // console.log('h', pageRef.value)

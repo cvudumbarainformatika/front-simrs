@@ -554,9 +554,11 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
 import { defineAsyncComponent, ref } from 'vue'
+// import { useHistoryPasien } from 'src/stores/simrs/pelayanan/poli/historypasien'
 // import { date } from 'quasar'
 
 const store = useEResepDepoFarmasiStore()
+// const histori = useHistoryPasien()
 const router = useRouter()
 defineProps({
   ruangan: {
@@ -703,7 +705,8 @@ function color (val) {
 function buka (val) {
   store.setOpen()
   store.setResep(val)
-  // console.log('buka', val)
+  // histori.getData(val)
+  console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }

@@ -89,7 +89,7 @@ function obatSelected (val) {
     notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
   }
   refObat.value.validate()
-  // console.log('obat selected', val)
+  console.log('obat selected', val)
   setForm('satuan_kcl', val?.satuankecil ?? '-')
   setForm('kodeobat', val?.kdobat ?? '-')
   setForm('kandungan', val?.kandungan ?? '-')
@@ -101,6 +101,7 @@ function obatSelected (val) {
   setForm('kode50', val?.kode50 ?? '-')
   setForm('uraian50', val?.uraian50 ?? '-')
   setForm('harga_beli', val?.harga_beli ?? 0)
+  setForm('namaobat', val?.namaobat ?? 0)
   emits('form', form)
 }
 function obatValid (val) {

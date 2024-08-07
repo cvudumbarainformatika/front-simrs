@@ -1,48 +1,68 @@
 <template>
-  <div class="row no-wrap q-col-gutter-xs items-center">
-    <div class="col-auto">
-      <selectObat
-        v-model="obat"
-        :depo="depo"
-        @form="setObat"
-      />
-    </div>
-    <div class="col-auto">
-      <app-input
-        v-model="store.form.jumlah"
-        label="Jumlah"
-        outlined
-        @update:model-value="setJumlah($event,'jumlah')"
-      />
-    </div>
-    <div class="col-auto">
-      <q-select
-        ref="refSigna"
-        v-model="signa"
-        label="Aturan Pakai"
-        use-input
-        fill-input
-        hide-selected
-        dense
-        clearable
-        standout="bg-yellow-3"
-        option-label="signa"
+  <div class="row no-wrap justify-bentween items-center full-width">
+    <div class="col-6">
+      <div class="row no-wrap q-col-gutter-xs items-center">
+        <div class="col-auto">
+          <selectObat
+            v-model="obat"
+            :depo="depo"
+            @form="setObat"
+          />
+        </div>
+        <div class="col-auto">
+          <app-input
+            v-model="store.tempObat.jumlah"
+            label="Jumlah"
+            outlined
+            @update:model-value="setJumlah($event,'jumlah')"
+          />
+        </div>
+        <div class="col-auto">
+          <q-select
+            ref="refSigna"
+            v-model="signa"
+            label="Aturan Pakai"
+            use-input
+            fill-input
+            hide-selected
+            dense
+            clearable
+            standout="bg-yellow-3"
+            option-label="signa"
 
-        outlined
-        :rules="[sigaValid]"
-        lazy-rules
-        no-error-icon
-        hide-bottom-space
-        hide-dropdown-icon
-        @filter="store.getSigna"
-        :options="store.signas"
-        @new-value="signaCreateValue"
-        @update:model-value="signaSelected"
-        @keyup.enter.stop="signaEnter"
-      />
+            outlined
+            :rules="[sigaValid]"
+            lazy-rules
+            no-error-icon
+            hide-bottom-space
+            hide-dropdown-icon
+            @filter="store.getSigna"
+            :options="store.signas"
+            @new-value="signaCreateValue"
+            @update:model-value="signaSelected"
+            @keyup.enter.stop="signaEnter"
+          />
+        </div>
+      </div>
     </div>
-    <div class="col-auto">
-      {{ isNaN(formatDouble(store.form?.harga_jual))?0:formatDouble(store.form?.harga_jual) }}
+    <div class="col-6">
+      <div class="row no-wrap q-col-gutter-xs items-center justify-end">
+        <div class="col-auto">
+          {{ isNaN(formatDouble(store.form?.harga_jual))?0: 'Rp. '+formatDouble(store.form?.harga_jual,2) }}
+        </div>
+        <div class="col-auto">
+          <q-btn
+            round
+            dense
+            icon="icon-mat-add"
+            color="primary"
+            flat
+            :loading="store.loadingSimpan"
+            :disable="store.loadingSimpan"
+            @click="tambah"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -67,7 +87,7 @@ const depo = computed(() => {
 function setObat (val) {
   const keys = Object.keys(val)
   keys.forEach(k => {
-    store.setForm(k, val[k])
+    store.setTemp(k, val[k])
   })
   console.log('form', store.form)
 }
@@ -76,8 +96,8 @@ function setJumlah (evt, key) {
   const ind = evt.indexOf('.')
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
-  store.setForm(key, nilai)
-  // if(store.form?.harga_beli>0 && store.form?.margin>0) store.setForm(harga_jual,(nilai*()))
+  store.setTemp(key, nilai)
+  if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', ((nilai * ((store.form.margin / 100) * store.tempObat.harga_beli))))
   console.log('set jumlah', nilai)
 }
 // signa start ----
@@ -120,13 +140,13 @@ function signaCreateValue (val, done) {
 }
 function signaSelected (val) {
   // console.log('signa', val)
-  store.setForm('aturan', val?.signa)
+  store.setTemp('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
-  store.setForm('jumlahdosis', parseFloat(val?.jumlah))
-  if (parseFloat(store.form.jumlah_diminta) > 0) {
-    const kons = store.form.jumlah_diminta / parseFloat(val?.jumlah)
-    store.setForm('konsumsi', kons)
+  store.setTemp('jumlahdosis', parseFloat(val?.jumlah))
+  if (parseFloat(store.tempObat.jumlah) > 0) {
+    const kons = store.tempObat.jumlah / parseFloat(val?.jumlah)
+    store.setTemp('konsumsi', kons)
   }
   refSigna.value.validate()
   // }
@@ -138,8 +158,21 @@ function signaEnter () {
     // console.log('signa enter')
   }
 }
+// signa end ---
+
+function tambah () {
+  console.log('simpan')
+  store.form.details.push(store.tempObat)
+  // store.simpan()
+}
+// eslint-disable-next-line no-unused-vars
+function simpan () {
+  console.log('simpan')
+  store.simpan()
+}
 onMounted(() => {
   if (props.tipe === 'rs') store.setForm('margin', 20)
+  else store.setForm('margin', 10)
   console.log('props', props.tipe)
 })
 // signa end ----

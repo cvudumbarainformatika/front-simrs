@@ -1,16 +1,18 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmasi', {
   state: () => ({
-    loading: false,
+    loadingSimpan: false,
     loadingPihakTiga: false,
     params: {
       q: ''
     },
     form: {
-      kd_obat: ''
+      details: []
     },
+    tempObat: {},
     pihakTigas: [],
     signas: []
   }),
@@ -20,6 +22,9 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
     },
     setForm (key, val) {
       this.form[key] = val
+    },
+    setTemp (key, val) {
+      this.tempObat[key] = val
     },
     getPihakTiga (val) {
       this.loadingPihakTiga = true
@@ -66,6 +71,19 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
       //   this.signas = resp?.data
       // })
       // .catch(() => { this.loadingSigna = false })
+    },
+    simpan () {
+      this.loadingSimpan = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penjualanbebas/simpan', this.form)
+          .then(resp => {
+            this.loadingSimpan = false
+            console.log('simpan bebas', resp?.data)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => { this.loadingSimpan = false })
+      })
     }
   }
 })

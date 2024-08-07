@@ -35,6 +35,14 @@
         </q-tabs>
       </div>
       <div
+        v-if="store.loading"
+        class="col full-height"
+        style="overflow: hidden;"
+      >
+        <app-loading />
+      </div>
+      <div
+        v-if="!store.loading"
         class="col full-height"
         style="overflow: hidden;"
       >

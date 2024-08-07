@@ -23,6 +23,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loadingPelayananInfoObat: false,
     loadingTolak: false,
     loadingAlasan: false,
+    openHistory: false,
     toAlasan: {},
     noreg: '',
     items: [],
@@ -508,14 +509,29 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       // console.log('loading', val, this.loading)
       await api.get('v1/simrs/farmasinew/depo/listresepbydokter', param)
         .then(resp => {
-          console.log('get data table', resp?.data)
           this.loading = false
           const data = resp?.data?.data ?? resp?.data
+          console.log('get data table', data)
           if (data?.length) {
             data.forEach(da => {
               const adaKwi = da.kwitansi?.find(kw => kw?.nota?.includes(da?.noresep))
-              console.log('kw', adaKwi)
               if (adaKwi) da.lunas = true
+              if (da?.diagnosas?.length) {
+                da.diagnosaigd = null
+                da.diagnosa = null
+                const diagIGD = da?.diagnosas.filter(fa => fa.rs13 === 'POL014')
+                const diagAja = da?.diagnosas.filter(fa => fa.rs13 !== 'POL014')
+                diagIGD.forEach((diag, index) => {
+                  const diagA = diag?.masterdiagnosa?.rs1 + ' - ' + diag?.masterdiagnosa?.rs4
+                  if (index === 0) da.diagnosaigd = diagA
+                  else da.diagnosaigd += ', ' + diagA
+                })
+                diagAja.forEach((diag, index) => {
+                  const diagA = diag?.masterdiagnosa?.rs1 + ' - ' + diag?.masterdiagnosa?.rs4
+                  if (index === 0) da.diagnosa = diagA
+                  else da.diagnosa += ', ' + diagA
+                })
+              }
             })
           }
           this.items = data
