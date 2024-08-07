@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { useListHistoryPendaftaranRanapStore } from './history'
+import { notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 // import { api } from 'boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
 // import { date } from 'quasar'
@@ -393,9 +394,11 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
 
     async onSubmit () {
       // console.log('t_sep', this.t_sep)
+      this.loading = true
       await api.post('v1/simrs/pendaftaran/ranap/create-sep-ranap', this.t_sep)
         .then((resp) => {
           console.log('resp submit', resp)
+          this.loading = false
           if (resp.data?.metadata?.code === '200') {
             const result = resp?.data?.result?.sep
             if (result) {
@@ -404,10 +407,16 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
               const index = items.findIndex((item) => item.noreg === this.t_sep.noreg)
               items[index].sep = result?.noSep
             }
+            notifSuccessVue(resp?.data?.metadata?.message)
+            notifCenterVue('Berhasil Buat SEP')
+          }
+          else {
+            notifErrVue(resp?.data?.metadata?.message)
           }
         })
         .catch((err) => {
           console.log('create sep', err)
+          this.loading = false
         })
     },
 
