@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+// eslint-disable-next-line no-unused-vars
 import { useListHistoryPendaftaranRanapStore } from './history'
+// eslint-disable-next-line no-unused-vars
 import { notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 // import { api } from 'boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
@@ -18,7 +20,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       klsRawat: {
         klsRawatHak: '',
         klsRawatNaik: '',
-        pembiayaan: '1',
+        pembiayaan: '',
         penanggungJawab: 'Pribadi'
       },
       noMR: '',
@@ -105,6 +107,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       { label: 'ICU', value: '7' }
     ],
     pembiayaans: [
+      { label: '-', value: '' },
       { label: 'Pribadi', value: '1' },
       { label: 'Pemberi Kerja', value: '2' },
       { label: 'Asuransi Kesehatan Tambahan', value: '3' }
@@ -193,7 +196,12 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     loadingListSuplesi: false,
     dialogListSuplesi: false,
 
-    ppkRujukan: null,
+    loadingRujukanInternal: false,
+
+    ppkRujukan: {
+      kode: null,
+      nama: null
+    },
     ppkRujukans: [],
     diagnosas: [],
     diagnosa: null,
@@ -209,6 +217,8 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     initForm (pasien, petugas) {
       console.log('from RS', pasien)
       this.resetForm()
+      this.t_sep.tglSep = dateDbFormat(pasien?.tglmasuk ?? new Date())
+
       this.t_sep.noreg = pasien?.noreg
       this.t_sep.noKartu = pasien?.noka
       this.t_sep.noMR = pasien?.norm
@@ -251,6 +261,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       // this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
     },
 
+    // gak dipake
     async getRujukanBridging (pasien) {
       const params = {
         noka: pasien?.noka
@@ -265,13 +276,13 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
 
             const ada = resp.data.result
             this.t_sep.rujukan.asalRujukan = ada?.asalFaskes ?? ''
-            this.t_sep.rujukan.noRujukan = ada?.rujukan?.noKunjungan ?? ''
-            this.t_sep.rujukan.tglRujukan = ada?.rujukan?.tglKunjungan ?? ''
-            this.t_sep.rujukan.ppkRujukan = ada?.rujukan?.provPerujuk?.kode ?? ''
-            this.t_sep.diagAwal = ada?.rujukan?.diagnosa?.kode ?? ''
+            // this.t_sep.rujukan.noRujukan = ada?.rujukan?.noKunjungan ?? ''
+            // this.t_sep.rujukan.tglRujukan = ada?.rujukan?.tglKunjungan ?? ''
+            // this.t_sep.rujukan.ppkRujukan = ada?.rujukan?.provPerujuk?.kode ?? ''
+            // this.t_sep.diagAwal = ada?.rujukan?.diagnosa?.kode ?? ''
 
-            this.ppkRujukan = ada?.rujukan?.provPerujuk ?? null
-            this.diagnosa = ada?.rujukan?.diagnosa ?? null
+            // this.ppkRujukan = ada?.rujukan?.provPerujuk ?? null
+            // this.diagnosa = ada?.rujukan?.diagnosa ?? null
 
             this.ppkRujukans = []
             this.ppkRujukans.push(this.ppkRujukan)
@@ -282,6 +293,23 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
         })
         .catch((err) => {
           console.log('Rujukan', err)
+        })
+    },
+
+    async getRujukanInternal () {
+      this.loadingRujukanInternal = true
+      await api.get('v1/simrs/pendaftaran/ranap/get-no-rujukan-internal')
+        .then((resp) => {
+          this.loadingRujukanInternal = false
+          console.log('No Rujukan', resp)
+          if (resp.status === 200) {
+            this.t_sep.rujukan.noRujukan = resp.data
+            this.t_sep.rujukan.tglRujukan = dateDbFormat(new Date())
+          }
+        })
+        .catch((err) => {
+          console.log('No Rujukan', err)
+          this.loadingRujukanInternal = false
         })
     },
 
@@ -398,17 +426,20 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       await api.post('v1/simrs/pendaftaran/ranap/create-sep-ranap', this.t_sep)
         .then((resp) => {
           console.log('resp submit', resp)
+          const history = useListHistoryPendaftaranRanapStore()
           this.loading = false
           if (resp.data?.metadata?.code === '200') {
             const result = resp?.data?.result?.sep
             if (result) {
-              const history = useListHistoryPendaftaranRanapStore()
               const items = history?.items
               const index = items.findIndex((item) => item.noreg === this.t_sep.noreg)
               items[index].sep = result?.noSep
             }
             notifSuccessVue(resp?.data?.metadata?.message)
             notifCenterVue('Berhasil Buat SEP')
+
+            // tutup dialog
+            history.dialogSep = false
           }
           else {
             notifErrVue(resp?.data?.metadata?.message)
@@ -450,7 +481,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
         klsRawat: {
           klsRawatHak: '',
           klsRawatNaik: '',
-          pembiayaan: '1',
+          pembiayaan: '',
           penanggungJawab: 'Pribadi'
         },
         noMR: '',

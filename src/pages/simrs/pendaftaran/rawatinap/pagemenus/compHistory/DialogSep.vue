@@ -1,6 +1,6 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)" @show="init">
-    <q-card style="min-width:60vw; max-width: 60vw;">
+    <q-card style="min-width:70vw; max-width: 70vw;">
       <q-bar class="bg-teal text-white">
         <div>Create SEP</div>
 
@@ -85,6 +85,7 @@
                   :model="sep.t_sep.tglSep"
                   label="Tanggal SEP"
                   outlined
+                  :disable="true"
                   @set-model="val=>sep.t_sep.tglSep=val"
                   class="col-5"
                 />
@@ -136,7 +137,7 @@
                   class="col-6"
                 />
                 <app-autocomplete
-                  v-if="sep.naikKelas"
+                  v-if="sep.t_sep.klsRawat.klsRawatNaik !== ''"
                   ref="refPembiayaan"
                   v-model="sep.t_sep.klsRawat.pembiayaan"
                   label="Pembiayaan"
@@ -160,8 +161,8 @@
                   class="col-7"
                 />
                 <div class="col-5">
-                  <q-btn dense class="full-width" color="primary" @click="sep.onPreviewListRujukan(pasien)">
-                    List Rujukan
+                  <q-btn dense class="full-width" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
+                    Get Rujukan
                   </q-btn>
                 </div>
                 <app-input-date
@@ -211,28 +212,6 @@
                 />
                 <app-input-simrs
                   v-model="sep.t_sep.catatan" label="Catatan Peserta" :autofocus="false"
-                  class="col-12"
-                />
-                <q-select
-                  ref="refSelectDiagnosa"
-                  v-model="sep.diagnosa"
-                  label="Diagnosa Awal"
-                  outlined
-                  dense
-                  use-input
-                  hide-selected
-                  fill-input
-                  input-debounce="200"
-                  :options="sep.diagnosas"
-                  @filter="diagnosaFn"
-                  placeholder="Min 3 character untuk pencarian"
-                  option-label="nama"
-                  option-value="kode"
-                  autofocus
-                  hide-bottom-space
-                  hide-dropdown-icon
-                  no-error-icon
-                  @update:model-value="diagnosaSelected"
                   class="col-12"
                 />
               </div>
@@ -377,6 +356,32 @@
             <q-separator class="col-12 " />
             <div class="col-12">
               <div class="row q-col-gutter-sm">
+                <q-select
+                  ref="refSelectDiagnosa"
+                  v-model="sep.diagnosa"
+                  label="Diagnosa Awal"
+                  outlined
+                  dense
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="200"
+                  :options="sep.diagnosas"
+                  @filter="diagnosaFn"
+                  placeholder="Min 3 character untuk pencarian"
+                  option-label="nama"
+                  option-value="kode"
+                  autofocus
+                  hide-bottom-space
+                  hide-dropdown-icon
+                  no-error-icon
+                  @update:model-value="diagnosaSelected"
+                  class="col-12"
+                >
+                  <template v-if="sep.diagnosa" #append>
+                    <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.diagnosa = null" class="cursor-pointer" />
+                  </template>
+                </q-select>
                 <app-autocomplete
                   ref="refTujuanKunjungan"
                   v-model="sep.t_sep.tujuanKunj"
@@ -393,7 +398,7 @@
                       sep.t_sep.kdPenunjang = ''
                     }
                   }"
-                  class="col-3"
+                  class="col-2"
                 />
                 <app-autocomplete
                   v-if="sep.t_sep.tujuanKunj !== '0'"
@@ -403,6 +408,7 @@
                   autocomplete="label"
                   option-value="value"
                   option-label="label"
+                  valid
                   outlined
                   :source="sep.flagProcedurs.filter(val => val.value !== '')"
                   @update:model-value="(val)=>{
@@ -418,6 +424,7 @@
                   autocomplete="label"
                   option-value="value"
                   option-label="label"
+                  valid
                   outlined
                   :source="sep.kdPenunjangs.filter(val => val.value !== '')"
                   @update:model-value="(val)=>{
@@ -427,12 +434,15 @@
                 />
 
                 <app-input-simrs
-                  v-model="sep.t_sep.skdp.noSurat" label="NO Surat" :autofocus="false"
-                  class="col-7"
+                  v-model="sep.t_sep.skdp.noSurat" label="NO SPRI" :autofocus="false"
+                  class="col-4"
+                  append
+                  :append-btn="true"
+                  @append-click="sep.getSpri(pasien)"
                 />
-                <div class="col-2">
-                  <q-btn dense color="primary" class="q-px-md" label="Cek Spri" @click="sep.getSpri(pasien)" />
-                </div>
+                <!-- <div class="col-1">
+                  <q-btn dense color="primary" class="q-px-md" label="Cek" @click="sep.getSpri(pasien)" />
+                </div> -->
                 <app-autocomplete
                   ref="refDokter"
                   v-model="sep.t_sep.skdp.kodeDPJP"
@@ -464,7 +474,12 @@
         <q-separator />
         <q-card-section class="q-pa-none bg-teal text-white">
           <div class="q-pa-md row justify-between items-center">
-            <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" /></div>
+            <div class="flex q-gutter-sm">
+              <q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" />
+              <q-btn dense class="q-px-md" color="dark" @click="sep.onPreviewListRujukan(pasien)">
+                List Rujukan
+              </q-btn>
+            </div>
             <div>
               <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" label="Create SEP" color="yellow-3" text-color="dark" />
             </div>
@@ -499,6 +514,7 @@
 
 <script setup>
 import { api } from 'src/boot/axios'
+// import { dateDbFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
@@ -524,19 +540,26 @@ const props = defineProps({
 })
 
 const init = () => {
-  console.log('init', props.pasien)
+  console.log('init')
   sep.initForm(props.pasien, app?.user?.pegawai?.nama)
   Promise.all([
     store.cekPesertaBpjs('nik', props.pasien?.nktp)
       .then((resp) => {
-        console.log('resp', store.cekPeserta)
+        console.log('cek Peserta', store.cekPeserta)
         sep.hakKelas = store.cekPeserta?.hakKelas?.kode
         sep.t_sep.klsRawat.klsRawatHak = store.cekPeserta?.hakKelas?.kode
         sep.t_sep.sepRanap.jenispeserta = store.cekPeserta?.jenisPeserta?.keterangan
         sep.t_sep.sepRanap.hakKelas = store.cekPeserta?.hakKelas?.keterangan
         sep.t_sep.sepRanap.namaAsuransiCob = store.cekPeserta?.cob?.nmAsuransi
+        sep.t_sep.rujukan.ppkRujukan = store.cekPeserta?.provUmum?.kdProvider
+        sep.t_sep.rujukan.asalRujukan = '2'
+
+        sep.ppkRujukan = {
+          kode: store.cekPeserta?.provUmum?.kdProvider,
+          nama: store.cekPeserta?.provUmum?.nmProvider
+        }
       }),
-    sep.getRujukanBridging(props.pasien),
+    // sep.getRujukanBridging(props.pasien),
     sep.getPropinsiBpjs()
   ])
 }

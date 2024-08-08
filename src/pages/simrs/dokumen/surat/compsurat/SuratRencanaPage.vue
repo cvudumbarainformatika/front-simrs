@@ -206,7 +206,7 @@ const props = defineProps({
 const ket = ref('')
 const plan = ref('')
 const toItem = ref(null)
-function terpilih(val) {
+function terpilih (val) {
   const temp = props?.pasien?.planning?.filter(a => a.rs4 === val)
   if (temp.length) {
     toItem.value = temp[0]
@@ -217,65 +217,88 @@ onMounted(() => {
   toItem.value = props?.pasien?.planning[0]
   plan.value = props?.pasien?.planning[0].rs4
 })
-function setKepada(val) {
+function setKepada (val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
       return val?.kontrol?.namaDokter
-    } else { return '-' }
-  } else if (val?.rs4 === 'Konsultasi') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Konsultasi') {
     if (val?.masterpoli) {
       return val?.masterpoli?.rs2
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rawat Inap') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rawat Inap') {
     if (props.pasien) {
       return props.pasien.dokter
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return 'Poli ' + val?.transrujukan?.poli + ', ' + val?.transrujukan?.rs7
-    } else { return '-' }
+    }
+    else { return '-' }
   }
 }
-function setNomor(val) {
+function setNomor (val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
       return val?.kontrol?.noSuratKontrol
-    } else { return '-' }
-  } else if (val?.rs4 === 'Konsultasi') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Konsultasi') {
     if (val?.listkonsul) {
       return val?.listkonsul?.noreg_lama
-    } else if (val?.rekomdpjp) {
+    }
+    else if (val?.rekomdpjp) {
       return val?.rekomdpjp?.noreg
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rawat Inap') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rawat Inap') {
     if (val?.spri) {
       return val?.spri?.noSuratKontrol
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return val?.transrujukan?.rs3
-    } else { return '-' }
+    }
+    else { return '-' }
   }
 }
-function setTgl(val) {
+function setTgl (val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
       return date.formatDate(val?.kontrol?.tglRencanaKontrol, 'DD MMMM YYYY')
-    } else { return '-' }
-  } else if (val?.rs4 === 'Konsultasi') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Konsultasi') {
     if (val?.listkonsul) {
       return date.formatDate(val?.listkonsul?.tgl_rencana_konsul, 'DD MMMM YYYY')
-    } else if (val?.rekomdpjp) {
+    }
+    else if (val?.rekomdpjp) {
       return date.formatDate(val?.rekomdpjp?.tglKontrol, 'DD MMMM YYYY')
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rawat Inap') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rawat Inap') {
     if (val?.spri) {
       return date.formatDate(val?.spri?.tglRencanaKontrol, 'DD MMMM YYYY')
-    } else { return '-' }
-  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    }
+    else { return '-' }
+  }
+  else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return date.formatDate(val?.transrujukan?.tglRencanaKunjungan, 'DD MMMM YYYY')
-    } else { return '-' }
+    }
+    else { return '-' }
   }
 }
 // eslint-disable-next-line no-unused-vars
