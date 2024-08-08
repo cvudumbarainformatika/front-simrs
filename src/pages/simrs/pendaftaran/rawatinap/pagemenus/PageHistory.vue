@@ -40,10 +40,13 @@
                 store.pasien = val
                 store.dialogSpri = true
               }"
-
               @cetak-gelang="(val)=>{
                 store.pasien = val
                 store.dialogCetakGelang = true
+              }"
+              @buat-sep="(val)=>{
+                store.pasien = val
+                store.dialogSep = true
               }"
             />
           </transition-group>
