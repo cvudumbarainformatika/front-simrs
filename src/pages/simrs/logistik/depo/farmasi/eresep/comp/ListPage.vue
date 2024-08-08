@@ -119,7 +119,7 @@
             </td>
             <td>
               <div class="row ">
-                {{ item?.noresep }} ({{ item?.sistembayar?.rs2?? '-' }})
+                <span v-html="highlightText(item?.noresep)" /> ({{ item?.sistembayar?.rs2?? '-' }})
               </div>
               <div class="row text-grey f-10">
                 <div v-if="parseFloat(item?.flag)>0 && item?.tiperesep!=='iter'">
@@ -243,10 +243,14 @@
             </td>
             <td>
               <div class="row text-weight-bold">
-                {{ item?.datapasien?.nama }}
+                <span v-html="highlightText(item?.datapasien?.nama)" />
+                <!-- {{ item?.datapasien?.nama }} -->
               </div>
               <div class="row">
-                {{ item?.noreg }} || {{ item?.norm }}
+                <span v-html="highlightText(item?.noreg)" class="q-mr-sm" /> || <span v-html="highlightText(item?.norm)" class="q-ml-sm" />
+                <!-- {{ item?.noreg }}
+                ||
+                {{ item?.norm }} -->
               </div>
               <div class="row text-italic f-10">
                 {{ item?.datapasien?.noka }}
@@ -571,6 +575,12 @@ defineProps({
   }
 })
 const emits = defineEmits(['panggilan'])
+function highlightText (text) {
+  // Implement your text highlighting logic here
+  // For example, you can wrap the matching text in <span> with a specific style
+  // console.log('text', text)
+  return text.replace(new RegExp(store.params.q, 'ig'), matchedText => `<span class="bg-yellow text-dark">${matchedText}</span>`)
+}
 function responTime (item) {
   // const mulai= new Date(item?.tgl_kirim)
   // const selesai=new Date(item?.tgl_selesai)
