@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { filterDuplicateArrays } from 'src/modules/utils'
+import { usehutangObatPerTanggalStore } from './hutangobatpertanggal'
 
-export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_pertanggal', {
+export const usehutangObatPerTanggalBastStore = defineStore('laporan_hutang_obat_pertanggal_bast', {
   state: () => ({
     loading: false,
     items: [],
@@ -15,20 +16,21 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
     },
     params: {
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      jenisreport: '1'
+      jenisreport: '2'
       // ruangan: ''
-    },
-    judulreport: 'Laporan Hutang Pertanggal By Penerimaan'
+    }
   }),
   actions: {
     async initAmbilData () {
-      this.laporanHutangObatPertanggal()
+      this.laporanHutangObatPertanggalBast()
     },
-    async laporanHutangObatPertanggal () {
+    async laporanHutangObatPertanggalBast () {
+      const storex = usehutangObatPerTanggalStore()
+      storex.loading = true
       this.loading = true
       this.kolom = ['PBF', 'Total']
       const params = { params: this.params }
-      await api.get('v1/simrs/laporan/farmasi/hutang/reportObatPesananBytanggal', params)
+      await api.get('v1/simrs/laporan/farmasi/hutang/reportObatPesananBytanggalBast', params)
         .then((resp) => {
           if (resp.status === 200) {
             const datahasil = resp?.data
@@ -38,10 +40,13 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
         .catch((err) => {
           console.log(err)
           this.loading = false
+          storex.loading = false
         })
     },
     sethasil (val) {
       // console.log('val', val)
+      const storex = usehutangObatPerTanggalStore()
+      storex.loading = true
       const wew = []
       val.forEach(element => {
         const kodepbf = element?.kdpbf
@@ -92,9 +97,7 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
       })
       // console.log('pbf', this.items)
       this.loading = false
-    },
-    refreshTable () {
-      this.initAmbilData()
+      storex.loading = false
     }
   }
 })
