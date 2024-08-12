@@ -18,6 +18,7 @@
                   option-value="kodeperusahaan"
                   outlined
                   valid
+                  clearable
                   :loading="store.loading"
                   :source="store.perusahaans"
                   @on-select="store.perusahaanSelected"

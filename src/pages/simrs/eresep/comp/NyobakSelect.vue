@@ -55,6 +55,12 @@
         >
           {{ scope.opt.satuankecil }}
         </div>
+        <div
+          v-if="scope.opt.jenis_perbekalan"
+          :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-grey text-weight-bold'"
+        >
+          ({{ scope.opt.jenis_perbekalan }})
+        </div>
       </q-item>
       <q-separator />
     </template>
@@ -78,6 +84,8 @@ import { ref } from 'vue'
 const store = usePermintaanEResepStore()
 // ngisi form
 const refObat = ref(null)
+defineExpose({ refObat })
+
 function obatSelected (val) {
   console.log('select obat', val)
   if (val?.alokasi <= 0) {

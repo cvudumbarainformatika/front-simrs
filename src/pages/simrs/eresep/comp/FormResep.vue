@@ -141,7 +141,7 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <nyobak-select v-model="store.namaObat" />
+                      <nyobak-select ref="refObat" v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
                       <q-input
@@ -262,11 +262,18 @@
             >
               <!-- {{ item }} -->
               <q-item-section style="width: 50%;">
-                <div class="row">
-                  {{ item?.mobat?.nama_obat }}
-                </div>
-                <div class="row text-italic f-10">
-                  {{ item?.kdobat }}
+                <div class="row items-center">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-11">
+                    <div class="row">
+                      {{ item?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ item?.kdobat }}
+                    </div>
+                  </div>
                 </div>
               </q-item-section>
               <q-item-section
@@ -579,7 +586,7 @@ const props = defineProps({
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
 
-// const refObat = ref(null)
+const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
@@ -905,11 +912,13 @@ function ketEnter () {
 }
 function simpanObat () {
   console.log('simpan obat', store.form)
+  // console.log('obat', refObat.value?.refObat)
+
   if (validate()) {
     const form = store.form
     store.simpanObat(form)?.then(() => {
       signa.value = null
-      // refObat.value.focus()
+      refObat.value?.refObat.focus()
       // refObat.value.showPopup()
       // refObat.value.showPopup()
     })
