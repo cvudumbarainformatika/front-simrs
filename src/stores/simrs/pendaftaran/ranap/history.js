@@ -30,6 +30,7 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
     pasien: null,
     dialogSpri: false,
     dialogSep: false,
+    dialogSepManual: false,
     dialogCetakSep: false,
     dialogCetakGelang: false,
     dialogCetakIdentitas: false,
@@ -146,7 +147,7 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
           .then(resp => {
             const bpjs = resp?.data?.bpjs
             // const rs = resp?.data?.rs
-            if (bpjs.metadata.code === '200') {
+            if (bpjs?.metadata?.code === '200') {
               this.cekPeserta = resp?.data.bpjs.result.peserta
             }
             resolve(resp)

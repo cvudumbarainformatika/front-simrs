@@ -105,10 +105,24 @@
             </div>
           </div>
           <div class="col-3">
-            <div style="width:100%; height:80px;" class="relative-position">
+            <div style="width:100%; " class="relative-position">
               <div>Pasien / Keluarga Pasien</div>
-              <div class="absolute-bottom">
-                ..........................
+              <div style="width: 100px;" class="q-mb-xs">
+                <vue-qrcode
+                  :value="qrUrl"
+                  tag="svg"
+                  :options="{
+                    errorCorrectionLevel: 'Q',
+                    color: {
+                      dark: '#000000',
+                      light: '#ffffff',
+                    },
+                    margin:2
+                  }"
+                />
+              </div>
+              <div class="">
+                {{ props.pasien?.nama_panggil }}
               </div>
             </div>
           </div>
@@ -128,7 +142,7 @@
 
 <script setup>
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history.js'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const store = useListHistoryPendaftaranRanapStore()
 
@@ -140,6 +154,15 @@ const props = defineProps({
 })
 
 const sep = ref(null)
+
+const qrUrl = computed(() => {
+  const noka = props.pasien?.noka// noreg
+  // const dok = 'GENERAL-CONSENT.png'
+  // const asal = 'GENERAL-CONSENT'
+  // const enc = btoa(`${noreg}|${dok}|${asal}`)
+  return `${noka}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
+})
 
 const init = () => {
   console.log('init', props.pasien)

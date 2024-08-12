@@ -166,6 +166,7 @@
                   </q-btn>
                 </div>
                 <app-input-date
+                  v-if="!sep.rujukanInternal"
                   :model="sep.t_sep.rujukan.tglRujukan"
                   label="Tanggal Rujukan"
                   outlined
@@ -173,6 +174,7 @@
                   class="col-5"
                 />
                 <app-autocomplete
+                  v-if="!sep.rujukanInternal"
                   ref="refAsalRujukan"
                   v-model="sep.t_sep.rujukan.asalRujukan"
                   label="Asal Rujukan"
@@ -188,6 +190,7 @@
                   class="col-7"
                 />
                 <q-select
+                  v-if="!sep.rujukanInternal"
                   ref="refSelectPpkRujukan"
                   v-model="sep.ppkRujukan"
                   label="PPK Rujukan"
@@ -500,6 +503,8 @@
     <DialogListSpri
       v-model="sep.dialogListSpri" :loading="sep.loadingListSpri" :lists="sep.listSpri"
       :terpilih="sep.t_sep.skdp.noSurat"
+      :pasien="pasien"
+      @get-spri="val=>sep.getSpri(val)"
       @pilih="val=>sep.fromListSpri(val)"
     />
 
@@ -543,7 +548,7 @@ const init = () => {
   console.log('init')
   sep.initForm(props.pasien, app?.user?.pegawai?.nama)
   Promise.all([
-    store.cekPesertaBpjs('nik', props.pasien?.nktp)
+    store.cekPesertaBpjs('nokartu', props.pasien?.noka)
       .then((resp) => {
         console.log('cek Peserta', store.cekPeserta)
         sep.hakKelas = store.cekPeserta?.hakKelas?.kode
@@ -551,13 +556,13 @@ const init = () => {
         sep.t_sep.sepRanap.jenispeserta = store.cekPeserta?.jenisPeserta?.keterangan
         sep.t_sep.sepRanap.hakKelas = store.cekPeserta?.hakKelas?.keterangan
         sep.t_sep.sepRanap.namaAsuransiCob = store.cekPeserta?.cob?.nmAsuransi
-        sep.t_sep.rujukan.ppkRujukan = store.cekPeserta?.provUmum?.kdProvider
-        sep.t_sep.rujukan.asalRujukan = '2'
+        // sep.t_sep.rujukan.ppkRujukan = store.cekPeserta?.provUmum?.kdProvider
+        // sep.t_sep.rujukan.asalRujukan = '2'
 
-        sep.ppkRujukan = {
-          kode: store.cekPeserta?.provUmum?.kdProvider,
-          nama: store.cekPeserta?.provUmum?.nmProvider
-        }
+        // sep.ppkRujukan = {
+        //   kode: store.cekPeserta?.provUmum?.kdProvider,
+        //   nama: store.cekPeserta?.provUmum?.nmProvider
+        // }
       }),
     // sep.getRujukanBridging(props.pasien),
     sep.getPropinsiBpjs()

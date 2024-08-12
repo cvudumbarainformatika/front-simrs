@@ -1,18 +1,19 @@
 <template>
-  <q-dialog persistent>
+  <q-dialog persistent @show="onShow">
     <q-card style="min-width: 40vw">
       <q-card-section class="bg-primary text-white">
         <div class="text-h6">
-          LIST SPRI
+          {{ formSpri ? 'Create SPRI' : 'List SPRI' }}
         </div>
       </q-card-section>
 
       <q-separator />
 
-      <q-card-section style="max-height: 50vh" class="q-pa-none scroll">
+      <q-card-section v-if="!formSpri" style="max-height: 50vh" class="q-pa-none scroll">
         <div v-if="lists.length === 0">
           <div class="column flex-center" style="min-height: 300px;">
-            Maaf data tidak ditemukan
+            <div>Maaf data tidak ditemukan</div>
+            <q-btn label="Create SPRI" color="dark" class="q-mt-md" @click="formSpri=true" />
           </div>
         </div>
 
@@ -46,6 +47,92 @@
         <q-separator />
       </q-card-section>
 
+      <q-card-section v-else style="max-height: 50vh;">
+        <q-form @submit="onSubmit" class="row q-col-gutter-sm">
+          <app-input-date
+            :model="form.tglRawatInap"
+            label="Tanggal Rawat Inap"
+            outlined
+            @set-model="setTglRawatInap"
+            class="col-5"
+          />
+          <template v-if="spesialistiks.length > 0 && form.tglRawatInap !== null">
+            <q-select
+              ref="refSpesialis"
+              v-model="form.spesialis"
+              label="Spesialis"
+              outlined
+              dense
+              use-input
+              hide-selected
+              fill-input
+              input-debounce="200"
+              :rules="[(val) => (!!val) || 'Harap diisi']"
+              :options="options"
+              @filter="spesialisFn"
+              placeholder="Min 2 character untuk pencarian"
+              option-label="namaPoli"
+              autofocus
+              hide-bottom-space
+              hide-dropdown-icon
+              no-error-icon
+              class="col-7"
+              @update:model-value="(val)=>{
+                console.log('val', val);
+
+                form.spesialis = val
+                cariDataDokter()
+              }"
+            >
+              <template v-if="form.spesialis" #append>
+                <q-icon
+                  name="icon-mat-cancel" @click.stop.prevent="()=> {
+                    form.spesialis = null
+                    form.dokter = null
+                  }" class="cursor-pointer"
+                />
+              </template>
+            </q-select>
+            <q-select
+              v-if="dokters.length > 0 && form.spesialis !== null"
+              ref="refDokter"
+              v-model="form.dokter"
+              label="Dokter"
+              outlined
+              dense
+              use-input
+              hide-selected
+              fill-input
+              input-debounce="200"
+              :rules="[(val) => (!!val) || 'Harap diisi']"
+              :options="optionsDokters"
+              @filter="dokterFn"
+              placeholder="cari dokter"
+              option-label="namaDokter"
+              autofocus
+              hide-bottom-space
+              hide-dropdown-icon
+              no-error-icon
+              class="col-7"
+              @update:model-value="(val)=>{
+                console.log('val', val);
+
+                form.dokter = val
+              }"
+            >
+              <template v-if="form.dokter" #append>
+                <q-icon name="icon-mat-cancel" @click.stop.prevent="form.dokter = null" class="cursor-pointer" />
+              </template>
+            </q-select>
+          </template>
+
+          <div class="flex q-mt-lg full-width justify-between" style="border-top: 1px solid grey;">
+            <q-btn :loading="wait" :disabled="wait" label="kembali" color="dark" class="" @click="formSpri=false" />
+            <q-btn :loading="wait" :disabled="wait" type="submit" label="Buat SPRI" color="primary" class="" />
+          </div>
+        </q-form>
+      </q-card-section>
+
       <q-separator />
 
       <q-card-actions align="right" class="bg-yellow-3">
@@ -56,6 +143,10 @@
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
+import { ref } from 'vue'
+
 // import { ref } from 'vue'
 
 const props = defineProps({
@@ -70,8 +161,148 @@ const props = defineProps({
   terpilih: {
     type: String,
     default: null
+  },
+  pasien: {
+    type: Object,
+    default: null
   }
 })
 
-const emits = defineEmits(['pilih'])
+const formSpri = ref(false)
+const wait = ref(false)
+const form = ref({
+  pasien: null,
+  tglRawatInap: null,
+  spesialis: null,
+  dokter: null
+})
+
+const options = ref([])
+const optionsDokters = ref([])
+
+const spesialistiks = ref([])
+const dokters = ref([])
+
+const emits = defineEmits(['pilih', 'getSpri'])
+
+const setTglRawatInap = async (val) => {
+  form.value.tglRawatInap = val
+  if (val === null) {
+    form.value.spesialis = null
+    form.value.dokter = null
+  }
+
+  // console.log('pasien', props.pasien)
+  if (props.pasien?.noka === null || props.pasien?.noka === '') {
+    return notifErrVue('Noka Pasien Belum Ada ... Silahkan Daftarkan pada BPJS Terlebih dahulu')
+  }
+  if (form.value?.tglRawatInap === null || form.value?.tglRawatInap === '') {
+    return notifErrVue('silahkan pilih tanggal rawat inap')
+  }
+
+  if (form.value.tglRawatInap !== null) {
+    const params = {
+      jnsKontrol: 1,
+      nomor: props?.pasien?.noka,
+      tglRencanaKontrol: form.value?.tglRawatInap
+    }
+
+    const resp = await api.post('v1/simrs/pendaftaran/ranap/get-list-spesialistik', params)
+    console.log('resp spesialistik', resp.data)
+    let data = []
+    if (resp.data?.metadata?.code === '200') {
+      const result = resp?.data?.result?.list
+      if (result) {
+        data = result
+      }
+    }
+
+    spesialistiks.value = data
+  }
+}
+
+function spesialisFn (val, update, abort) {
+  if (val.length < 2) {
+    abort()
+    return
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    options.value = spesialistiks.value.filter(v => v?.namaPoli?.toLowerCase().indexOf(needle) > -1)
+  })
+}
+
+const cariDataDokter = async () => {
+  if (form.value.spesialis.value) {
+    return notifErrVue('Mohon Memilih Spesialis Terlebih dahulu')
+  }
+
+  if (form.value?.tglRawatInap === null || form.value?.tglRawatInap === '') {
+    return notifErrVue('silahkan pilih tanggal rawat inap')
+  }
+  // console.log('form', form.value)
+
+  const params = {
+    jnsKontrol: 1,
+    kodePoli: form.value?.spesialis?.kodePoli,
+    tglRencanaKontrol: form.value?.tglRawatInap
+  }
+  const resp = await api.post('v1/simrs/pendaftaran/ranap/get-list-dokter-bpjs', params)
+  console.log('resp spesialistik', resp.data)
+  let data = []
+  if (resp.data?.metadata?.code === '200') {
+    const result = resp?.data?.result?.list
+    if (result) {
+      data = result
+    }
+  }
+
+  dokters.value = data
+}
+
+function dokterFn (val, update, abort) {
+  if (val === null || val.length < 1) {
+    update(() => {
+      optionsDokters.value = dokters.value
+    })
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    optionsDokters.value = dokters.value.filter(v => v?.namaDokter?.toLowerCase().indexOf(needle) > -1)
+  })
+}
+
+const onShow = () => {
+  formSpri.value = false
+
+  form.value = {
+    tglRawatInap: null,
+    spesialis: null,
+    dokter: null,
+    pasien: props.pasien
+  }
+}
+const onSubmit = async () => {
+  wait.value = true
+  form.value.pasien = props.pasien
+  // console.log('form', form.value)
+  await api.post('v1/simrs/pendaftaran/ranap/create-spri-ranap', form.value)
+    .then(resp => {
+      console.log('resp create ', resp)
+      wait.value = false
+      if (resp.data.metadata.code === '200') {
+        formSpri.value = false
+        emits('getSpri', props.pasien)
+      }
+      else {
+        notifErrVue(resp.data.metadata.message)
+      }
+    })
+    .catch(err => {
+      console.log('err create spri', err)
+      wait.value = false
+    })
+}
 </script>

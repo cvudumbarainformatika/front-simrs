@@ -208,7 +208,9 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     hakKelas: null,
     kelasRawat: null,
     skrDiKelas: null,
-    naikKelas: false
+    naikKelas: false,
+
+    rujukanInternal: true
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
@@ -222,7 +224,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.t_sep.noreg = pasien?.noreg
       this.t_sep.noKartu = pasien?.noka
       this.t_sep.noMR = pasien?.norm
-      this.t_sep.tglSep = dateDbFormat(new Date())
+      // this.t_sep.tglSep = dateDbFormat(new Date())
       this.t_sep.jnsPelayanan = '1'
       this.kelasRawat = (pasien.kelasruangan === '1' || pasien.kelasruangan === '2' || pasien.kelasruangan === '3') ? parseInt(pasien?.kelasruangan) : pasien.kelasruangan ?? null
 
@@ -256,7 +258,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     },
 
     fromListSpri (ada) {
-      // console.log('fromListSpri', ada)
+      console.log('fromListSpri', ada)
       this.t_sep.skdp.noSurat = ada?.noSuratKontrol ?? ''
       // this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
     },
@@ -301,10 +303,14 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       await api.get('v1/simrs/pendaftaran/ranap/get-no-rujukan-internal')
         .then((resp) => {
           this.loadingRujukanInternal = false
-          console.log('No Rujukan', resp)
+          // console.log('No Rujukan', resp)
           if (resp.status === 200) {
             this.t_sep.rujukan.noRujukan = resp.data
-            this.t_sep.rujukan.tglRujukan = dateDbFormat(new Date())
+            // this.t_sep.rujukan.tglRujukan = dateDbFormat(new Date())
+            this.t_sep.rujukan.ppkRujukan = '1327R001'
+            this.t_sep.rujukan.asalRujukan = '2'
+            this.t_sep.rujukan.tglRujukan = this.t_sep.tglSep ?? dateDbFormat(new Date())
+            this.rujukanInternal = true
           }
         })
         .catch((err) => {
@@ -317,7 +323,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.dialogListSpri = true
       this.loadingListSpri = true
       const params = {
-        norm: pasien?.norm
+        noreg: pasien?.noreg
       }
       await api.post('v1/simrs/pendaftaran/ranap/get-list-spri', params)
         .then((resp) => {
