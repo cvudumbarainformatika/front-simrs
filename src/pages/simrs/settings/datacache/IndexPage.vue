@@ -2,8 +2,11 @@
   <q-page class="fit absolute bg-grey">
     <div class="fit column bg-white">
       <div class="col-auto bg-primary text-white">
-        <div class="q-pa-md">
-          DATA CACHE API BACKEND
+        <div class="row items-center justify-between q-pa-md">
+          <div class="f-14">
+            DATA CACHE API BACKEND
+          </div>
+          <q-btn round flat size="sm" icon="icon-mat-close" color="white" to="/settings" />
         </div>
         <q-separator />
       </div>
