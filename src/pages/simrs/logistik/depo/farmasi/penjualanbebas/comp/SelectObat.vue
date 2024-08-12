@@ -20,6 +20,7 @@
     hide-dropdown-icon
     no-error-icon
     @update:model-value="obatSelected"
+    @input-value="inputCari"
   >
     <template #prepend>
       <q-icon name="icon-mat-search" />
@@ -29,13 +30,15 @@
         <div
           v-if="scope.opt.namaobat"
         >
-          {{ scope.opt.namaobat }}
+          <span v-html="highlightText(scope.opt?.namaobat)" />
+          <!-- {{ scope.opt.namaobat }} -->
         </div>
         <div
           v-if="scope.opt.kandungan"
           :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
         >
-          ({{ scope.opt.kandungan }})
+          <!-- ({{ scope.opt.kandungan }}) -->
+          (<span class="text-deep-orange" v-html="highlightText(scope.opt?.kandungan)" />)
         </div>
         <div
           v-if="scope.opt.alokasi >0"
@@ -92,14 +95,14 @@ function obatSelected (val) {
   console.log('obat selected', val)
   setForm('satuan_kcl', val?.satuankecil ?? '-')
   setForm('kodeobat', val?.kdobat ?? '-')
-  setForm('kandungan', val?.kandungan ?? '-')
-  setForm('fornas', val?.fornas ?? '-')
-  setForm('forkit', val?.forkit ?? '-')
-  setForm('generik', val?.generik ?? '-')
-  setForm('kode108', val?.kode108 ?? '-')
-  setForm('uraian108', val?.uraian108 ?? '-')
-  setForm('kode50', val?.kode50 ?? '-')
-  setForm('uraian50', val?.uraian50 ?? '-')
+  // setForm('kandungan', val?.kandungan ?? '-')
+  // setForm('fornas', val?.fornas ?? '-')
+  // setForm('forkit', val?.forkit ?? '-')
+  // setForm('generik', val?.generik ?? '-')
+  // setForm('kode108', val?.kode108 ?? '-')
+  // setForm('uraian108', val?.uraian108 ?? '-')
+  // setForm('kode50', val?.kode50 ?? '-')
+  // setForm('uraian50', val?.uraian50 ?? '-')
   setForm('harga_beli', val?.harga_beli ?? 0)
   setForm('namaobat', val?.namaobat ?? 0)
   emits('form', form)
@@ -133,10 +136,18 @@ async function filterFn (val, update, abort) {
   })
 }
 
+const modVal = ref(null)
+const inputCari = (val) => {
+  // console.log('input cari', val)
+  if (!val) return
+  modVal.value = val
+}
 // eslint-disable-next-line no-unused-vars
-// function highlightSearchTerm (label) {
-//   const regex = new RegExp(store.namaObat, 'gi')
-//   return label?.replace(regex, '<span class="txt-highlight">$&</span>')
-// }
+function highlightText (text) {
+  // Implement your text highlighting logic here
+  // For example, you can wrap the matching text in <span> with a specific style
+  // console.log('text', text)
+  return text.replace(new RegExp(modVal.value, 'ig'), matchedText => `<span class="bg-yellow text-dark">${matchedText}</span>`)
+}
 
 </script>

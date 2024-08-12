@@ -14,7 +14,8 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
     },
     tempObat: {},
     pihakTigas: [],
-    signas: []
+    signas: [],
+    fromSigna: {}
   }),
   actions: {
     setParams (key, val) {

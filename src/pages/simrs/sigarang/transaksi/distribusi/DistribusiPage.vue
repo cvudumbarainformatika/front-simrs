@@ -336,7 +336,7 @@
                         <q-separator />
                       </div>
                       <div class="fit row no-wrap justify-evenly items-center content-center q-mt-md">
-                        <!-- <div
+                        <div
                           v-if="ruang==='Depo Habis Pakai'"
                           class="to-print-tt text-center"
                         >
@@ -350,6 +350,7 @@
                             NIP. 19740304 200801 2 005
                           </div>
                         </div>
+                        <!--
                         <div
                           v-if="ruang==='Depo PNM' || ruang==='Depo Gizi'"
                           class="to-print-tt text-center"
@@ -364,7 +365,8 @@
                             NIP. 19661125 199603 2 003
                           </div>
                         </div>
-                         <div class="to-print-tt text-center">
+                        -->
+                        <div class="to-print-tt text-center">
                           <div class="q-mb-xl">
                             Petugas Barang
                           </div>
@@ -374,7 +376,7 @@
                           <div class="">
                             NIP. 19760311 200801 1 008
                           </div>
-                        </div> -->
+                        </div>
                         <div class="to-print-tt text-center">
                           <div class="q-mb-xl">
                             Kepala Bagian / Ka.ru

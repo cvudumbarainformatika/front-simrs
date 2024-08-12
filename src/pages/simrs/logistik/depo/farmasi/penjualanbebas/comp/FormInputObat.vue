@@ -1,22 +1,31 @@
 <template>
+  <div class="row justify-end q-mr-md full-width q-mb-lg">
+    <div class="col-auto">
+      <q-btn
+        push
+        color="deep-orange"
+        no-caps
+        label="Simpan"
+        :loading="store.loadingSimpan"
+        :disable="store.loadingSimpan"
+        @click="simpan"
+      >
+        <q-tooltip>Simpan Resep dan Selesai</q-tooltip>
+      </q-btn>
+    </div>
+  </div>
   <div class="row no-wrap justify-bentween items-center full-width">
     <div class="col-6">
       <div class="row no-wrap q-col-gutter-xs items-center">
         <div class="col-auto">
           <selectObat
+            ref="refObat"
             v-model="obat"
             :depo="depo"
             @form="setObat"
           />
         </div>
-        <div class="col-auto">
-          <app-input
-            v-model="store.tempObat.jumlah"
-            label="Jumlah"
-            outlined
-            @update:model-value="setJumlah($event,'jumlah')"
-          />
-        </div>
+
         <div class="col-auto">
           <q-select
             ref="refSigna"
@@ -29,7 +38,6 @@
             clearable
             standout="bg-yellow-3"
             option-label="signa"
-
             outlined
             :rules="[sigaValid]"
             lazy-rules
@@ -41,6 +49,18 @@
             @new-value="signaCreateValue"
             @update:model-value="signaSelected"
             @keyup.enter.stop="signaEnter"
+          />
+        </div>
+
+        <div class="col-auto">
+          <app-input
+            ref="refJumlah"
+            v-model="store.tempObat.jumlah"
+            label="Jumlah"
+            outlined
+            def-err=""
+            @update:model-value="setJumlah($event,'jumlah')"
+            @keyup.enter.prevent="tambah"
           />
         </div>
       </div>
@@ -56,11 +76,13 @@
             dense
             icon="icon-mat-add"
             color="primary"
-            flat
+
             :loading="store.loadingSimpan"
             :disable="store.loadingSimpan"
             @click="tambah"
-          />
+          >
+            <q-tooltip>Tambah Obat</q-tooltip>
+          </q-btn>
         </div>
       </div>
     </div>
@@ -79,6 +101,10 @@ const apps = useAplikasiStore()
 const obat = ref(null)
 const selectObat = shallowRef(defineAsyncComponent(() => import('./SelectObat.vue')))
 const store = usePenjualanBebasFarmasiStore()
+
+const refObat = ref(null)
+const refJumlah = ref(null)
+
 const depo = computed(() => {
   const kode = apps?.user?.kdruangansim
   console.log('p', kode)
@@ -90,6 +116,9 @@ function setObat (val) {
     store.setTemp(k, val[k])
   })
   console.log('form', store.form)
+
+  refSigna.value.focus()
+  refObat.value?.$refs?.refObat.blur()
 }
 function setJumlah (evt, key) {
   const inc = evt.includes('.')
@@ -98,6 +127,7 @@ function setJumlah (evt, key) {
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   store.setTemp(key, nilai)
   if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', ((nilai * ((store.form.margin / 100) * store.tempObat.harga_beli))))
+
   console.log('set jumlah', nilai)
 }
 // signa start ----
@@ -143,13 +173,16 @@ function signaSelected (val) {
   store.setTemp('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
-  store.setTemp('jumlahdosis', parseFloat(val?.jumlah))
-  if (parseFloat(store.tempObat.jumlah) > 0) {
-    const kons = store.tempObat.jumlah / parseFloat(val?.jumlah)
-    store.setTemp('konsumsi', kons)
-  }
+  // store.setTemp('jumlahdosis', parseFloat(val?.jumlah))
+  // if (parseFloat(store.tempObat.jumlah) > 0) {
+  //   const kons = store.tempObat.jumlah / parseFloat(val?.jumlah)
+  //   store.setTemp('konsumsi', kons)
+  // }
   refSigna.value.validate()
   // }
+
+  refSigna.value.blur()
+  refJumlah.value?.refInput.focus()
 }
 function signaEnter () {
   if (!signaNewVal.value) {
@@ -159,14 +192,29 @@ function signaEnter () {
   }
 }
 // signa end ---
-
 function tambah () {
-  console.log('simpan')
-  store.form.details.push(store.tempObat)
+  console.log('tambah', store.tempObat)
+  if (parseFloat(store.tempObat?.jumlah) <= 0 || !store.tempObat?.jumlah) return
+  const index = store.form.details.findIndex(f => f.kodeobat === store.tempObat.kodeobat)
+  if (index >= 0)store.form.details[index] = store.tempObat
+  else store.form.details.push(store.tempObat)
+  store.tempObat = {}
+  signa.value = null
+  obat.value = null
+
+  refJumlah.value?.refInput.blur()
+  refObat.value?.$refs?.refObat.focus()
+
+  refSigna.value.resetValidation()
+  refObat.value?.$refs?.refObat.resetValidation()
+  refJumlah.value?.refInput.resetValidation()
   // store.simpan()
 }
+
 // eslint-disable-next-line no-unused-vars
 function simpan () {
+  const kode = store.form.details.map(m => m.kodeobat)
+  store.setForm('kode', kode)
   console.log('simpan')
   store.simpan()
 }

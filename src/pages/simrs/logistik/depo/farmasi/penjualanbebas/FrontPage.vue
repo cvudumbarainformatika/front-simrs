@@ -61,6 +61,7 @@
 <script setup>
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePenjualanBebasFarmasiStore } from 'src/stores/simrs/farmasi/penjualanbebas/penjualanbebas'
 import { defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 
 const tab = ref('rs')
@@ -77,14 +78,20 @@ const cekPanel = () => {
   return arr?.compo ?? ''
 }
 
+const store = usePenjualanBebasFarmasiStore()
+
 const apps = useAplikasiStore()
 const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
 const bisa = ref(false)
+
 onMounted(() => {
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
 
-  if (depo.length) bisa.value = true
+  if (depo.length) {
+    bisa.value = true
+    store.setForm('depo', apps?.user?.kdruangansim)
+  }
   else notifErrVue('Tidak boleh melakukan Penjualan bebas')
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
@@ -92,7 +99,10 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === obj)
   console.log('depos', depos)
-  if (depo.length) bisa.value = true
+  if (depo.length) {
+    bisa.value = true
+    store.setForm('depo', apps?.user?.kdruangansim)
+  }
   else {
     bisa.value = false
     notifErrVue('Tidak boleh melakukan Penjualan bebas')
