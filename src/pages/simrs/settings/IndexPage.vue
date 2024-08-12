@@ -82,8 +82,9 @@
                   <q-item
                     v-close-popup
                     clickable
+                    to="/settings/datacache"
                   >
-                    <q-item-section>New incognito tab</q-item-section>
+                    <q-item-section>Pengaturan Cache</q-item-section>
                   </q-item>
                   <q-separator />
                   <q-item
