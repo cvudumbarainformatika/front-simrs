@@ -30,6 +30,10 @@
                 store.pasien = val
                 store.dialogSep = true
               }"
+              @cetak-sep="(val)=>{
+                store.pasien = val
+                store.dialogCetakSep = true
+              }"
             />
             <thumbnail-view
               v-else
@@ -47,6 +51,10 @@
               @buat-sep="(val)=>{
                 store.pasien = val
                 store.dialogSep = true
+              }"
+              @cetak-sep="(val)=>{
+                store.pasien = val
+                store.dialogCetakSep = true
               }"
             />
           </transition-group>
@@ -98,6 +106,10 @@
       :pasien="store.pasien"
       :key="store.pasien"
     />
+    <dialog-cetak-sep
+      v-model="store.dialogCetakSep"
+      :pasien="store.pasien"
+    />
   </div>
 </template>
 
@@ -112,6 +124,7 @@ const ThumbnailView = defineAsyncComponent(() => import('./compHistory/Thumbnail
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
 const DialogCetakGelang = defineAsyncComponent(() => import('./compHistory/DialogCetakGelang.vue'))
 const DialogSep = defineAsyncComponent(() => import('./compHistory/DialogSep.vue'))
+const DialogCetakSep = defineAsyncComponent(() => import('./compHistory/DialogCetakSep.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
 

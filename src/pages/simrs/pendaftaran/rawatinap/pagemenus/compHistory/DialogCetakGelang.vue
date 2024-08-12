@@ -1,6 +1,6 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)" @show="init">
-    <q-card style="min-width:30vw; max-width: 30vw;">
+    <q-card style="min-width:50vw; max-width: 50vw;">
       <q-bar class="bg-primary text-white">
         <div>Cetak Gelang Pasien</div>
 
@@ -83,20 +83,17 @@
               <div class="f-10">
                 Alamat : {{ pasien?.alamatbarcode ?? '-' }}
               </div>
-              <!-- <div class="f-10">
-                Usia : {{ pasien?.usia }}
-              </div> -->
+              <BarcodeGenerator
+                :value="pasien.norm"
+                :format="'CODE128'"
+                :line-color="'#000'"
+                :width="2"
+                :height="15"
+                :element-tag="'img'"
+                :display-value="false"
+                class="self-start"
+              />
             </div>
-            <BarcodeGenerator
-              :value="pasien.norm"
-              :format="'CODE128'"
-              :line-color="'#000'"
-              :width="2"
-              :height="15"
-              :element-tag="'img'"
-              :display-value="false"
-              class="self-start"
-            />
           </div>
         </div>
       </q-card-section>

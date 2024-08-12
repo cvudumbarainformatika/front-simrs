@@ -30,6 +30,7 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
     pasien: null,
     dialogSpri: false,
     dialogSep: false,
+    dialogCetakSep: false,
     dialogCetakGelang: false,
     dialogCetakIdentitas: false,
     dialogHalaman1: false,
@@ -152,6 +153,22 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
           })
           .catch(err => {
             console.log('cekPesertaBpjs', err)
+            reject(err)
+          })
+      })
+    },
+
+    async cekSep (noSep) {
+      const params = { noSep }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pendaftaran/ranap/get-sep-from-bpjs', params)
+          .then(resp => {
+            // console.log('cekSep', resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log('cekSep', err)
             reject(err)
           })
       })

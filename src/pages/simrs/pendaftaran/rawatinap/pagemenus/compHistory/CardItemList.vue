@@ -37,9 +37,14 @@
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>
             </div>
-            <q-badge outline class="q-mt-sm q-px-md" dense :color="!item?.sep ? 'red' : 'primary'">
-              <div class="f-10">
-                {{ !item?.sep ? 'SEP BELUM TERBIT' : item?.sep }}
+            <q-badge outline class="q-mt-sm q-px-sm" dense :color="!item?.sep ? 'red' : 'primary'">
+              <div class="f-12">
+                {{ !item?.sep ? 'SEP RANAP BELUM TERBIT' : 'SEP RANAP : ' +item?.sep }}
+              </div>
+            </q-badge>
+            <q-badge v-if="item?.sep_igd" outline class="q-mt-sm q-px-sm q-ml-sm" dense :color="!item?.sep_igd ? 'red' : 'dark'">
+              <div class="f-12">
+                {{ !item?.sep_igd ? 'SEP IGD BELUM TERBIT' : 'SEP IGD : ' +item?.sep_igd }}
               </div>
             </q-badge>
           </div>
@@ -110,13 +115,13 @@
                     </template>
                     <template v-else>
                       <q-item clickable v-close-popup @click="emits('cetakSep', item)">
-                        <q-item-section>Cetak SEP</q-item-section>
+                        <q-item-section>Cetak SEP RANAP</q-item-section>
                       </q-item>
                       <q-item clickable v-close-popup @click="emits('editSep', item)">
-                        <q-item-section>Edit SEP</q-item-section>
+                        <q-item-section>Edit SEP RANAP</q-item-section>
                       </q-item>
                       <q-item clickable v-close-popup @click="emits('hapusSep', item)">
-                        <q-item-section>Hapus SEP</q-item-section>
+                        <q-item-section>Hapus SEP RANAP</q-item-section>
                       </q-item>
                     </template>
 

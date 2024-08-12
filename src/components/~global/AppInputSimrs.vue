@@ -21,7 +21,8 @@
     @update:model-value="emits('update:modelValue', $event)"
   >
     <template v-if="append" #append>
-      <q-icon :name="appendIcon" size="xs" class="cursor-pointer" v-ripple @click="emits('appendClick')" />
+      <q-icon v-if="!appendBtn" :name="appendIcon" size="xs" class="cursor-pointer" v-ripple @click="emits('appendClick')" />
+      <q-btn v-if="appendBtn" label="cek" outline color="primary" size="sm" v-ripple @click="emits('appendClick')" />
     </template>
   </q-input>
 </template>
@@ -53,6 +54,14 @@ const props = defineProps({
   appendIcon: {
     type: String,
     default: 'icon-mat-close'
+  },
+  appendBtn: {
+    type: Boolean,
+    default: false
+  },
+  appendBtnLabel: {
+    type: String,
+    default: 'Cek'
   },
   classTambahan: {
     type: String,

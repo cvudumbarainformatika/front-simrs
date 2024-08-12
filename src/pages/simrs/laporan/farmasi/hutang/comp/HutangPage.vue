@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row items-center garis-bawah">
           <div class="col-2">
-            <q-image
+            <q-img
               src="~assets/images/logo-kota-grey.png"
               spinner-color="white"
               style="height: 3.56cm; max-width: 2.86cm"
@@ -40,159 +40,39 @@
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          REKAP TAGIHAN PASIEN PER RUANGAN
+          {{ store.judulreport }}
         </div>
-        <div class="row fit justify-center items-center text-weight-bold f-14">
+        <div align="center">
+          <q-select
+            v-model="store.params.jenisreport"
+            use-input
+            fill-input
+            hide-selected
+            option-value="kodereport"
+            option-label="namareport"
+            :options="jenisreport"
+            emit-value
+            map-options
+            dense
+            outlined
+            label="Pilih Jenis Laporan Hutang"
+            transition-show="scale"
+            transition-hide="scale"
+            style="width: 350px"
+            :loading="store.loading"
+            @update:model-value="pilihjenislaporan"
+          />
+        </div>
+        <!-- <div class="row fit justify-center items-center text-weight-bold f-14">
           periode
-        </div>
+        </div> -->
       </q-card-section>
-      <q-card-section>
-        <TablePage
-          :ada-cari="false"
-          :default-btn="false"
-          :right-action="false"
-          :items="store.items"
-          :columns="store.kolom"
-          :column-hide="store.columnHide"
-          :loading="store.loading"
-          row-no
-          click-able
-          @on-click="click"
-          @refresh="store.refreshTable"
-        >
-          <template #header-left-after-search>
-            <q-form
-              ref="formRef"
-              class="row q-pa-md q-col-gutter-xs"
-              @submit="store.initAmbilData"
-            >
-              <div class="row q-col-gutter-sm">
-                <div>
-                  <q-select
-                    v-model="store.params.jenisreport"
-                    use-input
-                    fill-input
-                    hide-selected
-                    option-value="kodereport"
-                    option-label="namareport"
-                    :options="jenisreport"
-                    emit-value
-                    map-options
-                    dense
-                    outlined
-                    label="Pilih Jenis Laporan Hutang"
-                    transition-show="scale"
-                    transition-hide="scale"
-                    :rules="[
-                      val => !!val || 'Harus diisi'
-                    ]"
-                  />
-                </div>
-                <div>
-                  <app-input-date-human
-                    :model="store.tanggal.from"
-                    label="dari tanggal"
-                    outlined
-                    @db-model="setTo"
-                    @set-display="setToDisp"
-                  />
-                </div>
-                <!-- <div>
-                  <app-input-date-human
-                    :model="store.tanggal.to"
-                    label="sampai tanggal"
-                    outlined
-                    @db-model="setTox"
-                    @set-display="setToFromDisp"
-                  />
-                </div> -->
-
-                <div>
-                  <q-btn
-                    label="Cari"
-                    type="submit"
-                    color="primary"
-                    :loading="store.loading"
-                    :disable="store.loading"
-                  />
-                </div>
-              </div>
-            </q-form>
-          </template>
-          <template #cell-PBF="{row}">
-            {{ row?.PBF }}
-          </template>
-          <template #cell-Total="{row}">
-            <div class="row justify-end">
-              {{ formatDouble(row?.Total) }}
-            </div>
-          </template>
-          <template #expand="{row}">
-            <div v-if="row?.rinci?.length">
-              <div class="row f-14 text-weight-bold q-my-sm">
-                Detail Hutang Obat
-              </div>
-              <div class="row text-weight-bold bg-dark text-white items-center q-py-xs" style="border-bottom: 1px solid black;">
-                <div class="col-1">
-                  No
-                </div>
-                <div class="col-2 ">
-                  No. Penerimaan
-                </div>
-                <div class="col-1">
-                  Kode
-                </div>
-                <div class="col-4">
-                  Obat
-                </div>
-                <div class="col-1 text-right ">
-                  Jumlah
-                </div>
-                <div class="col-1 text-right">
-                  Harga
-                </div>
-                <div class="col-1 text-right">
-                  PPN
-                </div>
-                <div class="col-1 text-right ">
-                  Subtotal
-                </div>
-              </div>
-              <div v-for="(rincix,i) in row.rinci" :key="rincix">
-                <div class="row no-wrap " style="border-bottom: 1px solid black;">
-                  <div class="col-1">
-                    {{ i+1 }}
-                  </div>
-                  <div class="col-2 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
-                    {{ rincix?.nopenerimaan }}
-                  </div>
-                  <div class="col-1 text-right" style="white-space: normal; overflow-wrap: normal;">
-                    <div class="q-mr-xs">
-                      {{ rincix?.kdobat }}
-                    </div>
-                  </div>
-                  <div class="col-4 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
-                    {{ rincix?.masterobat?.nama_obat }}
-                  </div>
-                  <div class="col-1 text-right ">
-                    {{ rincix?.jml_terima_b }}
-                  </div>
-                  <div class="col-1 text-right ">
-                    {{ formatDouble(rincix?.harga) }}
-                  </div>
-                  <div class="col-1 text-right ">
-                    {{ formatDouble(rincix?.ppn_rp) }}
-                  </div>
-                  <div class="col-1 text-right ">
-                    {{ formatDouble(rincix?.subtotal) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- {{ row }} -->
-          </template>
-        </TablePage>
-      </q-card-section>
+      <div v-if="store.params.jenisreport === '1'">
+        <HutangpertanggalByPenerimaanVue />
+      </div>
+      <div v-else-if="store.params.jenisreport === '2'">
+        <HutangpertanggalByBAST />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -200,23 +80,38 @@
 import { ref } from 'vue'
 // import CustomTable from '../../../rekap/CustomTable.vue'
 import { usehutangObatPerTanggalStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggal'
-import TablePage from './TablePage.vue'
-import { formatDouble } from 'src/modules/formatter'
+// import { usehutangObatPerTanggalBastStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggalBast'
+// import TablePage from './TablePage.vue'
+// import { formatDouble } from 'src/modules/formatter'
+import HutangpertanggalByPenerimaanVue from './HutangpertanggalByPenerimaan.vue'
+import HutangpertanggalByBAST from './HutangpertanggalByBAST.vue'
 
 const store = usehutangObatPerTanggalStore()
+// const storebast = usehutangObatPerTanggalBastStore()
 const jenisreport = ref([
   {
     kodereport: '1',
-    namareport: 'Laporan Hutang Pertanggal'
+    namareport: 'Laporan Hutang Pertanggal By Penerimaan'
+  },
+  {
+    kodereport: '2',
+    namareport: 'Laporan Hutang Pertanggal By BAST'
   }
 ])
 
-function click (val) {
-  val.item.expand = !val.item.expand
+function pilihjenislaporan (val) {
+  if (val === '1') {
+    store.params.jenisreport = '1'
+    store.judulreport = 'Laporan Hutang Pertanggal By Penerimaan'
+  }
+  else {
+    store.params.jenisreport = '2'
+    store.judulreport = 'Laporan Hutang Pertanggal By BAST'
+  }
 }
 
-function setToDisp (vaal) {
-  store.tanggal.from = vaal
-}
+// function setToDisp (vaal) {
+//   store.tanggal.from = vaal
+// }
 
 </script>
