@@ -10,6 +10,7 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     item: null,
     dialogOpen: false,
     ruanganRajals: [],
+    ruanganRanaps: [],
     ruangan: null,
     dialogFormRuangan: false,
     loading: false,
@@ -18,12 +19,12 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
 
   }),
   actions: {
-    setItem(item) {
+    setItem (item) {
       this.item = null
       this.item = item
       this.dialogOpen = true
     },
-    setRuangan(val) {
+    setRuangan (val) {
       this.ruangan = null
       this.ruangan = val
 
@@ -39,7 +40,7 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
       this.dialogFormRuangan = true
     },
 
-    async getRuanganRajal() {
+    async getRuanganRajal () {
       this.loading = true
       const resp = await api.get('v1/satusehat/listRuanganRajal')
       console.log('ruangan rajal', resp)
@@ -47,12 +48,26 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
       if (resp.status === 200) {
         this.ruanganRajals = resp.data
         this.loading = false
-      } else {
+      }
+      else {
+        this.loading = false
+      }
+    },
+    async getRuanganRanap () {
+      this.loading = true
+      const resp = await api.get('v1/satusehat/listRuanganRanap')
+      console.log('ruangan ranap', resp)
+
+      if (resp.status === 200) {
+        this.ruanganRanaps = resp.data
+        this.loading = false
+      }
+      else {
         this.loading = false
       }
     },
 
-    async updateDataRuangan() {
+    async updateDataRuangan () {
       this.loading = true
       const satset = useSatsetStore()
       this.ruangan.token = satset.params.token

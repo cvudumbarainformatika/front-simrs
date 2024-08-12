@@ -5,6 +5,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { useListHistoryPendaftaranRanapStore } from './history'
 // eslint-disable-next-line no-unused-vars
 import { notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { useFormPendaftaranRanapStore } from './formpendaftaran'
 // import { api } from 'boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
 // import { date } from 'quasar'
@@ -206,6 +207,9 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     ppkRujukans: [],
     diagnosas: [],
     diagnosa: null,
+
+    dokters: [],
+    dokter: null,
     hakKelas: null,
     kelasRawat: null,
     skrDiKelas: null,
@@ -253,6 +257,8 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.listSpri = []
       this.listsRujukanPcare = []
       this.listsRujukanRs = []
+
+      this.dokter = null
     },
 
     fromListRujukan (ada, asal) {
@@ -276,7 +282,20 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     fromListSpri (ada) {
       console.log('fromListSpri', ada)
       this.t_sep.skdp.noSurat = ada?.noSuratKontrol ?? ''
-      // this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
+
+      const pendaftaran = useFormPendaftaranRanapStore()
+      this.dokters = pendaftaran.dokters
+      const cariDokter = pendaftaran?.dokters?.find(d => d.kddpjp === ada?.kodeDokter)
+
+      console.log('cariDokter', cariDokter)
+
+      this.dokter = {
+        kddpjp: ada?.kodeDokter ?? '',
+        nama: cariDokter ? cariDokter?.nama : ada?.namaDokter ?? ''
+      }
+
+      this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
+      this.dialogListSpri = false
     },
 
     // gak dipake

@@ -130,6 +130,8 @@
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history'
 import { defineAsyncComponent, onMounted } from 'vue'
 import ListPasien from './compHistory/ListPasien.vue'
+import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
+import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
 // const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
@@ -141,8 +143,11 @@ const DialogSepManual = defineAsyncComponent(() => import('./compHistory/DialogS
 const DialogCetakSep = defineAsyncComponent(() => import('./compHistory/DialogCetakSep.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
+const pendaftaran = useFormPendaftaranRanapStore()
+const sep = useBuatSepRanapStore()
 
 onMounted(() => {
+  sep.dokters = pendaftaran?.dokters
   store.getDataTable()
 })
 

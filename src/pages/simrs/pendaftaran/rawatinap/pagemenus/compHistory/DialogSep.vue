@@ -454,7 +454,7 @@
                 <!-- <div class="col-1">
                   <q-btn dense color="primary" class="q-px-md" label="Cek" @click="sep.getSpri(pasien)" />
                 </div> -->
-                <app-autocomplete
+                <!-- <app-autocomplete
                   ref="refDokter"
                   v-model="sep.t_sep.skdp.kodeDPJP"
                   label="Dokter"
@@ -472,7 +472,34 @@
 
                   }"
                   :key="sep.t_sep.skdp.kodeDPJP"
-                />
+                /> -->
+
+                <q-select
+                  ref="refSelectDokter"
+                  v-model="sep.dokter"
+                  label="Dokter"
+                  outlined
+                  dense
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="50"
+                  :options="sep.dokters"
+                  @filter="dokterFn"
+                  placeholder="Min 2 character untuk pencarian"
+                  option-label="nama"
+                  option-value="kddpjp"
+                  autofocus
+                  hide-bottom-space
+                  hide-dropdown-icon
+                  no-error-icon
+                  @update:model-value="dokterSelected"
+                  class="col-6"
+                >
+                  <template v-if="sep.dokter" #append>
+                    <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.dokter = null" class="cursor-pointer" />
+                  </template>
+                </q-select>
                 <app-input-simrs
                   v-model="sep.t_sep.user" label="Petugas" :autofocus="false"
                   class="col-4"
@@ -564,9 +591,12 @@ const props = defineProps({
   }
 })
 
+// const dokters = ref([])
+
 const init = () => {
   console.log('init')
   sep.initForm(props.pasien, app?.user?.pegawai?.nama)
+  sep.dokters = pendaftaran?.dokters
   Promise.all([
     store.cekPesertaBpjs('nokartu', props.pasien?.noka)
       .then((resp) => {
@@ -637,6 +667,23 @@ async function diagnosaFn (val, update, abort) {
   update(() => {
     sep.diagnosas = data
   })
+}
+
+function dokterFn (val, update, abort) {
+  if (val.length < 1) {
+    update(() => {
+      sep.dokters = pendaftaran.dokters
+    })
+  }
+  update(() => {
+    const needle = val?.toLowerCase()
+    sep.dokters = pendaftaran.dokters.filter((v) => v?.nama?.toLowerCase().indexOf(needle) > -1 || v?.kddpjp?.toLowerCase().indexOf(needle) > -1)
+  })
+}
+
+const dokterSelected = (val) => {
+  console.log('selected dokter', val)
+  sep.t_sep.skdp.kodeDPJP = val?.kddpjp
 }
 
 const ppkRujukanSelected = (val) => {
