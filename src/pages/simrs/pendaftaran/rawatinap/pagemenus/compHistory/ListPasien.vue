@@ -26,7 +26,7 @@
       </template>
 
       <!-- </Suspense> -->
-      <div style="padding-bottom: 300px" />
+      <div style="padding-bottom: 80px" />
     </q-list>
 
     <!-- menu di list -->

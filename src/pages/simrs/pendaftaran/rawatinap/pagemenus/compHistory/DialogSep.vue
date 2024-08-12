@@ -161,9 +161,14 @@
                   class="col-7"
                 />
                 <div class="col-5">
-                  <q-btn dense class="full-width" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
-                    Get Rujukan
-                  </q-btn>
+                  <div class="flex q-gutter-sm">
+                    <q-btn dense class="q-px-sm" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
+                      Get
+                    </q-btn>
+                    <q-btn dense class="q-px-md" color="dark" @click="sep.onPreviewListRujukan(pasien)">
+                      List Rujukan
+                    </q-btn>
+                  </div>
                 </div>
                 <app-input-date
                   v-if="!sep.rujukanInternal"
@@ -379,12 +384,15 @@
                   hide-dropdown-icon
                   no-error-icon
                   @update:model-value="diagnosaSelected"
-                  class="col-12"
+                  class="col-9"
                 >
                   <template v-if="sep.diagnosa" #append>
                     <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.diagnosa = null" class="cursor-pointer" />
                   </template>
                 </q-select>
+                <div class="col-3 text-right">
+                  <q-btn dense color="dark" class="q-px-md" label="Cek Diagnosa Pasien" @click="sep.dialogDiagnosa = true" />
+                </div>
                 <app-autocomplete
                   ref="refTujuanKunjungan"
                   v-model="sep.t_sep.tujuanKunj"
@@ -479,9 +487,6 @@
           <div class="q-pa-md row justify-between items-center">
             <div class="flex q-gutter-sm">
               <q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" />
-              <q-btn dense class="q-px-md" color="dark" @click="sep.onPreviewListRujukan(pasien)">
-                List Rujukan
-              </q-btn>
             </div>
             <div>
               <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" label="Create SEP" color="yellow-3" text-color="dark" />
@@ -514,6 +519,20 @@
       :terpilih="sep.t_sep.jaminan.penjamin.suplesi.noSepSuplesi"
       @pilih="val=>sep.t_sep.jaminan.penjamin.suplesi.noSepSuplesi = (val.noSep)"
     />
+    <!-- Dialog List Diagnosa -->
+    <DialogDiagnosaPasien
+      v-model="sep.dialogDiagnosa"
+      :pasien="pasien"
+      @pilih="val=>{
+        // console.log('diagnosa pilih', val);
+        sep.diagnosa = {
+          kode: val?.kode,
+          nama: val?.kode + ' - ' + val?.inggris
+        }
+        sep.dialogDiagnosa = false
+      }"
+      :key="pasien"
+    />
   </q-dialog>
 </template>
 
@@ -536,6 +555,7 @@ const pendaftaran = useFormPendaftaranRanapStore()
 const DialogListRujukan = defineAsyncComponent(() => import('./DialogListRujukan.vue'))
 const DialogListSpri = defineAsyncComponent(() => import('./DialogListSpri.vue'))
 const DialogListSuplesi = defineAsyncComponent(() => import('./DialogListSuplesi.vue'))
+const DialogDiagnosaPasien = defineAsyncComponent(() => import('./DialogDiagnosaPasien.vue'))
 
 const props = defineProps({
   pasien: {

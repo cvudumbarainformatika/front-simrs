@@ -191,6 +191,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     loadingListSpri: false,
     dialogListRujukan: false,
     dialogListSpri: false,
+    dialogDiagnosa: false,
 
     listSuplesis: [],
     loadingListSuplesi: false,
@@ -237,6 +238,21 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.t_sep.sepRanap.nama = pasien?.nama_panggil ?? ''
       this.t_sep.sepRanap.tglLahir = pasien?.tgllahir ?? ''
       this.t_sep.sepRanap.jeniskelamin = pasien?.kelamin ?? ''
+
+      this.diagnosa = null
+      this.ppkRujukan = {
+        kode: null,
+        nama: null
+      }
+      this.hakKelas = null
+      this.kelasRawat = null
+      this.skrDiKelas = null
+      this.naikKelas = false
+      this.cekRujukanPeserta = null
+
+      this.listSpri = []
+      this.listsRujukanPcare = []
+      this.listsRujukanRs = []
     },
 
     fromListRujukan (ada, asal) {
@@ -432,17 +448,17 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       await api.post('v1/simrs/pendaftaran/ranap/create-sep-ranap', this.t_sep)
         .then((resp) => {
           console.log('resp submit', resp)
-          const history = useListHistoryPendaftaranRanapStore()
           this.loading = false
           if (resp.data?.metadata?.code === '200') {
-            const result = resp?.data?.result?.sep
+            const result = resp?.data?.response?.sep
             if (result) {
+              const history = useListHistoryPendaftaranRanapStore()
               const items = history?.items
               const index = items.findIndex((item) => item.noreg === this.t_sep.noreg)
               items[index].sep = result?.noSep
             }
             notifSuccessVue(resp?.data?.metadata?.message)
-            notifCenterVue('Berhasil Buat SEP')
+            // notifCenterVue('Berhasil Buat SEP')
 
             // tutup dialog
             history.dialogSep = false
