@@ -5,7 +5,7 @@
     separator
   >
     <q-item
-      v-for="(item, i) in items"
+      v-for="(item, i) in itemFilterred"
       :key="i"
     >
       <q-item-section avatar>
@@ -15,9 +15,9 @@
         />
       </q-item-section>
       <q-item-section>
-        <q-item-label>{{ item.nama }}</q-item-label>
+        <q-item-label>{{ item?.nama }}</q-item-label>
         <q-item-label caption>
-          {{ item.desc }}
+          {{ item?.gruper }}
         </q-item-label>
       </q-item-section>
       <q-item-section side>
@@ -29,7 +29,11 @@
             class="q-px-md"
             size="md"
             color="primary"
-            @click="store.setItem(item)"
+            @click="()=> {
+              org.setItem(item)
+              store.departement = item
+              org.dialogRuangan = true
+            }"
           />
         </q-item-label>
       </q-item-section>
@@ -38,16 +42,22 @@
 </template>
 
 <script setup>
+
 import { useLocationSatsetStore } from 'src/stores/satset/location'
-import { ref } from 'vue'
+import { useOrganisasiStore } from 'src/stores/satset/organisasi'
+import { computed } from 'vue'
+// import { ref } from 'vue'
 
 const store = useLocationSatsetStore()
+const org = useOrganisasiStore()
 
-const items = ref([
-  { nama: 'Ruangan Polikliknik', desc: 'Instalasi Rawat Jalan', content: 'poli', comp: 'PagePoli' },
-  { nama: 'Ruangan Rawat Inap', desc: 'Instalasi Rawat Inap', content: 'ranap', comp: 'PageRanapDua' },
-  { nama: 'Ruangan Laboratorium', desc: 'Laboratorium', content: 'laborat', comp: 'PageLaborat' },
-  { nama: 'Ruangan Radiologi', desc: 'Radiologi', content: 'radiologi', comp: 'PageRadiologi' },
-  { nama: 'Ruangan Farmasi', desc: 'Farmasi', content: 'farmasi', comp: 'PageFarmasi' }
-])
+const itemFilterred = computed(() => {
+  const arr = [...org.items]
+
+  if (org.search.length > 0) {
+    return arr.filter(i => i?.nama?.toLowerCase().indexOf(org.search.toLowerCase()) > -1 || i?.gruper?.toLowerCase().indexOf(org.search.toLowerCase()) > -1)
+  }
+
+  return arr
+})
 </script>

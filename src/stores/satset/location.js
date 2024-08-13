@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifErr, notifSuccess } from 'src/modules/utils'
+// eslint-disable-next-line no-unused-vars
+import { notifErr, notifErrVue, notifSuccess } from 'src/modules/utils'
+// eslint-disable-next-line no-unused-vars
 import { useSatsetStore } from '.'
 // import { routerInstance } from 'src/boot/router'
 // import * as storage from 'src/modules/storage'
@@ -11,11 +13,16 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     dialogOpen: false,
     ruanganRajals: [],
     ruanganRanaps: [],
+    ruangans: [],
     ruangan: null,
     dialogFormRuangan: false,
     loading: false,
+    type: 'rajal',
 
-    organization_id: '100026342'
+    search: '',
+
+    organization_id: '100026342',
+    departement: null
 
   }),
   actions: {
@@ -24,7 +31,7 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
       this.item = item
       this.dialogOpen = true
     },
-    setRuangan (val) {
+    setRuangan (val, type) {
       this.ruangan = null
       this.ruangan = val
 
@@ -37,7 +44,10 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
       this.ruangan.rw = '-'
       this.ruangan.longitude = '-7.744970846652828'
       this.ruangan.latitude = '113.21050988068147'
+
+      this.ruangan.type = type
       this.dialogFormRuangan = true
+      console.log('ruangan', this.ruangan)
     },
 
     async getRuanganRajal () {
@@ -66,29 +76,63 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
         this.loading = false
       }
     },
+    async getRuanganByGroup (group) {
+      this.ruangans = []
+      this.loading = true
+      const params = { params: { group } }
+      const resp = await api.get('v1/satusehat/list-ruangan-by-group', params)
+      console.log('ruangan' + group, resp)
+      if (resp.status === 200) {
+        this.ruangans = resp.data
+        this.loading = false
+      }
+      else {
+        this.loading = false
+      }
+    },
 
     async updateDataRuangan () {
       this.loading = true
-      const satset = useSatsetStore()
-      this.ruangan.token = satset.params.token
+      // const satset = useSatsetStore()
+      // this.ruangan.token = satset.params.token
+
+      // console.log('post ruangan', this.ruangan)
       return new Promise((resolve, reject) => {
         api.post('v1/satusehat/updateLocation', this.ruangan)
           .then(resp => {
-            // console.log(resp)
-            if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
-              satset.DELETE_TOKEN_SATSET()
+            console.log('resp location', resp)
+
+            // if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+            //   satset.DELETE_TOKEN_SATSET()
+            //   return
+            // }
+            this.loading = false
+            if (resp.data?.message === 'failed') {
+              notifErrVue(resp?.data?.data?.response?.issue[0]?.code ?? 'Gagal Update Location Ke satu sehat')
               return
             }
-            if (resp.data.message === 'failed') {
-              notifErr(resp)
+            // else {
+            if (this.ruangan.type === 'rajal') {
+              const items = this.ruanganRajals
+              const fn = items.findIndex(x => x.id === this.ruangan.id)
+              items[fn].satset_uuid = resp.data?.data?.uuid
+              this.ruanganRajals = items
             }
-            this.loading = false
+            else if (this.ruangan.type === 'ranap') {
+              const items = this.ruanganRanaps
+              const fn = items.findIndex(x => x.id === this.ruangan.id)
+              // console.log('fn', fn)
+              items[fn].satset_uuid = resp.data?.data?.uuid
+              this.ruanganRanaps = items
+            }
+            // }
+
             notifSuccess(resp)
             resolve(resp)
           }).catch(err => {
             console.log(err)
             this.loading = false
-            notifErr(err)
+            // notifErr(err)
             reject(err)
           })
       })

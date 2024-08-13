@@ -70,7 +70,7 @@ onMounted(() => {
   }
 })
 
-function setItem(val) {
+function setItem (val) {
   item.value = val
   dialogOpen.value = true
 }
