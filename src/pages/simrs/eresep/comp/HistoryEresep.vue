@@ -91,7 +91,7 @@
                 >
                   <q-item
                     v-for="(rinc,j) in items?.permintaanresep"
-                    :key="rinc"
+                    :key="j"
                   >
                     <q-item-section style="width: 40%;">
                       <div class="row">
@@ -157,7 +157,7 @@
                         v-model="rinc.checked"
                         :val="rinc"
                         color="teal"
-                        @update:model-value="checked($event,items?.permintaanresep)"
+                        @update:model-value="checked($event,items?.permintaanresep, j)"
                       />
                     </q-item-section>
                     <q-item-section side style="width:20%">
@@ -409,7 +409,7 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { humanDate } from 'src/modules/formatter'
 // import { pathImg } from 'src/boot/axios'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { notifErrVue } from 'src/modules/utils'
+// import { notifErrVue } from 'src/modules/utils'
 
 // eslint-disable-next-line no-unused-vars
 const cekobats = ref([])
@@ -447,17 +447,7 @@ function pilihData (row) {
 // eslint-disable-next-line no-unused-vars
 function copyResep (val, indexlist, tipe) {
   store.loading = true
-  let permintaan = ''
-  if (store.permintaanDuplicate?.length === 0 && val?.permintaanresep.length > 5) {
-    store.loading = false
-    return notifErrVue('Maaf duplicate resep maksimal 5 Obat, silahkan pilih obat yang diperlukan maksimal 5 Obat!!!')
-  }
-  if (store?.permintaanDuplicate.length === 0) {
-    permintaan = val?.permintaanresep
-  }
-  else {
-    permintaan = store?.permintaanDuplicate
-  }
+  const permintaan = val?.permintaanresep
 
   const permintaanracik = val?.permintaanracikan
 
@@ -470,9 +460,8 @@ function copyResep (val, indexlist, tipe) {
   }
 }
 
-function checked (evt, val) {
-  console.log('DATADATA', evt, val)
-  store.permintaanDuplicate = val
+function checked (evt, val, index) {
+  store.permintaanDuplicate = true
 }
 
 onMounted(() => {
