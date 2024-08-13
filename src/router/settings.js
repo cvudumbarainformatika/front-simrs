@@ -10,6 +10,11 @@ const settings =
         path: '/settings/aplikasi',
         name: 'settings.aplikasi',
         component: () => import('pages/simrs/settings/IndexPage.vue')
+      },
+      {
+        path: '/settings/datacache',
+        name: 'settings.datacache',
+        component: () => import('pages/simrs/settings/datacache/IndexPage.vue')
       }
 
     ]

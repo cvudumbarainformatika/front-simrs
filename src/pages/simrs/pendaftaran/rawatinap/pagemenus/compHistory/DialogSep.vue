@@ -161,11 +161,17 @@
                   class="col-7"
                 />
                 <div class="col-5">
-                  <q-btn dense class="full-width" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
-                    Get Rujukan
-                  </q-btn>
+                  <div class="flex q-gutter-sm">
+                    <q-btn dense class="q-px-sm" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
+                      Get
+                    </q-btn>
+                    <q-btn dense class="q-px-md" color="dark" @click="sep.onPreviewListRujukan(pasien)">
+                      List Rujukan
+                    </q-btn>
+                  </div>
                 </div>
                 <app-input-date
+                  v-if="!sep.rujukanInternal"
                   :model="sep.t_sep.rujukan.tglRujukan"
                   label="Tanggal Rujukan"
                   outlined
@@ -173,6 +179,7 @@
                   class="col-5"
                 />
                 <app-autocomplete
+                  v-if="!sep.rujukanInternal"
                   ref="refAsalRujukan"
                   v-model="sep.t_sep.rujukan.asalRujukan"
                   label="Asal Rujukan"
@@ -188,6 +195,7 @@
                   class="col-7"
                 />
                 <q-select
+                  v-if="!sep.rujukanInternal"
                   ref="refSelectPpkRujukan"
                   v-model="sep.ppkRujukan"
                   label="PPK Rujukan"
@@ -376,12 +384,15 @@
                   hide-dropdown-icon
                   no-error-icon
                   @update:model-value="diagnosaSelected"
-                  class="col-12"
+                  class="col-9"
                 >
                   <template v-if="sep.diagnosa" #append>
                     <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.diagnosa = null" class="cursor-pointer" />
                   </template>
                 </q-select>
+                <div class="col-3 text-right">
+                  <q-btn dense color="dark" class="q-px-md" label="Cek Diagnosa Pasien" @click="sep.dialogDiagnosa = true" />
+                </div>
                 <app-autocomplete
                   ref="refTujuanKunjungan"
                   v-model="sep.t_sep.tujuanKunj"
@@ -443,7 +454,7 @@
                 <!-- <div class="col-1">
                   <q-btn dense color="primary" class="q-px-md" label="Cek" @click="sep.getSpri(pasien)" />
                 </div> -->
-                <app-autocomplete
+                <!-- <app-autocomplete
                   ref="refDokter"
                   v-model="sep.t_sep.skdp.kodeDPJP"
                   label="Dokter"
@@ -461,7 +472,34 @@
 
                   }"
                   :key="sep.t_sep.skdp.kodeDPJP"
-                />
+                /> -->
+
+                <q-select
+                  ref="refSelectDokter"
+                  v-model="sep.dokter"
+                  label="Dokter"
+                  outlined
+                  dense
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="50"
+                  :options="sep.dokters"
+                  @filter="dokterFn"
+                  placeholder="Min 2 character untuk pencarian"
+                  option-label="nama"
+                  option-value="kddpjp"
+                  autofocus
+                  hide-bottom-space
+                  hide-dropdown-icon
+                  no-error-icon
+                  @update:model-value="dokterSelected"
+                  class="col-6"
+                >
+                  <template v-if="sep.dokter" #append>
+                    <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.dokter = null" class="cursor-pointer" />
+                  </template>
+                </q-select>
                 <app-input-simrs
                   v-model="sep.t_sep.user" label="Petugas" :autofocus="false"
                   class="col-4"
@@ -476,9 +514,6 @@
           <div class="q-pa-md row justify-between items-center">
             <div class="flex q-gutter-sm">
               <q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" />
-              <q-btn dense class="q-px-md" color="dark" @click="sep.onPreviewListRujukan(pasien)">
-                List Rujukan
-              </q-btn>
             </div>
             <div>
               <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" label="Create SEP" color="yellow-3" text-color="dark" />
@@ -500,6 +535,8 @@
     <DialogListSpri
       v-model="sep.dialogListSpri" :loading="sep.loadingListSpri" :lists="sep.listSpri"
       :terpilih="sep.t_sep.skdp.noSurat"
+      :pasien="pasien"
+      @get-spri="val=>sep.getSpri(val)"
       @pilih="val=>sep.fromListSpri(val)"
     />
 
@@ -508,6 +545,20 @@
       v-model="sep.dialogListSuplesi" :loading="sep.loadingListSuplesi" :lists="sep.listSuplesis"
       :terpilih="sep.t_sep.jaminan.penjamin.suplesi.noSepSuplesi"
       @pilih="val=>sep.t_sep.jaminan.penjamin.suplesi.noSepSuplesi = (val.noSep)"
+    />
+    <!-- Dialog List Diagnosa -->
+    <DialogDiagnosaPasien
+      v-model="sep.dialogDiagnosa"
+      :pasien="pasien"
+      @pilih="val=>{
+        // console.log('diagnosa pilih', val);
+        sep.diagnosa = {
+          kode: val?.kode,
+          nama: val?.kode + ' - ' + val?.inggris
+        }
+        sep.dialogDiagnosa = false
+      }"
+      :key="pasien"
     />
   </q-dialog>
 </template>
@@ -531,6 +582,7 @@ const pendaftaran = useFormPendaftaranRanapStore()
 const DialogListRujukan = defineAsyncComponent(() => import('./DialogListRujukan.vue'))
 const DialogListSpri = defineAsyncComponent(() => import('./DialogListSpri.vue'))
 const DialogListSuplesi = defineAsyncComponent(() => import('./DialogListSuplesi.vue'))
+const DialogDiagnosaPasien = defineAsyncComponent(() => import('./DialogDiagnosaPasien.vue'))
 
 const props = defineProps({
   pasien: {
@@ -539,11 +591,14 @@ const props = defineProps({
   }
 })
 
+// const dokters = ref([])
+
 const init = () => {
   console.log('init')
   sep.initForm(props.pasien, app?.user?.pegawai?.nama)
+  sep.dokters = pendaftaran?.dokters
   Promise.all([
-    store.cekPesertaBpjs('nik', props.pasien?.nktp)
+    store.cekPesertaBpjs('nokartu', props.pasien?.noka)
       .then((resp) => {
         console.log('cek Peserta', store.cekPeserta)
         sep.hakKelas = store.cekPeserta?.hakKelas?.kode
@@ -551,13 +606,13 @@ const init = () => {
         sep.t_sep.sepRanap.jenispeserta = store.cekPeserta?.jenisPeserta?.keterangan
         sep.t_sep.sepRanap.hakKelas = store.cekPeserta?.hakKelas?.keterangan
         sep.t_sep.sepRanap.namaAsuransiCob = store.cekPeserta?.cob?.nmAsuransi
-        sep.t_sep.rujukan.ppkRujukan = store.cekPeserta?.provUmum?.kdProvider
-        sep.t_sep.rujukan.asalRujukan = '2'
+        // sep.t_sep.rujukan.ppkRujukan = store.cekPeserta?.provUmum?.kdProvider
+        // sep.t_sep.rujukan.asalRujukan = '2'
 
-        sep.ppkRujukan = {
-          kode: store.cekPeserta?.provUmum?.kdProvider,
-          nama: store.cekPeserta?.provUmum?.nmProvider
-        }
+        // sep.ppkRujukan = {
+        //   kode: store.cekPeserta?.provUmum?.kdProvider,
+        //   nama: store.cekPeserta?.provUmum?.nmProvider
+        // }
       }),
     // sep.getRujukanBridging(props.pasien),
     sep.getPropinsiBpjs()
@@ -612,6 +667,23 @@ async function diagnosaFn (val, update, abort) {
   update(() => {
     sep.diagnosas = data
   })
+}
+
+function dokterFn (val, update, abort) {
+  if (val.length < 1) {
+    update(() => {
+      sep.dokters = pendaftaran.dokters
+    })
+  }
+  update(() => {
+    const needle = val?.toLowerCase()
+    sep.dokters = pendaftaran.dokters.filter((v) => v?.nama?.toLowerCase().indexOf(needle) > -1 || v?.kddpjp?.toLowerCase().indexOf(needle) > -1)
+  })
+}
+
+const dokterSelected = (val) => {
+  console.log('selected dokter', val)
+  sep.t_sep.skdp.kodeDPJP = val?.kddpjp
 }
 
 const ppkRujukanSelected = (val) => {

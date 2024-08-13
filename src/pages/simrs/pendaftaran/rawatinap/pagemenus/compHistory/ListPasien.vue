@@ -19,13 +19,14 @@
             @spri="(val)=>emits('spri', val)"
             @cetak-gelang="(val)=>emits('cetakGelang', val)"
             @buat-sep="(val)=>emits('buatSep', val)"
+            @sep-manual="(val)=>emits('sepManual', val)"
             @cetak-sep="(val)=>emits('cetakSep', val)"
           />
         </TransitionGroup>
       </template>
 
       <!-- </Suspense> -->
-      <div style="padding-bottom: 300px" />
+      <div style="padding-bottom: 80px" />
     </q-list>
 
     <!-- menu di list -->

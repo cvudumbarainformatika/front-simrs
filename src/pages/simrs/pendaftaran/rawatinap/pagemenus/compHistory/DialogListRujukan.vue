@@ -7,8 +7,8 @@
           inline-label
           class="bg-primary text-white shadow-2"
         >
-          <q-tab name="pcare" label="Pcare" />
           <q-tab name="rs" label="Rumah Sakit" />
+          <q-tab name="pcare" label="Pcare" />
         </q-tabs>
       </q-card-section>
 
@@ -88,5 +88,5 @@ const props = defineProps({
 
 const emits = defineEmits(['pilih'])
 
-const tab = ref('pcare')
+const tab = ref('rs')
 </script>

@@ -244,7 +244,7 @@ import { ref } from 'vue'
 const store = useLocationSatsetStore()
 const formRef = ref()
 
-function onSubmit() {
+function onSubmit () {
   store.updateDataRuangan().then(() => {
     store.getRuanganRajal()
     store.dialogFormRuangan = false

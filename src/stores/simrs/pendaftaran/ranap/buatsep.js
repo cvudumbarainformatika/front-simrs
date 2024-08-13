@@ -5,6 +5,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { useListHistoryPendaftaranRanapStore } from './history'
 // eslint-disable-next-line no-unused-vars
 import { notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { useFormPendaftaranRanapStore } from './formpendaftaran'
 // import { api } from 'boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
 // import { date } from 'quasar'
@@ -191,6 +192,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     loadingListSpri: false,
     dialogListRujukan: false,
     dialogListSpri: false,
+    dialogDiagnosa: false,
 
     listSuplesis: [],
     loadingListSuplesi: false,
@@ -205,10 +207,15 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     ppkRujukans: [],
     diagnosas: [],
     diagnosa: null,
+
+    dokters: [],
+    dokter: null,
     hakKelas: null,
     kelasRawat: null,
     skrDiKelas: null,
-    naikKelas: false
+    naikKelas: false,
+
+    rujukanInternal: true
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
@@ -222,7 +229,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.t_sep.noreg = pasien?.noreg
       this.t_sep.noKartu = pasien?.noka
       this.t_sep.noMR = pasien?.norm
-      this.t_sep.tglSep = dateDbFormat(new Date())
+      // this.t_sep.tglSep = dateDbFormat(new Date())
       this.t_sep.jnsPelayanan = '1'
       this.kelasRawat = (pasien.kelasruangan === '1' || pasien.kelasruangan === '2' || pasien.kelasruangan === '3') ? parseInt(pasien?.kelasruangan) : pasien.kelasruangan ?? null
 
@@ -235,6 +242,23 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.t_sep.sepRanap.nama = pasien?.nama_panggil ?? ''
       this.t_sep.sepRanap.tglLahir = pasien?.tgllahir ?? ''
       this.t_sep.sepRanap.jeniskelamin = pasien?.kelamin ?? ''
+
+      this.diagnosa = null
+      this.ppkRujukan = {
+        kode: null,
+        nama: null
+      }
+      this.hakKelas = null
+      this.kelasRawat = null
+      this.skrDiKelas = null
+      this.naikKelas = false
+      this.cekRujukanPeserta = null
+
+      this.listSpri = []
+      this.listsRujukanPcare = []
+      this.listsRujukanRs = []
+
+      this.dokter = null
     },
 
     fromListRujukan (ada, asal) {
@@ -256,9 +280,22 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     },
 
     fromListSpri (ada) {
-      // console.log('fromListSpri', ada)
+      console.log('fromListSpri', ada)
       this.t_sep.skdp.noSurat = ada?.noSuratKontrol ?? ''
-      // this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
+
+      const pendaftaran = useFormPendaftaranRanapStore()
+      this.dokters = pendaftaran.dokters
+      const cariDokter = pendaftaran?.dokters?.find(d => d.kddpjp === ada?.kodeDokter)
+
+      console.log('cariDokter', cariDokter)
+
+      this.dokter = {
+        kddpjp: ada?.kodeDokter ?? '',
+        nama: cariDokter ? cariDokter?.nama : ada?.namaDokter ?? ''
+      }
+
+      this.t_sep.skdp.kodeDPJP = ada?.kodeDokter ?? ''
+      this.dialogListSpri = false
     },
 
     // gak dipake
@@ -301,10 +338,14 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       await api.get('v1/simrs/pendaftaran/ranap/get-no-rujukan-internal')
         .then((resp) => {
           this.loadingRujukanInternal = false
-          console.log('No Rujukan', resp)
+          // console.log('No Rujukan', resp)
           if (resp.status === 200) {
             this.t_sep.rujukan.noRujukan = resp.data
-            this.t_sep.rujukan.tglRujukan = dateDbFormat(new Date())
+            // this.t_sep.rujukan.tglRujukan = dateDbFormat(new Date())
+            this.t_sep.rujukan.ppkRujukan = '1327R001'
+            this.t_sep.rujukan.asalRujukan = '2'
+            this.t_sep.rujukan.tglRujukan = this.t_sep.tglSep ?? dateDbFormat(new Date())
+            this.rujukanInternal = true
           }
         })
         .catch((err) => {
@@ -317,7 +358,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.dialogListSpri = true
       this.loadingListSpri = true
       const params = {
-        norm: pasien?.norm
+        noreg: pasien?.noreg
       }
       await api.post('v1/simrs/pendaftaran/ranap/get-list-spri', params)
         .then((resp) => {
@@ -426,17 +467,17 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       await api.post('v1/simrs/pendaftaran/ranap/create-sep-ranap', this.t_sep)
         .then((resp) => {
           console.log('resp submit', resp)
-          const history = useListHistoryPendaftaranRanapStore()
           this.loading = false
           if (resp.data?.metadata?.code === '200') {
-            const result = resp?.data?.result?.sep
+            const result = resp?.data?.response?.sep
             if (result) {
+              const history = useListHistoryPendaftaranRanapStore()
               const items = history?.items
               const index = items.findIndex((item) => item.noreg === this.t_sep.noreg)
               items[index].sep = result?.noSep
             }
             notifSuccessVue(resp?.data?.metadata?.message)
-            notifCenterVue('Berhasil Buat SEP')
+            // notifCenterVue('Berhasil Buat SEP')
 
             // tutup dialog
             history.dialogSep = false
