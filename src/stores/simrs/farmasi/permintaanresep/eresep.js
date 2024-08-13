@@ -77,7 +77,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     messageCopied: [],
     pemberianObatCek: [],
     permintaanResepDuplicate: [],
-    noresepDuplicate: ''
+    noresepDuplicate: '',
+    checkObat: [],
+    permintaanDuplicate: []
     // section racikan end---
   }),
   actions: {
@@ -966,6 +968,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         if (resp.status === 200) {
           if (resp.data?.length) {
             const arr = resp.data
+            console.log('hisr', arr)
+
+            arr.forEach(hi => {
+              hi?.permintaanresep?.forEach(ri => {
+                if (ri?.mobat?.jenis_perbekalan.toLowerCase() === 'obat') ri.checked = false
+              })
+            })
             this.historyMeta = null
             this.historys = arr
             this.statusCopiedRacik = []
@@ -1014,6 +1023,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     cekObat (val, obat, indexlist, tipe) {
       this.loadingObat = true
       let kdobatArray = ''
+
+      if (val?.length > 5 || this.permintaanDuplicate.length > 5) {
+        this.loading = false
+        return notifErrVue('Maaf duplicate resep maksimal 5 Obat, silahkan pilih obat yang diperlukan maksimal 5 Obat!!!')
+      }
+
       if (obat.length) {
         kdobatArray = obat.map(item => item?.kdobat)
       }
@@ -1071,7 +1086,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     // }
     },
     simpanCopyResep (val, obat, indexlist, tipe) {
-      const resep = val?.permintaanresep
+      let resep = ''
+      if (this.permintaanDuplicate.length === 0) {
+        resep = val?.permintaanresep
+      }
+      else {
+        resep = this.permintaanDuplicate
+      }
+
       const racik = val?.permintaanracikan
       const rinracik = val?.rincianracik
       const kirimResep = []
@@ -1110,6 +1132,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               uraian108: obats?.uraian108,
 
               // data duplicate
+              jenis_perbekalan: res?.mobat?.jenis_perbekalan,
               aturan: res?.aturan,
               jumlah_diminta: res?.jumlah,
               jumlahdosis: res?.jumlah,
@@ -1214,10 +1237,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             resolve(resp)
 
             resp.data.forEach((element, index) => {
+              console.log('element', element, val)
               if (element?.messageError) {
                 if (tipe === 'racik') {
                   if (element?.messageError?.cek) {
                     const key = `${indexlist}-${index}`
+                    // const key =
                     this.statusCopiedRacik[key] = false
                     this.pemberianObatCek[key] = element?.messageError
                     this.permintaanResepDuplicate[key] = data?.kirimResep[index]

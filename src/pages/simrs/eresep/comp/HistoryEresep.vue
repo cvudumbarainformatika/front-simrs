@@ -131,13 +131,6 @@
                             </div>
                             <div class="col-4">
                               {{ rinc?.jumlah }}
-                            <!-- <app-input
-                                v-model="rinc.jumlah"
-                                outlined
-                                valid
-                                label="Jumlah"
-                                @update:model-value="setJumlah($event,rinc,'jumlah')"
-                              /> -->
                             </div>
                           </div>
                           <div class="row q-mt-sm">
@@ -158,6 +151,14 @@
                           </div>
                         </div>
                       </div>
+                    </q-item-section>
+                    <q-item-section v-if="items?.permintaanresep?.length > 5 && rinc?.mobat?.jenis_perbekalan === 'Obat'" side style="width:8%">
+                      <q-checkbox
+                        v-model="rinc.checked"
+                        :val="rinc"
+                        color="teal"
+                        @update:model-value="checked($event,items?.permintaanresep)"
+                      />
                     </q-item-section>
                     <q-item-section side style="width:20%">
                       <div v-if="store.statusCopied[`${index}-${j}`] === true" class="row col-6 items-center text-green">
@@ -408,10 +409,13 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { humanDate } from 'src/modules/formatter'
 // import { pathImg } from 'src/boot/axios'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
-// import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 
+// eslint-disable-next-line no-unused-vars
+const cekobats = ref([])
 // const apps = useAplikasiStore()
 const store = usePermintaanEResepStore()
+// const checkobat = ref(false)
 const props = defineProps({
   pasien: {
     type: Object,
@@ -443,15 +447,32 @@ function pilihData (row) {
 // eslint-disable-next-line no-unused-vars
 function copyResep (val, indexlist, tipe) {
   store.loading = true
-  const permintaan = val?.permintaanresep
+  let permintaan = ''
+  if (store.permintaanDuplicate?.length === 0 && val?.permintaanresep.length > 5) {
+    store.loading = false
+    return notifErrVue('Maaf duplicate resep maksimal 5 Obat, silahkan pilih obat yang diperlukan maksimal 5 Obat!!!')
+  }
+  if (store?.permintaanDuplicate.length === 0) {
+    permintaan = val?.permintaanresep
+  }
+  else {
+    permintaan = store?.permintaanDuplicate
+  }
+
   const permintaanracik = val?.permintaanracikan
 
   if (tipe === 'nonRacik') {
+    console.log('VAVAL', val)
     store.cekObat(val, permintaan, indexlist, tipe)
   }
   else {
     store.cekObat(val, permintaanracik, indexlist, tipe)
   }
+}
+
+function checked (evt, val) {
+  console.log('DATADATA', evt, val)
+  store.permintaanDuplicate = val
 }
 
 onMounted(() => {
