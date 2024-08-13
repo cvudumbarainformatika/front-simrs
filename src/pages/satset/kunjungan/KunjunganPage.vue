@@ -57,8 +57,8 @@ const auth = computed(() => {
 })
 
 const items = ref([
-  { nama: 'Pasien Rajal', icon: 'icon-mat-personal_injury', desc: 'Kunjungan Pasien Rawat Jalan', content: 'rajal', comp: 'PageBlock' },
-  { nama: 'Pasien Ranap', icon: 'icon-mat-bedroom_parent', desc: 'Kunjungan Pasien Rawat Inap', content: 'rajal', comp: 'PageRanap' }
+  { nama: 'Pasien Rajal', icon: 'icon-mat-personal_injury', desc: 'Kunjungan Pasien Rawat Jalan', content: 'rajal', comp: 'BlockPage' },
+  { nama: 'Pasien Ranap', icon: 'icon-mat-bedroom_parent', desc: 'Kunjungan Pasien Rawat Inap', content: 'rajal', comp: 'BlockPage' }
 ])
 
 const item = ref(null)
