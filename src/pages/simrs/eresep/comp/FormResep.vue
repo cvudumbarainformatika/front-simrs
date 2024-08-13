@@ -259,6 +259,7 @@
             <q-item
               v-for="(item, i) in store.listPemintaanSementara"
               :key="i"
+              :class="item?.sudahAda?'bg-red-2':''"
             >
               <!-- {{ item }} -->
               <q-item-section style="width: 50%;">
@@ -390,6 +391,7 @@
                   v-for="(obat, j) in item?.rincian"
                   :key="j"
                   style="padding:4px 16px;"
+                  :class="obat?.sudahAda?'bg-red-2':''"
                 >
                   <!-- {{ j }} {{ obat }} -->
                   <q-item-section style="width: 50%;">
@@ -829,7 +831,7 @@ function setJumlah (val) {
     store.setForm('jumlah_diminta', jumlah)
     notifErrVue('jumlah tidak boleh melebihi jumlah alokasi')
   }
-  if (Object.keys(signa.value)?.length) {
+  if (Object?.keys(signa.value)?.length) {
     if (parseFloat(jumlah) > 0) {
       const kons = jumlah / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
@@ -926,6 +928,12 @@ function simpanObat () {
 }
 
 function selesaiResep () {
+  const depo = store.depos.find(pa => pa.jenis === props.depo)
+  if (depo) store.setForm('kodedepo', depo?.value)
+  console.log('depo', depo)
+
+  console.log('form', store.form)
+
   store.selesaiResep()
   isReset.value = true
   setTimeout(() => {
