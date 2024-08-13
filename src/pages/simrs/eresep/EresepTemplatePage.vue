@@ -1,3 +1,4 @@
+<!-- eslint-disable no-unreachable -->
 <template>
   <div class="fit row q-pa-xs">
     <div class="col-4 form full-height">
@@ -252,6 +253,13 @@ function awal () {
 }
 
 function kirimOrder () {
+  // console.log('kirim order', store.templateSelected, store.items)
+  const obat = store.items.filter(f => f?.jenis_perbekalan?.toLowerCase() === 'obat')
+  const racik = store.items.filter(f => f?.kodeobat?.includes('racik'))
+  const tot = obat.length + racik.length
+  const batas = store.batases.find(f => f.depo === store.templateSelected.kodedepo)
+  if (tot > batas?.batas) return notifErrVue('Batas Item Obat + Racikan adalah ' + batas?.batas)
+
   // console.log('kirim order', props.pasien)
   if (!props.pasien) return notifErrVue('Pasien Belum Terdaftar')
   if (store.dpPar === '' || store.dpPar === null) return notifErrVue('tidak ada depo tujuan')
@@ -367,14 +375,14 @@ function kirimOrder () {
       emits('back')
     })
 
-  // console.log('pasian', props.pasien)
+  console.log('pasian', props.pasien)
 
-  // try {
-  //   console.log('payload', payload)
-  // }
-  // catch (error) {
-  //   console.log('error', error)
-  // }
+  try {
+    console.log('payload', payload)
+  }
+  catch (error) {
+    console.log('error', error)
+  }
 }
 
 watch(() => props.depo, (old, val) => {

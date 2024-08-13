@@ -931,6 +931,33 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           }
           this.form.noresep = ''
           this.loadingkirim = false
+          console.log(err?.response?.data)
+          // console.log(err?.response?.data?.sudahAda)
+          if (err?.response?.data?.sudahAda?.length) {
+            const sudahAda = err?.response?.data?.sudahAda
+            this.listPemintaanSementara?.forEach(mi => {
+              mi.sudahAda = false
+              const ada = sudahAda.find(su => su.kdobat === mi.kdobat)
+              if (ada) mi.sudahAda = true
+            })
+            this.listRacikan?.forEach(li => {
+              li?.rincian?.forEach(mi => {
+                mi.sudahAda = false
+                const ada = sudahAda.find(su => su.kdobat === mi.kdobat)
+                if (ada) mi.sudahAda = true
+              })
+            })
+            // err?.response?.data?.sudahAda.forEach(su => {
+            //   const minta = this.listPemintaanSementara?.find(f => f.kdobat === su.kdobat)
+            //   if (minta) minta.sudahAda = true
+            //   if (this.listRacikan?.length) {
+            //     this.listRacikan.forEach(raci => {
+            //       const racikan = raci?.rincian?.find(f => f.kdobat === su.kdobat)
+            //       if (racikan) racikan.sudahAda = true
+            //     })
+            //   }
+            // })
+          }
         })
     },
     async hapusObat (val) {

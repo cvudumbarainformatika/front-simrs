@@ -71,17 +71,24 @@
             class="q-pl-sm"
           >
             <!-- {{ item }} -->
-            <q-item-section style="width: 30%;">
-              <div class="row">
-                {{ item?.mobat?.nama_obat }}
-              </div>
-              <div class="row text-italic f-10">
-                {{ item?.kdobat }}
+            <q-item-section style="width: 35%;">
+              <div class="row items-center">
+                <div class="col-2">
+                  {{ i+1 }}
+                </div>
+                <div class="col-10">
+                  <div class="row">
+                    {{ item?.mobat?.nama_obat }}
+                  </div>
+                  <div class="row text-italic f-10">
+                    {{ item?.kdobat }}
+                  </div>
+                </div>
               </div>
             </q-item-section>
             <q-item-section
               side
-              style="width:70%"
+              style="width:65%"
             >
               <div class="row items-center q-col-gutter-sm full-width">
                 <div class="text-right col-2">
@@ -204,6 +211,12 @@ function status (val) {
     case '3':
       balik = 'Selesai'
       break
+    case '4':
+      balik = 'Ada Retur'
+      break
+    case '5':
+      balik = 'Ditolak'
+      break
 
     default:
       break
@@ -224,6 +237,12 @@ function color (val) {
       break
     case '3':
       balik = 'green'
+      break
+    case '4':
+      balik = 'orange'
+      break
+    case '5':
+      balik = 'nagative'
       break
 
     default:
