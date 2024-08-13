@@ -49,14 +49,14 @@
 import { useLocationSatsetStore } from 'src/stores/satset/location'
 import DialogFormRuangan from './DialogFormRuangan.vue'
 import PagePoli from './contents/PagePoli.vue'
-import PageRanap from './contents/PageRanap.vue'
+import PageRanapDua from './contents/PageRanapDua.vue'
 import { computed } from 'vue'
 
 const store = useLocationSatsetStore()
 const layouts = {
   default: PagePoli,
   PagePoli,
-  PageRanap
+  PageRanapDua
 }
 const defaultLayout = 'PagePoli'
 const layout = computed(() => layouts[store.item.comp] || defaultLayout)

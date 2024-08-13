@@ -36,7 +36,7 @@
               size="sm"
               round
               color="primary"
-              @click="store.setRuangan(item)"
+              @click="store.setRuangan(item,'rajal')"
             />
           </div>
         </td>

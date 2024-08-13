@@ -32,10 +32,20 @@
                   outlined
                   standout="bg-yellow-3"
                   dense
-                  class="col-12"
+                  class="col-10"
                   readonly
+                  :rules="[val => !!val || 'Harap diisi']"
                   hide-bottom-space
                 />
+                <div class="col-2">
+                  <q-btn
+                    label="get" color="primary" @click="()=> {
+                      console.log(store.departement);
+                      store.ruangan.departement_uuid = store.departement.satset_uuid
+
+                    }"
+                  />
+                </div>
                 <q-input
                   v-model="store.ruangan.gedung"
                   label="Gedung"
@@ -248,14 +258,5 @@ function onSubmit () {
     .then(() => {
       store.dialogFormRuangan = false
     })
-  // .then(() => {
-  //   store.dialogFormRuangan = false
-  //   if (store.type === 'rajal') {
-  //     store.getRuanganRajal()
-  //   }
-  //   else if (store.type === 'ranap') {
-  //     store.getRuanganRanap()
-  //   }
-  // })
 }
 </script>
