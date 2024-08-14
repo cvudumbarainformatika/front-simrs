@@ -25,6 +25,7 @@
                 :model="store.tanggal.from"
                 label="dari tanggal"
                 outlined
+                @db-model="setTo"
                 @set-display="setToDisp"
               />
             </div>
@@ -139,6 +140,10 @@ function click (val) {
 
 function setToDisp (vaal) {
   store.tanggal.from = vaal
+}
+
+function setTo (val) {
+  store.params.tgldari = val
 }
 
 </script>

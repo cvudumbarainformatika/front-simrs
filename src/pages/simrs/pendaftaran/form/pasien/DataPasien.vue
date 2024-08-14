@@ -109,55 +109,70 @@
                   @blur="store.cekDulu($event,'norm')"
                 />
                 <!-- val => val?val.length < 7:!val || 'Harus 6 Karakter', -->
+                <div>
+                  Kewarganegaraan :
+                  <q-radio
+                    v-for="item in store.kewarganegaran"
+                    :key="item"
+                    v-model="store.form.kewarganegaraan"
+                    :val="item"
+                    :label="item"
+                    dense
+                    size="xs"
+                    @update:model-value="gantiKewarganegaraan"
+                  />
+                </div>
               </div>
             </div>
             <!-- ktp -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refKtp"
-                  v-model="store.form.nik"
-                  label="Nomor KTP"
-                  outlined
-                  :right-icon="!!bpjs"
-                  right-icon-name="icon-mat-dvr"
-                  :loading="store.loadingNik"
-                  :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
-                  right-icon-tooltip="Cek BPJS"
-                  :rules="[
-                    val=>( !store.form.nomoridentitaslain ? !!val : true)||'Harap di isi',
-                    val=>( (!store.form.nomoridentitaslain && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
-                    val=> (!store.form.nomoridentitaslain && val.length >= 16) ||'Minimal 16 angka',
-                  ]"
-                  @icon-right-click="cekBpjsbyNik"
-                  @update:model-value="cekKtpKitas"
-                  @blur="store.cekDulu($event, 'nik')"
-                />
+            <div v-if="store.form.kewarganegaraan==='WNI'">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input
+                    ref="refKtp"
+                    v-model="store.form.nik"
+                    label="Nomor KTP"
+                    outlined
+                    :right-icon="!!bpjs"
+                    right-icon-name="icon-mat-dvr"
+                    :loading="store.loadingNik"
+                    :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
+                    right-icon-tooltip="Cek BPJS"
+                    :rules="[
+                      val=>( !store.form.nomoridentitaslain ? !!val : true)||'Harap di isi',
+                      val=>( (!store.form.nomoridentitaslain && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
+                      val=> (!store.form.nomoridentitaslain && val.length >= 16) ||'Minimal 16 angka',
+                    ]"
+                    @icon-right-click="cekBpjsbyNik"
+                    @update:model-value="cekKtpKitas"
+                    @blur="store.cekDulu($event, 'nik')"
+                  />
+                </div>
               </div>
             </div>
             <!-- kitas -->
-
-            <div
-              v-if="!bpjs"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-12">
-                <app-input
-                  ref="refKitas"
-                  v-model="store.form.nomoridentitaslain"
-                  label="Nomor Paspor / KITAS"
-                  outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[
-                    val=>( !store.form.nik ? !!val : true)||'Harap di isi',
-                    val => ( (!store.form.nik && val.length > 0)? regex.test(val) : true) || 'Hanya angka'
-                  ]"
-                  @update:model-value="cekKtpKitas"
-                />
+            <div v-else>
+              <div
+                v-if="!bpjs"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-12">
+                  <app-input
+                    ref="refKitas"
+                    v-model="store.form.nomoridentitaslain"
+                    label="Nomor Paspor / KITAS"
+                    outlined
+                    :disable="store.form.barulama!=='baru'&&!store.edit"
+                    :rules="[
+                      val=>( !store.form.nik ? !!val : true)||'Harap di isi',
+                      val => ( (!store.form.nik && val.length > 0)? regex.test(val) : true) || 'Hanya angka'
+                    ]"
+                    @update:model-value="cekKtpKitas"
+                  />
+                </div>
               </div>
-            </div>
             <!-- KA BPJS -->
-
+            </div>
             <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
               <div :class="bpjs || pelayanan?'bagi-tiga':'satu'">
                 <app-input
@@ -707,186 +722,246 @@
               </div>
             </div>
             <!-- RT / RW -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
+            <div v-if="store.form.kewarganegaraan==='WNI'">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
                 RT / RW
               </div>
               <div class="col-8"> -->
-              <div class="col-12">
-                <div class="row items-center q-col-gutter-sm">
-                  <div class="col-4">
-                    <app-input
-                      ref="refRT"
-                      v-model="store.form.rt"
-                      label="RT"
-                      outlined
-                      type="number"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
-                      @update:model-value="setRT"
-                    />
+                <div class="col-12">
+                  <div class="row items-center q-col-gutter-sm">
+                    <div class="col-4">
+                      <app-input
+                        ref="refRT"
+                        v-model="store.form.rt"
+                        label="RT"
+                        outlined
+                        type="number"
+                        :disable="store.form.barulama!=='baru'&&!store.edit"
+                        @update:model-value="setRT"
+                      />
+                    </div>
+                    <div class="col-1 text-center">
+                      /
+                    </div>
+                    <div class="col-4">
+                      <app-input
+                        ref="refRW"
+                        v-model="store.form.rw"
+                        label="RW"
+                        outlined
+                        type="number"
+                        :disable="store.form.barulama!=='baru'&&!store.edit"
+                        @update:model-value="setRW"
+                      />
+                    </div>
                   </div>
-                  <div class="col-1 text-center">
-                    /
-                  </div>
-                  <div class="col-4">
+                </div>
+              </div>
+              <!-- Negara -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Negara
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-autocomplete-new
+                    ref="refNegara"
+                    :model="store.wilayah.kd_negara"
+                    label="Cari Negara"
+                    autocomplete="wilayah"
+                    option-value="kd_negara"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.negaras"
+                    :loading="store.loadingSelect"
+                    :disable="store.form.barulama!=='baru'&&!store.edit"
+                    @on-select="negaraSelected"
+                    @clear="store.clearNegara"
+                  />
+                </div>
+              </div>
+              <!-- Propinsi -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Propinsi
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-autocomplete-new
+                    ref="refPropinsi"
+                    :model="store.wilayah.propinsi"
+                    label="Cari propinsi"
+                    autocomplete="wilayah"
+                    option-value="propinsi"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.propinsies"
+                    :disable="!store.propinsies.length || (store.form.barulama!=='baru' && !store.edit)"
+                    :loading="store.loadingPropinsi"
+                    @on-select="propinsiSelected"
+                    @clear="store.clearPropinsi"
+                  />
+                </div>
+              </div>
+              <!-- kabupaten -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Kabupaten
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-autocomplete-new
+                    ref="refKabupaten"
+                    :model="store.wilayah.kotakabupaten"
+                    label="Cari kabupaten / kota"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.kabupatens"
+                    :loading="store.loadingKabupaten"
+                    :disable="!store.kabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kabupatenSelected"
+                    @clear="store.clearKabupaten"
+                  />
+                </div>
+              </div>
+              <!-- kecamatan -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Kecamatan
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-autocomplete-new
+                    ref="refKecamatan"
+                    :model="store.wilayah.kecamatan.kotakabupaten"
+                    label="Cari kecamatan"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.kecamatans"
+                    :loading="store.loadingKecamatan"
+                    :disable="!store.kecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kecamatanSelected"
+                    @clear="store.clearKecamatan"
+                  />
+                </div>
+              </div>
+              <!-- kelurahan -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Kelurahan
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-autocomplete-new
+                    ref="refKelurahan"
+                    :model="store.wilayah.kelurahan.kotakabupaten"
+                    label="Cari kelurahan"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.kelurahans"
+                    :loading="store.loadingKelurahan"
+                    :disable="!store.kelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kelurahanSelected"
+                    @clear="store.clearKelurahan"
+                  />
+                </div>
+              </div>
+              <!-- kode pos -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <!-- <div class="col-4">
+                Kode Pos
+              </div>
+              <div class="col-8"> -->
+                <div class="col-12">
+                  <app-input
+                    ref="refKodePos"
+                    v-model="store.form.kodepos"
+                    label="Kode Pos"
+                    type="number"
+                    outlined
+                    :disable="store.form.barulama!=='baru'&&!store.edit"
+                    @update:model-value="setKodepos"
+                  />
+                </div>
+              </div>
+              <!-- Antrian -->
+              <div v-if="pelayanan !== 'igd'">
+                <div class="row q-col-gutter-sm items-center q-mb-xs">
+                  <div class="col-12">
                     <app-input
-                      ref="refRW"
-                      v-model="store.form.rw"
-                      label="RW"
+                      ref="refNoAntrian"
+                      v-model="store.form.noantrian"
+                      label="Nomor Antrian"
                       outlined
-                      type="number"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
-                      @update:model-value="setRW"
+                      @blur="setNoAntrian($event)"
                     />
+                    <!-- @update:model-value="setNoAntrian" -->
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Negara -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Negara
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-autocomplete-new
-                  ref="refNegara"
-                  :model="store.wilayah.kd_negara"
-                  label="Cari Negara"
-                  autocomplete="wilayah"
-                  option-value="kd_negara"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.negaras"
-                  :loading="store.loadingSelect"
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                  @on-select="negaraSelected"
-                  @clear="store.clearNegara"
-                />
-              </div>
-            </div>
-            <!-- Propinsi -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Propinsi
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-autocomplete-new
-                  ref="refPropinsi"
-                  :model="store.wilayah.propinsi"
-                  label="Cari propinsi"
-                  autocomplete="wilayah"
-                  option-value="propinsi"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.propinsies"
-                  :disable="!store.propinsies.length || (store.form.barulama!=='baru' && !store.edit)"
-                  :loading="store.loadingPropinsi"
-                  @on-select="propinsiSelected"
-                  @clear="store.clearPropinsi"
-                />
-              </div>
-            </div>
-            <!-- kabupaten -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Kabupaten
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-autocomplete-new
-                  ref="refKabupaten"
-                  :model="store.wilayah.kotakabupaten"
-                  label="Cari kabupaten / kota"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.kabupatens"
-                  :loading="store.loadingKabupaten"
-                  :disable="!store.kabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kabupatenSelected"
-                  @clear="store.clearKabupaten"
-                />
-              </div>
-            </div>
-            <!-- kecamatan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Kecamatan
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-autocomplete-new
-                  ref="refKecamatan"
-                  :model="store.wilayah.kecamatan.kotakabupaten"
-                  label="Cari kecamatan"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.kecamatans"
-                  :loading="store.loadingKecamatan"
-                  :disable="!store.kecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kecamatanSelected"
-                  @clear="store.clearKecamatan"
-                />
-              </div>
-            </div>
-            <!-- kelurahan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Kelurahan
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-autocomplete-new
-                  ref="refKelurahan"
-                  :model="store.wilayah.kelurahan.kotakabupaten"
-                  label="Cari kelurahan"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.kelurahans"
-                  :loading="store.loadingKelurahan"
-                  :disable="!store.kelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kelurahanSelected"
-                  @clear="store.clearKelurahan"
-                />
-              </div>
-            </div>
-            <!-- kode pos -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Kode Pos
-              </div>
-              <div class="col-8"> -->
-              <div class="col-12">
-                <app-input
-                  ref="refKodePos"
-                  v-model="store.form.kodepos"
-                  label="Kode Pos"
-                  type="number"
-                  outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                  @update:model-value="setKodepos"
-                />
-              </div>
-            </div>
-            <!-- Antrian -->
-            <div v-if="pelayanan !== 'igd'">
+            <div v-else>
               <div class="row q-col-gutter-sm items-center q-mb-xs">
                 <div class="col-12">
-                  <app-input
-                    ref="refNoAntrian"
-                    v-model="store.form.noantrian"
-                    label="Nomor Antrian"
+                  <q-select
+                    ref="refCity"
+                    v-model="weather"
                     outlined
-                    @blur="setNoAntrian($event)"
-                  />
-                <!-- @update:model-value="setNoAntrian" -->
+                    label="Pencarian Kota Luar Negeri"
+                    dense
+                    use-input
+                    hide-selected
+                    fill-input
+                    input-debounce="200"
+                    :options="store.countrys"
+                    @filter="filterFn"
+                    placeholder="Minimal 3 character"
+                    autofocus
+                    class="full-width"
+                    hide-bottom-space
+                    hide-dropdown-icon
+                    no-error-icon
+                    option-label="name"
+                    option-value="name"
+                    @update:model-value="citySelected"
+                  >
+                    <template #prepend>
+                      <q-icon name="icon-mat-search" />
+                    </template>
+                    <template #option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <div>
+                          {{ scope.opt.name }}
+                        </div>
+                        <div class="q-ml-sm">
+                          ({{ scope.opt.country }})
+                        </div>
+                      </q-item>
+                      <q-separator />
+                    </template>
+                  </q-select>
+                </div>
+              </div>
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input v-model="store.country" label="Country" :autofocus="false" outlined />
+                </div>
+              </div>
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input v-model="store.city" label="City" :autofocus="false" outlined />
+                </div>
+              </div>
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input v-model="store.region" label="Region" :autofocus="false" outlined />
                 </div>
               </div>
             </div>
@@ -932,164 +1007,170 @@
               </div>
             </div>
             <!-- RT / RW domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                RT / RW
-              </div>
-              <div class="col-8">
-                <div class="row items-center q-col-gutter-sm">
-                  <div class="col-4">
-                    <app-input
-                      ref="refRTDomisili"
-                      v-model="store.form.rtdomisili"
-                      label="RT"
-                      outlined
-                      type="number"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
-                    />
-                  </div>
-                  <div class="col-1 text-center">
-                    /
-                  </div>
-                  <div class="col-4">
-                    <app-input
-                      ref="refRWDomisili"
-                      v-model="store.form.rwdomisili"
-                      label="RW"
-                      outlined
-                      type="number"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
-                    />
+            <div v-if="store.form.kewarganegaraan==='WNI'">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  RT / RW
+                </div>
+                <div class="col-8">
+                  <div class="row items-center q-col-gutter-sm">
+                    <div class="col-4">
+                      <app-input
+                        ref="refRTDomisili"
+                        v-model="store.form.rtdomisili"
+                        label="RT"
+                        outlined
+                        type="number"
+                        :disable="store.form.barulama!=='baru'&&!store.edit"
+                      />
+                    </div>
+                    <div class="col-1 text-center">
+                      /
+                    </div>
+                    <div class="col-4">
+                      <app-input
+                        ref="refRWDomisili"
+                        v-model="store.form.rwdomisili"
+                        label="RW"
+                        outlined
+                        type="number"
+                        :disable="store.form.barulama!=='baru'&&!store.edit"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- negara domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Negara
+
+              <!-- negara domisili -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Negara
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-new
+                    ref="refNegaraDomisili"
+                    :model="store.wilayahDomisili.kd_negara"
+                    label="Cari Negara"
+                    autocomplete="wilayah"
+                    option-value="kd_negara"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.domisiliNegaras"
+                    :loading="store.loadingSelectDomisili"
+                    :disable="store.form.barulama!=='baru'&&!store.edit"
+                    @on-select="negaraDomisiliSelected"
+                    @clear="store.clearNegaraDomisili"
+                  />
+                </div>
               </div>
-              <div class="col-8">
-                <app-autocomplete-new
-                  ref="refNegaraDomisili"
-                  :model="store.wilayahDomisili.kd_negara"
-                  label="Cari Negara"
-                  autocomplete="wilayah"
-                  option-value="kd_negara"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.domisiliNegaras"
-                  :loading="store.loadingSelectDomisili"
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                  @on-select="negaraDomisiliSelected"
-                  @clear="store.clearNegaraDomisili"
-                />
-              </div>
-            </div>
-            <!-- propinsi domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Propinsi
-              </div>
-              <div class="col-8">
-                <app-autocomplete-new
-                  ref="refPropinsiDomisili"
-                  :model="store.wilayahDomisili.propinsi"
-                  label="Cari propinsi"
-                  autocomplete="wilayah"
-                  option-value="propinsi"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.domisiliPropinsies"
-                  :disable="!store.domisiliPropinsies.length || (store.form.barulama!=='baru' && !store.edit)"
-                  :loading="store.loadingPropinsiDomisili"
-                  @on-select="propinsiDomisiliSelected"
-                  @clear="store.clearPropinsiDomisili"
-                />
+
+              <!-- propinsi domisili -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Propinsi
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-new
+                    ref="refPropinsiDomisili"
+                    :model="store.wilayahDomisili.propinsi"
+                    label="Cari propinsi"
+                    autocomplete="wilayah"
+                    option-value="propinsi"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.domisiliPropinsies"
+                    :disable="!store.domisiliPropinsies.length || (store.form.barulama!=='baru' && !store.edit)"
+                    :loading="store.loadingPropinsiDomisili"
+                    @on-select="propinsiDomisiliSelected"
+                    @clear="store.clearPropinsiDomisili"
+                  />
+                </div>
               </div>
             </div>
           </div>
           <div class="col-6">
             <!-- kabupaten domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Kabupaten
+            <div v-if="store.form.kewarganegaraan==='WNI'">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Kabupaten
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-new
+                    ref="refKabupatenDomisili"
+                    :model="store.wilayahDomisili.kotakabupaten"
+                    label="Cari kabupaten / kota"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.domisiliKabupatens"
+                    :loading="store.loadingKabupatenDomisili"
+                    :disable="!store.domisiliKabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kabupatenDomisiliSelected"
+                    @clear="store.clearKabupatenDomisili"
+                  />
+                </div>
               </div>
-              <div class="col-8">
-                <app-autocomplete-new
-                  ref="refKabupatenDomisili"
-                  :model="store.wilayahDomisili.kotakabupaten"
-                  label="Cari kabupaten / kota"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.domisiliKabupatens"
-                  :loading="store.loadingKabupatenDomisili"
-                  :disable="!store.domisiliKabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kabupatenDomisiliSelected"
-                  @clear="store.clearKabupatenDomisili"
-                />
+              <!-- kecamatan domisili -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Kecamatan
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-new
+                    ref="refKecamatanDomisili"
+                    :model="store.wilayahDomisili.kecamatan.kotakabupaten"
+                    label="Cari kecamatan"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.domisiliKecamatans"
+                    :loading="store.loadingKecamatanDomisili"
+                    :disable="!store.domisiliKecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kecamatanDomisiliSelected"
+                    @clear="store.clearKecamatanDomisili"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- kecamatan domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Kecamatan
+              <!-- kelurahan domisili -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Kelurahan
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-new
+                    ref="refKelurahanDomisili"
+                    :model="store.wilayahDomisili.kelurahan.kotakabupaten"
+                    label="Cari kelurahan"
+                    autocomplete="wilayah"
+                    option-value="kotakabupaten"
+                    option-label="wilayah"
+                    outlined
+                    :source="store.domisiliKelurahans"
+                    :loading="store.loadingKelurahanDomisili"
+                    :disable="!store.domisiliKelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
+                    @on-select="kelurahanDomisiliSelected"
+                    @clear="store.clearKelurahanDomisili"
+                  />
+                </div>
               </div>
-              <div class="col-8">
-                <app-autocomplete-new
-                  ref="refKecamatanDomisili"
-                  :model="store.wilayahDomisili.kecamatan.kotakabupaten"
-                  label="Cari kecamatan"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.domisiliKecamatans"
-                  :loading="store.loadingKecamatanDomisili"
-                  :disable="!store.domisiliKecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kecamatanDomisiliSelected"
-                  @clear="store.clearKecamatanDomisili"
-                />
-              </div>
-            </div>
-            <!-- kelurahan domisili -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Kelurahan
-              </div>
-              <div class="col-8">
-                <app-autocomplete-new
-                  ref="refKelurahanDomisili"
-                  :model="store.wilayahDomisili.kelurahan.kotakabupaten"
-                  label="Cari kelurahan"
-                  autocomplete="wilayah"
-                  option-value="kotakabupaten"
-                  option-label="wilayah"
-                  outlined
-                  :source="store.domisiliKelurahans"
-                  :loading="store.loadingKelurahanDomisili"
-                  :disable="!store.domisiliKelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
-                  @on-select="kelurahanDomisiliSelected"
-                  @clear="store.clearKelurahanDomisili"
-                />
-              </div>
-            </div>
-            <!-- kode pos domisili-->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Kode Pos
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refKodePosDom"
-                  v-model="store.form.kodeposdomisili"
-                  label="Kode Pos"
-                  type="number"
-                  outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                />
+              <!-- kode pos domisili-->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-4">
+                  Kode Pos
+                </div>
+                <div class="col-8">
+                  <app-input
+                    ref="refKodePosDom"
+                    v-model="store.form.kodeposdomisili"
+                    label="Kode Pos"
+                    type="number"
+                    outlined
+                    :disable="store.form.barulama!=='baru'&&!store.edit"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1288,6 +1369,16 @@ import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pas
 import { computed, onBeforeUpdate, ref } from 'vue'
 import dialogCariPasien from './DialogCariPasien.vue'
 import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
+import { api } from 'src/boot/axios'
+
+const gantiKewarganegaraan = e => {
+  if (e === 'WNI') {
+    store.paramWilayah.kd_negara = '62'
+  }
+  else {
+    store.paramWilayah.kd_negara = ''
+  }
+}
 
 const refPasien = ref(null)
 const emits = defineEmits([
@@ -1407,9 +1498,12 @@ const refKelurahan = ref(null)
 const refHambatan = ref(null)
 // validasi ktp dan kitas
 function cekKtpKitas () {
-  refKtp.value.$refs.refInput.validate()
+  if (store.form.kewarganegaraan === 'WNI') {
+    refKtp.value.$refs.refInput.validate()
+  }
   if (refKitas.value) refKitas.value.$refs.refInput.validate()
 }
+
 // validasi noka dan norm
 function validateNokaAndNorm () {
   if (refNoRM.value.$refs.refInput.validate() &&
@@ -1450,31 +1544,31 @@ function resetValidation () {
   refNoTlp.value.$refs.refInput.resetValidation()
   refKodePos.value.$refs.refInput.resetValidation()
   if (refNoAntrian.value) refNoAntrian.value.$refs.refInput.resetValidation()
-  refKtp.value.$refs.refInput.resetValidation()
+  if (refKtp.value) refKtp.value.$refs.refInput.resetValidation()
   if (refKitas.value) refKitas.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
-  refRT.value.$refs.refInput.resetValidation()
-  refRW.value.$refs.refInput.resetValidation()
+  if (refRT.value) refRT.value.$refs.refInput.resetValidation()
+  if (refRW.value) refRW.value.$refs.refInput.resetValidation()
   refBahasa.value.$refs.refAuto.resetValidation()
-  refNegara.value.$refs.refAuto.resetValidation()
-  refPropinsi.value.$refs.refAuto.resetValidation()
-  refKabupaten.value.$refs.refAuto.resetValidation()
-  refKecamatan.value.$refs.refAuto.resetValidation()
-  refKelurahan.value.$refs.refAuto.resetValidation()
+  if (refNegara.value) refNegara.value.$refs.refAuto.resetValidation()
+  if (refPropinsi.value) refPropinsi.value.$refs.refAuto.resetValidation()
+  if (refKabupaten.value) refKabupaten.value.$refs.refAuto.resetValidation()
+  if (refKecamatan.value) refKecamatan.value.$refs.refAuto.resetValidation()
+  if (refKelurahan.value) refKelurahan.value.$refs.refAuto.resetValidation()
   refPekerjaan.value.$refs.refAuto.resetValidation()
   refHambatan.value.$refs.refAuto.resetValidation()
   refStatusPernikahan.value.$refs.refAuto.resetValidation()
   if (refTulisAgama.value !== null) { refTulisAgama.value.$refs.refInput.resetValidation() }
   if (refInputPekerjaan.value !== null) { refInputPekerjaan.value.$refs.refInput.resetValidation() }
-  if (!store.alamataDomisiliSama) { refRTDomisili.value.$refs.refInput.resetValidation() }
-  if (!store.alamataDomisiliSama) { refRWDomisili.value.$refs.refInput.resetValidation() }
-  if (!store.alamataDomisiliSama) { refNegaraDomisili.value.$refs.refAuto.resetValidation() }
-  if (!store.alamataDomisiliSama) { refPropinsiDomisili.value.$refs.refAuto.resetValidation() }
-  if (!store.alamataDomisiliSama) { refKabupatenDomisili.value.$refs.refAuto.resetValidation() }
-  if (!store.alamataDomisiliSama) { refKecamatanDomisili.value.$refs.refAuto.resetValidation() }
-  if (!store.alamataDomisiliSama) { refKelurahanDomisili.value.$refs.refAuto.resetValidation() }
-  if (!store.alamataDomisiliSama) { refKodePosDom.value.$refs.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refRTDomisili?.value?.$refs?.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refRWDomisili?.value?.$refs?.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refNegaraDomisili?.value?.$refs?.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refPropinsiDomisili?.value?.$refs?.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKabupatenDomisili?.value?.$refs?.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKecamatanDomisili?.value?.$refs?.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKelurahanDomisili?.value?.$refs?.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKodePosDom?.value?.$refs?.refInput?.resetValidation() }
 }
 // hari ini
 const hariIni = Date.now()
@@ -1832,31 +1926,31 @@ function validasi () {
   const Suku = refSuku.value.$refs.refInput.validate()
 
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
-  const KodePos = refKodePos.value.$refs.refInput.validate()
+  const KodePos = refKodePos.value ? refKodePos.value?.$refs?.refInput.validate() : true
   const NoAntrian = refNoAntrian.value ? refNoAntrian.value.$refs.refInput.validate() : true
 
-  const Ktp = refKtp.value.$refs.refInput.validate()
+  const Ktp = refKtp.value ? refKtp.value?.$refs?.refInput.validate() : true
   const Kitas = refKitas.value ? refKitas.value.$refs.refInput.validate() : true
   const NoKaBpjs = refNoKaBpjs.value.$refs.refInput.validate()
   const Alamat = refAlamat.value.$refs.refInput.validate()
-  const RT = refRT.value.$refs.refInput.validate()
-  const RW = refRW.value.$refs.refInput.validate()
+  const RT = refRT.value ? refRT.value?.$refs?.refInput.validate() : true
+  const RW = refRW.value ? refRW.value?.$refs?.refInput.validate() : true
   const Bahasa = refBahasa.value.$refs.refAuto.validate()
   const Hambatan = refHambatan.value.$refs.refAuto.validate()
-  const Negara = refNegara.value.$refs.refAuto.validate()
-  const Propinsi = refPropinsi.value.$refs.refAuto.validate()
-  const Kabupaten = refKabupaten.value.$refs.refAuto.validate()
-  const Kecamatan = refKecamatan.value.$refs.refAuto.validate()
-  const Kelurahan = refKelurahan.value.$refs.refAuto.validate()
+  const Negara = refNegara.value ? refNegara.value?.$refs?.refAuto.validate() : true
+  const Propinsi = refPropinsi.value ? refPropinsi.value.$refs.refAuto.validate() : true
+  const Kabupaten = refKabupaten.value ? refKabupaten.value.$refs.refAuto.validate() : true
+  const Kecamatan = refKecamatan.value ? refKecamatan.value.$refs.refAuto.validate() : true
+  const Kelurahan = refKelurahan.value ? refKelurahan.value.$refs.refAuto.validate() : true
 
-  const RTDomisili = store.alamataDomisiliSama ? true : refRTDomisili.value.$refs.refInput.validate()
-  const RWDomisili = store.alamataDomisiliSama ? true : refRWDomisili.value.$refs.refInput.validate()
-  const NegaraDomisili = store.alamataDomisiliSama ? true : refNegaraDomisili.value.$refs.refAuto.validate()
-  const PropinsiDomisili = store.alamataDomisiliSama ? true : refPropinsiDomisili.value.$refs.refAuto.validate()
-  const KabupatenDomisili = store.alamataDomisiliSama ? true : refKabupatenDomisili.value.$refs.refAuto.validate()
-  const KecamatanDomisili = store.alamataDomisiliSama ? true : refKecamatanDomisili.value.$refs.refAuto.validate()
-  const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
-  const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
+  const RTDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refRTDomisili?.value?.$refs?.refInput?.validate()
+  const RWDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refRWDomisili?.value?.$refs?.refInput?.validate()
+  const NegaraDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refNegaraDomisili?.value?.$refs?.refAuto?.validate()
+  const PropinsiDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refPropinsiDomisili?.value?.$refs?.refAuto?.validate()
+  const KabupatenDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refKabupatenDomisili?.value?.$refs?.refAuto?.validate()
+  const KecamatanDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refKecamatanDomisili?.value?.$refs?.refAuto?.validate()
+  const KelurahanDomisili = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refKelurahanDomisili?.value?.$refs?.refAuto?.validate()
+  const KodePosDom = store.alamataDomisiliSama || store.form?.kewarganegaraan === 'WNA' ? true : refKodePosDom?.value?.$refs?.refInput?.validate()
   const bacatulis = !!store.form.bacatulis
   if (!bacatulis) {
     notifErrVue('Bisa / Tidak bisa baca tulis belum dipilih')
@@ -1924,6 +2018,37 @@ store.getInitialData()
 onBeforeUpdate(() => {
   // console.log('jenis pasien', refJenisPasien.value)
 })
+
+async function filterFn (val, update, abort) {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+
+  const param = {
+    q: val
+  }
+
+  const params = { params: param }
+
+  const resp = await api.get('v1/simrs/pendaftaran/ranap/wheatherapi-country', params)
+  console.log('resp', resp)
+
+  update(() => {
+    store.countrys = resp.data
+  })
+}
+
+function citySelected (val) {
+  store.setForm('city', val.name)
+  store.setForm('country', val.country)
+  store.setForm('region', val.region)
+
+  store.city = val.name
+  store.country = val.country
+  store.region = val.region
+}
+
 </script>
 <style lang="scss" scoped>
 .bagi-tiga{

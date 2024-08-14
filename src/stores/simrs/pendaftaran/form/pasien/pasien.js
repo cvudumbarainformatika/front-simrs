@@ -39,6 +39,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     form: {
       barulama: 'baru',
+      kewarganegaraan: 'WNI',
       noteleponhp: '',
       nomoridentitaslain: '',
       nokabpjs: '',
@@ -68,6 +69,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     loadingKabupatenDomisili: false,
     loadingKecamatanDomisili: false,
     loadingKelurahanDomisili: false,
+    kewarganegaran: ['WNI', 'WNA'],
     propinsies: [],
     kabupatens: [],
     kecamatans: [],
@@ -94,12 +96,20 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     loadingNoka: false,
     loadingFinger: false,
     // --
-    noantrian: ''
+    noantrian: '',
+    countrys: [],
+
+    // WNA
+    country: null,
+    city: null,
+    region: null
+
   }),
   actions: {
     clearForm () {
       const nomorAntr = this.noantrian
       this.form = {
+        kewarganegaraan: 'WNI',
         barulama: 'baru',
         noteleponhp: '',
         nomoridentitaslain: '',

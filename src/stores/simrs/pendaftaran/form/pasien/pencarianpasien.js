@@ -11,7 +11,7 @@ export const usePencarianPasienStore = defineStore('pencarian_pasien_store', {
     doubleCount: (state) => state.counter * 2
   },
   actions: {
-    setSearch(payload) {
+    setSearch (payload) {
       this.search = payload
     },
 
