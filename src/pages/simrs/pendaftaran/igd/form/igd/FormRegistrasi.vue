@@ -171,7 +171,7 @@ import { findWithAttr, notifErrVue } from 'src/modules/utils'
 const store = useRegistrasiPasienIgdStore()
 store.getInitialData()
 function setSistembayar1 (val) {
-  // store.setForm('kodepoli', 'POL014')
+  store.setForm('kodepoli', 'POL014')
   // store.setForm('sistembayar1', val)
   if (store.form.sistembayar) { delete store.form.sistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
@@ -283,7 +283,9 @@ function setFlagKarcis (val) {
 // expose function
 defineExpose({
   resetValidation,
-  set // setPoliTujuan
+  set,
+  refSistemBayar,
+  setSistembayar
 })
 
 </script>

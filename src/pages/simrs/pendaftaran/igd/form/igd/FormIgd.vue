@@ -5,6 +5,7 @@
       :tglsep="register.paramDpjp.tglsep"
       :full="style.componentfull"
       :pelayanan="pelayanan"
+      :sistembayar="register.sistembayars"
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />
@@ -75,7 +76,7 @@ function simpanData (val) {
     register.simpanRegistrasi().then(resp => {
       cetakgelang(dataPasien.form)
       clearFormRegistrasi()
-      pasien.kewarganegaran = 'WNI'
+      pasien.form.kewarganegaraan = 'WNI'
       console.log('sasasa', refDataPasien)
       // cetakgelang(dataPasien.form)
     })

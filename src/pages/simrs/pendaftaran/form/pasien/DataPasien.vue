@@ -1397,7 +1397,8 @@ const props = defineProps({
   full: { type: Boolean, default: false },
   notEdit: { type: Boolean, default: true },
   bisaFull: { type: Boolean, default: true },
-  pelayanan: { type: [String, Number], default: '' }
+  pelayanan: { type: [String, Number], default: '' },
+  sistembayar: { type: [String, Number], default: '' }
 })
 const regex = /^\d+$/
 const dialog = useDialogCariPasienPendaftaranUmum()
@@ -1546,7 +1547,7 @@ function resetValidation () {
   if (refNoAntrian.value) refNoAntrian.value.$refs.refInput.resetValidation()
   if (refKtp.value) refKtp.value.$refs.refInput.resetValidation()
   if (refKitas.value) refKitas.value.$refs.refInput.resetValidation()
-  refNoKaBpjs.value.$refs.refInput.resetValidation()
+  if (refNoKaBpjs.value !== 'UMUM') refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
   if (refRT.value) refRT.value.$refs.refInput.resetValidation()
   if (refRW.value) refRW.value.$refs.refInput.resetValidation()
@@ -2011,7 +2012,8 @@ defineExpose({
   validateNokaAndNorm,
   validateNoka,
   clearForm,
-  cekFinger
+  cekFinger,
+  refNoKaBpjs
 })
 
 store.getInitialData()
