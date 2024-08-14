@@ -78,11 +78,12 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     errorsOrder: [],
     expandedList: [],
     cariTemplate: null,
-    // pembatasan oabat
+    // pembatasan obat
     batases: [
       { depo: 'Gd-05010101', batas: 5 }, // rajal
       { depo: 'Gd-04010102', batas: 7 } // ranap
-    ]
+    ],
+    sudahAda: []
   }),
   actions: {
 
@@ -259,7 +260,7 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
 
     kirimOrder (payload, pasien) {
       console.log('payload', payload)
-
+      this.sudahAda = []
       this.errorsOrder = []
       this.loadingTemplate = true
       return new Promise((resolve, reject) => {
@@ -277,12 +278,12 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
           })
           .catch((err) => {
             this.loadingTemplate = false
-            console.log('err response', err)
+            // console.log('err response', err)
             const items = err.response.data.items
             const racikan = items?.filter(x => x?.racikan !== false && x?.isError === true)
             const nonRacikan = items?.filter(x => x?.racikan === false && x?.isError === true)
 
-            const grouped = racikan.length ? this.groupByx(racikan, x => x?.racikan) : []
+            const grouped = racikan?.length ? this.groupByx(racikan, x => x?.racikan) : []
             // const groupArr = Array.from(grouped, ([name, value]) => ({ name, value }))
             // console.log('racikan', grouped)
             // console.log('non racikan', nonRacikan)
@@ -294,6 +295,9 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
             console.log('err', errors)
             this.expandedList = errors?.racikan?.length ? errors.racikan.map(x => x?.koderacikan) : []
             this.errorsOrder = errors
+            // error pembatasan
+            this.sudahAda = err?.response?.data?.sudahAda
+            console.log('err nya', this.sudahAda)
             reject(err)
           })
       })

@@ -13,7 +13,7 @@
     <template #body="props">
       <q-tr
         :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1"
-        :class="{'bg-grey text-white': adaError(props.row)}"
+        :class="pembatasan(props.row)===false?{'bg-grey text-white': adaError(props.row)}:pembatasan(props.row)"
       >
         <q-td key="namaobat" :props="props">
           {{ props.row.namaobat }}
@@ -121,5 +121,12 @@ function adaError (row) {
   const obats = errs?.length ? errs[0].rincian?.filter(x => x?.kodeobat?.includes(row?.kodeobat)) : []
   // console.log('ada error sub', obats)
   return obats?.length
+}
+function pembatasan (row) {
+  if (store.sudahAda?.length) {
+    const ada = store.sudahAda.find(f => f.kdobat === row.kodeobat)
+    if (ada) return 'bg-red-2'
+  }
+  else return false
 }
 </script>

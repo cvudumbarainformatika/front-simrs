@@ -269,8 +269,13 @@ function pembatasan (row) {
   const racik = store.items.filter(f => f?.kodeobat?.includes('racik'))
   const tot = obat.length + racik.length
   // console.log('pembatasan', store.items, row, tot)
+  console.log('pembatasan', store.items, row)
   if (tot > row?.batas && (row?.jenis_perbekalan?.toLowerCase() === 'obat' || row?.kodeobat?.includes('racik'))) {
     return 'bg-negative text-white'
+  }
+  if (store.sudahAda?.length && !row?.kodeobat?.includes('racik')) {
+    const ada = store.sudahAda.find(f => f.kdobat === row.kodeobat)
+    if (ada) return 'bg-red-2'
   }
   else return false
 }
