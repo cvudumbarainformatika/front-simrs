@@ -75,6 +75,7 @@ function simpanData (val) {
     register.simpanRegistrasi().then(resp => {
       cetakgelang(dataPasien.form)
       clearFormRegistrasi()
+      pasien.kewarganegaran = 'WNI'
       console.log('sasasa', refDataPasien)
       // cetakgelang(dataPasien.form)
     })
