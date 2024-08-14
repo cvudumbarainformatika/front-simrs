@@ -15,7 +15,7 @@ export const useSatsetStore = defineStore('satset_store', {
   }),
   persist: true,
   actions: {
-    async getAuth() {
+    async getAuth () {
       const resp = await api.get('v1/satusehat/authorization')
       console.log('percobaan', resp)
       if (resp.status === 200) {
@@ -35,13 +35,13 @@ export const useSatsetStore = defineStore('satset_store', {
       }, 2000)
     },
 
-    DELETE_TOKEN_SATSET() {
+    DELETE_TOKEN_SATSET () {
       storage.delAuthSatset()
       this.auth = null
       this.params.token = null
       routerInstance.push({ path: '/' })
     },
-    async getOrganisasi() {
+    async getOrganisasi () {
       const params = { params: this.params }
       const resp = await api.get('v1/satusehat/organization', params)
       console.log('organization', resp)

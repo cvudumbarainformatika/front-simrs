@@ -17,6 +17,7 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
     },
     dialogTambah: false,
     dialogSatset: false,
+    dialogRuangan: false,
     form: {
       nama: '',
       phone: '(0335) 433119,421118',
@@ -28,23 +29,26 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
     sender: {
       token: null,
       id: null
-    }
+    },
+
+    search: ''
   }),
   actions: {
-    async getData() {
+    async getData () {
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('/v1/satusehat/listOrganisasiRs', params)
-      // console.log(resp)
+      console.log('organisasi', resp)
       if (resp?.status === 200) {
         this.items = resp.data
         this.loading = false
-      } else {
+      }
+      else {
         this.loading = false
       }
     },
 
-    postData() {
+    postData () {
       this.loading = true
       return new Promise((resolve, reject) => {
         api.post('/v1/satusehat/postOrganisasiRs', this.form)
@@ -60,7 +64,7 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
           })
       })
     },
-    async updateDataRs() {
+    async updateDataRs () {
       // console.log(this.item)
       this.loading = true
       return new Promise((resolve, reject) => {
@@ -79,7 +83,7 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
           })
       })
     },
-    async kirimSatset(item) {
+    async kirimSatset (item) {
       this.loadingSatset = true
       const satset = useSatsetStore()
       this.sender.token = satset.params.token
@@ -100,19 +104,23 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
           this.loadingSatset = false
           this.dialogTambah = false
           this.getData()
-        } else {
+        }
+        else {
           this.loadingSatset = false
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log('error send to satset', error)
         this.loadingSatset = false
       }
     },
 
-    setItem(item) {
+    setItem (item) {
       this.item = null
       this.item = item
       this.dialogSatset = true
+
+      console.log('pilih item', this.item)
     }
   }
 })

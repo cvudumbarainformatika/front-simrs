@@ -63,6 +63,9 @@
           <span class="text-deep-orange">{{ scope.opt.generik==='1' ? 'Generik, ' : ' ' }}</span>
           <span class="text-accent">{{ scope.opt.psikotropika==='1' ? 'Psikotropika, ' : ' ' }}</span>
         </div>
+        <div v-if="scope.opt.jenis_perbekalan " class="f-10 text-grey text-weight-bold">
+          ({{ scope.opt.jenis_perbekalan }})
+        </div>
       </q-item>
 
       <q-separator />
