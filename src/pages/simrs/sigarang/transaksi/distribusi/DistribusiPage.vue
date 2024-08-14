@@ -756,17 +756,17 @@ import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
-// import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
 
-// const apps = useAplikasiStore()
+const apps = useAplikasiStore()
 
-// const ruang = computed(() => {
-//   const depo = apps.user.pegawai.depo ? apps.user.pegawai.depo.nama : false
+const ruang = computed(() => {
+  const depo = apps.user.pegawai.depo ? apps.user.pegawai.depo.nama : false
 
-//   return depo
-// })
+  return depo
+})
 
 const proxyDate = ref(null)
 const refDate = ref(null)
