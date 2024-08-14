@@ -15,33 +15,33 @@ export const useDialogCariPasienPendaftaranUmum = defineStore('dialog_cari_pasie
     }
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setPage(payload) {
+    setPage (payload) {
       // console.log('setPage', payload)
       this.params.page = payload
       this.getDataPasien()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.params.per_page = payload
       this.params.page = 1
       this.getDataPasien()
     },
-    refreshTable() {
+    refreshTable () {
       this.params.page = 1
       this.getDataPasien()
     },
-    setSearch(val) {
+    setSearch (val) {
       this.params.q = val
       this.params.page = 1
       this.getDataPasien()
     },
-    getInitialData() {
+    getInitialData () {
       // this.getDataPasien()
     },
     // api related function
-    async getDataPasien() {
+    async getDataPasien () {
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/master/pasienGetNoRM', param)

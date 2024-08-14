@@ -21,7 +21,7 @@
           <div class="row">
             <div class="col">
               <div class="full-height column flex-center items-center text-white">
-                <figure class="qrcode full-width q-pa-xl absolute-top">
+                <figure class="qrcode full-width q-pa-xl absolute-center">
                   <vue-qrcode
                     style="margin-top: -55;"
                     :value="patien.norm"
@@ -35,15 +35,15 @@
                       margin:2
                     }"
                   />
-                  <img
+                  <!-- <img
                     class="qrcode__image"
                     src="~assets/logos/logo-rsud.png"
                     alt="Chen Fengyuan"
-                  >
+                  > -->
                 </figure>
               </div>
             </div>
-            <div class="col">
+            <div class="col text-bold">
               {{ patien.norm }}
               <q-separator />
               <div class="row">
