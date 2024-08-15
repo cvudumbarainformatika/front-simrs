@@ -9,7 +9,7 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
     items: [],
     detail: [],
     meta: {},
-    kolom: [],
+    kolom: ['PBF', 'Total'],
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
