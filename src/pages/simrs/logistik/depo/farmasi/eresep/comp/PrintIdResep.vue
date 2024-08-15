@@ -72,7 +72,12 @@
             v-if="item?.kunjunganranap"
             class="col-shrink"
           >
-            - {{ item?.kunjunganranap?.rs6 }}
+            <div v-if="!item?.kunjunganranap?.titipan">
+              - {{ item?.kunjunganranap?.rs6 }}
+            </div>
+            <div v-else class="q-ml-xs">
+              Dititipkan Di {{ item?.kunjunganranap?.ruangtitipan?.rs2 }} {{ item?.kunjunganranap?.rs6 }}
+            </div>
           </div>
         </div>
         <div
