@@ -11,7 +11,8 @@
       </div>
 
       <div>
-        <app-input-simrs v-model="org.search" label="Cari" />
+        <!-- <app-input-simrs v-model="org.search" label="Cari" /> -->
+        <q-input dense outlined placeholder="Cari Departement" v-model="org.search" standout="bg-yellow-3" style="min-width:200px;" />
       </div>
     </div>
     <q-card
