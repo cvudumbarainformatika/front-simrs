@@ -110,7 +110,10 @@
                     <div class="col-4">
                       Dokter
                     </div>
-                    <div class="col-6">
+                    <div v-if="item?.depo ==='Gd-05010101'" class="col-6">
+                      {{ item?.kunjunganrajal[0]?.doktersimpeg?.nama }}
+                    </div>
+                    <div v-else>
                       {{ item?.dokter?.nama }}
                     </div>
                   </div>
@@ -308,7 +311,7 @@
                 </div>
                 <!-- penyerahan -->
                 <div class="row justify-center f-16 text-weight-bold q-my-xs">
-                  PENYERAHAN oBAT
+                  PENYERAHAN OBAT
                 </div>
                 <div class="row items-center">
                   <div class="col-2">
@@ -438,7 +441,7 @@ function printPage () {
       const img = canvas.toDataURL('image/jpeg', 0.8)
 
       doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
-      doc.save('Resep ' + props?.item?.datapasien?.nama + ' (' + props?.item?.datapasien?.noka + ')' + '.pdf')
+      doc.save('Resep ' + props?.item?.datapasien?.nama + ' (' + props?.item?.norm + ')' + '.pdf')
 
     //   const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
       // const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.jpg', { type: 'application/jpg' })
