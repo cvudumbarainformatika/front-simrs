@@ -14,7 +14,7 @@
           :option-label="opt => Object(opt) === opt && 'nip' in opt ? opt.nama + ' - ' + opt.nip : 'Silahkan Dipilih'"
           option-value="nip"
           outlined
-          :source="data.ptks"
+          :source="tarik.ptks"
           @selected="(val)=>pilihPTK(val)"
         />
       </div>
@@ -34,7 +34,9 @@
           option-value="kodekegiatan"
           outlined
           :source="tarik.kegiatans"
+          @db-model="kodeKeg"
           @selected="(val)=>pilihKegiatan(val)"
+          :key="store.reqs.kodebidang"
         />
       </div>
 
@@ -87,40 +89,68 @@
         :autofocus="false"
         :valid="{required:true}"
       />
-      <div class="q-pa-sm q-gutter-y-md" style="width: 25%">
-        <app-input-simrs
-          v-model="store.form.biayatransfer"
-          label="Biaya Administrasi"
-          outlined
-          :autofocus="false"
-          :valid="{required:true, number:true}"
-        />
-      </div>
+      <app-input-simrs
+        class="q-pa-sm q-gutter-y-xs"
+        style="width: 50%;"
+        v-model="store.form.noserahterima"
+        label="Nomor Serahterima"
+        disable
+        outlined
+      />
 
-      <div class="float-right q-pa-sm q-gutter-y-xs">
+      <app-input-simrs
+        class="q-pa-sm q-gutter-y-xs"
+        style="width: 50%;"
+        v-model="store.form.biayatransfer"
+        label="Biaya Administrasi"
+        outlined
+        :autofocus="false"
+        :valid="{required:true, number:true}"
+      />
+
+      <!-- <div class="float-right q-pa-sm q-gutter-y-xs">
         <app-btn
           label="Simpan"
           :disable="store.loading"
           :loading="store.loading"
           @click="onSimpan()"
         />
-      </div>
+      </div> -->
     </div>
     <select-serahterima
       v-model="store.openDialogCariSerahterima"
       @selected="pilihSerahterima"
       :key="carisrt.reqs.kodepenerima"
     />
+
+    <div class="q-card q-mt-sm">
+      <div class="row bg-grey-5 text-primary q-pa-sm q-mb-xs q-mt-xs">
+        <div class="f-14 text-weight-bold">
+          Rincian NPD-LS
+        </div>
+      </div>
+      <FormRincianNPDls />
+    </div>
+    <div class="float-right q-pa-sm q-gutter-y-xs">
+      <app-btn
+        label="Simpan NPD-LS"
+        :disable="store.loading"
+        :loading="store.loading"
+        @click="onSimpan()"
+      />
+    </div>
   </q-form>
+  {{ tanggal() }}
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, onMounted } from 'vue'
+import { defineAsyncComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
-import { useLaporanBkuPtkStore } from 'src/stores/siasik/laporan/bku/bkuptk'
+// import { useLaporanBkuPtkStore } from 'src/stores/siasik/laporan/bku/bkuptk'
 import { formKontrakPekerjaan } from 'src/stores/siasik/transaksi/ls/kontrak/formkontrak'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
+import FormRincianNPDls from './FormRincianNPDls.vue'
 
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
@@ -129,25 +159,9 @@ const ambil = formKontrakPekerjaan()
 const store = formNotaPermintaanDanaLS()
 const carisrt = dataBastFarmasi()
 
-const data = useLaporanBkuPtkStore()
+// const data = useLaporanBkuPtkStore()
 const formNpdLS = ref(null)
 
-onMounted(() => {
-  onReset()
-  Promise.all([
-    data.getPtks(),
-    tarik.getDataBidang(),
-    ambil.getPihaktiga()
-    // store.selectbastFarmasi()
-  ])
-})
-
-function onSimpan () {
-  store.simpanNpdls()
-  // .then(() => {
-  //   store.emptyForm()
-  // })
-}
 const onSubmit = () => {
   store.simpanNpdls()
     .then(() => {
@@ -156,6 +170,41 @@ const onSubmit = () => {
       }
     })
 }
+const onReset = () => {
+  formNpdLS.value.resetValidation()
+}
+onMounted(() => {
+  onReset()
+  // store.getRincianBelanja()
+  Promise.all([
+    // data.getPtks(),
+    tarik.getDataBidang(),
+    ambil.getPihaktiga(),
+
+    pilihKegiatan()
+    // store.selectbastFarmasi()
+  ])
+})
+
+onBeforeUnmount(() => {
+  store.resetFORM()
+})
+function kodeKeg (val) {
+  store.setParams('kodekegiatan', val)
+  console.log('kkkk', store.setParams)
+}
+function tanggal (val) {
+  const tgl = store.form.tglnpdls
+  console.log('tanggal', tgl)
+}
+
+function onSimpan () {
+  store.simpanNpdls()
+  // .then(() => {
+  //   store.emptyForm()
+  // })
+}
+
 const serahTerima = (val) => {
   console.log('serahTerima', val)
   if (val === '1') {
@@ -164,31 +213,30 @@ const serahTerima = (val) => {
 }
 const pilihSerahterima = (val) => {
   store.setForm(val)
-  // .then(() => {
-  //   const arr = carisrt.bastfarmasis
-  //   const obj = arr.length ? arr.find(x => x.nobast === val) : null
+}
 
-  //   store.form.noserahterima = obj.nobast ?? ''
-  // })
-}
-const onReset = () => {
-  formNpdLS.value.resetValidation()
-}
 function pilihKegiatan (val) {
   const arr = tarik.kegiatans
   const obj = arr.length ? arr.find(x => x.kodekegiatan === val) : null
   // console.log('pilihKegiatan', obj)
   store.form.kegiatanblud = obj?.kegiatan ?? ''
   store.form.kodekegiatanblud = obj?.kodekegiatan ?? ''
+  store.reqs.kodekegiatan = val ?? ''
+  store.getRincianBelanja()
+  console.log('kodekegiatan', store.reqs.kodekegiatan)
 }
 function pilihPTK (val) {
-  const arr = data.ptks
+  const arr = tarik.ptks
   const obj = arr.length ? arr.find(x => x.nip === val) : null
   // console.log('pilihKamar', obj)
   store.form.pptk = obj?.nama ?? ''
   store.form.kodepptk = obj?.nip ?? ''
+  // store.form.kodekegiatanblud = ''
   store.form.kodebidang = obj?.kodeBagian ?? ''
+  store.reqs.kodebidang = obj?.kodeBagian ?? ''
+  store.form.kodekegiatanblud = ''
   store.form.bidang = obj?.bagian ?? ''
+  console.log('kodebidang', store.reqs.kodebidang)
 }
 function pilihPihaktiga (val) {
   const arr = ambil.pihaktigas

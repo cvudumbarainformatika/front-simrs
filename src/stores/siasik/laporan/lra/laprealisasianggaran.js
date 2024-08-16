@@ -27,6 +27,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     realisasipends: [],
     bidangs: [],
     kegiatans: [],
+    ptks: [],
     paguAnggaran: [],
     mapRekening: [],
     penggunaAnggaran: [],
@@ -57,9 +58,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           if (resp.status === 200) {
             this.bidangs = resp.data
             this.kegiatans = resp.data
+            this.ptks = resp.data
             this.loading = false
             this.filterBidang(resp.data)
             this.filterKegiatan(resp.data)
+            this.filterPtk(resp.data)
             resolve(resp)
           }
         }).catch(() => { this.loading = false })
@@ -83,6 +86,27 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       }, [])
       this.bidangs = bid
       // console.log('bidangfilt', this.params.bidang)
+    },
+    filterPtk() {
+      const data = this.ptks?.length
+        ? this.ptks?.map((x) => {
+          return {
+            nip: x.kodepptk,
+            nama: x.namapptk,
+            kodeBagian: x.kodebidang,
+            bagian: x.bidang
+          }
+        })
+        : []
+      const ptk = data.reduce((acc, curr) => {
+        const kodesama = acc.find(x => x.nip === curr.nip)
+        if (!kodesama) {
+          acc.push(curr)
+        }
+        return acc
+      }, [])
+      this.ptks = ptk
+      console.log('pptk', this.ptks)
     },
     filterKegiatan() {
       const data = this.kegiatans?.length

@@ -20,6 +20,11 @@ const siasik = {
       component: () => import('pages/siasik/transaksi/ls/kontrak/IndexPage.vue')
     },
     {
+      path: '/siasik/ls/serahterima',
+      // name: 'siasik.saldo',
+      component: () => import('pages/siasik/transaksi/ls/serahterima/IndexPage.vue')
+    },
+    {
       path: '/siasik/ls/npdls',
       // name: 'siasik.saldo',
       component: () => import('pages/siasik/transaksi/ls/npdls/IndexPage.vue')

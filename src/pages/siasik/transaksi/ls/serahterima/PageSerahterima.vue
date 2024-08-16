@@ -4,7 +4,7 @@
       <q-card class="q-pa-xs">
         <div class="row bg-black text-white q-pa-sm q-mb-xs q-mt-xs">
           <div class="f-14 text-weight-bold">
-            Nota Permintaan Dana Langsung | SIASIK
+            Serah Terima Pekerjaan | SIASIK
           </div>
         </div>
       </q-card>
@@ -19,17 +19,18 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="forminput" label="Form NPD-LS" />
-        <q-tab name="data" label="Data NPD-LS" />
+        <q-tab name="forminput" label="Form Serahterima" />
+        <q-tab name="data" label="Data Serahterima" />
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tabdata" animated>
         <q-tab-panel name="forminput">
-          <FormInputnpdLS />
+          <!-- <FormInputnpdLS /> -->
+          <div>Coba</div>
         </q-tab-panel>
 
         <q-tab-panel name="data">
-          <ListdataNpsLS />
+          <!-- <ListdataNpsLS /> -->
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -38,8 +39,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import FormInputnpdLS from './inpage/FormInputnpdLS.vue'
-import ListdataNpsLS from './inpage/ListdataNpdLS.vue'
+// import FormInputnpdLS from './inpage/FormInputnpdLS.vue'
+// import ListdataNpsLS from './inpage/ListdataNpdLS.vue'
 // import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 
 const tabdata = ref('forminput')
