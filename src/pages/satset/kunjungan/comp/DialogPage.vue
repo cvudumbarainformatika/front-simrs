@@ -50,6 +50,7 @@
 <script setup>
 import PageRajal from './contents/PageRajal.vue'
 import PageRanap from './contents/PageRanap.vue'
+import BlockPage from './contents/BlockPage.vue'
 
 import { computed } from 'vue'
 const props = defineProps({
@@ -59,9 +60,10 @@ const props = defineProps({
   }
 })
 const layouts = {
-  default: PageRajal,
+  default: BlockPage,
   PageRajal,
-  PageRanap
+  PageRanap,
+  BlockPage
 }
 const defaultLayout = 'PageRajal'
 const layout = computed(() => layouts[props?.item?.comp] || defaultLayout)

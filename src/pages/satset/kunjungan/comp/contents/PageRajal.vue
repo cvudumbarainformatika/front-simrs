@@ -103,12 +103,12 @@ onMounted(() => {
   store.getData()
 })
 
-function getIdSatset(pasien, n) {
+function getIdSatset (pasien, n) {
   pas.value = n
   store.getSatsetId(pasien)
 }
 
-function kirimKunjungan(pasien, n) {
+function kirimKunjungan (pasien, n) {
   pas.value = n
   store.kirimKunjunganSatset(pasien)
 }

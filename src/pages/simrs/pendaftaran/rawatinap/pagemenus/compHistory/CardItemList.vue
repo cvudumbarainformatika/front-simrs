@@ -37,11 +37,25 @@
             <div class="ellipsis text-grey-8 q-pt-xs">
               Alamat : <i>{{ item?.alamat }}</i>
             </div>
-            <q-badge outline class="q-mt-sm q-px-md" dense :color="!item?.sep ? 'red' : 'primary'">
-              <div class="f-10">
-                {{ !item?.sep ? 'SEP BELUM TERBIT' : item?.sep }}
-              </div>
-            </q-badge>
+            <div v-if="item?.groups !=='2'">
+              <q-badge outline class="q-mt-sm q-px-sm" dense :color="!item?.sep ? 'red' : 'primary'">
+                <div class="f-12">
+                  {{ !item?.sep ? 'SEP RANAP BELUM TERBIT' : 'SEP RANAP : ' +item?.sep }}
+                </div>
+              </q-badge>
+              <q-badge v-if="item?.sep_igd" outline class="q-mt-sm q-px-sm q-ml-sm" dense :color="!item?.sep_igd ? 'red' : 'dark'">
+                <div class="f-12">
+                  {{ !item?.sep_igd ? 'SEP IGD BELUM TERBIT' : 'SEP IGD : ' +item?.sep_igd }}
+                </div>
+              </q-badge>
+            </div>
+            <div v-else>
+              <q-badge outline class="q-mt-sm q-px-sm" dense color="teal">
+                <div class="f-12">
+                  PASIEN UMUM
+                </div>
+              </q-badge>
+            </div>
           </div>
         </div>
       </div>
@@ -57,6 +71,11 @@
             <div class="text-grey-6 f-10">
               Jam : <b> {{ date.formatDate(item?.tglmasuk, 'HH:mm') }}</b>
             </div>
+            <q-badge outline class="q-mt-sm q-px-sm" dense :color="item?.diagnosa.length ? 'teal' : 'negative'">
+              <div class="f-10">
+                {{ item?.diagnosa.length ? 'Ada Diagnosa' : 'Blm Ada Diagnosa' }}
+              </div>
+            </q-badge>
           </div>
           <!-- <div class="col-2">
             <div class="f-10 text-grey-8">
@@ -100,9 +119,26 @@
                       <q-item-section>Cetak Gelang</q-item-section>
                     </q-item>
                     <q-separator />
-                    <q-item clickable v-close-popup @click="emits('buatSep', item)">
-                      <q-item-section>{{ !item?.sep ? 'Buat SEP' : 'Cetak SEP' }}</q-item-section>
-                    </q-item>
+                    <template v-if="!item?.sep">
+                      <q-item clickable v-close-popup @click="emits('buatSep', item)">
+                        <q-item-section>{{ !item?.sep ? 'Buat SEP' : 'Cetak SEP' }}</q-item-section>
+                      </q-item>
+                      <q-item clickable v-close-popup @click="emits('sepManual', item)">
+                        <q-item-section>SEP Manual</q-item-section>
+                      </q-item>
+                    </template>
+                    <template v-else>
+                      <q-item clickable v-close-popup @click="emits('cetakSep', item)">
+                        <q-item-section>Cetak SEP RANAP</q-item-section>
+                      </q-item>
+                      <q-item clickable v-close-popup @click="emits('editSep', item)">
+                        <q-item-section>Edit SEP RANAP</q-item-section>
+                      </q-item>
+                      <q-item clickable v-close-popup @click="emits('hapusSep', item)">
+                        <q-item-section>Hapus SEP RANAP</q-item-section>
+                      </q-item>
+                    </template>
+
                     <!-- <q-separator />
                     <q-item clickable v-close-popup @click="emits('halaman1', item)">
                       <q-item-section>Halaman 1</q-item-section>
@@ -137,7 +173,7 @@ defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep', 'sepManual', 'cetakSep', 'editSep', 'hapusSep'])
 </script>
 
 <style lang="scss" scoped>

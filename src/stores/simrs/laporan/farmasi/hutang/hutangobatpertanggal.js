@@ -7,16 +7,18 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
   state: () => ({
     loading: false,
     items: [],
+    detail: [],
     meta: {},
-    kolom: [],
+    kolom: ['PBF', 'Total'],
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     params: {
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      jenisreport: ''
+      jenisreport: '1'
       // ruangan: ''
-    }
+    },
+    judulreport: 'Laporan Hutang Pertanggal By Penerimaan'
   }),
   actions: {
     async initAmbilData () {
@@ -39,6 +41,7 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
         })
     },
     sethasil (val) {
+      // console.log('val', val)
       const wew = []
       val.forEach(element => {
         const kodepbf = element?.kdpbf
@@ -52,21 +55,46 @@ export const usehutangObatPerTanggalStore = defineStore('laporan_hutang_obat_per
           namapbfx,
           subtotalz
         }
+
         wew.push(xxx)
       })
-      const namapbff = filterDuplicateArrays(wew.map(m => m?.namapbfx))
+
+      const kodepbf = filterDuplicateArrays(wew.map(m => m?.kodepbf))
       const hasilglobal = []
-      namapbff.forEach(sasa => {
-        const subtotal = wew?.filter(m => m.namapbfx === sasa)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalz), 0)
+
+      kodepbf.forEach(sasa => {
+        const subtotal = wew?.filter(m => m.kodepbf === sasa)?.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotalz), 0)
+        const pbfnama = wew.find(kd => kd.kodepbf === sasa)
         const hasilglobalzz = {
-          PBF: sasa,
+          kodepbfp: sasa,
+          PBF: pbfnama?.namapbfx,
           Total: subtotal
         }
         hasilglobal.push(hasilglobalzz)
       })
-      this.items = hasilglobal
-      console.log('asli', this.items)
+      // const nopenrimaanhx = []
+
+      this.items = hasilglobal.sort(({ Total: a }, { Total: b }) => b - a)
+
+      this.items.forEach(k => {
+        k.rinci = []
+        const caripbf = k?.kodepbfp
+        const cariheder = val.filter(f => f.kdpbf === caripbf)
+        if (cariheder.length) {
+          cariheder.forEach(h => {
+            if (h.penerimaanrinci.length) {
+              h.penerimaanrinci.forEach(r => {
+                k.rinci.push(r)
+              })
+            }
+          })
+        }
+      })
+      // console.log('pbf', this.items)
       this.loading = false
+    },
+    refreshTable () {
+      this.initAmbilData()
     }
   }
 })

@@ -13,12 +13,18 @@
           <div class="col-6">
             <!-- no Registrasi -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Nomor Registrasi
+              <div class="col-12">
+                <app-input
+                  v-model="store.form.noreg"
+                  disable
+                  label="Noreg"
+                  outlined
+                  :loading="store.loading"
+                />
               </div>
-              <div class="col-8">
-                : {{ store.form.noreg }}
-              </div>
+              <!-- <div class="col-8 primary">
+                {{ store.form.noreg }}
+              </div> -->
             </div>
             <!-- asal rujukan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -38,7 +44,7 @@
               </div>
             </div>
             <!-- poli tujuan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
+            <!-- <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
                 <app-autocomplete
                   ref="refPoliTujuan"
@@ -54,7 +60,7 @@
                   @selected="setPoliTujuan"
                 />
               </div>
-            </div>
+            </div> -->
             <!-- kartu / karcis -->
             <div v-if="!pelayanan">
               <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -74,6 +80,7 @@
                     @selected="setFlagKarcis"
                   />
                 </div>
+
                 <div class="col-6">
                   <app-input
                     v-model="store.display.hargakarcis"
@@ -163,14 +170,15 @@ import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienIgdStore()
 store.getInitialData()
-function setSistembayar1(val) {
+function setSistembayar1 (val) {
+  store.setForm('kodepoli', 'POL014')
   // store.setForm('sistembayar1', val)
   if (store.form.sistembayar) { delete store.form.sistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
   store.getSistemBayar2(val)
   // console.log('form', store.form)
 }
-function setSistembayar(val) {
+function setSistembayar (val) {
   store.setForm('sistembayar', val)
   const index = findWithAttr(store.sistembayars, 'rs2', val)
   console.log('sistem bayar dua ', store.sistembayars[index])
@@ -193,7 +201,7 @@ const props = defineProps({
   pelayanan: { type: [String, Number], default: '' }
 })
 // reset validasi
-function resetValidation() {
+function resetValidation () {
   refAsalRujukan.value.$refs.refAuto.resetValidation()
   refFlagKartu.value.$refs.refAuto.resetValidation()
   refDPJP.value.$refs.refAuto.resetValidation()
@@ -202,62 +210,66 @@ function resetValidation() {
 }
 // validasi
 let valid = false
-function validasi() {
+function validasi () {
   const asalRujukan = refAsalRujukan.value.$refs.refAuto.validate()
   const flagKartu = refFlagKartu.value ? refFlagKartu.value.$refs.refAuto.validate() : true
   const dpjp = refDPJP.value ? refDPJP.value.$refs.refAuto.validate() : true
   // const dpjp = true
-  const poliTujuan = refPoliTujuan.value.$refs.refAuto.validate()
+  const poliTujuan = refPoliTujuan?.value ? refPoliTujuan.value.$refs.refAuto.validate() : true
   const sistemBayar = refSistemBayar.value.$refs.refAuto.validate()
   if (props.pelayanan !== 'igd') {
     if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) {
       valid = true
-    } else {
+    }
+    else {
       valid = false
     }
-  } else {
+  }
+  else {
     if (asalRujukan && poliTujuan && sistemBayar) {
       valid = true
-    } else {
+    }
+    else {
       valid = false
     }
   }
 }
 // set
-function set() {
+function set () {
   validasi()
   if (valid) {
     emits('bisaSimpan', { form: store.form, save: true })
     return { form: store.form, save: true }
-  } else {
+  }
+  else {
     emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
     return { form: store.form, save: false }
   }
 }
 // set kode Poli
-function setPoliTujuan(val) {
-  store.paramKarcis.kd_poli = val
-  const index = findWithAttr(store.polis, 'kodepoli', val)
-  if (val !== 'POL014') {
-  // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
-    store.form.dpjp = ''
-    refDPJP.value.$refs.refAuto.resetValidation()
-    if (store.paramKarcis.flag) {
-      if (store.paramKarcis.flag !== '') {
-        store.getKarcisPoli().then(() => {
-          store.display.hargakarcis = store.kasrcispoli.tarif
-          store.form.karcis = store.kasrcispoli.tarif
-        })
-      }
-    }
-    console.log(val)
-    store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
-    store.getDokterDpjp()
-  }
-}
+// function setPoliTujuan (val) {
+//   store.paramKarcis.kd_poli = 'POL014'
+//   const index = findWithAttr(store.polis, 'kodepoli', val)
+//   if (val !== 'POL014') {
+//   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
+//     store.form.dpjp = ''
+//     refDPJP.value.$refs.refAuto.resetValidation()
+//     if (store.paramKarcis.flag) {
+//       if (store.paramKarcis.flag !== '') {
+//         store.getKarcisPoli().then(() => {
+//           store.display.hargakarcis = store.kasrcispoli.tarif
+//           store.form.karcis = store.kasrcispoli.tarif
+//         })
+//       }
+//     }
+//     // console.log(val)
+//     store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+//     store.getDokterDpjp()
+//   }
+// }
 // set flag karcis
-function setFlagKarcis(val) {
+function setFlagKarcis (val) {
   // const index = findWithAttr(store.jenisKarcises, 'jeniskarcis', val)
   // const flag = store.jenisKarcises[index]
   // store.display.hargakarcis = flag.harga
@@ -269,5 +281,11 @@ function setFlagKarcis(val) {
   })
 }
 // expose function
-defineExpose({ resetValidation, set, setPoliTujuan })
+defineExpose({
+  resetValidation,
+  set,
+  refSistemBayar,
+  setSistembayar
+})
+
 </script>

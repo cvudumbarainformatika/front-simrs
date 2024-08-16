@@ -196,7 +196,9 @@ function pilihPasienIni (val) {
   emits('gantiPasien')
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
+  val.kewarganegaraan = store.form.kewarganegaraan
   store.form = val
+
   store.setNoAntrian(store.noantrian)
   if (store.alamataDomisiliSama) {
     if ((!store.form.alamatdomisili ? true : store.form.alamatdomisili === '') && store.form.alamat) store.setForm('alamatdomisili', store.form.alamat)
@@ -346,7 +348,7 @@ function pilihPasienIni (val) {
   // metani kode2 dan alamat -- end --
   store.cariPasienDialog = false
 
-  console.log('pasien terpilih', val)
+  console.log('pasien terpilihxxxx', val)
   // console.log('Formnya', store.form)
 }
 </script>

@@ -268,7 +268,7 @@ const cetakdialog = ref(false)
 const temp = ref(null)
 const confirm = ref(false)
 const tempData = ref(null)
-function batal() {
+function batal () {
   temp.value = ''
   tempData.value = ''
   confirm.value = false
@@ -284,12 +284,12 @@ function batal() {
 //   })
 //   confirm.value = false
 // }
-function tidak() {
+function tidak () {
   emits('hapus', tempData.value)
   confirm.value = false
 }
 
-function hapus(item) {
+function hapus (item) {
   Dialog.create({
     title: 'KONFIRMASI',
     message: 'Yakin Data Pasien Akan Dihapus...???',
@@ -361,7 +361,7 @@ const pasien = ref(null)
 const openGen = ref(false)
 const openPrevGc = ref(false)
 
-function openPreviewGc() {
+function openPreviewGc () {
   openPrevGc.value = !openPrevGc.value
 }
 
@@ -373,7 +373,7 @@ const jenisPengajuans = ref([
 ])
 const keterangan = ref('')
 const jenisPengajuan = ref('2')
-function PengajuanSep(val) {
+function PengajuanSep (val) {
   dialog.value = true
   temp.value = val.noka
 }
@@ -393,7 +393,7 @@ const loadingReSep = ref(null)
 //     sepStore.getSep(val)
 //   }
 // }
-function simpanPengajuan() {
+function simpanPengajuan () {
   const data = {
     noka: temp.value,
     jenispengajuan: jenisPengajuan.value,
@@ -461,17 +461,19 @@ function simpanPengajuan() {
 //   return text
 // }
 
-function getsatpasien(stat) {
+function getsatpasien (stat) {
   if (stat === '') {
     return 'BELUM TERLAYANI'
-  } else if (stat === '1') {
+  }
+  else if (stat === '1') {
     return 'PASIEN SUDAH DILAYANI'
-  } else {
+  }
+  else {
     return 'PASIEN MASIH DILAYANI'
   }
 }
 
-function genCon(row) {
+function genCon (row) {
   // console.log(row)
   pasien.value = row
   openGen.value = !openGen.value
@@ -479,9 +481,8 @@ function genCon(row) {
 
 const patien = ref(null)
 
-function cetakgelang(val) {
+function cetakgelang (val) {
   patien.value = val
-  console.log('wew', val)
   cetakdialog.value = true
 }
 

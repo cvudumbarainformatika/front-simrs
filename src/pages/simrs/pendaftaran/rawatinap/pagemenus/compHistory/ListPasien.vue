@@ -19,12 +19,14 @@
             @spri="(val)=>emits('spri', val)"
             @cetak-gelang="(val)=>emits('cetakGelang', val)"
             @buat-sep="(val)=>emits('buatSep', val)"
+            @sep-manual="(val)=>emits('sepManual', val)"
+            @cetak-sep="(val)=>emits('cetakSep', val)"
           />
         </TransitionGroup>
       </template>
 
       <!-- </Suspense> -->
-      <div style="padding-bottom: 300px" />
+      <div style="padding-bottom: 80px" />
     </q-list>
 
     <!-- menu di list -->
@@ -49,7 +51,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep', 'sepManual', 'cetakSep', 'editSep', 'hapusSep'])
 </script>
 
 <style lang="scss" scoped>

@@ -88,18 +88,18 @@ onMounted(() => {
   tab.value = lists.value[0]
 
   Promise.all([
-    store.getKelamin(),
-    store.getSapaan(),
-    store.getPendidikan(),
-    store.getAgama(),
-    store.getBahasa(),
-    store.getStatusPernikahan(),
-    store.getPekerjaan(),
-    store.getAsalRujukan(),
+    store.getKelamin(), // sudah di cache
+    store.getSapaan(), // sudah di cache
+    store.getPendidikan(), // sudah di cache
+    store.getAgama(), // sudah di cache
+    store.getBahasa(), // sudah di cache
+    store.getStatusPernikahan(), // sudah di cache
+    store.getPekerjaan(), // sudah di cache
+    store.getAsalRujukan(), // sudah di cache
     // store.getHakRuang(),
-    store.getSistemBayar(),
-    store.getKamar(),
-    store.getDokter(),
+    store.getSistemBayar(), // sudah di cache
+    store.getKamar(), // sudah di cache
+    store.getDokter(), // sudah di cache
     store.getJenisKasus()
   ])
 })

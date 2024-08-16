@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row items-center garis-bawah">
           <div class="col-2">
-            <q-image
+            <q-img
               src="~assets/images/logo-kota-grey.png"
               spinner-color="white"
               style="height: 3.56cm; max-width: 2.86cm"
@@ -40,90 +40,42 @@
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          REKAP TAGIHAN PASIEN PER RUANGAN
+          {{ store.judulreport }}
         </div>
-        <div class="row fit justify-center items-center text-weight-bold f-14">
+        <div align="center">
+          <q-select
+            v-model="store.params.jenisreport"
+            use-input
+            fill-input
+            hide-selected
+            option-value="kodereport"
+            option-label="namareport"
+            :options="jenisreport"
+            emit-value
+            map-options
+            dense
+            outlined
+            label="Pilih Jenis Laporan Hutang"
+            transition-show="scale"
+            transition-hide="scale"
+            style="width: 350px"
+            :loading="store.loading"
+            @update:model-value="pilihjenislaporan"
+          />
+        </div>
+        <!-- <div class="row fit justify-center items-center text-weight-bold f-14">
           periode
-        </div>
+        </div> -->
       </q-card-section>
-      <q-card-section>
-        <TablePage
-          :ada-cari="false"
-          :default-btn="false"
-          :right-action="false"
-          :items="store.items"
-          :columns="store.kolom"
-          row-no
-        >
-          <template #header-left-after-search>
-            <q-form
-              ref="formRef"
-              class="row q-pa-md q-col-gutter-xs"
-              @submit="store.initAmbilData"
-            >
-              <div class="row q-col-gutter-sm">
-                <div>
-                  <q-select
-                    v-model="store.params.jenisreport"
-                    use-input
-                    fill-input
-                    hide-selected
-                    option-value="kodereport"
-                    option-label="namareport"
-                    :options="jenisreport"
-                    emit-value
-                    map-options
-                    dense
-                    outlined
-                    label="Pilih Jenis Laporan Hutang"
-                    transition-show="scale"
-                    transition-hide="scale"
-                    :rules="[
-                      val => !!val || 'Harus diisi'
-                    ]"
-                  />
-                </div>
-                <div>
-                  <app-input-date-human
-                    :model="store.tanggal.from"
-                    label="dari tanggal"
-                    outlined
-                    @db-model="setTo"
-                    @set-display="setToDisp"
-                  />
-                </div>
-                <!-- <div>
-                  <app-input-date-human
-                    :model="store.tanggal.to"
-                    label="sampai tanggal"
-                    outlined
-                    @db-model="setTox"
-                    @set-display="setToFromDisp"
-                  />
-                </div> -->
-
-                <div>
-                  <q-btn
-                    label="Cari"
-                    type="submit"
-                    color="primary"
-                    :loading="store.loading"
-                    :disable="store.loading"
-                  />
-                </div>
-              </div>
-            </q-form>
-          </template>
-          <template #cell-PBF="{row}">
-            {{ row?.PBF }}
-          </template>
-          <template #cell-Total="{row}">
-            <div class="row justify-end">
-              {{ formatDouble(row?.Total) }}
-            </div>
-          </template>
-        </TablePage>
-      </q-card-section>
+      <div v-if="store.params.jenisreport === '1'">
+        <HutangpertanggalByPenerimaanVue />
+      </div>
+      <div v-else-if="store.params.jenisreport === '2'">
+        <HutangpertanggalByBAST />
+      </div>
+      <div v-else-if="store.params.jenisreport === '3'">
+        <MutasiHutangObat />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -131,19 +83,47 @@
 import { ref } from 'vue'
 // import CustomTable from '../../../rekap/CustomTable.vue'
 import { usehutangObatPerTanggalStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggal'
-import TablePage from './TablePage.vue'
-import { formatDouble } from 'src/modules/formatter'
+// import { usehutangObatPerTanggalBastStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggalBast'
+// import TablePage from './TablePage.vue'
+// import { formatDouble } from 'src/modules/formatter'
+import HutangpertanggalByPenerimaanVue from './HutangpertanggalByPenerimaan.vue'
+import HutangpertanggalByBAST from './HutangpertanggalByBAST.vue'
+import MutasiHutangObat from './MutasiHutangObat.vue'
 
 const store = usehutangObatPerTanggalStore()
+// const storebast = usehutangObatPerTanggalBastStore()
 const jenisreport = ref([
   {
     kodereport: '1',
-    namareport: 'Laporan Hutang Pertanggal'
+    namareport: 'Laporan Hutang Pertanggal By Penerimaan'
+  },
+  {
+    kodereport: '2',
+    namareport: 'Laporan Hutang Pertanggal By BAST'
+  },
+  {
+    kodereport: '3',
+    namareport: 'Laporan Mutasi Hutang Obat'
   }
 ])
 
-function setToDisp (vaal) {
-  store.tanggal.from = vaal
+function pilihjenislaporan (val) {
+  if (val === '1') {
+    store.params.jenisreport = '1'
+    store.judulreport = 'Laporan Hutang Pertanggal By Penerimaan'
+  }
+  else if (val === '2') {
+    store.params.jenisreport = '2'
+    store.judulreport = 'Laporan Hutang Pertanggal By BAST'
+  }
+  else {
+    store.params.jenisreport = '3'
+    store.judulreport = 'Laporan Mutasi Hutang Obat'
+  }
 }
+
+// function setToDisp (vaal) {
+//   store.tanggal.from = vaal
+// }
 
 </script>

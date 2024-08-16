@@ -161,6 +161,7 @@ function obatSelected (val) {
   store.setForm('generik', val?.generik ?? null)
   store.setForm('kode108', val?.kode108 ?? null)
   store.setForm('kode50', val?.kode50 ?? null)
+  store.setForm('jenis_perbekalan', val?.jenis_perbekalan ?? null) // pembatasan
   store.setForm('kodedepo', store.dpPar)
   // refQty.value?.focus()
   // refQty.value?.select()

@@ -110,7 +110,8 @@ const props = defineProps({
   disable: { type: Boolean, default: false },
   readonly: { type: Boolean, default: false },
   reverseFillMask: { type: Boolean, default: false },
-  errMessage: { type: String, default: 'error, data tidak valid' }
+  errMessage: { type: String, default: 'error, data tidak valid' },
+  defErr: { type: String, default: 'Harap diisi' }
 })
 
 const refInput = ref(null)
@@ -131,7 +132,7 @@ function anotherValid (val) {
     const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
     return emailPattern.test(val) || 'email tidak valid'
   }
-  return (!!val) || 'Harap diisi'
+  return (!!val) || props.defErr
 }
 
 function changeType () {

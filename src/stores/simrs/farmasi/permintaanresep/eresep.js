@@ -77,8 +77,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     messageCopied: [],
     pemberianObatCek: [],
     permintaanResepDuplicate: [],
-    noresepDuplicate: ''
+    noresepDuplicate: '',
+    checkObat: [],
+    permintaanDuplicate: false,
     // section racikan end---
+    batases: [
+      { depo: 'Gd-05010101', batas: 5 }, // rajal
+      { depo: 'Gd-04010102', batas: 7 } // ranap
+    ]
   }),
   actions: {
     setForm (key, val) {
@@ -929,6 +935,33 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           }
           this.form.noresep = ''
           this.loadingkirim = false
+          console.log(err?.response?.data)
+          // console.log(err?.response?.data?.sudahAda)
+          if (err?.response?.data?.sudahAda?.length) {
+            const sudahAda = err?.response?.data?.sudahAda
+            this.listPemintaanSementara?.forEach(mi => {
+              mi.sudahAda = false
+              const ada = sudahAda.find(su => su.kdobat === mi.kdobat)
+              if (ada) mi.sudahAda = true
+            })
+            this.listRacikan?.forEach(li => {
+              li?.rincian?.forEach(mi => {
+                mi.sudahAda = false
+                const ada = sudahAda.find(su => su.kdobat === mi.kdobat)
+                if (ada) mi.sudahAda = true
+              })
+            })
+            // err?.response?.data?.sudahAda.forEach(su => {
+            //   const minta = this.listPemintaanSementara?.find(f => f.kdobat === su.kdobat)
+            //   if (minta) minta.sudahAda = true
+            //   if (this.listRacikan?.length) {
+            //     this.listRacikan.forEach(raci => {
+            //       const racikan = raci?.rincian?.find(f => f.kdobat === su.kdobat)
+            //       if (racikan) racikan.sudahAda = true
+            //     })
+            //   }
+            // })
+          }
         })
     },
     async hapusObat (val) {
@@ -966,6 +999,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         if (resp.status === 200) {
           if (resp.data?.length) {
             const arr = resp.data
+            console.log('hisr', arr)
+
+            arr.forEach(hi => {
+              const batas = this.batases.find(b => b.depo === hi.depo)
+              hi?.permintaanresep?.forEach(ri => {
+                if (ri?.mobat?.jenis_perbekalan.toLowerCase() === 'obat') {
+                  ri.checked = false
+                  ri.batas = batas?.batas ?? 0
+                }
+              })
+            })
+
             this.historyMeta = null
             this.historys = arr
             this.statusCopiedRacik = []
@@ -1014,6 +1059,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     cekObat (val, obat, indexlist, tipe) {
       this.loadingObat = true
       let kdobatArray = ''
+
+      // if (val?.length > 5 || this.permintaanDuplicate.length > 5) {
+      //   this.loading = false
+      //   return notifErrVue('Maaf duplicate resep maksimal 5 Obat, silahkan pilih obat yang diperlukan maksimal 5 Obat!!!')
+      // }
+
       if (obat.length) {
         kdobatArray = obat.map(item => item?.kdobat)
       }
@@ -1071,7 +1122,36 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     // }
     },
     simpanCopyResep (val, obat, indexlist, tipe) {
-      const resep = val?.permintaanresep
+      const resep = []
+      const panjang = val?.permintaanresep.filter(fi => fi.checked)
+      let batas = 0
+      const indexss = []
+
+      val?.permintaanresep.forEach((pa, indexs) => {
+        if (pa?.mobat?.jenis_perbekalan.toLowerCase() === 'obat') {
+          if (val?.permintaanresep?.length > 5) {
+            batas = pa.batas
+            if (pa.checked && panjang.length <= pa.batas) {
+              indexss.push(indexs)
+              resep.push(pa)
+            }
+          }
+          else {
+            indexss.push(indexs)
+            resep.push(pa)
+          }
+        }
+        else {
+          indexss.push(indexs)
+          resep.push(pa)
+        }
+      })
+
+      if (panjang.length > batas) {
+        this.loading = false
+        return notifErrVue('Maaf duplicate resep maksimal ' + batas + ' Obat, silahkan pilih obat yang diperlukan maksimal ' + batas + ' Obat!!!')
+      }
+
       const racik = val?.permintaanracikan
       const rinracik = val?.rincianracik
       const kirimResep = []
@@ -1110,6 +1190,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               uraian108: obats?.uraian108,
 
               // data duplicate
+              jenis_perbekalan: res?.mobat?.jenis_perbekalan,
               aturan: res?.aturan,
               jumlah_diminta: res?.jumlah,
               jumlahdosis: res?.jumlah,
@@ -1213,7 +1294,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
             resolve(resp)
 
+            indexss.forEach(i => {
+
+            })
             resp.data.forEach((element, index) => {
+              console.log('element', element, val)
               if (element?.messageError) {
                 if (tipe === 'racik') {
                   if (element?.messageError?.cek) {
@@ -1237,10 +1322,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
                     this.permintaanResepDuplicate[key] = data?.kirimResep[index]
                   }
                   else {
-                    const key = `${indexlist}-${index}`
-                    this.statusCopied[key] = false
-                    this.messageCopied[key] = element?.messageError
-                    this.pemberianObatCek[key] = null
+                    if (indexss.length === 0) {
+                      const key = `${indexlist}-${index}`
+                      this.statusCopied[key] = false
+                      this.messageCopied[key] = element?.messageError
+                      this.pemberianObatCek[key] = null
+                    }
+                    else {
+                      const key = `${indexlist}-${indexss[index]}`
+                      this.statusCopied[key] = false
+                      this.messageCopied[key] = element?.messageError
+                      this.pemberianObatCek[key] = null
+                    }
                   }
                 }
               }
@@ -1251,9 +1344,17 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
                   this.pemberianObatCek[key] = []
                 }
                 else {
-                  const key = `${indexlist}-${index}`
-                  this.statusCopied[key] = true
-                  this.pemberianObatCek[key] = []
+                  console.log('INDEX', indexss.length)
+                  if (indexss.length === 0) {
+                    const key = `${indexlist}-${index}`
+                    this.statusCopied[key] = true
+                    this.pemberianObatCek[key] = []
+                  }
+                  else {
+                    const key = `${indexlist}-${indexss[index]}`
+                    this.statusCopied[key] = true
+                    this.pemberianObatCek[key] = []
+                  }
                 }
               }
             })
@@ -1322,6 +1423,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           noreg: this.pasien?.noreg,
           norm: this.pasien?.norm,
           satuan_kcl: val?.satuan_kcl,
+          jenis_perbekalan: val?.jenis_perbekalan,
           sistembayar: this.pasien?.kodesistembayar ?? this.pasien?.kdsistembayar,
           stokalokasi: val?.stokalokasi,
           tagihanrs: tagihanRs,

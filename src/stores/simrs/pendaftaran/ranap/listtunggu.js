@@ -214,7 +214,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       const obj = arr.length ? arr.find(x => x.rs1 === val) : null
       // console.log('pilihRuang', obj)
       const group = obj?.groups ?? null
-      // const kodeRuang = obj?.rs1 ?? null
+      const kodeRuang = obj?.rs1 ?? null
       const kelas = obj?.rs3 ?? null
       const flag = obj?.rs6 ?? null
 
@@ -234,10 +234,11 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
           console.log('pilihan', pilihan)
           const kamarsx = pilihan?.kamars?.length
             ? pilihan?.kamars?.filter(x => {
-              return x.rs6 === group && (x?.rs5 === `${group + kelas}` || x?.rs5 === '-')
+              return (x.rs6 === group) && (x?.rs5 === `${kodeRuang}` || x?.rs5 === '-')
             })
             : []
-          console.log('kamars', this.kamars)
+          // const kamarsx = pilihan?.kamars ?? []
+          // console.log('kamars', this.kamars)
           const mapKamar = kamarsx?.length ? kamarsx?.map(x => x.rs1) : []
           const grup = [...new Set(mapKamar)]
           // grupKamar.value = grup
@@ -254,11 +255,13 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
         })
     },
     pilihKamar (val) {
-      // console.log('pilihKamar', val)
       const pendaftaran = useFormPendaftaranRanapStore()
+      console.log('listKamar', pendaftaran.listKamars)
+      console.log('form', this.form)
       const arr = pendaftaran.listKamars?.find(x => x?.groups === this.form.group)?.kamars || []
       // console.log('arr', arr)
-      const lists = arr?.length ? arr?.filter(x => x.rs1 === val) : []
+      const kdRuang = this.form.isTitipan === 'Tidak' ? this.form.hakruang : this.form.kode_ruang
+      const lists = arr?.length ? arr?.filter(x => x.rs1 === val && (x.rs5 === kdRuang || x.rs5 === '-')) : []
       console.log('lihatKamar', lists)
       this.form.no_bed = null
       this.beds = lists

@@ -94,7 +94,7 @@
     <template #body="props">
       <q-tr
         :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1"
-        :class="{'bg-grey text-white': adaError(props.row) || adaErrorRacikan(props.row)}"
+        :class="pembatasan(props.row)===false?{'bg-grey text-white': adaError(props.row) || adaErrorRacikan(props.row)}:pembatasan(props.row)"
       >
         <!-- <q-td auto-width>
           <q-btn v-if="props.row.racikan" size="xs" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'icon-mat-remove' : 'icon-mat-add'" />
@@ -146,6 +146,8 @@
 
 <script setup>
 import { getCssVar, useQuasar } from 'quasar'
+// eslint-disable-next-line no-unused-vars
+import { notifErrVue } from 'src/modules/utils'
 import { useTemplateEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/templateeresep'
 import { defineAsyncComponent, ref, watchEffect } from 'vue'
 
@@ -222,6 +224,14 @@ function hapusItem (val) {
 }
 
 function simpanTemplate () {
+  console.log(store.templateSelected, store.items)
+  // cek lagi
+  const obat = store.items.filter(f => f?.jenis_perbekalan?.toLowerCase() === 'obat')
+  const racik = store.items.filter(f => f?.kodeobat?.includes('racik'))
+  const tot = obat.length + racik.length
+  const batas = store.batases.find(f => f.depo === store.templateSelected.kodedepo)
+  if (tot > batas?.batas) return notifErrVue('Batas Item Obat + Racikan adalah ' + batas?.batas)
+
   $q.dialog({
     title: `${store.templateSelected?.nama ? 'Update Template' : 'Simpan Template'}`,
     message: `${store.templateSelected?.nama ? 'Apakah Template ini akan diperbarui?' : 'Silahkan masukkan nama Template terlebih dahulu'}`,
@@ -254,7 +264,21 @@ function adaErrorRacikan (row) {
 
   return errs?.length
 }
-
+function pembatasan (row) {
+  const obat = store.items.filter(f => f?.jenis_perbekalan?.toLowerCase() === 'obat')
+  const racik = store.items.filter(f => f?.kodeobat?.includes('racik'))
+  const tot = obat.length + racik.length
+  // console.log('pembatasan', store.items, row, tot)
+  console.log('pembatasan', store.items, row)
+  if (tot > row?.batas && (row?.jenis_perbekalan?.toLowerCase() === 'obat' || row?.kodeobat?.includes('racik'))) {
+    return 'bg-negative text-white'
+  }
+  if (store.sudahAda?.length && !row?.kodeobat?.includes('racik')) {
+    const ada = store.sudahAda.find(f => f.kdobat === row.kodeobat)
+    if (ada) return 'bg-red-2'
+  }
+  else return false
+}
 watchEffect(() => {
   if (store.templateSelected) {
     bg.value.head = getCssVar('dark-page')

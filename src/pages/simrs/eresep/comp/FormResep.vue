@@ -141,7 +141,7 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <nyobak-select v-model="store.namaObat" />
+                      <nyobak-select ref="refObat" v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
                       <q-input
@@ -259,14 +259,22 @@
             <q-item
               v-for="(item, i) in store.listPemintaanSementara"
               :key="i"
+              :class="item?.sudahAda?'bg-red-2':''"
             >
               <!-- {{ item }} -->
               <q-item-section style="width: 50%;">
-                <div class="row">
-                  {{ item?.mobat?.nama_obat }}
-                </div>
-                <div class="row text-italic f-10">
-                  {{ item?.kdobat }}
+                <div class="row items-center">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-11">
+                    <div class="row">
+                      {{ item?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ item?.kdobat }}
+                    </div>
+                  </div>
                 </div>
               </q-item-section>
               <q-item-section
@@ -383,6 +391,7 @@
                   v-for="(obat, j) in item?.rincian"
                   :key="j"
                   style="padding:4px 16px;"
+                  :class="obat?.sudahAda?'bg-red-2':''"
                 >
                   <!-- {{ j }} {{ obat }} -->
                   <q-item-section style="width: 50%;">
@@ -579,7 +588,7 @@ const props = defineProps({
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
 
-// const refObat = ref(null)
+const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
@@ -822,7 +831,7 @@ function setJumlah (val) {
     store.setForm('jumlah_diminta', jumlah)
     notifErrVue('jumlah tidak boleh melebihi jumlah alokasi')
   }
-  if (Object.keys(signa.value)?.length) {
+  if (Object?.keys(signa.value)?.length) {
     if (parseFloat(jumlah) > 0) {
       const kons = jumlah / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
@@ -905,11 +914,13 @@ function ketEnter () {
 }
 function simpanObat () {
   console.log('simpan obat', store.form)
+  // console.log('obat', refObat.value?.refObat)
+
   if (validate()) {
     const form = store.form
     store.simpanObat(form)?.then(() => {
       signa.value = null
-      // refObat.value.focus()
+      refObat.value?.refObat.focus()
       // refObat.value.showPopup()
       // refObat.value.showPopup()
     })
@@ -917,6 +928,12 @@ function simpanObat () {
 }
 
 function selesaiResep () {
+  const depo = store.depos.find(pa => pa.jenis === props.depo)
+  if (depo) store.setForm('kodedepo', depo?.value)
+  console.log('depo', depo)
+
+  console.log('form', store.form)
+
   store.selesaiResep()
   isReset.value = true
   setTimeout(() => {

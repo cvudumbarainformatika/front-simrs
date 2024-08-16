@@ -233,12 +233,12 @@ const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
 const loading = ref(false)
 
-function clearAllRegistrasi() {
+function clearAllRegistrasi () {
   regis.clearForm()
   refDataPasien.value.clearForm()
 }
 const Rm = ref('')
-function kirimPoli(val) {
+function kirimPoli (val) {
   pasien.clearForm()
   // val.noreg = ''
   if (!val.noreg) {
@@ -253,6 +253,7 @@ function kirimPoli(val) {
       pasien.setForm('noantrian', val.nomorantrean)
       pasien.setForm('noka', val.nomorkartu)
       pasien.setForm('nokabpjs', val.nomorkartu)
+      pasien.setForm('kewarganegaraan', 'WNI')
       if (val.nomorantrean.length > 1) {
         const temp = parseInt(val.nomorantrean.slice(2, val.nomorantrean.length))
         // console.log('antrian ', val.nomorantrean.length)
@@ -262,15 +263,17 @@ function kirimPoli(val) {
       // regis.paramKarcis.flag = 'Baru'
       cekReferensi(val.nomorreferensi)
       // console.log('pasien baru ', val)
-    } else {
+    }
+    else {
       // console.log('pasien lama ', val)
       Rm.value = val.norm
-
+      // pasien.setForm('kewarganegaraan', 'WNI')
       regis.paramKarcis.flag = 'Lama'
       store.getPasien(val.norm).then(resp => {
         if (resp.length === 1) {
           pilihPasienIni(resp[0], val)
-        } else {
+        }
+        else {
           const index = findWithAttr(resp, 'norm', val.norm)
           if (index >= 0) {
             pilihPasienIni(resp[index], val)
@@ -286,14 +289,14 @@ let nomor = '-'
 let poli = '-'
 let norm = '-'
 let tgl = dateFullFormat(new Date())
-function pilihPasienIni(val, jkn) {
+function pilihPasienIni (val, jkn) {
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
   pasien.form = val
   // console.log('pilih paseien', val)
   // console.log('jkn', jkn)
   if (val.norm) norm = val.norm
-
+  pasien.form.kewarganegaraan = 'WNI'
   if (jkn.nomorantrean) nomor = jkn.nomorantrean
   if (pasien.alamataDomisiliSama) {
     if ((!pasien.form.alamatdomisili ? true : pasien.form.alamatdomisili === '') && pasien.form.alamat) pasien.setForm('alamatdomisili', pasien.form.alamat)
@@ -362,7 +365,8 @@ function pilihPasienIni(val, jkn) {
       if (indexkelamin >= 0) {
         pasien.setForm('kodekelamin', pasien.kelamins[indexkelamin].kode)
       }
-    } else {
+    }
+    else {
       pasien.setForm('kodekelamin', val.kd_kelamin)
     }
   }
@@ -427,7 +431,7 @@ function pilihPasienIni(val, jkn) {
   // })
 }
 
-function cekReferensi(referensi) {
+function cekReferensi (referensi) {
   const param = {
     search: referensi
   }
@@ -463,16 +467,18 @@ function cekReferensi(referensi) {
               validasiSuratKontrol()
             }
           })
-        } else {
+        }
+        else {
           console.log('tidak cek Surat kontrol ')
         }
       })
-    } else {
+    }
+    else {
       console.log('tidak cek Rujukan rs ')
     }
   })
 }
-function pilihRujukan(val, jenis) {
+function pilihRujukan (val, jenis) {
   // console.log('karcis', regis.jenisKarcises)
   // console.log('rujukan p care', val)
 
@@ -484,7 +490,8 @@ function pilihRujukan(val, jenis) {
     // console.log('pilih rujukan ', nomor, poli, norm)
     setKodepoli(regis.polis[index].kodepoli)
     regis.getDokterDpjp()
-  } else {
+  }
+  else {
     notifErrVue('Poli tidak ditemukan')
   }
   // sistaem bayar start
@@ -517,7 +524,7 @@ function pilihRujukan(val, jenis) {
   regis.setForm('kdPenunjang', '')
 }
 // rujukan p care ketemu
-function pilihRujukanPCare(val) {
+function pilihRujukanPCare (val) {
   const param = {
     jenisrujukan: 1,
     norujukan: val.noKunjungan
@@ -543,7 +550,7 @@ function pilihRujukanPCare(val) {
 }
 
 // rujukan RS
-function pilihRujukanRS(val) {
+function pilihRujukanRS (val) {
   const param = {
     jenisrujukan: 2,
     norujukan: val.noKunjungan
@@ -567,12 +574,12 @@ function pilihRujukanRS(val) {
 }
 // pasien
 // registrasi
-function clearFormRegistrasi() {
+function clearFormRegistrasi () {
   regis.clearForm()
   store.setDialog()
 }
 // cek surat Kontrol
-function getListSuratKontrol() {
+function getListSuratKontrol () {
   const data = refDataPasien.value.validateNokaAndNorm()
   data.bulan = date.formatDate(regis.form.tglsep, 'MM')
   data.tahun = date.formatDate(regis.form.tglsep, 'YYYY')
@@ -587,7 +594,7 @@ function getListSuratKontrol() {
 }
 
 // cek list rujukan
-function getListRujukan() {
+function getListRujukan () {
   // console.log('validasi ', refDataPasien.value.validateNokaAndNorm())
   const data = refDataPasien.value.validateNokaAndNorm()
 
@@ -607,7 +614,7 @@ function getListRujukan() {
 }
 
 // cek supplesi
-function cekSuplesi() {
+function cekSuplesi () {
   const data = refDataPasien.value.validateNoka()
   if (data) {
     // console.log('noka', data)
@@ -616,44 +623,45 @@ function cekSuplesi() {
 }
 
 // setkodePoli
-function setKodepoli(val) {
+function setKodepoli (val) {
   // console.log('poli ditemukan', val, refRegistrasi.value)
   regis.form.kodepoli = val
   refRegistrasi.value.setPoliTujuan(val)
 }
 
 // validasi surat kontrol
-function validasiSuratKontrol() {
+function validasiSuratKontrol () {
   // console.log('validasi surat kontrol')
   refRegistrasi.value.validasiSuratKontrol()
 }
 
 // jenis konjungan
-function jenisKunjungan(val) {
+function jenisKunjungan (val) {
   // console.log('jenis kunjungan ', val)
   refRegistrasi.value.setJenisKunjungan(val)
 }
 
 // assign surat kontrol
-function assignSurat(val) {
+function assignSurat (val) {
   refRegistrasi.value.assignSuratKontrol(val)
 }
 const dialog = ref(false)
 const bisaBuatSep = ref(false)
 const pesanBPJS = ref('')
-function preSEP() {
+function preSEP () {
   // refDataPasien.value.set()
   // refRegistrasi.value.set()
   if (refDataPasien.value.set() && refRegistrasi.value.set()) {
     if (!regis.form.noreg) {
       notifNegativeCenterVue('Nomor Registrasi belum ada')
       dialogTidakAdaReg()
-    } else {
+    }
+    else {
       buatSEP()
     }
   }
 }
-function buatSEP() {
+function buatSEP () {
   // console.log('form registrasi ', regis.form)
   regis.buatSep().then(resp => {
     // console.log('resp bpjs', resp)
@@ -671,7 +679,7 @@ function buatSEP() {
 }
 
 const loadingFinger = ref(false)
-function cekFingerPasien(form) {
+function cekFingerPasien (form) {
   dialog.value = true
   loadingFinger.value = true
   pesanBPJS.value = 'Mengambil Data Finger Print dari BPJS'
@@ -683,14 +691,17 @@ function cekFingerPasien(form) {
     if (finger === '1') {
       // toSimpan(dataPasien)
       dialogCetak()
-    } else if (finger === '0') {
+    }
+    else if (finger === '0') {
       // cek umur
       // jika  < 17 thn pas cetak sep, jika tidak muncul popup pengajuan
       if (regis.form.umurthn < 17) {
         dialogCetak()
-      } else if (regis.form.umurthn === 17 && regis.form.umurbln === 0 && regis.form.umurhari === 0) {
+      }
+      else if (regis.form.umurthn === 17 && regis.form.umurbln === 0 && regis.form.umurhari === 0) {
         dialogCetak()
-      } else {
+      }
+      else {
         // pasien.alert = true
         // pasien.alertMsg = resp.result
         pesanBPJS.value = resp.result.status
@@ -704,10 +715,10 @@ const nokaQr = ref('')
 //   nokaQr.value = pasien.form.noka
 //   dialogQr.value = true
 // }
-function closeQr() {
+function closeQr () {
   dialogQr.value = false
 }
-function simpanData() {
+function simpanData () {
   // refDataPasien.value.set()
   // refRegis.value.set()
   const dataPasien = refDataPasien.value.set()
@@ -723,7 +734,7 @@ function simpanData() {
 }
 
 const router = useRouter()
-function toSimpan(dataPasien, form) {
+function toSimpan (dataPasien, form) {
   const keys = Object.keys(dataPasien.form)
   if (keys.length) {
     keys.forEach(key => {
@@ -741,7 +752,7 @@ function toSimpan(dataPasien, form) {
   })
 }
 
-function cetakAntrian(val) {
+function cetakAntrian (val) {
   console.log('cetak', val)
   const tglPer = (val?.tanggalperiksa ? dateFullFormat(val?.tanggalperiksa) : false)
   nomor = val?.nomorantrean ?? '-'
@@ -754,7 +765,7 @@ function cetakAntrian(val) {
 
 const keterangan = ref('')
 const loadingP = ref(false)
-function simpanPengajuan() {
+function simpanPengajuan () {
   const data = {
     noka: regis.form.noka,
     jenispengajuan: '2',
@@ -791,7 +802,7 @@ function simpanPengajuan() {
 }
 
 const dialogQr = ref(false)
-function dialogCetak() {
+function dialogCetak () {
   dialog.value = false
   Dialog.create({
     title: 'Konfirmasi.',
@@ -816,7 +827,7 @@ function dialogCetak() {
   })
 }
 
-function dialogTidakAdaReg() {
+function dialogTidakAdaReg () {
   Dialog.create({
     title: 'Konfirmasi.',
     message: 'Nomor Registrasi tidak ada, apakah akan dilanjutkan?',

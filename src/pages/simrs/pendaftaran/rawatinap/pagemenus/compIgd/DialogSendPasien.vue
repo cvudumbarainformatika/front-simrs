@@ -68,7 +68,6 @@
               class="col-5 q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>pendaftaran.filterSistemBayar(val)"
-              :key="store.form.jnsBayar"
             />
             <app-autocomplete
               ref="refSistemBayar"
@@ -81,7 +80,6 @@
               :source="pendaftaran.sistembayars"
               class="col-7 q-mb-xs"
               :rules="[val => (!!val) || 'Harap diisi',]"
-              :key="store.form.kodesistembayar"
             />
             <app-autocomplete
               v-if="pendaftaran.kamars.length > 0"
@@ -96,7 +94,6 @@
               class="q-mb-xs col-12"
               :rules="[val => (!!val) || 'Harap diisi',]"
               @selected="(val)=>store.pilihRuang(val)"
-              :key="store.form.hakruang"
             />
             <div class="flex q-gutter-sm full-width q-mb-sm">
               <div>Titipkan Pasien ? : </div>
@@ -205,7 +202,10 @@
 
         <q-card-section class="q-pa-none bg-primary text-white">
           <div class="q-pa-md row justify-between items-center">
-            <div><q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSend=false" /></div>
+            <div class="row q-gutter-sm">
+              <q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSend=false" />
+              <q-btn label="Show Kmr" color="dark" text-color="white" @click="pendaftaran.openDialogShowKamar=true" />
+            </div>
             <div>
               <q-btn :loading="store.loadingSend" :disable="store.loadingSend" type="submit" label="Kirim Pasien" color="yellow-3" text-color="dark" />
             </div>
@@ -213,14 +213,22 @@
         </q-card-section>
       </q-form>
     </q-card>
+
+    <!-- dialog kamar -->
+    <page-kamar
+      v-model="pendaftaran.openDialogShowKamar"
+      @close="pendaftaran.openDialogShowKamar = false"
+    />
   </q-dialog>
 </template>
 
 <script setup>
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
 import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
-import { watch } from 'vue'
+import { defineAsyncComponent, watch } from 'vue'
 // import { onMounted } from 'vue'
+
+const PageKamar = defineAsyncComponent(() => import('../PageKamar.vue'))
 
 const store = useListPendaftaranRanapStore()
 const pendaftaran = useFormPendaftaranRanapStore()

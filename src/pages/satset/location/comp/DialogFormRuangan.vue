@@ -34,7 +34,6 @@
                   dense
                   class="col-12"
                   readonly
-                  :rules="[val => !!val || 'Harap diisi']"
                   hide-bottom-space
                 />
                 <q-input
@@ -244,10 +243,19 @@ import { ref } from 'vue'
 const store = useLocationSatsetStore()
 const formRef = ref()
 
-function onSubmit() {
-  store.updateDataRuangan().then(() => {
-    store.getRuanganRajal()
-    store.dialogFormRuangan = false
-  })
+function onSubmit () {
+  store.updateDataRuangan()
+    .then(() => {
+      store.dialogFormRuangan = false
+    })
+  // .then(() => {
+  //   store.dialogFormRuangan = false
+  //   if (store.type === 'rajal') {
+  //     store.getRuanganRajal()
+  //   }
+  //   else if (store.type === 'ranap') {
+  //     store.getRuanganRanap()
+  //   }
+  // })
 }
 </script>

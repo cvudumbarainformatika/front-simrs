@@ -68,6 +68,28 @@
           >
             - {{ item?.ruanganranap?.rs2 }}
           </div>
+          <div
+            v-if="item?.kunjunganranap"
+            class="col-shrink"
+          >
+            <div v-if="!item?.kunjunganranap?.titipan">
+              - {{ item?.kunjunganranap?.rs6 }}
+            </div>
+            <div v-else class="q-ml-xs">
+              Dititipkan Di {{ item?.kunjunganranap?.ruangtitipan?.rs2 }} {{ item?.kunjunganranap?.rs6 }}
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="item?.diagnosaigd && !head"
+          class="row q-mb-xs"
+        >
+          <div class="col-shrink q-mr-xs">
+            diagnosa IGD :
+          </div>
+          <div class="col-grow">
+            {{ item?.diagnosaigd }}
+          </div>
         </div>
         <div
           v-if="item?.diagnosa && !head"

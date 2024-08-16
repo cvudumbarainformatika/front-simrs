@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <div class="row">
-      <div class="col-auto" style="min-width: 250px;">
+      <div class="col-auto" style="min-width: 50%;">
         <q-select
           v-model="rsl"
           outlined
@@ -54,7 +54,8 @@ function filterRsLain (val, update) {
 }
 function rsSelected (val) {
   console.log(val)
-  store.setForm('kdpbf', val.kode)
+  store.setForm('kode_identitas', val.kode)
+  store.setForm('nama', val.nama)
 }
 onMounted(() => {
   store.getPihakTiga().then(() => {

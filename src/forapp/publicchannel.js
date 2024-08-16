@@ -33,7 +33,7 @@ export function usePublicChannel () {
     return LIS.subscribed(() => {
       console.log('subscribed!!!')
     }).listen('.playground', (e) => {
-      console.log('listen', e)
+      console.log('listen laborat')
       if (e.message.menu === 'laborat-luar') {
         const items = labLuar.items
         if (items.length > 0) {

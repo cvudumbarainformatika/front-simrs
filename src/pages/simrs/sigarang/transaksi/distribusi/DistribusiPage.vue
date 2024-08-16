@@ -350,6 +350,7 @@
                             NIP. 19740304 200801 2 005
                           </div>
                         </div>
+                        <!--
                         <div
                           v-if="ruang==='Depo PNM' || ruang==='Depo Gizi'"
                           class="to-print-tt text-center"
@@ -364,6 +365,7 @@
                             NIP. 19661125 199603 2 003
                           </div>
                         </div>
+                        -->
                         <div class="to-print-tt text-center">
                           <div class="q-mb-xl">
                             Petugas Barang
@@ -748,6 +750,7 @@
   </div>
 </template>
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { computed, ref } from 'vue'
 import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
@@ -778,7 +781,7 @@ const updateProxy = () => {
 const today = new Date()
 const lastDay = date.formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0), 'YYYY/MM/DD')
 const firstDay = date.formatDate(Date.now(), 'YYYY/MM/01')
-function dateOption(val) {
+function dateOption (val) {
   return val >= firstDay && val <= lastDay
 }
 // date options end ----
@@ -842,7 +845,7 @@ const printObj = {
   popTitle: 'print Dsitribusi',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...', vue)
   },

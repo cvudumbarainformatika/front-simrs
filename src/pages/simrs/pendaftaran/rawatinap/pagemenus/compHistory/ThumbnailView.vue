@@ -55,19 +55,36 @@
               class="absolute z-top"
               style="top: 0; right: 12px; transform: translateY(-200%);"
             >
-              <q-menu>
-                <q-list style="min-width: 100px">
+              <q-menu dark style="min-width: 150px">
+                <q-list style="min-width: 150px;">
                   <q-item clickable v-close-popup @click="emits('spri', item)">
-                    <q-item-section>Dokumen SPRI</q-item-section>
+                    <q-item-section>Cetak SPRI</q-item-section>
                   </q-item>
-                  <q-separator />
                   <q-item clickable v-close-popup @click="emits('cetakGelang', item)">
                     <q-item-section>Cetak Gelang</q-item-section>
                   </q-item>
-                  <!-- <q-item clickable v-close-popup @click="emits('cetakIdentitas', item)">
-                      <q-item-section>Cetak Identitas</q-item-section>
+                  <q-separator dark />
+                  <template v-if="!item?.sep">
+                    <q-item clickable v-close-popup @click="emits('buatSep', item)">
+                      <q-item-section>{{ !item?.sep ? 'Buat SEP' : 'Cetak SEP' }}</q-item-section>
                     </q-item>
-                    <q-separator />
+                    <q-item clickable v-close-popup @click="emits('sepManual', item)">
+                      <q-item-section>SEP Manual</q-item-section>
+                    </q-item>
+                  </template>
+                  <template v-else>
+                    <q-item clickable v-close-popup @click="emits('cetakSep', item)">
+                      <q-item-section>Cetak SEP</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('editSep', item)">
+                      <q-item-section>Edit SEP</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="emits('hapusSep', item)">
+                      <q-item-section>Hapus SEP</q-item-section>
+                    </q-item>
+                  </template>
+
+                  <!-- <q-separator />
                     <q-item clickable v-close-popup @click="emits('halaman1', item)">
                       <q-item-section>Halaman 1</q-item-section>
                     </q-item>
@@ -108,7 +125,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2'])
+const emits = defineEmits(['details', 'spri', 'cetakGelang', 'cetakIdentitas', 'halaman1', 'halaman2', 'buatSep', 'sepManual', 'cetakSep', 'editSep', 'hapusSep'])
 
 </script>
 

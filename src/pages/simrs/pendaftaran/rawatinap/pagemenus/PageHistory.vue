@@ -30,6 +30,14 @@
                 store.pasien = val
                 store.dialogSep = true
               }"
+              @sep-manual="(val)=>{
+                store.pasien = val
+                store.dialogSepManual= true
+              }"
+              @cetak-sep="(val)=>{
+                store.pasien = val
+                store.dialogCetakSep = true
+              }"
             />
             <thumbnail-view
               v-else
@@ -40,10 +48,21 @@
                 store.pasien = val
                 store.dialogSpri = true
               }"
-
               @cetak-gelang="(val)=>{
                 store.pasien = val
                 store.dialogCetakGelang = true
+              }"
+              @buat-sep="(val)=>{
+                store.pasien = val
+                store.dialogSep = true
+              }"
+              @sep-manual="(val)=>{
+                store.pasien = val
+                store.dialogSepManual= true
+              }"
+              @cetak-sep="(val)=>{
+                store.pasien = val
+                store.dialogCetakSep = true
               }"
             />
           </transition-group>
@@ -95,6 +114,15 @@
       :pasien="store.pasien"
       :key="store.pasien"
     />
+    <dialog-sep-manual
+      v-model="store.dialogSepManual"
+      :pasien="store.pasien"
+      :key="store.pasien"
+    />
+    <dialog-cetak-sep
+      v-model="store.dialogCetakSep"
+      :pasien="store.pasien"
+    />
   </div>
 </template>
 
@@ -102,6 +130,8 @@
 import { useListHistoryPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/history'
 import { defineAsyncComponent, onMounted } from 'vue'
 import ListPasien from './compHistory/ListPasien.vue'
+import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
+import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
 // const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
@@ -109,10 +139,15 @@ const ThumbnailView = defineAsyncComponent(() => import('./compHistory/Thumbnail
 const DialogSpri = defineAsyncComponent(() => import('./compHistory/DialogSpri.vue'))
 const DialogCetakGelang = defineAsyncComponent(() => import('./compHistory/DialogCetakGelang.vue'))
 const DialogSep = defineAsyncComponent(() => import('./compHistory/DialogSep.vue'))
+const DialogSepManual = defineAsyncComponent(() => import('./compHistory/DialogSepManual.vue'))
+const DialogCetakSep = defineAsyncComponent(() => import('./compHistory/DialogCetakSep.vue'))
 
 const store = useListHistoryPendaftaranRanapStore()
+const pendaftaran = useFormPendaftaranRanapStore()
+const sep = useBuatSepRanapStore()
 
 onMounted(() => {
+  sep.dokters = pendaftaran?.dokters
   store.getDataTable()
 })
 

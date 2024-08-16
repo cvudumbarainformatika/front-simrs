@@ -43,7 +43,7 @@
             class="primary"
             :offset="[10, 10]"
           >
-            Pilih tanda tangan
+            Tutup
           </q-tooltip>
         </q-btn>
       </div>

@@ -154,7 +154,7 @@ export const useFormPendaftaranRanapStore = defineStore('pendaftaran-ranap-store
     listKamars: [],
     categories: [],
     openDialogShowKamar: false,
-    loadingShowKamar: false,
+    loadingShowKamar: true,
     openDialogCariPasien: false,
 
     errors: []

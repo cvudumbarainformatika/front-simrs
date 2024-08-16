@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 // import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { notifSuccess, notifErrVue } from 'src/modules/utils'
 import { LocalStorage } from 'quasar'
+// eslint-disable-next-line no-unused-vars
 import { usePermintaanEResepStore } from './eresep'
 // import { dateFullFormat } from 'src/modules/formatter'
 
@@ -76,7 +77,13 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     templates: [],
     errorsOrder: [],
     expandedList: [],
-    cariTemplate: null
+    cariTemplate: null,
+    // pembatasan obat
+    batases: [
+      { depo: 'Gd-05010101', batas: 5 }, // rajal
+      { depo: 'Gd-04010102', batas: 7 } // ranap
+    ],
+    sudahAda: []
   }),
   actions: {
 
@@ -126,6 +133,14 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
         this.form.kodeobat = `racikan-${parseInt(racikans?.length) + parseInt(1)}`
         this.form.namaobat = `Racikan ${parseInt(racikans?.length) + parseInt(1)}`
       }
+      // console.log('form', this.form, this.items)
+      console.log('form', this.form, this.depo, this.dpPar)
+      const batas = this.batases.find(f => f.depo === this.dpPar)
+      if (batas) this.form.batas = batas?.batas
+      else {
+        if (this.form.batas) delete this.form.batas
+      }
+
       this.items.push(this.form)
       return new Promise((resolve, reject) => {
         LocalStorage.set('template-eresep', JSON.stringify(this.items)) // simpan ke local storage (this.items)
@@ -202,11 +217,30 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
       const params = { params: { kodedepo: val } }
       // return new Promise(resolve => {
       const resp = await api.get('v1/simrs/penunjang/farmasinew/templateeresep/gettemplate', params)
-      console.log('get templates', resp)
+      // console.log('get templates', resp)
       if (resp.status === 200) {
         this.templates = resp.data
+        // pembatasan obat
+        this.templates.forEach(ite => {
+          const batas = this.batases.find(f => f.depo === ite.kodedepo)
+          if (batas) this.setBatasan(ite, batas?.batas)
+        })
+        console.log('templates', this.templates)
       }
       // })
+    },
+    setBatasan (ite, batas) {
+      ite?.rincian.forEach(ri => {
+        ri.batas = batas
+      })
+      const non = ite?.rincian.filter(f => f?.jenis_perbekalan?.toLowerCase() === 'obat')
+      const rac = ite?.rincian.filter(f => f?.kodeobat?.toLowerCase().includes('racik'))
+      const tot = non.length + rac.length
+      console.log('rincian', non, rac, tot)
+      if (tot > batas) {
+        ite.bisaOrder = false
+        ite.errorBatas = 'Pembatasan Jumlah Obat, Maksimal ' + batas
+      }
     },
 
     selectTemplate (val) {
@@ -225,6 +259,8 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     },
 
     kirimOrder (payload, pasien) {
+      console.log('payload', payload)
+      this.sudahAda = []
       this.errorsOrder = []
       this.loadingTemplate = true
       return new Promise((resolve, reject) => {
@@ -242,12 +278,12 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
           })
           .catch((err) => {
             this.loadingTemplate = false
-            console.log('err response', err)
+            // console.log('err response', err)
             const items = err.response.data.items
             const racikan = items?.filter(x => x?.racikan !== false && x?.isError === true)
             const nonRacikan = items?.filter(x => x?.racikan === false && x?.isError === true)
 
-            const grouped = racikan.length ? this.groupByx(racikan, x => x?.racikan) : []
+            const grouped = racikan?.length ? this.groupByx(racikan, x => x?.racikan) : []
             // const groupArr = Array.from(grouped, ([name, value]) => ({ name, value }))
             // console.log('racikan', grouped)
             // console.log('non racikan', nonRacikan)
@@ -259,6 +295,9 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
             console.log('err', errors)
             this.expandedList = errors?.racikan?.length ? errors.racikan.map(x => x?.koderacikan) : []
             this.errorsOrder = errors
+            // error pembatasan
+            this.sudahAda = err?.response?.data?.sudahAda
+            console.log('err nya', this.sudahAda)
             reject(err)
           })
       })

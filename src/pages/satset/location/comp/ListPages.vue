@@ -45,6 +45,9 @@ const store = useLocationSatsetStore()
 
 const items = ref([
   { nama: 'Ruangan Polikliknik', desc: 'Instalasi Rawat Jalan', content: 'poli', comp: 'PagePoli' },
-  { nama: 'Ruangan Rawat Inap', desc: 'Instalasi Rawat Inap', content: 'ranap', comp: 'PageRanap' }
+  { nama: 'Ruangan Rawat Inap', desc: 'Instalasi Rawat Inap', content: 'ranap', comp: 'PageRanapDua' },
+  { nama: 'Ruangan Laboratorium', desc: 'Laboratorium', content: 'laborat', comp: 'PageLaborat' },
+  { nama: 'Ruangan Radiologi', desc: 'Radiologi', content: 'radiologi', comp: 'PageRadiologi' },
+  { nama: 'Ruangan Farmasi', desc: 'Farmasi', content: 'farmasi', comp: 'PageFarmasi' }
 ])
 </script>
