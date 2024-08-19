@@ -22,6 +22,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     },
     loading: false,
     dialogRinci: false,
+    loadingRinci: false,
     item: null,
     exportExcel: false
   }),
@@ -85,7 +86,30 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     setItem (val) {
       this.item = val
       this.dialogRinci = true
+    },
+    async getDetail (val) {
+      const param = {
+        params: {
+          kd_obat: val?.kd_obat,
+          koderuangan: this.params?.koderuangan,
+          bulan: this.params?.bulan,
+          tahun: this.params?.tahun
+        }
+      }
+      this.loadingRinci = true
+      val.loading = true
+      // this.dialogRinci = true
+      await api.get('v1/simrs/farmasinew/kartustok/rinciobat', param)
+        .then(resp => {
+          this.loadingRinci = false
+          val.loading = false
+          this.setItem(resp?.data)
+          console.log('rinci', resp?.data)
+        })
+        .catch(() => {
+          this.loadingRinci = false
+          val.loading = false
+        })
     }
-
   }
 })
