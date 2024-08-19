@@ -160,25 +160,25 @@
               <td>{{ s + 1 }}.</td>
               <td>
                 {{ rincians?.masterobat?.nama_obat }} <br>
-                <div class="row text-italic f-8">
+                <div class="row text-italic f-10 text-weight-bold">
                   {{ rincians?.kdobat }}
                 </div>
               </td>
-              <td class="f-8">
+              <td class="f-10 text-weight-bold">
                 Pesan : {{ angka(rincians?.jml_pesan) }}<br>
                 Terima : {{ angka(rincians?.jml_terima_k) }} <br>
                 Seluruhnya : {{ angka(rincians?.jml_all_penerimaan) }}
               </td>
-              <td class="f-8">
+              <td class="f-10 text-weight-bold">
                 Satuan Besar : {{ rincians?.satuan }}<br>
                 Isi : {{ angka(rincians?.isi) }} <br>
                 Satuan Kecil : {{ rincians?.satuan_kcl }}
               </td>
-              <td class="f-8">
+              <td class="f-10 text-weight-bold">
                 Batch : {{ rincians?.no_batch }}<br>
                 Expired : {{ rincians?.tgl_exp }}
               </td>
-              <td class="f-8">
+              <td class="f-10 text-weight-bold">
                 Harga : {{ angka(rincians?.harga) }}<br>
                 Diskon : {{ angka(rincians?.diskon) }}% <br>
                 PPN : {{ angka(rincians?.ppn) }}% <br>
