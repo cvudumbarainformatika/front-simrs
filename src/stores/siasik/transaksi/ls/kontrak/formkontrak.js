@@ -34,26 +34,10 @@ export const formKontrakPekerjaan = defineStore('form_KontrakPekerjaan', {
   }),
   actions: {
     resetFORM () {
-      this.form = {}
-      const columns = [
-        'nokontrak',
-        'tgltrans',
-        'tglmulaikontrak',
-        'tglakhirkontrak',
-        'kodeperusahaan',
-        'namaperusahaan',
-        'kodepptk',
-        'namapptk',
-        'kodekegiatanblud',
-        'kegiatanblud',
-        'kodemapingrs',
-        'namasuplier',
-        'nilaikontrak',
-        'kodeBagian',
-        'nokontrakx',
-        'termin']
-      for (let i = 0; i < columns.length; i++) {
-        this.setForm(columns[i], null)
+      const forms = Object.keys(this.form)
+      for (let i = 0; i < forms.length; i++) {
+        const el = forms[i]
+        this.setForm(el, null)
       }
     },
     // newData () {

@@ -21,7 +21,23 @@
           <div class="column full-height">
             <div class="col-auto">
               <div class="flex items-center justify-between q-pa-md">
-                <q-input dense standout="bg-blue text-white" dark placeholder="Cari" />
+                <div class="flex q-gutter-sm items-center">
+                  <q-input dense standout="bg-blue text-white" dark placeholder="Cari Ruangan" style="min-width: 250px;" />
+                  <div class="flex q-gutter-sm">
+                    <q-radio
+                      dense color="orange" v-for="conn in store.connects" :key="conn" name="shape" v-model="store.connect" :val="conn"
+                      :label="`${conn} (${store.ruangans?.filter(item => {
+                        if (conn === 'Terkoneksi') {
+                          return item?.satset_uuid !== null
+                        } else if (conn === 'Tidak Terkoneksi') {
+                          return item?.satset_uuid === null
+                        } else {
+                          return item
+                        }
+                      }).length})`"
+                    />
+                  </div>
+                </div>
                 <div>Data Ruangan {{ item?.nama }}</div>
               </div>
               <q-separator dark />
@@ -34,8 +50,8 @@
             </div>
 
             <div v-else class="col full-height">
-              <div v-if="store.ruangans.length" class="full-height scroll bg-grey-4">
-                <q-card dark separator bordered class="q-ma-xs" v-for="(data, n) in store.ruangans" :key="n" :class="data?.satset_uuid?'bg-primary':'bg-negative'">
+              <div v-if="listsFilterred.length" class="full-height scroll bg-grey-4 q-pa-md">
+                <q-card dark separator bordered class="q-ma-xs" v-for="(data, n) in listsFilterred" :key="n" :class="data?.satset_uuid?'bg-primary':'bg-negative'">
                   <q-item clickable v-ripple @click="store.setRuangan(data, data?.gruper)">
                     <q-item-section avatar>
                       <q-icon
@@ -61,9 +77,8 @@
               <div v-else class="full-height bg-grey-4">
                 <div class="column full-height flex-center text-dark">
                   <div class="">
-                    Maaf ... Data Ruangan Belum Ter SET
+                    Tidak Ada Data
                   </div>
-                  <div>Harap Cek grup di databese ruangan</div>
                 </div>
               </div>
             </div>
@@ -82,7 +97,7 @@
 <script setup>
 // import { notifErrVue } from 'src/modules/utils'
 import { useLocationSatsetStore } from 'src/stores/satset/location'
-import { defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 
 const DialogFormRuangan = defineAsyncComponent(() => import('./DialogFormRuangan.vue'))
 
@@ -95,8 +110,22 @@ const props = defineProps({
 
 const store = useLocationSatsetStore()
 
+const listsFilterred = computed(() => {
+  const arr = store.ruangans
+  if (store.connect === 'Terkoneksi') {
+    return arr.filter(item => item?.satset_uuid !== null)
+  }
+  else if (store.connect === 'Tidak Terkoneksi') {
+    return arr.filter(item => item?.satset_uuid === null)
+  }
+  else {
+    return arr
+  }
+})
+
 const onShow = () => {
   store.getRuanganByGroup(props.item?.gruper)
+  store.connect = 'Semua'
 }
 
 </script>

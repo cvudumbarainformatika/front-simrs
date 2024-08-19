@@ -73,6 +73,9 @@
       <div v-else-if="store.params.jenisreport === '2'">
         <HutangpertanggalByBAST />
       </div>
+      <div v-else-if="store.params.jenisreport === '3'">
+        <MutasiHutangObat />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -85,6 +88,7 @@ import { usehutangObatPerTanggalStore } from 'src/stores/simrs/laporan/farmasi/h
 // import { formatDouble } from 'src/modules/formatter'
 import HutangpertanggalByPenerimaanVue from './HutangpertanggalByPenerimaan.vue'
 import HutangpertanggalByBAST from './HutangpertanggalByBAST.vue'
+import MutasiHutangObat from './MutasiHutangObat.vue'
 
 const store = usehutangObatPerTanggalStore()
 // const storebast = usehutangObatPerTanggalBastStore()
@@ -96,6 +100,10 @@ const jenisreport = ref([
   {
     kodereport: '2',
     namareport: 'Laporan Hutang Pertanggal By BAST'
+  },
+  {
+    kodereport: '3',
+    namareport: 'Laporan Mutasi Hutang Obat'
   }
 ])
 
@@ -104,9 +112,13 @@ function pilihjenislaporan (val) {
     store.params.jenisreport = '1'
     store.judulreport = 'Laporan Hutang Pertanggal By Penerimaan'
   }
-  else {
+  else if (val === '2') {
     store.params.jenisreport = '2'
     store.judulreport = 'Laporan Hutang Pertanggal By BAST'
+  }
+  else {
+    store.params.jenisreport = '3'
+    store.judulreport = 'Laporan Mutasi Hutang Obat'
   }
 }
 

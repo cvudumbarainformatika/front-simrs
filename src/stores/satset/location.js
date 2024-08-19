@@ -22,7 +22,9 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     search: '',
 
     organization_id: '100026342',
-    departement: null
+    departement: null,
+    connects: ['Semua', 'Terkoneksi', 'Tidak Terkoneksi'],
+    connect: 'Semua'
 
   }),
   actions: {
@@ -111,21 +113,11 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
               notifErrVue(resp?.data?.data?.response?.issue[0]?.code ?? 'Gagal Update Location Ke satu sehat')
               return
             }
-            // else {
-            if (this.ruangan.type === 'rajal') {
-              const items = this.ruanganRajals
-              const fn = items.findIndex(x => x.id === this.ruangan.id)
-              items[fn].satset_uuid = resp.data?.data?.uuid
-              this.ruanganRajals = items
-            }
-            else if (this.ruangan.type === 'ranap') {
-              const items = this.ruanganRanaps
-              const fn = items.findIndex(x => x.id === this.ruangan.id)
-              // console.log('fn', fn)
-              items[fn].satset_uuid = resp.data?.data?.uuid
-              this.ruanganRanaps = items
-            }
-            // }
+
+            const items = this.ruangans
+            const fn = items.findIndex(x => x.id === this.ruangan.id)
+            items[fn].satset_uuid = resp.data?.data?.uuid
+            this.ruangans = items
 
             notifSuccess(resp)
             resolve(resp)

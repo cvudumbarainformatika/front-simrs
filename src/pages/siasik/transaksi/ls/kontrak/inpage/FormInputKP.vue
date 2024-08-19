@@ -97,7 +97,7 @@
 import { formKontrakPekerjaan } from 'src/stores/siasik/transaksi/ls/kontrak/formkontrak'
 import { useLaporanBkuPtkStore } from 'src/stores/siasik/laporan/bku/bkuptk'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeMount } from 'vue'
 
 const tarik = useLaporanLraLaprealisasianggaranStore()
 const data = useLaporanBkuPtkStore()
@@ -112,7 +112,9 @@ onMounted(() => {
     store.getPihaktiga()
   ])
 })
-
+onBeforeMount(() => {
+  store.resetFORM()
+})
 // const pilihTanggal = (val) => {
 //   store.setForm('tgltrans', val)
 // }

@@ -21,7 +21,7 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
     meta: null
   }),
   actions: {
-    async getData() {
+    async getData () {
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('v1/satusehat/listKunjungan', params)
@@ -30,17 +30,18 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
         this.loading = false
         this.meta = resp.data
         this.pasiens = resp?.data?.data
-      } else {
+      }
+      else {
         this.loading = false
       }
     },
 
-    goToPage(val) {
+    goToPage (val) {
       this.params.page = val
       this.getData()
     },
 
-    getSatsetId(pasien) {
+    getSatsetId (pasien) {
       this.loading = true
 
       const satset = useSatsetStore()
@@ -66,7 +67,8 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
             }
             if (resp.data.message === 'success') {
               notifSuccess(resp)
-            } else {
+            }
+            else {
               notifErr(resp)
             }
           })
@@ -78,7 +80,7 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
       })
     },
 
-    async kirimKunjunganSatset(pasien) {
+    async kirimKunjunganSatset (pasien) {
       this.loadingSend = true
 
       const satset = useSatsetStore()
@@ -101,7 +103,8 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
             this.getData()
             if (resp.data.message === 'success') {
               notifSuccess(resp)
-            } else {
+            }
+            else {
               notifErr(resp)
             }
           })
