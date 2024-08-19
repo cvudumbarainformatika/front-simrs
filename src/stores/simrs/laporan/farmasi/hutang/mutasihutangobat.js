@@ -39,6 +39,27 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
           console.log(err)
           this.loading = false
         })
+    },
+    async sethasil (val) {
+      console.log('asil', val)
+
+      val.forEach(satu => {
+        const saldoHpenerimaan = satu?.penerimaanobat
+        const kodepbf = val?.kode
+        const saldotagihan = []
+        saldoHpenerimaan?.forEach(dua => {
+          const saldoRpenerimaan = dua?.penerimaanrinci
+          const subtotalsaldoRpenerimaan = saldoRpenerimaan.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+          const a = {
+            kodepbf,
+            subtotalsaldoRpenerimaan
+          }
+          saldotagihan.push(a)
+          console.log('xxx', saldoRpenerimaan)
+        })
+      })
+
+      this.loading = false
     }
   }
 })
