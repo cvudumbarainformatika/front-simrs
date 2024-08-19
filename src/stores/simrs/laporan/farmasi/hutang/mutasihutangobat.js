@@ -42,37 +42,20 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
     },
     async sethasil (val) {
       console.log('asil', val)
-      // const wew = []
+
       val.forEach(satu => {
         const saldoHpenerimaan = satu?.penerimaanobat
-        // const kodepbf = satu?.kode
-        // const pbf = satu?.nama
 
         saldoHpenerimaan?.forEach(dua => {
-          // const saldoHpenerimaanx = saldoHpenerimaan.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-          console.log('xxx', dua)
-          // saldoHpenerimaanxsaldoHpenerimaan?.forEach(tiga => {
-          //   const subtotalsaldoRpenerimaan = saldoHpenerimaanx.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-          //   const xxx = {
-          //     saldoHpenerimaanx,
-          //     subtotalsaldoRpenerimaan
-          //   }
-          //   wew.push(xxx)
-          //
-          // })
+          const penerimaanrinci = dua.penerimaanrinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+          const hasil = {
+            kodepbf: satu?.kode,
+            pbf: satu?.nama,
+            total: penerimaanrinci
+          }
+          const sasa = hasil.kodepbf.reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
+          console.log('xxx', sasa)
         })
-        // const saldotagihan = []
-        // saldoHpenerimaan?.forEach(dua => {
-        //   const saldoRpenerimaan = dua?.penerimaanrinci
-        //   const subtotalsaldoRpenerimaan = saldoRpenerimaan.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-        //   const a = {
-        //     kodepbf,
-        //     subtotalsaldoRpenerimaan
-        //   }
-        //   saldotagihan.push(a)
-        //   console.log('xxx', saldoRpenerimaan)
-
-        // })
       })
 
       this.loading = false
