@@ -75,26 +75,31 @@
     </template>
     <template #body="props">
       <q-tr :props="props" @click="onRowClick(props.row)">
-        <q-td key="nama_obat" :props="props">
+        <q-td v-if="!props.row?.loading" key="nama_obat" :props="props">
           {{ props.row.nama_obat }}
         </q-td>
-        <q-td key="saldo_awal" :props="props">
+        <q-td v-if="!props.row?.loading" key="saldo_awal" :props="props">
           {{ props?.cols[1]?.value }}
         </q-td>
-        <q-td key="masuk" :props="props">
+        <q-td v-if="!props.row?.loading" key="masuk" :props="props">
           {{ props?.cols[2]?.value }}
         </q-td>
-        <q-td key="keluar" :props="props">
+        <q-td v-if="!props.row?.loading" key="keluar" :props="props">
           {{ props?.cols[3]?.value }}
         </q-td>
-        <q-td key="stok_akhir" :props="props">
+        <q-td v-if="!props.row?.loading" key="stok_akhir" :props="props">
           {{ props?.cols[4]?.value }}
         </q-td>
-        <q-td key="stok_sekarang" :props="props">
+        <q-td v-if="!props.row?.loading" key="stok_sekarang" :props="props">
           {{ props?.cols[5]?.value }}
         </q-td>
-        <q-td key="stok_fisik" :props="props">
+        <q-td v-if="!props.row?.loading" key="stok_fisik" :props="props">
           {{ props?.cols[6]?.value }}
+        </q-td>
+        <q-td v-if="props.row?.loading" colspan="7">
+          <div class="bg-yellow text-center">
+            Sebentar... sedang ambil data rinci ...
+          </div>
         </q-td>
       </q-tr>
     </template>
@@ -102,7 +107,7 @@
 </template>
 
 <script setup>
-import { exportFile, useQuasar } from 'quasar'
+import { date, exportFile, useQuasar } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useKartuStokFarmasiStore } from 'src/stores/simrs/farmasi/katustok'
 import { onMounted, ref } from 'vue'
@@ -226,19 +231,23 @@ function hitungMutasiMasuk (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
 }
 function hitungResepKeluar (arr, dist) {
-  if (app?.user?.kdruangansim === 'Gd-04010103') {
-    const noreseps = app?.user?.kdruangansim === 'Gd-04010103' ? dist?.map(m => m?.noresep) : []
-    // console.log('nores', noreseps)
-    const resepkeluar = arr?.filter(f => !noreseps.includes(f?.noresep))?.reduce((x, y) => parseFloat(x) + parseFloat(y?.jumlah), 0)
+  // if (app?.user?.kdruangansim === 'Gd-04010103') {
+  //   const noreseps = app?.user?.kdruangansim === 'Gd-04010103' ? dist?.map(m => m?.noresep) : []
+  //   // console.log('nores', noreseps)
+  //   const resepkeluar = arr?.filter(f => !noreseps.includes(f?.noresep))?.reduce((x, y) => parseFloat(x) + parseFloat(y?.jumlah), 0)
 
-    return resepkeluar
-  }
-  else {
-    const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  //   return resepkeluar
+  // }
+  // else {
+  //   const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 
-    // console.log('returresep', jmlRetur)
-    return resepkeluar
-  }
+  //   // console.log('returresep', jmlRetur)
+  //   return resepkeluar
+  // }
+  const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+
+  // console.log('returresep', jmlRetur)
+  return resepkeluar
 }
 function hitungDistribusi (arr) {
   if (app?.user?.kdruangansim === 'Gd-04010103') {
@@ -308,13 +317,16 @@ function hitungPenyesuaianKeluar (arr) {
 
 function stokSekarang (arr) {
   let jumlah = 0
-  if (arr?.saldoakhir?.length) {
-    keteranganStok.value = 'Stok Opname'
-    jumlah = arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
-  }
-  else {
+  const bulanIni = date.formatDate(Date.now(), 'MM')
+  console.log('bulan', bulanIni, store.params.bulan, bulanIni === store.params.bulan)
+
+  if (bulanIni === store.params.bulan) {
     keteranganStok.value = 'Stok Sekarang'
     jumlah = arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  }
+  else {
+    keteranganStok.value = 'Stok Opname'
+    jumlah = arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
   }
   return jumlah
 }
@@ -402,7 +414,8 @@ function wrapCsvValue (val, formatFn, row) {
 // eslint-disable-next-line no-unused-vars
 function onRowClick (row) {
   console.log('onRowClick', row)
-  store.setItem(row)
+  // store.setItem(row)
+  store.getDetail(row)
 }
 
 // function delokIsineProps (props) {
