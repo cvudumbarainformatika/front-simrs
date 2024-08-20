@@ -45,17 +45,16 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
 
       val.forEach(satu => {
         const saldoHpenerimaan = satu?.penerimaanobat
-        const kodepbf = val?.kode
-        const saldotagihan = []
+
         saldoHpenerimaan?.forEach(dua => {
-          const saldoRpenerimaan = dua?.penerimaanrinci
-          const subtotalsaldoRpenerimaan = saldoRpenerimaan.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
-          const a = {
-            kodepbf,
-            subtotalsaldoRpenerimaan
+          const penerimaanrinci = dua.penerimaanrinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+          const hasil = {
+            kodepbf: satu?.kode,
+            pbf: satu?.nama,
+            total: penerimaanrinci
           }
-          saldotagihan.push(a)
-          console.log('xxx', saldoRpenerimaan)
+          const sasa = hasil.kodepbf.reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
+          console.log('xxx', sasa)
         })
       })
 
