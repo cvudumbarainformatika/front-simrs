@@ -16,7 +16,6 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
-      :ada-cari="false"
       row-no
       use-full
       text-cari="Cari ..."
@@ -572,6 +571,10 @@ const label = (status) => {
       break
     case '4':
       return 'Diterima Ruangan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '5':
+      return 'Ditolak'
       // eslint-disable-next-line no-unreachable
       break
     case 99:
