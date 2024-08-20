@@ -505,6 +505,14 @@
                         />
                       </div>
                     </div>
+                    <div v-if="rinc?.keterangan_bypass" class="row items-center text-weight-bold text-negative">
+                      <div class="col-4">
+                        Keterangan bypass
+                      </div>
+                      <div class="col-8">
+                        {{ rinc?.keterangan_bypass }}
+                      </div>
+                    </div>
                   </div>
                   <div class="col-1 text-right">
                     <div v-if="store?.resep?.flag==='1'">
@@ -847,7 +855,7 @@
                       </div>
                       <div v-if="parseInt(store?.resep?.flag)>=2">
                         <q-btn
-                          v-if="!rinc?.obatkeluar && parseInt(store?.resep?.flag)<5"
+                          v-if="(!rinc?.obatkeluar) && !rinc?.done && parseInt(store?.resep?.flag)<5"
                           round
                           class="f-10 q-mr-sm"
                           color="primary"
@@ -864,7 +872,7 @@
                             Simpan Obat
                           </q-tooltip>
                         </q-btn>
-                        <div v-if="rinc?.obatkeluar">
+                        <div v-if="rinc?.obatkeluar>=0">
                           Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                         </div>
                       </div>
