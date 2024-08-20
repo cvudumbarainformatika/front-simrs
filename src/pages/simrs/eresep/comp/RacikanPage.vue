@@ -150,29 +150,29 @@
                     @keyup.enter.stop="enterSigna"
                   /> -->
                   <q-select
-                        ref="refSigna"
-                        v-model="signa"
-                        label="Aturan Pakai"
-                        use-input
-                        fill-input
-                        hide-selected
-                        dense
-                        clearable
-                        standout="bg-yellow-3"
-                        option-label="signa"
+                    ref="refSigna"
+                    v-model="signa"
+                    label="Aturan Pakai"
+                    use-input
+                    fill-input
+                    hide-selected
+                    dense
+                    clearable
+                    standout="bg-yellow-3"
+                    option-label="signa"
 
-                        outlined
-                        :rules="[sigaValid]"
-                        lazy-rules
-                        no-error-icon
-                        hide-bottom-space
-                        hide-dropdown-icon
-                        @filter="store.getSigna"
-                        :options="store.signas"
-                        @new-value="signaCreateValue"
-                        @update:model-value="signaSelected"
-                        @keyup.enter.stop="signaEnter"
-                      />
+                    outlined
+                    :rules="[sigaValid]"
+                    lazy-rules
+                    no-error-icon
+                    hide-bottom-space
+                    hide-dropdown-icon
+                    @filter="store.getSigna"
+                    :options="store.signas"
+                    @new-value="signaCreateValue"
+                    @update:model-value="signaSelected"
+                    @keyup.enter.stop="signaEnter"
+                  />
                 </div>
                 <div
                   class="col text-right"
@@ -243,73 +243,6 @@
             class=""
           >
             <q-item-section style="width: 30%;">
-              <!-- <q-select
-                ref="refObat"
-                v-model="store.namaObat"
-                use-input
-                label="Cari Obat"
-                dense
-                option-label="namaobat"
-                option-value="kodeobat"
-                standout="bg-yellow-3"
-                outlined
-                clearable
-                input-debounce="800"
-                class="full-width"
-                hide-dropdown-icon
-                :rules="[obatValid]"
-                lazy-rules
-                hide-bottom-space
-                no-error-icon
-                :options="store.Obats"
-                @input-value="inputObat"
-                @update:model-value="obatSelected"
-                @keyup.enter.stop="enterObat"
-              >
-                <template #prepend>
-                  <q-icon name="icon-mat-search" />
-                </template>
-                <template #option="scope">
-                  <q-item v-bind="scope.itemProps">
-                    <div
-                      v-if="scope.opt.namaobat"
-                    >
-                      {{ scope.opt.namaobat }}
-                    </div>
-                    <div
-                      v-if="scope.opt.kandungan"
-                      class="q-ml-xs q-mr-xs text-deep-orange"
-                    >
-                      ({{ scope.opt.kandungan }})
-                    </div>
-                    <div
-                      v-if="scope.opt.kekuatandosis"
-                      class="q-ml-xs q-mr-xs text-green"
-                    >
-                      ({{ scope.opt.kekuatandosis }})
-                    </div>
-                    <div
-                      v-if="scope.opt.alokasi"
-                      class="q-ml-xs text-weight-bold tetx-green"
-                    >
-                      {{ scope.opt.alokasi }}
-                    </div>
-                    <div
-                      v-if="scope.opt.satuankecil"
-                      class="q-ml-xs text-primary"
-                    >
-                      {{ scope.opt.satuankecil }}
-                    </div>
-                  </q-item>
-                </template>
-                <template #no-option>
-                  <q-item>
-                    <q-item-section class="text-grey">
-                      No results
-                    </q-item-section>
-                  </q-item>
-                </template>
-              </q-select> -->
               <SelectRacikan v-model="store.namaObat" @tidak-bisa-simpan="noSimp" />
             </q-item-section>
             <q-item-section
@@ -387,6 +320,19 @@
                     @keyup.enter.stop="enterKetx"
                   />
                 </div>
+                <!-- <div
+                  class="col text-right"
+                >
+                  <q-input
+                    ref="refBypass"
+                    v-model="store.form.keterangan_bypass"
+                    label="Alasan By pass"
+                    outlined
+                    standout="bg-yellow-3"
+                    dense
+                    @keyup.enter.stop="enterKetx"
+                  />
+                </div> -->
                 <div
                   class="col-shrink text-right"
                 >

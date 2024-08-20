@@ -233,6 +233,21 @@
                         @keyup.enter="ketEnter"
                       />
                     </div>
+                    <div
+                      class="col-12 text-right"
+                      v-if="store.bypass"
+                    >
+                      <q-input
+                        ref="refBypass"
+                        v-model="store.form.keterangan_bypass"
+                        label="Alasan By Pass Item Obat"
+                        dense
+                        standout="bg-yellow-3"
+                        outlined
+                        class="full-width"
+                        @keyup.enter="ketEnter"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="col-1 text-right">
@@ -300,7 +315,12 @@
                   <div
                     class="col text-right"
                   >
-                    {{ item?.keterangan }}
+                    <div class="row justify-end">
+                      {{ item?.keterangan }}
+                    </div>
+                    <div class="row justify-end">
+                      {{ item?.keterangan_bypass }}
+                    </div>
                   </div>
                   <div class="col-shrink text-right">
                     <q-btn
@@ -432,7 +452,12 @@
                       <div
                         class="col text-right"
                       >
-                        {{ obat?.keteranganx }}
+                        <div class="row justify-end">
+                          {{ obat?.keteranganx }}
+                        </div>
+                        <div v-if="obat?.keterangan_bypass" class="row justify-end">
+                          {{ obat?.keterangan_bypass }}
+                        </div>
                       </div>
                       <div class="col-shrink text-right">
                         <q-btn
@@ -961,6 +986,7 @@ onMounted(() => {
   // store.cariObat()
   // refObat.value.focus()
   // refObat.value.showPopup()
+  store.bypass = false
 })
 watchEffect(() => {
   store.pasien = props?.pasien
