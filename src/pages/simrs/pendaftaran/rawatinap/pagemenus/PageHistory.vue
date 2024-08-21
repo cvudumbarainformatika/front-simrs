@@ -43,6 +43,9 @@
                 sep.cariSep(val)
 
               }"
+              @hapus-sep="(val)=>{
+                hapusSep(val)
+              }"
               @sep-manual="(val)=>{
                 store.pasien = val
                 store.dialogSepManual= true
@@ -147,6 +150,7 @@ import ListPasien from './compHistory/ListPasien.vue'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
 import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 import { notifErrVue } from 'src/modules/utils'
+import { useQuasar } from 'quasar'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
 // const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))
@@ -165,5 +169,25 @@ onMounted(() => {
   sep.dokters = pendaftaran?.dokters
   store.getDataTable()
 })
+
+const $q = useQuasar()
+
+function hapusSep (val) {
+  console.log(val)
+  $q.dialog({
+    title: '<span class="text-red">Peringatan<em>!</em></span>',
+    message: '<em>Apakah anda yakin ?</em> <span class="text-red">Akan Hapus NO. SEP  </span> <strong>' + val?.sep + '</strong>',
+    html: true,
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    sep.hapusSep(val)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 
 </script>

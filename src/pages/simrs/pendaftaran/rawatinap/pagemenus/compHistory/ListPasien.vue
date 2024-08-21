@@ -20,6 +20,7 @@
             @cetak-gelang="(val)=>emits('cetakGelang', val)"
             @buat-sep="(val)=>emits('buatSep', val)"
             @edit-sep="(val)=>emits('editSep', val)"
+            @hapus-sep="(val)=>emits('hapusSep', val)"
             @sep-manual="(val)=>emits('sepManual', val)"
             @cetak-sep="(val)=>emits('cetakSep', val)"
           />

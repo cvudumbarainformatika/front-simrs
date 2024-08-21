@@ -751,6 +751,33 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
           console.log('update sep', err)
           this.loading = false
         })
+    },
+
+    async hapusSep (pasien) {
+      const payload = {
+        noreg: pasien?.noreg,
+        noSep: pasien?.sep
+      }
+      await api.post('v1/simrs/pendaftaran/ranap/delete-sep-ranap', payload)
+        .then((resp) => {
+          console.log('resp hapus', resp)
+          this.loading = false
+          if (resp.data?.metadata?.code === '200') {
+            notifSuccessVue('SEP Sudah Terhapus !!!')
+            // tutup dialog
+            const history = useListHistoryPendaftaranRanapStore()
+            const items = history?.items
+            const idx = items.findIndex((item) => item.noreg === pasien?.noreg)
+            items[idx].sep = null
+          }
+          else {
+            notifErrVue(resp?.data?.metadata?.message)
+          }
+        })
+        .catch((err) => {
+          console.log('hapus sep', err)
+          this.loading = false
+        })
     }
 
   }
