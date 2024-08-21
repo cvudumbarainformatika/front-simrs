@@ -1,0 +1,3 @@
+<template>
+  maping kfa
+</template>
