@@ -6,6 +6,7 @@ import { useListHistoryPendaftaranRanapStore } from './history'
 // eslint-disable-next-line no-unused-vars
 import { notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useFormPendaftaranRanapStore } from './formpendaftaran'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import { api } from 'boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
 // import { date } from 'quasar'
@@ -215,7 +216,8 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     skrDiKelas: null,
     naikKelas: false,
 
-    rujukanInternal: true
+    rujukanInternal: true,
+    loadingCariSep: false
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
@@ -583,6 +585,133 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
           jeniskelamin: '',
           hakKelas: '',
           namaAsuransiCob: ''
+        }
+      }
+    },
+
+    // ============================================================================ EDIT SEP ==============================================================
+    async cariSep (pasien) {
+      this.loadingCariSep = true
+      const params = { sep: pasien?.sep }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pendaftaran/ranap/cari-sep-bpjs', params)
+          .then(resp => {
+            // console.log('cari sep', resp)
+            this.loadingCariSep = false
+            if (resp?.data?.metadata?.code === '200') {
+              const result = resp?.data?.result
+              if (result) {
+                this.editForm(result, pasien)
+              }
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log('cari sep', err)
+            this.loadingCariSep = false
+            reject(err)
+          })
+      })
+    },
+
+    editForm (val, pasien) {
+      console.log('editForm', val)
+      console.log('pasien', pasien)
+
+      const jnsPelayanan = this.jnsPelayanans.find(x => x?.label === val?.jnsPelayanan)
+      console.log('jnsPelayanan', jnsPelayanan)
+
+      const klsRawat = this.klsRawats.find(x => x?.label === val?.kelasRawat)
+      console.log('klsRawat', klsRawat)
+
+      // this.dokter?.kode = val?.dokter
+      this.diagnosas = pasien?.diagnosa.length
+        ? pasien?.diagnosa.map(x => {
+          return { kode: x?.kode, nama: x?.kode + ' - ' + x?.inggris }
+        })
+        : []
+      this.diagnosa = this.diagnosas?.find(x => x?.nama.includes(val?.diagnosa))
+      // console.log('diagnosas', this.diagnosas)
+      // console.log('diagnosa', this.diagnosa)
+
+      const pendaftaran = useFormPendaftaranRanapStore()
+      const doktersFromPendaftaran = pendaftaran.dokters
+      this.dokter = doktersFromPendaftaran.length ? doktersFromPendaftaran.find(x => x.kddpjp === val?.kontrol?.kdDokter) : null
+      // console.log('dokter', this.dokter)
+
+      const app = useAplikasiStore()
+
+      this.t_sep = {
+        noreg: pasien?.noreg,
+        noKartu: val?.peserta?.noKartu ?? '', // auto
+        tglSep: val?.tglSep ?? '', // auto
+        ppkPelayanan: '', // dr backend kode rs
+        jnsPelayanan: jnsPelayanan?.value ?? '1',
+        klsRawat: {
+          klsRawatHak: val?.klsRawat?.klsRawatHak ?? '',
+          klsRawatNaik: val?.klsRawat?.klsRawatNaik ?? '',
+          pembiayaan: val?.klsRawat?.pembiayaan ?? '',
+          penanggungJawab: val?.klsRawat?.penanggungJawab ?? ''
+        },
+        noMR: val?.peserta?.noMr ?? '',
+        rujukan: {
+          asalRujukan: '',
+          tglRujukan: '',
+          noRujukan: val?.noRujukan ?? '',
+          ppkRujukan: ''
+        },
+        catatan: val?.catatan ?? '',
+        diagAwal: this.diagnosa?.kode ?? '',
+        poli: {
+          tujuan: '',
+          eksekutif: '0'
+        },
+        cob: {
+          cob: val?.cob
+        },
+        katarak: {
+          katarak: val?.katarak
+        },
+        jaminan: {
+          lakaLantas: val?.kdStatusKecelakaan,
+          noLP: '-',
+          penjamin: {
+            tglKejadian: val?.lokasiKejadian?.tglKejadian ?? '',
+            keterangan: val?.lokasiKejadian.ketKejadian ?? '',
+            suplesi: {
+              suplesi: '0',
+              noSepSuplesi: '',
+              lokasiLaka: {
+                kdPropinsi: val?.lokasiKejadian?.kdProp ?? '',
+                kdKabupaten: val?.lokasiKejadian?.kdKab ?? '',
+                kdKecamatan: val?.lokasiKejadian?.kdKec ?? ''
+              }
+            }
+          }
+        },
+        tujuanKunj: val?.tujuanKunj?.kode ?? '0',
+        flagProcedure: val?.flagProcedure?.kode ?? '',
+        kdPenunjang: val?.kdPenunjang?.kode === '0' ? '' : val?.kdPenunjang?.kode ?? '',
+        assesmentPel: val?.assestmenPel?.kode,
+        skdp: {
+          noSurat: val?.kontrol?.noSurat,
+          kodeDPJP: val?.kontrol?.kdDokter ?? ''
+        },
+        dpjpLayan: null, // (tidak diisi jika jnsPelayanan = "1" (RANAP)
+        noTelp: pasien?.nohp ?? '',
+        user: app?.user?.pegawai?.nama ?? '',
+
+        sepRanap: {
+          ruang: pasien?.kdruangan ?? '',
+          kodesistembayar: pasien?.kodesistembayar ?? '',
+          diagnosa: '',
+          jenispeserta: val?.peserta?.jnsPeserta ?? '',
+          nama: val?.peserta?.nama,
+          tglLahir: val?.peserta?.tglLahir,
+          jeniskelamin: val?.peserta?.kelamin,
+          hakKelas: val?.peserta?.hakKelas ?? '',
+          namaAsuransiCob: val?.peserta?.asuransi
         }
       }
     }

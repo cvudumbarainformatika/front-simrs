@@ -30,6 +30,17 @@
                 store.pasien = val
                 store.dialogSep = true
               }"
+              @edit-sep="(val)=>{
+                store.pasien = val
+                // store.dialogSep = true
+                console.log('val from list', val);
+                if (!val?.sep) {
+                  return notifErrVue('sep Tidak ditemukan !')
+                }
+                store.dialogSep = true
+                sep.cariSep(val)
+
+              }"
               @sep-manual="(val)=>{
                 store.pasien = val
                 store.dialogSepManual= true
@@ -56,6 +67,7 @@
                 store.pasien = val
                 store.dialogSep = true
               }"
+
               @sep-manual="(val)=>{
                 store.pasien = val
                 store.dialogSepManual= true
@@ -132,6 +144,7 @@ import { defineAsyncComponent, onMounted } from 'vue'
 import ListPasien from './compHistory/ListPasien.vue'
 import { useFormPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/formpendaftaran'
 import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
+import { notifErrVue } from 'src/modules/utils'
 
 const HeaderComp = defineAsyncComponent(() => import('./compHistory/HeaderComp.vue'))
 // const ListPasien = defineAsyncComponent(() => import('./compHistory/ListPasien.vue'))

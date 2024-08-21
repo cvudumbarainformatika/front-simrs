@@ -76,7 +76,11 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-form @submit="sep.onSubmit">
+      <div v-if="sep.loadingCariSep" class="column flex-center light-dimmed" style="height:58vh">
+        <q-spinner color="primary" size="3em" />
+        <div>Harap Tunggu ... Mengkoneksikan dengan BPJS </div>
+      </div>
+      <q-form v-else @submit="sep.onSubmit">
         <q-card-section class="scroll" style="max-height: 58vh">
           <div class="row q-col-gutter-sm">
             <div class="col-6" style="border-right: 1px solid grey;">
@@ -387,7 +391,13 @@
                   class="col-9"
                 >
                   <template v-if="sep.diagnosa" #append>
-                    <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.diagnosa = null" class="cursor-pointer" />
+                    <q-icon
+                      name="icon-mat-cancel" @click.stop.prevent="()=> {
+                        sep.diagnosa = null
+                        sep.t_sep.diagAwal = ''
+                        sep.t_sep.sepRanap.diagnosa = null
+                      }" class="cursor-pointer"
+                    />
                   </template>
                 </q-select>
                 <div class="col-3 text-right">
@@ -517,6 +527,12 @@
             </div>
             <div>
               <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" label="Create SEP" color="yellow-3" text-color="dark" />
+              <!-- <q-btn
+                type="button" label="Coba Create SEP" color="yellow-3" text-color="dark" @click="()=> {
+                  console.log('simpan sep', sep.t_sep);
+
+                }"
+              /> -->
             </div>
           </div>
         </q-card-section>
@@ -556,6 +572,10 @@
           kode: val?.kode,
           nama: val?.kode + ' - ' + val?.inggris
         }
+
+        sep.t_sep.diagAwal = val?.kode
+        sep.t_sep.sepRanap.diagnosa = val?.nama
+
         sep.dialogDiagnosa = false
       }"
       :key="pasien"
