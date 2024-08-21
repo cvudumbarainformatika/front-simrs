@@ -320,7 +320,8 @@
                     @keyup.enter.stop="enterKetx"
                   />
                 </div>
-                <!-- <div
+                <div
+                  v-if="store.bypass"
                   class="col text-right"
                 >
                   <q-input
@@ -332,7 +333,7 @@
                     dense
                     @keyup.enter.stop="enterKetx"
                   />
-                </div> -->
+                </div>
                 <div
                   class="col-shrink text-right"
                 >
@@ -582,6 +583,7 @@ onMounted(() => {
   store.listRincianRacikan = rac?.rincian ?? []
   console.log('rac', rac, store.listRincianRacikan)
   console.log('form', store.form)
+  store.bypass = false
 })
 // key up ---
 // header

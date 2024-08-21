@@ -845,6 +845,14 @@
                           {{ rinc?.keteranganx }}
                         </div>
                       </div>
+                      <div v-if="rinc?.keterangan_bypass" class="row q-mt-xs text-weight-bold text-negative">
+                        <div class="col-4">
+                          Keterangan bypass
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.keterangan_bypass }}
+                        </div>
+                      </div>
                     </div>
                     <div class="col-1">
                       <div v-if="store?.resep?.flag==='1'">

@@ -183,6 +183,9 @@
               <div class="row q-ml-lg f-12 items-end">
                 <div>* <i>{{ rac?.mobat?.nama_obat }} - <span v-if="parseInt(lirac?.flag)<=2" class="">(rsp : {{ rac?.jumlahresep }}) - </span> <span class="">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
               </div>
+              <div v-if="rac?.keterangan_bypass" class="row q-ml-xl items-end q-mb-xs">
+                <div>Ket. bypass : {{ rac?.keterangan_bypass }} </div>
+              </div>
             </div>
             <!-- </div> -->
             <q-separator class="q-ml-lg q-my-xs" />
