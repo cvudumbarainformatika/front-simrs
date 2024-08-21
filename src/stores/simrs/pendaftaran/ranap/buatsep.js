@@ -217,7 +217,8 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
     naikKelas: false,
 
     rujukanInternal: true,
-    loadingCariSep: false
+    loadingCariSep: false,
+    edited: false
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2
@@ -463,8 +464,17 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
         })
     },
 
-    async onSubmit () {
-      // console.log('t_sep', this.t_sep)
+    onSubmit () {
+      // console.log('edited?', this.edited)
+      if (this.edited === false) {
+        this.createSep()
+      }
+      else {
+        this.updateSep()
+      }
+    },
+
+    async createSep () {
       this.loading = true
       await api.post('v1/simrs/pendaftaran/ranap/create-sep-ranap', this.t_sep)
         .then((resp) => {
@@ -597,11 +607,12 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pendaftaran/ranap/cari-sep-bpjs', params)
           .then(resp => {
-            // console.log('cari sep', resp)
+            console.log('cari sep', resp)
             this.loadingCariSep = false
             if (resp?.data?.metadata?.code === '200') {
               const result = resp?.data?.result
               if (result) {
+                this.resetForm()
                 this.editForm(result, pasien)
               }
             }
@@ -637,13 +648,14 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
 
       const pendaftaran = useFormPendaftaranRanapStore()
       const doktersFromPendaftaran = pendaftaran.dokters
-      this.dokter = doktersFromPendaftaran.length ? doktersFromPendaftaran.find(x => x.kddpjp === val?.kontrol?.kdDokter) : null
+      this.dokter = doktersFromPendaftaran.length ? doktersFromPendaftaran.find(x => x.kddpjp === val?.dpjp?.kdDPJP) : null
       // console.log('dokter', this.dokter)
 
       const app = useAplikasiStore()
 
       this.t_sep = {
         noreg: pasien?.noreg,
+        noSep: val?.noSep ?? '',
         noKartu: val?.peserta?.noKartu ?? '', // auto
         tglSep: val?.tglSep ?? '', // auto
         ppkPelayanan: '', // dr backend kode rs
@@ -654,7 +666,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
           pembiayaan: val?.klsRawat?.pembiayaan ?? '',
           penanggungJawab: val?.klsRawat?.penanggungJawab ?? ''
         },
-        noMR: val?.peserta?.noMr ?? '',
+        noMR: pasien?.norm ?? '',
         rujukan: {
           asalRujukan: '',
           tglRujukan: '',
@@ -664,8 +676,8 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
         catatan: val?.catatan ?? '',
         diagAwal: this.diagnosa?.kode ?? '',
         poli: {
-          tujuan: '',
-          eksekutif: '0'
+          tujuan: val?.poli ?? '',
+          eksekutif: val?.poliEksekutif ?? '0'
         },
         cob: {
           cob: val?.cob
@@ -698,22 +710,47 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
           noSurat: val?.kontrol?.noSurat,
           kodeDPJP: val?.kontrol?.kdDokter ?? ''
         },
-        dpjpLayan: null, // (tidak diisi jika jnsPelayanan = "1" (RANAP)
+        dpjpLayan: val?.dpjp?.kdDPJP ?? '', // (tidak diisi jika jnsPelayanan = "1" (RANAP)
         noTelp: pasien?.nohp ?? '',
         user: app?.user?.pegawai?.nama ?? '',
 
         sepRanap: {
           ruang: pasien?.kdruangan ?? '',
           kodesistembayar: pasien?.kodesistembayar ?? '',
-          diagnosa: '',
+          diagnosa: this.diagnosa?.nama ?? '',
           jenispeserta: val?.peserta?.jnsPeserta ?? '',
           nama: val?.peserta?.nama,
           tglLahir: val?.peserta?.tglLahir,
           jeniskelamin: val?.peserta?.kelamin,
           hakKelas: val?.peserta?.hakKelas ?? '',
-          namaAsuransiCob: val?.peserta?.asuransi
+          namaAsuransiCob: val?.peserta?.asuransi,
+          namaDpjp: null
         }
       }
+    },
+
+    async updateSep () {
+      console.log('update sep', this.t_sep)
+
+      this.loading = true
+      await api.post('v1/simrs/pendaftaran/ranap/update-sep-ranap', this.t_sep)
+        .then((resp) => {
+          console.log('resp update', resp)
+          this.loading = false
+          if (resp.data?.metadata?.code === '200') {
+            notifSuccessVue(resp?.data?.metadata?.message)
+            // tutup dialog
+            const history = useListHistoryPendaftaranRanapStore()
+            history.dialogSep = false
+          }
+          else {
+            notifErrVue(resp?.data?.metadata?.message)
+          }
+        })
+        .catch((err) => {
+          console.log('update sep', err)
+          this.loading = false
+        })
     }
 
   }

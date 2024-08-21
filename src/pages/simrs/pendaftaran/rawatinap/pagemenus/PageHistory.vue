@@ -27,10 +27,12 @@
                 store.dialogCetakGelang = true
               }"
               @buat-sep="(val)=>{
+                sep.edited = false
                 store.pasien = val
                 store.dialogSep = true
               }"
               @edit-sep="(val)=>{
+                sep.edited = true
                 store.pasien = val
                 // store.dialogSep = true
                 console.log('val from list', val);

@@ -1,8 +1,8 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)" @show="init">
     <q-card style="min-width:70vw; max-width: 70vw;">
-      <q-bar class="bg-teal text-white">
-        <div>Create SEP</div>
+      <q-bar class="text-white" :class="sep.edited ? 'bg-dark' : 'bg-teal'">
+        <div>{{ sep.edited ? 'Edit SEP -- '+sep?.t_sep?.noSep : 'Create SEP' }}</div>
 
         <q-space />
 
@@ -161,10 +161,11 @@
 
                 <!-- Rujukan -->
                 <app-input-simrs
+                  v-if="!sep.edited"
                   v-model="sep.t_sep.rujukan.noRujukan" label="No. Rujukan" :valid="{required: true}" :autofocus="false"
                   class="col-7"
                 />
-                <div class="col-5">
+                <div class="col-5" v-if="!sep.edited">
                   <div class="flex q-gutter-sm">
                     <q-btn dense class="q-px-sm" color="primary" :loading="sep.loadingRujukanInternal" :disable="sep.loadingRujukanInternal" @click="sep.getRujukanInternal(pasien)">
                       Get
@@ -388,6 +389,7 @@
                   hide-dropdown-icon
                   no-error-icon
                   @update:model-value="diagnosaSelected"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
                   class="col-9"
                 >
                   <template v-if="sep.diagnosa" #append>
@@ -404,6 +406,7 @@
                   <q-btn dense color="dark" class="q-px-md" label="Cek Diagnosa Pasien" @click="sep.dialogDiagnosa = true" />
                 </div>
                 <app-autocomplete
+                  v-if="!sep.edited"
                   ref="refTujuanKunjungan"
                   v-model="sep.t_sep.tujuanKunj"
                   label="Tujuan Kunjungan"
@@ -422,7 +425,7 @@
                   class="col-2"
                 />
                 <app-autocomplete
-                  v-if="sep.t_sep.tujuanKunj !== '0'"
+                  v-if="sep.t_sep.tujuanKunj !== '0' && !sep.edited"
                   ref="refProcedure"
                   v-model="sep.t_sep.flagProcedure"
                   label="Procedure"
@@ -438,7 +441,7 @@
                   class="col-5"
                 />
                 <app-autocomplete
-                  v-if="sep.t_sep.tujuanKunj !== '0'"
+                  v-if="sep.t_sep.tujuanKunj !== '0' && !sep.edited"
                   ref="refKdPenunjang"
                   v-model="sep.t_sep.kdPenunjang"
                   label="Penunjang"
@@ -455,6 +458,7 @@
                 />
 
                 <app-input-simrs
+                  v-if="!sep.edited"
                   v-model="sep.t_sep.skdp.noSurat" label="NO SPRI" :autofocus="false"
                   class="col-4"
                   append
@@ -485,6 +489,7 @@
                 /> -->
 
                 <q-select
+                  v-if="!sep.edited"
                   ref="refSelectDokter"
                   v-model="sep.dokter"
                   label="Dokter"
@@ -510,6 +515,33 @@
                     <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.dokter = null" class="cursor-pointer" />
                   </template>
                 </q-select>
+                <q-select
+                  v-if="sep.edited"
+                  ref="refSelectDPJP"
+                  v-model="sep.dokter"
+                  label="DPJP"
+                  outlined
+                  dense
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="50"
+                  :options="sep.dokters"
+                  @filter="dokterFn"
+                  placeholder="Min 2 character untuk pencarian"
+                  option-label="nama"
+                  option-value="kddpjp"
+                  autofocus
+                  hide-bottom-space
+                  hide-dropdown-icon
+                  no-error-icon
+                  @update:model-value="dpjpSelected"
+                  class="col-6"
+                >
+                  <template v-if="sep.dokter" #append>
+                    <q-icon name="icon-mat-cancel" @click.stop.prevent="sep.dokter = null" class="cursor-pointer" />
+                  </template>
+                </q-select>
                 <app-input-simrs
                   v-model="sep.t_sep.user" label="Petugas" :autofocus="false"
                   class="col-4"
@@ -520,13 +552,13 @@
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-section class="q-pa-none bg-teal text-white">
+        <q-card-section class="q-pa-none text-white" :class="sep.edited ? 'bg-dark' : 'bg-teal'">
           <div class="q-pa-md row justify-between items-center">
             <div class="flex q-gutter-sm">
               <q-btn label="Tutup" color="dark" text-color="white" @click="store.dialogSep=false" />
             </div>
             <div>
-              <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" label="Create SEP" color="yellow-3" text-color="dark" />
+              <q-btn :loading="sep.loading" :disabled="sep.loading" type="submit" :label="sep.edited? 'Edit SEP' : 'Create SEP'" color="yellow-3" text-color="dark" />
               <!-- <q-btn
                 type="button" label="Coba Create SEP" color="yellow-3" text-color="dark" @click="()=> {
                   console.log('simpan sep', sep.t_sep);
@@ -704,6 +736,11 @@ function dokterFn (val, update, abort) {
 const dokterSelected = (val) => {
   console.log('selected dokter', val)
   sep.t_sep.skdp.kodeDPJP = val?.kddpjp
+}
+const dpjpSelected = (val) => {
+  console.log('selected dpjp', val)
+  sep.t_sep.dpjpLayan = val?.kddpjp
+  sep.t_sep.sepRanap.namaDpjp = val?.nama
 }
 
 const ppkRujukanSelected = (val) => {
