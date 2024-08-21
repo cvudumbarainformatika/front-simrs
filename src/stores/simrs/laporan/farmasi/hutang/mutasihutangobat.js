@@ -47,7 +47,20 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
       const tsaldoawal = []
       const tsaldoawalkonsi = []
       const tutangsekarang = []
+      const tutangsekarangkonsi = []
       val.forEach(satu => {
+        // -----utang sekarang konsinyasi-----//
+        const utangsekarangkonsi = satu?.penerimaanobatkonsinyasiperiodeskrng
+        utangsekarangkonsi?.forEach(duautaksekkonsi => {
+          const utangsekarangkonsix = duautaksekkonsi?.rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
+          const hasilutangsekarangkonsi = {
+            kodepbfskx: satu?.kode,
+            pbfskx: satu?.nama,
+            total: utangsekarangkonsix
+          }
+          tutangsekarangkonsi.push(hasilutangsekarangkonsi)
+        })
+        // -----utang sekarang non konsinyasi-----//
         const utangsekarang = satu?.penerimaanobatperiodeskrng
         utangsekarang?.forEach(duautangsek => {
           const utangsekarangx = duautangsek?.penerimaanrinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
@@ -59,7 +72,7 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
 
           tutangsekarang.push(hasilutangsekarang)
         })
-
+        // -----saldo awal konsinyasi-----//
         const saldokonsi = satu?.penerimaanobatkonsinyasi
         saldokonsi?.forEach(duakonsi => {
           const penerimaanrincikonsi = duakonsi?.rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
@@ -71,7 +84,7 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
           }
           tsaldoawalkonsi.push(hasilkonsi)
         })
-
+        // -----saldo awal -----//
         const saldoHpenerimaan = satu?.penerimaanobat
 
         saldoHpenerimaan?.forEach(dua => {
@@ -81,11 +94,10 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
             pbf: satu?.nama,
             total: penerimaanrinci
           }
-          // const sasa = hasil.kodepbf.reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
           tsaldoawal.push(hasil)
         })
       })
-
+      // -----saldo awal -----//
       const kodepbfkonsi = filterDuplicateArrays(tsaldoawalkonsi.map(m => m.kodepbf))
       kodepbfkonsi.forEach(xxxkonsi => {
         const subtotalfixkonsi = tsaldoawalkonsi.filter(fi => fi.kodepbf === xxxkonsi).reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
@@ -118,16 +130,43 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
           this.items.push(hasilfix)
         }
       })
+
+      // -----penambahan hutang-----//
       const kodepbfutang = filterDuplicateArrays(tutangsekarang.map(m => m.kodepbfsk))
       kodepbfutang.forEach(xxxutangsekarang => {
         const subtotalutangsek = tutangsekarang.filter(tut => tut.kodepbfsk === xxxutangsekarang).reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
-
+        const hasilfixhutang = {
+          kodepbf: xxxutangsekarang,
+          PenambahanHutang: subtotalutangsek
+        }
         const adaxi = this.items.find(terx => terx.kodepbf === xxxutangsekarang)
-        console.log('sasa', adaxi)
+
         if (adaxi) {
           adaxi.PenambahanHutang = subtotalutangsek
         }
+        else {
+          this.items.push(hasilfixhutang)
+        }
       })
+
+      const kodepbfhutangkonsi = filterDuplicateArrays(tutangsekarangkonsi.map(k => k.kodepbfskx))
+      kodepbfhutangkonsi.forEach(xxxutangsekarangkonsi => {
+        const subtotalhutangsekarangkonsi = tutangsekarangkonsi.filter(sasa => sasa.kodepbfskx === xxxutangsekarangkonsi).reduce((x, y) => parseFloat(x) + parseFloat(y.total))
+        const hasilfixhutangkonsi = {
+          kodepbf: xxxutangsekarangkonsi,
+          PenambahanHutang: subtotalhutangsekarangkonsi
+        }
+        const adaxikonsi = this.items.find(terx => terx.kodepbf === xxxutangsekarangkonsi)
+
+        if (adaxikonsi) {
+          adaxikonsi.PenambahanHutang = subtotalhutangsekarangkonsi
+        }
+        else {
+          this.items.push(hasilfixhutangkonsi)
+        }
+      })
+      console.log('hahahahaha', kodepbfhutangkonsi)
+
       this.items.forEach(tot => {
         const saldoawal = tot.SaldoAwal ?? 0
         const PenambahanHutang = tot.PenambahanHutang ?? 0
