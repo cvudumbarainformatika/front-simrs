@@ -140,7 +140,7 @@
           Total
         </td>
         <td style="color: red;" class="col-1 text-right text-bold">
-          100000
+          {{ formatDouble(store.totalall) }}
         </td>
       </template>
     </TablePagex>

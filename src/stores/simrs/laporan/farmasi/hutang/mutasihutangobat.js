@@ -9,6 +9,7 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
     items: [],
     detail: [],
     meta: {},
+    totalall: 0,
     kolom: ['NamaPbf', 'SaldoAwal', 'PenambahanHutang', 'Pembayaran', 'Saldo'],
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -184,7 +185,6 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
       }
 
       this.items.forEach(tot => {
-        console.log('sasa', tot)
         const pbfname = val.find(xxx => xxx.kode === tot.kodepbf)
         const pbf = pbfname?.nama
         const saldoawal = tot.SaldoAwal ?? 0
@@ -193,6 +193,10 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
         tot.SaldoAkhir = saldoakhir
         tot.pbf = pbf
       })
+      const totalall = this.items.reduce(function (acc, obj) { return acc + obj.SaldoAkhir }, 0)
+      this.totalall = totalall
+      console.log('hahaha', this.totalall)
+
       this.loading = false
     }
   }
