@@ -734,7 +734,6 @@ export const useLaporanRekapBillByRuanganStore = defineStore('laporan-rekapbill-
           TindakanKeperawatan: TindakanKeperawatan.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0),
           Total: Admin + KonsulAntarPoli +
                 TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0) +
-                 TindakanDokter.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0) +
                  TindakanKeperawatan.reduce((a, b) => parseFloat(a) + parseFloat(b?.subtotal), 0)
         }
 
