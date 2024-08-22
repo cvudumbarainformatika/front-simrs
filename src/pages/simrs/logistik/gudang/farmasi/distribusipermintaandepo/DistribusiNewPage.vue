@@ -16,7 +16,6 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
-      :ada-cari="false"
       row-no
       use-full
       text-cari="Cari ..."
