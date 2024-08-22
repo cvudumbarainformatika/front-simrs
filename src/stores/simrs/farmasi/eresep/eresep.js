@@ -663,6 +663,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       val.nilai_r = val?.r
       val.kodedepo = this.params.kddepo
       val.loading = true
+
       this.simpan(val).then((resp) => {
         console.log('obat', resp)
         const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)

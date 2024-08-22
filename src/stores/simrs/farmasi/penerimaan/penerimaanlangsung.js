@@ -44,7 +44,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     jenisSuratLs: [
       { nama: 'Faktur' },
       { nama: 'Surat Jalan' },
-      { nama: 'Nota' }
+      { nama: 'Nota' },
+      { nama: 'Memo' }
     ],
     jenisPenerimaans: [
       // Pembelian langsung, Pinjaman, Konsinyasi, APBD, APBN, penggantian barang

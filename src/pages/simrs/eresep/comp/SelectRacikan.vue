@@ -113,7 +113,7 @@ async function filterFn (val, update, abort) {
     abort()
     return
   }
-
+  store.bypass = false
   const depo = store.depos.filter(pa => pa.jenis === store.depo)
   // console.log('depo', store?.depo, depo)
   if (depo.length) {
