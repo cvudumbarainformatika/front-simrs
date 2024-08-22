@@ -135,6 +135,14 @@
         </div>
       <!-- {{ row }} -->
       </template>
+      <template #bottom-row>
+        <td style="color: red;" colspan="5" class="col-1 text-right text-bold">
+          Total
+        </td>
+        <td style="color: red;" class="col-1 text-right text-bold">
+          100000
+        </td>
+      </template>
     </TablePagex>
   </q-card-section>
 </template>
