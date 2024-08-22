@@ -27,7 +27,7 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
     },
     async lapMutasiHutangObat () {
       this.loading = true
-      this.kolom = ['kodepbf', 'SaldoAwal', 'PenambahanHutang', 'Pembayaran', 'Saldo']
+      this.kolom = ['pbf', 'SaldoAwal', 'PenambahanHutang', 'Pembayaran', 'SaldoAkhir']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/hutang/reportMutasiHutangObat', params)
         .then((resp) => {
@@ -98,14 +98,17 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
         })
       })
       // -----saldo awal -----//
+      // const pbfname = val?.nama
+
       const kodepbfkonsi = filterDuplicateArrays(tsaldoawalkonsi.map(m => m.kodepbf))
       kodepbfkonsi.forEach(xxxkonsi => {
         const subtotalfixkonsi = tsaldoawalkonsi.filter(fi => fi.kodepbf === xxxkonsi).reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
         const hasilfixkonsi = {
           kodepbf: xxxkonsi,
+          // pbf: val.find(xxx => xxx.kode === xxxkonsi),
           SaldoAwal: subtotalfixkonsi
         }
-
+        // console.log('rerere', hasilfixkonsi)
         const ada = this.items.find(ter => ter.kodepbf === xxxkonsi)
         if (ada) {
           ada.SaldoAwal += subtotalfixkonsi
@@ -137,41 +140,58 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
         const subtotalutangsek = tutangsekarang.filter(tut => tut.kodepbfsk === xxxutangsekarang).reduce((x, y) => parseFloat(x) + parseFloat(y.total), 0)
         const hasilfixhutang = {
           kodepbf: xxxutangsekarang,
-          PenambahanHutang: subtotalutangsek
+          PenambahanHutang: subtotalutangsek ?? 0
         }
+
         const adaxi = this.items.find(terx => terx.kodepbf === xxxutangsekarang)
 
         if (adaxi) {
-          adaxi.PenambahanHutang = subtotalutangsek
+          if (!adaxi.PenambahanHutang) {
+            adaxi.PenambahanHutang = subtotalutangsek
+          }
+          else {
+            adaxi.PenambahanHutang += subtotalutangsek
+          }
         }
         else {
           this.items.push(hasilfixhutang)
         }
       })
-
       const kodepbfhutangkonsi = filterDuplicateArrays(tutangsekarangkonsi.map(k => k.kodepbfskx))
-      kodepbfhutangkonsi.forEach(xxxutangsekarangkonsi => {
-        const subtotalhutangsekarangkonsi = tutangsekarangkonsi.filter(sasa => sasa.kodepbfskx === xxxutangsekarangkonsi).reduce((x, y) => parseFloat(x) + parseFloat(y.total))
-        const hasilfixhutangkonsi = {
-          kodepbf: xxxutangsekarangkonsi,
-          PenambahanHutang: subtotalhutangsekarangkonsi
-        }
-        const adaxikonsi = this.items.find(terx => terx.kodepbf === xxxutangsekarangkonsi)
+      if (kodepbfhutangkonsi.length > 0) {
+        kodepbfhutangkonsi?.forEach(xxxutangsekarangkonsi => {
+          const subtotalhutangsekarangkonsi = tutangsekarangkonsi.filter(sasa => sasa.kodepbfskx === xxxutangsekarangkonsi)?.map(m => m.total)?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+          const hasilfixhutangkonsi = {
+            kodepbf: xxxutangsekarangkonsi,
+            PenambahanHutang: subtotalhutangsekarangkonsi ?? 0
+          }
 
-        if (adaxikonsi) {
-          adaxikonsi.PenambahanHutang = subtotalhutangsekarangkonsi
-        }
-        else {
-          this.items.push(hasilfixhutangkonsi)
-        }
-      })
-      console.log('hahahahaha', kodepbfhutangkonsi)
+          const adaxikonsi = this.items.find(terx => terx.kodepbf === xxxutangsekarangkonsi)
+          console.log('cek', adaxikonsi)
+
+          if (adaxikonsi) {
+            if (!adaxikonsi.PenambahanHutang) {
+              adaxikonsi.PenambahanHutang = subtotalhutangsekarangkonsi
+            }
+            else {
+              adaxikonsi.PenambahanHutang += subtotalhutangsekarangkonsi
+            }
+          }
+          else {
+            this.items.push(hasilfixhutangkonsi)
+          }
+        })
+      }
 
       this.items.forEach(tot => {
+        console.log('sasa', tot)
+        const pbfname = val.find(xxx => xxx.kode === tot.kodepbf)
+        const pbf = pbfname?.nama
         const saldoawal = tot.SaldoAwal ?? 0
         const PenambahanHutang = tot.PenambahanHutang ?? 0
         const saldoakhir = saldoawal + PenambahanHutang
-        tot.Saldo = saldoakhir
+        tot.SaldoAkhir = saldoakhir
+        tot.pbf = pbf
       })
       this.loading = false
     }

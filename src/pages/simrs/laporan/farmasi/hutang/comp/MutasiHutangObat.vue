@@ -51,12 +51,24 @@
           </div>
         </q-form>
       </template>
-      <template #cell-PBF="{row}">
-        {{ row?.PBF }}
-      </template>
-      <template #cell-Total="{row}">
+      <template #cell-SaldoAwal="{row}">
         <div class="row justify-end">
-          {{ formatDouble(row?.Total) }}
+          {{ formatDouble(row?.SaldoAwal ?? 0) }}
+        </div>
+      </template>
+      <template #cell-PenambahanHutang="{row}">
+        <div class="row justify-end">
+          {{ formatDouble(row?.PenambahanHutang ?? 0) }}
+        </div>
+      </template>
+      <template>
+        <div class="row justify-end">
+          0
+        </div>
+      </template>
+      <template #cell-SaldoAkhir="{row}">
+        <div class="row justify-end">
+          {{ formatDouble(row?.SaldoAkhir ?? 0) }}
         </div>
       </template>
       <template #expand="{row}">

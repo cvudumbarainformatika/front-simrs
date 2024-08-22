@@ -202,7 +202,6 @@ const store = useLaporanHutangKonsinyasiFarmasiStore()
 const TablePage = shallowRef(defineAsyncComponent(() => import('./TablePage.vue')))
 
 function click (val) {
-  console.log(val)
   val.item.expand = !val.item.expand
 }
 onMounted(() => {
