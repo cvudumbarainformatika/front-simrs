@@ -69,13 +69,13 @@ defineProps({
 
 const emits = defineEmits(['saveForm'])
 
-function resetForm() {
+function resetForm () {
   console.log('child', formRef.value)
   formRef.value.resetValidation()
 }
 defineExpose({ resetForm })
 
-function saveForm() {
+function saveForm () {
   emits('saveForm')
 }
 </script>

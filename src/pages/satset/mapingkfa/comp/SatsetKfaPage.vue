@@ -50,7 +50,7 @@
 </template>
 <script setup>
 import { api } from 'src/boot/axios'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const items = ref([])
 const meta = ref({})
@@ -83,7 +83,7 @@ function refreshTable () {
 }
 function getDataTable () {
   loading.value = true
-  const param = { params }
+  const param = { params: params.value }
   return new Promise(resolve => {
     api.get('v1/satusehat/mapingkfa/get-kfa', param)
       .then(resp => {
@@ -96,7 +96,8 @@ function getDataTable () {
       .catch(() => { loading.value = false })
   })
 }
-onMounted(() => {
-  getDataTable()
+
+defineExpose({
+  getDataTable
 })
 </script>

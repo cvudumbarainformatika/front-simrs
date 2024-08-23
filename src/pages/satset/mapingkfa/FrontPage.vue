@@ -45,7 +45,7 @@
       </template>
     </app-table-extend>
   </div>
-  <kfaPage v-model="bukaKfa" />
+  <kfaPage ref="refKfaPage" v-model="bukaKfa" />
 </template>
 <script setup>
 import { useMapingKfaStore } from 'src/stores/satset/mapingkfa'
@@ -55,9 +55,11 @@ const store = useMapingKfaStore()
 
 const kfaPage = defineAsyncComponent(() => import('./comp/SatsetKfaPage.vue'))
 const bukaKfa = ref(false)
+const refKfaPage = ref(null)
 function openKfa (val) {
-  console.log('buka kfa', val)
+  console.log('buka kfa', val, refKfaPage.value)
   bukaKfa.value = true
+  refKfaPage.value.getDataTable()
 }
 
 onMounted(() => {
