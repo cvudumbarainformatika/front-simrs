@@ -173,7 +173,7 @@ onMounted(() => {
 const $q = useQuasar()
 
 function hapusSep (val) {
-  console.log(val)
+  // console.log(val)
   $q.dialog({
     title: '<span class="text-red">Peringatan<em>!</em></span>',
     message: '<em>Apakah anda yakin ?</em> <span class="text-red">Akan Hapus NO. SEP  </span> <strong>' + val?.sep + '</strong>',
