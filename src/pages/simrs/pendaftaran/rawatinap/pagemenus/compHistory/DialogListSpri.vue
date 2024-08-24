@@ -3,7 +3,7 @@
     <q-card style="min-width: 40vw">
       <q-card-section class="bg-primary text-white">
         <div class="text-h6">
-          {{ formSpri ? 'Create SPRI' : 'List SPRI' }}
+          {{ formSpri ? (form.noSuratKontrol===null?'Create SPRI':'Edit SPRI') : 'List SPRI' }}
         </div>
       </q-card-section>
 
@@ -13,7 +13,12 @@
         <div v-if="lists.length === 0">
           <div class="column flex-center" style="min-height: 300px;">
             <div>Maaf data tidak ditemukan</div>
-            <q-btn label="Create SPRI" color="dark" class="q-mt-md" @click="formSpri=true" />
+            <q-btn
+              label="Create SPRI" color="dark" class="q-mt-md" @click="()=> {
+                form.noSuratKontrol = null
+                formSpri = true
+              }"
+            />
           </div>
         </div>
 
@@ -34,15 +39,36 @@
               </q-item-label>
             </q-item-section>
             <q-item-section side>
-              <q-btn
-                dense
-                color="primary"
-                label="Pilih"
-                class="q-px-md"
-                @click="emits('pilih', item)"
-              />
+              <div class="q-gutter-sm">
+                <q-btn
+                  dense
+                  color="primary"
+                  label="Pilih"
+                  class="q-px-md"
+                  @click="emits('pilih', item)"
+                />
+                <q-btn
+                  dense
+                  color="info"
+                  outline
+                  label="Edit"
+                  class="q-px-md"
+                  @click="editSpri(item)"
+                />
+              </div>
+              <div class="q-mt-sm">
+                <q-btn
+                  dense
+                  color="negative"
+                  outline
+                  label="Hapus SPRI"
+                  class="q-px-md"
+                  @click="hapusSpri(item)"
+                />
+              </div>
             </q-item-section>
           </q-item>
+          <q-separator />
         </q-list>
         <q-separator />
       </q-card-section>
@@ -128,7 +154,7 @@
 
           <div class="flex q-mt-lg full-width justify-between" style="border-top: 1px solid grey;">
             <q-btn :loading="wait" :disabled="wait" label="kembali" color="dark" class="" @click="formSpri=false" />
-            <q-btn :loading="wait" :disabled="wait" type="submit" label="Buat SPRI" color="primary" class="" />
+            <q-btn :loading="wait" :disabled="wait" type="submit" :label="form.noSuratKontrol===null? 'Buat Spri' : 'Update Spri'" color="primary" class="" />
           </div>
         </q-form>
       </q-card-section>
@@ -174,7 +200,8 @@ const form = ref({
   pasien: null,
   tglRawatInap: null,
   spesialis: null,
-  dokter: null
+  dokter: null,
+  noSuratKontrol: null
 })
 
 const options = ref([])
@@ -183,7 +210,7 @@ const optionsDokters = ref([])
 const spesialistiks = ref([])
 const dokters = ref([])
 
-const emits = defineEmits(['pilih', 'getSpri'])
+const emits = defineEmits(['pilih', 'getSpri', 'edit'])
 
 const setTglRawatInap = async (val) => {
   form.value.tglRawatInap = val
@@ -281,12 +308,24 @@ const onShow = () => {
     tglRawatInap: null,
     spesialis: null,
     dokter: null,
-    pasien: props.pasien
+    pasien: props.pasien,
+    noSuratKontrol: null
   }
 }
 const onSubmit = async () => {
   wait.value = true
   form.value.pasien = props.pasien
+
+  if (form.value.spesialis.value) {
+    return notifErrVue('Mohon Memilih Spesialis Terlebih dahulu')
+  }
+
+  if (form.value?.tglRawatInap === null || form.value?.tglRawatInap === '') {
+    return notifErrVue('silahkan pilih tanggal rawat inap')
+  }
+  if (form.value?.dokter === null || form.value?.dokter === '') {
+    return notifErrVue('silahkan pilih Dokter Terlebih dahulu')
+  }
   // console.log('form', form.value)
   await api.post('v1/simrs/pendaftaran/ranap/create-spri-ranap', form.value)
     .then(resp => {
@@ -302,6 +341,40 @@ const onSubmit = async () => {
     })
     .catch(err => {
       console.log('err create spri', err)
+      wait.value = false
+    })
+}
+
+function editSpri (item) {
+  console.log('edit spri', item)
+  // form.value.tglRawatInap = item.tglRencanaKontrol
+  setTglRawatInap(item.tglRencanaKontrol)
+  form.value.dokter = item.kodeDokter
+  form.value.noSuratKontrol = item?.noSuratKontrol
+
+  formSpri.value = true
+}
+
+async function hapusSpri (item) {
+  wait.value = true
+  form.value.noSuratKontrol = null
+  form.value.pasien = props.pasien
+  form.value.noSuratKontrol = item?.noSuratKontrol
+
+  await api.post('v1/simrs/pendaftaran/ranap/delete-spri-ranap', form.value)
+    .then(resp => {
+      console.log('resp delete ', resp)
+      wait.value = false
+      if (resp.data.metadata.code === '200') {
+        formSpri.value = false
+        emits('getSpri', props.pasien)
+      }
+      else {
+        notifErrVue(resp.data.metadata.message)
+      }
+    })
+    .catch(err => {
+      console.log('err delete spri', err)
       wait.value = false
     })
 }

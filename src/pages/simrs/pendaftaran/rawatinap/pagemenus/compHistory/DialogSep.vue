@@ -610,6 +610,7 @@
 
         sep.dialogDiagnosa = false
       }"
+
       :key="pasien"
     />
   </q-dialog>
