@@ -56,8 +56,8 @@
           <div class="col-auto q-ml-sm">
             <q-btn
               outline
-              color="grey-8"
-              class="bg-white"
+              color="white"
+              class="bg-primary"
               no-caps
             >
               <div class="flex items-center q-mx-xs">

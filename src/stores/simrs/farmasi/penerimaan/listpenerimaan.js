@@ -18,7 +18,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       per_page: 10,
       page: 1,
       to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date()),
+      from: dateDbFormat(new Date())
     },
     columns: [
       'nopenerimaan',
@@ -43,7 +43,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       { nama: 'penggantian barang' },
       { nama: 'Hibah' }
 
-    ],
+    ]
   }),
   actions: {
     setParam (key, val) {
@@ -76,7 +76,6 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       this.setParam('jenispenerimaan', val)
       this.setParam('page', 1)
       this.cariRencanaBeli()
-      
     },
     setPeriode (val) {
       this.header.periode = val

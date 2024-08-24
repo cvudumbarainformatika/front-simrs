@@ -1,5 +1,5 @@
 <template>
-<AsyncComp/>
+  <AsyncComp />
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
