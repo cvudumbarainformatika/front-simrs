@@ -155,7 +155,9 @@ import { useMasterFarmasiMinMaxObatStore } from 'src/stores/simrs/master/farmasi
 const store = useMasterFarmasiMinMaxObatStore()
 function onSubmit (val) {
   console.log('on Submit', val)
-  if (val.max > 0 && val.min > 0) {
+  if (val.max <= 0) return notifErrVue('nilai max harus lebih besar dari 0')
+  if (val.min < 0) return notifErrVue('nilai min tidak boleh kurang dari 0')
+  if (val.max > 0 && val.min >= 0) {
     store.simpanData(val) // .then(() => {
   }
   //   store.setOpen()
