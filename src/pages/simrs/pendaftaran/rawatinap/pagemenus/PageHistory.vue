@@ -167,6 +167,7 @@ const sep = useBuatSepRanapStore()
 
 onMounted(() => {
   sep.dokters = pendaftaran?.dokters
+  store.getRuangan()
   store.getDataTable()
 })
 

@@ -198,6 +198,47 @@
             </q-menu>
           </q-btn>
           <q-btn
+            outline
+            color="grey-8"
+            class="bg-white"
+            padding="sm"
+            size="sm"
+            no-caps
+          >
+            <div class="flex items-center q-mx-xs">
+              <div class="f-12 q-mr-sm">
+                {{ store.ruangans?.find(x => x.groups === store.params.ruangan)?.groups_nama }}
+              </div>
+              <transition>
+                <q-icon
+                  :name="`${showMenuRuangan?'icon-mat-keyboard_arrow_up':'icon-mat-keyboard_arrow_down'}`"
+                  size="16px"
+                />
+              </transition>
+            </div>
+
+            <q-menu
+              @show="showMenuRuangan=true"
+              @hide="showMenuRuangan=false"
+            >
+              <div class="row no-wrap q-pa-sms">
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-for="item in store.ruangans"
+                    :key="item"
+                    clickable
+                    v-close-popup
+                    :active="item.groups === store.params.ruangan"
+                    active-class="bg-primary text-white"
+                    @click="store.setRuangan(item)"
+                  >
+                    <q-item-section>{{ item.groups_nama }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+            </q-menu>
+          </q-btn>
+          <q-btn
             v-for="(item, i) in store.statuses"
             :key="i"
             outline
@@ -280,6 +321,7 @@ import { ref } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const showMenuPeriode = ref(false)
+const showMenuRuangan = ref(false)
 // const showMenuStatus = ref(false)
 
 const store = useListHistoryPendaftaranRanapStore()

@@ -362,7 +362,8 @@ function hapusSpri (item) {
   $q.dialog({
     title: 'Peringatan<em>!</em>',
     message: '<em>Apakah Benar akan Hapus</em> <span class="text-red">use</span> <strong>SPRI ini ?</strong>',
-    html: true
+    html: true,
+    cancel: true
   }).onOk(() => {
     // console.log('OK')
     hapusBenar(item)
