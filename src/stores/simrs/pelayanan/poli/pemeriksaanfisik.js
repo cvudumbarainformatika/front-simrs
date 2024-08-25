@@ -98,12 +98,12 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     auskultasisuaratambahankanans: [],
     auskultasisuaratambahankiris: [],
     optionsTingkatkesadaran: [
-      { value: 0, label: 'Sadar Baik/Alert' },
-      { value: 1, label: 'Berespon denga kata-kata / Voice' },
-      { value: 2, label: 'Hanya berespons jika dirangsang nyeri / Pain' },
-      { value: 3, label: 'Pasien tidak sadar / Unresponsive' },
-      { value: 4, label: 'Gelisah atau bingung' },
-      { value: 5, label: 'Acute Confusional States' }
+      { value: 0, label: 'Sadar Baik/Alert' }, // 248234008
+      { value: 1, label: 'Berespon denga kata-kata / Voice' }, // 300202002
+      { value: 2, label: 'Hanya berespons jika dirangsang nyeri / Pain' }, // 450847001
+      { value: 3, label: 'Pasien tidak sadar / Unresponsive' }, // 422768004
+      { value: 4, label: 'Gelisah atau bingung' }, // 130987000
+      { value: 5, label: 'Acute Confusional States' } // 2776000
     ],
     loadingform: false,
     edited: false,
@@ -249,19 +249,19 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     setTingkatKesadaran (val) {
       let result = ''
       if (val === 3) {
-        result = 'Coma'
+        result = 'Coma' // 371632003
       }
       else if (val > 3 && val <= 6) {
-        result = 'Stupor'
+        result = 'Stupor' // 89458003
       }
       else if (val > 6 && val <= 9) {
-        result = 'Somnolen'
+        result = 'Somnolen' // 79519003
       }
       else if (val > 9 && val <= 11) {
-        result = 'Delirium'
+        result = 'Delirium' // 2776000
       }
       else if (val > 11 && val <= 13) {
-        result = 'Apatis'
+        result = 'Apatis' // 20602000 Apathetic
       }
       else if (val > 13 && val <= 15) {
         result = 'Compos Mentis'

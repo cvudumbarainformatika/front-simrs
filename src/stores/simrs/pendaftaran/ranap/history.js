@@ -15,11 +15,14 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
       page: 1,
       per_page: 20,
       q: '',
-      status: 'Semua',
+      status: 'Belum Pulang',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      sort: 'terbaru'
+      sort: 'terbaru',
+      ruangan: ''
     },
+
+    ruangans: [],
 
     cekPeserta: null,
 
@@ -42,6 +45,28 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
     // doubleCount: (state) => state.counter * 2
   },
   actions: {
+
+    getRuangan () {
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/ranap/ruangan/listruanganranap')
+          .then(resp => {
+            console.log('ruangan ranap', resp)
+            if (resp.status === 200) {
+              this.ruangans = resp.data
+              const all = {
+                groups: '',
+                groups_nama: 'SEMUA RUANGAN'
+              }
+              this.ruangans.unshift(all)
+              // this.params.koderuangan = this.ruangans.map(x => x.groups)
+            }
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
     getDataTable () {
       this.loading = true
       return new Promise((resolve, reject) => {
@@ -68,6 +93,11 @@ export const useListHistoryPendaftaranRanapStore = defineStore('list-history-pen
           reject(err)
         })
       })
+    },
+
+    setRuangan (val) {
+      this.params.ruangan = val?.groups
+      this.getDataTable()
     },
 
     setPeriode (val) {

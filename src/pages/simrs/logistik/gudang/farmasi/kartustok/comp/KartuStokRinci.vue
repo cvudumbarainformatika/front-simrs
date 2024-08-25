@@ -178,6 +178,17 @@ const bentukArrBaru = computed(() => {
     }
   })
 
+  const barangrusak = props?.item?.barangrusak?.map(x => {
+    return {
+      tgl: x?.tgl_rusak,
+      tanggal: date.formatDate(x?.tgl_rusak, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.created_at, 'HH:mm'),
+      keterangan: 'Item Obat ' + x?.status,
+      masuk: 0,
+      keluar: parseFloat(x?.jumlah),
+      total: 0
+    }
+  })
   const mutasikeluar = props?.item?.mutasikeluar?.map(x => {
     return {
       tgl: x?.tgl_permintaan,
@@ -314,7 +325,7 @@ const bentukArrBaru = computed(() => {
 
   const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk,
     resepkeluar, resepracikankeluar, returresep, penyesuaian,
-    distribusi, returdistribusi].flat(Infinity)
+    distribusi, returdistribusi, barangrusak].flat(Infinity)
 
   // const hasil = gabung.length ? gabung?.filter(x => x.masuk !== x.keluar)?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : [] // ini jika yg aneh tdk dimasukkan
   const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []

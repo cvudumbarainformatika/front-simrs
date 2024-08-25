@@ -24,6 +24,11 @@ const satset = {
       name: 'satset.kunjungan',
       component: () => import('pages/satset/kunjungan/IndexPage.vue')
     },
+    {
+      path: '/satset/mapingkfa',
+      name: 'satset.mapingkfa',
+      component: () => import('pages/satset/mapingkfa/IndexPage.vue')
+    },
 
     {
       path: '/satset/notfound',

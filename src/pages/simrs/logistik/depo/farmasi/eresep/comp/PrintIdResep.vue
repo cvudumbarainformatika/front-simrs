@@ -111,7 +111,7 @@
           <div class="">
             <div v-for="(rinc,i) in item?.permintaanresep" :key="i">
               <div v-if="(item?.flag==='3' && rinc?.done) || parseInt(item?.flag)<=2">
-                <div class="row justify-between q-mb-xs">
+                <div class="row justify-between" :class="rinc?.keterangan_bypass?'':'q-mb-xs'">
                   <div class="col-shrink">
                     {{ i+1 }}
                   </div>
@@ -127,6 +127,9 @@
                   <div class="col-2 text-right">
                     <i>{{ formatDouble(rinc?.harga,2) }}</i>
                   </div>
+                </div>
+                <div v-if="rinc?.keterangan_bypass" class="row q-mb-xs q-ml-sm">
+                  Ket. bypass : {{ rinc?.keterangan_bypass }}
                 </div>
                 <!-- <div class="row q-ml-lg ">
                   <div>* <i>{{ rinc?.aturan }}  </i></div>
@@ -179,6 +182,9 @@
             <div v-for="(rac,n) in lirac?.rincian" :key="n">
               <div class="row q-ml-lg f-12 items-end">
                 <div>* <i>{{ rac?.mobat?.nama_obat }} - <span v-if="parseInt(lirac?.flag)<=2" class="">(rsp : {{ rac?.jumlahresep }}) - </span> <span class="">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
+              </div>
+              <div v-if="rac?.keterangan_bypass" class="row q-ml-xl items-end q-mb-xs">
+                <div>Ket. bypass : {{ rac?.keterangan_bypass }} </div>
               </div>
             </div>
             <!-- </div> -->

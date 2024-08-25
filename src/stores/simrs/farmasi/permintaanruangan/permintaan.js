@@ -50,16 +50,16 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
     ]
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setDisp(key, val) {
+    setDisp (key, val) {
       this.disp[key] = val
     },
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    clearForm() {
+    clearForm () {
       const dari = this.form.dari
       const tujuan = this.form.tujuan
       this.form = {
@@ -71,7 +71,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
       }
       this.details = []
     },
-    obatSelected(val) {
+    obatSelected (val) {
       this.setForm('kdobat', val)
       this.setForm('jumlah_minta', 0)
       console.log('obat ', val)
@@ -98,35 +98,38 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
         if (dar.length) {
           const stok = dar[0]
           this.setForm('stok', stok.jumlah)
-        } else {
+        }
+        else {
           this.setForm('stok', 0)
         }
-      } else {
+      }
+      else {
         notifErrVue('Depo belum dipilih')
       }
     },
-    clearObat() {
+    clearObat () {
       this.setForm('kdobat', null)
       this.setForm('stok_alokasi', 0)
       this.setForm('mak_stok', 0)
       this.setForm('jumlah_minta', 0)
     },
-    cariObat(val) {
+    cariObat (val) {
       console.log('cari obat ', val)
       this.setParam('nama_obat', val)
       if (this.params.kdgudang) {
         this.getListObat()
-      } else {
+      }
+      else {
         notifErrVue('gudang belum dipilih')
       }
     },
-    getInitialData() {
+    getInitialData () {
       this.getRuangan()
     },
-    selesaiDanKunci(val) {
+    selesaiDanKunci (val) {
       this.kunci(this.form.no_permintaan)
     },
-    kunci(val) {
+    kunci (val) {
       const data = {
         no_permintaan: val
       }
@@ -147,7 +150,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           .catch(() => { this.loadingKunci = false })
       })
     },
-    getListObat() {
+    getListObat () {
       this.loadingObat = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -167,7 +170,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           })
       })
     },
-    getRuangan() {
+    getRuangan () {
       this.loadingRuang = true
       return new Promise(resolve => {
         api.get('v1/ruang/ruang')
@@ -182,7 +185,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           })
       })
     },
-    simpan() {
+    simpan () {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/simpanpermintaandepo', this.form)
@@ -207,7 +210,8 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
                   if (data) {
                     Object.assign(data, rinc)
                   }
-                } else {
+                }
+                else {
                   this.details.push(rinc)
                 }
               }
@@ -219,7 +223,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           .catch(() => { this.loading = false })
       })
     },
-    simpanMintaMax(val) {
+    simpanMintaMax (val) {
       this.loadingMax = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/simpanminta', val)
@@ -232,7 +236,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           }).catch(() => { this.loadingMax = false })
       })
     },
-    hapusHead(val) {
+    hapusHead (val) {
       this.loadingHapus = true
       const data = {
         id: val.id
@@ -252,7 +256,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
           })
       })
     },
-    hapusRinci(val) {
+    hapusRinci (val) {
       this.loadingHapus = true
       val.loading = true
       const data = {
