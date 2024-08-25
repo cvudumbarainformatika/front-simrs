@@ -106,7 +106,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         return acc
       }, [])
       this.ptks = ptk
-      console.log('pptk', this.ptks)
+      // console.log('pptk', this.ptks)
     },
     filterKegiatan() {
       const data = this.kegiatans?.length
@@ -115,7 +115,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         )
         : []
       this.kegiatans = data
-      // console.log('ddd', data)
+      // console.log('ddd', this.kegiatans)
     },
     getDataRealisasi() {
       this.loading = true
