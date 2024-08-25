@@ -144,7 +144,8 @@ const columnsx = [
     label: 'Stok Keluar',
     align: 'right',
     field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
-      hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
+      hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
+      hitungBarangRusak(row?.barangrusak)
     )
   },
   {
@@ -229,6 +230,12 @@ function hitungMutasiKeluar (arr) {
 }
 function hitungMutasiMasuk (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+const gudang = ['Gd-05010100', 'Gd-03010100']
+function hitungBarangRusak (arr) {
+  // console.log(gudang.includes(app?.user?.kdruangansim), app?.user?.kdruangansim)
+  if (gudang.includes(app?.user?.kdruangansim)) return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  else return 0
 }
 function hitungResepKeluar (arr, dist) {
   // if (app?.user?.kdruangansim === 'Gd-04010103') {
@@ -347,7 +354,8 @@ function hitungTotal (row) {
   hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur)
   // eslint-disable-next-line no-unused-vars
   const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
-  hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan)
+  hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
+  hitungBarangRusak(row?.barangrusak)
   // eslint-disable-next-line no-unused-vars
   const total = awal + masuk - keluar
   return total
