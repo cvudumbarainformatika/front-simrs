@@ -31,20 +31,20 @@
           <q-table
             class="my-sticky-header"
             flat
-            :rows="store.bastfarmasis"
+            :rows="carisrt.bastfarmasis"
             :columns="columns"
             row-key="name"
-            @request="store.onRequest"
-            v-model:pagination="store.reqs"
-            :filter="store.reqs.q"
-            :loading="store.loading"
+            @request="carisrt.onRequest"
+            v-model:pagination="carisrt.reqs"
+            :filter="carisrt.reqs.q"
+            :loading="carisrt.loading"
             :rows-per-page-options="[10,20,50]"
           >
             <template #top-left>
               <div class="flex q-qutter-sm z-top">
                 <div>
                   <q-input
-                    v-model="store.reqs.q"
+                    v-model="carisrt.reqs.q"
                     outlined
                     dark
                     color="white"
@@ -52,10 +52,10 @@
                     placeholder="Cari BAST ..."
                     debounce="500"
                     style="min-width: 200px;"
-                    @keyup.enter="store.goToPage(1)"
+                    @keyup.enter="carisrt.goToPage(1)"
                   >
                     <template
-                      v-if="store.reqs.q"
+                      v-if="carisrt.reqs.q"
                       #append
                     >
                       <q-icon
@@ -120,13 +120,15 @@
 
 <script setup>
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
+import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 import { onMounted, ref } from 'vue'
 import { formattanpaRp } from 'src/modules/formatter'
 // import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 
 // const storeform = formNotaPermintaanDanaLS()
-const noBast = ref([])
-const store = dataBastFarmasi()
+// const noBast = ref([])
+const carisrt = dataBastFarmasi()
+const store = formNotaPermintaanDanaLS()
 function hiddenDialog () {
   console.log('hidden dialog')
 }
@@ -155,15 +157,23 @@ onMounted(() => {
 
 })
 const init = () => {
-  store.getDataBast()
+  carisrt.getDataBast()
 }
 const clearSearch = () => {
-  store.reqs.q = ''
-  store.goToPage(1)
+  carisrt.reqs.q = ''
+  carisrt.goToPage(1)
 }
 function pilihDataSerahterima (val) {
-  noBast.value = val
-  console.log('pilih serahtrima', noBast.value)
+  // noBast.value = val
+
+  store.reqs.bast = val
+  store.openDialogFarmasi = false
+  store.form.noserahterima = store.reqs.bast
+  carisrt.reqs.kodebast = val
+  carisrt.selectbastFarmasi()
+
+  // store.rinci = val ?? ''
+  console.log('kkode bast', carisrt.reqs.kodebast)
 }
 // const pilihSerahterima = (val) => {
 //   storeform.setForm(val)

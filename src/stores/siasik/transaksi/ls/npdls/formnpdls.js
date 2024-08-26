@@ -1,14 +1,25 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { date } from 'quasar'
 import { notifSuccess } from 'src/modules/utils'
+// import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 
 export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
   state: () => ({
     loading: false,
+    params: {
+      q: '',
+      tahun: date.formatDate(Date.now(), 'YYYY'),
+      bidang: '',
+      kegiatan: ''
+    },
     reqs: {
       q: '',
       kodebidang: null,
-      kodekegiatan: null
+      kodekegiatan: null,
+      bast: null,
+      rekening50: null,
+      nip: null
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -23,6 +34,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       kodebidang: null,
       bidang: null,
 
+      bast: null,
       // Data Kontrak
       serahterimapekerjaan: null,
       noserahterima: null,
@@ -57,6 +69,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       uraian108: null,
       itembelanja: null,
 
+      // Nomer Usulan
       nopenerimaan: null,
 
       // id serahterima
@@ -76,52 +89,31 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       totalls: null,
       nominalpembayaran: null
     },
+    dariserahterima: [
+      { nama: '-', value: '1' },
+      { nama: 'Sigarang', value: '2' },
+      { nama: 'Farmasi', value: '3' },
+      { nama: 'Siasik', value: '4' }
+    ],
 
     serahterimas: [
       { ket: 'Ya', value: '1' },
       { ket: 'Tidak', value: '2' }
     ],
-    anggarans: {},
-    rekening50: {},
+    bidangdanptk: [],
+    bidangs: [],
+    kegiatans: [],
+    ptks: [],
+    anggarans: [],
+    rekening50: [],
     itembelanja: [],
+    // datafarmasi: [],
     // bastfarmasis: [],
-    openDialogCariSerahterima: false
+    openDialogFarmasi: false,
+    openDialogSiasik: false
   }),
   actions: {
     resetFORM () {
-      // this.form = {
-      //   nonpdls: '',
-      //   tglnpdls: '',
-
-      //   // PPTK
-      //   kodepptk: '',
-      //   pptk: '',
-      //   kodebidang: '',
-      //   bidang: '',
-
-      //   // Data Kontrak
-      //   serahterimapekerjaan: '',
-      //   noserahterima: '',
-      //   nokontrak: '',
-
-      //   triwulan: '',
-
-      //   // kegiatan
-      //   kodekegiatanblud: '',
-      //   kegiatanblud: '',
-
-      //   // pihak ketiga
-      //   kodepenerima: '',
-      //   penerima: '',
-      //   bank: '',
-      //   rekening: '',
-      //   npwp: '',
-
-      //   keterangan: '',
-      //   biayatransfer: 0,
-      //   rincians: ''
-      // }
-
       const forms = Object.keys(this.form)
       for (let i = 0; i < forms.length; i++) {
         const el = forms[i]
@@ -139,6 +131,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     setForm (key, val) {
       this.form[key] = val
       this.rinci[key] = val
+      // this.openDialogFarmasi = false
       // console.log('form', this.form)
     },
     emptyForm () {
@@ -155,13 +148,62 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     //   this.reqs.page = val
     //   this.getInitialData()
     // },
+    getDataBidang () {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve) => {
+        api.get('v1/laporan/lra/bidang', params).then((resp) => {
+          console.log('bidang', resp.data)
+          if (resp.status === 200) {
+            this.bidangdanptk = resp.data
+            // this.kegiatans = resp.data
+            // this.ptks = resp.data
+            this.loading = false
+            // this.filterBidang(resp.data)
+            this.filterKegiatan(resp.data)
+            this.filterPtk(resp.data)
+            resolve(resp)
+          }
+        }).catch(() => { this.loading = false })
+      })
+    },
+    filterPtk () {
+      const data = this.bidangdanptk?.length
+        ? this.bidangdanptk?.map((x) => {
+          return {
+            nip: x.kodepptk,
+            nama: x.namapptk,
+            kodeBagian: x.kodebidang,
+            bagian: x.bidang
+          }
+        })
+        : []
+      const ptk = data.reduce((acc, curr) => {
+        const kodesama = acc.find(x => x.nip === curr.nip)
+        if (!kodesama) {
+          acc.push(curr)
+        }
+        return acc
+      }, [])
+      this.ptks = ptk
+      console.log('pptk', this.ptks)
+    },
+    filterKegiatan () {
+      const data = this.bidangdanptk?.length
+        ? this.bidangdanptk?.filter(x =>
+          x.kodepptk === this.reqs.nip
+        )
+        : []
+      this.kegiatans = data
+      console.log('ddd', this.kegiatans)
+    },
     simpanNpdls () {
       console.log('fooorm', this.form)
       this.loading = true
       return new Promise((resolve, reject) => {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
-            console.log('isian', resp)
+            // console.log('isian', resp)
             this.loading = false
             notifSuccess(resp)
             // this.form.rincians = []
@@ -184,10 +226,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
               console.log('anggaran', resp.data)
               this.loading = false
               this.anggarans = resp.data
-              this.rekening50 = resp.data
-              this.filterRekening50(resp.data)
               this.itembelanja = resp.data
-              this.filterItem(resp.data)
+              this.filterRekening50(resp.data)
+              this.filterItemBelanja(resp.data)
               resolve(resp.data)
             }
             else {
@@ -200,8 +241,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       })
     },
     filterRekening50 () {
-      const data = this.rekening50?.length
-        ? this.rekening50?.map((x) => {
+      const data = this.anggarans?.length
+        ? this.anggarans?.map((x) => {
           return {
             rincianbelanja: x.uraian50,
             rek50: x.koderek50
@@ -216,12 +257,16 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         return a
       }, [])
       this.rekening50 = rek
-      console.log('rincianbelanjaxxx', this.rekening50)
     },
-    filterItem () {
-      const data = this.itembelanja?.length
-        ? this.itembelanja?.map((x) => {
+    filterItemBelanja () {
+      // const fil50 = this.reqs.rekening50
+      const data = this.anggarans?.length
+        ? this.anggarans?.filter(x => x.koderek50 === this.reqs.rekening50).map((x) => {
           return {
+            koderek108: x.koderek108,
+            uraian108: x.uraian108,
+            rek50: x.koderek50,
+            uraian50: x.uraian50,
             item: x.usulan,
             harga: x.harga,
             satuan: x.satuan,
@@ -230,15 +275,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
           }
         })
         : []
-      // const rek = data.reduce((a, b) => {
-      //   const yangsama = a.find(x => x.rek50 === b.rek50)
-      //   if (!yangsama) {
-      //     a.push(b)
-      //   }
-      //   return a
-      // }, [])
       this.itembelanja = data
-      console.log('itembelanja', this.itembelanja)
+      console.log('item belanja', this.itembelanja)
     }
     // getDataBast () {
     //   this.selectbastFarmasi()

@@ -169,6 +169,7 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
 import { ref } from 'vue'
@@ -355,7 +356,25 @@ function editSpri (item) {
   formSpri.value = true
 }
 
-async function hapusSpri (item) {
+const $q = useQuasar()
+
+function hapusSpri (item) {
+  $q.dialog({
+    title: 'Peringatan<em>!</em>',
+    message: '<em>Apakah Benar akan Hapus</em> <span class="text-red">use</span> <strong>SPRI ini ?</strong>',
+    html: true,
+    cancel: true
+  }).onOk(() => {
+    // console.log('OK')
+    hapusBenar(item)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
+async function hapusBenar (item) {
   wait.value = true
   form.value.noSuratKontrol = null
   form.value.pasien = props.pasien
