@@ -109,6 +109,12 @@ const props = defineProps({
 
 const menus = ref([
   {
+    name: 'TriagePage',
+    label: 'Triage',
+    icon: 'icon-mat-medical_information',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/triage/TriagePage.vue')))
+  },
+  {
     name: 'AnamnesisPage',
     label: 'Anamnesis',
     icon: 'icon-mat-medical_information',
