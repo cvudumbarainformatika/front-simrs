@@ -283,23 +283,23 @@ const props = defineProps({
     default: 'History Pasien'
   }
 })
-function onSubmit() {
+function onSubmit () {
   store.saveData(props.pasien).then(() => {
     refForm.value.resetValidation()
   })
 }
 
-function historyOpen() {
+function historyOpen () {
   emits('openHistory')
   // store.getHistory(props.pasien?.norm)
 }
 
-function lihatPerubahan() {
+function lihatPerubahan () {
   store.hitungNilaiSkor()
 }
 
 // eslint-disable-next-line no-unused-vars
-function updateSelection(val) {
+function updateSelection (val) {
   // console.log(val.join(','))
   store.setForm('riwayatalergi', val.join(', '))
 }
@@ -308,15 +308,20 @@ const iconNyeri = computed(() => {
   let icon = 'icon-my-emoticon-excited-outline'
   if (val < 2) {
     icon = 'icon-my-emoticon-excited-outline'
-  } else if (val >= 2 && val < 4) {
+  }
+  else if (val >= 2 && val < 4) {
     icon = 'icon-my-emoticon-outline'
-  } else if (val >= 4 && val < 6) {
+  }
+  else if (val >= 4 && val < 6) {
     icon = 'icon-my-emoticon-neutral-outline'
-  } else if (val >= 6 && val < 8) {
+  }
+  else if (val >= 6 && val < 8) {
     icon = 'icon-my-emoticon-confused-outline'
-  } else if (val >= 8 && val < 10) {
+  }
+  else if (val >= 8 && val < 10) {
     icon = 'icon-my-emoticon-angry-outline'
-  } else if (val === 10) {
+  }
+  else if (val === 10) {
     icon = 'icon-my-emoticon-cry-outline'
   }
 
