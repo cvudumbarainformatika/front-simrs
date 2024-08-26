@@ -15,7 +15,7 @@ export const useMapingKfaStore = defineStore('store_maping_kfa', {
     form: {
       kd_obat: ''
     },
-    columns: ['kd_obat', 'nama_obat', 'satset_uuid']
+    columns: ['kd_obat', 'nama_obat', 'kode_kfa']
   }),
   actions: {
     setForm (key, val) {

@@ -25,22 +25,45 @@
       <template #col-nama_obat>
         <div>Nama Obat</div>
       </template>
-      <template #col-satset_uuid>
-        <div>Sat Set UUID</div>
+      <template #col-kode_kfa>
+        <div>Kode KFA</div>
       </template>
-      <template #cell-satset_uuid="{ row }">
-        <div v-if="!row?.satset_uuid===null" class="row wrap">
-          {{ row?.satset_uuid }}
+
+      <template #cell-kode_kfa="{ row }">
+        <div v-if="!row?.kode_kfa===null || !row.edit" class="row wrap">
+          {{ row?.kode_kfa }}
         </div>
-        <div v-else class="row wrap">
-          <q-btn
-            push
-            dense
-            color="teal"
-            no-caps
-            label="Buka Tabel KFA"
-            @click="openKfa(row)"
+        <div v-if="row?.kode_kfa===null || row.edit" class="row wrap">
+          <app-input
+            v-model="row.kode_kfa"
+            label="Input Kode KFA"
+            valid
+            outlined
           />
+        </div>
+      </template>
+      <template #custom-btn="{ row }">
+        <div v-if="row?.kode_kfa===null || row.edit" class="row no-wrap">
+          <div v-if="!row?.kode_kfa===null" class="col-auto">
+            <q-btn
+              flat
+              dense
+              color="dark"
+              no-caps
+              icon="icon-mat-edit"
+              @click="edit(row)"
+            />
+          </div>
+          <div class="col-auto">
+            <q-btn
+              flat
+              dense
+              color="primary"
+              no-caps
+              icon="icon-mat-save"
+              @click="simpan(row)"
+            />
+          </div>
         </div>
       </template>
     </app-table-extend>
@@ -56,10 +79,13 @@ const store = useMapingKfaStore()
 const kfaPage = defineAsyncComponent(() => import('./comp/SatsetKfaPage.vue'))
 const bukaKfa = ref(false)
 const refKfaPage = ref(null)
-function openKfa (val) {
-  console.log('buka kfa', val, refKfaPage.value)
-  bukaKfa.value = true
-  refKfaPage.value.getDataTable()
+function simpan (val) {
+  console.log('simpan', val)
+  // bukaKfa.value = true
+  // refKfaPage.value.getDataTable()
+}
+function edit (val) {
+  console.log('edit', val)
 }
 
 onMounted(() => {
