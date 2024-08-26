@@ -19,6 +19,7 @@
           :default-btn="false"
           :ada-tambah="false"
           :ada-filter="false"
+          simple-paginasi
           row-no
           text-cari="Cari ..."
           @find="setSearch"
@@ -26,8 +27,8 @@
           @set-row="setPerPage"
           @refresh="refreshTable"
         >
-          <template #col-kd_obat>
-            <div>Kode Obat</div>
+          <template #col-obat>
+            <div>Obat</div>
           </template>
           <template #col-nama_obat>
             <div>Nama Obat</div>
@@ -41,6 +42,19 @@
             </div>
             <div v-else class="row wrap">
               input
+            </div>
+          </template>
+          <template #cell-obat="{ row }">
+            <div class="row no-wrap f-12 text-weight-bold obat">
+              {{ row?.name }}
+            </div>
+            <div class="row no-wrap justify-between text-italic obat ">
+              <div class="col-auto ">
+                KFA Code :
+              </div>
+              <div class="col-auto ">
+                {{ row?.kfa_code }}
+              </div>
             </div>
           </template>
         </app-table-extend>
@@ -60,7 +74,7 @@ const params = ref({
   per_page: 10
 })
 const loading = ref(false)
-const columns = ref(['kd_obat', 'nama_obat', 'satset_uuid'])
+const columns = ref(['obat', 'nama_obat', 'satset_uuid'])
 function setParams (key, val) {
   params.value[key] = val
 }
@@ -101,3 +115,9 @@ defineExpose({
   getDataTable
 })
 </script>
+<style lang="scss" scoped>
+.obat{
+  white-space: normal;
+  min-width: 250px
+}
+</style>
