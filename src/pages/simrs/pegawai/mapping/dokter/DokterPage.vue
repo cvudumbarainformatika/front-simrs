@@ -199,13 +199,15 @@ const resizeCanvas = () => {
   console.log(document.getElementById('listRef').clientHeight)
 }
 
-function labelNake(val) {
+function labelNake (val) {
   if (!val) return ''
   if (val === '1') {
     return 'Dokter'
-  } else if (val === '2') {
+  }
+  else if (val === '2') {
     return 'Perawat'
-  } else {
+  }
+  else {
     return 'Bidan'
   }
 }
@@ -250,13 +252,14 @@ async function filterOptions (val, update) {
   })
 }
 
-function getImage(row) {
+function getImage (row) {
   const kelamin = row.kelamin
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
     return kelamin === 'Perempuan'
       ? new URL('../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../assets/images/user-avatar.svg', import.meta.url).href
-  } else {
+  }
+  else {
     return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
   }
 }
