@@ -55,7 +55,7 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
               this.loading = false
               this.bastfarmasis = resp.data.data
               this.reqs.rowsNumber = resp.data.total
-              this.rekening50 = resp.data.data
+              // this.rekening50 = resp.data.data
               this.filterRekening50(resp.data)
               this.ambilRekeningFarmasi(resp.data)
 
@@ -72,8 +72,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
     },
     filterRekening50 () {
       const dataPagu = []
-      for (let i = 0; i < this.rekening50.length; i++) {
-        const el = this.rekening50[i].rincianbast
+      for (let i = 0; i < this.bastfarmasis.length; i++) {
+        const el = this.bastfarmasis[i].rincianbast
         const master = el.length
           ? el.map((x) => {
             // const a = x.masterobat.pagu.koderek108
@@ -88,6 +88,7 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
               volume: x.masterobat.pagu.volume,
               pagu: parseFloat(x.masterobat.pagu.pagu),
               id_bast: x.id,
+              nobast: x.nobast,
               hargabast: x.harga_net,
               volumebast: x.jumlah,
               subtotal: parseFloat(x.subtotal),
@@ -100,7 +101,7 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
         dataPagu.push(...master)
       }
       this.rekening50 = dataPagu
-      console.log('rincian BAST', dataPagu)
+      console.log('rincian BAST', this.rekening50)
 
       // FITER DATA UNIK
       const unik108 = this.rekening50.map((s) => s.rek108)
@@ -115,6 +116,7 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
           rek50: dataPagu.filter((z) => z.rek108 === el)[0]?.rek50,
           uraian50: dataPagu.filter((z) => z.rek108 === el)[0]?.uraian50,
           id_bast: dataPagu.filter((z) => z.rek108 === el)[0]?.id_bast,
+          nobast: dataPagu.filter((z) => z.rek108 === el)[0]?.nobast,
           itembelanja: dataPagu.filter((z) => z.rek108 === el)[0]?.itembelanja,
           rek108: dataPagu.filter((z) => z.rek108 === el)[0]?.rek108,
           item: dataPagu.filter((z) => z.rek108 === el)[0]?.item,
@@ -126,8 +128,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
           hargabast: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
           volumebast: 1,
           subtotal: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
-          realisasi: parseFloat(dataPagu.filter((z) => z.rek108 === el).map((x) => x.realisasi)).reduce((a, b) => a + b, 0)
-          // sisapagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(dataPagu.filter((z) => z.rek108 === el).map((x) => x.realisasi)).reduce((a, b) => a + b, 0)
+          realisasi: parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi),
+          sisapagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi)
         }
         arr.push(obj)
       }

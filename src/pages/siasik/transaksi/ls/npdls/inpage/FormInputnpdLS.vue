@@ -44,6 +44,7 @@
           @set-model="val=>store.form.tglnpdls=val"
           :disable="store.loading"
           :loading="store.loading"
+          autofocus
         />
         <!-- <app-autocomplete
           v-model="store.form.kodekegiatanblud"
@@ -87,18 +88,33 @@
           label="Pilih Serahterima Pekerjaan"
           outlined
         /> -->
-        <app-autocomplete
-          v-model="store.form.kodepenerima"
-          label="Pihak Ketiga"
-          autocomplete="nama"
-          option-label="nama"
-          option-value="kode"
-          outlined
-          :source="ambil.pihaktigas"
-          @selected="(val)=>pilihPihaktiga(val)"
-          :disable="store.loading"
-          :loading="store.loading"
-        />
+        <template v-if="store.form.kodepenerima === null">
+          <app-autocomplete
+            v-model="store.form.kodepenerima"
+            label="Pihak Ketiga"
+            autocomplete="nama"
+            option-label="nama"
+            option-value="kode"
+            outlined
+            :source="ambil.pihaktigas"
+            @selected="(val)=>pilihPihaktiga(val)"
+            :disable="store.loading"
+            :loading="store.loading"
+          />
+        </template>
+        <template v-else>
+          <app-autocomplete
+            v-model="store.form.kodepenerima"
+            label="Pihak Ketiga"
+            autocomplete="nama"
+            option-label="nama"
+            option-value="kode"
+            outlined
+            disable
+            :source="ambil.pihaktigas"
+            @selected="(val)=>pilihPihaktiga(val)"
+          />
+        </template>
         <div class="row items-center">
           <div>
             Ada Serahterima ? :
@@ -114,19 +130,21 @@
             />
           </div>
 
-          <div>
-            <app-autocomplete
-              v-model="store.form.bast"
-              label="Serah Terima Dari"
-              autocomplete="nama"
-              option-value="value"
-              option-label="nama"
-              outlined
-              :key="carisrt.reqs.kodepenerima"
-              :source="store.dariserahterima"
-              @update:model-value="(val)=>serahTerima(val)"
-            />
-          </div>
+          <template v-if="store.form.serahterimapekerjaan === '1'">
+            <div>
+              <app-autocomplete
+                v-model="store.form.bast"
+                label="Serah Terima Dari"
+                autocomplete="nama"
+                option-value="value"
+                option-label="nama"
+                outlined
+                :key="carisrt.reqs.kodepenerima"
+                :source="store.dariserahterima"
+                @update:model-value="(val)=>serahTerima(val)"
+              />
+            </div>
+          </template>
         </div>
       </div>
 
@@ -150,22 +168,23 @@
         :autofocus="false"
         :valid="{required:true}"
       />
-      <div class="row items-center">
-        <q-btn
-          color="dark"
-          round
-          size="sm"
-          :disable="store.loading"
-          :loading="store.loading"
-          icon="icon-mat-add"
-          :source="store.dariserahterima"
-          :key="carisrt.reqs.kodepenerima"
-          @click=" () => {
-            carisrt.reqs.kodebast = ''
-            store.openDialogFarmasi = true}"
-        />
-      </div>
-
+      <template v-if="store.form.serahterimapekerjaan === '1'">
+        <div class="row items-center">
+          <q-btn
+            color="dark"
+            round
+            size="sm"
+            :disable="store.loading"
+            :loading="store.loading"
+            icon="icon-mat-add"
+            :source="store.dariserahterima"
+            :key="carisrt.reqs.kodepenerima"
+            @click=" () => {
+              carisrt.reqs.kodebast = ''
+              store.openDialogFarmasi = true}"
+          />
+        </div>
+      </template>
       <app-input-simrs
         class="q-pa-sm q-gutter-y-xs"
         style="width: 50%;"
@@ -194,14 +213,14 @@
     />
 
     <div class="q-card q-mt-sm">
-      <div class="row bg-grey-5 text-primary q-pa-sm q-mb-xs q-mt-xs">
+      <div class="row bg-grey-4 text-primary q-pa-sm q-mb-xs q-mt-xs">
         <div class="f-14 text-weight-bold">
           Rincian NPD-LS
         </div>
       </div>
       <FormRincianNPDls />
     </div>
-    <div class="float-right q-pa-sm q-gutter-y-xs">
+    <div class="float-left q-pt-md q-pa-sm q-gutter-y-xs">
       <app-btn
         label="Simpan NPD-LS"
         :disable="store.loading"
@@ -210,7 +229,6 @@
       />
     </div>
   </q-form>
-  {{ tanggal() }}
 </template>
 
 <script setup>
@@ -265,13 +283,14 @@ function kodeKeg (val) {
   store.setParams('kodekegiatan', val)
   console.log('kkkk', store.setParams)
 }
-function tanggal (val) {
-  const tgl = store.form.tglnpdls
-  console.log('tanggal', tgl)
-}
+// function tanggal (val) {
+//   const tgl = store.form.tglnpdls
+//   console.log('tanggal', tgl)
+// }
 
-function onSimpan () {
+function onSimpan (val) {
   store.simpanNpdls()
+  // store.form.rincians.push(store.rinci = val)
   // .then(() => {
   //   store.emptyForm()
   // })
@@ -311,8 +330,18 @@ function pilihPTK (val) {
   store.form.kodebidang = obj?.kodeBagian ?? ''
   store.reqs.kodebidang = obj?.kodeBagian ?? ''
 
-  // mengkosongkan rekening50 setelah milih ulang PTK
+  // mengkosongkan form rinci setelah milih ulang PTK
   store.rinci.koderek50 = ''
+  store.rinci.koderek108 = ''
+  store.rinci.itembelanja = ''
+  store.rinci.volume = ''
+  store.rinci.satuan = ''
+  store.rinci.harga = ''
+  store.rinci.total = ''
+  store.rinci.volumels = ''
+  store.rinci.hargals = ''
+  store.rinci.totalls = ''
+  store.rinci.nominalpembayaran = ''
   // mengkosongkan form Kegiatan setelah milih ulang PTK
   store.form.kodekegiatanblud = ''
   store.form.bidang = obj?.bagian ?? ''
@@ -333,6 +362,15 @@ function pilihKegiatan (val) {
   // Mengosongkan Rincian Belanja setelah milih ulang kegiatan
   store.rinci.koderek50 = ''
   store.rinci.koderek108 = ''
+  store.rinci.itembelanja = ''
+  store.rinci.volume = ''
+  store.rinci.satuan = ''
+  store.rinci.harga = ''
+  store.rinci.total = ''
+  store.rinci.volumels = ''
+  store.rinci.hargals = ''
+  store.rinci.totalls = ''
+  store.rinci.nominalpembayaran = ''
 
   carisrt.reqs.kodekegiatan = val ?? ''
   carisrt.selectbastFarmasi()

@@ -173,7 +173,7 @@ function pilihDataSerahterima (val) {
   carisrt.selectbastFarmasi()
 
   // store.rinci = val ?? ''
-  console.log('kkode bast', carisrt.reqs.kodebast)
+  console.log('kkode bast', store.reqs.bast)
 }
 // const pilihSerahterima = (val) => {
 //   storeform.setForm(val)
