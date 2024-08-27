@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useMapingKfaStore = defineStore('store_maping_kfa', {
   state: () => ({
@@ -44,6 +45,7 @@ export const useMapingKfaStore = defineStore('store_maping_kfa', {
 
     getDataTable () {
       this.loading = true
+      this.items = []
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/satusehat/mapingkfa/master-obat', param)
@@ -55,6 +57,19 @@ export const useMapingKfaStore = defineStore('store_maping_kfa', {
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    simpan (val) {
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/satusehat/mapingkfa/simpan-maping-kfa', val)
+          .then(resp => {
+            val.loading = false
+            notifSuccess(resp)
+            console.log('simpan', resp?.data)
+            resolve(resp)
+          })
+          .catch(() => { val.loading = false })
       })
     }
   }
