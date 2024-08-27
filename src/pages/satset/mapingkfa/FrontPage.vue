@@ -25,22 +25,50 @@
       <template #col-nama_obat>
         <div>Nama Obat</div>
       </template>
-      <template #col-satset_uuid>
-        <div>Sat Set UUID</div>
+      <template #col-kode_kfa>
+        <div>Kode KFA</div>
       </template>
-      <template #cell-satset_uuid="{ row }">
-        <div v-if="!row?.satset_uuid===null" class="row wrap">
-          {{ row?.satset_uuid }}
+
+      <template #cell-kode_kfa="{ row }">
+        <div v-if="!row?.kode_kfa===null || !row.edit" class="row wrap">
+          {{ row?.kode_kfa }}
         </div>
-        <div v-else class="row wrap">
-          <q-btn
-            push
-            dense
-            color="teal"
-            no-caps
-            label="Buka Tabel KFA"
-            @click="openKfa(row)"
+        <div v-if="row?.kode_kfa===null || row.edit" class="row wrap">
+          <app-input
+            v-model="row.kode_kfa"
+            label="Input Kode KFA"
+            valid
+            outlined
+            @update:model-value="setInput($event, row)"
           />
+        </div>
+      </template>
+      <template #custom-btn="{ row }">
+        <div class="row no-wrap">
+          <div v-if=" !row.edit" class="col-auto">
+            <q-btn
+              flat
+              dense
+              color="dark"
+              no-caps
+              icon="icon-mat-edit"
+              :loading="row.loading"
+              :disable="row.loading"
+              @click="edit(row)"
+            />
+          </div>
+          <div v-if=" row.edit" class="col-auto">
+            <q-btn
+              flat
+              dense
+              color="primary"
+              no-caps
+              :loading="row.loading"
+              :disable="row.loading"
+              icon="icon-mat-save"
+              @click="simpan(row)"
+            />
+          </div>
         </div>
       </template>
     </app-table-extend>
@@ -56,10 +84,20 @@ const store = useMapingKfaStore()
 const kfaPage = defineAsyncComponent(() => import('./comp/SatsetKfaPage.vue'))
 const bukaKfa = ref(false)
 const refKfaPage = ref(null)
-function openKfa (val) {
-  console.log('buka kfa', val, refKfaPage.value)
-  bukaKfa.value = true
-  refKfaPage.value.getDataTable()
+function simpan (val) {
+  if (val.edit) val.edit = false
+  console.log('simpan', val)
+  store.simpan(val)
+  // bukaKfa.value = true
+  // refKfaPage.value.getDataTable()
+}
+function edit (val) {
+  val.edit = true
+  console.log('edit', val)
+}
+function setInput (evt, val) {
+  val.edit = true
+  console.log(val)
 }
 
 onMounted(() => {

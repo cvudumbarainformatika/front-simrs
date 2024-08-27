@@ -505,7 +505,7 @@
               v-if="meta.total !==0"
               classs="row items-center"
             >
-              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }}  </span> data ke -  {{ meta.from }} sampai data ke -  <span class="text-weight-bold">{{ meta.to }}</span> </span> |
+              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }}  </span> <span v-if="meta.from"> data ke -  {{ meta.from }} sampai data ke -  </span> <span v-if="meta.to" class="text-weight-bold">{{ meta.to }}</span> </span> |
             </div>
             <div v-else>
               Tidak Ada Data

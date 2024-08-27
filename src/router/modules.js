@@ -24,10 +24,11 @@ import rehabmedik from './rehabmedik'
 import hemodialisa from './hemodialisa'
 import siasik from './siasik'
 import radiologi from './radiologi'
+import rekammedik from './rekammedik'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
   kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset,
-  kamaroperasi, rehabmedik, hemodialisa, siasik, radiologi
+  kamaroperasi, rehabmedik, hemodialisa, siasik, radiologi, rekammedik
 }
