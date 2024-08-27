@@ -172,9 +172,11 @@
 import { useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
+import { useBuatSepRanapStore } from 'src/stores/simrs/pendaftaran/ranap/buatsep'
 import { ref } from 'vue'
 
 // import { ref } from 'vue'
+const sep = useBuatSepRanapStore()
 
 const props = defineProps({
   loading: {
@@ -237,15 +239,17 @@ const setTglRawatInap = async (val) => {
 
     const resp = await api.post('v1/simrs/pendaftaran/ranap/get-list-spesialistik', params)
     console.log('resp spesialistik', resp.data)
-    let data = []
     if (resp.data?.metadata?.code === '200') {
       const result = resp?.data?.result?.list
       if (result) {
-        data = result
+        spesialistiks.value = result
       }
+      return
     }
-
-    spesialistiks.value = data
+    if (resp?.data?.metadata?.code === '201') {
+      spesialistiks.value = []
+      return notifErrVue(resp?.data?.metadata?.message)
+    }
   }
 }
 
@@ -327,18 +331,20 @@ const onSubmit = async () => {
   if (form.value?.dokter === null || form.value?.dokter === '') {
     return notifErrVue('silahkan pilih Dokter Terlebih dahulu')
   }
-  // console.log('form', form.value)
+  console.log('form', form.value)
   await api.post('v1/simrs/pendaftaran/ranap/create-spri-ranap', form.value)
     .then(resp => {
       console.log('resp create ', resp)
       wait.value = false
       if (resp.data.metadata.code === '200') {
         formSpri.value = false
-        emits('getSpri', props.pasien)
+        // emits('getSpri', props.pasien)
+        sep.getSpri(props.pasien)
       }
       else {
         notifErrVue(resp.data.metadata.message)
       }
+      wait.value = false
     })
     .catch(err => {
       console.log('err create spri', err)
