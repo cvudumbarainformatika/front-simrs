@@ -19,7 +19,7 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="forminput" label="Form NPD-LS" />
+        <q-tab name="forminput" label="Form NPD-LS" @click="store.resetFORM()" />
         <q-tab name="data" label="Data NPD-LS" />
       </q-tabs>
       <q-separator />
@@ -37,13 +37,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import FormInputnpdLS from './inpage/FormInputnpdLS.vue'
 import ListdataNpsLS from './inpage/ListdataNpdLS.vue'
-// import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
+import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 
+const store = formNotaPermintaanDanaLS()
 const tabdata = ref('forminput')
-// const store = formNotaPermintaanDanaLS()
+onBeforeUnmount(() => {
+  store.resetFORM(tabdata)
+})
 
 // onMounted(() => {
 //   store.emptyForm()

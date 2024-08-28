@@ -19,7 +19,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       kodekegiatan: null,
       bast: null,
       rekening50: null,
-      nip: null
+      nip: null,
+      volumels: null
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -203,10 +204,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       return new Promise((resolve, reject) => {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
-            // console.log('isian', resp)
+            console.log('isian', resp)
             this.loading = false
             notifSuccess(resp)
-            // this.form.rincians = []
             resolve(resp.data)
           })
           .catch((err) => {
@@ -226,7 +226,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
               console.log('anggaran', resp.data)
               this.loading = false
               this.anggarans = resp.data
-              this.itembelanja = resp.data
+              // this.itembelanja = resp.data
               this.filterRekening50(resp.data)
               this.filterItemBelanja(resp.data)
               resolve(resp.data)
@@ -263,6 +263,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       const data = this.anggarans?.length
         ? this.anggarans?.filter(x => x.koderek50 === this.reqs.rekening50).map((x) => {
           return {
+            idpp: x.idpp,
             koderek108: x.koderek108,
             uraian108: x.uraian108,
             rek50: x.koderek50,
