@@ -193,7 +193,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       this.params.to = to
       this.params.from = from
       this.removedItemId = []
-      this.getDataTable()
+      // this.getDataTable()
     },
     setSistembayar (val) {
       this.setParams('sistembayar', val)
