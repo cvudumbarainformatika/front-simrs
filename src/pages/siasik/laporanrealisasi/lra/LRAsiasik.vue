@@ -93,6 +93,14 @@
               outlined
               :source="store.bidangs"
               :loading="store.loading"
+              @selected="(val)=>{
+                const arr = store.bidangs
+                const obj = arr.length ? arr.find(x => x.kodebidang === val) : null
+                store.params.kodebidang = obj?.kodebidang ?? ''
+                store.params.kegiatan = ''
+                console.log('kode bidang', store.params.kodebidang)
+                store.filterKegiatan()
+              }"
             />
             <app-autocomplete
               v-model="store.params.kegiatan"
