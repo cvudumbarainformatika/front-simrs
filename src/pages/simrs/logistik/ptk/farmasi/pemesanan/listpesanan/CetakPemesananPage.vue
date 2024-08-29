@@ -97,9 +97,9 @@
               <th class="text-center">
                 OBAT
               </th>
-              <th class="text-center">
+              <!-- <th class="text-center">
                 JUMLAH BISA DIBELI
-              </th>
+              </th> -->
               <th class="text-center">
                 JUMLAH DIPESAN
               </th>
@@ -120,12 +120,12 @@
                   {{ rincians?.kdobat }}
                 </div>
               </td>
-              <td>
+              <!-- <td>
                 {{ angka(rincians?.jumlah_bisa_dibeli) }} <br>
                 <div class="row text-italic f-8">
                   {{ rincians?.masterobat?.satuan_k }}
                 </div>
-              </td>
+              </td> -->
               <td>
                 {{ angka(rincians?.jumlahdpesan) }} <br>
                 <div class="row text-italic f-8">
