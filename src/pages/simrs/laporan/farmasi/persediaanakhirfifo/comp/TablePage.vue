@@ -1,6 +1,6 @@
 <template>
   <table>
-    <thead>
+    <thead class="my-sticky-header-table">
       <tr>
         <th
           width="5%"
@@ -96,7 +96,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr>
+          <tr :class="n%2===0?'even':'odd'">
             <td width="5%" :rowspan="item?.stok?.length + 1">
               <div class="row items-center">
                 {{ n+1 }}
@@ -142,7 +142,7 @@
               </div>
             </td>
           </tr>
-          <tr v-for="(stok, i) in item?.stok" :key="stok">
+          <tr v-for="(stok, i) in item?.stok" :key="stok" :class="n%2===0?'even':'odd'">
             <template v-if="i>0">
               <td>
                 {{ jenisPenerimaan(stok) }}
@@ -238,11 +238,17 @@ thead{
   tr{
     th{
       border: 1px solid black;
-      vertical-align: text-center !important;
+      vertical-align: center !important;
       background-color: white;
       color: black;
     }
   }
+}
+.odd{
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.even{
+  background-color: rgba(0, 0, 0, 0.05);
 }
 // th,
 td {
@@ -258,7 +264,6 @@ td {
 // padding: 0.5em 0.5em 0.5em 1em;
 // }
 // th {
-
   // border: inherit;
   // border: 1px solid black;
 // }
@@ -273,17 +278,17 @@ tr:nth-child(odd) th[scope=row] {
   background-color: #fff;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.05);
-}
+// tr:nth-child(even) {
+//   background-color: rgba(0, 0, 0, 0.05);
+// }
 
-tr:nth-child(odd) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
+// tr:nth-child(odd) {
+//   background-color: rgba(255, 255, 255, 0.05);
+// }
 
-td:nth-of-type(2) {
-  font-style: italic;
-}
+// td:nth-of-type(2) {
+//   font-style: italic;
+// }
 
 // th:nth-of-type(3),
 // td:nth-of-type(3) {
@@ -295,7 +300,7 @@ th {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 5;
   border: inherit;
 }
 
