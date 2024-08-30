@@ -33,7 +33,7 @@ export const useLaporanPersediaanFiFoFarmasiStore = defineStore('laporan_persedi
     gudangs: [
 
       { nama: 'Rumah Sakit', value: 'all' },
-      { nama: 'Gudang dan Depo', value: 'gudep' },
+      // { nama: 'Gudang dan Depo', value: 'gudep' },
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' },
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
@@ -72,9 +72,31 @@ export const useLaporanPersediaanFiFoFarmasiStore = defineStore('laporan_persedi
       this.getDataTable()
     },
     mapingItem (val) {
-      console.log('metani items', val)
-
       this.items = val
+
+      val.forEach(it => {
+        const bulanIni = date.formatDate(Date.now(), 'MM')
+        console.log('bulanIni', bulanIni)
+        if (bulanIni !== this.params.bulan) {
+          it.stok = []
+          it.stok = it?.saldoawal
+        }
+
+        if (it?.stok.length) {
+          it?.stok.forEach(s => {
+            if (s.sub === null) {
+              let sub = 0
+              if ((parseFloat(s.jumlah) > 0 && parseFloat(s.harga) > 0)) sub = s.jumlah * s.harga
+              s.sub = sub
+            }
+            if (isNaN(parseFloat(s.sub))) console.log('st', s, parseFloat(s.harga))
+          })
+          it.subtotal = it?.stok.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+        }
+        else it.subtotal = 0
+      })
+      this.total = val.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+      console.log('metani items', this.total)
     },
     getInitialData () {
       this.getDataTable()

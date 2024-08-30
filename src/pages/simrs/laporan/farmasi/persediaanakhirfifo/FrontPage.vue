@@ -372,7 +372,7 @@ import { date } from 'quasar'
 import { defineAsyncComponent, ref, onMounted } from 'vue'
 import { useLaporanPersediaanFiFoFarmasiStore } from 'src/stores/simrs/laporan/farmasi/persediaanfifo/persediaan'
 const store = useLaporanPersediaanFiFoFarmasiStore()
-store.getInitialData()
+// store.getInitialData()
 const TableComp = defineAsyncComponent(() => import('./comp/TablePage.vue'))
 const refTop = ref(null)
 const h = ref(0)
@@ -392,20 +392,20 @@ const printObj = {
 }
 // text tanda tangan start
 
-const kiriAtasSatu = ref('Mengetahui')
-const kiriAtasDua = ref('Kepala Bagian Umum')
-const kiriBawahSatu = ref('Jumadi, S.Sos, MM')
-const kiriBawahDua = ref('NIP . 19691223 199302 1 002')
+const kiriAtasSatu = ref('')
+const kiriAtasDua = ref('Kepala Bagian Keuangan')
+const kiriBawahSatu = ref('')
+const kiriBawahDua = ref('')
 
 const tengahAtasSatu = ref('')
-const tengahAtasDua = ref('Pejabat Teknik Kegiatan')
-const tengahBawahSatu = ref('Yuliana, S.A.P')
-const tengahBawahDua = ref('NIP. 19740304 200801 2 005')
+const tengahAtasDua = ref('Kepala Instalasi Farmasi')
+const tengahBawahSatu = ref('')
+const tengahBawahDua = ref('')
 
 const kananAtasSatu = ref('')
 const kananAtasDua = ref('Petugas Bagian Barang')
-const kananBawahSatu = ref('SARWANI')
-const kananBawahDua = ref('NIP. 19760311 200801 1 008')
+const kananBawahSatu = ref('')
+const kananBawahDua = ref('')
 
 const pojokKananAtas = ref('Probolinggo, ' + date.formatDate(Date.now(), 'DD MMMM YYYY'))
 

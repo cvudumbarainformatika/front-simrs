@@ -22,6 +22,9 @@
         <th>
           Nilai
         </th>
+        <th>
+          Subtotal
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -72,11 +75,18 @@
               height="14px"
             />
           </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="100px"
+              height="14px"
+            />
+          </td>
         </tr>
       </template>
       <template v-else-if="!store.items.length">
         <tr>
-          <td colspan="6">
+          <td colspan="7">
             <app-no-data />
           </td>
         </tr>
@@ -87,12 +97,12 @@
           :key="n"
         >
           <tr>
-            <td width="5%">
+            <td width="5%" :rowspan="item?.stok?.length + 1">
               <div class="row items-center">
                 {{ n+1 }}
               </div>
             </td>
-            <td>
+            <td :rowspan="item?.stok?.length + 1">
               <div class="row text-weight-bold">
                 {{ item?.nama_obat }}
               </div>
@@ -108,32 +118,59 @@
                 </div>
               </div>
             </td>
-            <td colspan="4">
-              <template v-for="(stok) in item?.stok" :key="stok">
-                <tr>
-                  <td>
-                    {{ stok?.jumlah }}
-                  </td>
-                  <td>
-                    <div class="text-right">
-                      {{ stok?.jumlah }}
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-right">
-                      {{ stok?.jumlah }}
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-right">
-                      {{ formatDouble(parseFloat(item?.akhir),2) }}
-                    </div>
-                  </td>
-                </tr>
-              </template>
+            <td>
+              {{ jenisPenerimaan(item?.stok[0]) }}
+            </td>
+            <td>
+              <div class="text-right q-mr-xs">
+                {{ cekNan(formatDouble(parseFloat(item?.stok[0]?.jumlah),2)) }}
+              </div>
+            </td>
+            <td>
+              <div class="text-right q-mr-xs">
+                {{ cekNan(formatDouble(parseFloat(item?.stok[0]?.harga),2)) }}
+              </div>
+            </td>
+            <td>
+              <div class="text-right q-mr-xs">
+                {{ cekNan(formatDouble(parseFloat(item?.stok[0]?.sub),2)) }}
+              </div>
+            </td>
+            <td :rowspan="item?.stok?.length + 1">
+              <div class="text-right q-mr-xs">
+                {{ formatDouble(parseFloat(item?.subtotal),2) }}
+              </div>
             </td>
           </tr>
+          <tr v-for="(stok, i) in item?.stok" :key="stok">
+            <template v-if="i>0">
+              <td>
+                {{ jenisPenerimaan(stok) }}
+              </td>
+              <td>
+                <div class="text-right q-mr-xs">
+                  {{ cekNan(formatDouble(parseFloat(stok?.jumlah),2)) }}
+                </div>
+              </td>
+              <td>
+                <div class="text-right q-mr-xs">
+                  {{ formatDouble(parseFloat(stok?.harga),2) }}
+                </div>
+              </td>
+              <td>
+                <div class="text-right q-mr-xs">
+                  {{ formatDouble(parseFloat(stok?.sub),2) }}
+                </div>
+              </td>
+            </template>
+          </tr>
         </template>
+        <tr class="text-weight-bold">
+          <td colspan="6">
+            Total
+          </td>
+          <td> {{ formatDouble(parseFloat(store.total),2) }}</td>
+        </tr>
       </template>
     </tbody>
   </table>
@@ -146,6 +183,16 @@ import { useLaporanPersediaanFiFoFarmasiStore } from 'src/stores/simrs/laporan/f
 
 const store = useLaporanPersediaanFiFoFarmasiStore()
 
+function jenisPenerimaan (val) {
+  if (!val?.jenis_penerimaan && !val?.jumlah) return ''
+  else if (!val?.jenis_penerimaan && val?.stpen?.toLowerCase().includes('awal')) return 'Awal'
+  else if (val?.jenis_penerimaan?.toLowerCase().includes('pesanan') || val?.jenis_penerimaan?.toLowerCase().includes('pembelian langsung')) return 'Pembelian'
+  else return val?.jenis_penerimaan
+}
+function cekNan (val) {
+  // console.log('nan', val, isNaN(parseFloat(val)))
+  return isNaN(parseFloat(val)) ? 0 : val
+}
 </script>
 
 <style lang="scss" scoped>
@@ -203,7 +250,7 @@ td {
   text-align: left;
   text-indent: 2px;
   border: 1px solid black;
-  vertical-align: bottom;
+  vertical-align: center;
   border: 1px solid black;
 }
 // td {
