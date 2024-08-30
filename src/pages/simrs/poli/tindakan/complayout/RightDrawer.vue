@@ -1009,9 +1009,9 @@
                                 {{ tin + 1 }}. {{ tindakan?.mastertindakan?.rs2 }}
                                 <q-item-label
                                   caption
-                                  lines="2"
+                                  lines="10"
                                 />
-                                keterangan = {{ tindakan?.rs20 }}
+                                keterangan = {{ tindakan?.sambungan?.ket ?? tindakan?.rs20 }}
                                 <div
                                   v-if="tindakan?.gambardokumens?.length > 0"
                                   class="image-row"
