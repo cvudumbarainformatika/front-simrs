@@ -130,8 +130,8 @@ function bulanIni () {
   // params.from = dateDbFormat(firstday)
   // params.to = dateDbFormat(lastday)
 
-  to.value = dateDbFormat(firstday)
-  from.value = dateDbFormat(lastday)
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
 }
 function mingguIni () {
   const curr = new Date()
@@ -140,8 +140,8 @@ function mingguIni () {
   // params.from = dateDbFormat(firstday)
   // params.to = dateDbFormat(lastday)
 
-  to.value = dateDbFormat(firstday)
-  from.value = dateDbFormat(lastday)
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
 }
 onMounted(() => {
   hariIni()
