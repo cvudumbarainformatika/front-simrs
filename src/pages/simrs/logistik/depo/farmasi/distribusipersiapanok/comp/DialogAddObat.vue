@@ -224,6 +224,7 @@ function setJumlah (evt) {
   }
 }
 function getWhenShow () {
+  store.namaObat = ''
   store.cariObat('')
   store.getPegawai('')
 }
