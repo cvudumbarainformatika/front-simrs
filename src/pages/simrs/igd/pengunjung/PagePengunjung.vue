@@ -67,13 +67,13 @@ const pasien = ref(null)
 const diagnosa = useDiagnosaDokter()
 
 function terimapasien (val) {
-  console.log('terimapasien', val)
+  // console.log('terimapasien', val)
   store.setTerima(val)
   store.items.flagpelayanan = '1'
 }
 
 function bukaTindakan (val) {
-  console.log('bukaTindakan', val)
+  // console.log('bukaTindakan', val)
   pasien.value = val
   store.bukaLayanan(val)
 }
