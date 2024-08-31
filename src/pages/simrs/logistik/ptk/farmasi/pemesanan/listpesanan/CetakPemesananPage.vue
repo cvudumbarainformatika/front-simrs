@@ -103,9 +103,9 @@
               <th class="text-center">
                 JUMLAH DIPESAN
               </th>
-              <th class="text-center">
+              <!-- <th class="text-center">
                 HARGA
-              </th>
+              </th> -->
             </tr>
           </thead>
           <tbody>
@@ -132,9 +132,9 @@
                   {{ rincians?.masterobat?.satuan_k }}
                 </div>
               </td>
-              <td>
+              <!-- <td>
                 {{ angka(rincians?.harga) }}
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </q-markup-table>
