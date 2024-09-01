@@ -20,7 +20,7 @@ export const useTriageIgd = defineStore('triageigd', {
       suhu: 0,
       spo2: 0,
       kesadaran: '',
-      gsc: '',
+      gcs: '',
       doa: []
     }
   }),

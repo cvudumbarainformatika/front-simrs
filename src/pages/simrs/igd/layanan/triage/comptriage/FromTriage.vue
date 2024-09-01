@@ -219,6 +219,8 @@
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                   :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
                     || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
+                  :debounce="1000"
+                  @update:model-value="scorenadi()"
                 />
               </div>
               <div class="col-2">
@@ -294,6 +296,40 @@
             </div>
             <div class="row q-col-gutter-sm q-pb-sm">
               <div class="col-6">
+                <q-select
+                  ref="refkesadaran"
+                  v-model="store.form.kesadaran"
+                  label="Kesadaran"
+                  outlined
+                  standout="bg-yellow-3"
+                  dense
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  :options="kesadaran"
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
+                    || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
+                />
+              </div>
+              <div class="col-6">
+                <q-select
+                  ref="refgsc"
+                  v-model="store.form.gcs"
+                  label="GCS"
+                  outlined
+                  standout="bg-yellow-3"
+                  dense
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  :options="gcs"
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
+                    || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm q-pb-sm">
+              <div class="col-6">
                 <q-input
                   ref="refbb"
                   v-model="store.form.bb"
@@ -314,40 +350,6 @@
                   outlined
                   standout="bg-yellow-3"
                   dense
-                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                  :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
-                    || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
-                />
-              </div>
-            </div>
-            <div class="row q-col-gutter-sm q-pb-sm">
-              <div class="col-6">
-                <q-select
-                  ref="refkesadaran"
-                  v-model="store.form.kesadaran"
-                  label="Kesadaran"
-                  outlined
-                  standout="bg-yellow-3"
-                  dense
-                  transition-show="flip-up"
-                  transition-hide="flip-down"
-                  :options="kesadaran"
-                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                  :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
-                    || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
-                />
-              </div>
-              <div class="col-6">
-                <q-select
-                  ref="refgsc"
-                  v-model="store.form.gsc"
-                  label="GCS"
-                  outlined
-                  standout="bg-yellow-3"
-                  dense
-                  transition-show="flip-up"
-                  transition-hide="flip-down"
-                  :options="gcs"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                   :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Akral Dingin'
                     || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
@@ -426,6 +428,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
+import { notifErr } from 'src/modules/utils'
 import { useTriageIgd } from 'src/stores/simrs/igd/triage'
 import { ref } from 'vue'
 const store = useTriageIgd()
@@ -458,15 +461,37 @@ const optionhamil = ref([
 ])
 
 function flagstatus (val) {
-  store.pasienhamil = val
+  console.log('asasasa', props.pasien.kelamin)
+  resetscore()
+
   if (val === 0) {
     clearhamil()
   }
   else {
-    store.formattanggal()
+    if (props.pasien.kelamin === 'Laki-laki') {
+      notifErr('Pasien Laki-laki Tidak Bisa Hamil')
+    }
+    else {
+      store.formattanggal()
+      store.pasienhamil = val
+    }
   }
 }
 
+function resetscore () {
+  store.form.nadi = ''
+  store.form.pernapasanx = ''
+  store.form.sistole = ''
+  store.form.diastole = ''
+  store.form.suhu = ''
+  store.form.spo2 = ''
+  store.form.kesadaran = ''
+  store.form.gcs = ''
+
+  store.form.nyeri = ''
+  store.form.lhocea = ''
+  store.form.proteinurin = ''
+}
 function hidenall () {
   if (store.form.doa.length > 0) {
     store.hiddenall = 'MATI'
@@ -549,6 +574,19 @@ function onSubmit () {
     store.saveData(props.pasien).then(() => {
       refForm.value.resetValidation()
     })
+  }
+}
+
+function scorenadi () {
+  const umurleng = props.pasien?.usia.split(' ')
+  const umur = parseInt(umurleng[0])
+  if (store.form.pasienhamil === 1) {
+    console.log('pasienx', umur)
+  }
+  else {
+    if (umur > 17) {
+      console.log('pasien', umur)
+    }
   }
 }
 
