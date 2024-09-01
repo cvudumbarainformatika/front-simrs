@@ -896,6 +896,7 @@
             <app-loading />
           </div>
           <div v-if="!store?.resep?.loadingGetIter && !store.loadingCopy">
+            <!-- ini yang untuk tampilan copy resep iter -->
             <div
               v-if="store?.resep?.rincian?.length && (store?.resep?.flag === '3' || store?.resep?.flag === '4') && store?.resep?.tiperesep === 'iter'"
               class="q-mt-sm"
@@ -1074,10 +1075,10 @@
                             </div>
                           </div>
                         </div>
-                        anu
+                        <!-- anu -->
                         <div v-if="parseInt(store?.resep?.flag)>=2">
                           anu
-                          <q-btn
+                          <!-- <q-btn
                             v-if="!rinc?.obatkeluar && parseInt(store?.resep?.flag)<5"
                             round
                             class="f-10 q-my-sm"
@@ -1094,7 +1095,7 @@
                             >
                               Simpan Obat
                             </q-tooltip>
-                          </q-btn>
+                          </q-btn> -->
                           <div v-if="rinc?.obatkeluar">
                             Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                           </div>

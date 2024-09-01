@@ -162,6 +162,11 @@ const laporan = {
       // name: 'laporan.farmasi.pemakaian-obat',
       component: () => import('pages/simrs/laporan/farmasi/pemakaianobat/IndexPage.vue')
     },
+    {
+      path: '/laporan/farmasi/persediaan-akhir-fifo',
+      // name: 'laporan.farmasi.persediaan-akhir-fifo',
+      component: () => import('pages/simrs/laporan/farmasi/persediaanakhirfifo/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',

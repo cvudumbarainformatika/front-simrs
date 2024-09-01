@@ -65,29 +65,29 @@ export const useLaporanStokOpnameGudangStore = defineStore('laporan_sigarang_sto
     htTotal: 0
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       console.log(this.params.q)
       // this.setParams('q', payload)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParams('page', payload)
       this.getDataTable()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParams('per_page', payload)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParams('page', 1)
       this.getDataTable()
     },
-    mapingItem(val) {
+    mapingItem (val) {
       if (val.length) {
         val.forEach(item => {
           // console.log('item', item)
@@ -228,10 +228,10 @@ export const useLaporanStokOpnameGudangStore = defineStore('laporan_sigarang_sto
         // console.log('items', val)
       }
     },
-    getInitialData() {
+    getInitialData () {
       this.getDataTable()
     },
-    async getDataTable() {
+    async getDataTable () {
       this.meta = {}
       this.items = []
       this.loading = true
