@@ -52,23 +52,43 @@
         </q-form>
       </template>
       <template #cell-NoPenerimaan="{row}">
-        <div class="row justify-end">
-          {{ formatDouble(row?.NoPenerimaan ?? 0) }}
+        <div class="row justify-center">
+          {{ row?.NoPenerimaan }}
         </div>
       </template>
-      <template #cell-PenambahanHutang="{row}">
-        <div class="row justify-end">
-          {{ formatDouble(row?.PenambahanHutang ?? 0) }}
+      <template #cell-TglPenerimaan="{row}">
+        <div class="row justify-center">
+          {{ row?.TglPenerimaan }}
         </div>
       </template>
-      <template>
-        <div class="row justify-end">
-          0
+      <template #cell-Suplier="{row}">
+        <div class="row justify-center">
+          {{ row?.Suplier }}
         </div>
       </template>
-      <template #cell-SaldoAkhir="{row}">
+      <template #cell-NoDokumen="{row}">
+        <div class="row justify-center">
+          {{ row?.NoDokumen }}
+        </div>
+      </template>
+      <template #cell-JenisDokumen="{row}">
+        <div class="row justify-center">
+          {{ row?.JenisDokumen }}
+        </div>
+      </template>
+      <template #cell-TglSurat="{row}">
+        <div class="row justify-center">
+          {{ row?.TglSurat }}
+        </div>
+      </template>
+      <template #cell-TglJatuhTempo="{row}">
+        <div class="row justify-center">
+          {{ row?.TglJatuhTempo }}
+        </div>
+      </template>
+      <template #cell-Total="{row}">
         <div class="row justify-end">
-          {{ formatDouble(row?.SaldoAkhir ?? 0) }}
+          {{ formatDouble(row?.Total) }}
         </div>
       </template>
       <template #expand="{row}">
@@ -76,67 +96,66 @@
           <div class="row f-14 text-weight-bold q-my-sm">
             Detail Hutang Obat
           </div>
-          <div class="row text-weight-bold bg-dark text-white items-center q-py-xs" style="border-bottom: 1px solid black;">
-            <div class="col-1">
-              No
-            </div>
-            <div class="col-2 ">
-              No. Penerimaan
-            </div>
-            <div class="col-1">
-              Kode
-            </div>
-            <div class="col-4">
-              Obat
-            </div>
-            <div class="col-1 text-right ">
-              Jumlah
-            </div>
-            <div class="col-1 text-right">
-              Harga
-            </div>
-            <div class="col-1 text-right">
-              PPN
-            </div>
-            <div class="col-1 text-right ">
-              Subtotal
-            </div>
-          </div>
-          <div v-for="(rincix,i) in row.rinci" :key="rincix">
-            <div class="row no-wrap " style="border-bottom: 1px solid black;">
-              <div class="col-1">
-                {{ i+1 }}
-              </div>
-              <div class="col-2 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
-                {{ rincix?.nopenerimaan }}
-              </div>
-              <div class="col-1 text-right" style="white-space: normal; overflow-wrap: normal;">
-                <div class="q-mr-xs">
-                  {{ rincix?.kdobat }}
-                </div>
-              </div>
-              <div class="col-4 bg-grey-2" style="white-space: normal; overflow-wrap: normal;">
-                {{ rincix?.masterobat?.nama_obat }}
-              </div>
-              <div class="col-1 text-right ">
-                {{ rincix?.jml_terima_b }}
-              </div>
-              <div class="col-1 text-right ">
-                {{ formatDouble(rincix?.harga) }}
-              </div>
-              <div class="col-1 text-right ">
-                {{ formatDouble(rincix?.ppn_rp) }}
-              </div>
-              <div class="col-1 text-right ">
-                {{ formatDouble(rincix?.subtotal) }}
-              </div>
-            </div>
-          </div>
+          <q-markup-table :separator="cell" flat bordered>
+            <thead>
+              <tr class="bg-dark text-white items-center">
+                <th>No</th>
+                <th>No. Peerimaan</th>
+                <th>Obat</th>
+                <th>Jumlah</th>
+                <th>Harga</th>
+                <th>Satuan</th>
+                <th>Diskon</th>
+                <th>PPN</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(rincix,i) in row.rinci" :key="rincix">
+                <td>{{ i+1 }}</td>
+                <td>{{ rincix?.nopenerimaan }}</td>
+                <td> {{ rincix?.masterobat?.nama_obat }}</td>
+                <td>
+                  Pesan = {{ rincix?.jml_pesan }} <br>
+                  Terima (Besar) = {{ formatDouble(rincix?.jml_terima_b) }} <br>
+                  Terima (Kecil) = {{ formatDouble(rincix?.jml_terima_k) }} <br>
+                  Penerimaan Sebelumnya = {{ rincix?.jml_terima_lalu }} <br>
+                  Semua Penerimaan = {{ rincix?.jml_all_penerimaan }} <br>
+                </td>
+                <td>
+                  Harga (Besar) = {{ formatDouble(rincix?.harga) }} <br>
+                  Harga (Kecil) = {{ formatDouble(rincix?.harga_kcl) }} <br>
+                  Harga Netto (Besar) = {{ formatDouble(rincix?.harga_netto) }} <br>
+                  Harga Netto (Kecil) = {{ formatDouble(rincix?.harga_netto_kecil) }} <br>
+                </td>
+                <td>
+                  Satuan (Besar) = {{ rincix?.satuan }} <br>
+                  Satuan (Kecil) = {{ rincix?.satuan_kcl }} <br>
+                  Isi = {{ formatDouble(rincix?.isi) }} <br>
+                </td>
+                <td>
+                  Diskon (%) = {{ rincix?.diskon }}% <br>
+                  Diskon (Besar) = {{ formatDouble(rincix?.diskon_rp) }} <br>
+                  Diskon (Kecil) = {{ formatDouble(rincix?.diskon_rp_kecil) }} <br>
+                </td>
+                <td>
+                  PPN (%) = {{ formatDouble(rincix?.ppn) }}% <br>
+                  PPN (Besar) = {{ formatDouble(rincix?.ppn_rp) }} <br>
+                  PPN (Kecil) = {{ formatDouble(rincix?.ppn_rp_kecil) }} <br>
+                  Harga Netto (Besar) = {{ formatDouble(rincix?.harga_netto) }} <br>
+                  Harga Netto (Kecil) = {{ formatDouble(rincix?.harga_netto_kecil) }} <br>
+                </td>
+                <td>
+                  {{ formatDouble(rincix?.subtotal) }}
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
         </div>
       <!-- {{ row }} -->
       </template>
       <template #bottom-row>
-        <td style="color: red;" colspan="5" class="col-1 text-right text-bold">
+        <td style="color: red;" colspan="8" class="col-1 text-right text-bold">
           Total
         </td>
         <td style="color: red;" class="col-1 text-right text-bold">
@@ -151,8 +170,10 @@
 import TablePagex from './TablePageX.vue'
 import { formatDouble } from 'src/modules/formatter'
 import { useHutangObatByTransaksi } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatbytransaksi'
+import { ref } from 'vue'
 
 const store = useHutangObatByTransaksi()
+const cell = ref('cell')
 
 function click (val) {
   val.item.expand = !val.item.expand

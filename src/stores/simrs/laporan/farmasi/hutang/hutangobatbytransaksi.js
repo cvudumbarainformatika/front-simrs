@@ -42,7 +42,6 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
         })
     },
     async sethasil (val) {
-      console.log('asli', val)
       const hasilglobal = []
       val.forEach(x => {
         const nopenerimaan = x?.nopenerimaan
@@ -55,20 +54,30 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
         const total = x.penerimaanrinci.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
         const hasil = {
           NoPenerimaan: nopenerimaan,
-          tglpenerimaan,
-          pbf,
-          nomorsurat,
-          jenisdokumen,
-          tglsurat,
-          batasbayar,
-          total
+          TglPenerimaan: tglpenerimaan,
+          Suplier: pbf,
+          NoDokumen: nomorsurat,
+          JenisDokumen: jenisdokumen,
+          TglSurat: tglsurat,
+          TglJatuhTempo: batasbayar,
+          Total: total
         }
         hasilglobal.push(hasil)
-        this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
       })
-      // console.log('wew', hasilglobal)
-      // this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
-      console.log('wew', hasilglobal)
+      this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
+
+      this.items.forEach(sasa => {
+        sasa.rinci = []
+        const nopenerimaanrinci = sasa?.NoPenerimaan
+        const caririnci = val.filter(ft => ft.nopenerimaan === nopenerimaanrinci)
+        caririnci.forEach(i => {
+          const rincix = i?.penerimaanrinci
+          rincix.forEach(rincis => {
+            sasa.rinci.push(rincis)
+          })
+        })
+      })
+      this.totalall = this.items.reduce((a, b) => parseFloat(a) + parseFloat(b.Total), 0)
       this.loading = false
     }
   }

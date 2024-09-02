@@ -80,7 +80,7 @@ export const usehutangObatPerTanggalBastStore = defineStore('laporan_hutang_obat
       // const nopenrimaanhx = []
 
       this.items = hasilglobal.sort(({ Total: a }, { Total: b }) => b - a)
-
+      console.log('asdasdasdasd', this.items)
       this.items.forEach(k => {
         k.rinci = []
         const caripbf = k?.kodepbfp
