@@ -8,16 +8,15 @@
           :key="props.pasien"
           :pasien="props.pasien"
           tooltip="History Pasien (Shift + H)"
-          @open-history="seamless = !seamless"
         />
       </div>
-      <div class="col-6 full-height">
+      <!-- <div class="col-6 full-height">
         <ListAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
         />
-      </div>
+      </div> -->
     </div>
 
     <!-- dialog -->
@@ -28,7 +27,7 @@
       :pasien="props.pasien"
       @close="seamless =!seamless"
     /> -->
-    <app-drawer-right-new
+    <!-- <app-drawer-right-new
       :key="props.pasien"
       :seamless="seamless"
       :pasien="props.pasien"
@@ -41,7 +40,7 @@
           title="HISTORY ANAMNESSIS LALU"
         />
       </template>
-    </app-drawer-right-new>
+    </app-drawer-right-new> -->
   </div>
 </template>
 
@@ -83,9 +82,9 @@ const handleKeypress = (evt) => {
   }
 }
 
-const clickslideRight = () => {
-  // console.log('ok')
-  seamless.value = !seamless.value
-}
+// const clickslideRight = () => {
+//   // console.log('ok')
+//   seamless.value = !seamless.value
+// }
 
 </script>

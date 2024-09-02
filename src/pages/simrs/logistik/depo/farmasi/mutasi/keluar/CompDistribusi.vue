@@ -90,6 +90,7 @@
               // val => parseFloat(val) >= 0 || 'Harus lebih lebih besar dari 0',
               val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
             ]"
+            :disable="store.loadingSimpan && (store.form.id === rin.id)"
             @keyup.enter="kirim(rin, row)"
             @update:model-value="sudah($event, rin)"
           />

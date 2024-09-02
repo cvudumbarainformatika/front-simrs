@@ -60,11 +60,11 @@
           </q-btn>
         </div>
       </template>
-      <template #col-kode>
-        <div>Kode Obat</div>
+      <template #col-nomor>
+        <div>Nomor</div>
       </template>
       <template #col-obat>
-        <div>Nama Obat</div>
+        <div>Obat</div>
       </template>
       <template #col-penyedia>
         <div>Penyedia</div>
@@ -85,19 +85,20 @@
         <div>Subtotal</div>
       </template>
 
-      <template #cell-Pasien="{ row }">
-        <div class="row wrap">
-          {{ row?.persiapan?.pasien?.rs2 }}
+      <template #cell-nomor="{ row }">
+        <div class="row wrap text-weight-bold text-primary">
+          {{ row?.nopenerimaan }}
         </div>
-      </template>
-      <template #cell-kode="{ row }">
-        <div class="row wrap ">
-          {{ row.kd_obat??'-' }}
+        <div class="row wrap text-weight-bold text-green">
+          {{ row?.nopermintaan }}
         </div>
       </template>
       <template #cell-penyedia="{ row }">
-        <div class="row justify-between no-wrap">
+        <div class="row no-wrap text-weight-bold text-primary">
           {{ row?.pbf?.nama ?? '-' }}
+        </div>
+        <div class="row wrap text-weight-bold text-green">
+          {{ row?.persiapan?.pasien?.rs2 }}
         </div>
       </template>
 
@@ -105,10 +106,8 @@
         <div class="row wrap ">
           {{ row.nama_obat??'-' }}
         </div>
-      </template>
-      <template #cell-harga="{ row }">
-        <div class="row wrap justify-end">
-          {{ formatDouble(row.harga_net,2) }}
+        <div class="row wrap text-italic f-10">
+          {{ row.kd_obat??'-' }}
         </div>
       </template>
       <template #cell-dipakai="{ row }">
@@ -120,10 +119,39 @@
             ({{ row.satuan }})
           </div>
         </div>
+        <div class="row no-wrap justify-between">
+          <div class="col-auto q-mr-sm">
+            Harga
+          </div>
+          <div class="col-auto ">
+            {{ formatDouble(row.harga_net,2) }}
+          </div>
+        </div>
+        <div class="row no-wrap justify-between">
+          <div class="col-auto q-mr-sm">
+            Subtotal
+          </div>
+          <div class="col-auto text-weight-bold">
+            {{ formatDouble(row.sub,2) }}
+          </div>
+        </div>
       </template>
-      <template #cell-subtotal="{ row }">
+      <template #custom-btn="{ row }">
         <div class="row wrap justify-end">
-          {{ formatDouble(row.sub,2) }}
+          <div v-if="row.dibayar==='1'" class="col-auto">
+            <q-btn
+              flat
+              dense
+              round
+              color="negative"
+              :loading="row.loading"
+              :disable="row.loading"
+              icon="icon-mat-delete_sweep"
+              @click="store.hapusDibayar(row)"
+            >
+              <q-tooltip>Hapus tanda sudah dibayar</q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
     </app-table-extend>

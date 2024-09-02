@@ -19,6 +19,7 @@
         @set-flag="store.setFlag"
         @set-tipe="store.setTipe"
         @set-periode="(val)=>store.setPeriodik(val)"
+        @terapkan="store.getDataTable()"
         @set-sistembayar="store.setSistembayar"
         @set-list-sistembayar="store.setListSistembayar"
       />

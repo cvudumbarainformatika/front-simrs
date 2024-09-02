@@ -74,12 +74,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     historys: [],
     statusCopied: [],
     statusCopiedRacik: [],
+    checkKdObat: [],
     messageCopied: [],
     pemberianObatCek: [],
+    konsumsiObatCek: false,
     permintaanResepDuplicate: [],
     noresepDuplicate: '',
     checkObat: [],
     permintaanDuplicate: false,
+    noresepAsal: null,
+    permintaanResep: [],
+    permintaanresep: [],
+    permintaanresepracikan: [],
     // section racikan end---
     batases: [
       { depo: 'Gd-05010101', batas: 5 }, // rajal
@@ -522,6 +528,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               this.pasien.newapotekrajal = resp?.data?.newapotekrajal
               this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
 
+              console.log('NORESEP2', this.noresep)
               this.setResep(this.noresep)
 
               this.resetForm()
@@ -692,11 +699,25 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     cekObat (val, obat, indexlist, tipe) {
       this.loadingObat = true
       let kdobatArray = ''
+      let batas = 0
 
-      // if (val?.length > 5 || this.permintaanDuplicate.length > 5) {
-      //   this.loading = false
-      //   return notifErrVue('Maaf duplicate resep maksimal 5 Obat, silahkan pilih obat yang diperlukan maksimal 5 Obat!!!')
-      // }
+      console.log('TIPE', tipe)
+      if (tipe === 'nonRacik') {
+        const panjang = val?.permintaanresep.filter(fi => fi.checked)
+
+        val?.permintaanresep.forEach((pa, indexs) => {
+          if (pa?.mobat?.jenis_perbekalan.toLowerCase() === 'obat') {
+            if (val?.permintaanresep?.length > 5) {
+              batas = pa.batas
+            }
+          }
+        })
+
+        if (panjang.length <= 0 && batas > 0) {
+          this.loading = false
+          return notifErrVue('silahkan pilih obat yang diperlukan maksimal ' + batas + ' Obat!!!')
+        }
+      }
 
       if (obat.length) {
         kdobatArray = obat.map(item => item?.kdobat)
@@ -755,6 +776,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     // }
     },
     simpanCopyResep (val, obat, indexlist, tipe) {
+      this.permintaanresep = val?.permintaanresep
+      this.permintaanresepracikan = val?.permintaanracikan
       const resep = []
       const panjang = val?.permintaanresep.filter(fi => fi.checked)
       let batas = 0
@@ -875,6 +898,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               uraian50: obats?.uraian50,
               uraian108: obats?.uraian108,
 
+              jenis_perbekalan: rac?.mobat?.jenis_perbekalan,
               namaracikan: rac?.namaracikan,
               tiperacikan: rac?.tiperacikan,
               jumlahdibutuhkan: rac?.jumlahdibutuhkan,
@@ -899,7 +923,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         }
       }
       const data = {
-        kirimResep, groupsistembayar: this.form.groupsistembayar, kddepo: depo[0]?.value
+        kirimResep, groupsistembayar: this.form.groupsistembayar, kddepo: depo[0]?.value, noresep_asal: val?.noresep, noresep: this.form.noresep ?? null
       }
 
       this.loading = true
@@ -909,6 +933,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             this.loading = false
             notifSuccess(resp)
 
+            console.log('resp', resp?.data)
             const nota = resp?.data.map(item => item?.nota)
             this.noreseps.push(nota[0])
             this.noresep = nota[0]
@@ -923,74 +948,51 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             }
 
             this.resetForm()
-            this.setForm('noresep', resp?.data?.nota)
+            this.setForm('noresep', nota[0])
 
             resolve(resp)
 
-            indexss.forEach(i => {
-
-            })
-            resp.data.forEach((element, index) => {
-              console.log('element', element, val)
-              if (element?.messageError) {
-                if (tipe === 'racik') {
-                  if (element?.messageError?.cek) {
-                    const key = `${indexlist}-${index}`
-                    this.statusCopiedRacik[key] = false
-                    this.pemberianObatCek[key] = element?.messageError
-                    this.permintaanResepDuplicate[key] = data?.kirimResep[index]
+            if (tipe === 'racik') {
+              racik.forEach((dt, idt) => {
+                const result = resp.data.find(el => el.kdobat === dt?.kdobat)
+                if (result?.messageError) {
+                  if (result?.messageError?.cek) {
+                    this.statusCopiedRacik[`${indexlist}-${dt?.kdobat}`] = false
+                    this.pemberianObatCek[`${indexlist}-${dt?.kdobat}`] = result?.messageError
+                    this.permintaanResepDuplicate[`${indexlist}-${dt?.kdobat}`] = data?.kirimResep[idt]
                   }
                   else {
-                    const key = `${indexlist}-${index}`
-                    this.statusCopiedRacik[key] = false
-                    this.pemberianObatCek[key] = null
-                    this.messageCopied[key] = element?.messageError
+                    this.statusCopiedRacik[`${indexlist}-${dt?.kdobat}`] = false
+                    this.pemberianObatCek[`${indexlist}-${dt?.kdobat}`] = null
+                    this.messageCopied[`${indexlist}-${dt?.kdobat}`] = result?.messageError
                   }
                 }
                 else {
-                  if (element?.messageError?.cek) {
-                    const key = `${indexlist}-${index}`
-                    this.statusCopied[key] = false
-                    this.pemberianObatCek[key] = element?.messageError
-                    this.permintaanResepDuplicate[key] = data?.kirimResep[index]
+                  this.statusCopiedRacik[`${indexlist}-${dt?.kdobat}`] = true
+                  this.pemberianObatCek[`${indexlist}-${dt?.kdobat}`] = []
+                }
+              })
+            }
+            else {
+              resep.forEach((dt, idt) => {
+                const result = resp.data.find(el => el.kdobat === dt?.kdobat)
+                if (result?.messageError) {
+                  if (result?.messageError?.cek) {
+                    this.statusCopied[`${indexlist}-${dt?.kdobat}`] = false
+                    this.pemberianObatCek[`${indexlist}-${dt?.kdobat}`] = result?.messageError
+                    this.permintaanResepDuplicate[`${indexlist}-${dt?.kdobat}`] = data?.kirimResep[idt]
                   }
                   else {
-                    if (indexss.length === 0) {
-                      const key = `${indexlist}-${index}`
-                      this.statusCopied[key] = false
-                      this.messageCopied[key] = element?.messageError
-                      this.pemberianObatCek[key] = null
-                    }
-                    else {
-                      const key = `${indexlist}-${indexss[index]}`
-                      this.statusCopied[key] = false
-                      this.messageCopied[key] = element?.messageError
-                      this.pemberianObatCek[key] = null
-                    }
+                    this.statusCopied[`${indexlist}-${dt?.kdobat}`] = false
+                    this.messageCopied[`${indexlist}-${dt?.kdobat}`] = result?.messageError
+                    this.pemberianObatCek[`${indexlist}-${dt?.kdobat}`] = null
                   }
-                }
-              }
-              else {
-                if (tipe === 'racik') {
-                  const key = `${indexlist}-${index}`
-                  this.statusCopiedRacik[key] = true
-                  this.pemberianObatCek[key] = []
                 }
                 else {
-                  console.log('INDEX', indexss.length)
-                  if (indexss.length === 0) {
-                    const key = `${indexlist}-${index}`
-                    this.statusCopied[key] = true
-                    this.pemberianObatCek[key] = []
-                  }
-                  else {
-                    const key = `${indexlist}-${indexss[index]}`
-                    this.statusCopied[key] = true
-                    this.pemberianObatCek[key] = []
-                  }
+                  this.statusCopied[`${indexlist}-${dt?.kdobat}`] = true
                 }
-              }
-            })
+              })
+            }
 
             this.cariObat()
           })
@@ -1004,6 +1006,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
 
     simpanCopyResepKonfirmasi (val, tipe, indexlist) {
+      const racik = this.permintaanresep
+      const resep = this.permintaanresepracikan
       const kirimResep = []
       const apps = useAplikasiStore()
       let kdruang = ''
@@ -1114,7 +1118,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           uraianinacbg: '-',
           diagnosa: diag,
           lanjuTr: '1',
-          tiperesep: val?.tiperesep
+          tiperesep: val?.tiperesep,
+          jenis_perbekalan: val?.jenis_perbekalan
         }
         kirimResep.push(temp)
       }
@@ -1139,7 +1144,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       }
       const data = {
-        head, kirimResep, groupsistembayar: val?.groupsistembayar, kddepo: val?.kodedepo
+        head, kirimResep, groupsistembayar: val?.groupsistembayar, kddepo: val?.kodedepo, noresep: this.form.noresep ?? null
       }
 
       this.loading = true
@@ -1152,7 +1157,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             const nota = resp?.data.map(item => item?.nota)
             this.noreseps.push(nota[0])
             this.noresep = nota[0]
-            // this.setResepCopi(this.noresep)
 
             const newapotekrajal = resp?.data.map(item => item?.newapotekrajal)
 
@@ -1160,38 +1164,58 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               const lastIndex = newapotekrajal.length - 1
               const lastItem = newapotekrajal[lastIndex]
               this.pasien.newapotekrajal = lastItem
+              this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === nota[0])
+              if (this.indexRacikan !== -1) { this.setResep(this.noresep) }
             }
-            // this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === nota[0])
+
+            this.resetForm()
+            this.setForm('noresep', nota[0])
             resolve(resp)
 
-            resp.data.forEach((element, index) => {
-              if (element?.messageError) {
-                if (tipe === 'racik') {
-                  const key = `${indexlist}`
-                  this.statusCopiedRacik[key] = false
-                  this.pemberianObatCek[key] = element?.messageError
-                  this.messageCopied[key] = element?.messageError
+            console.log('RACIK', racik)
+            console.log('NON RACIK', resep)
+
+            if (tipe === 'racik') {
+              racik.forEach((dt, idt) => {
+                const result = resp.data.find(el => el.kdobat === dt?.kdobat)
+                if (result?.messageError) {
+                  if (result?.messageError?.cek) {
+                    this.statusCopiedRacik[`${indexlist}`] = false
+                    this.pemberianObatCek[`${indexlist}`] = result?.messageError
+                    this.permintaanResepDuplicate[`${indexlist}`] = data?.kirimResep[idt]
+                  }
+                  else {
+                    this.statusCopiedRacik[`${indexlist}`] = false
+                    this.pemberianObatCek[`${indexlist}`] = null
+                    this.messageCopied[`${indexlist}`] = result?.messageError
+                  }
                 }
                 else {
-                  const key = `${indexlist}`
-                  this.pemberianObatCek[key] = element?.messageError
-                  this.statusCopied[key] = false
-                  this.messageCopied[key] = element?.messageError
+                  this.statusCopiedRacik[`${indexlist}`] = true
+                  this.pemberianObatCek[`${indexlist}`] = []
                 }
-              }
-              else {
-                if (tipe === 'racik') {
-                  const key = `${indexlist}`
-                  this.statusCopiedRacik[key] = true
-                  this.pemberianObatCek[key] = []
+              })
+            }
+            else {
+              this.permintaanresep.forEach((dt, idt) => {
+                const result = resp.data.find(el => el.kdobat === dt?.kdobat)
+                if (result?.messageError) {
+                  if (result?.messageError?.cek) {
+                    this.statusCopied[`${indexlist}`] = false
+                    this.pemberianObatCek[`${indexlist}`] = result?.messageError
+                    this.permintaanResepDuplicate[`${indexlist}`] = data?.kirimResep[idt]
+                  }
+                  else {
+                    this.statusCopied[`${indexlist}`] = false
+                    this.messageCopied[`${indexlist}`] = result?.messageError
+                    this.pemberianObatCek[`${indexlist}`] = null
+                  }
                 }
                 else {
-                  const key = `${indexlist}`
-                  this.statusCopied[key] = true
-                  this.pemberianObatCek[key] = []
+                  this.statusCopied[`${indexlist}`] = true
                 }
-              }
-            })
+              })
+            }
 
             this.cariObat()
           })
@@ -1204,9 +1228,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     openDialogDuplicateResep (val, permintaanResepDuplicate, tipe, indexlist) {
+      console.log('VALKONF', permintaanResepDuplicate)
       Dialog.create({
         title: 'Konfirmasi',
-        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
+        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.konsumsi} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
         ok: {
           push: true,
           label: 'Lanjutkan',

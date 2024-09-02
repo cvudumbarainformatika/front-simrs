@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListBelumMasukKonsinyasiStore = defineStore('list_belum_masuk_konsinyasi', {
   state: () => ({
@@ -13,14 +14,10 @@ export const useListBelumMasukKonsinyasiStore = defineStore('list_belum_masuk_ko
     },
     columns: [
       'penyedia',
-      'Pasien',
-      'kode',
+      // 'Pasien',
       'obat',
-      'nopermintaan',
-      'nopenerimaan',
-      'dipakai',
-      'harga',
-      'subtotal'
+      'nomor',
+      'dipakai'
     ],
     columnHide: []
   }),
@@ -64,6 +61,17 @@ export const useListBelumMasukKonsinyasiStore = defineStore('list_belum_masuk_ko
         .catch(() => {
           this.loading = false
         })
+    },
+    async hapusDibayar (val) {
+      val.loading = true
+      await api.post('v1/simrs/penunjang/farmasinew/bast-konsi/hapus-dibayar', val)
+        .then(resp => {
+          delete val.loading
+          val.dibayar = null
+          notifSuccess(resp)
+        })
+        .catch(() => { delete val.loading })
     }
+
   }
 })

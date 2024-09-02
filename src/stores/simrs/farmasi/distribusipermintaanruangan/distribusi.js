@@ -169,19 +169,24 @@ export const useDistribusiPermintaanRuanganStore = defineStore('distribusi_permi
           .catch(() => { this.loading = false })
       })
     },
-    simpanDetail (val) {
+    simpanDetail (val, row) {
       this.loadingSimpan = true
+      row.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/gudang/distribusi/simpandistribusidepo', val)
           .then(resp => {
             this.loadingSimpan = false
+            delete row.loading
             console.log('didtribusi', resp)
             val.distribusi = parseFloat(resp?.data?.data?.jml)
             notifSuccess(resp)
             // this.getPermintaanDepo()
             resolve(resp)
           })
-          .catch(() => { this.loadingSimpan = false })
+          .catch(() => {
+            this.loadingSimpan = false
+            delete row.loading
+          })
       })
     },
     kunci (val) {

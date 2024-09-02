@@ -90,6 +90,7 @@
               // val => parseFloat(val) >= 0 || 'Harus lebih lebih besar dari 0',
               val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
             ]"
+            :disable="rin.loading"
             @keyup.enter="kirim(rin, row)"
             @update:model-value="sudah($event, rin)"
           />
@@ -108,6 +109,7 @@
               val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
               val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
             ]"
+            :disable="rin.loading"
             @focus="setNol(rin)"
             @keyup.enter="kirim(rin, row)"
             @update:model-value="setJumlah($event, rin)"
@@ -128,6 +130,7 @@
               val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
               val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
             ]"
+            :disable="rin.loading"
             @update:model-value="sudah($event, rin)"
           />
           <!-- @keyup.enter="gaKirim(rin, i)" -->
@@ -279,10 +282,12 @@ function setJumlah (evt, val) {
   console.log('beli', beli, evt, max, stok, totalStok)
 }
 function kirim (val, row) {
-  console.log('ref', refInputVerifNol.value?.refInput)
+  if (val.loading) return notifErrVue('sudah dikirim, tunggu sebentar')
+  // console.log('ref', refInputVerifNol.value?.refInput)
   const valid = refInputVerifNol.value?.refInput?.validate()
-  console.log('kirim', val)
-  console.log('kirim row', row)
+  // console.log('kirim', val)
+  // console.log('kirim row', row)
+  console.log('kirim row', val)
   if (valid) {
     store.setForm('id', val.id)
     const form = {
@@ -295,7 +300,7 @@ function kirim (val, row) {
 
     }
     console.log('form', form)
-    store.simpanDetail(form).then(() => {
+    store.simpanDetail(form, val).then(() => {
       // val.editable = false
       emits('distribusi', form.distribusi)
       emits('editable', false)

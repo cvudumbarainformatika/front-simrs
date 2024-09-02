@@ -31,7 +31,7 @@
             />
           </template>
         </q-input>
-        <q-select
+        <!-- <q-select
           v-model="periode"
           dense
           outlined
@@ -44,6 +44,10 @@
           map-options
           style="min-width: 150px;"
           @update:model-value="gantiPeriode"
+        /> -->
+        <BtnPeriode
+          @set-periode="gantiPeriode"
+          @terapkan="emits('terapkan')"
         />
         <q-select
           v-model="toFlag"
@@ -105,7 +109,6 @@
           style="min-width: 150px;"
           @update:model-value="setSistembayar"
         />
-        
       </div>
       <div class="kanan">
         <!-- refresh Ids -->
@@ -192,14 +195,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
-import { dateDbFormat } from 'src/modules/formatter'
-import { date } from 'quasar'
-import { useAplikasiStore } from 'src/stores/app/aplikasi';
+// import { dateDbFormat } from 'src/modules/formatter'
+// import { date } from 'quasar'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe','setSistembayar','setListSistembayar'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe', 'setSistembayar', 'setListSistembayar', 'terapkan'])
 const props = defineProps({
   ruang: { type: String, default: '' },
   search: { type: String, default: '' },
@@ -211,38 +214,39 @@ const props = defineProps({
   flag: { type: String, default: '1' },
   tipe: { type: String, default: '' }
 })
+const BtnPeriode = defineAsyncComponent(() => import('./BtnPeriode.vue'))
 // filter sistem bayar start ---
-const group=ref(null)
-const groups=ref([  
-  {nama:'Semua', value:null},
-  {nama:'JKN', value:'1'},
-  {nama:'Mandiri', value:'2'},
-  {nama:'Tagihan', value:'3'},
+const group = ref(null)
+const groups = ref([
+  { nama: 'Semua', value: null },
+  { nama: 'JKN', value: '1' },
+  { nama: 'Mandiri', value: '2' },
+  { nama: 'Tagihan', value: '3' }
 ])
-const app=useAplikasiStore()
-const sistemBayars=computed(()=>{
-  const data=app?.sistemBayars?.filter(a=>a?.groups===group.value)
+const app = useAplikasiStore()
+const sistemBayars = computed(() => {
+  const data = app?.sistemBayars?.filter(a => a?.groups === group.value)
   data.unshift({
-    nama:'Semua', kode:null
+    nama: 'Semua', kode: null
   })
   return data
 })
-const sistembayar =ref(null)
-function setGroupSistembayar(val){
+const sistembayar = ref(null)
+function setGroupSistembayar (val) {
   // console.log('set', val);
-  sistembayar.value=null
-  if(!val) emits('setSistembayar',null)
-  else if(val==='2') {
-    sistembayar.value='UMUM'
-    emits('setSistembayar','UMUM')
-  }else{
-    emits('setListSistembayar',sistemBayars.value)
+  sistembayar.value = null
+  if (!val) emits('setSistembayar', null)
+  else if (val === '2') {
+    sistembayar.value = 'UMUM'
+    emits('setSistembayar', 'UMUM')
+  }
+  else {
+    emits('setListSistembayar', sistemBayars.value)
   }
 }
-function setSistembayar(val){
+function setSistembayar (val) {
   // console.log('sistem', val);
-  emits('setSistembayar',val)
-  
+  emits('setSistembayar', val)
 }
 // filter sistem bayar end ---
 
@@ -301,79 +305,81 @@ const tipeResep = computed({
   }
 })
 
-// periode
-const to = ref(dateDbFormat(new Date()))
-const from = ref(dateDbFormat(new Date()))
-const periode = ref(1)
-const periods = ref([
-  { value: 1, label: 'Hari ini' },
-  { value: 2, label: 'Minggu Ini' },
-  { value: 3, label: 'Bulan Ini' },
-  { value: 4, label: 'Bulan Lalu' },
-  { value: 5, label: 'Dua Bulan Lalu' }
-  // { value: 6, label: 'Tahun Ini' }
-])
+// // periode
+// const to = ref(dateDbFormat(new Date()))
+// const from = ref(dateDbFormat(new Date()))
+// const periode = ref(1)
+// const periods = ref([
+//   { value: 1, label: 'Hari ini' },
+//   { value: 2, label: 'Minggu Ini' },
+//   { value: 3, label: 'Bulan Ini' },
+//   { value: 4, label: 'Bulan Lalu' },
+//   { value: 5, label: 'Dua Bulan Lalu' }
+//   // { value: 6, label: 'Tahun Ini' }
+// ])
 
-function hariIni () {
-  const cDate = new Date()
-  to.value = dateDbFormat(cDate)
-  from.value = dateDbFormat(cDate)
-}
-function mingguIni () {
-  const curr = new Date()
-  const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
-  const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
-  from.value = dateDbFormat(firstday)
-  to.value = dateDbFormat(lastday)
-}
-function bulanIni () {
-  const curr = new Date()
-  const firstday = date.formatDate(curr, 'YYYY-MM-01')
-  const lastday = date.formatDate(curr, 'YYYY-MM-31')
-  from.value = firstday
-  to.value = lastday
-}
-function bulanLalu () {
-  const newDate = new Date()
-  const curr = date.subtractFromDate(newDate, { months: 1 })
-  const firstday = date.formatDate(curr, 'YYYY-MM-01')
-  const lastday = date.formatDate(curr, 'YYYY-MM-31')
-  from.value = firstday
-  to.value = lastday
-}
-function duaBulanLalu () {
-  const newDate = new Date()
-  const curr = date.subtractFromDate(newDate, { months: 2 })
-  const firstday = date.formatDate(curr, 'YYYY-MM-01')
-  const lastday = date.formatDate(curr, 'YYYY-MM-31')
-  from.value = firstday
-  to.value = lastday
-}
+// function hariIni () {
+//   const cDate = new Date()
+//   to.value = dateDbFormat(cDate)
+//   from.value = dateDbFormat(cDate)
+// }
+// function mingguIni () {
+//   const curr = new Date()
+//   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+//   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
+//   from.value = dateDbFormat(firstday)
+//   to.value = dateDbFormat(lastday)
+// }
+// function bulanIni () {
+//   const curr = new Date()
+//   const firstday = date.formatDate(curr, 'YYYY-MM-01')
+//   const lastday = date.formatDate(curr, 'YYYY-MM-31')
+//   from.value = firstday
+//   to.value = lastday
+// }
+// function bulanLalu () {
+//   const newDate = new Date()
+//   const curr = date.subtractFromDate(newDate, { months: 1 })
+//   const firstday = date.formatDate(curr, 'YYYY-MM-01')
+//   const lastday = date.formatDate(curr, 'YYYY-MM-31')
+//   from.value = firstday
+//   to.value = lastday
+// }
+// function duaBulanLalu () {
+//   const newDate = new Date()
+//   const curr = date.subtractFromDate(newDate, { months: 2 })
+//   const firstday = date.formatDate(curr, 'YYYY-MM-01')
+//   const lastday = date.formatDate(curr, 'YYYY-MM-31')
+//   from.value = firstday
+//   to.value = lastday
+// }
 
 function gantiPeriode (val) {
-  if (val === 1) {
-    hariIni()
-  }
-  else if (val === 2) {
-    mingguIni()
-  }
-  else if (val === 3) {
-    bulanIni()
-  }
-  else if (val === 4) {
-    bulanLalu()
-  }
-  else if (val === 5) {
-    duaBulanLalu()
-  }
+  console.log('gant', val)
 
-  const per = {
-    to: to.value,
-    from: from.value
-  }
-  emits('setPeriode', per)
+  //   if (val === 1) {
+  //     hariIni()
+  //   }
+  //   else if (val === 2) {
+  //     mingguIni()
+  //   }
+  //   else if (val === 3) {
+  //     bulanIni()
+  //   }
+  //   else if (val === 4) {
+  //     bulanLalu()
+  //   }
+  //   else if (val === 5) {
+  //     duaBulanLalu()
+  //   }
+
+  //   const per = {
+  //     to: to.value,
+  //     from: from.value
+  //   }
+  emits('setPeriode', val)
 }
 onMounted(() => {
-  hariIni()
+  // hariIni()
 })
 </script>
