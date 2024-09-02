@@ -7,6 +7,7 @@ import { notifSuccess } from 'src/modules/utils'
 export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
   state: () => ({
     loading: false,
+    disable: false,
     params: {
       q: '',
       tahun: date.formatDate(Date.now(), 'YYYY'),
@@ -125,6 +126,11 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         const el = keys[i]
         this.setForm(el, null)
       }
+      const bast = Object.keys(this.reqs)
+      for (let i = 0; i < bast.length; i++) {
+        const el = bast[i]
+        this.setForm(el, null)
+      }
     },
     setParams (key, val) {
       this.reqs[key] = val
@@ -132,12 +138,14 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     setForm (key, val) {
       this.form[key] = val
       this.rinci[key] = val
+      this.reqs[key] = val
       // this.openDialogFarmasi = false
       // console.log('form', this.form)
     },
     emptyForm () {
       this.form = {}
       this.rinci = {}
+      this.reqs = []
     },
     // onRequest (props) {
     //   console.log('props', props)
@@ -154,7 +162,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       const params = { params: this.params }
       return new Promise((resolve) => {
         api.get('v1/laporan/lra/bidang', params).then((resp) => {
-          console.log('bidang', resp.data)
+          // console.log('bidang', resp.data)
           if (resp.status === 200) {
             this.bidangdanptk = resp.data
             // this.kegiatans = resp.data
@@ -187,7 +195,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         return acc
       }, [])
       this.ptks = ptk
-      console.log('pptk', this.ptks)
+      // console.log('pptk', this.ptks)
     },
     filterKegiatan () {
       const data = this.bidangdanptk?.length
@@ -196,7 +204,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         )
         : []
       this.kegiatans = data
-      console.log('ddd', this.kegiatans)
+      // console.log('ddd', this.kegiatans)
     },
     simpanNpdls () {
       console.log('fooorm', this.form)
@@ -204,10 +212,11 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       return new Promise((resolve, reject) => {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
-            console.log('isian', resp)
+            // console.log('isian', resp)
             this.loading = false
             notifSuccess(resp)
             resolve(resp.data)
+            // this.form.rincians = {}
           })
           .catch((err) => {
             this.loading = false
@@ -223,7 +232,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         api.get('/v1/transaksi/belanja_ls/anggaran', params)
           .then((resp) => {
             if (resp.status === 200) {
-              console.log('anggaran', resp.data)
+              // console.log('anggaran', resp.data)
               this.loading = false
               this.anggarans = resp.data
               // this.itembelanja = resp.data

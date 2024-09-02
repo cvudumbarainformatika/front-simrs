@@ -1,33 +1,38 @@
 <template>
   <template v-if="store.reqs.bast">
-    <div>
+    <div class="flex">
       <q-table
         :rows="carisrt.itembelanja"
         :columns="columns"
         row-key="name"
-        hide-header
         hide-bottom
         ref="rincianNpd"
       >
         <template #body="props">
           <q-tr :props="props">
-            <q-td key="nobast" :props="props">
-              {{ props.row.nobast }}
+            <q-td key="nopenerimaan" :props="props" class="text-left">
+              {{ props.row.nopenerimaan }}
             </q-td>
-            <q-td key="rek50" :props="props">
-              {{ props.row.rek50 }}
+            <q-td key="koderek50" :props="props">
+              {{ props.row.koderek50 }}
             </q-td>
-            <q-td key="uraian50" :props="props">
-              {{ props.row.uraian50 }}
+            <q-td key="rincianbelanja" :props="props">
+              {{ props.row.rincianbelanja }}
             </q-td>
-            <q-td key="rek108" :props="props">
-              {{ props.row.rek108 }}
+            <q-td key="koderek108" :props="props">
+              {{ props.row.koderek108 }}
             </q-td>
             <q-td key="itembelanja" :props="props">
               {{ props.row.itembelanja }}
             </q-td>
-            <q-td key="subtotal" :props="props">
-              {{ props.row.subtotal }}
+            <q-td key="totalls" :props="props" class="text-right">
+              {{ formattanpaRp(props.row.totalls) }}
+            </q-td>
+            <q-td key="nominalpembayaran" :props="props" class="text-right">
+              {{ formattanpaRp(props.row.nominalpembayaran) }}
+              <q-popup-edit v-model="props.row.nominalpembayaran" auto-save v-slot="scope">
+                <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
+              </q-popup-edit>
             </q-td>
             <q-td>
               <div class="row justify-end">
@@ -37,6 +42,7 @@
                   class="q-px-md"
                   label="Pilih"
                   @click="simpanRinciBast(props?.row)"
+                  onclick="disabled='true'"
                 />
               </div>
             </q-td>
@@ -60,26 +66,8 @@
             :key="store.reqs.kodekegiatan"
             @selected="(val)=>pilihRekening50(val)"
           />
-          <!-- <app-autocomplete
-            v-model="form.koderek50"
-            label="Rekening Belanja"
-            autocomplete="rincianbelanja"
-            option-value="rek50"
-            outlined
-            :option-label="opt => Object(opt) === opt && 'rincianbelanja' in opt ? opt.rek50 + ' - ' + opt.rincianbelanja : 'Silahkan Dipilih'"
-            :source="store.rekening50"
-          /> -->
         </div>
-        <!-- <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
-          <app-input-simrs
-            v-model="form.itembelanja"
-            label="Item Belanja"
 
-            outlined
-
-            :valid="{required:true}"
-          />
-        </div> -->
         <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
           <app-autocomplete
             v-model="store.rinci.itembelanja"
@@ -90,11 +78,9 @@
             outlined
             :key="store.reqs"
             :source="store.itembelanja"
-            :valid="{required:true}"
             @selected="(val)=>{
               const arr = store.itembelanja
               const cari = arr.find(x => x.item === val)
-              console.log('cari xxx', cari)
               store.rinci.idserahterima_rinci = cari.idpp
               store.rinci.koderek108 = cari.koderek108
               store.rinci.uraian108 = cari.uraian108
@@ -185,13 +171,6 @@
             :loading="store.loading"
           />
         </div>
-        <!-- <app-input-simrs
-          v-model="store.rinci.nominalpembayaran"
-          class="q-pa-sm q-gutter-y-md"
-          style="width: 25%"
-          label="Nominal Pembayaran"
-          outlined
-        /> -->
       </div>
     </q-form>
   </template>
@@ -202,47 +181,67 @@ import { useQuasar } from 'quasar'
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 import { onMounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { formattanpaRp } from 'src/modules/formatter'
 
 const $q = useQuasar()
 
 const carisrt = dataBastFarmasi()
-const rincianNpd = ref(null)
+const rincianNpd = ref([])
 // const rincians = ref([])
 const store = formNotaPermintaanDanaLS()
+// const onReset = () => {
+//   rincianNpd.value.resetValidation()
+// }
 onMounted(() => {
+  // carisrt.resetFORM()
+  // onReset()
   store.getRincianBelanja()
   $q.localStorage.set('rincian_npd', [])
 })
+
 const tablebast = [
   {
-    name: 'nobast',
-    align: 'left',
-    field: 'nobast'
+    label: 'No BAST',
+    name: 'nopenerimaan',
+    align: 'center',
+    field: 'nopenerimaan'
   },
   {
-    name: 'rek50',
-    align: 'left',
-    field: 'rek50'
+    label: 'Rekening 50',
+    name: 'koderek50',
+    align: 'center',
+    field: 'koderek50'
   },
   {
-    name: 'uraian50',
-    align: 'left',
-    field: 'uraian50'
+    label: 'Uraian',
+    name: 'rincianbelanja',
+    align: 'center',
+    field: 'rincianbelanja'
   },
   {
-    name: 'rek108',
-    align: 'left',
-    field: 'rek108'
+    label: 'Rekening 108',
+    name: 'koderek108',
+    align: 'center',
+    field: 'koderek108'
   },
   {
+    label: 'Item Belanja',
     name: 'itembelanja',
-    align: 'left',
+    align: 'center',
     field: 'itembelanja'
   },
   {
-    name: 'subtotal',
-    align: 'left',
-    field: 'subtotal'
+    label: 'Subtotal',
+    name: 'totalls',
+    align: 'center',
+    field: 'totalls'
+  },
+  {
+    label: 'Nominal Pembayaran',
+    name: 'nominalpembayaran',
+    align: 'center',
+    field: 'nominalpembayaran'
   },
   {
     name: 'Opsi',
@@ -250,6 +249,7 @@ const tablebast = [
     align: 'center'
   }
 ]
+// eslint-disable-next-line no-unused-vars
 const columns = ref(tablebast)
 // const form = ref({
 //   koderek50: null,
@@ -272,13 +272,14 @@ const columns = ref(tablebast)
 //   store.rinci.nominalpembayaran = cari.subtotal
 // }
 
+// eslint-disable-next-line no-unused-vars
 function simpanRinci () {
   // SIMPAN RINCIAN PAKAI LOCALSTORAGE JIKA OBJ RINCI KE REPLACE
   // eslint-disable-next-line no-unused-vars
   // const obj = form.value
   const obj = store.rinci
   const rinci = $q.localStorage.getItem('rincian_npd')
-  console.log('rincian sblm push', rinci)
+  // console.log('rincian sblm push', rinci)
 
   rinci.push(obj)
   $q.localStorage.set('rincian_npd', rinci)
@@ -289,34 +290,41 @@ function simpanRinci () {
   // console.log('rincian', obj)
   // store.form.rincians.push(obj)
 
-  console.log('rincian stlh push', store.form.rincians)
+  // console.log('rincian stlh push', store.form.rincians)
 }
+// eslint-disable-next-line no-unused-vars
 function simpanRinciBast (val) {
-  carisrt.reqs.rincianbast = val
-  // console.log('rincidariBAST', carisrt.reqs.rincianbast)
+  // const obj = store.rinci = val
+  // const obj = carisrt.reqs.rincianbast = val
+  const rinci = store.rinci = val
+  const data = $q.localStorage.getItem('rincian_npd')
+  console.log('sebelum push', rinci)
+  data.push(rinci)
+  // store.rinci.koderek50 = data?.koderek50 ?? ''
+  // store.rinci.rincianbelanja = data?.rincianbelanja ?? ''
 
-  store.rinci.koderek50 = carisrt?.reqs?.rincianbast?.rek50 ?? ''
-  store.rinci.rincianbelanja = carisrt?.reqs?.rincianbast?.uraian50 ?? ''
+  // store.rinci.koderek108 = data?.koderek108 ?? ''
+  // store.rinci.uraian108 = data?.uraian108 ?? ''
+  // store.rinci.itembelanja = data?.itembelanja ?? ''
 
-  store.rinci.koderek108 = carisrt?.reqs?.rincianbast?.rek108 ?? ''
-  store.rinci.uraian108 = carisrt?.reqs?.rincianbast?.item ?? ''
-  store.rinci.itembelanja = carisrt?.reqs?.rincianbast?.itembelanja ?? ''
+  // store.rinci.nopenerimaan = data?.nopenerimaan ?? ''
 
-  store.rinci.nopenerimaan = carisrt?.reqs?.rincianbast?.nobast ?? ''
+  // store.rinci.idserahterima_rinci = data?.idserahterima_rinci ?? ''
 
-  store.rinci.idserahterima_rinci = carisrt?.reqs?.rincianbast?.id_bast ?? ''
+  // store.rinci.volume = data?.volume ?? ''
+  // store.rinci.satuan = data?.satuan ?? ''
+  // store.rinci.harga = data?.harga ?? ''
+  // store.rinci.total = data?.pagu ?? ''
 
-  store.rinci.volume = carisrt?.reqs?.rincianbast?.volume ?? ''
-  store.rinci.satuan = carisrt?.reqs?.rincianbast?.satuan ?? ''
-  store.rinci.harga = carisrt?.reqs?.rincianbast?.harga ?? ''
-  store.rinci.total = carisrt?.reqs?.rincianbast?.pagu ?? ''
+  // store.rinci.volumels = data?.volumels ?? ''
+  // store.rinci.hargals = data?.hargals ?? ''
+  // store.rinci.totalls = data?.totalls ?? ''
+  // store.rinci.nominalpembayaran = data?.nominalpembayaran ?? ''
 
-  store.rinci.volumels = carisrt?.reqs?.rincianbast?.volumebast ?? ''
-  store.rinci.hargals = carisrt?.reqs?.rincianbast?.hargabast ?? ''
-  store.rinci.totalls = carisrt?.reqs?.rincianbast?.subtotal ?? ''
-  store.rinci.nominalpembayaran = carisrt?.reqs?.rincianbast?.subtotal ?? ''
-  store.form.rincians.push(store.rinci)
-  console.log('simpan rincianBAST', store.form)
+  $q.localStorage.set('rincian_npd', data)
+
+  store.form.rincians = data
+  console.log('simpan setelah Push', store.form.rincians)
 }
 // function onSimpan () {
 //   store.simpanNpdls()
