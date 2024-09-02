@@ -15,7 +15,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       bidang: '',
-      kegiatan: ''
+      kegiatan: '',
+      kodebidang: null
     },
     display: {
       dari: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -25,6 +26,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     pendapatans: [],
     nilaipends: [],
     realisasipends: [],
+    mapbidangptk: [],
     bidangs: [],
     kegiatans: [],
     ptks: [],
@@ -44,7 +46,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       this.params[key] = val
     },
     emptyForm() {
-      this.params.bidang = ''
+      // this.params.bidang = ''
       this.params.kegiatan = ''
     },
 
@@ -56,9 +58,10 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         api.get('v1/laporan/lra/bidang', params).then((resp) => {
           console.log('bidang', resp)
           if (resp.status === 200) {
-            this.bidangs = resp.data
-            this.kegiatans = resp.data
-            this.ptks = resp.data
+            this.mapbidangptk = resp.data
+            // this.bidangs = resp.data
+            // this.kegiatans = resp.data
+            // this.ptks = resp.data
             this.loading = false
             this.filterBidang(resp.data)
             this.filterKegiatan(resp.data)
@@ -69,8 +72,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       })
     },
     filterBidang() {
-      const data = this.bidangs?.length
-        ? this.bidangs?.map((x) => {
+      const data = this.mapbidangptk?.length
+        ? this.mapbidangptk?.map((x) => {
           return {
             kodebidang: x.kodebidang,
             bidang: x.bidang
@@ -88,8 +91,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       // console.log('bidangfilt', this.params.bidang)
     },
     filterPtk() {
-      const data = this.ptks?.length
-        ? this.ptks?.map((x) => {
+      const data = this.mapbidangptk?.length
+        ? this.mapbidangptk?.map((x) => {
           return {
             nip: x.kodepptk,
             nama: x.namapptk,
@@ -109,13 +112,13 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       // console.log('pptk', this.ptks)
     },
     filterKegiatan() {
-      const data = this.kegiatans?.length
-        ? this.kegiatans?.filter((x) =>
-          x.kodekegiatan
+      const data = this.mapbidangptk?.length
+        ? this.mapbidangptk?.filter(x =>
+          x.kodebidang === this.params.kodebidang
         )
         : []
       this.kegiatans = data
-      // console.log('ddd', this.kegiatans)
+      console.log('ddd', this.kegiatans)
     },
     getDataRealisasi() {
       this.loading = true
