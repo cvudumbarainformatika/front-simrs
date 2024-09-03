@@ -92,6 +92,7 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
               hargabast: x.harga_net,
               volumebast: x.jumlah,
               subtotal: parseFloat(x.subtotal),
+              nominalpembayaran: parseFloat(x.subtotal),
               realisasi: x.masterobat.pagu.realisasi.map(x => parseFloat(x.total_realisasi)).reduce((a, b) => a + b, 0)
             }
           })
@@ -113,21 +114,22 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
       for (let i = 0; i < unik.length; i++) {
         const el = unik[i]
         const obj = {
-          rek50: dataPagu.filter((z) => z.rek108 === el)[0]?.rek50,
-          uraian50: dataPagu.filter((z) => z.rek108 === el)[0]?.uraian50,
-          id_bast: dataPagu.filter((z) => z.rek108 === el)[0]?.id_bast,
-          nobast: dataPagu.filter((z) => z.rek108 === el)[0]?.nobast,
+          koderek50: dataPagu.filter((z) => z.rek108 === el)[0]?.rek50,
+          rincianbelanja: dataPagu.filter((z) => z.rek108 === el)[0]?.uraian50,
+          idserahterima_rinci: dataPagu.filter((z) => z.rek108 === el)[0]?.id_bast,
+          nopenerimaan: dataPagu.filter((z) => z.rek108 === el)[0]?.nobast,
           itembelanja: dataPagu.filter((z) => z.rek108 === el)[0]?.itembelanja,
-          rek108: dataPagu.filter((z) => z.rek108 === el)[0]?.rek108,
-          item: dataPagu.filter((z) => z.rek108 === el)[0]?.item,
+          koderek108: dataPagu.filter((z) => z.rek108 === el)[0]?.rek108,
+          uraian108: dataPagu.filter((z) => z.rek108 === el)[0]?.item,
           harga: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.harga),
           satuan: dataPagu.filter((z) => z.rek108 === el)[0]?.satuan,
           volume: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.volume),
-          pagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu),
+          total: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu),
           // hargabast: dataPagu.filter((z) => z.rek108 === el).map((x) => x.hargabast)[i] * dataPagu.filter((z) => z.rek108 === el).map((x) => x.volumebast)[i],
-          hargabast: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
-          volumebast: 1,
-          subtotal: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
+          hargals: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
+          volumels: 1,
+          totalls: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
+          nominalpembayaran: dataPagu.filter((z) => z.rek108 === el).map((x) => x.nominalpembayaran).reduce((a, b) => a + b, 0),
           realisasi: parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi),
           sisapagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi)
         }

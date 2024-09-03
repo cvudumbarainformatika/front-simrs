@@ -157,18 +157,18 @@
         :autofocus="false"
         :valid="{required:true}"
       />
-
-      <app-input-simrs
-        class="q-pa-sm q-gutter-y-xs"
-        style="width: 40%;"
-        v-model="store.form.noserahterima"
-        label="Nomor Serahterima"
-        disable
-        outlined
-        :autofocus="false"
-        :valid="{required:true}"
-      />
       <template v-if="store.form.serahterimapekerjaan === '1'">
+        <app-input-simrs
+          class="q-pa-sm q-gutter-y-xs"
+          style="width: 40%;"
+          v-model="store.form.noserahterima"
+          label="Nomor Serahterima"
+          disable
+          outlined
+          :autofocus="false"
+          :valid="{required:true}"
+        />
+
         <div class="row items-center">
           <q-btn
             color="dark"
@@ -246,7 +246,6 @@ const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima
 const ambil = formKontrakPekerjaan()
 const store = formNotaPermintaanDanaLS()
 const carisrt = dataBastFarmasi()
-
 // const data = useLaporanBkuPtkStore()
 const formNpdLS = ref(null)
 
@@ -291,9 +290,11 @@ function kodeKeg (val) {
 function onSimpan (val) {
   store.simpanNpdls()
   // store.form.rincians.push(store.rinci = val)
-  // .then(() => {
-  //   store.emptyForm()
-  // })
+    .then(() => {
+      store.resetFORM()
+      carisrt.itembelanja = []
+      store.form.rincians = {}
+    })
 }
 
 const serahTerima = (val) => {

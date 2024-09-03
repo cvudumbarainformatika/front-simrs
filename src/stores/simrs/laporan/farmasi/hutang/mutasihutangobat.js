@@ -195,7 +195,6 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
       })
       const totalall = this.items.reduce(function (acc, obj) { return acc + obj.SaldoAkhir }, 0)
       this.totalall = totalall
-      console.log('hahaha', this.totalall)
 
       this.loading = false
     }
