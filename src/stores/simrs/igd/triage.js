@@ -22,7 +22,10 @@ export const useTriageIgd = defineStore('triageigd', {
       kesadaran: '',
       gcs: '',
       doa: [],
-      scorenadi: 0
+      scorenadi: 0,
+      scorepernapasanx: 0,
+      scorespo2: 0,
+      scoresuhu: 0
     }
   }),
   actions: {
