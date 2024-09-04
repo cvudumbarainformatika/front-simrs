@@ -13,7 +13,7 @@
     :type="type"
     :rules="[requiredRule, minRule, maxRule, emailRule, isNumberRule]"
     :lazy-rules="lazyRules"
-    hide-bottom-space
+    :hide-bottom-space="true"
     :hint="hint"
     :hide-hint="!hint"
     :error="errorFromServer?.length > 0"
@@ -149,3 +149,18 @@ const isValidMail = (val) => {
 }
 
 </script>
+
+<style lang="scss" scoped>
+.q-field--dense .q-field__bottom {
+    display:none;
+}
+
+.q-field--error .q-field--highligted {
+  background: none;
+}
+// .q-field--standout.q-field--highlighted .q-field__control {
+//     box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+//     background: rgb(250, 173, 173);
+// }
+
+</style>

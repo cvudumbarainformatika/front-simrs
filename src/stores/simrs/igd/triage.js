@@ -20,12 +20,20 @@ export const useTriageIgd = defineStore('triageigd', {
       suhu: 0,
       spo2: 0,
       kesadaran: '',
-      gcs: '',
+      eye: '',
+      verbal: '',
+      motorik: '',
       doa: [],
       scorenadi: 0,
       scorepernapasanx: 0,
       scorespo2: 0,
-      scoresuhu: 0
+      scoresuhu: 0,
+      scoresistole: 0,
+      scorediastole: 0,
+      scorekesadaran: 0,
+      scorenyeri: 0,
+      scorelochea: 0,
+      scoreproteinurin: 0
     }
   }),
   actions: {
@@ -44,7 +52,7 @@ export const useTriageIgd = defineStore('triageigd', {
       this.norm = pasien ? pasien.norm : ''
 
       try {
-        const resp = await api.post('v1/simrs/pelayanan/triage', this.form)
+        const resp = await api.post('v1/simrs/pelayananigd/simpantriage', this.form)
         this.loadingForm = false
         notifSuccess(resp)
       }
