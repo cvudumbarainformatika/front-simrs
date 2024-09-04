@@ -604,13 +604,13 @@ export const useLaporanBkuPengeluaranStore = defineStore(
         // console.log("nihil", nihil);
 
         const gabungArray = spm?.concat(
-          geserDebit,
+          spmgu,
           npk_Panjar,
+          geserDebit,
           CairNpkPanjar,
           spj_Panjar,
           kembalianpjr,
           sisapjr,
-          spmgu,
           geserKredit,
           npkls,
           pencairanLS,
