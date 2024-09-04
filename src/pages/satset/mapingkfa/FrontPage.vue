@@ -28,6 +28,9 @@
       <template #col-kode_kfa>
         <div>Kode KFA</div>
       </template>
+      <template #col-kode_kfa_93>
+        <div>Kode KFA 93..</div>
+      </template>
 
       <template #cell-kode_kfa="{ row }">
         <div v-if="!row?.kode_kfa===null || !row.edit" class="row wrap">
@@ -43,8 +46,35 @@
           />
         </div>
       </template>
+      <template #cell-kode_kfa_93="{ row }">
+        <div v-if="!row?.kode_kfa_93===null || !row.edit" class="row wrap">
+          {{ row?.kode_kfa_93 }}
+        </div>
+        <div v-if="row?.kode_kfa_93===null || row.edit" class="row wrap">
+          <app-input
+            v-model="row.kode_kfa_93"
+            label="Input Kode KFA"
+            valid
+            outlined
+            @update:model-value="setInput($event, row)"
+          />
+        </div>
+      </template>
       <template #custom-btn="{ row }">
         <div class="row no-wrap">
+          <!-- <div v-if="row.kode_kfa" class="col-auto"> -->
+          <div v-if="row.kode_kfa_93 && row?.kfa?.kode_kfa_93 !== row.kode_kfa_93" class="col-auto">
+            <q-btn
+              push
+              dense
+              color="primary"
+              no-caps
+              :loading="row.loadingKfa"
+              :disable="row.loading || row.loadingKfa"
+              :label="row?.kfa?.kode_kfa_93 !== row.kode_kfa_93 ?'simpan KFA':'update KFA'"
+              @click="store.simpanKFA(row)"
+            />
+          </div>
           <div v-if=" !row.edit" class="col-auto">
             <q-btn
               flat
@@ -53,7 +83,7 @@
               no-caps
               icon="icon-mat-edit"
               :loading="row.loading"
-              :disable="row.loading"
+              :disable="row.loading || row.loadingKfa"
               @click="edit(row)"
             />
           </div>
@@ -64,7 +94,7 @@
               color="primary"
               no-caps
               :loading="row.loading"
-              :disable="row.loading"
+              :disable="row.loading || row.loadingKfa"
               icon="icon-mat-save"
               @click="simpan(row)"
             />
@@ -73,17 +103,13 @@
       </template>
     </app-table-extend>
   </div>
-  <kfaPage ref="refKfaPage" v-model="bukaKfa" />
 </template>
 <script setup>
 import { useMapingKfaStore } from 'src/stores/satset/mapingkfa'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
 const store = useMapingKfaStore()
 
-const kfaPage = defineAsyncComponent(() => import('./comp/SatsetKfaPage.vue'))
-const bukaKfa = ref(false)
-const refKfaPage = ref(null)
 function simpan (val) {
   if (val.edit) val.edit = false
   console.log('simpan', val)

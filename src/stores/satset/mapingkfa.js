@@ -16,7 +16,7 @@ export const useMapingKfaStore = defineStore('store_maping_kfa', {
     form: {
       kd_obat: ''
     },
-    columns: ['kd_obat', 'nama_obat', 'kode_kfa']
+    columns: ['kd_obat', 'nama_obat', 'kode_kfa', 'kode_kfa_93']
   }),
   actions: {
     setForm (key, val) {
@@ -70,6 +70,20 @@ export const useMapingKfaStore = defineStore('store_maping_kfa', {
             resolve(resp)
           })
           .catch(() => { val.loading = false })
+      })
+    },
+    simpanKFA (val) {
+      val.loadingKfa = true
+      return new Promise(resolve => {
+        api.post('v1/satusehat/mapingkfa/get-kfa', val)
+          .then(resp => {
+            val.loadingKfa = false
+            notifSuccess(resp)
+            val.kfa = resp?.data?.simpan
+            console.log('simpan', resp?.data)
+            resolve(resp)
+          })
+          .catch(() => { val.loadingKfa = false })
       })
     }
   }
