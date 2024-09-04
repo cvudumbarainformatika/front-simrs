@@ -245,6 +245,7 @@
                   type="number"
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="scoresistole()"
                 />
               </div>
               <div class="col-2">
@@ -257,6 +258,7 @@
                   type="number"
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="scorediastole()"
                 />
               </div>
               <div class="col-2">
@@ -285,22 +287,22 @@
                   @update:model-value="scorespo2()"
                 />
               </div>
-              <div class="col-2">
+              <div class="col-2 text-bold q-pt-none q-mt-none">
                 Score Nadi : {{ store.form.scorenadi }}
               </div>
-              <div class="col-2">
+              <div class="col-2 text-bold q-pt-none q-mt-none">
                 Score Pernapsan : {{ store.form.scorepernapasanx }}
               </div>
-              <div class="col-2">
-                Score Sistole :
+              <div class="col-2 text-bold q-pt-none q-mt-none">
+                Score Sistole : {{ store.form.scoresistole }}
               </div>
-              <div class="col-2">
-                Score Diastole :
+              <div class="col-2 text-bold q-pt-none q-mt-none">
+                Score Diastole : {{ store.form.scorediastole }}
               </div>
-              <div class="col-2">
+              <div class="col-2 text-bold q-pt-none q-mt-none">
                 Score Suhu : {{ store.form.scoresuhu }}
               </div>
-              <div class="col-2">
+              <div class="col-2 text-bold q-pt-none q-mt-none">
                 Score SPo2 : {{ store.form.scorespo2 }}
               </div>
             </div>
@@ -310,6 +312,8 @@
                   ref="refkesadaran"
                   v-model="store.form.kesadaran"
                   label="Kesadaran"
+                  emit-value
+                  map-options
                   outlined
                   standout="bg-yellow-3"
                   dense
@@ -317,21 +321,53 @@
                   transition-hide="flip-down"
                   :options="kesadaran"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="(val) => scorekesadaran(val)"
                 />
               </div>
-              <div class="col-6">
+              <div class="col-2">
                 <q-select
-                  ref="refgsc"
-                  v-model="store.form.gcs"
-                  label="GCS"
+                  ref="refeye"
+                  v-model="store.form.eye"
+                  label="Eye"
                   outlined
                   standout="bg-yellow-3"
                   dense
                   transition-show="flip-up"
                   transition-hide="flip-down"
-                  :options="gcs"
+                  :options="eye"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                 />
+              </div>
+              <div class="col-2">
+                <q-select
+                  ref="refverbal"
+                  v-model="store.form.verbal"
+                  label="Verbal"
+                  outlined
+                  standout="bg-yellow-3"
+                  dense
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  :options="verbal"
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                />
+              </div>
+              <div class="col-2">
+                <q-select
+                  ref="refmotorik"
+                  v-model="store.form.motorik"
+                  label="Motorik"
+                  outlined
+                  standout="bg-yellow-3"
+                  dense
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  :options="motorik"
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                />
+              </div>
+              <div class="col-2 text-bold q-pt-none q-mt-none">
+                Score Kesadaran : {{ store.form.scorekesadaran }}
               </div>
             </div>
             <div class="row q-col-gutter-sm q-pb-sm">
@@ -362,7 +398,7 @@
           </div>
           <div v-if="store.form.pasienhamil === 1" class="q-pt-sm">
             <div class="row q-col-gutter-sm q-pb-sm">
-              <div class="col-6">
+              <div class="col-4">
                 <q-select
                   ref="refnyeri"
                   v-model="store.form.nyeri"
@@ -374,9 +410,10 @@
                   transition-hide="flip-down"
                   :options="nyeri"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="(val) => scorenyeri(val)"
                 />
               </div>
-              <div class="col-6">
+              <div class="col-4">
                 <q-select
                   ref="reflochea"
                   v-model="store.form.lochea"
@@ -388,11 +425,10 @@
                   transition-hide="flip-down"
                   :options="lochea"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="(val) => scoreloche(val)"
                 />
               </div>
-            </div>
-            <div class="row q-col-gutter-sm q-pb-sm">
-              <div class="col-12">
+              <div class="col-4">
                 <q-select
                   ref="refproteinurin"
                   v-model="store.form.proteinurin"
@@ -404,7 +440,17 @@
                   transition-hide="flip-down"
                   :options="proteinurin"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="(val) => scoreproteinurin(val)"
                 />
+              </div>
+              <div class="col-4 text-bold q-pt-none q-mt-none">
+                Score Nyeri : {{ store.form.scorenyeri }}
+              </div>
+              <div class="col-4 text-bold q-pt-none q-mt-none">
+                Score Lochea : {{ store.form.scorelochea }}
+              </div>
+              <div class="col-4 text-bold q-pt-none q-mt-none">
+                Score Protein Urin : {{ store.form.scoreproteinurin }}
               </div>
             </div>
             <q-separator class="q-my-xs" />
@@ -452,10 +498,14 @@ const pernapasan = ref(['Normal', 'Sumbatan Parsial', 'Trakipnone'])
 const sirkulasi = ref(['Nadi Normal ', 'CTR > 2 dtk', 'Akral Dingin', 'Pucat', 'Takikardia', 'Brakikardia', 'Nadi Terabah Lemah', 'Nadi Tidak Terabah', 'Henti Jantung'])
 const disability = ref(['Disability Normal', 'Hemiplegi', 'Hemiparesis', 'Gelisah', 'GCS 8 - 12', 'Tidak Ada Respon', 'Kejang', 'CGS < 8'])
 const kesadaran = ref(['Alert', 'Verbal', 'Pain', 'Unrespon'])
-const gcs = ref(['Eye', 'Verbal', 'Motorik'])
+// const gcs = ref(['Eye', 'Verbal', 'Motorik'])
 const nyeri = ref(['Normal', 'Abnormal'])
 const lochea = ref(['Normal', 'Abnormal', 'NA'])
 const proteinurin = ref(['+', '++>', 'NA'])
+
+const eye = ref([1, 2, 3, 4])
+const verbal = ref([1, 2, 3, 4, 5])
+const motorik = ref([1, 2, 3, 4, 6])
 
 const optionhamil = ref([
   { label: 'Iya', value: 1 },
@@ -488,7 +538,9 @@ function resetscore () {
   store.form.suhu = ''
   store.form.spo2 = ''
   store.form.kesadaran = ''
-  store.form.gcs = ''
+  store.form.eye = ''
+  store.form.verbal = ''
+  store.form.motorik = ''
 
   store.form.nyeri = ''
   store.form.lhocea = ''
@@ -538,7 +590,9 @@ function kuis1 () {
   delete store.form.bb
   delete store.form.tinggibadan
   delete store.form.kesadaran
-  delete store.form.gcs
+  delete store.form.eye
+  delete store.form.verbal
+  delete store.form.motorik
 }
 
 function cekjalannafas () {
@@ -567,17 +621,20 @@ const props = defineProps({
   }
 })
 function onSubmit () {
-  if (store.form.pasienhamil === 1) {
-    store.saveData(props.pasien).then(() => {
-      refForm.value.resetValidation()
-    })
-  }
-  else {
-    clearhamil()
-    store.saveData(props.pasien).then(() => {
-      refForm.value.resetValidation()
-    })
-  }
+  // if (store.form.pasienhamil === 1) {
+  //   store.saveData(props.pasien).then(() => {
+  //     refForm.value.resetValidation()
+  //   })
+  // }
+  // else {
+  //   clearhamil()
+  //   store.saveData(props.pasien).then(() => {
+  //     refForm.value.resetValidation()
+  //   })
+  // }
+  store.saveData(props.pasien).then(() => {
+    refForm.value.resetValidation()
+  })
 }
 
 function scorepernapasanx () {
@@ -827,9 +884,133 @@ function scorespo2 () {
   }
 }
 
-function scoresuhu () {
+function scoresistole () {
+  const umurleng = props.pasien?.usia.split(' ')
+  const umur = parseInt(umurleng[0])
+  // const umurbln = parseInt(umurleng[2])
+
+  if (store.form.pasienhamil === 1) {
+    if (store.form.sistole < 90) {
+      store.form.scoresistole = 3
+    }
+    else if (store.form.sistole >= 90 && store.form.sistole <= 140) {
+      store.form.scoresistole = 0
+    }
+    else if (store.form.sistole >= 141 && store.form.sistole <= 150) {
+      store.form.scoresistole = 1
+    }
+    else if (store.form.sistole >= 151 && store.form.sistole <= 160) {
+      store.form.scoresistole = 2
+    }
+    else if (store.form.sistole > 160) {
+      store.form.scoresistole = 3
+    }
+  }
+  else {
+    if (umur >= 1 && umur <= 4) {
+      if (store.form.sistole < 70) {
+        store.form.scoresistole = 3
+      }
+      else if (store.form.sistole < 80) {
+        store.form.scoresistole = 2
+      }
+      else if (store.form.sistole < 90) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole >= 90 && store.form.sistole <= 110) {
+        store.form.scoresistole = 0
+      }
+      else if (store.form.sistole > 110 && store.form.sistole <= 120) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole > 120 && store.form.sistole <= 130) {
+        store.form.scoresistole = 2
+      }
+      else if (store.form.sistole > 130) {
+        store.form.scoresistole = 3
+      }
+    }
+    else if (umur >= 5 && umur <= 11) {
+      if (store.form.sistole < 80) {
+        store.form.scoresistole = 3
+      }
+      else if (store.form.sistole < 90) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole >= 90 && store.form.pernasistolepasanx <= 120) {
+        store.form.scoresistole = 0
+      }
+      else if (store.form.sistole > 120 && store.form.sistole <= 130) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole > 130 && store.form.sistole <= 140) {
+        store.form.scoresistole = 2
+      }
+      else if (store.form.sistole > 140) {
+        store.form.scoresistole = 3
+      }
+    }
+    else if (umur >= 12 && umur <= 17) {
+      if (store.form.sistole < 90) {
+        store.form.scoresistole = 3
+      }
+      else if (store.form.sistole < 110) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole >= 110 && store.form.sistole <= 120) {
+        store.form.scoresistole = 0
+      }
+      else if (store.form.sistole > 120 && store.form.sistole <= 130) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole > 130 && store.form.sistole <= 150) {
+        store.form.scoresistole = 2
+      }
+      else if (store.form.sistole > 150) {
+        store.form.scoresistole = 3
+      }
+    }
+    else if (umur > 17) {
+      if (store.form.sistole <= 90) {
+        store.form.scoresistole = 3
+      }
+      else if (store.form.sistole >= 91 && store.form.sistole <= 100) {
+        store.form.scoresistole = 2
+      }
+      else if (store.form.sistole >= 101 && store.form.sistole <= 110) {
+        store.form.scoresistole = 1
+      }
+      else if (store.form.sistole >= 111 && store.form.sistole <= 219) {
+        store.form.scoresistole = 0
+      }
+    }
+  }
+}
+
+function scorediastole () {
   // const umurleng = props.pasien?.usia.split(' ')
   // const umur = parseInt(umurleng[0])
+  // const umurbln = parseInt(umurleng[2])
+
+  if (store.form.pasienhamil === 1) {
+    if (store.form.diastole >= 60 && store.form.diastole <= 90) {
+      store.form.scorediastole = 0
+    }
+    else if (store.form.diastole >= 91 && store.form.diastole <= 100) {
+      store.form.scorediastole = 1
+    }
+    else if (store.form.diastole >= 101 && store.form.diastole <= 110) {
+      store.form.scorediastole = 2
+    }
+    else if (store.form.diastole > 110) {
+      store.form.scorediastole = 3
+    }
+  }
+}
+
+function scoresuhu () {
+  const umurleng = props.pasien?.usia.split(' ')
+  const umur = parseInt(umurleng[0])
   // const umurbln = parseInt(umurleng[2])
 
   if (store.form.pasienhamil === 1) {
@@ -845,6 +1026,283 @@ function scoresuhu () {
     else if (store.form.suhu > 37.7) {
       store.form.scoresuhu = 3
     }
+  }
+  else if (umur > 17) {
+    if (store.form.suhu >= 1 && store.form.suhu < 35) {
+      store.form.scoresuhu = 3
+    }
+    else if (store.form.suhu >= 35.1 && store.form.suhu <= 36) {
+      store.form.scoresuhu = 1
+    }
+    else if (store.form.suhu >= 36.1 && store.form.suhu <= 38) {
+      store.form.scoresuhu = 0
+    }
+    else if (store.form.suhu >= 38.1 && store.form.suhu <= 39) {
+      store.form.scoresuhu = 1
+    }
+    else if (store.form.suhu > 39.1) {
+      store.form.scoresuhu = 2
+    }
+  }
+}
+
+function scorenadi () {
+  const umurleng = props.pasien?.usia.split(' ')
+  const umur = parseInt(umurleng[0])
+  const umurbln = parseInt(umurleng[2])
+
+  if (store.form.pasienhamil === 1) {
+    if (store.form.nadi < 50) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi >= 50 && store.form.nadi <= 60) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi >= 61 && store.form.nadi <= 100) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi >= 101 && store.form.nadi <= 110) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 111 && store.form.nadi <= 120) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 120) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur === 0 && umurbln >= 0 && umurbln <= 3) {
+    if (store.form.nadi < 80) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi < 90) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi < 110) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 110 && store.form.nadi <= 150) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi > 150 && store.form.nadi <= 180) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi > 180 && store.form.nadi <= 190) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 190) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur === 0 && umurbln >= 4 && umurbln <= 11) {
+    if (store.form.nadi < 70) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi < 110) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 100 && store.form.nadi <= 150) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi > 150 && store.form.nadi <= 170) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi > 170 && store.form.nadi <= 180) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 180) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur >= 1 && umur <= 4) {
+    if (store.form.nadi < 60) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi < 80) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 80 && store.form.nadi <= 130) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi > 130 && store.form.nadi <= 150) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi > 150 && store.form.nadi <= 170) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 170) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur >= 5 && umur <= 11) {
+    if (store.form.nadi < 50) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi < 70) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 70 && store.form.nadi <= 110) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi > 110 && store.form.nadi <= 130) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi > 130 && store.form.nadi <= 150) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 150) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur >= 12 && umur <= 17) {
+    if (store.form.nadi < 40) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi < 60) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 60 && store.form.nadi <= 100) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi > 100 && store.form.nadi <= 120) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi > 120 && store.form.nadi <= 140) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 140) {
+      store.form.scorenadi = 3
+    }
+  }
+  else if (umur > 17) {
+    if (store.form.nadi <= 40) {
+      store.form.scorenadi = 3
+    }
+    else if (store.form.nadi >= 41 && store.form.nadi <= 50) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi >= 51 && store.form.nadi <= 90) {
+      store.form.scorenadi = 0
+    }
+    else if (store.form.nadi >= 91 && store.form.nadi <= 110) {
+      store.form.scorenadi = 1
+    }
+    else if (store.form.nadi >= 111 && store.form.nadi <= 130) {
+      store.form.scorenadi = 2
+    }
+    else if (store.form.nadi > 131) {
+      store.form.scorenadi = 3
+    }
+  }
+}
+
+function scorekesadaran (val) {
+  const umurleng = props.pasien?.usia.split(' ')
+  const umur = parseInt(umurleng[0])
+  const umurbln = parseInt(umurleng[2])
+
+  if (store.form.pasienhamil === 1) {
+    if (val === 'Alert') {
+      store.form.scorekesadaran = 0
+    }
+    else {
+      store.form.scorekesadaran = 3
+    }
+  }
+  else {
+    if (umur === 0 && umurbln >= 0 && umurbln <= 3) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else if (val === 'Verbal') {
+        store.form.scorekesadaran = 1
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+    else if (umur === 0 && umurbln >= 4 && umurbln <= 11) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else if (val === 'Verbal') {
+        store.form.scorekesadaran = 1
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+    else if (umur >= 1 && umur <= 4) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else if (val === 'Verbal') {
+        store.form.scorekesadaran = 1
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+    else if (umur >= 5 && umur <= 11) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else if (val === 'Verbal') {
+        store.form.scorekesadaran = 1
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+    else if (umur >= 12 && umur <= 17) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else if (val === 'Verbal') {
+        store.form.scorekesadaran = 1
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+    else if (umur > 17) {
+      if (val === 'Alert') {
+        store.form.scoresistole = 0
+      }
+      else {
+        store.form.scorekesadaran = 3
+      }
+    }
+  }
+}
+
+function scorenyeri (val) {
+  if (val === 'Normal') {
+    store.form.scorenyeri = 0
+  }
+  else {
+    store.form.scorenyeri = 3
+  }
+}
+
+function scoreloche (val) {
+  if (val === 'Abnormal') {
+    store.form.scorelochea = 3
+  }
+  else {
+    store.form.scorelochea = 0
+  }
+}
+
+function scoreproteinurin (val) {
+  if (val === 'NA') {
+    store.form.scoreproteinurin = 0
+  }
+  else if (val === '+') {
+    store.form.scoreproteinurin = 2
+  }
+  else {
+    store.form.scoreproteinurin = 3
   }
 }
 
