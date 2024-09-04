@@ -78,7 +78,8 @@ import { notifErrVue } from 'src/modules/utils'
 import { ref } from 'vue'
 const emits = defineEmits(['form'])
 const props = defineProps({
-  depo: { type: String, default: '' }
+  depo: { type: String, default: '' },
+  tipe: { type: String, default: '' }
 })
 const form = {}
 function setForm (key, val) {
@@ -92,7 +93,11 @@ function obatSelected (val) {
     notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
   }
   refObat.value.validate()
-  console.log('obat selected', val)
+  console.log('obat selected', val, props.tipe)
+  if (props.tipe === 'rs') {
+    setForm('aturan', '1 x 1') // set default signa
+  }
+  setForm('jumlah', null) // set default jumlah
   setForm('satuan_kcl', val?.satuankecil ?? '-')
   setForm('kodeobat', val?.kdobat ?? '-')
   // setForm('kandungan', val?.kandungan ?? '-')
@@ -105,6 +110,8 @@ function obatSelected (val) {
   // setForm('uraian50', val?.uraian50 ?? '-')
   setForm('harga_beli', val?.harga_beli ?? 0)
   setForm('namaobat', val?.namaobat ?? 0)
+  setForm('alokasi', val?.alokasi ?? 0)
+  setForm('satuan_k', val?.satuan_k ?? '')
   emits('form', form)
 }
 function obatValid (val) {

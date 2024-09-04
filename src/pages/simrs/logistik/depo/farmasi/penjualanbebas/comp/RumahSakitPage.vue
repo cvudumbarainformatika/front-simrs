@@ -16,9 +16,10 @@
           hide-dropdown-icon
           @filter="filterRsLain"
           @update:model-value="rsSelected"
+          @clear="clearSl"
         >
           <template v-if="rsl" #append>
-            <q-icon name="icon-mat-cancel" @click.stop.prevent="rsl = null" class="cursor-pointer" />
+            <q-icon name="icon-mat-cancel" @click.stop.prevent="rsl = null" class="cursor-pointer" @click="clearSl" />
           </template>
         </q-select>
       </div>
@@ -27,7 +28,7 @@
       <forminput tipe="rs" />
     </div>
     <div class="row q-py-sm">
-      <listbelum />
+      <listbelum tipe="rs" />
     </div>
   </div>
 </template>
@@ -56,6 +57,11 @@ function rsSelected (val) {
   console.log(val)
   store.setForm('kode_identitas', val.kode)
   store.setForm('nama', val.nama)
+}
+function clearSl (val) {
+  console.log('clear', val)
+  store.setForm('kode_identitas', null)
+  store.setForm('nama', null)
 }
 onMounted(() => {
   store.getPihakTiga().then(() => {

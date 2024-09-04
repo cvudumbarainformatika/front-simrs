@@ -5,7 +5,7 @@
         push
         color="deep-orange"
         no-caps
-        label="Simpan"
+        label="Simpan dan Selesai"
         :loading="store.loadingSimpan"
         :disable="store.loadingSimpan"
         @click="simpan"
@@ -22,11 +22,12 @@
             ref="refObat"
             v-model="obat"
             :depo="depo"
+            :tipe="tipe"
             @form="setObat"
           />
         </div>
 
-        <div class="col-auto">
+        <div v-if="tipe!=='rs'" class="col-auto">
           <q-select
             ref="refSigna"
             v-model="signa"
@@ -63,6 +64,9 @@
             @keyup.enter.prevent="tambah"
           />
         </div>
+        <div class="col-auto">
+          {{ store.tempObat?.satuan_k }}
+        </div>
       </div>
     </div>
     <div class="col-6">
@@ -90,6 +94,7 @@
 </template>
 <script setup>
 import { formatDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenjualanBebasFarmasiStore } from 'src/stores/simrs/farmasi/penjualanbebas/penjualanbebas'
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
@@ -117,7 +122,8 @@ function setObat (val) {
   })
   console.log('form', store.form)
 
-  refSigna.value.focus()
+  if (refSigna.value) refSigna.value?.focus()
+  else refJumlah.value?.refInput.focus()
   refObat.value?.$refs?.refObat.blur()
 }
 function setJumlah (evt, key) {
@@ -127,7 +133,17 @@ function setJumlah (evt, key) {
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   store.setTemp(key, nilai)
   if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', ((nilai * ((store.form.margin / 100) * store.tempObat.harga_beli))))
-
+  if (key === 'jumlah' && parseFloat(evt) > parseFloat(store.tempObat?.alokasi)) {
+    store.setTemp(key, store.tempObat?.alokasi)
+    return notifErrVue('maksimal jumlah adalah ' + store.tempObat?.alokasi)
+  }
+  if (props.tipe === 'rs') {
+    store.setTemp('konsumsi', store.tempObat?.jumlah) // set default konsumsi
+  }
+  else {
+    const konsumsi = parseFloat(store.tempObat?.konsumsiPerHari) / parseFloat(store.tempObat?.jumlah)
+    store.setTemp('konsumsi', isNaN(konsumsi) ? 1 : konsumsi) // set default konsumsi
+  }
   console.log('set jumlah', nilai)
 }
 // signa start ----
@@ -169,8 +185,9 @@ function signaCreateValue (val, done) {
   // console.log('signa new val', signa.value)
 }
 function signaSelected (val) {
-  // console.log('signa', val)
+  console.log('signa', val)
   store.setTemp('aturan', val?.signa)
+  store.setTemp('konsumsiPerHari', val?.jumlah)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
   // store.setTemp('jumlahdosis', parseFloat(val?.jumlah))
@@ -205,7 +222,7 @@ function tambah () {
   refJumlah.value?.refInput.blur()
   refObat.value?.$refs?.refObat.focus()
 
-  refSigna.value.resetValidation()
+  refSigna.value?.resetValidation()
   refObat.value?.$refs?.refObat.resetValidation()
   refJumlah.value?.refInput.resetValidation()
   // store.simpan()
@@ -213,6 +230,7 @@ function tambah () {
 
 // eslint-disable-next-line no-unused-vars
 function simpan () {
+  if (!store.form?.kode_identitas) return notifErrVue('silahkan isi terlebih dahulu identitas pembeli')
   const kode = store.form.details.map(m => m.kodeobat)
   store.setForm('kode', kode)
   console.log('simpan')
