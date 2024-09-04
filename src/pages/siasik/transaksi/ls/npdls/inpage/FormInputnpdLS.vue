@@ -1,6 +1,11 @@
 <template>
+  <template>
+    <div id="printMe">
+      <PrintNpdls />
+    </div>
+  </template>
   <q-form class="fit" ref="formNpdLS" @submit="onSubmit" @reset="onReset">
-    <div class="row">
+    <div class="row" id="printMe">
       <div class="q-pa-sm q-gutter-y-md" style="width: 25%">
         <app-input-simrs
           v-model="store.form.nonpdls"
@@ -220,13 +225,73 @@
       </div>
       <FormRincianNPDls />
     </div>
-    <div class="float-left q-pt-md q-pa-sm q-gutter-y-xs">
+    <template v-if="store.reqs.rincianmanual">
+      <div>
+        <q-table
+          :rows="store.form.rincians"
+          :columns="columns"
+          row-key="name"
+          hide-bottom
+        >
+          <template #body="props">
+            <q-tr :props="props">
+              <q-td key="rincianbelanja" :props="props" class="text-left">
+                {{ props.row.rincianbelanja }}
+              </q-td>
+              <q-td key="koderek50" :props="props" class="text-left">
+                {{ props.row.koderek50 }}
+              </q-td>
+              <q-td key="itembelanja" :props="props" class="text-left">
+                {{ props.row.itembelanja }}
+              </q-td>
+              <q-td key="nominalpembayaran" :props="props" class="text-right">
+                {{ formattanpaRp(props.row.nominalpembayaran) }}
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </div>
+      <div class="subtotal">
+        <table class="vertical-center">
+          <tr>
+            <td width="200px" class="text-bold q-pl-md">
+              SUBTOTAL
+            </td>
+            <td width="200px" class="text-bold">
+              :
+            </td>
+            <td width="200px" class="text-right text-bold q-pr-md">
+              {{ formattanpaRp(store.reqs.subtotal) }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </template>
+    <div class="row items-center float-left q-pt-md q-pa-sm q-gutter-y-xs">
       <app-btn
         label="Simpan NPD-LS"
         :disable="store.loading"
         :loading="store.loading"
         @click="onSimpan()"
       />
+      <div class="q-pl-md">
+        <q-btn
+          ref="refPrint"
+          v-print="printObj"
+          unelevated
+          color="dark"
+          round
+          size="sm"
+          icon="icon-mat-print"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print
+          </q-tooltip>
+        </q-btn>
+      </div>
     </div>
   </q-form>
 </template>
@@ -239,6 +304,8 @@ import { formKontrakPekerjaan } from 'src/stores/siasik/transaksi/ls/kontrak/for
 // import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import FormRincianNPDls from './FormRincianNPDls.vue'
+import PrintNpdls from '../print/PrintNpdls.vue'
+import { formattanpaRp } from 'src/modules/formatter'
 
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
@@ -249,6 +316,33 @@ const carisrt = dataBastFarmasi()
 // const data = useLaporanBkuPtkStore()
 const formNpdLS = ref(null)
 
+const tablerinci = [
+  {
+    label: 'Rincian Belanja',
+    name: 'rincianbelanja',
+    align: 'center',
+    field: 'rincianbelanja'
+  },
+  {
+    label: 'Rekening',
+    name: 'koderek50',
+    align: 'center',
+    field: 'koderek50'
+  },
+  {
+    label: 'Item Belanja',
+    name: 'itembelanja',
+    align: 'center',
+    field: 'itembelanja'
+  },
+  {
+    label: 'Jumlah',
+    name: 'nominalpembayaran',
+    align: 'center',
+    field: 'nominalpembayaran'
+  }
+]
+const columns = ref(tablerinci)
 const onSubmit = () => {
   store.simpanNpdls()
     .then(() => {
@@ -278,6 +372,18 @@ onMounted(() => {
 onBeforeUnmount(() => {
   store.resetFORM()
 })
+
+// function hitungSubtotal () {
+//   const arr = store.form.rincians
+//   const obj = arr.length ? arr.map((x) => x.nominalpembayaran) : []
+//   const subtotal = obj.reduce((x, y) => x + y, 0)
+//   // console.log('jumlah', obj)
+//   // const total = nominal.reduce((x, y) => x + y, 0)
+
+//   store.reqs.subtotal.push(subtotal)
+//   return subtotal
+// }
+
 function kodeKeg (val) {
   store.setParams('kodekegiatan', val)
   console.log('kkkk', store.setParams)
@@ -290,11 +396,11 @@ function kodeKeg (val) {
 function onSimpan (val) {
   store.simpanNpdls()
   // store.form.rincians.push(store.rinci = val)
-    .then(() => {
-      store.resetFORM()
-      carisrt.itembelanja = []
-      store.form.rincians = {}
-    })
+  // .then(() => {
+  //   store.resetFORM()
+  //   carisrt.itembelanja = []
+  //   store.form.rincians = {}
+  // })
 }
 
 const serahTerima = (val) => {
@@ -395,8 +501,40 @@ function pilihPihaktiga (val) {
 
   // console.log('penerima', carisrt.reqs.kodepenerima)
 }
+
+const printed = ref(false)
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Nota Permintaan Dana Langsung (NPD-LS) | SIASIK',
+  beforeOpenCallback (vue) {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback (vue) {
+    console.log('opened')
+  },
+  closeCallback (vue) {
+    printed.value = false
+    console.log('closePrint')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
+.subtotal{
+  position: relative;
+  top: 20px;
+  left: 70%;
+  width: 30%;
+  height: 35px;
+  background-color: rgb(245, 200, 0);
+  border-radius: 5px;
+}
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 </style>

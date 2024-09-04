@@ -249,6 +249,7 @@ const tablebast = [
     align: 'center'
   }
 ]
+
 // eslint-disable-next-line no-unused-vars
 const columns = ref(tablebast)
 // const form = ref({
@@ -273,7 +274,8 @@ const columns = ref(tablebast)
 // }
 
 // eslint-disable-next-line no-unused-vars
-function simpanRinci () {
+function simpanRinci (val) {
+  store.reqs.rincianmanual = val
   // SIMPAN RINCIAN PAKAI LOCALSTORAGE JIKA OBJ RINCI KE REPLACE
   // eslint-disable-next-line no-unused-vars
   // const obj = form.value
@@ -290,7 +292,11 @@ function simpanRinci () {
   // console.log('rincian', obj)
   // store.form.rincians.push(obj)
 
-  // console.log('rincian stlh push', store.form.rincians)
+  const jml = store.form.rincians.map((x) => x.nominalpembayaran)
+  const subtotal = jml.reduce((x, y) => x + y, 0)
+
+  store.reqs.subtotal = subtotal
+  console.log('rincian stlh push', store.form.rincians)
 }
 // eslint-disable-next-line no-unused-vars
 function simpanRinciBast (val) {
