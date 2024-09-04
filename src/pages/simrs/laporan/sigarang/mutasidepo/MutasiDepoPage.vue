@@ -368,13 +368,13 @@
             class="text-italic text-right print-hide"
             :class="parseFloat(row.keluar)!== parseFloat(row.trmru)? 'text-negative text-weight-bold f-12':'f-8 '"
           >
-            (trm: {{ parseFloat(row.trmru) }})
+            (trm: {{ formatDouble( parseFloat(row.trmru),2) }})
           </div>
         </div>
       </template>
       <template #cell-sisa="{row}">
         <div class="text-right">
-          {{ parseFloat(row.akhir) }}
+          {{ formatDouble(parseFloat(row.akhir),2) }}
           <div
             class="text-italic text-right print-hide"
             :class="parseFloat(row.akhir)!== parseFloat(row.tAkhir)? 'text-negative text-weight-bold f-14':'f-8 '"
@@ -423,7 +423,7 @@
   </div>
 </template>
 <script setup>
-import { formatRp } from 'src/modules/formatter'
+import { formatDouble, formatRp } from 'src/modules/formatter'
 import { useLaporanSigarangMutasiDepoStore } from 'src/stores/simrs/laporan/sigarang/mutasidepo/mutasi'
 import { date } from 'quasar'
 import { computed } from 'vue'

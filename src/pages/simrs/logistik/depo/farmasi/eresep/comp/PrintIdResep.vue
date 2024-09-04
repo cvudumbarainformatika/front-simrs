@@ -252,37 +252,39 @@ const qrUrl = computed(() => {
 // })
 // eslint-disable-next-line no-unused-vars
 // const cont = document.getElementById('endas')?.innerHTML
+// const originalContents = document.body.innerHTML
 function printPage () {
   // console.log('print ')
-  // setTimeout(function () {
-  //   // const printContents = document.getElementById('printGueeee')?.innerHTML
-  //   // const originalContents = document.body.innerHTML
-
-  //   // document.body.innerHTML = printContents
-
-  // }, 200)
-  window.print()
   setTimeout(function () {
-    afterPrint()
-  }, 500)
+    // const printContents = document.getElementById('printGueeee')?.innerHTML
+
+    // document.body.innerHTML = printContents
+
+    window.print()
+    // setTimeout(function () {
+    //   afterPrint()
+    // }, 500)
+  }, 200)
 }
 
-function afterPrint () {
-  window.onafterprint = (event) => {
-    console.log('After print', event)
-  }
-  // const originalContents = document.body.innerHTML
-
-  // document.body.innerHTML = cont
+window.onafterprint = (event) => {
+  console.log('After print', event)
+  // document.body.innerHTML = originalContents
   emits('close')
-  // const r = confirm('Press a button!')
-  // if (r === true) {
-  // router.push({ path: store.prevUrl ? store.prevUrl : '/history' })
-  // window.close()
-  // } else {
-  //   window.close()
-  // }
 }
+// function afterPrint () {
+// emits('close')
+// const originalContents = document.body.innerHTML
+
+// document.body.innerHTML = cont
+// const r = confirm('Press a button!')
+// if (r === true) {
+// router.push({ path: store.prevUrl ? store.prevUrl : '/history' })
+// window.close()
+// } else {
+//   window.close()
+// }
+// }
 defineExpose({ printPage })
 </script>
 <style lang="scss" scoped>
