@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifErr, notifSuccess } from 'src/modules/utils'
+import { notifErr } from 'src/modules/utils'
+import { usePengunjungIgdStore } from './pengunjung'
 
 export const useTriageIgd = defineStore('triageigd', {
   state: () => ({
@@ -52,12 +53,28 @@ export const useTriageIgd = defineStore('triageigd', {
       this.norm = pasien ? pasien.norm : ''
 
       try {
-        const resp = await api.post('v1/simrs/pelayananigd/simpantriage', this.form)
+        const resp = await api.post('v1/simrs/pelayanan/igd/simpantriage', this.form)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          let isi = resp.data.result
+          isi = this.form
+          console.log('resp', isi)
+          storePasien.injectDataPasien(pasien, isi, 'triage')
+
+          // const storePasien = usePengunjungIgdStore()
+          // let isi = resp.data.result
+          // if (resp.data.result === 1) {
+          //   this.form.rs4 = this.form.keluhanutama
+          //   isi = this.form
+          // }
+          // storePasien.injectDataPasien(pasien, isi, 'anamnesis')
+          // notifSuccess(resp)
+          // this.initReset()
+          // this.loadingForm = false
+        }
         this.loadingForm = false
-        notifSuccess(resp)
       }
       catch (error) {
-        // console.log('anamnesis err', error)
         this.loadingForm = false
         notifErr(error)
       }
