@@ -361,7 +361,7 @@ export const useBuatSepRanapStore = defineStore('buat-sep-ranap', {
       this.dialogListSpri = true
       this.loadingListSpri = true
       const params = {
-        noreg: pasien?.noreg
+        norm: pasien?.norm
       }
       await api.post('v1/simrs/pendaftaran/ranap/get-list-spri', params)
         .then((resp) => {

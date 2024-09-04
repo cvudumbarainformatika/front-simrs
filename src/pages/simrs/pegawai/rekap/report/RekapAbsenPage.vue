@@ -968,10 +968,10 @@ function hitungTelat (x) {
   const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
 
   let created = new Date(x?.created_at)
-  created = date.subtractFromDate(created, { minutes: 0 }) // 15 menit kompensasi sdh di ganti 0 tgl 9 jul 2024 diganti lagi dengan 15 menit bln agustus 2024
+  created = date.subtractFromDate(created, { minutes: 15 }) // 15 menit kompensasi sdh di ganti 0 tgl 9 jul 2024 diganti lagi dengan 15 menit bln agustus 2024
 
-  const jamMasukServer = formatJam(created.setMinutes() + 15)
-  // const jamMasukServer = formatJam(created)
+  // const jamMasukServer = formatJam(created.setMinutes() + 15)
+  const jamMasukServer = formatJam(created)
   const tglMasukServer = dateDbFormat(x.created_at)
 
   const terlambat = new Date(tglMasukServer + ' ' + jamMasukServer) > new Date(tglMasukServer + ' ' + kategoryMasuk)

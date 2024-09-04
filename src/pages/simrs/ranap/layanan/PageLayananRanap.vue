@@ -103,6 +103,18 @@ defineProps({
 })
 
 const menus = ref([
+  // {
+  //   name: 'asessment-awal-page',
+  //   label: 'Asessment Awal',
+  //   icon: 'icon-mat-medical_information',
+  //   comp: shallowRef(defineAsyncComponent(() => import('./asessmentAwal/IndexPage.vue')))
+  // },
+  {
+    name: 'Anamnesse',
+    label: 'Anamnesse',
+    icon: 'icon-mat-medical_information',
+    comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
+  },
   {
     name: 'e-resep-page',
     label: 'EResep',

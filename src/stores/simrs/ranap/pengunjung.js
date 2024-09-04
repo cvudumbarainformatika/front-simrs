@@ -33,17 +33,17 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const params = { params: this.params }
       try {
         const resp = await api.get('v1/simrs/ranap/ruangan/kunjunganpasien', params)
-        console.log('ranap', resp)
+        // console.log('ranap', resp)
         if (resp.status === 200) {
           this.meta = resp.data
           this.pasiens = resp.data.data
           this.loading = false
         }
         this.loading = false
-        // console.log(resp)
+        // // console.log(resp)
       }
       catch (error) {
-        console.log(error)
+        // console.log(error)
         this.loading = false
       }
     },
@@ -62,22 +62,22 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const form = { noreg: pasien?.noreg }
       // try {
       //   const resp = await api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
-      //   console.log('ranap', resp)
+      //   // console.log('ranap', resp)
       //   this.loadingLayanan = false
       //   if (resp.status === 200) {
-      //     // console.log('ranap', this.pasiens)
+      //     // // console.log('ranap', this.pasiens)
       //     this.setPasien(pasien, resp.data)
       //   }
       // }
       // catch (error) {
-      //   console.log('error buka layanan', error)
+      //   // console.log('error buka layanan', error)
       //   this.loadingLayanan = false
       // }
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
           .then(resp => {
-            console.log('ranap', resp)
+            // console.log('ranap', resp)
             this.loadingLayanan = false
             // if (resp.status === 200) {
             this.setPasien(pasien, resp.data)
@@ -87,7 +87,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             resolve(this.pasiens[indexPasien])
           })
           .catch(err => {
-            console.log('error buka layanan', err)
+            // console.log('error buka layanan', err)
             this.loadingLayanan = false
             reject(err)
           })
@@ -97,7 +97,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     setPasien (pasien, data) {
       const findPasien = this.pasiens.filter(x => x?.noreg === data?.noreg)
       // this.pasiens[indexPasien] = data
-      // console.log('wew', this.pasiens[indexPasien])
+      // // console.log('wew', this.pasiens[indexPasien])
       if (findPasien.length) {
         const datax = findPasien[0]
         datax.newapotekrajal = data?.newapotekrajal
@@ -111,7 +111,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/ranap/ruangan/listruanganranap')
           .then(resp => {
-            console.log('ruangan ranap', resp)
+            // console.log('ruangan ranap', resp)
             if (resp.status === 200) {
               this.ruangans = resp.data
               this.ruangans.push('SEMUA')
@@ -119,13 +119,13 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             }
             resolve(resp)
           }).catch(err => {
-            console.log(err)
+            // console.log(err)
             reject(err)
           })
       })
     },
     gantiRuangan () {
-      console.log('gnt ruangan', this.ruangan)
+      // console.log('gnt ruangan', this.ruangan)
       if (this.ruangan === 'SEMUA') {
         this.params.koderuangan = this.ruangans.map(x => x.groups)
         this.getData()
