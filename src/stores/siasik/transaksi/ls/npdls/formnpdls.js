@@ -14,6 +14,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       bidang: '',
       kegiatan: ''
     },
+    display: {
+      sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
+    },
     reqs: {
       q: '',
       kodebidang: null,
@@ -21,7 +24,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       bast: null,
       rekening50: null,
       nip: null,
-      volumels: null
+      volumels: null,
+      rincianmanual: null,
+      subtotal: null
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -57,7 +62,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
 
       keterangan: null,
       biayatransfer: 0,
-      rincians: []
+      rincians: [],
+      rincimanual: []
     },
     rinci:
     {
@@ -109,6 +115,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     anggarans: [],
     rekening50: [],
     itembelanja: [],
+
+    // utuk list tersimpan
+    rincians: [],
     // datafarmasi: [],
     // bastfarmasis: [],
     openDialogFarmasi: false,
