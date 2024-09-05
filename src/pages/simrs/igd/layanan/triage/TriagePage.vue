@@ -10,13 +10,13 @@
           tooltip="History Pasien (Shift + H)"
         />
       </div>
-      <!-- <div class="col-6 full-height">
-        <ListAnamnesis
+      <div class="col-6 full-height">
+        <ListTriage
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
         />
-      </div> -->
+      </div>
     </div>
 
     <!-- dialog -->
@@ -47,7 +47,7 @@
 <script setup>
 // import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 import FromTriage from './comptriage/FromTriage.vue'
-// import ListTriage from './comptriage/ListTriage.vue'
+import ListTriage from './comptriage/ListTriage.vue'
 // eslint-disable-next-line no-unused-vars
 // import HistoryAnamnesis from './comanamnesis/HistoryAnamnesis.vue'
 // import HistoryKanan from './comanamnesis/HistoryKanan.vue'

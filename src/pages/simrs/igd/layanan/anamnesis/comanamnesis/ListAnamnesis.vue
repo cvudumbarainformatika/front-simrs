@@ -158,17 +158,19 @@ const lists = computed(() => {
   return arr?.sort((a, b) => { return b.id - a.id })
 })
 
-function getYT(val) {
+function getYT (val) {
   if (val === 1 || val === '1') {
     return 'Ya'
-  } else if (val === 0 || val === '0') {
+  }
+  else if (val === 0 || val === '0') {
     return 'Tidak'
-  } else {
+  }
+  else {
     return '-'
   }
 }
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -192,15 +194,20 @@ function iconNyeri (anu) {
   let icon = 'icon-my-emoticon-excited-outline'
   if (val < 2) {
     icon = 'icon-my-emoticon-excited-outline'
-  } else if (val >= 2 && val < 4) {
+  }
+  else if (val >= 2 && val < 4) {
     icon = 'icon-my-emoticon-outline'
-  } else if (val >= 4 && val < 6) {
+  }
+  else if (val >= 4 && val < 6) {
     icon = 'icon-my-emoticon-neutral-outline'
-  } else if (val >= 6 && val < 8) {
+  }
+  else if (val >= 6 && val < 8) {
     icon = 'icon-my-emoticon-confused-outline'
-  } else if (val >= 8 && val < 10) {
+  }
+  else if (val >= 8 && val < 10) {
     icon = 'icon-my-emoticon-angry-outline'
-  } else if (val === 10) {
+  }
+  else if (val === 10) {
     icon = 'icon-my-emoticon-cry-outline'
   }
 

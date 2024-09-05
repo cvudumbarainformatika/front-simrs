@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifErr } from 'src/modules/utils'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 import { usePengunjungIgdStore } from './pengunjung'
 
 export const useTriageIgd = defineStore('triageigd', {
@@ -10,6 +10,8 @@ export const useTriageIgd = defineStore('triageigd', {
     loadingHistory: false,
     norm: '',
     noreg: '',
+    doak: ['Tidak Ada Nafas', 'Tidak Ada Nadi', 'ECG Flat', 'Pupil Medriasis', 'Reflek Cahaya Pupil'],
+    doax: [],
     hiddenall: 'HIDUP',
     form: {
       pasienhamil: 0,
@@ -24,7 +26,6 @@ export const useTriageIgd = defineStore('triageigd', {
       eye: '',
       verbal: '',
       motorik: '',
-      doa: [],
       scorenadi: 0,
       scorepernapasanx: 0,
       scorespo2: 0,
@@ -60,6 +61,9 @@ export const useTriageIgd = defineStore('triageigd', {
           isi = this.form
           console.log('resp', isi)
           storePasien.injectDataPasien(pasien, isi, 'triage')
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingForm = false
 
           // const storePasien = usePengunjungIgdStore()
           // let isi = resp.data.result
@@ -78,6 +82,18 @@ export const useTriageIgd = defineStore('triageigd', {
         this.loadingForm = false
         notifErr(error)
       }
+    },
+    initReset () {
+      this.form = null
+      return new Promise((resolve, reject) => {
+        this.form = {
+          doa: ''
+
+        }
+        this.selection = []
+
+        resolve()
+      })
     },
     setForm (key, val) {
       this.form[key] = val

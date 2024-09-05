@@ -199,7 +199,8 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]
-        // console.log('inject isi pasien', findPasien[0])
+        console.log('val', val.id)
+        console.log('data', data)
 
         const target = data[kode]?.find(x => x.id === val.id)
         console.log('itarget', target)
