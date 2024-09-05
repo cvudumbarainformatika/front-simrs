@@ -9,7 +9,8 @@
           inline-label
           align="left"
           class=" bg-white shadow-2 text-grey-8"
-          active-color="accent"
+          active-color="orange-3"
+          active-bg-color="primary"
         >
           <q-tab v-for="tb in tabs" :key="tb.name" :ripple="false" :name="tb?.name" :icon="tb?.icon" :label="tb?.label" ico />
         </q-tabs>

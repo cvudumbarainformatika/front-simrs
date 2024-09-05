@@ -2,13 +2,13 @@
   <div class="row fit">
     <div class="col fit">
       <div class="full-height row q-col-gutter-x-xs">
-        <div class=" full-height" :class="full ? 'col-12' : 'col-8'">
+        <div class=" full-height" :class="full ? 'col-12' : 'col-7'">
           <q-card flat bordered class="column fit" style="overflow: hidden;">
             <div class="col-auto">
               <BarComp title="Form Pemeriksaan Umum" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
             </div>
             <q-card-section class="col full-height scroll">
-              <q-form ref="myForm" class="q-pa-md" @submit="onSubmit">
+              <q-form ref="myForm" class="" @submit="onSubmit">
                 <FormPemeriksaanUmum :pasien="pasien" />
                 <q-separator class="q-my-md" />
                 <q-btn label="Simpan" type="submit" color="primary" />
@@ -16,7 +16,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="full-height" :class="full ? 'col-0' : 'col-4'">
+        <div class="full-height" :class="full ? 'col-0' : 'col-5'">
           <q-card flat bordered class="fit">
             ooi
           </q-card>
