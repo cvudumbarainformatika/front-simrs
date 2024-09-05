@@ -17,8 +17,13 @@
           </q-card>
         </div>
         <div class="full-height" :class="full ? 'col-0' : 'col-5'">
-          <q-card flat bordered class="fit">
-            ooi
+          <q-card flat bordered class="fit column bg-transparent">
+            <div class="col-auto">
+              <BarComp title="List Pemeriksaan Umum" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+            </div>
+            <div class="col full-height scroll">
+              {{ pasien }}
+            </div>
           </q-card>
         </div>
       </div>

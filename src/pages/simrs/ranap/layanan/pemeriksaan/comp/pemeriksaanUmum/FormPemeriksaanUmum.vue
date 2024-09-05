@@ -16,7 +16,6 @@
           class="col-4"
           input-class="ellipsis"
           fill-input
-          hide-dropdown-icon
           :rules="[val => !!val || 'Harap diisi']"
           hide-bottom-space
         />
