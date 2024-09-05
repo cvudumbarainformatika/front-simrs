@@ -14,6 +14,7 @@
           option-value="kode"
           :options="optionRs"
           hide-dropdown-icon
+          hide-selected
           @filter="filterRsLain"
           @update:model-value="rsSelected"
           @clear="clearSl"
@@ -54,7 +55,7 @@ function filterRsLain (val, update) {
   }
 }
 function rsSelected (val) {
-  console.log(val)
+  console.log('selected', val, rsl.value)
   store.setForm('kode_identitas', val.kode)
   store.setForm('nama', val.nama)
 }
@@ -62,6 +63,7 @@ function clearSl (val) {
   console.log('clear', val)
   store.setForm('kode_identitas', null)
   store.setForm('nama', null)
+  rsl.value = null
 }
 onMounted(() => {
   store.getPihakTiga().then(() => {

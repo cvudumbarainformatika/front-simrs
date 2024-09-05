@@ -8,11 +8,14 @@
         <div class="col-1">
           No
         </div>
-        <div :class="tipe==='rs'?'col-6':'col-5'">
+        <div :class="tipe==='rs'?'col-5':'col-4'">
           Obat
         </div>
         <div v-if="tipe!=='rs'" class="col-1">
           Aturan
+        </div>
+        <div class="col-1 text-right">
+          Alokasi
         </div>
         <div class="col-1 text-right">
           Jumlah
@@ -32,15 +35,18 @@
         </div>
       </div>
       <div v-for="(det, i) in store.form?.details" :key="i">
-        <div class="row no-wrap q-col-gutter-xs">
+        <div :class="parseFloat(det?.jumlah)>parseFloat(det?.alokasi) ?'row no-wrap q-col-gutter-xs bg-red-2':(i%2===1?'row no-wrap q-col-gutter-xs bg-grey-3':'row no-wrap q-col-gutter-xs')">
           <div class="col-1">
             {{ i+1 }}
           </div>
-          <div :class="tipe==='rs'?'col-6':'col-5'">
+          <div :class="tipe==='rs'?'col-5':'col-4'">
             {{ det?.namaobat }}
           </div>
           <div v-if="tipe!=='rs'" class="col-1">
             {{ det?.aturan }}
+          </div>
+          <div class="col-1 text-right">
+            {{ det?.alokasi }}
           </div>
           <div class="col-1 text-right">
             {{ det?.jumlah }}
@@ -49,10 +55,10 @@
             {{ det?.satuan_k }}
           </div>
           <div class="col-1 text-right">
-            {{ formatDouble(det?.harga_jual) }}
+            {{ formatDouble(det?.harga_jual,2) }}
           </div>
           <div class="col-1 text-right">
-            {{ formatDouble(det?.jumlah * det?.harga_jual) }}
+            {{ formatDouble((det?.jumlah * det?.harga_jual),2) }}
           </div>
           <div class="col-1 text-center">
             <q-btn

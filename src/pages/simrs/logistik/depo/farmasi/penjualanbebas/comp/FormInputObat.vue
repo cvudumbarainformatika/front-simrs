@@ -132,7 +132,7 @@ function setJumlah (evt, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   store.setTemp(key, nilai)
-  if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', ((nilai * ((store.form.margin / 100) * store.tempObat.harga_beli))))
+  if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', (((store.tempObat.harga_beli + (store.form.margin * store.tempObat.harga_beli)))))
   if (key === 'jumlah' && parseFloat(evt) > parseFloat(store.tempObat?.alokasi)) {
     store.setTemp(key, store.tempObat?.alokasi)
     return notifErrVue('maksimal jumlah adalah ' + store.tempObat?.alokasi)
@@ -237,7 +237,7 @@ function simpan () {
   store.simpan()
 }
 onMounted(() => {
-  if (props.tipe === 'rs') store.setForm('margin', 20)
+  if (props.tipe === 'rs') store.setForm('margin', (20 / 100))
   else store.setForm('margin', 10)
   console.log('props', props.tipe)
 })

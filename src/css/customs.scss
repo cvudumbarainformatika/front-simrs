@@ -14,7 +14,14 @@
   padding: 3px 10px 0 !important;
 }
 .q-field__message-col>div {
+
+  // display: none !important;
   font-size:10px !important;
+}
+.q-field__messages .col {
+
+  display: none !important;
+  // font-size:10px !important;
 }
 .menu-button{
   margin-left:-15px ;
