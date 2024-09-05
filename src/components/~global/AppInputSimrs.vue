@@ -14,8 +14,7 @@
     :rules="[requiredRule, minRule, maxRule, emailRule, isNumberRule]"
     :lazy-rules="lazyRules"
     :hide-bottom-space="true"
-    :hint="hint"
-    :hide-hint="!hint"
+
     :error="errorFromServer?.length > 0"
     :error-message="errorFromServer?.length ? errorFromServer[0]: null"
     @update:model-value="emits('update:modelValue', $event)"
@@ -100,7 +99,7 @@ const requiredRule = (val) => {
   if (props.valid === null) {
     return true
   }
-  return (val && val.length > 0) || 'Harap diisi'
+  return (!!val || props.valid?.required || val === 0) || 'Harap diisi'
 }
 
 const minRule = (val) => {

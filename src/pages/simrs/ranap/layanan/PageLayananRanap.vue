@@ -110,10 +110,16 @@ const menus = ref([
   //   comp: shallowRef(defineAsyncComponent(() => import('./asessmentAwal/IndexPage.vue')))
   // },
   {
-    name: 'Anamnesse',
-    label: 'Anamnesse',
+    name: 'AnamnesisPage',
+    label: 'Anamnesse $ Riwayat',
     icon: 'icon-mat-medical_information',
     comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
+  },
+  {
+    name: 'PemeriksaanPage',
+    label: 'Pemeriksaan',
+    icon: 'icon-my-stethoscope',
+    comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
   },
   {
     name: 'e-resep-page',
