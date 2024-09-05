@@ -238,7 +238,7 @@ function simpan () {
 }
 onMounted(() => {
   if (props.tipe === 'rs') store.setForm('margin', (20 / 100))
-  else store.setForm('margin', 10)
+  else store.setForm('margin', 10 / 100)
   console.log('props', props.tipe)
 })
 // signa end ----

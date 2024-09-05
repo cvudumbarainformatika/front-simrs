@@ -6,6 +6,7 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
   state: () => ({
     loadingSimpan: false,
     loadingPihakTiga: false,
+    loadingKaryawan: false,
     params: {
       q: ''
     },
@@ -14,6 +15,7 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
     },
     tempObat: {},
     pihakTigas: [],
+    karyawans: [],
     signas: [],
     fromSigna: {}
   }),
@@ -45,6 +47,24 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
             resolve(resp)
           })
           .catch(() => { this.loadingPihakTiga = false })
+      })
+    },
+    getKaryawan (val) {
+      this.loadingKaryawan = true
+      const param = {
+        params: {
+          q: val
+        }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/penjualanbebas/karyawan', param)
+          .then(resp => {
+            this.loadingKaryawan = false
+            console.log('pihak3', resp?.data)
+            this.karyawans = resp?.data
+            resolve(resp)
+          })
+          .catch(() => { this.loadingKaryawan = false })
       })
     },
     async getSigna (val, update, abort) {
