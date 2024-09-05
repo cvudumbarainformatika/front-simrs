@@ -376,6 +376,7 @@
                   ref="refbb"
                   v-model="store.form.bb"
                   label="BB/Kg"
+                  type="number"
                   outlined
                   standout="bg-yellow-3"
                   dense
@@ -387,6 +388,7 @@
                   ref="reftinggibadan"
                   v-model="store.form.tinggibadan"
                   label="Tinggi Badan/Cm"
+                  type="number"
                   outlined
                   standout="bg-yellow-3"
                   dense
