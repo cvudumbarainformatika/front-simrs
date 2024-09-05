@@ -49,10 +49,10 @@
             {{ det?.satuan_k }}
           </div>
           <div class="col-1 text-right">
-            {{ formatDouble(det?.harga_jual) }}
+            {{ formatDouble(det?.harga_jual,2) }}
           </div>
           <div class="col-1 text-right">
-            {{ formatDouble(det?.jumlah * det?.harga_jual) }}
+            {{ formatDouble((det?.jumlah * det?.harga_jual),2) }}
           </div>
           <div class="col-1 text-center">
             <q-btn

@@ -27,6 +27,9 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
     setTemp (key, val) {
       this.tempObat[key] = val
     },
+    resetForm () {
+      this.setForm('details', [])
+    },
     getPihakTiga (val) {
       this.loadingPihakTiga = true
       const param = {
@@ -81,6 +84,7 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
             this.loadingSimpan = false
             console.log('simpan bebas', resp?.data)
             notifSuccess(resp)
+            this.resetForm()
             resolve(resp)
           })
           .catch(() => { this.loadingSimpan = false })
