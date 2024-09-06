@@ -15,7 +15,26 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       diastole: 0,
       pernapasan: 0,
       tkKesadaran: 0,
-      tkKesadaranKet: 'Sadar Baik/Alert'
+      tkKesadaranKet: 'Sadar Baik/Alert',
+      sosial: null,
+      spiritual: null,
+      // neurologis: null,
+      // muakuloskeletal: null,
+      statusPsikologis: 'Tidak ada kelainan',
+      ansuransi: 'Ada',
+      edukasi: [
+        { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
+        { label: 'Apakah membutuhkan edukasi?', value: null }
+      ],
+
+      // kultural
+      penyebabSakit: null,
+      komunikasi: 'Normal',
+      makananPokok: 'Nasi',
+      makananPokokLain: null,
+      pantanganMkanan: 'Tidak'
+
+      // pemeriksaan fisik
     },
 
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
@@ -26,7 +45,20 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       { value: 3, label: 'Pasien tidak sadar / Unresponsive' }, // 422768004
       { value: 4, label: 'Gelisah atau bingung' }, // 130987000
       { value: 5, label: 'Acute Confusional States' } // 2776000
-    ]
+    ],
+    statusPsikologis: [
+      { value: 'Tidak ada kelainan', label: 'Tidak ada kelainan' },
+      { value: 'Cemas', label: 'Cemas' },
+      { value: 'Takut', label: 'Takut' },
+      { value: 'Marah', label: 'Marah' },
+      { value: 'Sedih', label: 'Sedih' },
+      { value: 'Lain-lain', label: 'Lain-lain' }
+    ],
+    penyebabs: ['Hukuman', 'Ujian', 'Takdir', 'Buatan Orang Lain', 'Keturunan'],
+    komunikasi: ['Normal', 'Introvert', 'Extrovert'],
+    makanans: ['Nasi', 'Selain Nasi'],
+    yaTidaks: ['Ya', 'Tidak'],
+    adaTidaks: ['Ada', 'Tidak Ada']
 
   }),
   getters: {
