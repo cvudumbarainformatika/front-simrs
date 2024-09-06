@@ -93,21 +93,33 @@
                 <q-item-label>
                   <span class="text-weight-bold"><u>Kondisi Pasien Tiba</u></span>
                 </q-item-label>
-                <div>
-                  <q-item-label>
-                    <span class="">Jalan Nafas </span> : <span class="text-weight-bold">{{ item?.jalannafas ?? '-' }}</span>
-                  </q-item-label>
+                <div class="row">
+                  <div class="col-5">
+                    <q-item-label>
+                      <span>Jalan Nafas </span> : <span class="text-weight-bold">{{ item?.jalannafas ?? '-' }}</span>
+                    </q-item-label>
+                  </div>
+                  <div class="col-5">
+                    <q-item-label>
+                      <span>Pernapasan </span> : <span class="text-weight-bold">{{ item?.pernapasan ?? '-' }}</span>
+                    </q-item-label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5">
+                    <q-item-label>
+                      <span>Sirkulasi </span> : <span class="text-weight-bold">{{ item?.sirkulasi ?? '-' }}</span>
+                    </q-item-label>
+                  </div>
+                  <div>
+                    <div class="col-5">
+                      <q-item-label>
+                        <span>Disability</span> : <span class="text-weight-bold">{{ item?.disability ?? '-' }}</span>
+                      </q-item-label>
+                    </div>
+                  </div>
                 </div>
 
-                <q-item-label>
-                  <span class="">Pernapasan </span> : <span class="text-weight-bold">{{ item?.pernapasan ?? '-' }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Sirkulasi </span> : <span class="text-weight-bold">{{ item?.sirkulasi ?? '-' }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Disability</span> : <span class="text-weight-bold">{{ item?.disability ?? '-' }}</span>
-                </q-item-label>
                 <q-separator class="q-my-md" />
                 <q-item-label>
                   <span class="text-weight-bold"><u>Secondary Survei</u></span>
