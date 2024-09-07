@@ -41,7 +41,7 @@ const register = useRegistrasiPasienUmumStore()
 
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
-function clearFormRegistrasi() {
+function clearFormRegistrasi () {
   register.clearForm()
 }
 
@@ -70,7 +70,7 @@ const style = useStyledStore()
 //   // console.log('form registrasi dua', register.form)
 // }
 const router = useRouter()
-function simpanData(val) {
+function simpanData (val) {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   console.log('pasien', dataPasien,
