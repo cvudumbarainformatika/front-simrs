@@ -3,6 +3,7 @@
     <DataPasien
       ref="refDataPasien"
       :full="style.componentfull"
+      pelayanan="homecare"
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />

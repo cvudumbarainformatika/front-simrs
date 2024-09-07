@@ -186,7 +186,7 @@ export const useRegistrasiPasienHomeCareStore = defineStore('registrasi_pasien_h
     simpanRegistrasi () {
       return new Promise(resolve => {
         this.loading = true
-        api.post('v1/simrs/pendaftaran/homecare/simpandaftar', this.form)
+        api.post('v1/simrs/pendaftaran/homecare/simpan-daftar', this.form)
           .then(resp => {
             console.log('simpan pendaftaran', resp)
             this.loading = false

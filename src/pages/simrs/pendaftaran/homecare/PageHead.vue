@@ -51,7 +51,7 @@
           glossy
           size="md"
           color="primary"
-          label="Pasien Baru"
+          label="From Pendaftaran"
           @click="goTo('/pendaftaran/homecare/form')"
         />
       </q-btn-group>
