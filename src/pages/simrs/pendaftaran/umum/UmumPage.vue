@@ -110,22 +110,26 @@ const page = useRoute()
 const title = computed(() => {
   if (page.path === '/pendaftaran/umum/form') {
     return 'RAJAL UMUM'
-  } else if (page.path === '/pendaftaran/umum/kunjungan') {
+  }
+  else if (page.path === '/pendaftaran/umum/kunjungan') {
     return 'LIST KUNJUNGAN'
   // } else if (page.path === '/pendaftaran/umum/listmjkn') {
   //   return 'LIST MOBILE JKN'
-  } else {
+  }
+  else {
     return 'MASTER PASIEN'
   }
 })
 const subtitle = computed(() => {
   if (page.path === '/pendaftaran/umum/form') {
     return 'Pendaftaran Pasien Baru Tanpa Ansuransi / Umum'
-  } else if (page.path === '/pendaftaran/umum/kunjungan') {
+  }
+  else if (page.path === '/pendaftaran/umum/kunjungan') {
     return 'List Kunjungan Pasien Tanpa Ansuransi / Umum'
   // } else if (page.path === '/pendaftaran/umum/listmjkn') {
   //   return 'List Kunjungan dari m-JKN'
-  } else {
+  }
+  else {
     return 'Daftar Pasien'
   }
 })

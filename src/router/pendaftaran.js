@@ -106,6 +106,34 @@ const pendaftaran = {
         }
       ]
     },
+    // home care
+    {
+      path: '/pendaftaran/homecare',
+      component: () => import('pages/simrs/pendaftaran/homecare/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/pendaftaran/homecare/form' },
+        {
+          path: '/pendaftaran/homecare/form',
+          name: 'pendaftaran.homecare.form',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/homecare/form/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/homecare/kunjungan',
+          name: 'pendaftaran.homecare.kunjungan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/homecare/kunjungan/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/homecare/pasien',
+          name: 'pendaftaran.homecare.pasien',
+          component: () =>
+            import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
+        }
+      ]
+    },
     {
       path: '/pendaftaran/igd',
       component: () => import('pages/simrs/pendaftaran/igd/IndexPage.vue'),
