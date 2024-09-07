@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 
-export const useListKunjunganUmumStore = defineStore('list_kunjungan_umum', {
+export const useListKunjunganHomeCareStore = defineStore('list_kunjungan_home_care', {
   state: () => ({
     items: [],
     meta: null,
