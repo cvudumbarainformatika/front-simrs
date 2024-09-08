@@ -12,18 +12,27 @@
           active-color="orange-3"
           active-bg-color="primary"
         >
-          <q-tab v-for="tb in tabs" :key="tb.name" :ripple="false" :name="tb?.name" :icon="tb?.icon" :label="tb?.label" ico />
+          <q-tab v-for="tb in tabs" :key="tb.name" :ripple="true" :name="tb?.name">
+            <template #default>
+              <div class="row q-gutter-x-sm items-center q-px-sm">
+                <q-icon :name="tb?.icon" size="20px" />
+                <div>{{ tb?.label }}</div>
+              </div>
+            </template>
+          </q-tab>
         </q-tabs>
       </div>
       <div class="col full-height scroll">
         <q-tab-panels v-model="tab" animated class="bg-transparent q-pa-none fit">
+          <!-- PANEL -->
           <q-tab-panel name="umum" class="q-py-xs q-px-none">
             <PemeriksaanUmumPage :pasien="props?.pasien" />
           </q-tab-panel>
 
           <q-tab-panel name="fisik" class="q-py-xs q-px-none">
-            {{ props?.pasien }}
+            <PemeriksaaFisikPage :pasien="props?.pasien" />
           </q-tab-panel>
+          <!-- END PANEL -->
         </q-tab-panels>
       </div>
       <!-- <div class="absolute-bottom bg-dark text-white">
@@ -44,6 +53,7 @@ const props = defineProps({
 })
 
 const PemeriksaanUmumPage = defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
+const PemeriksaaFisikPage = defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
 
 const tab = ref('umum')
 

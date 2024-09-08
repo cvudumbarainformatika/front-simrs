@@ -173,7 +173,7 @@ const resizeCanvas = () => {
   // func()
 }
 
-function init() {
+function init () {
   if (!canvasRef.value) return
   cvn.value = markRaw(new fabric.Canvas(canvasRef.value, {
     // isDrawingMode: true,
@@ -227,8 +227,8 @@ function init() {
   const cloneImg = document.createElement('img')
   cloneImg.src = cloneIcon
 
-  function renderIcon(icon) {
-    return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
+  function renderIcon (icon) {
+    return function renderIcon (ctx, left, top, styleOverride, fabricObject) {
       const size = this.cornerSize
       ctx.save()
       ctx.translate(left, top)
@@ -261,7 +261,7 @@ function init() {
     cornerSize: 16
   }))
 
-  function deleteObject() {
+  function deleteObject () {
     console.log('delete Object', objectSelected.value)
     const x = objectSelected.value?.left
     const y = objectSelected.value?.top
@@ -270,7 +270,7 @@ function init() {
     })
   }
 
-  function cloneObject(eventData, transform) {
+  function cloneObject (eventData, transform) {
     const target = transform.target
     const obj = arr.value[target.ids]
     console.log('clone', target)
@@ -308,7 +308,7 @@ function init() {
   drawall()
 }
 
-function onCanvas() {
+function onCanvas () {
   const canvas = cvn.value
 
   canvas.on('mouse:down', (obj) => {
@@ -331,7 +331,8 @@ function onCanvas() {
 
       // addBtns(canvas, object)
       // canvas.renderAll()
-    } else {
+    }
+    else {
       // JIKA MENU MUNCUL
       canvas.discardActiveObject()
       objectSelected.value = null
@@ -449,7 +450,7 @@ function onCanvas() {
   // })
 }
 
-function setBtns(canvas, obj) {
+function setBtns (canvas, obj) {
   const object = canvas.item(obj?.target?.ids)
   objectSelected.value = object
   // console.log('mousedown select', obj)
@@ -474,7 +475,7 @@ function setBtns(canvas, obj) {
   canvas.renderAll()
 }
 
-function deselectObject() {
+function deselectObject () {
   const canvas = cvn.value
   canvas.discardActiveObject()
   canvas.renderAll()
@@ -500,7 +501,8 @@ const onChange = (obj) => {
     // console.log('drag', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
-  } else if (action === 'scale') {
+  }
+  else if (action === 'scale') {
     // scaling
     // console.log('scale', obj)
     // console.log('onChange-arr', store.shapes[ids])
@@ -509,17 +511,20 @@ const onChange = (obj) => {
     store.setShapeObject(ids, 'panjang', parseInt(object?.width * object?.scaleX) / 2)
     store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY) / 2)
     // console.log('onChange-arr', store.shapes[ids])
-  } else if (action === 'scaleX') {
+  }
+  else if (action === 'scaleX') {
     // scaling
     // console.log('scaleX', obj)
     store.setShapeObject(ids, 'width', object?.width * object?.scaleX)
     store.setShapeObject(ids, 'panjang', parseInt(object?.width * object?.scaleX) / 2)
-  } else if (action === 'scaleY') {
+  }
+  else if (action === 'scaleY') {
     // scaling
     // console.log('scaleY', obj)
     store.setShapeObject(ids, 'height', object?.height * object?.scaleY)
     store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY))
-  } else if (action === 'rotate') {
+  }
+  else if (action === 'rotate') {
     // console.log('rotate', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
@@ -527,17 +532,17 @@ const onChange = (obj) => {
   }
 }
 
-function onMenuShow() {
+function onMenuShow () {
   writingMode.value = false
 }
 
-function cancelShape() {
+function cancelShape () {
   store.resetDialogForm(store.templateActive, store.dialogForm.penanda)
   refMenu.value?.refMenu?.hide()
   drawall()
 }
 
-function saveShapes() {
+function saveShapes () {
   const obj = {
     penanda: store.dialogForm.penanda,
     x: store.dialogForm.x,
@@ -567,7 +572,7 @@ function saveShapes() {
   })
 }
 
-function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
+function draw (penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
   const canvas = cvn.value
   if (penanda === 'circle') {
     const circle = markRaw(new fabric.Circle({
@@ -583,7 +588,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
       angle
     }))
     canvas.add(circle)
-  } else if (penanda === 'kotak') {
+  }
+  else if (penanda === 'kotak') {
     const rect = markRaw(new fabric.Rect({
       ids,
       left: x,
@@ -603,7 +609,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(rect)
-  } else if (penanda === 'drag-segi-empat') {
+  }
+  else if (penanda === 'drag-segi-empat') {
     const rect = markRaw(new fabric.Rect({
       ids,
       left: x,
@@ -621,7 +628,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(rect)
-  } else if (penanda === 'Segitiga') {
+  }
+  else if (penanda === 'Segitiga') {
     const triangle = markRaw(new fabric.Triangle({
       ids,
       left: x,
@@ -637,7 +645,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(triangle)
-  } else if (penanda === 'Polyline') {
+  }
+  else if (penanda === 'Polyline') {
     const poly = markRaw(new fabric.Polygon(
       [
         { x: p, y: tinggi / 3 },
@@ -663,7 +672,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
         strokeLineJoin: 'bevil'
       }))
     canvas.add(poly)
-  } else if (penanda === 'Radix dention') {
+  }
+  else if (penanda === 'Radix dention') {
     const akar = markRaw(new fabric.Text('√', {
       left: x, // Take the block's position
       top: y,
@@ -677,7 +687,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(akar)
-  } else if (penanda === 'Non Vital') {
+  }
+  else if (penanda === 'Non Vital') {
     const integral = markRaw(new fabric.Text('∫', {
       left: x, // Take the block's position
       top: y,
@@ -689,7 +700,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(integral)
-  } else if (penanda === 'Partial Denture, etc') {
+  }
+  else if (penanda === 'Partial Denture, etc') {
     const PD = markRaw(new fabric.Text('PD', {
       left: x, // Take the block's position
       top: y,
@@ -701,7 +713,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(PD)
-  } else if (penanda === 'Unerupted teeth') {
+  }
+  else if (penanda === 'Unerupted teeth') {
     const UE = markRaw(new fabric.Text('UE', {
       left: x, // Take the block's position
       top: y,
@@ -713,7 +726,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(UE)
-  } else if (penanda === 'Partial Erupted teeth') {
+  }
+  else if (penanda === 'Partial Erupted teeth') {
     const PE = markRaw(new fabric.Text('PE', {
       left: x, // Take the block's position
       top: y,
@@ -725,7 +739,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(PE)
-  } else if (penanda === 'Anomali') {
+  }
+  else if (penanda === 'Anomali') {
     const A = markRaw(new fabric.Text('A', {
       left: x, // Take the block's position
       top: y,
@@ -737,7 +752,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(A)
-  } else if (penanda === 'Gigi Hilang / tidak ada') {
+  }
+  else if (penanda === 'Gigi Hilang / tidak ada') {
     const X = markRaw(new fabric.Text('✖', {
       left: x, // Take the block's position
       top: y,
@@ -749,7 +765,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(X)
-  } else if (penanda === 'Carries/temporary filling') {
+  }
+  else if (penanda === 'Carries/temporary filling') {
     const X = markRaw(new fabric.Text('〇', {
       left: x, // Take the block's position
       top: y,
@@ -761,7 +778,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(X)
-  } else if (penanda === 'Tumpatan lain / inlay') {
+  }
+  else if (penanda === 'Tumpatan lain / inlay') {
     const X = markRaw(new fabric.Text('⊠', {
       left: x, // Take the block's position
       top: y,
@@ -773,7 +791,8 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     }))
 
     canvas.add(X)
-  } else if (penanda === 'Amalgam Filling') {
+  }
+  else if (penanda === 'Amalgam Filling') {
     const X = markRaw(new fabric.Text('10', {
       left: x, // Take the block's position
       top: y,
@@ -788,7 +807,7 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
   }
 }
 
-function drawall() {
+function drawall () {
   resetCanvas()
   objectSelected.value = null
   // if (writingMode.value) {
@@ -829,12 +848,12 @@ const scaleCoordinates = (width, height, x, y, scale) => {
   return { x: scaledX + centerX, y: scaledY + centerY }
 }
 
-function resetCanvas() {
+function resetCanvas () {
   const canvas = cvn.value
   canvas?.remove(...canvas?.getObjects())
 }
 
-function resetShapes() {
+function resetShapes () {
   store.resetShapes()
   setTimeout(() => {
     drawall()
@@ -895,7 +914,7 @@ const saveImage = () => {
 //   canvas.renderAll()
 // }
 
-function lihatTab(val) {
+function lihatTab (val) {
   const canvas = cvn.value
   console.log('tab', canvas)
   canvas.discardActiveObject()
@@ -907,7 +926,7 @@ function lihatTab(val) {
   canvas.remove(...canvas.getObjects())
   setTimeout(() => onChangeImg(), 500)
 }
-function tabDiNullkan() {
+function tabDiNullkan () {
   const canvas = cvn.value
   console.log('baruuuuuuuuuuuuuuuuu')
   if (canvas) {
@@ -928,11 +947,11 @@ function tabDiNullkan() {
     drawall()
   }, 500)
 }
-function tabOpenned() {
+function tabOpenned () {
   openTab.value = !openTab.value
 }
 
-function hapusGambar() {
+function hapusGambar () {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -950,7 +969,7 @@ function hapusGambar() {
   })
 }
 
-function onChangeImg() {
+function onChangeImg () {
   // resizeCanvas()
   const canvas = cvn.value
   console.log('oooi')
