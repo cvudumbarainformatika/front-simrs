@@ -104,7 +104,7 @@ export const useTriageIgd = defineStore('triageigd', {
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           storePasien.hapusDataTriage(pasien, id)
-          notifSuccess('resp')
+          notifSuccess(resp)
         }
       }
       catch (error) {
