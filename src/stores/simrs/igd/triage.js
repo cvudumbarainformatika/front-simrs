@@ -54,7 +54,7 @@ export const useTriageIgd = defineStore('triageigd', {
       }
     },
     async saveData (pasien) {
-      console.log('noreg', pasien.noreg)
+      // console.log('noreg', pasien.noreg)
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
@@ -65,7 +65,7 @@ export const useTriageIgd = defineStore('triageigd', {
           const storePasien = usePengunjungIgdStore()
           const isi = resp.data.result
           // isi = this.form
-          console.log('isisis', isi)
+
           storePasien.injectDataPasien(pasien, isi, 'triage')
           notifSuccess(resp)
           this.initReset()
