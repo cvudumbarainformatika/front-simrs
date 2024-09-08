@@ -53,42 +53,82 @@
               class="list-move"
             >
               <q-item-section>
-                <q-item-label
-                  class="f-12"
-                >
-                  <span class="">DOA </span> : <span class="text-weight-bold">{{ item?.doa ?? '-' }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Pasien Hamil </span>: <span class="text-weight-bold">{{ pasienhamil(item?.pasienhamil) }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Hari Pertama Haid Terakhir : <span class="text-weight-bold">{{ item?.haid ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Gravida : <span class="text-weight-bold">{{ item?.gravida ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Partus : <span class="text-weight-bold">{{ item?.partus ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Abortus : <span class="text-weight-bold">{{ item?.abortus ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Nyeri : <span class="text-weight-bold">{{ item?.nyeri ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Lochea : <span class="text-weight-bold">{{ item?.lochea ?? '-' }}</span>
-                  </span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Protein Urin : <span class="text-weight-bold">{{ item?.proteinurin ?? '-' }}</span>
-                  </span>
-                </q-item-label>
+                <div class="row">
+                  <div class="col-7">
+                    <q-item-label
+                      class="f-12"
+                    >
+                      <span class="">DOA </span> : <span class="text-weight-bold">{{ item?.doa ?? '-' }}</span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Pasien Hamil </span>: <span class="text-weight-bold">{{ pasienhamil(item?.flaghamil) }}</span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Hari Pertama Haid Terakhir : <span class="text-weight-bold">{{ item?.haid ?? '-' }}</span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Gravida : <span class="text-weight-bold">{{ item?.gravida ?? '-' }}</span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Partus : <span class="text-weight-bold">{{ item?.partus ?? '-' }}</span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Abortus : <span class="text-weight-bold">{{ item?.abortus ?? '-' }}</span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Nyeri : <span class="text-weight-bold">{{ item?.nyeri ?? '-' }} <span style="color: blue;"> ({{ item.scorenyeri }})</span></span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Lochea : <span class="text-weight-bold">{{ item?.lochea ?? '-' }}  <span style="color: blue;">({{ item.scorelochea }})</span></span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label>
+                      <span class="">Protein Urin : <span class="text-weight-bold">{{ item?.proteinurin ?? '-' }} <span style="color: blue;"> ({{ item.scoreproteinurin }})</span></span>
+                      </span>
+                    </q-item-label>
+                  </div>
+                  <div class="col-5">
+                    <div class="q-pa-none row items-start q-gutter-md">
+                      <q-card class="my-card" style="width: 60%;">
+                        <!-- <q-card-section v-if="item?.kategoritriage === 'Resusitasi'" class="bg-red text-white items-center">
+                          <div class="text-h6 text-center">
+                            {{ item?.kategoritriage }}
+                          </div>
+                        </q-card-section>
+                        <q-separator />
+                        <q-card-actions vertical>
+                          <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
+                            Primary Surve  {{ item.hasilprimarusurve }}
+                          </q-btn>
+                          <q-separator inset />
+                          <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
+                            Secondary Surve {{ item.hasilsecondsurve }}
+                          </q-btn>
+                        </q-card-actions> -->
+                        <q-card-section class="bg-primary text-white items-center">
+                          <div class="text-h6 text-center">
+                            {{ item?.kategoritriage }}
+                          </div>
+                        </q-card-section>
+                        <q-separator />
+                        <q-card-actions vertical>
+                          <q-btn flat style="font-size: 11px;" class=" text-weight-bold">
+                            Primary Surve  {{ item.hasilprimarusurve }}
+                          </q-btn>
+                          <q-separator inset />
+                          <q-btn flat style="font-size: 11px;" class=" text-weight-bold">
+                            Secondary Surve {{ item.hasilsecondsurve }}
+                          </q-btn>
+                        </q-card-actions>
+                      </q-card>
+                    </div>
+                  </div>
+                </div>
                 <q-separator class="q-my-md" />
                 <q-item-label>
                   <span class="text-weight-bold"><u>Kondisi Pasien Tiba</u></span>
@@ -121,40 +161,60 @@
                 </div>
 
                 <q-separator class="q-my-md" />
+
                 <q-item-label>
                   <span class="text-weight-bold"><u>Secondary Survei</u></span>
                 </q-item-label>
-                <q-item-label>
-                  <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt </span></span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Pernapasan: <span class="text-weight-bold">  {{ item?.pernapasanx ?? '-' }} x/mnt</span></span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Sistole : <span class="text-weight-bold">{{ item?.sistole ?? '-' }} mmHg</span></span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Diastole : <span class="text-weight-bold">{{ item?.diastole ?? '-' }} mmHg</span></span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C</span></span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}%</span></span>
-                </q-item-label>
+                <div class="row">
+                  <div class="col-4">
+                    <q-item-label avatar>
+                      <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt  <span style="color: blue;">({{ item?.scorenadi }})</span></span></span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Pernapasan: <span class="text-weight-bold">  {{ item?.pernapasanx ?? '-' }} x/mnt
+                        <span style="color: blue;"> ({{ item?.scorepernapasanx }})</span></span></span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Sistole/Diastole : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}/{{ item?.diastole ?? '-' }} mmHg
+                        <span style="color: blue;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Eye : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}</span></span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Verbal : <span class="text-weight-bold">{{ item?.verbal ?? '-' }}</span></span>
+                    </q-item-label>
+                  </div>
+                  <div class="col-6">
+                    <q-item-label avatar>
+                      <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C <span style="color: blue;">({{ item?.scoresuhu }}) </span></span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}% <span style="color: blue;">({{ item?.scorespo2 }})</span></span>
+                      </span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: blue;">({{ item?.scorekesadaran }})</span></span></span>
+                    </q-item-label>
+                    <q-item-label avatar>
+                      <span class="">Motorik : <span class="text-weight-bold">{{ item?.motorik ?? '-' }}</span></span>
+                    </q-item-label>
+                  </div>
+                </div>
               </q-item-section>
 
               <q-item-section
                 side
               >
                 <div class="q-gutter-sm">
-                  <q-btn
+                  <!-- <q-btn
                     flat
                     round
                     size="sm"
                     icon="icon-mat-edit"
                     @click="store.editForm(item)"
-                  />
+                  /> -->
                   <q-btn
                     flat
                     round
@@ -198,7 +258,6 @@ const lists = computed(() => {
 })
 
 function pasienhamil (val) {
-  console.log('hamil', val)
   if (val === '1' || val === 1) {
     return 'Ya'
   }
@@ -235,4 +294,5 @@ function hapusItem (id) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+
 </script>

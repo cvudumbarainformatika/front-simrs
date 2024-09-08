@@ -1026,3 +1026,7 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-cus-group_work:before {
     content: "\f251";
 }
+.icon-my-lungs-with-bronchi-svgrepo-com:before {
+  content: "\f11b";
+}
+

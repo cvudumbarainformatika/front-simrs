@@ -210,6 +210,7 @@
                     || store.form.sirkulasi === 'Nadi Tidak Terabah' || store.form.sirkulasi === 'Henti Jantung'"
                   :options="disability"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  @update:model-value="disabilitycekhasilsurve"
                 />
               </div>
             </div>
@@ -279,6 +280,7 @@
                   outlined
                   dense
                   type="number"
+                  mask="#.##"
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                   @update:model-value="scoresuhu()"
@@ -490,7 +492,7 @@
 import { useQuasar } from 'quasar'
 import { notifErrVue } from 'src/modules/utils'
 import { useTriageIgd } from 'src/stores/simrs/igd/triage'
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 const store = useTriageIgd()
 const emits = defineEmits(['openHistory'])
 
@@ -506,9 +508,9 @@ const refjalannafas = ref(null)
 const refpernapasan = ref(false)
 
 const jalannafas = ref(['Bebas', 'Ancaman', 'Sumbatan'])
-const pernapasan = ref(['Normal', 'Sumbatan Parsial', 'Trakipnone'])
-const sirkulasi = ref(['Nadi Normal ', 'CTR > 2 dtk', 'Akral Dingin', 'Pucat', 'Takikardia', 'Brakikardia', 'Nadi Terabah Lemah', 'Nadi Tidak Terabah', 'Henti Jantung'])
-const disability = ref(['Disability Normal', 'Hemiplegi', 'Hemiparesis', 'Gelisah', 'GCS 8 - 12', 'Tidak Ada Respon', 'Kejang', 'CGS < 8'])
+const pernapasan = ref(['Normal', 'Sumbatan Parsial', 'Trakipnone', 'Sianosis', 'Bradipnoe', 'Henti Nafas'])
+const sirkulasi = ref(['Nadi Normal ', 'CRT > 2 dtk', 'Akral Dingin', 'Pucat', 'Takikardia', 'Brakikardia', 'Nadi Terabah Lemah', 'Nadi Tidak Terabah', 'Henti Jantung'])
+const disability = ref(['Disability Normal', 'Hemiplegi', 'Hemiparesis', 'Gelisah', 'GCS 8 - 12', 'Tidak Ada Respon', 'Kejang', 'GCS < 8'])
 const kesadaran = ref(['Alert', 'Verbal', 'Pain', 'Unrespon'])
 // const gcs = ref(['Eye', 'Verbal', 'Motorik'])
 const nyeri = ref(['Normal', 'Abnormal'])
@@ -635,19 +637,61 @@ function kuis1 () {
   store.form.motorik = 0
 }
 
-function cekjalannafas () {
+function cekjalannafas (val) {
   store.form.pernapasan = null
   store.form.sirkulasi = null
   store.form.disability = null
+  if (val === 'Sumbatan') {
+    store.form.hasilprimarysurve = 'Resusitasi'
+  }
+  else if (val === 'Ancaman') {
+    store.form.hasilprimarysurve = 'P1'
+  }
+  else {
+    store.form.hasilprimarysurve = ''
+  }
 }
 
-function ceksirkulasi () {
+function ceksirkulasi (val) {
+  console.log('sirkulasi', val)
   store.form.sirkulasi = null
   store.form.disability = null
+
+  if (val === 'Henti Nafas' || val === 'Bradipnoe' || val === 'Sianosis') {
+    store.form.hasilprimarysurve = 'Resusitasi'
+  }
+  else if (val === 'Trakipnoe' || val === 'Sumbatan Parsial') {
+    store.form.hasilprimarysurve = 'P1'
+  }
+  else {
+    store.form.hasilprimarysurve = ''
+  }
 }
 
-function cekdisability () {
+function cekdisability (val) {
   store.form.disability = null
+
+  if (val === 'Henti Jantung' || val === 'Nadi Tidak Teraba' || val === 'Akral Dingin') {
+    store.form.hasilprimarysurve = 'Resusitasi'
+  }
+  else if (val === 'Nadi Lemah' || val === 'Bradikardia' || val === 'Takikardia' || val === 'CRT > 2 dtk') {
+    store.form.hasilprimarysurve = 'P1'
+  }
+  else {
+    store.form.hasilprimarysurve = ''
+  }
+}
+
+function disabilitycekhasilsurve (val) {
+  if (val === 'Tidak Ada Respon' || val === 'Kejang' || val === 'GCS < 8') {
+    store.form.hasilprimarysurve = 'Resusitasi'
+  }
+  else if (val === 'Hemiplegi' || val === 'Hemiparesis' || val === 'Gelisah' || val === 'GCS 8 - 12') {
+    store.form.hasilprimarysurve = 'P1'
+  }
+  else {
+    store.form.hasilprimarysurve = ''
+  }
 }
 
 const props = defineProps({
@@ -672,9 +716,43 @@ function onSubmit () {
   //     refForm.value.resetValidation()
   //   })
   // }
+  kategoritriage()
   store.saveData(props.pasien).then(() => {
     refForm.value.resetValidation()
   })
+}
+
+function kategoritriage () {
+  const totalscore = parseInt(store.form.scorenadi) + parseInt(store.form.scorepernapasanx) + parseInt(store.form.scoresistole) +
+  parseInt(store.form.scorediastole) + parseInt(store.form.scoresuhu) + parseInt(store.form.scorespo2) + parseInt(store.form.scorekesadaran)
+
+  if (totalscore > 7) {
+    store.form.hasilsecondsurve = 'Resusitasi'
+  }
+  else if (totalscore >= 4 && totalscore <= 5) {
+    store.form.hasilsecondsurve = 'P1'
+  }
+  else if (totalscore >= 2 && totalscore <= 3) {
+    store.form.hasilsecondsurve = 'P2'
+  }
+  else if (totalscore >= 0 && totalscore <= 1) {
+    store.form.hasilsecondsurve = 'P3'
+  }
+
+  if (store.form.hasilprimarysurve === 'Resusitasi') {
+    store.form.kategoritriage = 'Resusitasi'
+  }
+  else if (store.form.hasilprimarysurve === 'P1' && store.form.hasilsecondsurve === 'Resusitasi') {
+    store.form.kategoritriage = 'P1'
+  }
+  else if (store.form.hasilprimarysurve === 'P1') {
+    store.form.kategoritriage = 'P1'
+  }
+  else {
+    store.form.hasilsecondsurve = store.form.kategoritriage
+  }
+
+  store.form.totalscore = totalscore
 }
 
 function scorepernapasanx () {
@@ -1356,5 +1434,11 @@ function historyOpen () {
   // store.getHistory(props.pasien?.norm)
 }
 store.formattanggal()
+
+onBeforeMount(() => {
+  store.form.pasienhamil = 0
+  store.doax = []
+  store.hiddenall = 'HIDUP'
+})
 
 </script>

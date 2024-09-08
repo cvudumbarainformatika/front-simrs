@@ -196,10 +196,11 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
+      console.log('valid', val.id)
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]
-        console.log('val', val.id)
+
         console.log('data', data)
 
         const target = data[kode]?.find(x => x.id === val.id)
@@ -231,6 +232,15 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].anamnesis
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataTriage (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].triage
+        console.log('hahahahahaha', data)
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

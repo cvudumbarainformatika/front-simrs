@@ -14,6 +14,7 @@ export const useTriageIgd = defineStore('triageigd', {
     doax: [],
     hiddenall: 'HIDUP',
     form: {
+      id: null,
       pasienhamil: 0,
       nadi: 0,
       pernapasan: '',
@@ -35,7 +36,11 @@ export const useTriageIgd = defineStore('triageigd', {
       scorekesadaran: 0,
       scorenyeri: 0,
       scorelochea: 0,
-      scoreproteinurin: 0
+      scoreproteinurin: 0,
+      totalscore: 0,
+      kategoritriage: '',
+      hasilprimarysurve: '',
+      hasilsecondsurve: ''
     }
   }),
   actions: {
@@ -49,32 +54,22 @@ export const useTriageIgd = defineStore('triageigd', {
       }
     },
     async saveData (pasien) {
+      console.log('noreg', pasien.noreg)
       this.loadingForm = true
-      this.noreg = pasien ? pasien.noreg : ''
-      this.norm = pasien ? pasien.norm : ''
+      this.form.noreg = pasien ? pasien.noreg : ''
+      this.form.norm = pasien ? pasien.norm : ''
 
       try {
         const resp = await api.post('v1/simrs/pelayanan/igd/simpantriage', this.form)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          let isi = resp.data.result
-          isi = this.form
-          console.log('resp', isi)
+          const isi = resp.data.result
+          // isi = this.form
+          console.log('isisis', isi)
           storePasien.injectDataPasien(pasien, isi, 'triage')
           notifSuccess(resp)
           this.initReset()
           this.loadingForm = false
-
-          // const storePasien = usePengunjungIgdStore()
-          // let isi = resp.data.result
-          // if (resp.data.result === 1) {
-          //   this.form.rs4 = this.form.keluhanutama
-          //   isi = this.form
-          // }
-          // storePasien.injectDataPasien(pasien, isi, 'anamnesis')
-          // notifSuccess(resp)
-          // this.initReset()
-          // this.loadingForm = false
         }
         this.loadingForm = false
       }
@@ -87,8 +82,8 @@ export const useTriageIgd = defineStore('triageigd', {
       this.form = null
       return new Promise((resolve, reject) => {
         this.form = {
-          doa: ''
-
+          doa: '',
+          pasienhamil: 0
         }
         this.selection = []
 
@@ -97,10 +92,26 @@ export const useTriageIgd = defineStore('triageigd', {
     },
     setForm (key, val) {
       this.form[key] = val
-    }
+    },
     // hitungscore () {
     //   asdasd
     // }
+    async deleteData (pasien, id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/igd/hapustriage', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          storePasien.hapusDataTriage(pasien, id)
+          notifSuccess('resp')
+        }
+      }
+      catch (error) {
+        notifErr(error)
+      }
+    }
 
   }
+
 })
