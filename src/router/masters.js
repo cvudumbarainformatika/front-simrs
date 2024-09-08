@@ -98,6 +98,12 @@ const masters = {
           name: 'master.farmasi.volume-sediaan',
           component: () =>
             import('pages/simrs/master/farmasi/volumeSediaan/IndexPage.vue')
+        },
+        {
+          path: '/master/farmasi/signa',
+          name: 'master.farmasi.signa',
+          component: () =>
+            import('pages/simrs/master/farmasi/signa/IndexPage.vue')
         }
       ]
     },
