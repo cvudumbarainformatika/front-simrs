@@ -104,7 +104,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.getLists()
     },
     setPerPage (payload) {
-      console.log('sasa', payload)
+      // console.log('sasa', payload)
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
@@ -118,7 +118,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.noreg = pasien?.noreg
       try {
         const resp = await api.post('v1/simrs/pelayanan/igd/terimapasien', form)
-        console.log('terima', resp)
+        // console.log('terima', resp)
         if (resp.status === 200) {
           const wew = this.items.filter(x => x === pasien)
           // console.log('wew', wew)
@@ -196,17 +196,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      console.log('valid', val.id)
+      // console.log('valid', val.id)
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]
-
-        console.log('data', data)
-
         const target = data[kode]?.find(x => x.id === val.id)
-        console.log('itarget', target)
+        // console.log('itarget', target)
         // console.log('inject kode pasien', kode)
-        console.log('inject isi pasien', val)
+        // console.log('inject isi pasien', val)
 
         if (target) {
           Object.assign(target, val)
@@ -240,7 +237,6 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].triage
-        console.log('hahahahahaha', data)
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
@@ -256,7 +252,6 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
         this.notaTindakans = arr.length ? arr : []
-        console.log('notas', this.notaTindakans)
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]
       }
