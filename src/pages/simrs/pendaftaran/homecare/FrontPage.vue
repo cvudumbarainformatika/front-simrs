@@ -108,12 +108,12 @@ const barStyle = ref({
 
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/pendaftaran/umum/form') {
-    return 'RAJAL UMUM'
+  if (page.path === '/pendaftaran/homecare/form') {
+    return 'HOME CARE'
   }
-  else if (page.path === '/pendaftaran/umum/kunjungan') {
+  else if (page.path === '/pendaftaran/homecare/kunjungan') {
     return 'LIST KUNJUNGAN'
-  // } else if (page.path === '/pendaftaran/umum/listmjkn') {
+  // } else if (page.path === '/pendaftaran/homecare/listmjkn') {
   //   return 'LIST MOBILE JKN'
   }
   else {

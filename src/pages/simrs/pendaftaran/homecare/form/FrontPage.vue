@@ -3,6 +3,7 @@
     <DataPasien
       ref="refDataPasien"
       :full="style.componentfull"
+      pelayanan="homecare"
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />
@@ -32,12 +33,12 @@ import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
-import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
-// import { Dialog } from 'quasar'
+
 import { useStyledStore } from 'src/stores/app/styled'
 import { useRouter } from 'vue-router'
+import { useRegistrasiPasienHomeCareStore } from 'src/stores/simrs/pendaftaran/form/homecare/registrasi'
 const pasien = usePendaftaranPasienStore()
-const register = useRegistrasiPasienUmumStore()
+const register = useRegistrasiPasienHomeCareStore()
 
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
@@ -46,29 +47,7 @@ function clearFormRegistrasi () {
 }
 
 const style = useStyledStore()
-// let canSavePasien = false
-// let canSaveRegis = false
-// function bisaSimpan(val) {
-//   // console.log('pasien simpan', val)
-//   canSavePasien = val.save
-//   if (val.save) {
-//     const keys = Object.keys(val.form)
-//     if (keys.length) {
-//       keys.forEach(key => {
-//         register.setForm(key, val.form[key])
-//       })
-//     }
-//   }
-//   // console.log('simpan pasien key', key)
-//   // register.form.concat(val)
-// }
-// function simpanRegistrasi(val) {
-//   // console.log('simpan regestrasi', val)
-//   canSaveRegis = val.save
-//   // const key = Object.keys(val)
-//   // console.log('simpan regis key', key)
-//   // console.log('form registrasi dua', register.form)
-// }
+
 const router = useRouter()
 function simpanData (val) {
   const dataPasien = refDataPasien.value.set()

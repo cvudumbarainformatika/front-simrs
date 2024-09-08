@@ -892,7 +892,8 @@
                 </div>
               </div>
               <!-- Antrian -->
-              <div v-if="pelayanan !== 'igd'">
+              <!-- Home care juga ga butuh antrian  -->
+              <div v-if="pelayanan === '' ">
                 <div class="row q-col-gutter-sm items-center q-mb-xs">
                   <div class="col-12">
                     <app-input
