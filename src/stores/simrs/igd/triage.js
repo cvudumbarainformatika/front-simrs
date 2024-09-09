@@ -64,8 +64,6 @@ export const useTriageIgd = defineStore('triageigd', {
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           const isi = resp.data.result
-          // isi = this.form
-
           storePasien.injectDataPasien(pasien, isi, 'triage')
           notifSuccess(resp)
           this.initReset()
