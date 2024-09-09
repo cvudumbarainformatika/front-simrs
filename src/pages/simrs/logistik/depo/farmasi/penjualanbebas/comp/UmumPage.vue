@@ -20,7 +20,7 @@
           @update:model-value="modelKunjSelected"
           @clear="clearModelKunj"
         >
-          <template v-if="model" #append>
+          <template v-if="modelKu" #append>
             <q-icon name="icon-mat-cancel" @click.stop.prevent="modelKu = null" class="cursor-pointer" @click="clearModelKunj" />
           </template>
         </q-select>
@@ -65,6 +65,7 @@
           v-model="store.form.nama"
           :disable="store.form.details.length>0"
           label="Nama"
+          @update:model-value="ketikNama"
           outlined
         />
       </div>
@@ -142,7 +143,7 @@ function filterKunj (val, update) {
   const ada = store.kunjungans.filter(f => f?.nama?.toLowerCase()?.includes(val?.toLowerCase()))
   if (ada.length > 3) update(() => { optionModelKunjs.value = ada })
   else {
-    store.getPasien(val).then(() => {
+    store.getKunjungan(val).then(() => {
       optionModelKunjs.value = store.kunjungans
       update(() => {
         optionModelKunjs.value = store.kunjungans
@@ -163,6 +164,11 @@ function clearModelKunj (val) {
   modelKu.value = null
 }
 
+function ketikNama (val) {
+  console.log('ketik nama', val)
+  model.value = null
+  modelKu.value = null
+}
 onMounted(() => {
   store.setForm('kode_identitas', null)
   store.getPasien().then(() => {

@@ -145,7 +145,7 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
             this.loadingSimpan = false
             console.log('simpan bebas', resp?.data)
             notifSuccess(resp)
-            // this.resetForm()
+            this.resetForm()
             resolve(resp)
           })
           .catch((err) => {

@@ -579,7 +579,7 @@ function highlightText (text) {
   // Implement your text highlighting logic here
   // For example, you can wrap the matching text in <span> with a specific style
   // console.log('text', text)
-  return text.replace(new RegExp(store.params.q, 'ig'), matchedText => `<span class="bg-yellow text-dark">${matchedText}</span>`)
+  return text?.replace(new RegExp(store.params.q, 'ig'), matchedText => `<span class="bg-yellow text-dark">${matchedText}</span>`)
 }
 function responTime (item) {
   // const mulai= new Date(item?.tgl_kirim)
