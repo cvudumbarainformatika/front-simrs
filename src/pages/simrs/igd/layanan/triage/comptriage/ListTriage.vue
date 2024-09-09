@@ -93,113 +93,212 @@
                     </q-item-label>
                   </div>
                   <div class="col-5">
-                    <div class="q-pa-none row items-start q-gutter-md">
-                      <q-card class="my-card" style="width: 60%;">
-                        <!-- <q-card-section v-if="item?.kategoritriage === 'Resusitasi'" class="bg-red text-white items-center">
-                          <div class="text-h6 text-center">
-                            {{ item?.kategoritriage }}
-                          </div>
-                        </q-card-section>
-                        <q-separator />
-                        <q-card-actions vertical>
-                          <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
-                            Primary Surve  {{ item.hasilprimarusurve }}
-                          </q-btn>
-                          <q-separator inset />
-                          <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
-                            Secondary Surve {{ item.hasilsecondsurve }}
-                          </q-btn>
-                        </q-card-actions> -->
-                        <q-card-section class="bg-primary text-white items-center">
-                          <div class="text-h6 text-center">
-                            {{ item?.kategoritriage }}
-                          </div>
-                        </q-card-section>
-                        <q-separator />
-                        <q-card-actions vertical>
-                          <q-btn flat style="font-size: 11px;" class=" text-weight-bold">
-                            Primary Surve  {{ item.hasilprimarusurve }}
-                          </q-btn>
-                          <q-separator inset />
-                          <q-btn flat style="font-size: 11px;" class=" text-weight-bold">
-                            Secondary Surve {{ item.hasilsecondsurve }}
-                          </q-btn>
-                        </q-card-actions>
-                      </q-card>
+                    <div v-if="item.kategoritriage !== null && item.doa === null">
+                      <div class="q-pa-none row items-center q-gutter-md">
+                        <q-card v-if="item?.kategoritriage === 'Resusitasi'" class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-red text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                        <q-card v-if="item?.kategoritriage === 'P1'" class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-deep-orange text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-deep-orange text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-deep-orange text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                        <q-card v-else-if="item?.kategoritriage === 'P2'" class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-yellow text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-yellow text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-yellow text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                        <q-card v-else-if="item?.kategoritriage === 'P3'" class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-green text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-green text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-green text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                        <q-card v-else class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-primary text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                      </div>
+                    </div>
+                    <div v-else-if="item.doa !== null && item.kategoritriage === null">
+                      <div class="q-pa-none row items-center q-gutter-md">
+                        <q-card class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-black text-white items-center">
+                            <div class="text-h6 text-center">
+                              DOA
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <div class="q-pa-none row items-center q-gutter-md">
+                        <q-card class="my-card" style="width: 60%;">
+                          <q-card-section class="bg-primary text-white items-center">
+                            <div class="text-h6 text-center">
+                              {{ item?.kategoritriage }}
+                            </div>
+                          </q-card-section>
+                          <q-separator />
+                          <q-card-actions vertical>
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Primary Surve  {{ item.hasilprimarusurve }}
+                            </q-btn>
+                            <q-separator inset />
+                            <q-btn flat style="font-size: 11px;" class="text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }}
+                            </q-btn>
+                          </q-card-actions>
+                        </q-card>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <q-separator class="q-my-md" />
-                <q-item-label>
-                  <span class="text-weight-bold"><u>Kondisi Pasien Tiba</u></span>
-                </q-item-label>
-                <div class="row">
-                  <div class="col-5">
+                <div>
+                  <div class="q-gutter-md">
                     <q-item-label>
-                      <span>Jalan Nafas </span> : <span class="text-weight-bold">{{ item?.jalannafas ?? '-' }}</span>
+                      <span class="text-weight-bold"><u>Kondisi Pasien Tiba</u></span>
                     </q-item-label>
-                  </div>
-                  <div class="col-5">
-                    <q-item-label>
-                      <span>Pernapasan </span> : <span class="text-weight-bold">{{ item?.pernapasan ?? '-' }}</span>
-                    </q-item-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-5">
-                    <q-item-label>
-                      <span>Sirkulasi </span> : <span class="text-weight-bold">{{ item?.sirkulasi ?? '-' }}</span>
-                    </q-item-label>
-                  </div>
-                  <div>
-                    <div class="col-5">
-                      <q-item-label>
-                        <span>Disability</span> : <span class="text-weight-bold">{{ item?.disability ?? '-' }}</span>
-                      </q-item-label>
+                    <div class="row">
+                      <div class="col-5">
+                        <q-item-label>
+                          <span>Jalan Nafas </span> : <span class="text-weight-bold">{{ item?.jalannafas ?? '-' }}</span>
+                        </q-item-label>
+                      </div>
+                      <div class="col-5">
+                        <q-item-label>
+                          <span>Pernapasan </span> : <span class="text-weight-bold">{{ item?.pernapasan ?? '-' }}</span>
+                        </q-item-label>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                <q-separator class="q-my-md" />
-
-                <q-item-label>
-                  <span class="text-weight-bold"><u>Secondary Survei</u></span>
-                </q-item-label>
-                <div class="row">
-                  <div class="col-4">
-                    <q-item-label avatar>
-                      <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt  <span style="color: blue;">({{ item?.scorenadi }})</span></span></span>
+                    <div class="row">
+                      <div class="col-5">
+                        <q-item-label>
+                          <span>Sirkulasi </span> : <span class="text-weight-bold">{{ item?.sirkulasi ?? '-' }}</span>
+                        </q-item-label>
+                      </div>
+                      <div>
+                        <div class="col-5">
+                          <q-item-label>
+                            <span>Disability</span> : <span class="text-weight-bold">{{ item?.disability ?? '-' }}</span>
+                          </q-item-label>
+                        </div>
+                      </div>
+                    </div>
+                    <q-separator class="q-my-md" />
+                    <q-item-label>
+                      <span class="text-weight-bold"><u>Secondary Survei</u></span>
                     </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Pernapasan: <span class="text-weight-bold">  {{ item?.pernapasanx ?? '-' }} x/mnt
-                        <span style="color: blue;"> ({{ item?.scorepernapasanx }})</span></span></span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Sistole/Diastole : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}/{{ item?.diastole ?? '-' }} mmHg
-                        <span style="color: blue;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Eye : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}</span></span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Verbal : <span class="text-weight-bold">{{ item?.verbal ?? '-' }}</span></span>
-                    </q-item-label>
-                  </div>
-                  <div class="col-6">
-                    <q-item-label avatar>
-                      <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C <span style="color: blue;">({{ item?.scoresuhu }}) </span></span>
-                      </span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}% <span style="color: blue;">({{ item?.scorespo2 }})</span></span>
-                      </span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: blue;">({{ item?.scorekesadaran }})</span></span></span>
-                    </q-item-label>
-                    <q-item-label avatar>
-                      <span class="">Motorik : <span class="text-weight-bold">{{ item?.motorik ?? '-' }}</span></span>
-                    </q-item-label>
+                    <div class="row">
+                      <div class="col-4">
+                        <q-item-label avatar>
+                          <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt  <span style="color: blue;">({{ item?.scorenadi }})</span></span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Pernapasan: <span class="text-weight-bold">  {{ item?.pernapasanx ?? '-' }} x/mnt
+                            <span style="color: blue;"> ({{ item?.scorepernapasanx }})</span></span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Sistole/Diastole : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}/{{ item?.diastole ?? '-' }} mmHg
+                            <span style="color: blue;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Eye : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}</span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Verbal : <span class="text-weight-bold">{{ item?.verbal ?? '-' }}</span></span>
+                        </q-item-label>
+                      </div>
+                      <div class="col-6">
+                        <q-item-label avatar>
+                          <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C <span style="color: blue;">({{ item?.scoresuhu }}) </span></span>
+                          </span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}% <span style="color: blue;">({{ item?.scorespo2 }})</span></span>
+                          </span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: blue;">({{ item?.scorekesadaran }})</span></span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span class="">Motorik : <span class="text-weight-bold">{{ item?.motorik ?? '-' }}</span></span>
+                        </q-item-label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </q-item-section>
