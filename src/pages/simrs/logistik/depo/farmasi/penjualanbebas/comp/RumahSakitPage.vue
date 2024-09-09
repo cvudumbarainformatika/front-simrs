@@ -13,6 +13,7 @@
           option-label="nama"
           option-value="kode"
           :options="optionRs"
+          :disable="store.form.details.length>0"
           hide-dropdown-icon
           hide-selected
           @filter="filterRsLain"

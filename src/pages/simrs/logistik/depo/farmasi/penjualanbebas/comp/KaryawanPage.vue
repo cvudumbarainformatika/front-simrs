@@ -13,6 +13,7 @@
           option-label="nama"
           option-value="nik"
           :options="optionKaryawans"
+          :disable="store.form.details.length>0"
           hide-dropdown-icon
           hide-selected
           @filter="filterRsLain"

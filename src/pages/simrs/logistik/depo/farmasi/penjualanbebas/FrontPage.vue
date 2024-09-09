@@ -68,7 +68,8 @@ const tab = ref('rs')
 const optionTabs = ref([
   { name: 'umum', label: 'Umum', compo: shallowRef(defineAsyncComponent(() => import('./comp/UmumPage.vue'))) },
   { name: 'karyawan', label: 'Karyawan', compo: shallowRef(defineAsyncComponent(() => import('./comp/KaryawanPage.vue'))) },
-  { name: 'rs', label: 'Rumah Sakit Lain', compo: shallowRef(defineAsyncComponent(() => import('./comp/RumahSakitPage.vue'))) }
+  { name: 'rs', label: 'Rumah Sakit Lain', compo: shallowRef(defineAsyncComponent(() => import('./comp/RumahSakitPage.vue'))) },
+  { name: 'list', label: 'List Penjualan', compo: shallowRef(defineAsyncComponent(() => import('./comp/ListPenjualanPage.vue'))) }
 ])
 // eslint-disable-next-line no-unused-vars
 const cekPanel = () => {

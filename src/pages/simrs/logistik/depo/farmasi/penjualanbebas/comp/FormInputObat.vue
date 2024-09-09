@@ -233,13 +233,13 @@ function simpan () {
   if (!store.form?.kode_identitas) return notifErrVue('silahkan isi terlebih dahulu identitas pembeli')
   const kode = store.form.details.map(m => m.kodeobat)
   store.setForm('kode', kode)
-  console.log('simpan')
+  // console.log('simpan')
   store.simpan()
 }
 onMounted(() => {
-  if (props.tipe === 'rs') store.setForm('margin', (20 / 100))
+  if (props.tipe === 'umum') store.setForm('margin', (25 / 100))
   else store.setForm('margin', 10 / 100)
-  console.log('props', props.tipe)
+  // console.log('props', props.tipe)
 })
 // signa end ----
 </script>
