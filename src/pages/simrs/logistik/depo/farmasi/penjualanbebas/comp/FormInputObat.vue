@@ -102,6 +102,7 @@ import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 const props = defineProps({
   tipe: { type: String, default: '' }
 })
+const emits = defineEmits(['simpan'])
 const apps = useAplikasiStore()
 const obat = ref(null)
 const selectObat = shallowRef(defineAsyncComponent(() => import('./SelectObat.vue')))
@@ -132,7 +133,7 @@ function setJumlah (evt, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 2)) ? evt : parseFloat(evt))
   store.setTemp(key, nilai)
-  if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', (((store.tempObat.harga_beli + (store.form.margin * store.tempObat.harga_beli)))))
+  if (store.tempObat?.harga_beli > 0 && store.form?.margin > 0) store.setTemp('harga_jual', (((store.tempObat.harga_beli + ((store.form.margin / 100) * store.tempObat.harga_beli)))))
   if (key === 'jumlah' && parseFloat(evt) > parseFloat(store.tempObat?.alokasi)) {
     store.setTemp(key, store.tempObat?.alokasi)
     return notifErrVue('maksimal jumlah adalah ' + store.tempObat?.alokasi)
@@ -234,11 +235,11 @@ function simpan () {
   const kode = store.form.details.map(m => m.kodeobat)
   store.setForm('kode', kode)
   // console.log('simpan')
-  store.simpan()
+  store.simpan().then(() => { emits('simpan') })
 }
 onMounted(() => {
-  if (props.tipe === 'umum') store.setForm('margin', (25 / 100))
-  else store.setForm('margin', 10 / 100)
+  if (props.tipe === 'umum') store.setForm('margin', 25)
+  else store.setForm('margin', 10)
   // console.log('props', props.tipe)
 })
 // signa end ----

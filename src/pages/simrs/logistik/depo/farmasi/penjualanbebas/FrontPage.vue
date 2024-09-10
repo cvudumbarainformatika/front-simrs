@@ -64,12 +64,12 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenjualanBebasFarmasiStore } from 'src/stores/simrs/farmasi/penjualanbebas/penjualanbebas'
 import { defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 
-const tab = ref('rs')
+const tab = ref('umum')
 const optionTabs = ref([
   { name: 'umum', label: 'Umum', compo: shallowRef(defineAsyncComponent(() => import('./comp/UmumPage.vue'))) },
   { name: 'karyawan', label: 'Karyawan', compo: shallowRef(defineAsyncComponent(() => import('./comp/KaryawanPage.vue'))) },
   { name: 'rs', label: 'Rumah Sakit Lain', compo: shallowRef(defineAsyncComponent(() => import('./comp/RumahSakitPage.vue'))) },
-  { name: 'list', label: 'List Penjualan', compo: shallowRef(defineAsyncComponent(() => import('./comp/ListPenjualanPage.vue'))) }
+  { name: 'list', label: 'List Penjualan', compo: shallowRef(defineAsyncComponent(() => import('./listpenjualan/IndexPage.vue'))) }
 ])
 // eslint-disable-next-line no-unused-vars
 const cekPanel = () => {

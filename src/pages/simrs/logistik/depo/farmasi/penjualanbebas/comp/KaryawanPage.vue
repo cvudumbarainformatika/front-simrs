@@ -28,7 +28,7 @@
     </div>
 
     <div class="row q-py-sm">
-      <forminput tipe="kar" />
+      <forminput tipe="kar" @simpan="afterSimpan" />
     </div>
     <div class="row q-py-sm">
       <listbelum tipe="kar" />
@@ -65,6 +65,12 @@ function rsSelected (val) {
 }
 function clearSl (val) {
   console.log('clear', val)
+  store.setForm('kode_identitas', null)
+  store.setForm('nama', null)
+  karyawan.value = null
+}
+
+function afterSimpan () {
   store.setForm('kode_identitas', null)
   store.setForm('nama', null)
   karyawan.value = null
