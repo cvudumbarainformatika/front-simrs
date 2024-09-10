@@ -122,7 +122,6 @@
       v-model="store.pageLayanan"
       :pasien="pasien"
     />
-    {{ pasien }}
   </div>
 </template>
 

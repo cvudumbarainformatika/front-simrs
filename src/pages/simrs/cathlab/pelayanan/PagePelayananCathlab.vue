@@ -6,7 +6,6 @@
     transition-show="slide-left"
     transition-hide="slide-right"
   >
-    {{ pasien }}
     <q-card
       square
       flat
