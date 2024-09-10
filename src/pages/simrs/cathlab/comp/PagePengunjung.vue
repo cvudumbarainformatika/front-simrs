@@ -29,6 +29,7 @@
           :items="store.items"
           :loading="store.loading"
           :loading-terima="store.loadingTerima"
+          :pasien="pasien"
           @terimapasien="terimapasien"
           @bukalayanan="bukaTindakan"
         />

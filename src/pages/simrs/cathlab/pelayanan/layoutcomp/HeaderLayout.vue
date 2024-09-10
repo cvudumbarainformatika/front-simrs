@@ -1,5 +1,4 @@
 <template>
-  {{ props.pasien }}
   <q-toolbar>
     <q-btn
       flat
@@ -7,6 +6,7 @@
       icon="icon-mat-sort"
       @click="emits('toggleLeftDrawer')"
     />
+
     <q-toolbar-title class="f-14">
       <div class="row items-center q-gutter-md">
         <q-btn
@@ -20,7 +20,7 @@
             </q-avatar>
             <div class="column f-12">
               <div>
-                DPJP | {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
+                Dokter Pengirim | {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
               </div>
             </div>
           </div>
@@ -153,6 +153,7 @@ const search = ref('')
 const kodedpjp = ref(null)
 const kdpegsimrs = ref(null)
 const options = ref([])
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
@@ -174,16 +175,16 @@ function updateKodeDpjp (val) {
   kdpegsimrs.value = val?.kdpegsimrs
 }
 
-function gantiDpjp () {
-  // console.log('ok')
-  const form = {
-    kodedpjp: kodedpjp.value ?? '',
-    kdpegsimrs: kdpegsimrs.value,
-    noreg: props?.pasien?.noreg
-  }
+// function gantiDpjp () {
+//   // console.log('ok')
+//   const form = {
+//     kodedpjp: kodedpjp.value ?? '',
+//     kdpegsimrs: kdpegsimrs.value,
+//     noreg: props?.pasien?.noreg
+//   }
 
-  emits('gantidpjp', form)
-}
+//   emits('gantidpjp', form)
+// }
 
 function getImage (kelamin, row) {
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined) {
@@ -196,6 +197,7 @@ function getImage (kelamin, row) {
   }
 }
 function getImageDokter (kelamin, row) {
+  console.log('tes', props.pasien?.datasimpeg)
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href

@@ -108,13 +108,13 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       this.togglePageTindakan()
       try {
         const resp = await api.post('v1/simrs/penunjang/cathlab/terimapasien', form)
-        // console.log('terima', resp)
         if (resp.status === 200) {
-          const findPasien = this.items.filter(x => x?.rs1 === pasien?.nota)
+          const findPasien = this.items.filter(x => x?.nota === pasien?.nota)
           if (findPasien.length) {
             // findPasien[0].status = findPasien[0].status === '' ? '2' : findPasien[0].status
 
             // BARU
+            findPasien[0].datasimpeg = resp?.data?.datasimpeg
             // findPasien[0].triage = resp?.data?.triage
           }
           this.loadingTerima = false
