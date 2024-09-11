@@ -61,7 +61,6 @@
                   :key="pasien"
                   :pasien="pasien"
                   :loadingaja="loadingaja"
-                  depo="igd"
                 />
               </template>
               <template #fallback>
@@ -77,9 +76,9 @@
 
 <script setup>
 import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
-import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
-const store = usePengunjungIgdStore()
+import { usePermintaanCathLab } from 'src/stores/simrs/penunjang/cathlab/permintaan'
+const store = usePermintaanCathLab()
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -95,6 +94,8 @@ const props = defineProps({
     default: false
   }
 })
+
+// console.log('qwer', pasien)
 
 // defineProps({
 //   pasien: {
@@ -123,8 +124,13 @@ function menuDiganti (val) {
   menu.value = val
 }
 
+// onMounted(() => {
+// console.log('qwer', pasien)
+// const kelas = props?.pasien?.kelas
+// store.tarifcatlab(kelas)
+// })
+
 watchEffect(() => {
-  // console.log('watch effect', store.loadingTerima)
   if (store.loadingTerima === false) {
     inacbg.getDataIna(props.pasien)
     inacbg.setTotalTindakan(props.pasien)

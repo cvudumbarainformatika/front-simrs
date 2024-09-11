@@ -38,21 +38,16 @@
         <div
           class="row items-center"
         >
-          <q-separator />
-
-          <!-- <div
-            class="text-right q-mt-md"
-            style="margin-bottom: 50px;"
-          >
-            <app-btn
-              color="primary"
-              label="Simpan Triage"
-              tooltip="Simpan Data"
-              type="submit"
-              tip
-              :loading="store.loadingForm"
+          <div class="col-5">
+            <q-select
+              label="Tindakan CathLab"
+              dense
+              outlined
             />
-          </div> -->
+          </div>
+          <div class="col-10">
+            <q-input label="Keterangan" />
+          </div>
         </div>
       </q-card-section>
     </q-form>

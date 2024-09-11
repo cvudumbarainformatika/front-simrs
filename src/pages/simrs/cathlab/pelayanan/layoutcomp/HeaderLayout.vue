@@ -222,7 +222,6 @@ async function filterOptions (val, update) {
   }
   // console.log('q :', val)
   const resp = await api.get('/v1/settings/appmenu/cari_dokter', params)
-  console.log('cari', resp)
   update(
     () => (options.value = resp.data),
     ref => {

@@ -20,7 +20,8 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
     nota: null,
     loadingTerima: false,
     flag: null,
-    pageLayanan: false
+    pageLayanan: false,
+    mastertarif: []
   }),
   actions: {
     setParams (key, val) {
@@ -131,6 +132,20 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
     },
     togglePageTindakan () {
       this.pageLayanan = !this.pageLayanan
+    },
+
+    async tarifcatlab (val) {
+      console.log('sasasax', val)
+      this.loading = true
+      const paramsx = { paramsx: this.paramsx }
+      console.log('sasasa', val)
+      await api.get('v1/simrs/penunjang/cathlab/tarifcathlab', paramsx)
+        .then(resp => {
+          this.loading = false
+          console.log('tarif', resp)
+          this.mastertarif = resp?.data?.data
+        })
+        .catch(() => { this.loading = false })
     }
   }
 })
