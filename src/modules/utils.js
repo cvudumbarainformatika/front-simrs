@@ -462,6 +462,63 @@ const inputMustNumber = (value) => {
   return temp
 }
 
+function terbilangRupiah (nilai) {
+  nilai = Math.floor(Math.abs(nilai))
+  const huruf = [
+    '',
+    'Satu',
+    'Dua',
+    'Tiga',
+    'Empat',
+    'Lima',
+    'Enam',
+    'Tujuh',
+    'Delapan',
+    'Sembilan',
+    'Sepuluh',
+    'Sebelas'
+  ]
+  let bagi = 0
+  let penyimpanan = ''
+  if (nilai < 12) {
+    penyimpanan = ' ' + huruf[nilai]
+  }
+  else if (nilai < 20) {
+    penyimpanan = terbilangRupiah(Math.floor(nilai - 10)) + ' Belas'
+  }
+  else if (nilai < 100) {
+    bagi = Math.floor(nilai / 10)
+    penyimpanan = terbilangRupiah(bagi) + ' Puluh' + terbilangRupiah(nilai % 10)
+  }
+  else if (nilai < 200) {
+    penyimpanan = ' Seratus' + terbilangRupiah(nilai - 100)
+  }
+  else if (nilai < 1000) {
+    bagi = Math.floor(nilai / 100)
+    penyimpanan = terbilangRupiah(bagi) + ' Ratus' + terbilangRupiah(nilai % 100)
+  }
+  else if (nilai < 2000) {
+    penyimpanan = ' Seribu' + terbilangRupiah(nilai - 1000)
+  }
+  else if (nilai < 1000000) {
+    bagi = Math.floor(nilai / 1000)
+    penyimpanan = terbilangRupiah(bagi) + ' Ribu' + terbilangRupiah(nilai % 1000)
+  }
+  else if (nilai < 1000000000) {
+    bagi = Math.floor(nilai / 1000000)
+    penyimpanan = terbilangRupiah(bagi) + ' Juta' + terbilangRupiah(nilai % 1000000)
+  }
+  else if (nilai < 1000000000000) {
+    bagi = Math.floor(nilai / 1000000000)
+    penyimpanan = terbilangRupiah(bagi) + ' Miliar' + terbilangRupiah(nilai % 1000000000)
+  }
+  else if (nilai < 1000000000000000) {
+    bagi = Math.floor(nilai / 1000000000000)
+    penyimpanan = terbilangRupiah(nilai / 1000000000000) + ' Triliun' + terbilangRupiah(nilai % 1000000000000)
+  }
+  return penyimpanan
+}
+
 export {
   daysInMonth,
   notifCenterVue,
@@ -480,5 +537,6 @@ export {
   loadingBlock,
   loadingRes,
   notifInfVue,
-  inputMustNumber
+  inputMustNumber,
+  terbilangRupiah
 }
