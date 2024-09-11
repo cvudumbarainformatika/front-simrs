@@ -43,7 +43,7 @@
         />
       </div>
     </q-card>
-    <!-- <page-layanan-igd
+    <!-- <cathlab-page
       :key="pasien"
       v-model="store.pageLayanan"
       :pasien="pasien"
@@ -57,6 +57,7 @@
 import ListPengunjung from './ListPengunjung.vue'
 import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
+// import CathlabPage from '../pelayanan/layanan/CathlabPage.vue'
 // import PageLayananIgd from '../layanan/PageLayananIgd.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { onMounted, ref } from 'vue'
@@ -64,7 +65,7 @@ import { onMounted, ref } from 'vue'
 import { usePermintaanCathLab } from 'src/stores/simrs/penunjang/cathlab/permintaan'
 const store = usePermintaanCathLab()
 const style = useStyledStore()
-const pasien = ref(null)
+const pasien = ref([])
 // const diagnosa = useDiagnosaDokter()
 
 function terimapasien (val) {

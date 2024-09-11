@@ -124,12 +124,6 @@ function menuDiganti (val) {
   menu.value = val
 }
 
-// onMounted(() => {
-// console.log('qwer', pasien)
-// const kelas = props?.pasien?.kelas
-// store.tarifcatlab(kelas)
-// })
-
 watchEffect(() => {
   if (store.loadingTerima === false) {
     inacbg.getDataIna(props.pasien)
