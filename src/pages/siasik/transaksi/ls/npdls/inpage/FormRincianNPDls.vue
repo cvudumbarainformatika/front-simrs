@@ -1,11 +1,12 @@
 <template>
   <template v-if="store.reqs.bast">
-    <div class="flex">
+    <div class="justify-content-center">
       <q-table
         :rows="carisrt.itembelanja"
         :columns="columns"
         row-key="name"
         hide-bottom
+        dense
         ref="rincianNpd"
       >
         <template #body="props">
@@ -284,6 +285,7 @@ function simpanRinci (val) {
   // console.log('rincian sblm push', rinci)
 
   rinci.push(obj)
+
   $q.localStorage.set('rincian_npd', rinci)
   store.form.rincians = rinci
   // rincians.value = rinci
@@ -297,6 +299,7 @@ function simpanRinci (val) {
 
   store.reqs.subtotal = subtotal
   console.log('rincian stlh push', store.form.rincians)
+  store.disabled = true
 }
 // eslint-disable-next-line no-unused-vars
 function simpanRinciBast (val) {
@@ -330,6 +333,10 @@ function simpanRinciBast (val) {
   $q.localStorage.set('rincian_npd', data)
 
   store.form.rincians = data
+  const jml = store.form.rincians.map((x) => x.nominalpembayaran)
+  const subtotal = jml.reduce((x, y) => x + y, 0)
+
+  store.reqs.subtotal = subtotal
   console.log('simpan setelah Push', store.form.rincians)
 }
 // function onSimpan () {

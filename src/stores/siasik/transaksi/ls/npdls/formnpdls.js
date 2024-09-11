@@ -7,7 +7,7 @@ import { notifSuccess } from 'src/modules/utils'
 export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
   state: () => ({
     loading: false,
-    disable: false,
+    disabled: false,
     params: {
       q: '',
       tahun: date.formatDate(Date.now(), 'YYYY'),
@@ -105,7 +105,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     ],
 
     serahterimas: [
-      { ket: 'Ya', value: '1' },
+      { ket: 'Ya', value: '3' },
       { ket: 'Tidak', value: '2' }
     ],
     bidangdanptk: [],
@@ -222,6 +222,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
             // console.log('isian', resp)
+            this.form.nonpdls = resp.data?.result?.nonpdls
             this.loading = false
             notifSuccess(resp)
             resolve(resp.data)
@@ -295,7 +296,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         })
         : []
       this.itembelanja = data
-      console.log('item belanja', this.itembelanja)
+      // console.log('item belanja', this.itembelanja)
     }
     // getDataBast () {
     //   this.selectbastFarmasi()

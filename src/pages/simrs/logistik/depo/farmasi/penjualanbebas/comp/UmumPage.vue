@@ -86,7 +86,7 @@
     </div>
 
     <div class="row q-py-sm">
-      <forminput tipe="umum" />
+      <forminput tipe="umum" @simpan="afterSimpan" />
     </div>
     <div class="row q-py-sm">
       <listbelum tipe="umum" />
@@ -166,6 +166,12 @@ function clearModelKunj (val) {
 
 function ketikNama (val) {
   console.log('ketik nama', val)
+  model.value = null
+  modelKu.value = null
+}
+function afterSimpan () {
+  store.setForm('kode_identitas', null)
+  store.setForm('nama', null)
   model.value = null
   modelKu.value = null
 }

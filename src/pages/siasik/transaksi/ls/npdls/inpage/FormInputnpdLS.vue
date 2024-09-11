@@ -11,6 +11,8 @@
           v-model="store.form.nonpdls"
           label="Nomor NPD-LS"
           disable
+          outlined
+          dense
         />
         <app-autocomplete
           v-model="store.form.kodepptk"
@@ -21,7 +23,7 @@
           outlined
           :source="store.ptks"
           @selected="(val)=>pilihPTK(val)"
-          :disable="store.loading"
+          :disable="store.disabled"
           :loading="store.loading"
         />
         <!-- <app-autocomplete
@@ -47,9 +49,9 @@
           icon="icon-mat-event"
           outlined
           @set-model="val=>store.form.tglnpdls=val"
-          :disable="store.loading"
+          :disable="store.disabled"
           :loading="store.loading"
-          autofocus
+          :autofocus="false"
         />
         <!-- <app-autocomplete
           v-model="store.form.kodekegiatanblud"
@@ -73,7 +75,7 @@
           @db-model="kodeKeg"
           @selected="(val)=>pilihKegiatan(val)"
           :key="store.reqs.kodebidang"
-          :disable="store.loading"
+          :disable="store.disabled"
           :loading="store.loading"
         />
       </div>
@@ -93,33 +95,20 @@
           label="Pilih Serahterima Pekerjaan"
           outlined
         /> -->
-        <template v-if="store.form.kodepenerima === null">
-          <app-autocomplete
-            v-model="store.form.kodepenerima"
-            label="Pihak Ketiga"
-            autocomplete="nama"
-            option-label="nama"
-            option-value="kode"
-            outlined
-            :source="ambil.pihaktigas"
-            @selected="(val)=>pilihPihaktiga(val)"
-            :disable="store.loading"
-            :loading="store.loading"
-          />
-        </template>
-        <template v-else>
-          <app-autocomplete
-            v-model="store.form.kodepenerima"
-            label="Pihak Ketiga"
-            autocomplete="nama"
-            option-label="nama"
-            option-value="kode"
-            outlined
-            disable
-            :source="ambil.pihaktigas"
-            @selected="(val)=>pilihPihaktiga(val)"
-          />
-        </template>
+
+        <app-autocomplete
+          v-model="store.form.kodepenerima"
+          label="Pihak Ketiga"
+          autocomplete="nama"
+          option-label="nama"
+          option-value="kode"
+          outlined
+          :source="ambil.pihaktigas"
+          @selected="(val)=>pilihPihaktiga(val)"
+          :disable="store.disabled"
+          :loading="store.loading"
+        />
+
         <div class="row items-center">
           <div>
             Ada Serahterima ? :
@@ -135,7 +124,7 @@
             />
           </div>
 
-          <template v-if="store.form.serahterimapekerjaan === '1'">
+          <template v-if="store.form.serahterimapekerjaan === '3'">
             <div>
               <app-autocomplete
                 v-model="store.form.bast"
@@ -162,7 +151,7 @@
         :autofocus="false"
         :valid="{required:true}"
       />
-      <template v-if="store.form.serahterimapekerjaan === '1'">
+      <template v-if="store.form.serahterimapekerjaan === '3'">
         <app-input-simrs
           class="q-pa-sm q-gutter-y-xs"
           style="width: 40%;"
@@ -179,7 +168,7 @@
             color="dark"
             round
             size="sm"
-            :disable="store.loading"
+            :disable="store.disabled"
             :loading="store.loading"
             icon="icon-mat-add"
             :source="store.dariserahterima"
@@ -203,7 +192,7 @@
       <!-- <div class="float-right q-pa-sm q-gutter-y-xs">
         <app-btn
           label="Simpan"
-          :disable="store.loading"
+          :disable="store.disabled"
           :loading="store.loading"
           @click="onSimpan()"
         />
@@ -345,11 +334,11 @@ const tablerinci = [
 const columns = ref(tablerinci)
 const onSubmit = () => {
   store.simpanNpdls()
-    .then(() => {
-      if (formNpdLS.value != null) {
-        formNpdLS.value.resetValidation()
-      }
-    })
+  // .then(() => {
+  //   if (formNpdLS.value != null) {
+  //     formNpdLS.value.resetValidation()
+  //   }
+  // })
 }
 const onReset = () => {
   formNpdLS.value.resetValidation()
@@ -511,6 +500,7 @@ const printObj = {
     console.log('wait...')
   },
   openCallback (vue) {
+    printed.value = true
     console.log('opened')
   },
   closeCallback (vue) {

@@ -28,90 +28,146 @@
       <q-separator />
       <q-card-section>
         <q-list>
-          <q-table
-            class="my-sticky-header"
-            flat
-            :rows="carisrt.bastfarmasis"
-            :columns="columns"
-            row-key="name"
-            @request="carisrt.onRequest"
-            v-model:pagination="carisrt.reqs"
-            :filter="carisrt.reqs.q"
-            :loading="carisrt.loading"
-            :rows-per-page-options="[10,20,50]"
-          >
-            <template #top-left>
-              <div class="flex q-qutter-sm z-top">
-                <div>
-                  <q-input
-                    v-model="carisrt.reqs.q"
-                    outlined
-                    dark
-                    color="white"
-                    dense
-                    placeholder="Cari BAST ..."
-                    debounce="500"
-                    style="min-width: 200px;"
-                    @keyup.enter="carisrt.goToPage(1)"
-                  >
-                    <template
-                      v-if="carisrt.reqs.q"
-                      #append
-                    >
-                      <q-icon
-                        name="icon-mat-close"
-                        size="xs"
-                        class="cursor-pointer"
-                        @click.stop.prevent="clearSearch"
-                      />
-                    </template>
-                    <template #prepend>
-                      <q-icon
-                        size="sm"
-                        name="icon-mat-search"
-                      />
-                    </template>
-                  </q-input>
-                </div>
-              </div>
-            </template>
-
-            <template #no-data="{ message, filter }">
-              <div class="absolute-top fit row flex-center bg-transparent items-center text-dark">
-                <div class="row items-center q-gutter-sm">
-                  <q-icon size="2em" name="icon-mat-eye" />
+          <template v-if="carisrt.bastfarmasis.length">
+            <q-table
+              class="my-sticky-header"
+              :rows="carisrt.bastfarmasis"
+              :columns="columns"
+              row-key="name"
+              @request="carisrt.onRequest"
+              v-model:pagination="carisrt.reqs"
+              :filter="carisrt.reqs.q"
+              :loading="carisrt.loading"
+              :rows-per-page-options="[10,20,50]"
+            >
+              <template #top-left>
+                <div class="flex q-qutter-sm z-top">
                   <div>
-                    Data tidak ditemukan... {{ message }}
-                  </div>
-                  <div class="text-h4">
-                    {{ filter? '🏷️': '🏷️' }}
+                    <q-input
+                      v-model="carisrt.reqs.q"
+                      outlined
+                      dark
+                      color="white"
+                      dense
+                      placeholder="Cari BAST ..."
+                      debounce="500"
+                      style="min-width: 200px;"
+                      @keyup.enter="carisrt.goToPage(1)"
+                    >
+                      <template
+                        v-if="carisrt.reqs.q"
+                        #append
+                      >
+                        <q-icon
+                          name="icon-mat-close"
+                          size="xs"
+                          class="cursor-pointer"
+                          @click.stop.prevent="clearSearch"
+                        />
+                      </template>
+                      <template #prepend>
+                        <q-icon
+                          size="sm"
+                          name="icon-mat-search"
+                        />
+                      </template>
+                    </q-input>
                   </div>
                 </div>
-                <!-- <q-icon size="2em" :name="filter ? 'icon-mat-list' : icon" /> -->
-              </div>
-            </template>
-            <template #body="props">
-              <q-tr :props="props">
-                <q-td key="nobast" :props="props">
-                  {{ props.row.nobast }}
-                </q-td>
-                <q-td key="jumlah_bastx" :props="props">
-                  {{ formattanpaRp(props.row.jumlah_bastx) }}
-                </q-td>
-                <q-td>
-                  <div class="row justify-end">
-                    <q-btn
-                      outline
-                      size="sm"
-                      class="q-px-md"
-                      label="Pilih"
-                      @click="pilihDataSerahterima(props?.row.nobast)"
-                    />
+              </template>
+              <template #body="props">
+                <q-tr :props="props">
+                  <q-td key="nobast" :props="props">
+                    {{ props.row.nobast }}
+                  </q-td>
+                  <q-td key="jumlah_bastx" :props="props">
+                    {{ formattanpaRp(props.row.jumlah_bastx) }}
+                  </q-td>
+                  <q-td>
+                    <div class="row justify-end">
+                      <q-btn
+                        outline
+                        size="sm"
+                        class="q-px-md"
+                        label="Pilih"
+                        @click="pilihDataSerahterima(props?.row.nobast)"
+                      />
+                    </div>
+                  </q-td>
+                </q-tr>
+              </template>
+            </q-table>
+          </template>
+          <template v-if="carisrt.konsinyasis.length">
+            <q-table
+              class="my-sticky-header"
+              :rows="carisrt.konsinyasis"
+              :columns="columnkonsinyasi"
+              row-key="name"
+              @request="carisrt.onRequest"
+              v-model:pagination="carisrt.reqs"
+              :filter="carisrt.reqs.q"
+              :loading="carisrt.loading"
+              :rows-per-page-options="[10,20,50]"
+            >
+              <template #top-left>
+                <div class="flex q-qutter-sm z-top">
+                  <div>
+                    <q-input
+                      v-model="carisrt.reqs.q"
+                      outlined
+                      dark
+                      color="white"
+                      dense
+                      placeholder="Cari BAST ..."
+                      debounce="500"
+                      style="min-width: 200px;"
+                      @keyup.enter="carisrt.goToPage(1)"
+                    >
+                      <template
+                        v-if="carisrt.reqs.q"
+                        #append
+                      >
+                        <q-icon
+                          name="icon-mat-close"
+                          size="xs"
+                          class="cursor-pointer"
+                          @click.stop.prevent="clearSearch"
+                        />
+                      </template>
+                      <template #prepend>
+                        <q-icon
+                          size="sm"
+                          name="icon-mat-search"
+                        />
+                      </template>
+                    </q-input>
                   </div>
-                </q-td>
-              </q-tr>
-            </template>
-          </q-table>
+                </div>
+              </template>
+              <template #body="props">
+                <q-tr :props="props">
+                  <q-td key="notranskonsi" :props="props">
+                    {{ props.row.notranskonsi }}
+                  </q-td>
+                  <q-td key="jumlah_bastx" :props="props">
+                    {{ formattanpaRp(props.row.jumlah_bastx) }}
+                  </q-td>
+                  <q-td>
+                    <div class="row justify-end">
+                      <q-btn
+                        outline
+                        size="sm"
+                        class="q-px-md"
+                        label="Pilih"
+                        @click="pilihDataSerahterima(props?.row.notranskonsi)"
+                      />
+                    </div>
+                  </q-td>
+                </q-tr>
+              </template>
+            </q-table>
+          </template>
         </q-list>
       </q-card-section>
     </q-card>
@@ -152,6 +208,27 @@ const columnsx = [
   }
 ]
 const columns = ref(columnsx)
+
+const columnkons = [
+  {
+    name: 'notranskonsi',
+    label: 'No BAST',
+    align: 'left',
+    field: 'notranskonsi'
+  },
+  {
+    name: 'jumlah_bastx',
+    label: 'Nilai',
+    align: 'center',
+    field: 'jumlah_bastx'
+  },
+  {
+    name: 'Opsi',
+    label: 'Opsi',
+    align: 'center'
+  }
+]
+const columnkonsinyasi = ref(columnkons)
 onMounted(() => {
   // store.getDataBast()
 

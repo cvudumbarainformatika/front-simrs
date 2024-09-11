@@ -1,9 +1,9 @@
 <template>
-  <div class="row justify-center q-pt-md">
+  <div class="cont row justify-center q-pt-md">
     <div class="row">
       <div class="col-1 q-pl-md">
         <q-img
-          src="~assets/images/logo_kota_original.png"
+          src="~assets/images/Pemkot.svg"
           style="height: 2.6cm; width: 2cm"
         />
       </div>
@@ -46,77 +46,79 @@
       <div class="q-pl-lg" />
     </div>
 
-    <div class="row items-left q-pt-xl">
-      <div class="headerkedua">
-        <table>
-          <tbody>
-            <tr>
-              <td width="150px">
-                Kegiatan BLUD
-              </td>
-              <td width="min:150px">
-                : {{ store.form.kegiatanblud }}
-              </td>
-            </tr>
-            <tr>
-              <td width="150px">
-                Pihak Ketiga
-              </td>
-              <td width="min:150px">
-                : {{ store.form.penerima }}
-              </td>
-            </tr>
-            <tr>
-              <td width="150px">
-                Nama Bank
-              </td>
-              <td width="min:150px">
-                : {{ store.form.bank }}
-              </td>
-            </tr>
-            <tr>
-              <td width="150px">
-                No. Rekening
-              </td>
-              <td width="min:150px">
-                : {{ store.form.rekening }}
-              </td>
-            </tr>
-            <tr>
-              <td width="150px">
-                NPWP
-              </td>
-              <td width="min:150px">
-                : {{ store.form.npwp }}
-              </td>
-            </tr>
-            <tr>
-              <td width="150px">
-                Keperluan
-              </td>
-              <td width="min:150px">
-                : {{ store.form.keterangan }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="headerkedua row items-left q-pt-xl">
+      <table>
+        <tbody>
+          <tr>
+            <td width="150px">
+              Kegiatan BLUD
+            </td>
+            <td width="min:150px">
+              : {{ store.form.kegiatanblud }}
+            </td>
+          </tr>
+          <tr>
+            <td width="150px">
+              Pihak Ketiga
+            </td>
+            <td width="min:150px">
+              : {{ store.form.penerima }}
+            </td>
+          </tr>
+          <tr>
+            <td width="150px">
+              Nama Bank
+            </td>
+            <td width="min:150px">
+              : {{ store.form.bank }}
+            </td>
+          </tr>
+          <tr>
+            <td width="150px">
+              No. Rekening
+            </td>
+            <td width="min:150px">
+              : {{ store.form.rekening }}
+            </td>
+          </tr>
+          <tr>
+            <td width="150px">
+              NPWP
+            </td>
+            <td width="min:150px">
+              : {{ store.form.npwp }}
+            </td>
+          </tr>
+          <tr>
+            <td width="150px">
+              Keperluan
+            </td>
+            <td width="min:150px">
+              : {{ store.form.keterangan }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
       <div class="table row q-pt-xl">
         <template v-if="store.reqs.rincianmanual">
-          <div>
+          <div class="float-center">
             <q-table
               :rows="store.form.rincians"
               :columns="columns"
               row-key="name"
               hide-bottom
+              dense
+              style="min-width:1050px; width:fit-content;"
+              class="float-center"
             >
               <template #body="props">
                 <q-tr :props="props">
-                  <q-td key="rincianbelanja" :props="props" class="text-left">
-                    {{ props.row.rincianbelanja }}
-                  </q-td>
                   <q-td key="koderek50" :props="props" class="text-left">
                     {{ props.row.koderek50 }}
+                  </q-td>
+                  <q-td key="rincianbelanja" :props="props" class="text-left  grid">
+                    {{ props.row.rincianbelanja }}
                   </q-td>
                   <q-td key="itembelanja" :props="props" class="text-left">
                     {{ props.row.itembelanja }}
@@ -127,21 +129,6 @@
                 </q-tr>
               </template>
             </q-table>
-          </div>
-          <div class="subtotal">
-            <table class="vertical-center">
-              <tr>
-                <td width="200px" class="text-bold q-pl-md">
-                  SUBTOTAL
-                </td>
-                <td width="200px" class="text-bold">
-                  :
-                </td>
-                <td width="200px" class="text-right text-bold q-pr-md">
-                  {{ formattanpaRp(store.reqs.subtotal) }}
-                </td>
-              </tr>
-            </table>
           </div>
         </template>
         <template v-else-if="store.form.rincians">
@@ -176,74 +163,66 @@
               </template>
             </q-table>
           </div>
-          <div class="subtotal">
-            <table class="vertical-center">
+        </template>
+        <div class="subtotal">
+          <table class="vertical-center">
+            <tbody>
               <tr>
-                <td width="200px" class="text-bold q-pl-md">
+                <td width="100px" class="text-bold q-pl-md">
                   SUBTOTAL
                 </td>
-                <td width="200px" class="text-bold">
+                <td width="20px" class="text-bold">
                   :
                 </td>
-                <td width="200px" class="text-right text-bold q-pr-md">
-                  {{ formattanpaRp(store.reqs.subtotal) }}
+                <td class="text-left text-bold q-pr-md">
+                  {{ 'Rp. ' + formattanpaRp(store.reqs.subtotal) }}
                 </td>
               </tr>
-            </table>
+              <tr>
+                <td width="100px" class="text-bold q-pl-md">
+                  Terbilang
+                </td>
+                <td width="20px" class="text-bold">
+                  :
+                </td>
+                <td class="text-right text-bold q-pr-md">
+                  {{ terbilangRupiah(store.reqs.subtotal) + ' Rupiah' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ttd-kanan">
+          <div>
+            Probolinggo {{ store.display.sekarang }}
           </div>
-        </template>
-      </div>
-    </div>
-
-    <div class="subtotal">
-      <table class="vertical-center">
-        <tbody>
-          <tr>
-            <td width="200px" class="text-bold q-pl-md">
-              SUBTOTAL
-            </td>
-            <td width="200px" class="text-bold">
-              :
-            </td>
-            <td width="200px" class="text-right text-bold q-pr-md">
-              {{ formattanpaRp(store.reqs.subtotal) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="row">
-      <div class="ttd-kanan">
-        <div>
-          Probolinggo {{ store.display.sekarang }}
+          <div class="text-bold">
+            Bendahara Pengeluaran
+          </div>
+          <div style="padding-bottom: 40px" />
+          <div class="underline text-bold">
+            {{ pegawai.pegawais[0]?.nama }}
+            <div class="garis-bawah" style="text-decoration-line: underline;" />
+          </div>
+          <div>
+            NIP. {{ pegawai.pegawais[0]?.nip }}
+          </div>
         </div>
-        <div class="text-bold">
-          Bendahara Pengeluaran
-        </div>
-        <div style="padding-bottom: 40px" />
-        <div class="underline text-bold">
-          {{ pegawai.pegawais[0]?.nama }}
-          <div class="garis-bawah" style="text-decoration-line: underline;" />
-        </div>
-        <div>
-          NIP. {{ pegawai.pegawais[0]?.nip }}
-        </div>
-      </div>
-      <div class="ttd-kiri">
-        <div class="invisible">
-          .
-        </div>
-        <div class="text-bold">
-          Pejabat Teknis Kegiatan
-        </div>
-        <div style="padding-bottom: 40px" />
-        <div class="underline text-bold">
-          {{ store.form.pptk }}
-          <div class="garis-bawah" style="text-decoration-line: underline;" />
-        </div>
-        <div>
-          NIP. {{ store.form.kodepptk }}
+        <div class="ttd-kiri">
+          <div class="invisible">
+            .
+          </div>
+          <div class="text-bold">
+            Pejabat Teknis Kegiatan
+          </div>
+          <div style="padding-bottom: 40px" />
+          <div class="underline text-bold">
+            {{ store.form.pptk }}
+            <div class="garis-bawah" style="text-decoration-line: underline;" />
+          </div>
+          <div>
+            NIP. {{ store.form.kodepptk }}
+          </div>
         </div>
       </div>
     </div>
@@ -254,22 +233,25 @@ import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/f
 import { useLaporanBkuPengeluaranStore } from 'src/stores/siasik/laporan/bku/bkupengeluaran'
 
 import { formattanpaRp } from 'src/modules/formatter'
+// eslint-disable-next-line no-unused-vars
+import { terbilangRupiah } from 'src/modules/utils'
+
 const store = formNotaPermintaanDanaLS()
 const pegawai = useLaporanBkuPengeluaranStore()
 
 import { onMounted, ref } from 'vue'
 const tablerinci = [
   {
-    label: 'Rincian Belanja',
-    name: 'rincianbelanja',
-    align: 'center',
-    field: 'rincianbelanja'
-  },
-  {
     label: 'Rekening',
     name: 'koderek50',
     align: 'center',
     field: 'koderek50'
+  },
+  {
+    label: 'Rincian Belanja',
+    name: 'rincianbelanja',
+    align: 'center',
+    field: 'rincianbelanja'
   },
   {
     label: 'Item Belanja',
@@ -339,8 +321,16 @@ onMounted(() => {
 // }
 </script>
 <style lang="scss" scoped>
+.headerkedua{
+  position: fixed;
+  justify-content: left;
+  left: 20px;
+  top: 200px;
+  width: fit-content;
+}
 .kop{
   border-bottom: 1px solid grey;
+  width: fit-content;
 }
 .logo_kanan{
   right: 5%;
@@ -348,10 +338,8 @@ onMounted(() => {
 }
 .subtotal{
   position: relative;
-  top: 20px;
-  left: 60%;
-  width: 30%;
-  height: 35px;
+  width: 100%;
+  height: 100px;
   border-radius: 5px;
 }
 .vertical-center {
@@ -363,14 +351,15 @@ onMounted(() => {
 }
 .table{
   position: relative;
-  width:150%;
-  justify-content: center;
+  break-inside: auto;
+  top: 32%;
+  align-content: center;
 }
 
 .ttd-kanan{
   position: relative;
-  top: 200px;
-  left: 40%;
+  top: 80px;
+  margin-left: 350px;
   text-align: center;
   justify-content: center;
   width: 65%;
@@ -378,11 +367,11 @@ onMounted(() => {
 }
 .ttd-kiri{
   position: relative;
-  top: 100px;
-  right: 65%;
+  bottom: 20px;
+  margin-left: -150px;
   text-align: center;
   justify-content: center;
-  width: 50%;
+  width: 65%;
   height: 100px;
 }
 .underline {
