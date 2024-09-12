@@ -20,7 +20,8 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
     nota: null,
     loadingTerima: false,
     flag: null,
-    pageLayanan: false
+    pageLayanan: false,
+    mastertarif: []
   }),
   actions: {
     setParams (key, val) {
@@ -101,11 +102,10 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       }
     },
     async bukaLayanan (pasien) {
-      // this.loadingCall = false
       this.loadingTerima = true
       const form = { nota: pasien?.nota }
       this.nota = pasien?.nota
-      this.togglePageTindakan()
+      this.togglePageTindakan(pasien)
       try {
         const resp = await api.post('v1/simrs/penunjang/cathlab/terimapasien', form)
         if (resp.status === 200) {
@@ -129,7 +129,7 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },
-    togglePageTindakan () {
+    togglePageTindakan (pasien) {
       this.pageLayanan = !this.pageLayanan
     }
   }

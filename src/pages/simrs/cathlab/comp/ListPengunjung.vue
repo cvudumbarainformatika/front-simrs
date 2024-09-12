@@ -133,6 +133,7 @@ import EmptyData from './EmptyData.vue'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { usePermintaanCathLab } from 'src/stores/simrs/penunjang/cathlab/permintaan'
 import PagePelayananCathlab from '../pelayanan/PagePelayananCathlab.vue'
+import { onMounted } from 'vue'
 
 const emits = defineEmits(['terimapasien', 'bukalayanan'])
 const store = usePermintaanCathLab()
@@ -170,5 +171,11 @@ defineProps({
     type: Object,
     default: null
   }
+})
+
+onMounted(() => {
+  // console.log('qwer', pasien)
+  // const kelas = pasien
+  // store.tarifcatlab()
 })
 </script>
