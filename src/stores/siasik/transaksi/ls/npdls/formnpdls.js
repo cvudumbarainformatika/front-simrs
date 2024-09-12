@@ -120,6 +120,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     rincians: [],
     // datafarmasi: [],
     // bastfarmasis: [],
+    dialogCetakNpd: false,
     openDialogFarmasi: false,
     openDialogSiasik: false
   }),
@@ -155,6 +156,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       this.form = {}
       this.rinci = {}
       this.reqs = []
+    },
+    dataTersimpan () {
+      this.simpanNpdls()
     },
     // onRequest (props) {
     //   console.log('props', props)

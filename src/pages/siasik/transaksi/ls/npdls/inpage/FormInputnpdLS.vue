@@ -1,11 +1,6 @@
 <template>
-  <template>
-    <div id="printMe">
-      <PrintNpdls />
-    </div>
-  </template>
   <q-form class="fit" ref="formNpdLS" @submit="onSubmit" @reset="onReset">
-    <div class="row" id="printMe">
+    <div class="row">
       <div class="q-pa-sm q-gutter-y-md" style="width: 25%">
         <app-input-simrs
           v-model="store.form.nonpdls"
@@ -263,15 +258,16 @@
         :loading="store.loading"
         @click="onSimpan()"
       />
+
       <div class="q-pl-md">
         <q-btn
-          ref="refPrint"
-          v-print="printObj"
           unelevated
           color="dark"
           round
           size="sm"
-          icon="icon-mat-print"
+          icon="icon-mat-description"
+          @click=" () => {
+            store.dialogCetakNpd = true}"
         >
           <q-tooltip
             class="primary"
@@ -281,6 +277,9 @@
           </q-tooltip>
         </q-btn>
       </div>
+      <print-npdls
+        v-model="store.dialogCetakNpd"
+      />
     </div>
   </q-form>
 </template>
@@ -293,11 +292,20 @@ import { formKontrakPekerjaan } from 'src/stores/siasik/transaksi/ls/kontrak/for
 // import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import FormRincianNPDls from './FormRincianNPDls.vue'
-import PrintNpdls from '../print/PrintNpdls.vue'
+// import PrintNpdls from '../print/PrintNpdls.vue'
 import { formattanpaRp } from 'src/modules/formatter'
 
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
+const PrintNpdls = defineAsyncComponent(() => import('../print/PrintNpdls.vue'))
+
+// defineProps({
+//   data: {
+//     type: Object,
+//     default: null
+//   }
+// })
+// const emits = defineEmits(['cetakNPD'])
 // const tarik = useLaporanLraLaprealisasianggaranStore()
 const ambil = formKontrakPekerjaan()
 const store = formNotaPermintaanDanaLS()
@@ -491,23 +499,6 @@ function pilihPihaktiga (val) {
   // console.log('penerima', carisrt.reqs.kodepenerima)
 }
 
-const printed = ref(false)
-const printObj = {
-  id: 'printMe',
-  popTitle: 'Nota Permintaan Dana Langsung (NPD-LS) | SIASIK',
-  beforeOpenCallback (vue) {
-    printed.value = true
-    console.log('wait...')
-  },
-  openCallback (vue) {
-    printed.value = true
-    console.log('opened')
-  },
-  closeCallback (vue) {
-    printed.value = false
-    console.log('closePrint')
-  }
-}
 </script>
 
 <style lang="scss" scoped>
