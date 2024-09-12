@@ -9,6 +9,7 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
     item: {},
     total: 0,
     loading: false,
+    loadingTerima: false,
     params: {
       q: '',
       page: 1,
@@ -18,7 +19,6 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       status: ''
     },
     nota: null,
-    loadingTerima: false,
     flag: null,
     pageLayanan: false,
     mastertarif: []
@@ -115,7 +115,7 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
 
             // BARU
             findPasien[0].datasimpeg = resp?.data?.datasimpeg
-            // findPasien[0].triage = resp?.data?.triage
+            findPasien[0].cathlab = resp?.data?.cathlab
           }
           this.loadingTerima = false
           // console.log('load2', this.loadingTerima)
@@ -131,6 +131,36 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
     },
     togglePageTindakan (pasien) {
       this.pageLayanan = !this.pageLayanan
+    },
+    injectDataPasien (pasien, val, kode, arr) {
+      // console.log('valid', val.id)
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => x.id === val.id)
+        // console.log('itarget', target)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
+
+        if (target) {
+          Object.assign(target, val)
+        }
+        else {
+          if (kode === 'diagnosa') {
+            data[kode]?.push(val)
+          }
+          else if (kode === 'dokumenluar') {
+            const trg = data[kode]
+            if (trg) {
+              data[kode] = []
+              data[kode] = val
+            }
+          }
+          else {
+            data[kode]?.splice(0, 0, val)
+          }
+        }
+      }
     }
   }
 })

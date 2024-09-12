@@ -66,7 +66,6 @@ const props = defineProps({
   }
 })
 onMounted(() => {
-  // console.log(text.value)
   document.addEventListener('keypress', handleKeypress, false)
 })
 

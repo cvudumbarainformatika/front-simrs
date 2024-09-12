@@ -40,7 +40,7 @@
           <div class="col-7">
             <q-select
               ref="reftindakan"
-              v-model="store.form.tindakan"
+              v-model="store.tindakan"
               label="Tindakan CathLab"
               dense
               outlined

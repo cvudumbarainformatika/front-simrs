@@ -43,17 +43,17 @@
         />
       </div>
     </q-card>
-    <!-- <cathlab-page
+    <CathlabPage
       :key="pasien"
       v-model="store.pageLayanan"
       :pasien="pasien"
       :loadingaja="store.loadingTerima"
-    /> -->
+    />
   </q-page>
 </template>
 
 <script setup>
-// import ListLoading from './ListLoading.vue'
+
 import ListPengunjung from './ListPengunjung.vue'
 import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
@@ -74,6 +74,7 @@ function terimapasien (val) {
 }
 
 function bukaTindakan (val) {
+  console.log('val', val)
   pasien.value = val
   store.bukaLayanan(val)
 }

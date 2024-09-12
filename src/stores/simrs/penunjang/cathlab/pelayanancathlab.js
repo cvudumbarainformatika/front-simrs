@@ -16,8 +16,10 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
     form: {
       noreg: '',
       norm: '',
-      nota: ''
-    }
+      nota: '',
+      keterangan: ''
+    },
+    tindakan: ''
   }),
   actions: {
     async tarifcatlab (val) {
@@ -35,10 +37,10 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
         if (kelas === '3') {
           const vartarif = {
             kode: x?.kode,
-            tindakan: x?.nama_tindakan
-            // js: x?.js_kelas3,
-            // jp: x?.jp_kelas3,
-            // total: parseInt(x?.js_kelas3) + parseInt(x?.jp_kelas3)
+            tindakan: x?.nama_tindakan,
+            js: x?.js_kelas3,
+            jp: x?.jp_kelas3,
+            total: parseInt(x?.js_kelas3) + parseInt(x?.jp_kelas3)
           }
           temptarif.push(vartarif)
         }
@@ -77,18 +79,22 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
       console.log('hasil', this.mastertarif)
     },
     async saveData (pasien) {
-      // console.log('noreg', pasien.noreg)
+      console.log('noreg', this.tindakan)
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
       this.form.nota = pasien ? pasien.nota : ''
+
+      this.form.tindakan = this.tindakan?.kode
+      this.form.js = this.tindakan?.js
+      this.form.jp = this.tindakan?.jp
 
       try {
         const resp = await api.post('v1/simrs/penunjang/cathlab/simpancathlab', this.form)
         if (resp.status === 200) {
           const storePasien = usePermintaanCathLab()
           const isi = resp.data.result
-          storePasien.injectDataPasien(pasien, isi, 'catlab')
+          storePasien.injectDataPasien(pasien, isi, 'cathlab')
           notifSuccess(resp)
           this.initReset()
           this.loadingForm = false
