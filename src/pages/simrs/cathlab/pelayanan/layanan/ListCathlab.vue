@@ -69,11 +69,11 @@
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Pelaksana 1 : <span class="text-weight-bold">{{ item?.pelaksana1?.nama ?? '-' }}</span>
+                      <span class="">Pelaksana 1 : <span class="text-weight-bold">{{ item?.pelaksana1?.nama }}</span>
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Pelaksana 2 : <span class="text-weight-bold">{{ item?.pelaksana2?.nama ?? '-' }}</span>
+                      <span class="">Pelaksana 2 : <span class="text-weight-bold">{{ item?.pelaksana2?.nama ?? '+' }}</span>
                       </span>
                     </q-item-label>
                   </div>
@@ -109,6 +109,7 @@ import { formatDouble } from 'src/modules/formatter'
 import { usePermintaanCathLab } from 'src/stores/simrs/penunjang/cathlab/permintaan'
 import { computed } from 'vue'
 const store = usePermintaanCathLab()
+
 const $q = useQuasar()
 const props = defineProps({
   pasien: {

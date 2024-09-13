@@ -185,7 +185,6 @@ function setSistembayar (val) {
   if (index >= 0) {
     store.setForm('kodesistembayar', store.sistembayars[index].rs1)
   }
-  console.log('form', store.form)
 }
 // emits
 const emits = defineEmits(['bisaSimpan'])
