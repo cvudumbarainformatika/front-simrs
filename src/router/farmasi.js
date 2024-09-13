@@ -29,6 +29,10 @@ const farmasi = {
       component: () => import('pages/simrs/farmasi/pembayaran/IndexPage.vue')
     },
     {
+      path: '/farmasi/penyesuaian',
+      component: () => import('pages/simrs/farmasi/penyesuaian/IndexPage.vue')
+    },
+    {
       path: '/farmasi/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
     }
