@@ -197,7 +197,6 @@ function getImage (kelamin, row) {
   }
 }
 function getImageDokter (kelamin, row) {
-  console.log('tes', props.pasien?.datasimpeg)
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href

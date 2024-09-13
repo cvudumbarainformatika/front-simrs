@@ -73,7 +73,7 @@
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Pelaksana 2 : <span class="text-weight-bold">{{ item?.pelaksana1?.nama ?? '-' }}</span>
+                      <span class="">Pelaksana 2 : <span class="text-weight-bold">{{ item?.pelaksana2?.nama ?? '-' }}</span>
                       </span>
                     </q-item-label>
                   </div>
@@ -127,6 +127,7 @@ const lists = computed(() => {
 })
 
 function hapusItem (id) {
+  console.log('id', id)
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -134,8 +135,7 @@ function hapusItem (id) {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    // console.log('OK')
-    store.deleteData(props.pasien, id)
+    store.deleteDataCathlab(props.pasien, id)
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {
