@@ -171,7 +171,8 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       }
     },
     async deleteDataCathlab (pasien, id) {
-      const payload = { id }
+      const nota = pasien?.nota
+      const payload = { id, nota }
       try {
         const resp = await api.post('v1/simrs/penunjang/cathlab/hapuscathlab', payload)
         // console.log(resp)
@@ -183,6 +184,30 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       }
       catch (error) {
         notifErr(error)
+      }
+    },
+    async flaglayanan (val) {
+      this.loading = true
+      const form = { nota: val?.nota }
+      this.nota = val?.nota
+
+      try {
+        const resp = await api.post('v1/simrs/penunjang/cathlab/updateflag', form)
+        if (resp.status === 200) {
+          const wew = this.items.filter(x => x === val)
+          if (wew.length) {
+            wew[0].flag = '1'
+          }
+          this.loading = false
+          this.nota = null
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.nota = null
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     }
   }

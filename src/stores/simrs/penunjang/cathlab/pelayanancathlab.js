@@ -54,7 +54,7 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
           }
           temptarif.push(vartarif)
         }
-        else if (kelas === '1') {
+        else if (kelas === '1' || kelas === 'ICC') {
           const vartarif = {
             kode: x?.kode,
             tindakan: x?.nama_tindakan,
