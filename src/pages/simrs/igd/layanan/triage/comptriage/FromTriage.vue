@@ -648,12 +648,11 @@ function cekjalannafas (val) {
     store.form.hasilprimarysurve = 'P1'
   }
   else {
-    store.form.hasilprimarysurve = ''
+    store.form.hasilprimarysurve = 0
   }
 }
 
 function ceksirkulasi (val) {
-  console.log('sirkulasi', val)
   store.form.sirkulasi = null
   store.form.disability = null
 
@@ -664,7 +663,7 @@ function ceksirkulasi (val) {
     store.form.hasilprimarysurve = 'P1'
   }
   else {
-    store.form.hasilprimarysurve = ''
+    store.form.hasilprimarysurve = 0
   }
 }
 
@@ -690,7 +689,7 @@ function disabilitycekhasilsurve (val) {
     store.form.hasilprimarysurve = 'P1'
   }
   else {
-    store.form.hasilprimarysurve = ''
+    store.form.hasilprimarysurve = 0
   }
 }
 
@@ -705,55 +704,75 @@ const props = defineProps({
   }
 })
 function onSubmit () {
-  // if (store.form.pasienhamil === 1) {
-  //   store.saveData(props.pasien).then(() => {
-  //     refForm.value.resetValidation()
-  //   })
-  // }
-  // else {
-  //   clearhamil()
-  //   store.saveData(props.pasien).then(() => {
-  //     refForm.value.resetValidation()
-  //   })
-  // }
-  kategoritriage()
-  store.saveData(props.pasien).then(() => {
-    refForm.value.resetValidation()
-  })
-}
+  const totalscore = ref(parseInt(store.form.scorenadi) + parseInt(store.form.scorepernapasanx) + parseInt(store.form.scoresistole) +
+  parseInt(store.form.scorediastole) + parseInt(store.form.scoresuhu) + parseInt(store.form.scorespo2) + parseInt(store.form.scorekesadaran))
 
-function kategoritriage () {
-  const totalscore = parseInt(store.form.scorenadi) + parseInt(store.form.scorepernapasanx) + parseInt(store.form.scoresistole) +
-  parseInt(store.form.scorediastole) + parseInt(store.form.scoresuhu) + parseInt(store.form.scorespo2) + parseInt(store.form.scorekesadaran)
+  store.form.totalscore = totalscore.value
 
-  if (totalscore > 7) {
-    store.form.hasilsecondsurve = 'Resusitasi'
+  const hasilsecondsurvex = ref('')
+
+  if (totalscore.value > 7) {
+    hasilsecondsurvex.value = 'Resusitasi'
   }
-  else if (totalscore >= 4 && totalscore <= 5) {
-    store.form.hasilsecondsurve = 'P1'
+  else if (totalscore.value >= 4 && totalscore.value <= 5) {
+    hasilsecondsurvex.value = 'P1'
   }
-  else if (totalscore >= 2 && totalscore <= 3) {
-    store.form.hasilsecondsurve = 'P2'
+  else if (totalscore.value >= 2 && totalscore.value <= 3) {
+    hasilsecondsurvex.value = 'P2'
   }
-  else if (totalscore >= 0 && totalscore <= 1) {
-    store.form.hasilsecondsurve = 'P3'
+  else if (totalscore.value >= 0 && totalscore.value <= 1) {
+    hasilsecondsurvex.value = 'P3'
   }
 
   if (store.form.hasilprimarysurve === 'Resusitasi') {
     store.form.kategoritriage = 'Resusitasi'
   }
-  else if (store.form.hasilprimarysurve === 'P1' && store.form.hasilsecondsurve === 'Resusitasi') {
+  else if (store.form.hasilprimarysurve === 'P1' && hasilsecondsurvex.value === 'Resusitasi') {
     store.form.kategoritriage = 'P1'
   }
   else if (store.form.hasilprimarysurve === 'P1') {
     store.form.kategoritriage = 'P1'
   }
   else {
-    store.form.hasilsecondsurve = store.form.kategoritriage
+    store.form.kategoritriage = hasilsecondsurvex.value
   }
-
-  store.form.totalscore = totalscore
+  store.saveData(props.pasien, hasilsecondsurvex.value).then(() => {
+    refForm.value.resetValidation()
+  })
 }
+
+// function kategoritriage () {
+//   const totalscore = parseInt(store.form.scorenadi) + parseInt(store.form.scorepernapasanx) + parseInt(store.form.scoresistole) +
+//   parseInt(store.form.scorediastole) + parseInt(store.form.scoresuhu) + parseInt(store.form.scorespo2) + parseInt(store.form.scorekesadaran)
+
+//   store.form.totalscore = totalscore
+
+//   if (totalscore > 7) {
+//     store.form.hasilsecondsurve = 'Resusitasi'
+//   }
+//   else if (totalscore >= 4 && totalscore <= 5) {
+//     store.form.hasilsecondsurve = 'P1'
+//   }
+//   else if (totalscore >= 2 && totalscore <= 3) {
+//     store.form.hasilsecondsurve = 'P2'
+//   }
+//   else if (totalscore >= 0 && totalscore <= 1) {
+//     store.form.hasilsecondsurve = 'P3'
+//   }
+
+//   if (store.form.hasilprimarysurve === 'Resusitasi') {
+//     store.form.kategoritriage = 'Resusitasi'
+//   }
+//   else if (store.form.hasilprimarysurve === 'P1' && store.form.hasilsecondsurve === 'Resusitasi') {
+//     store.form.kategoritriage = 'P1'
+//   }
+//   else if (store.form.hasilprimarysurve === 'P1') {
+//     store.form.kategoritriage = 'P1'
+//   }
+//   else {
+//     store.form.hasilsecondsurve = store.form.kategoritriage
+//   }
+// }
 
 function scorepernapasanx () {
   const umurleng = props.pasien?.usia.split(' ')
@@ -1123,6 +1142,12 @@ function scorediastole () {
     else if (store.form.diastole > 110) {
       store.form.scorediastole = 3
     }
+    else {
+      store.form.scorediastole = 0
+    }
+  }
+  else {
+    store.form.scorediastole = 0
   }
 }
 

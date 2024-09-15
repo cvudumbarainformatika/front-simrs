@@ -112,7 +112,7 @@
                             </q-btn>
                           </q-card-actions>
                         </q-card>
-                        <q-card v-if="item?.kategoritriage === 'P1'" class="my-card" style="width: 60%;">
+                        <q-card v-else-if="item?.kategoritriage === 'P1'" class="my-card" style="width: 60%;">
                           <q-card-section class="bg-deep-orange text-white items-center">
                             <div class="text-h6 text-center">
                               {{ item?.kategoritriage }}
