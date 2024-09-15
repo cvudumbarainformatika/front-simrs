@@ -26,7 +26,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       nip: null,
       volumels: null,
       rincianmanual: null,
-      subtotal: null
+      subtotal: null,
+      jmlperkoderek108: []
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0

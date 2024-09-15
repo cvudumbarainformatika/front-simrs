@@ -85,6 +85,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
         const dataPagu = []
         for (let i = 0; i < this.bastfarmasis.length; i++) {
           const el = this.bastfarmasis[i].rincianbast
+          console.log('val', el)
+
           const master = el.length
             ? el.map((x) => {
             // const a = x.masterobat.pagu.koderek108
@@ -94,17 +96,19 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
                 itembelanja: x.masterobat.pagu.usulan,
                 rek108: x.masterobat.pagu.koderek108,
                 item: x.masterobat.pagu.usulan,
-                harga: x.masterobat.pagu.harga,
+                harga: parseFloat(x.masterobat.pagu.harga),
                 satuan: x.masterobat.pagu.satuan,
-                volume: x.masterobat.pagu.volume,
+                volume: parseFloat(x.masterobat.pagu.volume),
                 pagu: parseFloat(x.masterobat.pagu.pagu),
-                id_bast: x.id,
+                id_bast: x.masterobat.pagu.idpp,
                 nobast: x.nobast,
-                hargabast: x.harga_net,
-                volumebast: x.jumlah,
+                hargabast: parseFloat(x.harga_net),
+                volumebast: parseFloat(x.jumlah),
                 subtotal: parseFloat(x.subtotal),
                 nominalpembayaran: parseFloat(x.subtotal),
-                realisasi: x.masterobat.pagu.realisasi.map(x => parseFloat(x.total_realisasi)).reduce((a, b) => a + b, 0)
+                realisasi: parseFloat(x.masterobat?.pagu?.realisasi?.map(x => parseFloat(x.nominalpembayaran))?.reduce((a, b) => a + b, 0)) +
+                parseFloat(x.masterobat?.pagu?.realisasi_spjpanjar?.map(x => parseFloat(x.jumlahbelanjapanjar))?.reduce((a, b) => a + b, 0))
+                // spjpanjar: parseFloat(x.masterobat?.pagu?.realisasi_spjpanjar?.map(x => parseFloat(x.jumlahbelanjapanjar))?.reduce((a, b) => a + b, 0))
               }
             })
             : []
@@ -113,6 +117,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
           dataPagu.push(...master)
         }
         this.rekening50 = dataPagu
+        console.log('dataaaa', this.rekening50)
+
         const unik108 = this.rekening50.map((s) => s.rek108)
         const unik = unik108.length ? [...new Set(unik108)] : []
 
@@ -133,17 +139,18 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
             volume: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.volume),
             total: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu),
             // hargabast: dataPagu.filter((z) => z.rek108 === el).map((x) => x.hargabast)[i] * dataPagu.filter((z) => z.rek108 === el).map((x) => x.volumebast)[i],
-            hargals: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
+            hargals: parseFloat(dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0)),
             volumels: 1,
-            totalls: dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
-            nominalpembayaran: dataPagu.filter((z) => z.rek108 === el).map((x) => x.nominalpembayaran).reduce((a, b) => a + b, 0),
-            realisasi: parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi),
-            sisapagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(dataPagu.filter((z) => z.rek108 === el)[i]?.realisasi)
+            totalls: parseFloat(dataPagu.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0)),
+            nominalpembayaran: parseFloat(dataPagu.filter((z) => z.rek108 === el).map((x) => x.nominalpembayaran).reduce((a, b) => a + b, 0)),
+            realisasi: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.realisasi),
+            sisapagu: parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(dataPagu.filter((z) => z.rek108 === el)[0]?.realisasi)
           }
           arr.push(obj)
         // console.log('jjjj', arr)
         }
         this.itembelanja.push(...arr)
+        console.log('DATA PENERIMAAN', this.itembelanja)
       }
       else {
         const kons = []
@@ -160,14 +167,14 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
                 itembelanja: x.obat.pagu.usulan,
                 rek108: x.obat.pagu.koderek108,
                 item: x.obat.pagu.usulan,
-                harga: x.obat.pagu.harga,
+                harga: parseFloat(x.obat.pagu.harga),
                 satuan: x.obat.pagu.satuan,
-                volume: x.obat.pagu.volume,
+                volume: parseFloat(x.obat.pagu.volume),
                 pagu: parseFloat(x.obat.pagu.pagu),
                 id_bast: x.id,
                 nobast: x.notranskonsi,
-                hargabast: x.harga_net,
-                volumebast: x.jumlah,
+                hargabast: parseFloat(x.harga_net),
+                volumebast: parseFloat(x.jumlah),
                 subtotal: parseFloat(x.subtotal),
                 nominalpembayaran: parseFloat(x.subtotal),
                 realisasi: x.obat.pagu.realisasi.map(x => parseFloat(x.total_realisasi)).reduce((a, b) => a + b, 0)
@@ -199,10 +206,10 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
             volume: parseFloat(kons.filter((z) => z.rek108 === el)[0]?.volume),
             total: parseFloat(kons.filter((z) => z.rek108 === el)[0]?.pagu),
             // hargabast: dataPagu.filter((z) => z.rek108 === el).map((x) => x.hargabast)[i] * dataPagu.filter((z) => z.rek108 === el).map((x) => x.volumebast)[i],
-            hargals: kons.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
+            hargals: parseFloat(kons.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0)),
             volumels: 1,
-            totalls: kons.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0),
-            nominalpembayaran: kons.filter((z) => z.rek108 === el).map((x) => x.nominalpembayaran).reduce((a, b) => a + b, 0),
+            totalls: parseFloat(kons.filter((z) => z.rek108 === el).map((x) => x.subtotal).reduce((a, b) => a + b, 0)),
+            nominalpembayaran: parseFloat(kons.filter((z) => z.rek108 === el).map((x) => x.nominalpembayaran).reduce((a, b) => a + b, 0)),
             realisasi: parseFloat(kons.filter((z) => z.rek108 === el)[i]?.realisasi),
             sisapagu: parseFloat(kons.filter((z) => z.rek108 === el)[0]?.pagu) - parseFloat(kons.filter((z) => z.rek108 === el)[i]?.realisasi)
           }
