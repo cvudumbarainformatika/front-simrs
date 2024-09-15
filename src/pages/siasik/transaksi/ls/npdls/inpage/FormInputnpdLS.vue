@@ -44,8 +44,7 @@
           icon="icon-mat-event"
           outlined
           @set-model="val=>store.form.tglnpdls=val"
-          :disable="store.disabled"
-          :loading="store.loading"
+          :disable="store.disabled && store.loading"
           :autofocus="false"
         />
         <!-- <app-autocomplete
@@ -417,12 +416,12 @@ function onSimpan (val) {
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
     store.reqs.subtotal = subtotal
   }
-  return notifSuccessVue('Sukses Disimpan')
+  store.simpanNpdls()
+  // return notifSuccessVue('Sukses Disimpan')
 
   // console.log('sisa', carisrt.itembelanja)
   // console.log('realisas', store.reqs.jmlperkoderek108)
   // console.log('tidak boleh', store.reqs.subtotal > carisrt.itembelanja.sisapagu)
-  // store.simpanNpdls()
 
   // store.form.rincians.push(store.rinci = val)
   // .then(() => {

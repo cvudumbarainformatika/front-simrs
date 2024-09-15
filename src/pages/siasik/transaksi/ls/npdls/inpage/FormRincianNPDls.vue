@@ -47,10 +47,10 @@
                 />
                 <div class="q-pl-sm" />
                 <q-btn
-                  size="md"
+                  size="sm"
                   class="q-pl-md"
                   color="negative"
-                  icon="icon-mat-description"
+                  icon="icon-mat-delete"
                   @click="deleteData(props?.row)"
                 />
               </div>
@@ -58,14 +58,14 @@
           </q-tr>
         </template>
         <template #bottom-row>
-          <div colspan="100%" class="row full-width justify-between q-pl-xl q-py-xs">
-            <div class="justify-start">
+          <q-tr class="full-width text-bold">
+            <q-td colspan="6" class="text-center">
               SUBTOTAL
-            </div>
-            <div class="justify-end">
-              jumlah {{ store.reqs.subtotal }}
-            </div>
-          </div>
+            </q-td>
+            <q-td class="text-right text-bold">
+              {{ formattanpaRp(store.reqs.subtotal) }}
+            </q-td>
+          </q-tr>
         </template>
       </q-table>
     </div>
@@ -80,6 +80,7 @@
             autocomplete="rincianbelanja"
             option-value="rek50"
             outlined
+            :loading="store.loading"
             :option-label="opt => Object(opt) === opt && 'rincianbelanja' in opt ? opt.rek50 + ' - ' + opt.rincianbelanja : 'Silahkan Dipilih'"
             :source="store.rekening50"
             :key="store.reqs.kodekegiatan"
@@ -97,6 +98,7 @@
             outlined
             :key="store.reqs"
             :source="store.itembelanja"
+            :loading="store.loading"
             @selected="(val)=>{
               const arr = store.itembelanja
               const cari = arr.find(x => x.item === val)
