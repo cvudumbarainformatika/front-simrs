@@ -437,7 +437,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['tutup'])
 
-function openFaktur() {
+function openFaktur () {
   const par = { noreg: props.pasien?.noreg }
   store.getBill(par)
   // console.log('par', par)

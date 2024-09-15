@@ -25,29 +25,29 @@ export const useKasirIgdStore = defineStore('kasir_igd_store', {
   // },
   actions: {
 
-    setDate(payload) {
+    setDate (payload) {
       this.params.page = 1
       this.params.tgl = payload
       this.getLists()
     },
-    setQ(payload) {
+    setQ (payload) {
       this.params.page = 1
       this.params.q = payload
       this.getLists()
     },
-    setTglAwal() {
+    setTglAwal () {
       this.params.tgl = dateDbFormat(new Date())
     },
-    setPage(payload) {
+    setPage (payload) {
       this.params.page = payload
       this.getLists()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
     },
-    async getLists() {
+    async getLists () {
       this.loading = true
       const params = { params: this.params }
       // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
@@ -60,7 +60,7 @@ export const useKasirIgdStore = defineStore('kasir_igd_store', {
       }
       this.loading = false
     },
-    getBill(val) {
+    getBill (val) {
       this.rekapBill = {}
       this.loading = true
       const params = { params: val }
@@ -77,7 +77,7 @@ export const useKasirIgdStore = defineStore('kasir_igd_store', {
         })
       })
     },
-    async getNotas(val) {
+    async getNotas (val) {
       this.notas = {}
       this.loading = true
       const params = { params: val }
@@ -90,7 +90,7 @@ export const useKasirIgdStore = defineStore('kasir_igd_store', {
       }
       this.loading = false
     },
-    savePembayaran(payload) {
+    savePembayaran (payload) {
       this.loading = true
       return new Promise(resolve => {
         api.post('/v1/simrs/kasir/rajal/pembayaran', payload)
