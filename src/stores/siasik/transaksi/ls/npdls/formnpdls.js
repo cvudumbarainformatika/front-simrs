@@ -113,6 +113,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     ],
     // DATA NPD LS
     listnpdls: [],
+    datanpd: [],
 
     bidangdanptk: [],
     bidangs: [],
@@ -166,10 +167,10 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     dataTersimpan () {
       this.simpanNpdls()
     },
-    // goToPage (val) {
-    //   this.reqs.page = val
-    //   this.listdatanpd()
-    // },
+    goToPage (val) {
+      this.reqs.page = val
+      this.listdatanpd()
+    },
     // onRequest (props) {
     //   console.log('props', props)
     //   this.reqs.page = props?.pagination?.page ?? 1
@@ -323,7 +324,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
               console.log('data NPD', resp)
               this.loading = false
               this.listnpdls = resp.data
-
+              this.rincianNpd(resp.data)
               resolve(resp.data)
             }
           })
@@ -332,6 +333,41 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             reject(err)
           })
       })
+    },
+    rincianNpd () {
+      if (this.listnpdls.length) {
+        const sas = []
+        for (let i = 0; i < this.listnpdls.length; i++) {
+          const arr = this.listnpdls[i]
+          const head = {
+            nonpdls: arr.nonpdls,
+            tglnpdls: arr.tglnpdls,
+            bidang: arr.bidang,
+            pptk: arr.pptk,
+            kegiatanblud: arr.kegiatanblud,
+            penerima: arr.penerima,
+            keterangan: arr.keterangan,
+            nopencairan: arr.nopencairan,
+            tglcair: arr.npkrinci?.header?.tglpindahbuku,
+            total: arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)
+          }
+          // console.log('head', head)
+          // const el = arr.npdlsrinci
+          // const obj = el.length
+          //   ? el.map((x) => {
+          //     return {
+          //       nonpdls: x.nonpdls,
+          //       item: x.itembelanja,
+          //       total: parseFloat(x.nominalpembayaran)
+          //     }
+          //   })
+          //   : []
+          // console.log('datarinci', el)
+          sas.push(head)
+        }
+        this.datanpd = sas
+        console.log('rinciiii', this.datanpd)
+      }
     }
   }
 })

@@ -1,9 +1,9 @@
 <template>
-  <template v-if="store.listnpdls">
+  <template v-if="store.datanpd">
     <div class="justify-content-center">
       <q-table
         class="my-sticky-table"
-        :rows="store.listnpdls"
+        :rows="store.datanpd"
         :columns="columnsnpd"
         row-key="name"
         dense
@@ -54,25 +54,40 @@
         <template #body="props">
           <q-tr>
             <q-td key="nonpdls" :props="props" class="text-left">
-              {{ props.row.nonpdls }}
+              <div>{{ props.row?.nonpdls }}</div>
+              <q-td key="total">
+                <q-badge color="green" @click="onRowClick(props.row)">
+                  {{ formatRpDouble(props.row?.total) }}
+                </q-badge>
+              </q-td>
             </q-td>
             <q-td key="tglnpdls" :props="props" class="text-left">
-              {{ props.row.tglnpdls }}
+              {{ props.row?.tglnpdls }}
             </q-td>
             <q-td key="pptk" :props="props" class="text-left">
-              <div>{{ props.row.bidang }}</div>
-              <div>> {{ props.row.pptk }}</div>
+              <div>{{ props.row?.bidang }}</div>
+              <q-badge color="pink">
+                {{ props.row?.pptk }}
+              </q-badge>
             </q-td>
             <q-td key="kegiatanblud" :props="props" class="text-left">
-              {{ props.row.kegiatanblud }}
+              {{ props.row?.kegiatanblud }}
             </q-td>
             <q-td key="penerima" :props="props" class="text-left">
-              {{ props.row.penerima }}
+              {{ props.row?.penerima }}
             </q-td>
             <q-td key="keterangan" :props="props" class="text-left wrap-cells">
               <div>
-                {{ props.row.keterangan }}
+                {{ props.row?.keterangan }}
               </div>
+            </q-td>
+            <q-td key="nopencairan" :props="props" class="text-left wrap-cells">
+              <div>
+                Pencairan Tanggal {{ props.row?.tglcair }}
+              </div>
+              <q-badge>
+                {{ props.row?.nopencairan }}
+              </q-badge>
             </q-td>
           </q-tr>
         </template>
@@ -83,6 +98,8 @@
 
 <script setup>
 
+// eslint-disable-next-line no-unused-vars
+import { formatRpDouble } from 'src/modules/formatter'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 import { onMounted, ref } from 'vue'
 
@@ -102,10 +119,15 @@ const listnpdls = [
   {
     label: 'No NPD-LS',
     name: 'nonpdls',
+    field: row => [row.nonpdls, row.total],
     align: 'center',
-    field: 'nonpdls',
     headerStyle: 'width: 200px;'
   },
+  // {
+  //   name: 'total',
+  //   field: 'total',
+  //   headerStyle: 'width: 200px;'
+  // },
   {
     label: 'Tanggal',
     name: 'tglnpdls',
@@ -118,7 +140,7 @@ const listnpdls = [
     label: 'Bidang',
     name: 'pptk',
     align: 'center',
-    field: 'bidang' && 'pptk'
+    field: row => [row.pptk, row.bidang]
   },
   {
     label: 'Kegiatan BLUD',
@@ -139,9 +161,19 @@ const listnpdls = [
     align: 'center',
     field: 'keterangan',
     headerStyle: 'width: 300px;'
+  },
+  {
+    label: 'Status',
+    name: 'nopencairan',
+    align: 'center',
+    field: row => [row.nopencairan, row.tglcair],
+    headerStyle: 'width: 300px;'
   }
 ]
 const columnsnpd = ref(listnpdls)
+
+const onRowClick = (row) =>
+  alert([row?.nopencairan, row?.total])
 
 </script>
 
