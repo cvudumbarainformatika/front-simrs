@@ -453,7 +453,7 @@
       </svg> -->
 
       <!-- <?xml version="1.0" encoding="utf-8"?> -->
-      <svg viewBox="0 0 700 550" xmlns="http://www.w3.org/2000/svg" id="anatomys" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" class="cursor-pointer">
+      <svg ref="refSvg" viewBox="0 0 700 550" xmlns="http://www.w3.org/2000/svg" id="anatomys" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" class="cursor-pointer">
         <g transform="matrix(0.4614430069923401, 0, 0, 0.49975302815437317, 12.878301620483384, 24.140260696411133)" style="pointer-events: none;">
           <title>bdb</title>
           <g transform="matrix(0.621261, 0, 0, 0.619823, 456.050842, 474.51886)" style="transform-origin: 0.130196px -224.144px; pointer-events: none;" id="bdb-all">
@@ -1119,7 +1119,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 // import useCanvas from './canvasUse/useCanvas'
 import useSvg from './svgUse/useSvg'
 // import useSvg from './svgUse/useSvg'
@@ -1141,16 +1141,12 @@ defineExpose({ refSvg })
 const { _initSVG, targetEl } = useSvg()
 
 onMounted(() => {
-  const _svg = document.querySelector('#anatomys')
-  _initSVG(_svg)
+  _initSVG(refSvg.value)
 })
 
-// eslint-disable-next-line no-unused-vars
-const onMouseClick = (e) => {
-  // console.log('onMouseClick', e?.target?.attributes.title?.value)
-  console.log('onMouseClick', e)
-}
-
+watchEffect(() => {
+  console.log('targetEl', refSvg.value)
+})
 </script>
 
 <style lang="scss" scoped>

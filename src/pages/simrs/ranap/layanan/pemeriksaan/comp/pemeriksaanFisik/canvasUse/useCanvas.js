@@ -86,6 +86,12 @@ export default function useCanvas () {
     })
   }
 
+  const _ZOOMSVGVIEWPORT = (el) => {
+    const canvas = cnvs.value
+    console.log('el', canvas)
+    // const delta = el.deltaY
+  }
+
   // eslint-disable-next-line no-unused-vars
   const _initSetSVG = (canvas, svg) => {
     console.log('canvas', canvas)
@@ -111,6 +117,8 @@ export default function useCanvas () {
     setWorkspace,
     svgEl,
     initCanvas,
-    getSvgEl
+    getSvgEl,
+
+    _ZOOMSVGVIEWPORT
   }
 }

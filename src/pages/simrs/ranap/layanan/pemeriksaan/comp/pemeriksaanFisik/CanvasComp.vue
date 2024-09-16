@@ -34,7 +34,7 @@ const SvgComp = defineAsyncComponent(() => import('./SvgComp.vue'))
 const canvasRef = ref(null)
 const svgRef = ref(null)
 // eslint-disable-next-line no-unused-vars
-const { ruler, initCanvas, getSvgEl, setWorkspace, svgEl } = useCanvas()
+const { ruler, initCanvas, setWorkspace, svgEl } = useCanvas()
 
 onMounted(async () => {
   // console.log('svg mounted', svgRef)
@@ -58,9 +58,7 @@ onUnmounted(() => {
 })
 
 watchEffect(() => {
-  // eslint-disable-next-line vue/no-ref-as-operand
-  getSvgEl(svgRef.value?.refSvg)
-  // console.log('svgRef from watch effect', svgEl.value)
+  // log
 })
 
 </script>
