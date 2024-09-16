@@ -34,9 +34,7 @@
           @bukalayanan="bukaTindakan"
         />
       </q-scroll-area>
-      <div
-        class=" absolute-bottom bg-primary text-white z-top"
-      >
+      <div>
         <footer-page
           :meta="store.meta"
           @go-to="store.goToPage"
@@ -74,7 +72,6 @@ function terimapasien (val) {
 }
 
 function bukaTindakan (val) {
-  console.log('val', val)
   pasien.value = val
   store.bukaLayanan(val)
 }

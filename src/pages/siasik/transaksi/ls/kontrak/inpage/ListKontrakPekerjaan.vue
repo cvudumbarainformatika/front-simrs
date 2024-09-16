@@ -24,7 +24,7 @@
               dark
               color="white"
               dense
-              placeholder="Cari Obat ..."
+              placeholder="Cari Kontrak ..."
               debounce="500"
               style="min-width: 200px;"
               @keyup.enter="store.goToPage(1)"

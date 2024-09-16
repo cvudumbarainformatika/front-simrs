@@ -5,9 +5,9 @@
         :rows="carisrt.itembelanja"
         :columns="columns"
         row-key="name"
-        hide-bottom
         dense
         ref="rincianNpd"
+        :rows-per-page-options="[10,20,50]"
       >
         <template #body="props">
           <q-tr :props="props">
@@ -45,7 +45,25 @@
                   @click="simpanRinciBast(props?.row)"
                   onclick="disabled='true'"
                 />
+                <div class="q-pl-sm" />
+                <q-btn
+                  size="sm"
+                  class="q-pl-md"
+                  color="negative"
+                  icon="icon-mat-delete"
+                  @click="deleteData(props?.row)"
+                />
               </div>
+            </q-td>
+          </q-tr>
+        </template>
+        <template #bottom-row>
+          <q-tr class="full-width text-bold">
+            <q-td colspan="6" class="text-center">
+              SUBTOTAL
+            </q-td>
+            <q-td class="text-right text-bold">
+              {{ formattanpaRp(store.reqs.subtotal) }}
             </q-td>
           </q-tr>
         </template>
@@ -62,6 +80,7 @@
             autocomplete="rincianbelanja"
             option-value="rek50"
             outlined
+            :loading="store.loading"
             :option-label="opt => Object(opt) === opt && 'rincianbelanja' in opt ? opt.rek50 + ' - ' + opt.rincianbelanja : 'Silahkan Dipilih'"
             :source="store.rekening50"
             :key="store.reqs.kodekegiatan"
@@ -79,6 +98,7 @@
             outlined
             :key="store.reqs"
             :source="store.itembelanja"
+            :loading="store.loading"
             @selected="(val)=>{
               const arr = store.itembelanja
               const cari = arr.find(x => x.item === val)
@@ -184,9 +204,10 @@ import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/f
 import { onMounted, ref } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { formattanpaRp } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 
 const $q = useQuasar()
-
+const emits = defineEmits(['deleteIds'])
 const carisrt = dataBastFarmasi()
 const rincianNpd = ref([])
 // const rincians = ref([])
@@ -253,6 +274,24 @@ const tablebast = [
 
 // eslint-disable-next-line no-unused-vars
 const columns = ref(tablebast)
+const selected = ref([])
+
+function deleteData () {
+  $q.dialog({
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true
+    // persistent: true
+  }).onOk(() => {
+    // const params = { id: selected.value }
+    emits('deleteIds', selected.value)
+  }).onCancel(() => {
+    console.log('Cancel')
+    selected.value = []
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 // const form = ref({
 //   koderek50: null,
 //   itembelanja: null
@@ -333,11 +372,25 @@ function simpanRinciBast (val) {
   $q.localStorage.set('rincian_npd', data)
 
   store.form.rincians = data
-  const jml = store.form.rincians.map((x) => x.nominalpembayaran)
-  const subtotal = jml.reduce((x, y) => x + y, 0)
+  const unikjumlah = store.form.rincians.map((x) => x.koderek108)
+  const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
+  const arr = []
+  for (let i = 0; i < unik.length; i++) {
+    const el = unik[i]
+    const obj = {
+      jumlah: store.form.rincians.filter((z) => z.koderek108 === el).map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
+      koderek108: el,
+      sisapagu: store.form.rincians.filter((z) => z.koderek108 === el)[0]?.sisapagu
 
-  store.reqs.subtotal = subtotal
-  console.log('simpan setelah Push', store.form.rincians)
+    }
+    console.log('jumlahnya', obj?.jumlah)
+    console.log('sisa', obj?.sisapagu)
+    if (obj?.jumlah > obj?.sisapagu) {
+      return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
+    } arr.push(obj)
+    const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
+    store.reqs.subtotal = subtotal
+  }
 }
 // function onSimpan () {
 //   store.simpanNpdls()

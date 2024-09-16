@@ -53,12 +53,13 @@ export const useTriageIgd = defineStore('triageigd', {
         this.form.haid = date.formatDate(sekarang, 'YYYY-MM-DD')
       }
     },
-    async saveData (pasien) {
+    async saveData (pasien, hasilsecondsurve) {
       // console.log('noreg', pasien.noreg)
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
 
+      this.form.hasilsecondsurve = hasilsecondsurve
       try {
         const resp = await api.post('v1/simrs/pelayanan/igd/simpantriage', this.form)
         if (resp.status === 200) {

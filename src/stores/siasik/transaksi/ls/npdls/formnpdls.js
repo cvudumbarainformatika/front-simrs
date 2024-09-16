@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { date } from 'quasar'
 import { notifSuccess } from 'src/modules/utils'
+// import ListdataNpdLS from 'src/pages/siasik/transaksi/ls/npdls/inpage/ListdataNpdLS.vue'
 // import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 
 export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
@@ -19,6 +20,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     },
     reqs: {
       q: '',
+      page: 1,
       kodebidang: null,
       kodekegiatan: null,
       bast: null,
@@ -26,7 +28,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       nip: null,
       volumels: null,
       rincianmanual: null,
-      subtotal: null
+      subtotal: null,
+      jmlperkoderek108: []
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -108,6 +111,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       { ket: 'Ya', value: '3' },
       { ket: 'Tidak', value: '2' }
     ],
+    // DATA NPD LS
+    listnpdls: [],
+
     bidangdanptk: [],
     bidangs: [],
     kegiatans: [],
@@ -160,6 +166,10 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     dataTersimpan () {
       this.simpanNpdls()
     },
+    // goToPage (val) {
+    //   this.reqs.page = val
+    //   this.listdatanpd()
+    // },
     // onRequest (props) {
     //   console.log('props', props)
     //   this.reqs.page = props?.pagination?.page ?? 1
@@ -301,28 +311,27 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         : []
       this.itembelanja = data
       // console.log('item belanja', this.itembelanja)
-    }
-    // getDataBast () {
-    //   this.selectbastFarmasi()
-    // },
-    // selectbastFarmasi () {
-    //   this.loading = true
-    //   return new Promise((resolve, reject) => {
-    //     api.get('/v1/transaksi/belanja_ls/bastfarmasi')
-    //       .then((resp) => {
-    //         if (resp.status === 200) {
-    //           console.log('farmasi', resp.data)
-    //           this.loading = false
-    //           this.bastfarmasis = resp.data
+    },
 
-    //           resolve(resp.data)
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         this.loading = false
-    //         reject(err)
-    //       })
-    //   })
-    // }
+    listdatanpd () {
+      this.loading = true
+      const params = { params: this.reqs }
+      return new Promise((resolve, reject) => {
+        api.get('/v1/transaksi/belanja_ls/listnpdls', params)
+          .then((resp) => {
+            if (resp.status === 200) {
+              console.log('data NPD', resp)
+              this.loading = false
+              this.listnpdls = resp.data
+
+              resolve(resp.data)
+            }
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    }
   }
 })

@@ -120,7 +120,7 @@ const props = defineProps({
 })
 
 function onSubmit () {
-  console.log('coba', store.tindakan)
+  // console.log('coba', store.tindakan)
   store.saveData(props.pasien).then(() => {
     refForm.value.resetValidation()
   })

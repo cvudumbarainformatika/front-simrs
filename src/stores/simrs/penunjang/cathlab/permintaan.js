@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
   state: () => ({
@@ -133,7 +134,6 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      // console.log('valid', val.id)
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]
@@ -160,6 +160,54 @@ export const usePermintaanCathLab = defineStore('permintaan_cathlab', {
             data[kode]?.splice(0, 0, val)
           }
         }
+      }
+    },
+    hapusDataCathlab (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].cathlab
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    async deleteDataCathlab (pasien, id) {
+      const nota = pasien?.nota
+      const payload = { id, nota }
+      try {
+        const resp = await api.post('v1/simrs/penunjang/cathlab/hapuscathlab', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePermintaanCathLab()
+          storePasien.hapusDataCathlab(pasien, id)
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        notifErr(error)
+      }
+    },
+    async flaglayanan (val) {
+      this.loading = true
+      const form = { nota: val?.nota }
+      this.nota = val?.nota
+
+      try {
+        const resp = await api.post('v1/simrs/penunjang/cathlab/updateflag', form)
+        if (resp.status === 200) {
+          const wew = this.items.filter(x => x === val)
+          if (wew.length) {
+            wew[0].flag = '1'
+          }
+          this.loading = false
+          this.nota = null
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.nota = null
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     }
   }

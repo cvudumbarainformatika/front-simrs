@@ -3,7 +3,7 @@ const siasik = {
   component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', name: 'siasik', redirect: '/laporan/dashboard' },
+    { path: '', name: 'siasik', redirect: '/siasik/saldo/saldoawal' },
     {
       path: '/siasik/saldo/saldoawal',
       // name: 'siasik.saldo',
@@ -26,7 +26,7 @@ const siasik = {
     },
     {
       path: '/siasik/ls/npdls',
-      // name: 'siasik.saldo',
+      name: 'siasik.ls.npdls',
       component: () => import('pages/siasik/transaksi/ls/npdls/IndexPage.vue')
     },
     // {

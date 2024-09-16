@@ -1,5 +1,5 @@
 <template>
-  <q-form class="fit" ref="formNpdLS" @submit="onSubmit" @reset="onReset">
+  <q-form class="fit" ref="formNpdLS" @submit="onSimpan" @reset="onReset">
     <div class="row">
       <div class="q-pa-sm q-gutter-y-md" style="width: 25%">
         <app-input-simrs
@@ -44,8 +44,7 @@
           icon="icon-mat-event"
           outlined
           @set-model="val=>store.form.tglnpdls=val"
-          :disable="store.disabled"
-          :loading="store.loading"
+          :disable="store.disabled && store.loading"
           :autofocus="false"
         />
         <!-- <app-autocomplete
@@ -294,6 +293,8 @@ import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import FormRincianNPDls from './FormRincianNPDls.vue'
 // import PrintNpdls from '../print/PrintNpdls.vue'
 import { formattanpaRp } from 'src/modules/formatter'
+// eslint-disable-next-line no-unused-vars
+import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
@@ -340,6 +341,7 @@ const tablerinci = [
   }
 ]
 const columns = ref(tablerinci)
+// eslint-disable-next-line no-unused-vars
 const onSubmit = () => {
   store.simpanNpdls()
   // .then(() => {
@@ -391,7 +393,36 @@ function kodeKeg (val) {
 // }
 
 function onSimpan (val) {
+  // if (store.reqs.subtotal > store.itembelanja.sisapagu) {
+  //   return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
+  // }
+  const unikjumlah = store.form.rincians.map((x) => x.koderek108)
+  const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
+  const arr = []
+  for (let i = 0; i < unik.length; i++) {
+    const el = unik[i]
+    const obj = {
+      jumlah: store.form.rincians.filter((z) => z.koderek108 === el).map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
+      koderek108: el,
+      sisapagu: store.form.rincians.filter((z) => z.koderek108 === el)[0]?.sisapagu
+
+    }
+    console.log('jumlahnya', obj?.jumlah)
+    console.log('sisa', obj?.sisapagu)
+    if (obj?.jumlah > obj?.sisapagu) {
+      return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
+    }
+    arr.push(obj)
+    const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
+    store.reqs.subtotal = subtotal
+  }
   store.simpanNpdls()
+  // return notifSuccessVue('Sukses Disimpan')
+
+  // console.log('sisa', carisrt.itembelanja)
+  // console.log('realisas', store.reqs.jmlperkoderek108)
+  // console.log('tidak boleh', store.reqs.subtotal > carisrt.itembelanja.sisapagu)
+
   // store.form.rincians.push(store.rinci = val)
   // .then(() => {
   //   store.resetFORM()

@@ -54,7 +54,7 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
           }
           temptarif.push(vartarif)
         }
-        else if (kelas === '1') {
+        else if (kelas === '1' || kelas === 'ICC') {
           const vartarif = {
             kode: x?.kode,
             tindakan: x?.nama_tindakan,
@@ -76,10 +76,8 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
         }
       })
       this.mastertarif = temptarif
-      console.log('hasil', this.mastertarif)
     },
     async saveData (pasien) {
-      console.log('noreg', this.tindakan)
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
@@ -105,6 +103,25 @@ export const usePelayanaCahtlab = defineStore('pelayanan-cathlab', {
         this.loadingForm = false
         notifErr(error)
       }
+    },
+    initReset () {
+      this.tindakan = ''
+      this.form.keterangan = ''
     }
+    // async deleteDataCathlab (pasien, id) {
+    //   const payload = { id }
+    //   try {
+    //     const resp = await api.post('v1/simrs/penunjang/cathlab/hapuscathlab', payload)
+    //     // console.log(resp)
+    //     if (resp.status === 200) {
+    //       const storePasien = usePermintaanCathLab()
+    //       storePasien.hapusDataCathlab(pasien, id)
+    //       notifSuccess(resp)
+    //     }
+    //   }
+    //   catch (error) {
+    //     notifErr(error)
+    //   }
+    // }
   }
 })
