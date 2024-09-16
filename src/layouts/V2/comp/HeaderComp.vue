@@ -64,7 +64,7 @@
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
-            
+
             <div
               v-else-if="(rsim?.length===1 && rsim[0]!=='') || (rsim?.length>1)"
               class="q-mr-sm text-primary"
@@ -72,7 +72,6 @@
               <!-- style="max-width: 80%;" -->
               {{ poli(user?.pegawai) }}
             </div>
-            
           </div>
           <div
             v-if="optionsGudang?.length >1"
@@ -92,7 +91,6 @@
                 @set-gudang="emit('setGudang',$event)"
               />
             </q-btn>
-            
           </div>
           <div
             v-if="optionsRuangans?.length >1"
@@ -112,7 +110,6 @@
                 @set-gudang="emit('setGudang',$event)"
               />
             </q-btn>
-            
           </div>
           <q-btn
             flat
@@ -187,8 +184,8 @@ const optionsPolis = computed(() => {
 })
 onMounted(() => {
   const temp = props.user?.pegawai?.kdruangansim.split('|')
-  const ruang=temp.filter(a=>a.includes('R-'))
-  if (!props.user?.kdruangansim && temp?.length) emit('setGudang', ruang[0]??temp[0])
+  const ruang = temp.filter(a => a.includes('R-'))
+  if (!props.user?.kdruangansim && temp?.length) emit('setGudang', ruang[0] ?? temp[0])
   // rsim.value = temp
 })
 function labelGd () {
