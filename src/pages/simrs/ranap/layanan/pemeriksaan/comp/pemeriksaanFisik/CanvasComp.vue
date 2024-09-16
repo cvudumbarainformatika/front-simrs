@@ -3,7 +3,10 @@
     <div class="inside-shadow" />
     <q-resize-observer :debounce="200" @resize="onResize" />
     <div class="absolute-top z-top fit column flex-center">
-      <SvgComp :workspace="setWorkspace" />
+      <SvgComp
+        ref="svgRef"
+        :workspace="setWorkspace"
+      />
     </div>
     <canvas ref="canvasRef" id="canvas" :class="ruler ? 'design-stage-grid' : ''" />
     <!-- <dragMode v-if="state.show" /> -->
@@ -12,7 +15,8 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { defineAsyncComponent, onMounted, onUnmounted, ref, shallowRef, watchEffect } from 'vue'
 import useCanvas from './canvasUse/useCanvas'
 
 // defineProps({
@@ -24,19 +28,23 @@ import useCanvas from './canvasUse/useCanvas'
 
 // eslint-disable-next-line no-unused-vars
 const SvgComp = defineAsyncComponent(() => import('./SvgComp.vue'))
+// const SvgComp = import('./SvgComp.vue')
 
 // const cvs = ref(null)
 const canvasRef = ref(null)
-const { ruler, initCanvas, setWorkspace } = useCanvas()
+const svgRef = ref(null)
+// eslint-disable-next-line no-unused-vars
+const { ruler, initCanvas, getSvgEl, setWorkspace, svgEl } = useCanvas()
 
-onMounted(() => {
+onMounted(async () => {
+  // console.log('svg mounted', svgRef)
+
   const canvas = canvasRef.value
   const workspaceEl = document.querySelector('#workspace')
   const width = workspaceEl.offsetWidth
   const height = workspaceEl.offsetHeight
 
-  initCanvas(canvas, width, height)
-  // setTimeout(() => initCanvas(width), 500)
+  await initCanvas(canvas, width, height)
 })
 
 const onResize = (dimensions) => {
@@ -47,6 +55,12 @@ const onResize = (dimensions) => {
 
 onUnmounted(() => {
   console.log('canvas unmounted')
+})
+
+watchEffect(() => {
+  // eslint-disable-next-line vue/no-ref-as-operand
+  getSvgEl(svgRef.value?.refSvg)
+  // console.log('svgRef from watch effect', svgEl.value)
 })
 
 </script>

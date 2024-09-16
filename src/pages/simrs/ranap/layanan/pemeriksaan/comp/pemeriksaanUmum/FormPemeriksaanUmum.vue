@@ -97,12 +97,12 @@
           hide-bottom-space
           class="col-6"
         />
-        <q-list dense flat bordered separator class="col-12 q-mt-xs">
+        <q-list flat bordered separator class="col-12 q-mt-xs">
           <q-item v-for="item in store.form.edukasi" :key="item">
             <q-item-section>
               <q-item-label>{{ item?.label }}</q-item-label>
             </q-item-section>
-            <q-item-section side>
+            <q-item-section>
               <div class="flex q-gutter-sm">
                 <q-radio dense v-for="n in store.yaTidaks" :key="n" v-model="item.value" :val="n" :label="n" />
               </div>

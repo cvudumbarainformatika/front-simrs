@@ -12,7 +12,7 @@
       <div>
         Kanan
       </div>
-      <div class="close-btn bg-white cursor-pointer" @click="settings.righDrawer = !settings.righDrawer">
+      <div class="close-btn bg-white cursor-pointer z-top" @click="settings.righDrawer = !settings.righDrawer">
         <div class="column full-height flex-center">
           <q-icon :name="settings.righDrawer ? 'icon-mat-chevron_right' : 'icon-mat-chevron_left'" size="22px" />
         </div>

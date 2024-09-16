@@ -3,6 +3,8 @@ import { reactive, ref } from 'vue'
 
 export default function useCanvas () {
   const ruler = ref(false)
+  const svgEl = ref(null)
+  const cnvs = ref(null)
 
   const setWorkspace = reactive({
     minWidth: 100,
@@ -11,10 +13,21 @@ export default function useCanvas () {
     height: 0
   })
 
-  const initCanvas = (cnv, width, height) => {
-    console.log('width', width)
-    console.log('height', height)
-    console.log('ref', cnv)
+  const getSvgEl = (svg) => {
+    svgEl.value = svg
+    if (cnvs.value && svgEl.value) {
+      // const canvas = cnvs.value
+      // _initSetSVG(canvas, svg)
+    }
+    // console.log('from useCanvas', svg)
+
+    // svg.el = el
+  }
+
+  const initCanvas = async (cnv, width, height) => {
+    // console.log('width', width)
+    // console.log('height', height)
+    // console.log('ref', cnv)
     const canvas = new fabric.Canvas(cnv, {
       fireRightClick: true, // 启用右键，button的数字为3
       stopContextMenu: true, // 禁止默认右键菜单
@@ -34,6 +47,7 @@ export default function useCanvas () {
 
     _initWorkspace(canvas, width, height)
     _initZoom(canvas)
+    cnvs.value = canvas
   }
 
   const _initWorkspace = (canvas, w, h) => {
@@ -72,9 +86,31 @@ export default function useCanvas () {
     })
   }
 
+  // eslint-disable-next-line no-unused-vars
+  const _initSetSVG = (canvas, svg) => {
+    console.log('canvas', canvas)
+    console.log('svg', svg)
+
+    const serializer = new XMLSerializer()
+    // Serializing the svg element and return that as a String
+    const svgString = serializer.serializeToString(svg)
+
+    // console.log('svgString', svgString)
+    fabric.loadSVGFromString(svgString, (objects, options) => {
+      const obj = fabric.util.groupSVGElements(objects, options)
+      obj.set({
+        left: canvas.width / 2 - obj.width / 2,
+        top: canvas.height / 2 - obj.height / 2
+      })
+      canvas.add(obj).renderAll()
+    })
+  }
+
   return {
     ruler,
+    setWorkspace,
+    svgEl,
     initCanvas,
-    setWorkspace
+    getSvgEl
   }
 }
