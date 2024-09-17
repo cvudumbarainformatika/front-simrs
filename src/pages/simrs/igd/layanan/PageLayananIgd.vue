@@ -43,6 +43,25 @@
             :menus="menus"
             :menu="menu"
             @click-menu="(val)=> menuDiganti(val)"
+            @icare="getIcare"
+            @history-pasien="historyPasien"
+          />
+        </q-drawer>
+
+        <!-- RIGHT DRAWER ======================================================================================-->
+        <q-drawer
+          v-model="drawerRight"
+          side="right"
+          show-if-above
+          overlay
+          bordered
+          :width="845"
+          :breakpoint="500"
+        >
+          <RightDrawer
+            :key="pasien"
+            :pasien="pasien"
+            @close="drawerRight = false"
           />
         </q-drawer>
 
@@ -83,7 +102,10 @@ const store = usePengunjungIgdStore()
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
+const RightDrawer = defineAsyncComponent(() => import('./layoutcomp/RightDrawer.vue'))
+
 const drawer = ref(false)
+const drawerRight = ref(false)
 
 const props = defineProps({
   pasien: {
@@ -145,6 +167,18 @@ const inacbg = useInacbgIgd()
 
 function menuDiganti (val) {
   menu.value = val
+}
+
+function historyPasien () {
+  drawerRight.value = !drawerRight.value
+}
+
+function getIcare () {
+  store.getDataIcare(props.pasien).then(resp => {
+    if (resp) {
+      window.open(resp?.response?.url, '_blank')
+    }
+  })
 }
 
 watchEffect(() => {

@@ -338,7 +338,7 @@
               Biaya Farmasi / Obat
             </div>
             <div class="col-2 garis-bawah-dablue text-right">
-              {{ formatRp(store.rekapBill.farmasi) }}
+              {{ formatRp(store.rekapBill.farmasi+store.rekapBill.eresep) }}
             </div>
           </div>
           <div class="row items-center no-wrap ">
