@@ -1,17 +1,17 @@
 <template>
   <div class="row q-col-gutter-xs full-width">
-    <q-card flat bordered class="col-12">
+    <q-card flat bordered class="col-12 relative-position">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>Pemeriksaan Umum</strong>
       </q-card-section>
       <q-separator />
-      <q-card-section class="q-pa-sm row q-col-gutter-xs">
+      <q-card-section class="q-pa-sm row q-col-gutter-xs ">
         <q-select
           v-model="store.form.keadaanUmum"
           dense
           standout="bg-yellow-3 text-black"
           outlined
-          label="Tingkat Kesadaran"
+          label="Keadaan Umum"
           :options="store.keadaanUmums"
           class="col-4"
           input-class="ellipsis"
@@ -25,6 +25,18 @@
         <app-input-simrs label="Sis (mmHg)" class="col-2" v-model="store.form.sistole" :valid="{ number: true }" :lazy-rules="true" />
         <app-input-simrs label="Dia (mmHg)" class="col-2" v-model="store.form.diastole" :valid="{ number: true }" :lazy-rules="true" />
         <app-input-simrs label="RR (x/mnt)" class="col-2" v-model="store.form.pernapasan" :valid="{ number: true }" :lazy-rules="true" />
+        <app-input-simrs label="Spo (%)" class="col-2" v-model="store.form.spo" :valid="{ number: true }" :lazy-rules="true" />
+        <app-input-simrs label="Suhu C" class="col-3" v-model="store.form.suhu" :valid="{ number: true }" :lazy-rules="true" />
+
+        <!-- 4.1 -->
+        <!-- <div class="col-6">
+          <div class="row q-col-gutter-xs">
+            <app-input-simrs label="Spo (%)" class="col-2" v-model="store.form.spo" :valid="{ number: true }" :lazy-rules="true" />
+            <app-input-simrs label="Suhu C" class="col-3" v-model="store.form.suhu" :valid="{ number: true }" :lazy-rules="true" />
+          </div>
+        </div> -->
+
+        <!-- end 4.1 -->
         <q-select
           v-model="store.form.tkKesadaran"
           dense
@@ -40,6 +52,18 @@
           class="col-8"
         />
       </q-card-section>
+      <div class="absolute q-pa-md" style="right: 0; bottom:0">
+        <q-card flat bordered>
+          <q-card-section align="center">
+            <div class="f-12 ">
+              SKOR
+            </div>
+            <div class="f-18 text-bold">
+              0
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
     </q-card>
 
     <!-- psikologis , ekonomi, spiritual -->

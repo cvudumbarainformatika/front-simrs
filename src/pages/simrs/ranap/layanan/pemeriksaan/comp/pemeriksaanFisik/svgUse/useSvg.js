@@ -23,7 +23,10 @@ export default function useSvg () {
     width: 0,
     height: 0,
     defaultWidth: 0,
-    defaultHeight: 0
+    defaultHeight: 0,
+    translateX: 0,
+    translateY: 0,
+    scale: 1
   })
 
   const getSvgEl = (el) => {
@@ -48,10 +51,11 @@ export default function useSvg () {
     getSvgEl(_svg)
     // eslint-disable-next-line no-unused-vars
 
+    _svg.addEventListener('wheel', viewPortOnMouseWheel)
     // console.dir('svg', _svg)
 
     // _svg.addEventListener('mouseover', viewPortOnonMouseClick)
-    _svg.addEventListener('wheel', viewPortOnMouseWheel)
+    // _svg.addEventListener('wheel', viewPortOnMouseWheel)
 
     // const pathSvg = _svg.querySelectorAll('path')
     const gSvg = _svg.children
@@ -207,38 +211,42 @@ export default function useSvg () {
 
     const dir = e.deltaY
 
-    const minWidth = svgViewBox.defaultWidth * 10
-    const minHeight = svgViewBox.defaultHeight * 10
-    const maxWidth = svgViewBox.defaultWidth / 10
-    const maxHeight = svgViewBox.defaultHeight / 10
+    const minWidth = svgViewBox.defaultWidth / 10
+    const minHeight = svgViewBox.defaultHeight / 10
+    const maxWidth = svgViewBox.defaultWidth * 1
+    const maxHeight = svgViewBox.defaultHeight * 1
 
     // console.log('minwidth, minheight, maxwidth, maxheight', minWidth, minHeight, maxWidth, maxHeight)
-    let scaledW
-    let scaledH
-    let scaledX = 0
-    let scaledY = 0
+    // let scaledW
+    // let scaledH
+    // let scaledX = 0
+    // let scaledY = 0
 
     // eslint-disable-next-line prefer-const, no-unused-vars
-    let [vieBoxX, vieBoxY, vieBoxWidth, vieBoxHeight] = svgEl?.value?.getAttribute('viewBox').split(' ').map(x => parseFloat(x))
-    if (dir > 0) {
-      scaledW = (vieBoxWidth * zoom) < maxWidth ? maxWidth : (vieBoxWidth * zoom).toFixed(2)
-      scaledH = (vieBoxHeight * zoom) < maxHeight ? maxHeight : (vieBoxHeight * zoom).toFixed(2)
-      scaledX = 0
-      scaledY = 0
-      // console.log('perkecil', scaledViewboxX)
+    // let [vieBoxX, vieBoxY, vieBoxWidth, vieBoxHeight] = svgEl?.value?.getAttribute('viewBox').split(' ').map(x => parseFloat(x))
+    if (dir < 0) {
+      svgViewBox.width = (svgViewBox.width / zoom) < minWidth ? minWidth : (svgViewBox.width / zoom).toFixed(2)
+      svgViewBox.height = (svgViewBox.height / zoom) < minHeight ? minHeight : (svgViewBox.height / zoom).toFixed(2)
+      svgViewBox.x = parseFloat(svgViewBox.width) / 2
+      svgViewBox.y = parseFloat(svgViewBox.height) / 2
+      // zoom *= 0.999 ** dir
+      // console.log('perbesar', dir)
     }
     else {
-      scaledW = (vieBoxWidth / zoom) > minWidth ? minWidth : (vieBoxWidth / zoom).toFixed(2)
-      scaledH = (vieBoxHeight / zoom) > minHeight ? minHeight : (vieBoxHeight / zoom).toFixed(2)
-      scaledX = 0
-      scaledY = 0
-      // console.log('perbesar', scaledW)
+      svgViewBox.width = (svgViewBox.width * zoom) > maxWidth ? maxWidth : (svgViewBox.width * zoom).toFixed(2)
+      svgViewBox.height = (svgViewBox.height * zoom) > maxHeight ? maxHeight : (svgViewBox.height * zoom).toFixed(2)
+      // svgViewBox.x = (parseFloat(svgViewBox.width) - svgViewBox.defaultWidth) / 2
+      // svgViewBox.y = (parseFloat(svgViewBox.height) - svgViewBox.defaultHeight) / 2
+      // console.log('perkecil', dir)
+      // zoom *= 0.999 ** dir
     }
 
-    const scaledViewBox = [scaledX, scaledY, scaledW, scaledH].map(s => s).join(' ')
+    // console.log(svgViewBox.scale)
+
+    const scaledViewBox = [svgViewBox.x, svgViewBox.y, svgViewBox.width, svgViewBox.height].map(s => s).join(' ')
     svgEl.value.setAttribute('viewBox', scaledViewBox)
 
-    // console.log('scaledViewBox', scaledViewBox)
+    console.log('scaledViewBox', scaledViewBox)
   }
 
   // watchEffect(() => {

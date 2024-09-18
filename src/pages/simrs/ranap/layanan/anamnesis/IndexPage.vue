@@ -10,7 +10,7 @@
           </div>
           <div class="col full-height scroll">
             <q-form ref="myForm" class="q-pa-md">
-              <FormAnamnesis ref="formRef" />
+              <FormAnamnesis ref="formRef" :pasien="props.pasien" />
               <q-separator class="q-my-md" />
               <div class="flex justify-end">
                 <q-btn type="button" color="primary" label="Simpan" @click="validate" />

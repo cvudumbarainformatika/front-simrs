@@ -14,8 +14,10 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       sistole: 0,
       diastole: 0,
       pernapasan: 0,
+      spo: 0,
       tkKesadaran: 0,
       tkKesadaranKet: 'Sadar Baik/Alert',
+
       sosial: null,
       spiritual: null,
       // neurologis: null,
