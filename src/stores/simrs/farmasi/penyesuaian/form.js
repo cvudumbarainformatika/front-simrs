@@ -142,14 +142,17 @@ export const usePenyesuaianFarmasiStore = defineStore('form_penyesuaian_farmasi'
       const param = {
         params: {
           q: val,
-          kdruang: this.params.kdruang
+          koderuangan: this.params.kdruang,
+          bulan: date.formatDate(Date.now(), 'MM'),
+          tahun: date.formatDate(Date.now(), 'YYYY'),
+          rowsPerPage: 10
         }
       }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/penyesuaian/get-obat', param)
           .then(resp => {
             this.loadingGetObat = false
-            this.obats = resp?.data
+            this.obats = resp?.data?.data ?? resp?.data
             if (this.obats.length) this.metaniObat()
             resolve(resp)
           })
