@@ -104,6 +104,11 @@ const depo = {
           path: '/depo/farmasi/penjualan',
           // name: 'farmasi.stokmindepo',
           component: () => import('pages/simrs/logistik/depo/farmasi/penjualanbebas/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/returgudang',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/logistik/depo/farmasi/returgudang/IndexPage.vue')
         }
       ]
     },
