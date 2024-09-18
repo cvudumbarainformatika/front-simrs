@@ -132,6 +132,9 @@ const props = defineProps({
 const optionx = ref([])
 const refAuto = ref(null)
 const diModel = ref(null)
+
+defineExpose({ refAuto })
+
 function fetchData () {
   // console.log(refAuto.value)
   if (props.source.length > 0) {
