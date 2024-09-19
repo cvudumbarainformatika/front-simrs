@@ -12,24 +12,24 @@ export const useReturGudangFormStore = defineStore('form_retur_gudang', {
       no_retur: '',
       tgl_retur: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       details: [
-        {
-          alasan: 'sdasdas',
-          jumlah_retur: 100,
-          kd_obat: '0001320-FAR',
-          nama_obat: 'ABACAVIR (PROGRAM) 300 MG TABLET'
-        },
-        {
-          alasan: 'sdassdas',
-          jumlah_retur: 100,
-          kd_obat: '0000283-FAR',
-          nama_obat: 'ACARBOSE 50 MG TABLET'
-        },
-        {
-          alasan: 'sdasdasdas',
-          jumlah_retur: 100,
-          kd_obat: '0000284-FAR',
-          nama_obat: 'ACARBOSE 100 MG TABLET'
-        }
+        // {
+        //   alasan: 'sdasdas',
+        //   jumlah_retur: 100,
+        //   kd_obat: '0001320-FAR',
+        //   nama_obat: 'ABACAVIR (PROGRAM) 300 MG TABLET'
+        // },
+        // {
+        //   alasan: 'sdassdas',
+        //   jumlah_retur: 100,
+        //   kd_obat: '0000283-FAR',
+        //   nama_obat: 'ACARBOSE 50 MG TABLET'
+        // },
+        // {
+        //   alasan: 'sdasdasdas',
+        //   jumlah_retur: 100,
+        //   kd_obat: '0000284-FAR',
+        //   nama_obat: 'ACARBOSE 100 MG TABLET'
+        // }
       ]
     },
     dispForm: {
