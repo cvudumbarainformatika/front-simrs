@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm">
-    <div class="row items-center q-py-xs">
+    <div v-if="store.form.no_retur" class="row items-center q-py-xs">
       <div class="col-2">
         Nomor Retur
       </div>
@@ -141,7 +141,7 @@
       <div class="col-1">
         :
       </div>
-      <div class="col-9">
+      <div class="col-7">
         <app-input
           ref="refAlasan"
           v-model="store.dispForm.alasan"
@@ -151,18 +151,24 @@
             val=>val.length<=255 || 'maksimal 255 karakter',
             val=>!!val||'Tidak boleh kosong'
           ]"
-          :hint="store.dispForm.alasan?.length + '/ 255'"
+          :hint="hint"
           @update:model-value="potongKarakter('alasan',$event)"
           @keyup.enter="tambah"
         />
       </div>
+      <div class="col-2 text-center">
+        <app-btn label="Tambah Item" @click="tambah" />
+      </div>
     </div>
     <div class="row items-center q-pa-xs justify-end">
-      <app-btn label="Tambah Item" @click="tambah" />
+      <app-btn label="Simpan, Selesai dan Kunci" color="dark" @click="selesai" />
     </div>
     <!-- details -->
     <div class="q-mt-md">
-      <div v-if="!store.form.details.length">
+      <div v-if="store.loading">
+        <app-loading style="margin-top: 100px;" />
+      </div>
+      <div v-else-if="!store.form.details.length && !store.loading">
         <app-no-data />
       </div>
       <div v-else>
@@ -196,7 +202,7 @@
         <div
           v-for="(item,i) in store.form.details" :key="i"
           class="row no-wrap q-py-xs items-center"
-          :class="i%2===1?'bg-grey-3':''"
+          :class="item?.error?'bg-red-5 text-white text-weight-bold':(i%2===1 ?'bg-grey-3':'')"
           style="max-width: 100%;"
         >
           <div class="col-1">
@@ -216,12 +222,12 @@
           </div>
           <div class="col-2 text-right">
             <div class="q-mr-sm">
-              {{ item?.jumlah_retur }}
+              <span v-if="item?.stok" class="q-mr-sm">Stok : ( {{ item?.stok }} ), kurang dari</span> {{ item?.jumlah_retur }}
             </div>
           </div>
           <div class="col-1 text-right">
             <div class="q-mr-sm">
-              <q-btn icon="icon-mat-delete_sweep" color="negative" flat size="sm" @click="hapusItem(item)">
+              <q-btn icon="icon-mat-delete_sweep" :color="item?.error?'white':'negative'" flat size="sm" @click="hapusItem(item)">
                 <q-tooltip>Hapus item</q-tooltip>
               </q-btn>
             </div>
@@ -232,6 +238,7 @@
   </div>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useReturGudangFormStore } from 'src/stores/simrs/farmasi/returgudang/form'
@@ -283,12 +290,18 @@ function setJumlah (key, evt) {
   }
   else store.setDispForm(key, nilai)
 }
+const hint = ref(store.dispForm.alasan?.length + ' / 255')
+
 function potongKarakter (key, evt) {
+  hint.value = store.dispForm.alasan?.length + ' / 255'
   if (evt?.length > 255) {
     notifErrVue('Maksimal 255 karakter')
     store.setDispForm(key, evt?.substring(0, 255))
   }
   else store.setDispForm(key, evt)
+  setTimeout(() => {
+    hint.value = store.dispForm.alasan?.length ? 'tekan enter untuk simpan' : 'panjang karakter maksimal 255'
+  }, 1000)
 }
 function hapusItem (item) {
   const index = store.form.details.findIndex(f => f.kd_obat === item.kd_obat)
@@ -326,9 +339,42 @@ function tambah () {
   if (ada >= 0) store.form.details[ada] = temp
   else store.form.details.push(temp)
   store.resetObat()
+  console.log('anu', refObat.value)
+
   refAlasan.value?.refInput.blur()
   refObat.value.focus()
+  hint.value = store.dispForm.alasan?.length + ' / 255'
+  setTimeout(() => {
+    refAlasan.value?.refInput.resetValidation()
+    refObat.value.resetValidation()
+    refJumlah.value?.refInput.resetValidation()
+  }, 50)
   // console.log('tambah item', temp)
+}
+// simpan dan selesai
+function selesai () {
+  Dialog.create({
+    title: 'Konfirmas Selesai Input',
+    message: 'Apakah sudah tidak ada yang akan di input lagi dan sudah akan disimpan?',
+    ok: {
+      push: true,
+      label: 'Simpan',
+      'no-caps': true,
+      color: 'green'
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      'no-caps': true,
+      color: 'dark'
+    }
+  })
+    .onOk(() => {
+      store.simpan().then(() => {
+        store.resetForm()
+        init()
+      })
+    })
 }
 function init (kd) {
   const kdru = kd ?? apps?.user?.kdruangansim
