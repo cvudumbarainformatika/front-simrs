@@ -80,15 +80,15 @@
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Nyeri : <span class="text-weight-bold">{{ item?.nyeri ?? '-' }} <span style="color: blue;"> ({{ item.scorenyeri }})</span></span>
+                      <span class="">Nyeri : <span class="text-weight-bold">{{ item?.nyeri ?? '-' }} <span style="color: teal;"> ({{ item.scorenyeri }})</span></span>
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Lochea : <span class="text-weight-bold">{{ item?.lochea ?? '-' }}  <span style="color: blue;">({{ item.scorelochea }})</span></span>
+                      <span class="">Lochea : <span class="text-weight-bold">{{ item?.lochea ?? '-' }}  <span style="color: teal;">({{ item.scorelochea }})</span></span>
                       </span>
                     </q-item-label>
                     <q-item-label>
-                      <span class="">Protein Urin : <span class="text-weight-bold">{{ item?.proteinurin ?? '-' }} <span style="color: blue;"> ({{ item.scoreproteinurin }})</span></span>
+                      <span class="">Protein Urin : <span class="text-weight-bold">{{ item?.proteinurin ?? '-' }} <span style="color: teal;"> ({{ item.scoreproteinurin }})</span></span>
                       </span>
                     </q-item-label>
                   </div>
@@ -104,11 +104,11 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-red text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
@@ -121,28 +121,28 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-deep-orange text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-deep-orange text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
                         <q-card v-else-if="item?.kategoritriage === 'P2'" class="my-card" style="width: 60%;">
-                          <q-card-section class="bg-yellow text-white items-center">
+                          <q-card-section class="bg-yellow-7 text-white items-center">
                             <div class="text-h6 text-center">
                               {{ item?.kategoritriage }}
                             </div>
                           </q-card-section>
                           <q-separator />
                           <q-card-actions vertical>
-                            <q-btn flat style="font-size: 11px;" class="text-yellow text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                            <q-btn flat style="font-size: 11px;" class="text-yellow-7 text-weight-bold">
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
-                            <q-btn flat style="font-size: 11px;" class="text-yellow text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                            <q-btn flat style="font-size: 11px;" class="text-yellow-7 text-weight-bold">
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
@@ -155,16 +155,16 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-green text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-green text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
                         <q-card v-else class="my-card" style="width: 60%;">
-                          <q-card-section class="bg-primary text-white items-center">
+                          <q-card-section class="bg-black text-white items-center">
                             <div class="text-h6 text-center">
                               {{ item?.kategoritriage }}
                             </div>
@@ -172,11 +172,11 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
@@ -193,11 +193,11 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
@@ -214,11 +214,11 @@
                           <q-separator />
                           <q-card-actions vertical>
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Primary Surve  {{ item.hasilprimarusurve }}
+                              Primary Surve  {{ primarysurvex(item.hasilprimarusurve) }}
                             </q-btn>
                             <q-separator inset />
                             <q-btn flat style="font-size: 11px;" class="text-weight-bold">
-                              Secondary Surve {{ item.hasilsecondsurve }}
+                              Secondary Surve {{ item.hasilsecondsurve }} ({{ item.totalscore }})
                             </q-btn>
                           </q-card-actions>
                         </q-card>
@@ -265,15 +265,15 @@
                     <div class="row">
                       <div class="col-4">
                         <q-item-label avatar>
-                          <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt  <span style="color: blue;">({{ item?.scorenadi }})</span></span></span>
+                          <span>Nadi: <span class="text-weight-bold">{{ item?.nadi ?? '-' }} x/mnt  <span style="color: teal;">({{ item?.scorenadi }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
                           <span class="">Pernapasan: <span class="text-weight-bold">  {{ item?.pernapasanx ?? '-' }} x/mnt
-                            <span style="color: blue;"> ({{ item?.scorepernapasanx }})</span></span></span>
+                            <span style="color: teal;"> ({{ item?.scorepernapasanx }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
                           <span class="">Sistole/Diastole : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}/{{ item?.diastole ?? '-' }} mmHg
-                            <span style="color: blue;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
+                            <span style="color: teal;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
                           <span class="">Eye : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}</span></span>
@@ -284,18 +284,34 @@
                       </div>
                       <div class="col-6">
                         <q-item-label avatar>
-                          <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C <span style="color: blue;">({{ item?.scoresuhu }}) </span></span>
+                          <span class="">Suhu  : <span class="text-weight-bold">{{ item?.suhu ?? '-' }}&deg; C <span style="color: teal;">({{ item?.scoresuhu }}) </span></span>
                           </span>
                         </q-item-label>
                         <q-item-label avatar>
-                          <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}% <span style="color: blue;">({{ item?.scorespo2 }})</span></span>
+                          <span class="">SPo2  :<span class="text-weight-bold"> {{ item?.spo2 ?? '-' }}% <span style="color: teal;">({{ item?.scorespo2 }})</span></span>
                           </span>
                         </q-item-label>
                         <q-item-label avatar>
-                          <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: blue;">({{ item?.scorekesadaran }})</span></span></span>
+                          <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: teal;">({{ item?.scorekesadaran }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
                           <span class="">Motorik : <span class="text-weight-bold">{{ item?.motorik ?? '-' }}</span></span>
+                        </q-item-label>
+                      </div>
+                    </div>
+                    <q-separator class="q-my-md" />
+                    <div class="row">
+                      <div class="col-6">
+                        <q-item-label avatar>
+                          <span>BB : <span class="text-weight-bold">{{ item?.bb ?? '-' }} </span></span>
+                        </q-item-label>
+                        <q-item-label avatar>
+                          <span>TB : <span class="text-weight-bold">{{ item?.tb ?? '-' }} </span></span>
+                        </q-item-label>
+                      </div>
+                      <div class="col-6">
+                        <q-item-label avatar>
+                          <span>Gangguan Perilaku : <span class="text-weight-bold">{{ item?.gangguanperilaku ?? '-' }} </span></span>
                         </q-item-label>
                       </div>
                     </div>
@@ -392,6 +408,16 @@ function hapusItem (id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function primarysurvex (val) {
+  console.log(val)
+  if (val === '0' || val === 0) {
+    return '-'
+  }
+  else {
+    return val
+  }
 }
 
 </script>
