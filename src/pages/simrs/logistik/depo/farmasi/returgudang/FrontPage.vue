@@ -36,7 +36,7 @@ import { findWithAttr } from 'src/modules/utils'
 import { defineAsyncComponent, ref } from 'vue'
 
 const Header = defineAsyncComponent(() => import('./comp/PageHead.vue'))
-const head = ref('form')
+const head = ref('list')
 const heads = ref([
   { page: 'form', label: 'Form Retur', color: 'deep-orange' },
   { page: 'list', label: 'List Retur ', color: 'green' }
