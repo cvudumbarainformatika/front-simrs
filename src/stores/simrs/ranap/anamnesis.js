@@ -516,7 +516,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       else {
         skor = parseInt(this.form.ekspresiWajah) + parseInt(this.form.gerakanTangan) + parseInt(this.form.kebutuhanVentilasi)
         this.setKeteranganSkornyeri(skor, 'form')
-        console.log('bener')
+        // console.log('bener')
       }
     },
     setKeteranganSkornyeri (val, jns) {

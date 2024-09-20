@@ -708,6 +708,110 @@
               class="col-4"
             />
           </div>
+          <q-separator class="q-my-sm" />
+          <div class="text-weight-bold">
+            Pola Tidur
+          </div>
+          <q-separator class="q-my-xs" />
+          <div class="row q-col-gutter-xs">
+            <div class="col-6 row items-center q-col-gutter-sm">
+              <div class="col-auto">
+                Siang (jam / hari)
+              </div>
+              <app-input-simrs v-model="store.formPediatrik.tidurSiang" label="(jm/hr)" class="col-auto" />
+            </div>
+            <div class="col-6 row items-center q-col-gutter-sm">
+              <div class="col-auto">
+                Malam (jam / hari)
+              </div>
+              <app-input-simrs v-model="store.formPediatrik.tidurMalam" label="(jm/hr)" class="col-auto" />
+            </div>
+          </div>
+          <q-separator class="q-my-xs" />
+          <div class="row q-col-gutter-xs">
+            <q-select
+              v-model="store.formPediatrik.kebiasaanSblmMkn"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Kebiasaan sblm makan"
+              :options="store.kebiasaanSblMakans"
+              hide-selected
+              fill-input
+              use-input
+              input-debounce="0"
+              hide-bottom-space
+              hide-dropdown-icon
+              @input-value="(val)=> store.formPediatrik.kebiasaanSblmMkn=val"
+              class="col-6"
+            />
+            <q-select
+              v-model="store.formPediatrik.nyeri"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Adakah nyeri"
+              :options="store.yaTidaks"
+              hide-selected
+              fill-input
+              use-input
+              input-debounce="0"
+              hide-bottom-space
+              hide-dropdown-icon
+              @input-value="(val)=> store.formPediatrik.nyeri=val"
+              class="col-6"
+            />
+          </div>
+
+          <q-separator class="q-my-sm" />
+          <div class="text-weight-bold">
+            Pola Kebersihan diri
+          </div>
+          <q-separator class="q-my-xs" />
+          <div class="row q-col-gutter-sm ">
+            <app-input-simrs v-model="store.formPediatrik.mandiSendiri" label="Mnd Sndr (x/hr)" class="col-2" />
+            <app-input-simrs v-model="store.formPediatrik.dimandikan" label="Dimndkan (x/hr)" class="col-2" />
+            <app-input-simrs v-model="store.formPediatrik.gosokGigi" label="Gsk gg (x/hr)" class="col-2" />
+            <app-input-simrs v-model="store.formPediatrik.keramas" label="Krmas (x/mgu)" class="col-2" />
+            <q-select
+              v-model="store.formPediatrik.kbersihanKuku"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Kebersihan Kuku"
+              :options="['Bersih', 'Kotor']"
+              emit-value
+              map-options
+              input-class="ellipsis"
+              fill-input
+              hide-bottom-space
+              class="col-4"
+            />
+          </div>
+          <q-separator class="q-my-xs q-mb-sm" />
+          <div class="row q-col-gutter-xs">
+            <q-select
+              v-model="store.formPediatrik.aktifitas"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Aktifitas Bermain"
+              :options="store.aktifitasBermains"
+              emit-value
+              map-options
+              fill-input
+              hide-bottom-space
+              class="col-4"
+            />
+
+            <app-input-simrs v-model="store.formPediatrik.babFrekuensi" label="Frek. BAB (x/hr)" class="col-2" />
+            <app-input-simrs v-model="store.formPediatrik.babKonsistensi" label="Konsis. BAB" class="col-3" />
+            <app-input-simrs v-model="store.formPediatrik.babBau" label="Bau BAB" class="col-3" />
+
+            <app-input-simrs v-model="store.formPediatrik.bakFrekuensi" label="BAK (x/hr)" class="col-2" />
+            <app-input-simrs v-model="store.formPediatrik.babWarna" label="warna BAK" class="col-3" />
+            <app-input-simrs v-model="store.formPediatrik.bakBau" label="Bau BAK" class="col-3" />
+          </div>
         </q-card-section>
       </q-card>
 
