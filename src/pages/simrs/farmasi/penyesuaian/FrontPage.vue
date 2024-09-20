@@ -46,6 +46,28 @@
           <template v-if="model" #append>
             <q-icon name="icon-mat-cancel" @click.stop.prevent="model = null" class="cursor-pointer" @click="clearModel" />
           </template>
+          <template #option="scope">
+            <q-item v-bind="scope.itemProps" class="row items-end">
+              <div class="text-weight-bold">
+                {{ scope.opt.nama_obat }}
+              </div>
+              <div class="q-ml-xs">
+                || <span class="text-light-blue">awal</span> => <span class="text-light-blue text-weight-bold">{{ scope.opt.sAawal }}</span>
+              </div>
+              <div class="q-ml-xs">
+                || <span class="text-green">masuk</span> => <span class="text-green text-weight-bold">{{ scope.opt.masuk }}</span>
+              </div>
+              <div class="q-ml-xs">
+                || <span class="text-orange">keluar</span> => <span class="text-orange text-weight-bold">{{ scope.opt.keluar }}</span>
+              </div>
+              <div class="q-ml-xs">
+                || <span :class="scope.opt.sAkhir !== scope.opt.sSekarang ? 'text-negative text-weight-bold' : 'text-purple'">akhir</span> => <span :class="scope.opt.sAkhir !== scope.opt.sSekarang ? 'text-negative text-weight-bold' : 'text-purple text-weight-bold'">{{ scope.opt.sAkhir }}</span>
+              </div>
+              <div class="q-ml-xs">
+                || <span :class="scope.opt.sAkhir !== scope.opt.sSekarang ? 'text-negative text-weight-bold' : 'text-deep-purple'">stok sekarang</span> => <span :class="scope.opt.sAkhir !== scope.opt.sSekarang ? 'text-negative text-weight-bold' : 'text-deep-purple text-weight-bold'">{{ scope.opt.sSekarang }}</span>
+              </div>
+            </q-item>
+          </template>
         </q-select>
       </div>
       <div class="col-2">

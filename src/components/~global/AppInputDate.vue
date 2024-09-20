@@ -136,6 +136,7 @@ const modelProp = computed({
 
 const refInputDate = ref(null)
 const refPopup = ref(null)
+defineExpose({ refInputDate })
 // const showing = ref(false)
 // const modelProxy = ref()
 

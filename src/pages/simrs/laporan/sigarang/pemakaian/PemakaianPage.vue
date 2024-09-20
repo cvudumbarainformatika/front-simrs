@@ -235,20 +235,20 @@ import { useLaporanSigarangPemakaianStore } from 'src/stores/simrs/laporan/sigar
 
 const store = useLaporanSigarangPemakaianStore()
 store.getInitialData()
-function cariRuangan(val) {
+function cariRuangan (val) {
   store.setParams('kode_ruang', val)
   store.getDataTable()
 }
-function setDari(val) {
+function setDari (val) {
   store.setParams('from', val)
 }
-function setDispDari(val) {
+function setDispDari (val) {
   store.display.from = val
 }
-function setKe(val) {
+function setKe (val) {
   store.setParams('to', val)
 }
-function setDispKe(val) {
+function setDispKe (val) {
   store.display.to = val
 }
 const printObj = {
