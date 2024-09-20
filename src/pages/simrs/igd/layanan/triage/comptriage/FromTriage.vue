@@ -338,7 +338,7 @@
                 label="Suhu"
                 outlined
                 dense
-                type="number"
+                mask="##.#"
                 standout="bg-yellow-3"
                 :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                 @update:model-value="scoresuhu()"
