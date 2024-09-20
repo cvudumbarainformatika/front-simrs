@@ -40,7 +40,8 @@ export const useTriageIgd = defineStore('triageigd', {
       totalscore: 0,
       kategoritriage: '',
       hasilprimarysurve: '',
-      hasilsecondsurve: ''
+      hasilsecondsurve: '',
+      falsetriage: false
     }
   }),
   actions: {
@@ -81,6 +82,7 @@ export const useTriageIgd = defineStore('triageigd', {
       this.form = null
       return new Promise((resolve, reject) => {
         this.form = {
+          falsetriage: false,
           doa: '',
           pasienhamil: 0
         }
