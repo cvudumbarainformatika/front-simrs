@@ -104,8 +104,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
                 nobast: x.nobast,
                 hargabast: parseFloat(x.harga_net),
                 volumebast: parseFloat(x.jumlah),
-                subtotal: parseFloat(x.subtotal),
-                nominalpembayaran: parseFloat(x.subtotal),
+                subtotal: parseFloat(x.totalobat),
+                nominalpembayaran: parseFloat(x.totalobat),
                 realisasi: parseFloat(x.masterobat?.pagu?.realisasi?.map(x => parseFloat(x.nominalpembayaran))?.reduce((a, b) => a + b, 0)) +
                 parseFloat(x.masterobat?.pagu?.realisasi_spjpanjar?.map(x => parseFloat(x.jumlahbelanjapanjar))?.reduce((a, b) => a + b, 0))
                 // spjpanjar: parseFloat(x.masterobat?.pagu?.realisasi_spjpanjar?.map(x => parseFloat(x.jumlahbelanjapanjar))?.reduce((a, b) => a + b, 0))
