@@ -277,6 +277,30 @@ const bentukArrBaru = computed(() => {
     }
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
+  const returgudang = props?.item?.returgudang?.map(x => {
+    return {
+      tgl: x?.tgl_retur,
+      tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+      keterangan: 'Nomor retur gudang ' + x?.no_retur,
+      masuk: parseFloat(x?.jumlah),
+      keluar: 0,
+      total: 0
+    }
+    // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  })
+  const returdepo = props?.item?.returdepo?.map(x => {
+    return {
+      tgl: x?.tgl_retur,
+      tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+      keterangan: 'Nomor retur gudang ' + x?.no_retur,
+      masuk: 0,
+      keluar: parseFloat(x?.jumlah),
+      total: 0
+    }
+    // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  })
   const penyesuaian = props?.item?.stok?.map(m => {
     const arr = m.ssw
     return arr.map(x => {
@@ -325,7 +349,7 @@ const bentukArrBaru = computed(() => {
 
   const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk,
     resepkeluar, resepracikankeluar, returresep, penyesuaian,
-    distribusi, returdistribusi, barangrusak].flat(Infinity)
+    distribusi, returdistribusi, barangrusak, returgudang, returdepo].flat(Infinity)
 
   // const hasil = gabung.length ? gabung?.filter(x => x.masuk !== x.keluar)?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : [] // ini jika yg aneh tdk dimasukkan
   const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []

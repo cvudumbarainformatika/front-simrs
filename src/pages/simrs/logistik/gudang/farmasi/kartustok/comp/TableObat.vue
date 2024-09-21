@@ -136,7 +136,7 @@ const columnsx = [
     align: 'right',
     field: (row) => (
       hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
-      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur)
+      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
     )
   },
   {
@@ -145,7 +145,7 @@ const columnsx = [
     align: 'right',
     field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
       hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
-      hitungBarangRusak(row?.barangrusak)
+      hitungBarangRusak(row?.barangrusak) + hitungReturDepo(row?.returdepo)
     )
   },
   {
@@ -230,6 +230,12 @@ function hitungMutasiKeluar (arr) {
 }
 function hitungMutasiMasuk (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+function hitungReturGudang (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+}
+function hitungReturDepo (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 const gudang = ['Gd-05010100', 'Gd-03010100']
 function hitungBarangRusak (arr) {
@@ -325,7 +331,7 @@ function hitungPenyesuaianKeluar (arr) {
 function stokSekarang (arr) {
   let jumlah = 0
   const bulanIni = date.formatDate(Date.now(), 'MM')
-  console.log('bulan', bulanIni, store.params.bulan, bulanIni === store.params.bulan)
+  // console.log('bulan', bulanIni, store.params.bulan, bulanIni === store.params.bulan)
 
   if (bulanIni === store.params.bulan) {
     keteranganStok.value = 'Stok Sekarang'
@@ -351,11 +357,11 @@ function hitungTotal (row) {
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars
   const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
-  hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur)
+  hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
   // eslint-disable-next-line no-unused-vars
   const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
   hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
-  hitungBarangRusak(row?.barangrusak)
+  hitungBarangRusak(row?.barangrusak) + hitungReturDepo(row?.returdepo)
   // eslint-disable-next-line no-unused-vars
   const total = awal + masuk - keluar
   return total
