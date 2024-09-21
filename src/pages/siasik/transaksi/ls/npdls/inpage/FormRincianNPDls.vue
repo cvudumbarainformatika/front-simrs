@@ -7,6 +7,7 @@
         row-key="name"
         dense
         ref="rincianNpd"
+        wrap-cells
         :rows-per-page-options="[10,20,50]"
       >
         <template #body="props">
@@ -17,7 +18,7 @@
             <q-td key="koderek50" :props="props">
               {{ props.row.koderek50 }}
             </q-td>
-            <q-td key="rincianbelanja" :props="props">
+            <q-td key="rincianbelanja" :props="props" class="text-left">
               {{ props.row.rincianbelanja }}
             </q-td>
             <q-td key="koderek108" :props="props">
@@ -109,6 +110,7 @@
               store.rinci.satuan = cari.satuan
               store.rinci.harga = cari.harga
               store.rinci.total = cari.pagu
+              store.rinci.sisapagu = cari.sisapagu
               store.rinci.volumels = 0
               store.rinci.hargals = 0
               store.rinci.totalls = 0
@@ -119,7 +121,7 @@
         <app-input-simrs
           v-model="store.rinci.volume"
           class="q-pa-sm q-gutter-y-md"
-          style="width: 25%"
+          style="width: 15%"
           label="Volume Item"
           outlined
           readonly
@@ -127,7 +129,7 @@
         <app-input-simrs
           v-model="store.rinci.satuan"
           class="q-pa-sm q-gutter-y-md"
-          style="width: 25%"
+          style="width: 15%"
           label="Satuan Item"
           outlined
           readonly
@@ -135,7 +137,7 @@
         <app-input-simrs
           v-model="store.rinci.harga"
           class="q-pa-sm q-gutter-y-md"
-          style="width: 25%"
+          style="width: 20%"
           label="Harga Item"
           outlined
           readonly
@@ -145,6 +147,14 @@
           class="q-pa-sm q-gutter-y-md"
           style="width: 25%"
           label="Total Pagu"
+          outlined
+          readonly
+        />
+        <app-input-simrs
+          v-model="store.rinci.sisapagu"
+          class="q-pa-sm q-gutter-y-md"
+          style="width: 25%"
+          label="Sisa Pagu"
           outlined
           readonly
         />
@@ -185,9 +195,10 @@
         />
         <div class="row items-center q-pb-md q-pa-sm q-gutter-y-md">
           <app-btn
-            type="submit"
             label="Pilih Rincian"
-            class="bg-black"
+            class="bg-green"
+            type="submit"
+
             :disable="store.loading"
             :loading="store.loading"
           />
@@ -332,11 +343,36 @@ function simpanRinci (val) {
   // form.value.koderek50 = null
   // console.log('rincian', obj)
   // store.form.rincians.push(obj)
+  console.log('abcdefgh', store.form.rincians)
 
-  const jml = store.form.rincians.map((x) => x.nominalpembayaran)
-  const subtotal = jml.reduce((x, y) => x + y, 0)
+  const unikjumlah = store.form.rincians.map((x) => x.itembelanja)
+  const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
+  console.log('pxpxpxpx', unik)
+  const arr = []
+  for (let i = 0; i < unik.length; i++) {
+    const el = unik[i]
+    console.log('roooow', el)
+    const obj = {
+      jumlah: store.form.rincians.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
+      koderek108: el,
+      sisapagu: store.rinci.sisapagu
 
-  store.reqs.subtotal = subtotal
+    }
+    console.log('jumlahnya', obj?.jumlah)
+    console.log('sisa', obj?.sisapagu)
+    if (obj?.jumlah > obj?.sisapagu) {
+      return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
+    } arr.push(obj)
+
+    const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
+    console.log('simpan', subtotal)
+    store.reqs.subtotal = subtotal
+  }
+
+  // const jml = store.form.rincians.map((x) => x.nominalpembayaran)
+  // const subtotal = jml.reduce((x, y) => x + y, 0)
+
+  // store.reqs.subtotal = subtotal
   console.log('rincian stlh push', store.form.rincians)
   store.disabled = true
 }
@@ -346,7 +382,7 @@ function simpanRinciBast (val) {
   // const obj = carisrt.reqs.rincianbast = val
   const rinci = store.rinci = val
   const data = $q.localStorage.getItem('rincian_npd')
-  console.log('sebelum push', rinci)
+  // console.log('sebelum push', rinci)
   data.push(rinci)
   // store.rinci.koderek50 = data?.koderek50 ?? ''
   // store.rinci.rincianbelanja = data?.rincianbelanja ?? ''
@@ -415,6 +451,7 @@ function pilihRekening50 (val) {
   store.rinci.satuan = ''
   store.rinci.harga = ''
   store.rinci.total = ''
+  store.rinci.sisapagu = ''
   store.rinci.volumels = ''
   store.rinci.hargals = ''
   store.rinci.totalls = ''

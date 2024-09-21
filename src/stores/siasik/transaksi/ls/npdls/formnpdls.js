@@ -29,7 +29,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       volumels: null,
       rincianmanual: null,
       subtotal: null,
-      jmlperkoderek108: []
+      jmlperkoderek108: [],
+      listrinci: []
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -93,6 +94,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       satuan: null,
       harga: null,
       total: null,
+      sisapagu: null,
 
       // Belanja
       volumels: null,
@@ -129,7 +131,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     // bastfarmasis: [],
     dialogCetakNpd: false,
     openDialogFarmasi: false,
-    openDialogSiasik: false
+    openDialogSiasik: false,
+    openDialogRinci: false
   }),
   actions: {
     resetFORM () {
@@ -257,7 +260,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         api.get('/v1/transaksi/belanja_ls/anggaran', params)
           .then((resp) => {
             if (resp.status === 200) {
-              // console.log('anggaran', resp.data)
+              console.log('anggaran', resp.data)
               this.loading = false
               this.anggarans = resp.data
               // this.itembelanja = resp.data
@@ -278,11 +281,16 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       const data = this.anggarans?.length
         ? this.anggarans?.map((x) => {
           return {
+            itembelanja: x.usulan,
             rincianbelanja: x.uraian50,
-            rek50: x.koderek50
+            rek50: x.koderek50,
+            realisasi: x.realisasi.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0) +
+            x.realisasi_spjpanjar.map((x) => parseFloat(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0) -
+            x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0)
           }
         })
         : []
+      console.log('realisasi item', data)
       const rek = data.reduce((a, b) => {
         const yangsama = a.find(x => x.rek50 === b.rek50)
         if (!yangsama) {
@@ -303,15 +311,21 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             rek50: x.koderek50,
             uraian50: x.uraian50,
             item: x.usulan,
-            harga: x.harga,
+            harga: parseFloat(x.harga),
             satuan: x.satuan,
-            volume: x.volume,
-            pagu: x.pagu
+            volume: parseFloat(x.volume),
+            pagu: parseFloat(x.pagu),
+            realisasi: x.realisasi.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0) +
+            x.realisasi_spjpanjar.map((x) => parseFloat(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0) -
+            x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0),
+            sisapagu: parseFloat(x.pagu) - (x.realisasi.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0) +
+            x.realisasi_spjpanjar.map((x) => parseFloat(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0) -
+            x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0))
           }
         })
         : []
       this.itembelanja = data
-      // console.log('item belanja', this.itembelanja)
+      console.log('item belanja', data)
     },
 
     listdatanpd () {
@@ -339,6 +353,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         const sas = []
         for (let i = 0; i < this.listnpdls.length; i++) {
           const arr = this.listnpdls[i]
+          // console.log('rincianqqq', arr)
           const head = {
             nonpdls: arr.nonpdls,
             tglnpdls: arr.tglnpdls,
@@ -349,7 +364,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             keterangan: arr.keterangan,
             nopencairan: arr.nopencairan,
             tglcair: arr.npkrinci?.header?.tglpindahbuku,
-            total: arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)
+            total: arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
+            rincian: arr.npdlsrinci
           }
           // console.log('head', head)
           // const el = arr.npdlsrinci
