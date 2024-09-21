@@ -196,9 +196,8 @@
         <div class="row items-center q-pb-md q-pa-sm q-gutter-y-md">
           <app-btn
             label="Pilih Rincian"
-            class="bg-green"
+            class="bg-black"
             type="submit"
-
             :disable="store.loading"
             :loading="store.loading"
           />
