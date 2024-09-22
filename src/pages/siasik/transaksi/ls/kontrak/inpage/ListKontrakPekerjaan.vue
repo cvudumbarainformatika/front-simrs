@@ -5,7 +5,7 @@
     <q-table
       class="my-sticky-header"
       flat
-      title="Treats"
+      wrap-cells
       :rows="store.kontraks"
       :columns="columns"
       row-key="name"
