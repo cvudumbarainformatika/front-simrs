@@ -20,8 +20,6 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
       sosial: null,
       spiritual: null,
-      // neurologis: null,
-      // muakuloskeletal: null,
       statusPsikologis: 'Tidak ada kelainan',
       ansuransi: 'Ada',
       edukasi: [
@@ -37,6 +35,122 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       pantanganMkanan: 'Tidak'
 
       // pemeriksaan fisik
+    },
+
+    formKebidanan: {
+      nyeri: 'Normal',
+      lochea: 'Normal',
+      proteinUrin: null,
+      // anatomi
+      mata: null,
+      leher: null,
+      dada: null,
+      putingMenonjol: null,
+      hiperpigmentasi: null,
+      kolostrum: null,
+      konsistensiPayudara: null,
+      nyeriTekan: null,
+      benjolan: null,
+      abdomen: null,
+      anoGenital: null,
+      ekstremitasTungkai: null,
+
+      hmlInspeksi: null,
+      hmlTfuPuka: null,
+      hmlTfuPuki: null,
+      hmlTfuPresentasi: null,
+      hmlNyeri: null,
+      hmlOsborn: null,
+      hmlCekung: null,
+      hmlAusDenyut: null,
+      hmlAusTeratur: null,
+      hmlHisFrekuensi: null,
+      hmlHisIntensitas: null,
+      hmlVgnBentuk: null,
+      hmlVgnJml: null,
+      hmlVgnKtuban: null,
+      hmlVgnToucher: null,
+
+      nfsTfu: null,
+      nfsUterus: null,
+      nfsVgnBentuk: null,
+      nfsVgnJml: null,
+      nfsVgnLochea: null,
+      nfsVgnLuka: null,
+      nfsVgnDrjLuka: null,
+      nfsVgnLukaPost: null,
+
+      gynecologiPalpasi: null,
+      gynecologiInsVgn: null,
+      gynecologiInsPortio: null,
+      gynecologiInsVgnToucher: null
+
+    },
+
+    formNeonatal: {
+      appearance: null,
+      pulse: null,
+      grimace: null,
+      activity: null,
+      respiration: null,
+      apgarScore: 0,
+      apgarKet: null,
+      lila: 0,
+      lida: 0,
+      lirut: 0,
+
+      grkBayi: null,
+      uub: null,
+      kejang: null,
+      refleks: null,
+      tngsBayi: null,
+
+      pssMata: null,
+      bsrPupil: null,
+      klpkMata: 'TAK',
+      konjungtiva: null,
+      sklera: 'TAK',
+
+      pendengaran: 'TAK',
+
+      penciuman: 'TAK',
+      warnaKlt: null,
+      denyutNadi: null,
+      sirkulasi: null,
+      pulsasi: null,
+
+      polaNafas: null,
+      jnsPernafasan: null,
+      irmNapas: null,
+      retraksi: null,
+      airEntri: null,
+      merintih: null,
+      suaraNapas: null,
+
+      mulut: null,
+      lidah: null,
+      oesofagus: null,
+      abdomen: null,
+      bab: null,
+      warnaBab: null,
+
+      warnaUrine: null,
+      bak: null,
+
+      laki: null,
+      perempuan: null,
+
+      vernicKasesosa: null,
+      lanugo: null,
+      warnaIntegument: null,
+      turgor: null,
+      kulit: null,
+
+      lengan: null,
+      tungkai: null,
+      rekoilTelinga: null,
+      grsTlpkKaki: null
+
     },
 
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
@@ -60,7 +174,83 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
     komunikasi: ['Normal', 'Introvert', 'Extrovert'],
     makanans: ['Nasi', 'Selain Nasi'],
     yaTidaks: ['Ya', 'Tidak'],
-    adaTidaks: ['Ada', 'Tidak Ada']
+    adaTidaks: ['Ada', 'Tidak Ada'],
+    normals: ['Normal', 'Abnormal'],
+    proteinUrins: ['INA', '+', '>++'],
+    matas: ['Pandangan Kabur', 'Icteric', 'Konjungtiva Anemis'], // lain-lain
+    lehers: ['Bendungan vena jugularis', 'Struma'],
+    dadas: ['Teratur', 'Tidak Teratur'],
+    konsistensis: ['Lembek', 'Padat', 'Keras'],
+    abdomens: ['Membesar', 'Kembung', 'Nyeri Tekan', 'Bekas Operasi'],
+    anogenitals: ['Hemoroid', 'Varises'],
+    ekstremitas: ['Simetris', 'Tidak Simetris'],
+    inspeksis: ['Membesar dengan arah memanjang', 'Melebar', 'Pelebaran Vena', 'Linea Alba', 'Line Nigra', 'Striae Lidivae', 'Striae Albican', 'Luka Bekas Operasi'],
+    presentasis: ['Kepala', 'Bokong'],
+    intensitas: ['Lemah', 'Sedang', 'Kuat'],
+    bentuks: ['lendir Darah', 'Darah'],
+    jumlahs: ['<250 cc', '250-500 cc', '>500 cc'],
+    kontraksis: ['Lemah', 'Keras', 'Tidak Ada'],
+    locheas: ['Rubra', 'Sanguinolenta', 'Serosa', 'Alba'],
+    lukas: ['Utuh', 'Ruptur', 'Episiotomi'],
+    derajats: ['1', '2', '3', '4', 'Lain-lain'],
+    appearances: [{ value: 0, label: 'Seluruh tubuh bayi berwarna biru atau pucat.' },
+      { value: 1, label: 'Tubuh bayi berwarna merah muda, tetapi tangan dan kaki berwarna biru (sianosis akrosianosis).' },
+      { value: 2, label: 'Seluruh tubuh bayi berwarna merah muda (normal).' }],
+    pulses: [{ value: 0, label: 'Tidak ada denyut jantung.' },
+      { value: 1, label: 'Denyut jantung kurang dari 100 bpm.' },
+      { value: 2, label: 'Denyut jantung 100 bpm atau lebih.' }],
+    grimaces: [{ value: 0, label: 'Tidak ada respons terhadap rangsangan.' },
+      { value: 1, label: 'Respons minimal (misalnya, meringis atau gerakan kecil) terhadap rangsangan.' },
+      { value: 2, label: 'Menangis, batuk, atau menarik diri dari rangsangan (respons aktif).' }],
+    activitys: [{ value: 0, label: 'Bayi lesu atau tidak bergerak.' },
+      { value: 1, label: 'Gerakan lengan dan kaki sedikit, tonus otot rendah.' },
+      { value: 2, label: 'Gerakan aktif, tonus otot baik.' }],
+    respirations: [{ value: 0, label: 'Tidak ada pernapasan (apnea).' },
+      { value: 1, label: 'Pernapasan lambat atau tidak teratur, menangis lemah.' },
+      { value: 2, label: 'Pernapasan baik, bayi menangis keras.' }],
+
+    // neonatal anatomy
+    aktifs: ['Aktif', 'Tidak Aktif'],
+    uubs: ['Datar', 'Cekung', 'Tegang', 'Membonjol'],
+    refleks: ['Moro', 'Menelan', 'Hisap', 'Babinski', 'Rooting'],
+    tngsBayis: ['Kuat', 'Melengking'],
+    posisiMatas: ['Simetris', 'Asimetris'],
+    pupils: ['Isokor', 'Anisokor'],
+    klpkMatas: ['TAK', 'Edema', 'Cekung'],
+    konjungtivas: ['TAK', 'Anemis', 'Konjungtivitis'],
+    skleras: ['TAK', 'Ikterik', 'Pendarahan'],
+    pendengarans: ['TAK', 'Asimetris', 'Serumen', 'Keluar Cairan', 'Tidak Ada Lubang Drum'],
+    penciumans: ['TAK', 'Asimetris', 'Pengeluaran Cairan'],
+    warnaKulits: ['Kemerahan', ' Sianosis....', 'Pucat'],
+    denyutNadis: ['Teratur', 'Tidak Teratur'],
+    sirkulasis: ['Akral Hangat', 'Akral Dingin'],
+    pulsasis: ['Palpitasi', 'Ederma Lokasi ...', 'Kuat', 'Lemah', 'Mur-mur'],
+    polaNafas: ['Normal', 'Bradipnea', 'Tachipnea'],
+    jnsPernafasans: ['Pernapasan Dada', 'Pernapasan Perut', 'Alat bantu napas, ...'],
+    iramaNapas: ['Teratur', 'Tidak Teratur'],
+    retraksis: ['Tidak Ada', 'Ringan', 'Sedang', 'Berat'],
+    airEntris: ['Udara Masuk', 'Penurunan Udara Masuk', 'Tidak Ada Udara Masuk'],
+    merintihs: ['Tidak Ada', 'Terdengar dengan Stetoskop', 'Terdengar Tanpa Stetoskop'],
+    suaraNapas: ['Veskuler', 'Wheezing', 'Ronchi', 'Stridor'],
+    muluts: ['Tidak Ada Kelainan', 'Simetris', 'Asimetris', 'Mucosa Mulut Kering', 'Bibir Pucat'],
+    lidahs: ['Tidak Ada Kelainan', 'Kotor', 'Gerakan Asimetris'],
+    oesofagus: ['Tidak Ada Kelainan'],
+    abdomensAnatomy: ['Supel', 'Asites', 'Tegang', 'Bising Usus ... x/menit'],
+    babs: ['Normal', 'Konstipasi', 'Melena', 'Colostomy', 'Diare', 'Frekuensi:..../hari', 'Meco pertama, tgl/jam......'],
+    warnaFeses: ['Kuning', 'Dempul', 'Coklat', 'Hijau'],
+    warnaUrines: ['Jernih', 'Kuning', 'Kuning Pekat'],
+    baks: ['Normal', 'Hematuri', 'Urin Menetes', 'Sakit', 'Tidak Sakit', 'Oliguri', 'BAK Pertama, tgl/jam......'],
+    lakilakis: ['Normal', 'Hipospedia', 'Epispedia', 'Fimosis', 'Hidrokel'],
+    perempuans: ['Normal', 'Keputihan', 'Vagina Skintag'],
+
+    lanugos: ['Tidak ada', 'Banyak', 'Tipis', 'Bercak-Bercak Tanpa Lanugo', 'Sebagian Besar Tanpa Lanugo'],
+    warnas: ['Pucat', 'Ikterik', 'Sianosis', 'Normal'],
+    turgors: ['Baik', 'Sedang', 'Buruk'],
+    kulits: ['Normal', 'Rash/Kemerahan', 'Lesi', 'Luka', 'Memar', 'Plechi', 'Bula'],
+    lengans: ['Fleksi', 'Ekstensi', 'Pergerakan Aktif', 'Pergerakan Tidak Aktif'],
+    tungkals: ['Fleksi', 'Ekstensi', 'Pergerakan Aktif', 'Pergerakan Tidak Aktif'],
+    rekoilTelingas: ['Rekoil Lambat', 'Rekoil Cepat', 'Rekoil Segera'],
+    grsTelapakKakis: ['Tipis', 'Garis Transversal Anterior', 'Garis 2/3 Anterior', 'Seluruh Telapak Kaki']
 
   }),
   getters: {
@@ -80,40 +270,158 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         suhu: 0,
         sistole: 0,
         diastole: 0,
-        pernapasan: 0
+        pernapasan: 0,
+        spo: 0,
+        tkKesadaran: 0,
+        tkKesadaranKet: 'Sadar Baik/Alert',
+
+        sosial: null,
+        spiritual: null,
+        statusPsikologis: 'Tidak ada kelainan',
+        ansuransi: 'Ada',
+        edukasi: [
+          { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
+          { label: 'Apakah membutuhkan edukasi?', value: null }
+        ],
+
+        // kultural
+        penyebabSakit: null,
+        komunikasi: 'Normal',
+        makananPokok: 'Nasi',
+        makananPokokLain: null,
+        pantanganMkanan: 'Tidak'
+
+        // pemeriksaan fisik
       }
 
-      this.setKeteranganSkornyeri(0)
-      this.hitungSkorSgd()
-    },
-    setKeteranganSkornyeri (val) {
-      if (val === 0) {
-        this.form.keluhanNyeri = 'tidak ada nyeri'
+      this.formKebidanan = {
+        nyeri: 'Normal',
+        lochea: 'Normal',
+        proteinUrin: null,
+        // anatomi
+        mata: null,
+        leher: null,
+        dada: null,
+        putingMenonjol: null,
+        hiperpigmentasi: null,
+        kolostrum: null,
+        konsistensiPayudara: null,
+        nyeriTekan: null,
+        benjolan: null,
+        abdomen: null,
+        anoGenital: null,
+        ekstremitasTungkai: null,
+
+        hmlInspeksi: null,
+        hmlTfuPuka: null,
+        hmlTfuPuki: null,
+        hmlTfuPresentasi: null,
+        hmlNyeri: null,
+        hmlOsborn: null,
+        hmlCekung: null,
+        hmlAusDenyut: null,
+        hmlAusTeratur: null,
+        hmlHisFrekuensi: null,
+        hmlHisIntensitas: null,
+        hmlVgnBentuk: null,
+        hmlVgnJml: null,
+        hmlVgnKtuban: null,
+        hmlVgnToucher: null,
+
+        nfsTfu: null,
+        nfsUterus: null,
+        nfsVgnBentuk: null,
+        nfsVgnJml: null,
+        nfsVgnLochea: null,
+        nfsVgnLuka: null,
+        nfsVgnDrjLuka: null,
+        nfsVgnLukaPost: null,
+
+        gynecologiPalpasi: null,
+        gynecologiInsVgn: null,
+        gynecologiInsPortio: null,
+        gynecologiInsVgnToucher: null
+
       }
-      else if (val > 0 && val <= 3) {
-        this.form.keluhanNyeri = 'nyeri ringan'
+
+      this.formNeonatal = {
+        appearance: null,
+        pulse: null,
+        grimace: null,
+        activity: null,
+        respiration: null,
+        apgarScore: 0,
+        apgarKet: null,
+        lila: 0,
+        lida: 0,
+        lirut: 0,
+
+        grkBayi: null,
+        uub: null,
+        kejang: null,
+        refleks: null,
+        tngsBayi: null,
+
+        pssMata: null,
+        bsrPupil: null,
+        klpkMata: 'TAK',
+        konjungtiva: null,
+        sklera: 'TAK',
+
+        pendengaran: 'TAK',
+
+        penciuman: 'TAK',
+        warnaKlt: null,
+        denyutNadi: null,
+        sirkulasi: null,
+        pulsasi: null,
+
+        polaNafas: null,
+        jnsPernafasan: null,
+        irmNapas: null,
+        retraksi: null,
+        airEntri: null,
+        merintih: null,
+        suaraNapas: null,
+
+        mulut: null,
+        lidah: null,
+        oesofagus: null,
+        abdomen: null,
+        bab: null,
+
+        warna: null,
+        bak: null,
+
+        laki: null,
+        perempuan: null,
+
+        vernicKasesosa: null,
+        lanugo: null,
+        warnaIntegument: null,
+        turgor: null,
+        kulit: null,
+
+        lengan: null,
+        tungkai: null,
+        rekoilTelinga: null,
+        grsTlpkKaki: null
       }
-      else if (val > 3 && val <= 6) {
-        this.form.keluhanNyeri = 'nyeri sedang'
-      }
-      else if (val > 6 && val <= 10) {
-        this.form.keluhanNyeri = 'nyeri berat'
-      }
+
+      this.hitungSkorApgar()
     },
 
-    hitungSkorSgd () {
-      const skor = parseInt(this.form.sgd.bb) + parseInt(this.form.sgd.am) + parseInt(this.form.sgd.kk)
-      this.form.sgdSkor = skor
-      this.setSgdKet(skor)
-    },
-    setSgdKet (nilai) {
-      const skor = nilai || 0
-      if (skor < 2) {
-        this.form.sgdKet = 'tidak beresiko malnutrisi'
-      }
-      else {
-        this.form.sgdKet = 'Beresiko malnutrisi'
-      }
+    hitungSkorApgar () {
+      let skor = 0
+      let ket = null
+      skor = parseInt(this.formNeonatal?.appearance?.value ?? 0) + parseInt(this.formNeonatal?.pulse?.value ?? 0) + parseInt(this.formNeonatal?.grimace?.value ?? 0) + parseInt(this.formNeonatal?.activity?.value ?? 0) + parseInt(this.formNeonatal?.respiration?.value ?? 0)
+
+      if (skor >= 0 && skor <= 3) ket = 'Kondisi bayi umumnya baik. Bayi dalam keadaan sehat dan mungkin hanya memerlukan observasi rutin.'
+      else if (skor >= 4 && skor <= 6) ket = 'Bayi membutuhkan pemantauan dan mungkin memerlukan intervensi, seperti bantuan pernapasan atau oksigen.'
+      else if (skor >= 7) ket = 'Bayi membutuhkan pemantauan dan mungkin memerlukan intervensi, seperti bantuan pernapasan atau oksigen.'
+      this.formNeonatal.apgarScore = skor
+      this.formNeonatal.apgarKet = ket
     }
+
   }
 })

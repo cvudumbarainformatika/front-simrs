@@ -3,6 +3,8 @@ import { reactive, ref } from 'vue'
 export default function useSvg () {
   const svgEl = ref(null)
 
+  const point = ref(null)
+
   const targetEl = reactive({
     id: null,
     title: null,
@@ -24,9 +26,15 @@ export default function useSvg () {
     height: 0,
     defaultWidth: 0,
     defaultHeight: 0,
+    maxWidth: 0,
+    maxHeight: 0,
+    minWidth: 0,
+    minHeight: 0,
     translateX: 0,
     translateY: 0,
-    scale: 1
+    scale: 1.1,
+    scaleDelta: 1,
+    duration: 0.5
   })
 
   const getSvgEl = (el) => {
@@ -39,6 +47,10 @@ export default function useSvg () {
     svgViewBox.height = height
     svgViewBox.defaultWidth = width
     svgViewBox.defaultHeight = height
+    svgViewBox.maxWidth = width / 10
+    svgViewBox.maxHeight = height / 10
+    svgViewBox.minWidth = width * 1
+    svgViewBox.minHeight = height * 1
 
     const { clientHeight, clientWidth } = el.parentNode
     el = el.parentNode
@@ -132,6 +144,7 @@ export default function useSvg () {
 
   // eslint-disable-next-line no-unused-vars
   const onMouseOver = (e) => {
+    e.preventDefault()
     const targetId = document.getElementById(e.target.id)
     if (targetId) {
       // console.log('onMouseOver', targetId)
@@ -144,22 +157,35 @@ export default function useSvg () {
       targetEl.title = e?.target?.children[1]?.innerHTML ?? null
     }
 
-    const el = e.target
     const svg = svgEl.value
+    // point.value = svg.createSVGPoint()
 
-    targetEl.x = (el.getBoundingClientRect().x - svg.getBoundingClientRect().x) + 30
-    targetEl.y = (el.getBoundingClientRect().y - svg.getBoundingClientRect().y) + 30
+    // point.value.x = e.clientX
+    // point.value.y = e.clientY
+
+    // const startPoint = point.value.matrixTransform(svgEl.value.getScreenCTM().inverse())
+
+    // targetEl.x = (startPoint.x - svgViewBox.x) * svgViewBox.scaleDelta
+    // targetEl.y = (startPoint.y - svgViewBox.y) * svgViewBox.scaleDelta
+
+    // const el = e.target
+    // targetEl.x = (el.getBoundingClientRect().x - svg.getBoundingClientRect().x) + 30
+    // targetEl.y = (el.getBoundingClientRect().y - svg.getBoundingClientRect().y) - 10
+    // const el = e.target
+    // targetEl.x = (point.value.x - el.getBoundingClientRect().x)
+    // targetEl.y = (point.value.y - el.getBoundingClientRect().y)
+    // console.log('svg', svg.getBoundingClientRect())
+    // console.log('el', el.getBoundingClientRect())
+    // console.log('scalling', svgViewBox.scaleDelta)
 
     //
     // targetEl.id = e?.target?.id
     // targetEl.title = e?.target?.attributes.title?.value ?? null
-    // window.onmousemove = function (j) {
-    //   // console.log('onmousemove', j)
-    //   targetEl.x = j.clientX - 290
-    //   targetEl.y = j.clientY - 200
-    //   // targetEl.x = j.x
-    //   // targetEl.y = j.y
-    // }
+    window.onmousemove = function (j) {
+      // console.log('onmousemove', j)
+      targetEl.x = (j.clientX - svg.getBoundingClientRect().x) + (20 * svgViewBox.scaleDelta)
+      targetEl.y = j.clientY - (svg.getBoundingClientRect().y) - (10 * svgViewBox.scaleDelta)
+    }
     e.stopPropagation()
   }
 
@@ -179,8 +205,10 @@ export default function useSvg () {
   }
 
   const onMouseClick = (e) => {
+    e.preventDefault()
     // const el = e.target
     const svg = svgEl.value
+    point.value = svg.createSVGPoint()
 
     // targetEl.x = el.getBoundingClientRect().x - svg.getBoundingClientRect().x
     // targetEl.y = el.getBoundingClientRect().y - svg.getBoundingClientRect().y
@@ -190,70 +218,58 @@ export default function useSvg () {
     console.log('clicked', svg.getBoundingClientRect())
     console.log('clicked 2', svgViewBox.height, svgViewBox.width)
     console.log('clicked 3', viewPortSize.height, viewPortSize.width)
+    // console.log('clicked 4', startPoint)
   }
 
   const viewPortOnMouseWheel = (e) => {
     // console.log('mouseWheel on viewPort', e)
-    _initZoom(e)
+    _gsapZOOM(e)
     e.preventDefault()
     e.stopPropagation()
   }
 
-  const _initZoom = (e) => {
-    // const { width, height } = viewPortSize
-    // console.log('mouseWheel on viewPort', width, height)
-    const zoom = 1.01
-
-    // const zoomx = e.offsetX
-    // const zoomy = e.offsetY
-    // // console.log('el', e)
-    // console.log('zoom', zoomx, zoomy)
-
-    const dir = e.deltaY
-
-    const minWidth = svgViewBox.defaultWidth / 10
-    const minHeight = svgViewBox.defaultHeight / 10
-    const maxWidth = svgViewBox.defaultWidth * 1
-    const maxHeight = svgViewBox.defaultHeight * 1
-
-    // console.log('minwidth, minheight, maxwidth, maxheight', minWidth, minHeight, maxWidth, maxHeight)
-    // let scaledW
-    // let scaledH
-    // let scaledX = 0
-    // let scaledY = 0
-
-    // eslint-disable-next-line prefer-const, no-unused-vars
-    // let [vieBoxX, vieBoxY, vieBoxWidth, vieBoxHeight] = svgEl?.value?.getAttribute('viewBox').split(' ').map(x => parseFloat(x))
-    if (dir < 0) {
-      svgViewBox.width = (svgViewBox.width / zoom) < minWidth ? minWidth : (svgViewBox.width / zoom).toFixed(2)
-      svgViewBox.height = (svgViewBox.height / zoom) < minHeight ? minHeight : (svgViewBox.height / zoom).toFixed(2)
-      svgViewBox.x = parseFloat(svgViewBox.width) / 2
-      svgViewBox.y = parseFloat(svgViewBox.height) / 2
-      // zoom *= 0.999 ** dir
-      // console.log('perbesar', dir)
+  const _gsapZOOM = (event) => {
+    let normalized
+    let delta = event.wheelDelta
+    if (delta) {
+      normalized = (delta % 100) === 0 ? delta / 100 : delta / 10
     }
     else {
-      svgViewBox.width = (svgViewBox.width * zoom) > maxWidth ? maxWidth : (svgViewBox.width * zoom).toFixed(2)
-      svgViewBox.height = (svgViewBox.height * zoom) > maxHeight ? maxHeight : (svgViewBox.height * zoom).toFixed(2)
-      // svgViewBox.x = (parseFloat(svgViewBox.width) - svgViewBox.defaultWidth) / 2
-      // svgViewBox.y = (parseFloat(svgViewBox.height) - svgViewBox.defaultHeight) / 2
-      // console.log('perkecil', dir)
-      // zoom *= 0.999 ** dir
+      delta = event.deltaY || event.detail || 0
+      normalized = -(delta % 3 ? delta * 10 : delta / 3)
     }
 
-    // console.log(svgViewBox.scale)
+    // eslint-disable-next-line no-unused-vars
+    const scaleDelta = normalized > 0 ? 1 / svgViewBox.scale : svgViewBox.scale
+    svgViewBox.scaleDelta = scaleDelta
+    // console.log('gsap zoom', scaleDelta)
+
+    const svg = svgEl.value
+    point.value = svg.createSVGPoint()
+
+    point.value.x = event.clientX
+    point.value.y = event.clientY
+    // console.log('point', point.value)
+
+    const startPoint = point.value.matrixTransform(svgEl.value.getScreenCTM().inverse())
+    // console.log('startPoint', startPoint)
+
+    svgViewBox.x -= (startPoint.x - svgViewBox.x) * (scaleDelta - 1)
+    svgViewBox.y -= (startPoint.y - svgViewBox.y) * (scaleDelta - 1)
+    svgViewBox.width *= scaleDelta
+    svgViewBox.height *= scaleDelta
+
+    // if (svgViewBox.width < svgViewBox.maxWidth) svgViewBox.width = svgViewBox.maxWidth
+    // if (svgViewBox.height < svgViewBox.maxHeight) svgViewBox.height = svgViewBox.maxHeight
+
+    // if (svgViewBox.width > svgViewBox.minWidth) svgViewBox.width = svgViewBox.minWidth
+    // if (svgViewBox.height > svgViewBox.minHeight) svgViewBox.height = svgViewBox.minHeight
 
     const scaledViewBox = [svgViewBox.x, svgViewBox.y, svgViewBox.width, svgViewBox.height].map(s => s).join(' ')
     svgEl.value.setAttribute('viewBox', scaledViewBox)
 
-    console.log('scaledViewBox', scaledViewBox)
+    // console.log('scaledViewBox', scaledViewBox)
   }
-
-  // watchEffect(() => {
-  //   if (svgEl.value) {
-  //     console.log('svgEl', svgEl.value)
-  //   }
-  // })
 
   return {
     getSvgEl,
