@@ -1119,7 +1119,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref } from 'vue'
 // import useCanvas from './canvasUse/useCanvas'
 import useSvg from './svgUse/useSvg'
 // import useSvg from './svgUse/useSvg'
@@ -1138,14 +1138,11 @@ const props = defineProps({
 const refSvg = ref(null)
 defineExpose({ refSvg })
 
+// eslint-disable-next-line no-unused-vars
 const { _initSVG, targetEl } = useSvg()
 
 onMounted(() => {
   _initSVG(refSvg.value)
-})
-
-watchEffect(() => {
-  console.log('targetEl', refSvg.value)
 })
 </script>
 

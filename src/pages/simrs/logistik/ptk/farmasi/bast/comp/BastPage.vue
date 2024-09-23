@@ -412,6 +412,7 @@ function updateHargaAll (evt, det, trm, key) {
   det.harga_netto_kecil = hargaPembelian / isi
   det.nilai_retur = det.jumlah_retur * det.harga_netto_kecil
   det.subtotalx = subtotal
+  det.subtotal = subtotal
 
   det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
 

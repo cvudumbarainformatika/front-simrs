@@ -207,22 +207,23 @@ const optionsJenisOperasi = ref([
   { nama: 'Cito' }
 ])
 
-function setIcd(val) {
+function setIcd (val) {
   store.setFormRanap('icd9', val)
   const icd = store.optionsIcd9.filter(a => a.kd_prosedur === val)
   if (icd.length) {
     store.setFormRanap('jenistindakan', icd[0].prosedur)
   }
 }
-function setOperasi(val) {
+function setOperasi (val) {
   if (val === 'Tidak') {
     store.setFormRanap('tanggaloperasi', null)
-  } else {
+  }
+  else {
     store.setFormRanap('tanggaloperasi', date.formatDate(Date.now(), 'YYYY-MM-DD'))
   }
 }
 
-async function getRuang() {
+async function getRuang () {
   const temp = store.formRanap.kdruangtujuan
   store.formRanap.kdruangtujuan = null
   await api.get('v1/simrs/ranap/ruangan/listruanganranap').then(response => {
@@ -230,7 +231,7 @@ async function getRuang() {
     store.formRanap.kdruangtujuan = temp
   })
 }
-function ruangRanapSelected(val) {
+function ruangRanapSelected (val) {
   console.log(val)
 }
 onMounted(() => {
@@ -238,7 +239,7 @@ onMounted(() => {
   getRuang()
 })
 
-function simpan() {
+function simpan () {
   console.log('simpan', store.formRanap)
   store.saveRanap(props.pasien)
   // console.log('opt', optionsIcd9.value, optionsJenisTindakan.value)

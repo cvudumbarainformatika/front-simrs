@@ -126,10 +126,12 @@
           <div class="f-12">
             {{ pasien?.ruangan }}
           </div>
-          <div class="f-10">
+          <div class="f-12">
             {{ pasien?.ketruangan }} <span class="text-orange">BED : {{ pasien?.nomorbed }}</span>
           </div>
         </div>
+
+        <div>Jenis Kasus</div>
       </div>
     </q-toolbar-title>
 

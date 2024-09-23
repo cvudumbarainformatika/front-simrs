@@ -59,6 +59,10 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     bukaLayanan (val, pasien) {
       this.pageLayanan = val
       this.loadingLayanan = true
+
+      Promise.all([
+
+      ])
       const form = { noreg: pasien?.noreg }
       // try {
       //   const resp = await api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
@@ -84,6 +88,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             const indexPasien = this.pasiens.findIndex(x => x.noreg === pasien.noreg)
             // this.pasiens[indexPasien] = resp.data
             // }
+
             resolve(this.pasiens[indexPasien])
           })
           .catch(err => {

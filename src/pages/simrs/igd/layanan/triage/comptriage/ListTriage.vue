@@ -276,7 +276,7 @@
                             <span style="color: teal;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
-                          <span class="">Eye : <span class="text-weight-bold">{{ item?.sistole ?? '-' }}</span></span>
+                          <span class="">Eye : <span class="text-weight-bold">{{ item?.eye ?? '-' }}</span></span>
                         </q-item-label>
                         <q-item-label avatar>
                           <span class="">Verbal : <span class="text-weight-bold">{{ item?.verbal ?? '-' }}</span></span>

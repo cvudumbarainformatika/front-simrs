@@ -264,7 +264,7 @@
                 transition-hide="flip-down"
                 standout="bg-yellow-3"
                 fill-input
-                :disable="store.form.jalannafas !== 'Bebas' || store.form.sirkulasi === 'Nadi Normal' || store.form.sirkulasi === 'CRT > 2 dtk' || store.form.sirkulasi === 'Akral Dingin'
+                :disable="store.form.jalannafas !== 'Bebas' || store.form.pernapasan !== 'Normal' || store.form.sirkulasi === 'Nadi Normal' || store.form.sirkulasi === 'CRT > 2 dtk' || store.form.sirkulasi === 'Akral Dingin'
                   || store.form.sirkulasi === 'Pucat' || store.form.sirkulasi === 'Takikardia' || store.form.sirkulasi === 'Bradikardia' || store.form.sirkulasi === 'Nadi Teraba Lemah'
                   || store.form.sirkulasi === 'Nadi Tidak Teraba' || store.form.sirkulasi === 'Henti Jantung'"
                 :options="disability"
@@ -699,7 +699,7 @@ function cekdisability (val) {
   if (val === 'Henti Jantung' || val === 'Nadi Tidak Teraba' || val === 'Akral Dingin') {
     store.form.hasilprimarysurve = 'Resusitasi'
   }
-  else if (val === 'Nadi Teraba Lemah' || val === 'Bradikardia' || val === 'Takikardia' || val === 'CRT > 2 dtk') {
+  else if (val === 'Nadi Teraba Lemah' || val === 'Bradikardia' || val === 'Takikardia' || val === 'CRT > 2 dtk' || val === 'Pucat') {
     store.form.hasilprimarysurve = 'P1'
   }
   else {
@@ -758,7 +758,7 @@ function onSubmit () {
       store.form.kategoritriage = 'Resusitasi'
     }
     else if (store.form.hasilprimarysurve === 'P1' && hasilsecondsurvex.value === 'Resusitasi') {
-      store.form.kategoritriage = 'P1'
+      store.form.kategoritriage = 'Resusitasi'
     }
     else if (store.form.hasilprimarysurve === 'P1') {
       store.form.kategoritriage = 'P1'
