@@ -54,7 +54,9 @@
         <template #body="props">
           <q-tr>
             <q-td key="nonpdls" :props="props" class="text-left">
-              <div>{{ props.row?.nonpdls }}</div>
+              <div>
+                {{ props.row?.nonpdls }}
+              </div>
               <q-td key="total">
                 <q-badge color="green" @click="onRowClick(props.row)">
                   {{ formatRpDouble(props.row?.total) }}
@@ -83,15 +85,46 @@
             </q-td>
             <q-td key="nopencairan" :props="props" class="text-left wrap-cells">
               <div>
-                Pencairan Tanggal {{ props.row?.tglcair }}
+                Pencairan Tanggal
               </div>
+              <div>{{ props.row?.tglcair }}</div>
               <q-badge>
                 {{ props.row?.nopencairan }}
               </q-badge>
             </q-td>
+            <q-td>
+              <div class="row justify-end">
+                <q-btn
+                  flat
+                  round
+                  class="bg-dark"
+                  size="sm"
+                  color="warning"
+                  icon="icon-mat-visibility"
+                  @click="viewRincian(props?.row)"
+                >
+                  <q-tooltip class="bg-accent">
+                    Lihat Rinci
+                  </q-tooltip>
+                </q-btn>
+                <!-- <div class="q-pl-sm" />
+                <q-btn
+                  size="sm"
+                  class="q-pl-md"
+                  color="negative"
+                  icon="icon-mat-delete"
+                  @click="deleteData(props?.row)"
+                />
+              </div> -->
+              </div>
+            </q-td>
           </q-tr>
         </template>
       </q-table>
+      <app-dialog-rincian
+        v-model="store.openDialogRinci"
+        :npd="npd"
+      />
     </div>
   </template>
 </template>
@@ -101,7 +134,8 @@
 // eslint-disable-next-line no-unused-vars
 import { formatRpDouble } from 'src/modules/formatter'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
-import { onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
+const AppDialogRincian = defineAsyncComponent(() => import('./DialogRincian.vue'))
 
 const store = formNotaPermintaanDanaLS()
 
@@ -167,11 +201,23 @@ const listnpdls = [
     name: 'nopencairan',
     align: 'center',
     field: row => [row.nopencairan, row.tglcair],
-    headerStyle: 'width: 300px;'
+    headerStyle: 'width: 100px;'
+  },
+  {
+    label: 'Aksi',
+    name: 'aksi',
+    align: 'center'
   }
 ]
 const columnsnpd = ref(listnpdls)
 
+const npd = ref(null)
+function viewRincian (row) {
+  store.openDialogRinci = true
+  npd.value = row.rincian
+  store.reqs.listrinci = npd.value
+  console.log('open', store.reqs.listrinci)
+}
 const onRowClick = (row) =>
   alert([row?.nopencairan, row?.total])
 
