@@ -76,12 +76,34 @@
               outlined
             />
           </div>
-          <div class="col-2">
+          <div>
             <app-btn
               label="Ambil Data"
               :disable="store.loading"
               :loading="store.loading"
               @click="ambilData()"
+            />
+          </div>
+          <div class="items-center">
+            <q-btn
+              position="bottom"
+              color="dark"
+              round
+              size="sm"
+              icon="icon-mat-print"
+              @click=" () => {
+                store.dialogCetak = true}"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+
+            <print-pdf
+              v-model="store.dialogCetak"
             />
           </div>
         </div>
@@ -329,9 +351,9 @@
 <script setup>
 import { formattanpaRp } from 'src/modules/formatter'
 import { useLaporanBkuPpkStore } from 'src/stores/siasik/laporan/bku/bkuppk'
-import { onMounted } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 // import VueHtml2pdf from 'vue-html2pdf'
-
+const PrintPdf = defineAsyncComponent(() => import('./inpage/PrintPdf.vue'))
 const store = useLaporanBkuPpkStore()
 onMounted(() => {
   store.getDataTable()
@@ -372,6 +394,7 @@ function totalsaldo () {
       saldo?.map((x) => x.pengeluaran).reduce((x, y) => x + y, 0)
     : 0
   // console.log("debit", totaldebit);
+  store.saldoakhir = totalsaldo
   return totalsaldo
 }
 // function saldoindex(ss) {

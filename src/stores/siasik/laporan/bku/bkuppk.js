@@ -14,6 +14,9 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       tahun: date.formatDate(Date.now(), 'YYYY')
       // per_page: 10,
     },
+    display: {
+      sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
+    },
     bulans: [
       { nama: 'Januari', value: '01' },
       { nama: 'Februari', value: '02' },
@@ -30,7 +33,9 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
     ],
     hasilArray: [],
     arrayTanggal: [],
-    pegawais: []
+    pegawais: [],
+    saldoakhir: 0,
+    dialogCetak: false
   }),
 
   actions: {
@@ -50,7 +55,6 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           console.log('dataBKUPPK', resp)
           if (resp.status === 200) {
             this.hasilArray = []
-            this.items = []
             this.items = resp.data
             this.pegawais = resp.data?.pegawai
             this.hitungharidalamBulan()
@@ -88,21 +92,39 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       // console.log("www", tgl);
       // ===================================================Saldo
 
-      const saldo = []
-      for (let i = 0; i < this.items.saldo.length; i++) {
-        const el = this.items?.saldo
+      // const saldo = []
+      // for (let i = 0; i < this.items.saldo.length; i++) {
+      //   const el = this.items?.saldo
+      //   const obj = {
+      //     tgl: el[i].tanggal,
+      //     notrans: el[i].rekening,
+      //     nonpd: null,
+      //     category: 'sts',
+      //     uraian: 'Saldo Awal',
+      //     uraianNPD: null,
+      //     urutan: 1,
+      //     penerimaan: el[i].nilaisaldo,
+      //     pengeluaran: 0
+      //   }
+      //   saldo.push(obj)
+      // }
+      // =====================================================
+      // ===================================================Nihil
+      const silpa = []
+      for (let i = 0; i < this.items.silpa.length; i++) {
+        const el = this.items?.silpa
         const obj = {
           tgl: el[i].tanggal,
-          notrans: el[i].rekening,
+          notrans: el[i].notrans,
           nonpd: null,
-          category: 'sts',
-          uraian: 'Saldo Awal Rekening ' + el[i].namaRek,
+          category: 'silpa',
+          uraian: 'Silpa',
           uraianNPD: null,
           urutan: 1,
-          penerimaan: el[i].nilaisaldo,
+          penerimaan: parseFloat(el[i].nominal),
           pengeluaran: 0
         }
-        saldo.push(obj)
+        silpa.push(obj)
       }
       // =====================================================
       // ===================================================Setor
@@ -116,8 +138,8 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           category: 'setoranpendapatan',
           uraian: el[i].ket,
           uraianNPD: null,
-          urutan: 1,
-          penerimaan: parseInt(el[i].nilai),
+          urutan: 2,
+          penerimaan: parseFloat(el[i].nilai),
           pengeluaran: 0
         }
         setor.push(obj)
@@ -179,9 +201,9 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           category: 'spm',
           uraian: el[i].uraian,
           uraianNPD: null,
-          urutan: 2,
+          urutan: 3,
           penerimaan: 0,
-          pengeluaran: parseInt(el[i].jumlahspp)
+          pengeluaran: parseFloat(el[i].jumlahspp)
         }
         spm.push(obj)
       }
@@ -198,9 +220,9 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           category: 'spmgu',
           uraian: el[i].uraian,
           uraianNPD: null,
-          urutan: 3,
+          urutan: 4,
           penerimaan: 0,
-          pengeluaran: parseInt(el[i].jumlahspp)
+          pengeluaran: parseFloat(el[i].jumlahspp)
         }
         spmgu.push(obj)
       }
@@ -268,10 +290,28 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           uraian: 'Pengembalian Nihil',
           uraianNPD: null,
           urutan: 5,
-          penerimaan: parseInt(el[i].jmlpengembalianreal),
+          penerimaan: parseFloat(el[i].jmlpengembalianreal),
           pengeluaran: 0
         }
         nihil.push(obj)
+      }
+      // =====================================================
+      // ===================================================Nihil
+      const kurangikaskecil = []
+      for (let i = 0; i < this.items.kaskecil.length; i++) {
+        const el = this.items?.kaskecil
+        const obj = {
+          tgl: date.formatDate(el[i].tanggalpengeluaran, 'YYYY-MM-DD'),
+          notrans: el[i].nomorpengeluaran,
+          nonpd: null,
+          category: 'kaskecil',
+          uraian: 'Pengembalian Kepada Pasien',
+          uraianNPD: null,
+          urutan: 6,
+          penerimaan: 0,
+          pengeluaran: parseFloat(el[i].nominal)
+        }
+        kurangikaskecil.push(obj)
       }
       // =====================================================
 
@@ -283,7 +323,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       // this.hasilArray = temp;
 
       // menggabungkan array
-      const gabungArray = saldo?.concat(setor, spm, spmgu, npkls, nihil)
+      const gabungArray = silpa?.concat(setor, spm, spmgu, npkls, nihil, kurangikaskecil)
       // urutan by tanggal
       const sortByDate = (gabungArray) =>
         gabungArray.sort(({ tgl: a }, { tgl: b }) =>
@@ -344,7 +384,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
     hitungTotalNpd (arr) {
       return arr
         .map((x) => x.nominalpembayaran)
-        .reduce((x, y) => parseInt(x) + parseInt(y), 0)
+        .reduce((x, y) => parseFloat(x) + parseFloat(y), 0)
     },
     hitungTBP (arr) {
       return arr.map((x) => x.nilai).reduce((x, y) => x + y, 0)

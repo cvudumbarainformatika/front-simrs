@@ -19,13 +19,20 @@ const akuntansi = {
       // name: 'laporan.rekap.datapasien',
       component: () => import('pages/siasik/akuntansi/laporanakuntansi/IndexPage.vue'),
       children: [
-        { path: '', redirect: '/akuntansi/laporan/lpsal' },
+        { path: '', redirect: '/akuntansi/laporan/lra' },
+        {
+          path: '/akuntansi/laporan/lra',
+          name: 'akuntansi.laporan.lra',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/lralevel3/IndexPage.vue')
+        },
         {
           path: '/akuntansi/laporan/lpsal',
           name: 'akuntansi.laporan.lpsal',
           component: () =>
             import('src/pages/siasik/akuntansi/laporanakuntansi/lpsal/IndexPage.vue')
         }
+
       ]
     },
     {

@@ -7,6 +7,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
   state: () => ({
     loading: false,
     items: [],
+    kodetigas: [],
     meta: {},
     params: {
       q: '',
@@ -658,7 +659,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      // console.log('ksksk', kode3)
+      console.log('kode3', kode3)
       // KODE4
       const kod4 = this.items.length
         ? this.items.map((x) => {
@@ -805,7 +806,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      // console.log('ksksk', kode4)
+      // console.log('kode4', kode4)
       // KODE4
       const kod5 = this.items?.length
         ? this.items?.map((x) => {
@@ -953,7 +954,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      console.log('ksksk', kod5)
+      console.log('kode5', kod5)
       // const kode2 = []
       // for (let i = 0; i < kode?.length; i++) {
       //   const kodkelompok = {
@@ -988,6 +989,17 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       // const join = kode1?.concat(kode2, kode3, kode4, kode5)
       // console.log('al al', join)
       this.items.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
+
+      const obj = {
+        kode1,
+        kode2,
+        kode3
+      }
+      this.kodetigas = obj
+      console.log('kode 3 all', this.kodetigas)
+      // const sortkode3 = this.kodetigas.sort(({ kodeall3: a }, { kodeall3: b }) =>
+      //   a < b ? -1 : a > b ? 1 : 0
+      // )
       const sort = this.items.sort(({ kodeall3: a }, { kodeall3: b }) =>
         a < b ? -1 : a > b ? 1 : 0
       )

@@ -19,6 +19,14 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
+          :outline="path!=='/akuntansi/laporan/lra'"
+          glossy
+          size="md"
+          color="primary"
+          label="LRA"
+          @click="goTo('/akuntansi/laporan/lra')"
+        />
+        <q-btn
           :outline="path!=='/akuntansi/laporan/lpsal'"
           glossy
           size="md"

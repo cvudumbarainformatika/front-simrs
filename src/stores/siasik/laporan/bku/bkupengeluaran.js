@@ -53,7 +53,6 @@ export const useLaporanBkuPengeluaranStore = defineStore(
             console.log('BkuPengeluaran', resp)
             if (resp.status === 200) {
               this.hasilArray = []
-              this.items = []
               this.items = resp.data
               this.pegawais = resp.data?.pegawai
               this.hitungharidalamBulan()

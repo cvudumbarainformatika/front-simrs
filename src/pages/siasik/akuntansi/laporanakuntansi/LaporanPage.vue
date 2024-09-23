@@ -62,21 +62,22 @@ const barStyle = ref({
 
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/akuntansi/laporan/lpse') {
-    return 'LAPORAN LPSAL'
+  if (page.path === '/akuntansi/laporan/lpsal') {
+    return 'LPSAL'
   }
-  // else if (page.path === '/pendaftaran/igd/kunjungan') {
-  //   return 'LIST KUNJUNGAN'
-  // // } else if (page.path === '/pendaftaran/umum/listmjkn') {
+  // else if (page.path === '/akuntansi/laporan/lpse') {
+  //   return 'LPSAL'
+  // }
+  // else if (page.path === '/pendaftaran/umum/listmjkn') {
   // //   return 'LIST MOBILE JKN'
   // }
   else {
-    return 'Laporan Akuntansi'
+    return 'LRA'
   }
 })
 
 const subtitle = computed(() => {
-  if (page.path === '/akuntansi/laporan/lpse') {
+  if (page.path === '/akuntansi/laporan/lpsal') {
     return 'Laporan Perubahan Saldo Anggaran Lebih'
   }
   // else if (page.path === '/pendaftaran/igd/kunjungan') {
@@ -85,7 +86,7 @@ const subtitle = computed(() => {
   // //   return 'List Kunjungan dari m-JKN'
   // }
   else {
-    return 'Laporan'
+    return 'Laporan Realisasi Anggaran'
   }
 })
 
