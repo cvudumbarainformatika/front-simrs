@@ -317,17 +317,17 @@
                     {{ formatRpDouble(trm?.subtotal_terima,2) }}
                   </div>
                 </div>
-                <div class="row no-wrap q-mt-xs">
+                <!-- <div class="row no-wrap q-mt-xs">
                   <div class="col-2">
                     Nilai Retur
                   </div>
                   <div class="text-weight-bold">
                     {{ formatRpDouble(trm?.nilai_retur,2) }}
                   </div>
-                </div>
+                </div> -->
                 <div class="row no-wrap q-mt-xs">
                   <div class="col-2">
-                    Subtotal Setelah Retur
+                    Subtotal BAST
                   </div>
                   <div class="text-weight-bold">
                     {{ formatRpDouble(trm?.subtotal_bast,2) }}
@@ -343,14 +343,11 @@
               >
                 <div class="">
                   <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Kode RS
-                    </div>
                     <div class="text-weight-bold">
-                      {{ det.kode_rs }}
+                      {{ det.kdobat }}
                     </div>
                   </div>
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                  <!-- <div class="row no-wrap justify-between q-mt-xs anudua">
                     <div class="q-mr-xs">
                       Kode 108
                     </div>
@@ -365,42 +362,12 @@
                     <div class="text-weight-bold">
                       {{ det.kode_50 }}
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="q-ml-md">
                   <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Nama
-                    </div>
                     <div class="text-weight-bold box text-right">
-                      {{ det.nama_barang }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      uraian 108
-                    </div>
-                    <div class="text-weight-bold box text-right">
-                      {{ det.uraian_108 }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      uraian 50
-                    </div>
-                    <div class="text-weight-bold box text-right">
-                      {{ det.uraian_50 }}
-                    </div>
-                  </div>
-                  <div
-                    v-if="det.merk"
-                    class="row no-wrap justify-between items-center q-mt-xs anudua"
-                  >
-                    <div class="q-mr-xs">
-                      Merk
-                    </div>
-                    <div class="text-weight-bold box text-right">
-                      {{ det.merk }}
+                      {{ det?.masterobat?.nama_obat }}
                     </div>
                   </div>
                 </div>
@@ -410,7 +377,7 @@
                       Jumlah
                     </div>
                     <div class="text-weight-bold">
-                      {{ det.qty }}
+                      {{ det.jml_terima_b }}
                     </div>
                   </div>
                   <div class="row no-wrap justify-between items-center q-mt-xs anudua">
@@ -418,7 +385,7 @@
                       Satuan
                     </div>
                     <div class="text-weight-bold text-right">
-                      {{ det.satuan?det.satuan.nama:'-' }}
+                      {{ det?.satuan }}
                     </div>
                   </div>
                   <div
@@ -462,22 +429,6 @@
                   </div>
                 </div>
                 <div class="q-ml-md">
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Harga Kontrak
-                    </div>
-                    <div class="text-weight-bold">
-                      {{ formatRpDouble(det.harga_kontrak,2) }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Harga Jadi
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ formatRpDouble(det.harga_jadi,2) }}
-                    </div>
-                  </div>
                   <div
                     class="row no-wrap justify-between items-center q-mt-xs anudua"
                   >
@@ -485,7 +436,7 @@
                       Subtotal
                     </div>
                     <div class="text-weight-bold text-right">
-                      {{ formatRpDouble(det.sub_total,2) }}
+                      {{ formatRpDouble(det.subtotal,2) }}
                     </div>
                   </div>
                 </div>
