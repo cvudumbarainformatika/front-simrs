@@ -175,7 +175,7 @@
 
     <!-- end 4.1 -->
     <!-- start 4.2 -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.2 KEBIDANAN</strong>
       </q-card-section>
@@ -321,8 +321,8 @@
       </q-card-section>
     </q-card>
 
-    <!-- start 4.2 -->
-    <q-card flat bordered class="col-12">
+    <!-- start 4.3 -->
+    <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.3 NEONATAL</strong>
       </q-card-section>
@@ -572,6 +572,10 @@ const SelectInput = defineAsyncComponent(() => import('../../../components/Selec
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  kasus: {
     type: Object,
     default: null
   }
