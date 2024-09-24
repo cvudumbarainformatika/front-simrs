@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerimaan_farmasi', {
   state: () => ({
@@ -16,7 +17,8 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
       'no_bast',
       'tanggal',
       'total',
-      'oleh'
+      'oleh',
+      'act'
     ],
     columnHide: []
   }),
@@ -65,6 +67,20 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
                 // trm.subtotal_bast = parseFloat(trm.subtotal_terima) - parseFloat(trm?.nilai_retur)
               })
             })
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    hapusBast (val) {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/bast/hapus-bast', val)
+          .then(resp => {
+            this.loading = false
+            const index = this.items.findIndex(f => f.no_bast === val?.no_bast)
+            if (index >= 0) this.items.splice(index, 1)
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => { this.loading = false })

@@ -81,14 +81,14 @@
           </div>
         </div>
         <div
-          v-if="row.no_pembayaran"
+          v-if="row.no_npd"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
           <div class="q-mr-xs text-teal">
-            Pembayaran
+            No NPD
           </div>
           <div class="box text-right">
-            {{ row.no_pembayaran }}
+            {{ row.no_npd }}
           </div>
         </div>
       </template>
@@ -208,7 +208,7 @@
       </template>
       <template #cell-total="{ row }">
         <div class="text-right text-weight-bold">
-          {{ formatRpDouble( row.totalSemua,2) }}
+          {{ formatDouble( row.totalSemua,2) }}
         </div>
         <div
           v-if="row.total"
@@ -279,8 +279,20 @@
           </div>
         </div>
       </template>
+      <template #cell-act="{ row }">
+        <div v-if="!row?.no_npd">
+          <q-btn
+            round
+            flat
+            size="sm"
+            icon="icon-mat-delete_sweep"
+            color="negative"
+            @click="hapus(row)"
+          />
+        </div>
+      </template>
       <template #expand="{ row }">
-        <div v-if="row.penerimaan.length">
+        <div v-if="row.penerimaan.length" style="width: 90vw;">
           <div
             v-for="(trm,n) in row.penerimaan"
             :key="n"
@@ -336,109 +348,132 @@
               </div>
             </div>
             <div v-if="trm.penerimaanrinci.length && trm.disp">
+              <div class="row q-mb-sm text-weight-bold">
+                <div class="col-8">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      Penerimaan
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      Bast
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div
                 v-for="(det,i) in trm.penerimaanrinci"
                 :key="i"
                 class="row no-wrap q-mb-xs anu"
+                :class="i%2===1?'bg-blue-2':''"
               >
-                <div class="">
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="text-weight-bold">
-                      {{ det.kdobat }}
+                <div class="col-8">
+                  <div class="row">
+                    <div class="">
+                      <div class="row no-wrap q-mt-xs anudua">
+                        <div class="text-weight-bold box">
+                          {{ det?.masterobat?.nama_obat }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap q-mt-xs anudua">
+                        <div class="text-italic">
+                          {{ det.kdobat }}
+                        </div>
+                      </div>
+                      <!-- <div class="row no-wrap justify-between q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Kode 108
+                        </div>
+                        <div class="text-weight-bold">
+                          {{ det.kode_108 }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap justify-between q-mt-xs anudua ">
+                        <div class="q-mr-xs">
+                          Kode 50
+                        </div>
+                        <div class="text-weight-bold">
+                          {{ det.kode_50 }}
+                        </div>
+                      </div> -->
+                    </div>
+                    <div class="q-ml-md">
+                      <div class="row no-wrap justify-between q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Jumlah
+                        </div>
+                        <div class="text-weight-bold">
+                          {{ det.jml_terima_b }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Satuan
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ det?.satuan }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="q-ml-md">
+                      <div class="row no-wrap justify-between q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Harga
+                        </div>
+                        <div class="text-weight-bold">
+                          {{ formatRpDouble(det.harga,2) }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          diskon
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ det.diskon }} %
+                        </div>
+                      </div>
+                      <div
+                        class="row no-wrap justify-between items-center q-mt-xs anudua"
+                      >
+                        <div class="q-mr-xs">
+                          PPN
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ det.ppn }} %
+                        </div>
+                      </div>
+                    </div>
+                    <div class="q-ml-md">
+                      <div
+                        class="row no-wrap justify-between items-center q-mt-xs anudua"
+                      >
+                        <div class="q-mr-xs">
+                          Subtotal
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ formatRpDouble(det.subtotal,2) }}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <!-- <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Kode 108
-                    </div>
-                    <div class="text-weight-bold">
-                      {{ det.kode_108 }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between q-mt-xs anudua ">
-                    <div class="q-mr-xs">
-                      Kode 50
-                    </div>
-                    <div class="text-weight-bold">
-                      {{ det.kode_50 }}
-                    </div>
-                  </div> -->
                 </div>
-                <div class="q-ml-md">
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="text-weight-bold box text-right">
-                      {{ det?.masterobat?.nama_obat }}
+                <div class="col-4">
+                  <!-- <div v-for="bas in cariBast(trm,det)" :key="bas"> -->
+                  <div class="row">
+                    <div class="q-ml-sm">
+                      Total Item
+                    </div>
+                    <div class="q-ml-sm text-weight-bold">
+                      {{ cariBast(trm,det) }}
+                    </div>
+                    <div class="q-ml-sm text-weight-bold">
+                      ({{ cariSatuan(trm,det) }})
                     </div>
                   </div>
-                </div>
-                <div class="q-ml-md">
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Jumlah
-                    </div>
-                    <div class="text-weight-bold">
-                      {{ det.jml_terima_b }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Satuan
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ det?.satuan }}
-                    </div>
-                  </div>
-                  <div
-                    v-if="det.satuan_kecil"
-                    class="row no-wrap justify-between items-center q-mt-xs anudua"
-                  >
-                    <div class="q-mr-xs">
-                      satuan kecil
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ det.satuan_kecil }}
-                    </div>
-                  </div>
-                </div>
-                <div class="q-ml-md">
-                  <div class="row no-wrap justify-between q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      Harga
-                    </div>
-                    <div class="text-weight-bold">
-                      {{ formatRpDouble(det.harga,2) }}
-                    </div>
-                  </div>
-                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                    <div class="q-mr-xs">
-                      diskon
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ det.diskon }}
-                    </div>
-                  </div>
-                  <div
-                    class="row no-wrap justify-between items-center q-mt-xs anudua"
-                  >
-                    <div class="q-mr-xs">
-                      PPN
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ det.ppn }}
-                    </div>
-                  </div>
-                </div>
-                <div class="q-ml-md">
-                  <div
-                    class="row no-wrap justify-between items-center q-mt-xs anudua"
-                  >
-                    <div class="q-mr-xs">
-                      Subtotal
-                    </div>
-                    <div class="text-weight-bold text-right">
-                      {{ formatRpDouble(det.subtotal,2) }}
-                    </div>
-                  </div>
+                  <!-- </div> -->
                 </div>
               </div>
             </div>
@@ -449,15 +484,34 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useListBastPenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/bast/list'
 
 const store = useListBastPenerimaanFarmasiStore()
 // click
 function onClick (val) {
-  console.log('click', val)
+  // console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
+}
+function cariBast (trm, rin) {
+  const bast = trm?.bastr.filter(f => f.kdobat === rin.kdobat)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0) ?? 0
+  // console.log('trm', bast)
+  return bast
+}
+function cariSatuan (trm, rin) {
+  const bast = trm?.bastr.find(f => f.kdobat === rin.kdobat)
+  // console.log('sat', bast)
+  return bast?.masterobat?.satuan_k ?? '-'
+}
+function hapus (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  const data = {
+    no_bast: val?.no_bast
+  }
+  store.hapusBast(data)
+  // console.log('hapus', data)
 }
 store.getInitialData()
 </script>
@@ -465,7 +519,7 @@ store.getInitialData()
 
 .box {
   white-space: normal !important;
-    inline-size: 400px;
+    inline-size: 220px;
     overflow-wrap: break-word;
 }
 .box2 {
