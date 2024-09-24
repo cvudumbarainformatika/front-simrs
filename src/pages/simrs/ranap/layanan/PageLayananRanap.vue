@@ -23,6 +23,7 @@
           <HeaderLayout
             :pasien="pasien"
             @toggle-left-drawer="()=> drawer = !drawer"
+            @update:jeniskasus="(val)=> store.gantiJenisKasus(val, pasien)"
           />
         </q-header>
         <!-- LEFT DRAWER ======================================================================================-->
@@ -47,14 +48,13 @@
         <q-page-container>
           <q-page
             class="contain bg-grey-3"
-            v-if="!loading"
           >
             <Suspense
               :key="menu.comp"
               timeout="0"
             >
               <template #default>
-                <!-- <div
+                <div
                   v-if="pasien?.dokter==='' || pasien?.dokter === null"
                   class="column full-height flex-center absolute-center z-top full-width"
                   style="background-color: black; opacity: .9;"
@@ -62,11 +62,22 @@
                   <div class="text-white">
                     Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
                   </div>
-                </div> -->
+                </div>
+                <div
+                  v-else-if="pasien?.kd_jeniskasus==='' || pasien?.kd_jeniskasus === null"
+                  class="column full-height flex-center absolute-center z-top full-width"
+                  style="background-color: black; opacity: .9;"
+                >
+                  <div class="text-white">
+                    MAAF, HARAP TENTUKAN DAHULU JENIS KASUS PASIEN
+                  </div>
+                </div>
                 <component
+                  v-else
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
+                  :kasus="store.jnsKasusPasien"
                   depo="rnp"
                 />
               </template>
@@ -75,9 +86,9 @@
               </template>
             </Suspense>
           </q-page>
-          <q-page v-else>
+          <!-- <q-page v-else>
             <AppLoader />
-          </q-page>
+          </q-page> -->
         </q-page-container>
       </q-layout>
     </q-card>
@@ -85,13 +96,19 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
-import HeaderLayout from './layoutcomp/HeaderLayout.vue'
-import LeftDrawer from './layoutcomp/LeftDrawer.vue'
-import AppLoader from 'src/components/~global/AppLoader.vue'
+import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
+// import HeaderLayout from './layoutcomp/HeaderLayout.vue'
+// import LeftDrawer from './layoutcomp/LeftDrawer.vue'
+// import AppLoader from 'src/components/~global/AppLoader.vue'
+import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+
+const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
+const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
+const AppLoader = defineAsyncComponent(() => import('src/components/~global/AppLoader.vue'))
 
 const drawer = ref(false)
-defineProps({
+
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -101,6 +118,8 @@ defineProps({
     default: false
   }
 })
+
+const store = usePengunjungRanapStore()
 
 const menus = ref([
   // {
@@ -133,6 +152,14 @@ const menu = ref(menus.value[0])
 function menuDiganti (val) {
   menu.value = val
 }
+
+watchEffect(() => {
+  if (!props.pasien) {
+    console.log('no pasien')
+
+    store.pageLayanan = false
+  }
+})
 </script>
 
 <style lang="scss">

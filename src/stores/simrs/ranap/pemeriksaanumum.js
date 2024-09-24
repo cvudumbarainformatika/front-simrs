@@ -153,6 +153,17 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
     },
 
+    formPediatrik: {
+      lila: 0,
+      lida: 0,
+      lirut: 0,
+      lilengtas: 0,
+
+      eye: null,
+      motorik: null,
+      verbal: null
+    },
+
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' }, // 248234008

@@ -110,6 +110,9 @@ function adaInput (val) {
   if (!store.loading) store.getData()
 }
 onMounted(() => {
-  store.getRuangan().then(() => store.getData())
+  Promise.all([
+    store.getJenisKasus(),
+    store.getRuangan().then(() => store.getData())
+  ])
 })
 </script>

@@ -98,7 +98,7 @@
       </q-card>
 
       <!-- FORM 4.2 -->
-      <q-card flat bordered class="q-mb-sm">
+      <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="q-mb-sm">
         <q-card-section class="row q-col-gutter-xs">
           <div class="text-weight-bold col-12">
             Form 4.2 (Kebidanan)
@@ -197,11 +197,11 @@
               <app-input-simrs v-model="store.formKebidanan.hpht" label="HPHT (hr)" class="col-4" :valid="{number: true}" />
               <app-input-date
                 v-model="store.formKebidanan.tglPerkPersalinan"
-                label="Tanggal Perkiraan Persalinan"
+                label="Tanggal Perk. Persalinan"
                 outlined
                 dense
                 @set-model="(val)=>{store.formKebidanan.tglPerkPersalinan=val}"
-                class="col-6"
+                class="col-3"
               />
 
               <div class="col-12 q-mt-xs">
@@ -361,7 +361,7 @@
       </q-card>
 
       <!-- FORM 4.3 -->
-      <q-card flat bordered class="q-mb-sm">
+      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
         <q-card-section>
           <div class="text-weight-bold">
             Form 4.3 (Neonatal)
@@ -590,7 +590,7 @@
       </q-card>
 
       <!-- FORM 4.4 -->
-      <q-card flat bordered class="q-mb-sm">
+      <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="q-mb-sm">
         <q-card-section>
           <div class="text-weight-bold">
             Form 4.4 (Pediatrik)
@@ -816,7 +816,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.1 -->
-      <q-card flat bordered class="q-mb-sm">
+      <q-card v-if="kasus?.gruping==='4.1'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
             <div class="text-weight-bold">
@@ -913,7 +913,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.3 NEONATAL -->
-      <q-card flat bordered class="q-mb-sm">
+      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
             <div class="text-weight-bold q-py-xs">
@@ -979,8 +979,8 @@
           <div>{{ store.formNeoNatal?.keluhanNyeri }}</div>
         </q-card-section>
       </q-card>
-
-      <div class="skreening-gizi-dewasa">
+      <!-- GIZI 4.1 DEWASA -->
+      <div v-if="kasus?.gruping==='4.1'" class="skreening-gizi-dewasa">
         <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1026,8 +1026,8 @@
           </q-card-section>
         </q-card>
       </div>
-
-      <div class="skreening-gizi-kebidanan">
+      <!-- GIZI 4.2 KEBIDANAN -->
+      <div v-if="kasus?.gruping==='4.2'" class="skreening-gizi-kebidanan">
         <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1085,8 +1085,8 @@
           </q-card-section>
         </q-card>
       </div>
-
-      <div class="skreening-gizi-neonatal">
+      <!-- GIZI 4.3 NEONATAL -->
+      <div v-if="kasus?.gruping==='4.3'" class="skreening-gizi-neonatal">
         <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1152,6 +1152,10 @@ const store = useAnamnesisRanapStore()
 
 defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  kasus: {
     type: Object,
     default: null
   }
