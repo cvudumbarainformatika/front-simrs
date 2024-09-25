@@ -9,11 +9,27 @@ const akuntansi = {
     //   // name: 'siasik.saldo',
     //   component: () => import('pages/siasik/akuntansi/IndexPage.vue')
     // },
-    // {
-    //   path: '/akuntansi/jurnal',
-    //   // name: 'laporan.rekap.datapasien',
-    //   component: () => import('pages/siasik/akuntansi/IndexPage.vue')
-    // },
+    {
+      path: '/akuntansi/jurnal',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/akuntansi/jurnal/IndePage.vue'),
+      children: [
+        { path: '', redirect: '/akuntansi/jurnal/saldoawal' },
+        {
+          path: '/akuntansi/jurnal/saldoawal',
+          name: 'akuntansi.jurnal.saldoawal',
+          component: () =>
+            import('src/pages/siasik/akuntansi/jurnal/saldoawal/IndexPage.vue')
+        },
+        {
+          path: '/akuntansi/jurnal/jurnalumum',
+          name: 'akuntansi.jurnal.jurnalumum',
+          component: () =>
+            import('src/pages/siasik/akuntansi/jurnal/jurnalumum/IndexPage.vue')
+        }
+
+      ]
+    },
     {
       path: '/akuntansi/laporan',
       // name: 'laporan.rekap.datapasien',

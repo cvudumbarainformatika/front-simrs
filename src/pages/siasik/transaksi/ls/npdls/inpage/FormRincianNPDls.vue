@@ -360,8 +360,10 @@ function simpanRinci (val) {
     console.log('jumlahnya', obj?.jumlah)
     console.log('sisa', obj?.sisapagu)
     if (obj?.jumlah > obj?.sisapagu) {
+      store.form.rincians = ''
       return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
-    } arr.push(obj)
+    }
+    arr.push(obj)
 
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
     console.log('simpan', subtotal)
@@ -405,8 +407,9 @@ function simpanRinciBast (val) {
   // store.rinci.nominalpembayaran = data?.nominalpembayaran ?? ''
 
   $q.localStorage.set('rincian_npd', data)
-
+  console.log('setelah simpan', data)
   store.form.rincians = data
+  // store.form.penerimaans = data.nobast
   const unikjumlah = store.form.rincians.map((x) => x.koderek108)
   const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
   const arr = []

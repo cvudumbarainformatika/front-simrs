@@ -60,9 +60,9 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
 
               console.log('farmasi', resp.data)
               this.loading = false
-              this.bastfarmasis = resp.data.penerimaan.data
+              this.bastfarmasis = resp.data.penerimaan
               console.log('bast penerimaan', this.bastfarmasis)
-              this.konsinyasis = resp.data.konsinyasi.data
+              this.konsinyasis = resp.data.konsinyasi
               console.log('konsinyasi', this.konsinyasis)
               this.reqs.rowsNumber = resp.data.total
               // this.rekening50 = resp.data.data
@@ -104,8 +104,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
                 nobast: x.nobast,
                 hargabast: parseFloat(x.harga_net),
                 volumebast: parseFloat(x.jumlah),
-                subtotal: parseFloat(x.totalobat),
-                nominalpembayaran: parseFloat(x.totalobat),
+                subtotal: parseFloat(x.subtotal),
+                nominalpembayaran: parseFloat(x.subtotal),
                 realisasi: parseFloat(x.masterobat?.pagu?.realisasi?.map(x => parseFloat(x.nominalpembayaran))?.reduce((a, b) => a + b, 0)) +
                 parseFloat(x.masterobat?.pagu?.realisasi_spjpanjar?.map(x => parseFloat(x.jumlahbelanjapanjar))?.reduce((a, b) => a + b, 0)) -
                 parseFloat(x.masterobat?.pagu?.contrapost?.map(x => parseFloat(x.nominalcontrapost))?.reduce((a, b) => a + b, 0))

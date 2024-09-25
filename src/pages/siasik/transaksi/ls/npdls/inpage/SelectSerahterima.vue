@@ -108,7 +108,6 @@
               v-model:pagination="carisrt.reqs"
               :filter="carisrt.reqs.q"
               :loading="carisrt.loading"
-              :rows-per-page-options="[10,20,50]"
             >
               <template #top-left>
                 <div class="flex q-qutter-sm z-top">
@@ -250,7 +249,8 @@ function pilihDataSerahterima (val) {
   carisrt.selectbastFarmasi()
 
   // store.rinci = val ?? ''
-  console.log('kkode bast', store.reqs.bast)
+  // console.log('kkode bast', store.reqs.bast)
+  console.log('cari bast', carisrt.reqs.kodebast)
 }
 // const pilihSerahterima = (val) => {
 //   storeform.setForm(val)
