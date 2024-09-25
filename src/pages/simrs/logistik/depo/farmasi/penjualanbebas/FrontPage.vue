@@ -64,7 +64,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenjualanBebasFarmasiStore } from 'src/stores/simrs/farmasi/penjualanbebas/penjualanbebas'
 import { defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 
-const tab = ref('umum')
+const tab = ref('list')
 const optionTabs = ref([
   { name: 'umum', label: 'Umum', compo: shallowRef(defineAsyncComponent(() => import('./comp/UmumPage.vue'))) },
   { name: 'karyawan', label: 'Karyawan', compo: shallowRef(defineAsyncComponent(() => import('./comp/KaryawanPage.vue'))) },

@@ -42,71 +42,104 @@
       </template>
       <template #expand="{row}">
         <div v-if="row?.apotek?.length" style="width: 90vw;">
-          <div class="row q-mr-xs q-pa-sm text-weight-bold bg-dark text-white no-wrap">
-            <div class="col-1">
-              No
-            </div>
-            <div class="col-2">
-              Nomor Resep
-            </div>
-            <div class="col-9">
-              <div class="row">
-                <div class="col-5">
-                  Obat
+          <div class="row bg-dark items-center">
+            <div class="col-11">
+              <div class="row q-mr-xs q-pa-sm text-weight-bold text-white no-wrap">
+                <div class="col-1">
+                  No
                 </div>
                 <div class="col-2">
-                  Satuan
+                  Nomor Resep
                 </div>
-                <div class="col-1 text-right">
-                  Jumlah
-                </div>
-                <div class="col-1 text-right">
-                  Harga
-                </div>
-                <div class="col-2 text-right">
-                  Subtotal
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-for="(item,i) in row.apotek" :key="item" :class="i%2===1?'bg-grey-4':''">
-            <div class="row no-wrap q-mr-xs q-py-xs items-center">
-              <div class="col-1">
-                {{ i+1 }}
-              </div>
-
-              <div class="col-2">
-                {{ item?.noresep }}
-              </div>
-              <div class="col-9">
-                <div v-for="(det,j) in item?.rincian" :key="det">
-                  <div class="row q-py-xs" :class="j%2===1?'bg-blue-2':''">
+                <div class="col-9">
+                  <div class="row">
                     <div class="col-5">
-                      {{ det?.mobat?.nama_obat }}
+                      Obat
                     </div>
                     <div class="col-2">
-                      {{ det?.mobat?.satuan_k }}
+                      Satuan
                     </div>
                     <div class="col-1 text-right">
-                      {{ det?.jumlah }}
+                      Jumlah
                     </div>
                     <div class="col-1 text-right">
-                      {{ formatDouble(det?.harga_jual,2) }}
+                      Harga
                     </div>
                     <div class="col-2 text-right">
-                      <!-- {{ formatDouble((parseFloat(det?.harga_jual)*parseFloat(det?.jumlah)),2) }} -->
-                      {{ formatDouble(det?.subtotal,2) }}
+                      Subtotal
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row q-py-xs text-weight-bold">
-              <div class="col-8 text-right">
-                Total
+          </div>
+          <div v-for="(item,i) in row.apotek" :key="item" :class="i%2===1?'bg-grey-4 row nowrap items-center':'row nowrap items-center'">
+            <div class="col-11">
+              <div class="row no-wrap q-mr-xs q-py-xs items-center">
+                <div class="col-1">
+                  {{ i+1 }}
+                </div>
+                <div class="col-2">
+                  {{ item?.noresep }}
+                </div>
+                <div class="col-9">
+                  <div v-for="(det,j) in item?.rincian" :key="det">
+                    <div class="row q-py-xs" :class="j%2===1?'bg-blue-2':''">
+                      <div class="col-5">
+                        {{ det?.mobat?.nama_obat }}
+                      </div>
+                      <div class="col-2">
+                        {{ det?.mobat?.satuan_k }}
+                      </div>
+                      <div class="col-1 text-right">
+                        {{ det?.jumlah }}
+                      </div>
+                      <div class="col-1 text-right">
+                        {{ formatDouble(det?.harga_jual,2) }}
+                      </div>
+                      <div class="col-2 text-right">
+                        <!-- {{ formatDouble((parseFloat(det?.harga_jual)*parseFloat(det?.jumlah)),2) }} -->
+                        {{ formatDouble(det?.subtotal,2) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-4 text-right">
-                {{ formatDouble(item?.total,2) }}
+              <div class="row q-py-xs text-weight-bold" :class="item?.flag_pembayaran==='1'?'bg-yellow-3 text-green':''">
+                <div class="col-7 text-right">
+                  Total
+                </div>
+                <div class="col-4 text-right">
+                  {{ formatDouble(item?.total,2) }}
+                </div>
+                <div class="col-1 text-right">
+                  <div v-if="item?.flag_pembayaran==='1'">
+                    LUNAS
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-1 text-right">
+              <div class="row">
+                <div class="q-mx-xs">
+                  <q-btn
+                    round
+                    color="dark"
+                    icon="icon-mat-print"
+                    size="sm"
+                    @click="toPrint(row,item)"
+                  />
+                </div>
+                <div v-if="item?.flag_pembayaran!=='1'" class="q-mr-xs">
+                  <q-btn
+                    color="negative"
+                    flat
+                    icon="icon-mat-delete_sweep"
+                    size="sm"
+                    :loading="item?.loadingHapus"
+                    @click="table.hapusResep(item)"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -116,16 +149,37 @@
         </div>
       </template>
     </app-table-extend>
+    <print v-model="isOpen" :data="data" @close="tutup" />
   </div>
 </template>
 <script setup>
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListKunjunganPenjualanLangsungStore } from 'src/stores/simrs/farmasi/penjualanbebas/list'
+import { defineAsyncComponent, ref } from 'vue'
 
+const print = defineAsyncComponent(() =>
+  import('./CompPrint.vue')
+)
 const table = useListKunjunganPenjualanLangsungStore()
 function clicked (val) {
   console.log(val)
   val.item.expand = !val?.item?.expand
   val.item.highlight = !val?.item?.highlight
+}
+const isOpen = ref(false)
+const data = ref({})
+function toPrint (row, item) {
+  console.log('row', row)
+  console.log('item', item)
+  data.value = {
+    nama: row?.nama,
+    item
+  }
+  console.log('data', data.value)
+  isOpen.value = true
+}
+function tutup () {
+  data.value = {}
+  isOpen.value = false
 }
 </script>

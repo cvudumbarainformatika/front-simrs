@@ -132,7 +132,7 @@
       </div>
 
       <div class="row justify-center f-16 text-weight-bold q-my-sm">
-        Laporan Persediaan Farmasi periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+        Laporan Persediaan Akhir FIFO Farmasi periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
       </div>
       <div class="q-pa-sm">
         <TableComp />

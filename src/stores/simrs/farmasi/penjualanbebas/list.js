@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays } from 'src/modules/utils'
+import { filterDuplicateArrays, notifSuccess } from 'src/modules/utils'
 
 export const useListKunjunganPenjualanLangsungStore = defineStore('list_kunjungan_penjualan_langsung', {
   state: () => ({
@@ -76,7 +76,9 @@ export const useListKunjunganPenjualanLangsungStore = defineStore('list_kunjunga
                   const det = {
                     noresep: res,
                     rincian: item?.rincian?.filter(f => f.noresep === res),
-                    total: item?.rincian?.filter(f => f.noresep === res)?.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0)
+                    total: item?.rincian?.filter(f => f.noresep === res)?.reduce((a, b) => parseFloat(a) + parseFloat(b.subtotal), 0),
+                    flag_pembayaran: item?.rincian?.find(f => f.noresep === res)?.flag_pembayaran ?? false,
+                    nama_pejabat: item?.rincian?.find(f => f.noresep === res)?.nama_pejabat ?? ''
                   }
                   item.apotek.push(det)
                 })
@@ -88,6 +90,37 @@ export const useListKunjunganPenjualanLangsungStore = defineStore('list_kunjunga
         .catch(() => {
           this.loading = false
         })
+    },
+    hapusResep (item) {
+      item.loadingHapus = true
+      const form = {
+        noresep: item?.noresep
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penjualanbebas/hapus', form)
+          .then(resp => {
+            delete item.loadingHapus
+            this.items.forEach(da => {
+              const indexes = da.apotek.findIndex(a => a.noresep === item?.noresep)
+              const indexri = da.rincian.filter(cur => cur.noresep === item?.noresep)
+              if (indexes >= 0) da.apotek.splice(indexes, 1)
+              if (indexri.length > 0) {
+                indexri.forEach(ind => {
+                  const index = da.rincian.findIndex(a => a.noresep === item?.noresep)
+                  // console.log('ind', ind, da.rincian[index])
+                  if (index >= 0)da.rincian.splice(index, 1)
+                })
+              }
+              // console.log('ind', indexes, indexri, da.rincian)
+            })
+            // console.log('items', this.items)
+
+            console.log((resp?.data))
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => { delete item.loadingHapus })
+      })
     }
   }
 })

@@ -26,6 +26,17 @@
         </q-select>
       </div>
     </div>
+    <div class="row q-mt-xs">
+      <div class="col-auto" style="min-width: 50%;">
+        <app-input
+          v-model="store.form.nama_pejabat"
+          outlined
+          dense
+          valid
+          label="Input Nama Pejabat"
+        />
+      </div>
+    </div>
 
     <div class="row q-py-sm">
       <forminput tipe="kar" @simpan="afterSimpan" />
