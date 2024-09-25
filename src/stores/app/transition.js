@@ -12,11 +12,12 @@ export const useTransitionStore = defineStore('transition', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    setPageTransition(payload) {
+    setPageTransition (payload) {
       if (payload === 'default') {
         this.pageTransition.name = 'router-view'
         this.pageTransition.mode = 'in-out'
-      } else {
+      }
+      else {
         this.pageTransition.mode = 'router-view-back'
         this.pageTransition.mode = ''
       }

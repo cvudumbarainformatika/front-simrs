@@ -9,7 +9,7 @@
             </div>
             <q-card-section class="col full-height scroll">
               <q-form ref="myForm" class="" @submit="onSubmit">
-                <FormPemeriksaanUmum :pasien="pasien" />
+                <FormPemeriksaanUmum :pasien="pasien" :kasus="kasus" />
                 <q-separator class="q-my-md" />
                 <q-btn label="Simpan" type="submit" color="primary" />
               </q-form>
@@ -22,7 +22,7 @@
               <BarComp title="List Pemeriksaan Umum" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
             </div>
             <div class="col full-height scroll">
-              {{ pasien }}
+              {{ kasus }}
             </div>
           </q-card>
         </div>
@@ -39,6 +39,10 @@ const FormPemeriksaanUmum = defineAsyncComponent(() => import('./pemeriksaanUmum
 
 defineProps({
   pasien: {
+    type: Object,
+    default: () => null
+  },
+  kasus: {
     type: Object,
     default: () => null
   }

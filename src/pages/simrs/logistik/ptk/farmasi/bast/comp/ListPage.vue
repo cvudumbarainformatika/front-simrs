@@ -349,29 +349,18 @@
             </div>
             <div v-if="trm.penerimaanrinci.length && trm.disp">
               <div class="row q-mb-sm text-weight-bold">
-                <div class="col-8">
+                <div class="col-6">
                   <div class="row">
                     <div class="col-12 text-center">
                       Penerimaan
                     </div>
                   </div>
-                </div>
-                <div class="col-4">
-                  <div class="row">
-                    <div class="col-12 text-center">
-                      Bast
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                v-for="(det,i) in trm.penerimaanrinci"
-                :key="i"
-                class="row no-wrap q-mb-xs anu"
-                :class="i%2===1?'bg-blue-2':''"
-              >
-                <div class="col-8">
-                  <div class="row">
+                  <div
+                    v-for="(det,i) in trm.penerimaanrinci"
+                    :key="i"
+                    class="row no-wrap q-mb-xs anu"
+                    :class="i%2===1?'bg-blue-2':''"
+                  >
                     <div class="">
                       <div class="row no-wrap q-mt-xs anudua">
                         <div class="text-weight-bold box">
@@ -383,42 +372,19 @@
                           {{ det.kdobat }}
                         </div>
                       </div>
-                      <!-- <div class="row no-wrap justify-between q-mt-xs anudua">
-                        <div class="q-mr-xs">
-                          Kode 108
-                        </div>
-                        <div class="text-weight-bold">
-                          {{ det.kode_108 }}
-                        </div>
-                      </div>
-                      <div class="row no-wrap justify-between q-mt-xs anudua ">
-                        <div class="q-mr-xs">
-                          Kode 50
-                        </div>
-                        <div class="text-weight-bold">
-                          {{ det.kode_50 }}
-                        </div>
-                      </div> -->
                     </div>
                     <div class="q-ml-md">
                       <div class="row no-wrap justify-between q-mt-xs anudua">
                         <div class="q-mr-xs">
                           Jumlah
                         </div>
-                        <div class="text-weight-bold">
+                        <div class="text-weight-bold q-mr-xs">
                           {{ det.jml_terima_b }}
                         </div>
-                      </div>
-                      <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                        <div class="q-mr-xs">
-                          Satuan
-                        </div>
-                        <div class="text-weight-bold text-right">
-                          {{ det?.satuan }}
+                        <div class="text-weight-bold">
+                          ({{ det?.satuan }})
                         </div>
                       </div>
-                    </div>
-                    <div class="q-ml-md">
                       <div class="row no-wrap justify-between q-mt-xs anudua">
                         <div class="q-mr-xs">
                           Harga
@@ -445,8 +411,6 @@
                           {{ det.ppn }} %
                         </div>
                       </div>
-                    </div>
-                    <div class="q-ml-md">
                       <div
                         class="row no-wrap justify-between items-center q-mt-xs anudua"
                       >
@@ -460,20 +424,80 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-4">
-                  <!-- <div v-for="bas in cariBast(trm,det)" :key="bas"> -->
+                <div class="col-6">
                   <div class="row">
-                    <div class="q-ml-sm">
-                      Total Item
-                    </div>
-                    <div class="q-ml-sm text-weight-bold">
-                      {{ cariBast(trm,det) }}
-                    </div>
-                    <div class="q-ml-sm text-weight-bold">
-                      ({{ cariSatuan(trm,det) }})
+                    <div class="col-12 text-center">
+                      Bast
                     </div>
                   </div>
-                  <!-- </div> -->
+                  <div
+                    v-for="(bast,l) in trm.bastr"
+                    :key="l"
+                    class="row no-wrap q-mb-xs anu"
+                    :class="l%2===1?'bg-blue-2':''"
+                  >
+                    <div class="">
+                      <div class="row no-wrap q-mt-xs anudua">
+                        <div class="text-weight-bold box">
+                          {{ bast?.masterobat?.nama_obat }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap q-mt-xs anudua">
+                        <div class="text-italic">
+                          {{ bast.kdobat }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="q-ml-md">
+                      <div class="row no-wrap justify-between q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Jumlah
+                        </div>
+                        <div class="text-weight-bold q-mr-xs">
+                          {{ bast?.jumlah }}
+                        </div>
+                        <div>
+                          ({{ bast?.masterobat?.satuan_k }})
+                        </div>
+                      </div>
+                      <div class="row no-wrap justify-between q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          Harga
+                        </div>
+                        <div class="text-weight-bold">
+                          {{ formatRpDouble(bast.harga,2) }}
+                        </div>
+                      </div>
+                      <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                        <div class="q-mr-xs">
+                          diskon
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ bast.diskon }} %
+                        </div>
+                      </div>
+                      <div
+                        class="row no-wrap justify-between items-center q-mt-xs anudua"
+                      >
+                        <div class="q-mr-xs">
+                          PPN
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ bast.ppn }} %
+                        </div>
+                      </div>
+                      <div
+                        class="row no-wrap justify-between items-center q-mt-xs anudua"
+                      >
+                        <div class="q-mr-xs">
+                          Subtotal
+                        </div>
+                        <div class="text-weight-bold text-right">
+                          {{ formatRpDouble(bast.subtotal,2) }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -494,16 +518,7 @@ function onClick (val) {
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
-function cariBast (trm, rin) {
-  const bast = trm?.bastr.filter(f => f.kdobat === rin.kdobat)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0) ?? 0
-  // console.log('trm', bast)
-  return bast
-}
-function cariSatuan (trm, rin) {
-  const bast = trm?.bastr.find(f => f.kdobat === rin.kdobat)
-  // console.log('sat', bast)
-  return bast?.masterobat?.satuan_k ?? '-'
-}
+
 function hapus (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight

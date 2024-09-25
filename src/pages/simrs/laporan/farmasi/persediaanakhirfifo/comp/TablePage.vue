@@ -185,7 +185,7 @@ const store = useLaporanPersediaanFiFoFarmasiStore()
 
 function jenisPenerimaan (val) {
   if (!val?.jenis_penerimaan && !val?.jumlah) return ''
-  else if (!val?.jenis_penerimaan && val?.stpen?.toLowerCase().includes('awal')) return 'Awal'
+  else if (!val?.jenis_penerimaan && val?.stpen?.toLowerCase().includes('awal')) return 'Simrs Lama'
   else if (val?.jenis_penerimaan?.toLowerCase().includes('pesanan') || val?.jenis_penerimaan?.toLowerCase().includes('pembelian langsung')) return 'Pembelian'
   else return val?.jenis_penerimaan
 }

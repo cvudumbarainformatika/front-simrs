@@ -22,6 +22,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     ruangan: 'SEMUA',
     statuses: ['Belum Pulang', 'Pulang'],
     statusx: 'Belum Pulang',
+    jeniskasus: [],
+    jnsKasusPasien: null,
     loading: false,
     pageLayanan: false,
     loadingLayanan: false
@@ -59,24 +61,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     bukaLayanan (val, pasien) {
       this.pageLayanan = val
       this.loadingLayanan = true
-
-      Promise.all([
-
-      ])
       const form = { noreg: pasien?.noreg }
-      // try {
-      //   const resp = await api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
-      //   // console.log('ranap', resp)
-      //   this.loadingLayanan = false
-      //   if (resp.status === 200) {
-      //     // // console.log('ranap', this.pasiens)
-      //     this.setPasien(pasien, resp.data)
-      //   }
-      // }
-      // catch (error) {
-      //   // console.log('error buka layanan', error)
-      //   this.loadingLayanan = false
-      // }
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
@@ -86,8 +71,12 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             // if (resp.status === 200) {
             this.setPasien(pasien, resp.data)
             const indexPasien = this.pasiens.findIndex(x => x.noreg === pasien.noreg)
-            // this.pasiens[indexPasien] = resp.data
-            // }
+
+            const jnsKasus = this.pasiens[indexPasien]?.kd_jeniskasus
+
+            if (this.jeniskasus.length && jnsKasus) {
+              this.jnsKasusPasien = this.jeniskasus.find(x => x.kode === jnsKasus) ?? null
+            }
 
             resolve(this.pasiens[indexPasien])
           })
@@ -129,6 +118,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
           })
       })
     },
+
     gantiRuangan () {
       // console.log('gnt ruangan', this.ruangan)
       if (this.ruangan === 'SEMUA') {
@@ -178,6 +168,91 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
       this.params.to = dateDbFormat(firstday)
       this.params.from = dateDbFormat(lastday)
+    },
+    async getJenisKasus () {
+      const resp = await api.get('v1/simrs/ranap/ruangan/listjeniskasus')
+      console.log('jns kasus', resp.data)
+      if (resp.status === 200) {
+        this.jeniskasus = resp.data
+      }
+    },
+    async gantiJenisKasus (val, pasien) {
+      console.log('ganti jns kasus', val, pasien)
+      const form = {
+        noreg: pasien?.noreg,
+        kd_jeniskasus: val?.kode
+      }
+
+      const resp = await api.post('v1/simrs/ranap/ruangan/gantijeniskasus', form)
+      if (resp.status === 200) {
+        const noreg = pasien?.noreg
+        const isi = resp.data?.kd_jeniskasus
+        this.jnsKasusPasien = val
+        this.injectDataPasien(noreg, isi, 'kd_jeniskasus')
+        // console.log('result', pasien)
+      }
+    },
+
+    async gantiDpjp (form, pasien) {
+      // console.log(form)
+      // this.loadingSaveGantiDpjp = true
+      // try {
+      //   const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
+      //   // console.log(resp)
+      //   if (resp.status === 200) {
+      //     const findPasien = this.items.filter(x => x.rs1 === pasien?.rs1)
+      //     if (findPasien.length) {
+      //       const data = findPasien[0]
+      //       data.datasimpeg = resp?.data?.result?.datasimpeg
+      //       data.dokter = resp?.data?.result?.datasimpeg?.nama
+      //       data.kodedokter = resp?.data?.result?.datasimpeg?.kdpegsimrs
+      //       this.loadingSaveGantiDpjp = false
+      //     }
+
+      //     this.loadingSaveGantiDpjp = false
+      //   }
+      //   this.loadingSaveGantiDpjp = false
+      // }
+      // catch (error) {
+      //   console.log(error)
+      //   this.loadingSaveGantiDpjp = false
+      // }
+    },
+
+    injectDataPasien (noreg, val, kode, arr) {
+      const findPasien = this.pasiens.filter(x => x.noreg === noreg)
+      // console.log('inject pasien', findPasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        if (kode === 'kd_jeniskasus') {
+          data[kode] = val
+        }
+        else {
+          const target = data[kode]?.find(x => x?.id === val?.id) ?? null
+          // console.log('inject target pasien', target)
+          // console.log('inject kode pasien', kode)
+          // console.log('inject isi pasien', val)
+
+          if (target) {
+            Object.assign(target, val)
+          }
+          else {
+          // if (kode === 'kd_jeniskasus') {
+          //   data[kode] = val
+          // }
+          // else if (kode === 'dokumenluar') {
+          //   const trg = data[kode]
+          //   if (trg) {
+          //     data[kode] = []
+          //     data[kode] = val
+          //   }
+          // }
+          // else {
+          //   data[kode]?.splice(0, 0, val)
+          // }
+          }
+        }
+      }
     }
   }
 })

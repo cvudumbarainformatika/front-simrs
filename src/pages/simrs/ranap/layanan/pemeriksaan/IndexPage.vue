@@ -29,7 +29,7 @@
           <!-- PANEL -->
           <q-tab-panel :name="menu?.name" class="q-pa-none">
             <!-- <PemeriksaanUmumPage :pasien="props?.pasien" /> -->
-            <component :is="menu?.comp" :pasien="pasien" />
+            <component :is="menu?.comp" :pasien="pasien" :kasus="kasus" />
           </q-tab-panel>
 
           <!-- <q-tab-panel name="fisik" class="q-pa-none">
@@ -53,6 +53,10 @@ import { computed, defineAsyncComponent, ref } from 'vue'
 
 defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  kasus: {
     type: Object,
     default: null
   }

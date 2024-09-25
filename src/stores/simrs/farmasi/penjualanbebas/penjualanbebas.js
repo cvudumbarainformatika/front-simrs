@@ -34,6 +34,7 @@ export const usePenjualanBebasFarmasiStore = defineStore('penjualan_bebas_farmas
       this.tempObat[key] = val
     },
     resetForm () {
+      this.form = {}
       this.setForm('details', [])
     },
     getPihakTiga (val) {

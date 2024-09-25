@@ -5,12 +5,12 @@
       <div :class="`${full ? 'col-12' : 'col-7'} full-height`">
         <div class="fit bg-white column">
           <div class="col-auto">
-            <BarComp title="Form Anamnesse" bg-color="bg-white" text-color="text-dark" @full="full = !full" />
+            <BarComp title="Form Anamnesse" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
             <q-separator />
           </div>
           <div class="col full-height scroll">
             <q-form ref="myForm" class="q-pa-md">
-              <FormAnamnesis ref="formRef" :pasien="props.pasien" />
+              <FormAnamnesis ref="formRef" :pasien="props.pasien" :kasus="props.kasus" />
               <q-separator class="q-my-md" />
               <div class="flex justify-end">
                 <q-btn type="button" color="primary" label="Simpan" @click="validate" />
@@ -23,10 +23,10 @@
       <div :class="`full-height ${full ? 'col-0' : 'col-5'}`">
         <div class="column fit">
           <div class="col-auto">
-            <BarComp title="List Anamnesse" bg-color="bg-primary" text-color="text-white" :btn-full="false" />
+            <BarComp title="List Anamnesse" bg-color="bg-teal" text-color="text-white" :btn-full="false" />
           </div>
           <div class="col full-height bg-grey-1 q-pa-sm scroll">
-            {{ props.pasien }}
+            {{ props.kasus }}
           </div>
         </div>
       </div>
@@ -45,6 +45,10 @@ const FormAnamnesis = defineAsyncComponent(() => import('./FormAnamnesis.vue'))
 
 const props = defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  kasus: {
     type: Object,
     default: null
   }

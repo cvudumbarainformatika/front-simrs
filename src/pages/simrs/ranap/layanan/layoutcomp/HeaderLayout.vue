@@ -6,7 +6,7 @@
       icon="icon-mat-sort"
       @click="emits('toggleLeftDrawer')"
     />
-    <q-toolbar-title class="f-14">
+    <q-toolbar-title class="f-12">
       <div class="row items-center q-gutter-md">
         <q-btn
           color="primary"
@@ -122,6 +122,7 @@
             </div>
           </q-menu>
         </q-btn>
+        <q-separator dark vertical class="" />
         <div>
           <div class="f-12">
             {{ pasien?.ruangan }}
@@ -130,8 +131,42 @@
             {{ pasien?.ketruangan }} <span class="text-orange">BED : {{ pasien?.nomorbed }}</span>
           </div>
         </div>
-
-        <div>Jenis Kasus</div>
+        <q-separator dark vertical class="" />
+        <q-btn
+          outline rounded color="orange" dense class="q-px-md" :disabled="auth?.user?.username!=='sa'"
+        >
+          <div class="text-white">
+            KASUS | {{ pengunjung.jnsKasusPasien?.uraian ?? 'Tidak diketahui' }}
+          </div>
+          <q-menu style="max-width: 460px;">
+            <q-card>
+              <q-card-section class="bg-teal text-white">
+                <div class="text-bold">
+                  GANTI JENIS KASUS
+                </div>
+              </q-card-section>
+              <q-separator />
+              <q-form @submit="emits('update:jeniskasus', kdJnsKasus)">
+                <q-card-section>
+                  <q-select
+                    filled dense
+                    v-model="kdJnsKasus"
+                    :options="pengunjung.jeniskasus"
+                    option-value="kode"
+                    option-label="uraian"
+                    label="Jenis Kasus"
+                    style="width: 250px"
+                    :rules="[val => !!val || 'Harap diisi ...']"
+                  />
+                </q-card-section>
+                <q-separator />
+                <q-card-actions align="right">
+                  <q-btn dense type="submit" class="bg-primary text-white" label="Simpan" />
+                </q-card-actions>
+              </q-form>
+            </q-card>
+          </q-menu>
+        </q-btn>
       </div>
     </q-toolbar-title>
 
@@ -181,14 +216,19 @@
 import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const store = usePermintaanEResepStore()
+const pengunjung = usePengunjungRanapStore()
+const auth = useAplikasiStore()
 
-const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'layananSelesai'])
+const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'update:jeniskasus', 'layananSelesai'])
 
 const search = ref('')
 const kodedpjp = ref(null)
 const kdpegsimrs = ref(null)
+const kdJnsKasus = ref(null)
 const options = ref([])
 const props = defineProps({
   pasien: {

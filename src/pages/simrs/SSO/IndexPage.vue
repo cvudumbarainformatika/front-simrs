@@ -244,7 +244,7 @@ onMounted(() => {
   store.getData()
 })
 
-function goTo(app, url) {
+function goTo (app, url) {
   // console.log('go to', url, app, auth.aplications)
   if (auth.aplications.length) {
     const appAkses = auth.aplications.filter(a => a.aplikasi === app)
@@ -255,13 +255,16 @@ function goTo(app, url) {
         setCurrentApp(app)
         store.currentApp = app
         router.replace({ path: url })
-      } else {
+      }
+      else {
         notifErrVue('Anda Sudah masuk aplikasi ' + getCurrentApp())
       }
-    } else {
+    }
+    else {
       notifErrVue('Anda tidak memiliki akses ke aplikasi ini')
     }
-  } else {
+  }
+  else {
     notifErrVue('Data Aplikasi belum tersedia, tunggu berapa saat lagi')
   }
 }
