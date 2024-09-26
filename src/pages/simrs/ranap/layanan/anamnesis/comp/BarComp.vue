@@ -5,8 +5,13 @@
     </div>
     <q-space />
     <div class="q-gutter-sm">
-      <q-btn v-if="btnFull" dense flat icon="icon-mat-open_in_full" @click="emits('full')">
-        <q-tooltip>Full Screen</q-tooltip>
+      <q-btn v-if="btnFull" dense flat :icon="!fullpage? btnFullIcon : 'icon-mat-close_fullscreen'" @click="emits('full')">
+        <q-tooltip v-if="!fullpage">
+          Full Screen
+        </q-tooltip>
+        <q-tooltip v-else>
+          Minimal Page
+        </q-tooltip>
       </q-btn>
     </div>
   </q-bar>
@@ -29,6 +34,14 @@ defineProps({
   btnFull: {
     type: Boolean,
     default: true
+  },
+  btnFullIcon: {
+    type: String,
+    default: 'icon-mat-fullscreen'
+  },
+  fullpage: {
+    type: Boolean,
+    default: false
   }
 })
 
