@@ -132,8 +132,10 @@
           </div>
         </div>
         <q-separator dark vertical class="" />
+
+        <!-- :disabled="auth?.user?.username!=='sa'" NANti ditambahkan -->
         <q-btn
-          outline rounded color="orange" dense class="q-px-md" :disabled="auth?.user?.username!=='sa'"
+          outline rounded color="orange" dense class="q-px-md"
         >
           <div class="text-white">
             KASUS | {{ pengunjung.jnsKasusPasien?.uraian ?? 'Tidak diketahui' }}
@@ -221,6 +223,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const store = usePermintaanEResepStore()
 const pengunjung = usePengunjungRanapStore()
+// eslint-disable-next-line no-unused-vars
 const auth = useAplikasiStore()
 
 const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'update:jeniskasus', 'layananSelesai'])

@@ -2,10 +2,10 @@
   <div class="fit q-pa-xs">
     <!-- <div class="col"> -->
     <div class="row q-col-gutter-xs fit">
-      <div :class="`${full ? 'col-12' : 'col-7'} full-height`">
+      <div :class="`${full ? 'col-12' : 'col-8'} full-height`">
         <div class="fit bg-white column">
           <div class="col-auto">
-            <BarComp title="Form Anamnesse" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
+            <BarComp title="Form Anamnesse" bg-color="bg-primary" text-color="text-white" :fullpage="full" @full="full = !full" />
             <q-separator />
           </div>
           <div class="col full-height scroll">
@@ -13,20 +13,20 @@
               <FormAnamnesis ref="formRef" :pasien="props.pasien" :kasus="props.kasus" />
               <q-separator class="q-my-md" />
               <div class="flex justify-end">
-                <q-btn type="button" color="primary" label="Simpan" @click="validate" />
+                <q-btn :loading="store.loadingSave" :disable="store.loadingSave" type="button" color="primary" label="Simpan" @click="validate" />
               </div>
               <div style="margin-bottom: 100px;" />
             </q-form>
           </div>
         </div>
       </div>
-      <div :class="`full-height ${full ? 'col-0' : 'col-5'}`">
+      <div v-if="!full" :class="`full-height ${full ? 'col-0' : 'col-4'}`">
         <div class="column fit">
           <div class="col-auto">
-            <BarComp title="List Anamnesse" bg-color="bg-teal" text-color="text-white" :btn-full="false" />
+            <BarComp title="Informasi" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
           </div>
-          <div class="col full-height bg-grey-1 q-pa-sm scroll">
-            {{ props.kasus }}
+          <div class="col full-height scroll">
+            <RightPage :pasien="pasien" :kasus="kasus" />
           </div>
         </div>
       </div>
@@ -38,10 +38,14 @@
 <script setup>
 import { defineAsyncComponent, ref } from 'vue'
 import { scroll } from 'quasar'
+import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 const BarComp = defineAsyncComponent(() => import('./comp/BarComp.vue'))
 const FormAnamnesis = defineAsyncComponent(() => import('./FormAnamnesis.vue'))
+const RightPage = defineAsyncComponent(() => import('./RightPage.vue'))
+
+const store = useAnamnesisRanapStore()
 
 const props = defineProps({
   pasien: {
@@ -65,7 +69,8 @@ const validate = () => {
   myForm.value.validate().then(success => {
     if (success) {
       // yay, models are correct
-      console.log('success')
+      // console.log('success')
+      store.saveForm(props?.kasus, props.pasien)
     }
     else {
       // oh no, user has filled in
