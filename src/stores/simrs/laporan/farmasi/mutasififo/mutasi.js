@@ -87,7 +87,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               if ((parseFloat(s.jumlah) > 0 && parseFloat(s.harga) > 0)) sub = s.jumlah * s.harga
               s.sub = sub
             }
+            s.tgl = this.params.tahun + '-' + this.params.bulan + '-' + '-01 00:00:00'
             // if (isNaN(parseFloat(s.sub))) console.log('st', s, parseFloat(s.harga))
+            const temp = {
+              tgl: s.tgl,
+              saldoawal: s,
+              ket: 'Saldo Awal'
+            }
+            it.data.push(temp)
           })
         }
 
@@ -105,6 +112,12 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         })
         const res = it.resepkeluar
         res.forEach(res => {
+          const temp = {
+            tgl: res.tgl,
+            keluar: res,
+            ket: this.params.jenis === 'detail' ? res?.header?.norm + ' ' + (res?.header?.datapasien?.rs2 ?? '') : 'resep'
+          }
+          it.data.push(temp)
           const adaPen = masuk.filter(a => a.kdobat === res.kdobat && (a.nopenerimaan === res.nopenerimaan || a.harga === res.harga))
           let diminta = res.jumlah
           if (adaPen.length) {
@@ -145,23 +158,32 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
           }
         })
-        it.akhir = masuk.filter(f => f.jumlah > 0)
-        const numOfIndex = [
-          it?.saldoawal.length,
-          it?.resepkeluar.length,
-          it?.akhir.length,
-          it?.penerimaanrinci.length
-        ]
-        const max = Math.max(...numOfIndex)
-        // console.log('metani anu', numOfIndex, max)
-        for (let index = 0; index < max; index++) {
-          it.data[index] = {
-            saldoawal: it?.saldoawal[index] ?? null,
-            keluar: it?.resepkeluar[index] ?? null,
-            penerimaanrinci: it?.penerimaanrinci[index] ?? null,
-            akhir: it?.akhir[index] ?? null
+        it?.penerimaanrinci.forEach(s => {
+          const temp = {
+            tgl: s.tgl,
+            masuk: s,
+            ket: s?.pbf?.nama + ' ( ' + s?.jenissurat + ' : ' + s?.nomorsurat + ' ) '
           }
-        }
+          it.data.push(temp)
+        })
+        it.akhir = masuk.filter(f => f.jumlah > 0)
+        it.akhir.forEach(s => {
+          s.tgl = this.params.tahun + '-' + this.params.bulan + '-' + '-31 23:59:59'
+          const temp = {
+            tgl: s.tgl,
+            akhir: s,
+            ket: 'Saldo Akhir'
+          }
+          it.data.push(temp)
+        })
+        it?.data?.sort(function (a, b) {
+          // Convert the date strings to Date objects
+          const dateA = new Date(a.tgl)
+          const dateB = new Date(b.tgl)
+
+          // Subtract the dates to get a value that is either negative, positive, or zero
+          return dateA - dateB
+        })
       })
 
       this.items = val

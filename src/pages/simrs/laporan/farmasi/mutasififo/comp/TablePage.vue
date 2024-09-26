@@ -240,22 +240,22 @@
               <!-- masuk -->
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ data?.penerimaanrinci?.tgl?dateFullFormat(data?.penerimaanrinci?.tgl):'' }}
+                  {{ data?.masuk?.tgl?dateFullFormat(data?.masuk?.tgl):'' }}
                 </div>
               </td>
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.penerimaanrinci?.jumlah),2)) }}
+                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.jumlah),2)) }}
                 </div>
               </td>
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.penerimaanrinci?.harga),2)) }}
+                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.harga),2)) }}
                 </div>
               </td>
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.penerimaanrinci?.sub),2)) }}
+                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.sub),2)) }}
                 </div>
               </td>
               <!-- keluar -->
@@ -297,7 +297,7 @@
               </td>
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ store?.params?.jenis==='detail' ? (data?.keluar?.header?.datapasien?.rs2??''):'' }}
+                  {{ data?.ket }}
                 </div>
               </td>
             </tr>
