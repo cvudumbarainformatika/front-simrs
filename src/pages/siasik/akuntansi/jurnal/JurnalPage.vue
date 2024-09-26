@@ -15,7 +15,7 @@
     </div>
     <q-card
       flat
-      class="col full-width full-height bg-yellow-1"
+      class="col full-width full-height bg-grey-6"
       :style="`max-height: ${!style.componentfull? h-60:h+40}px; overflow:hidden`"
     >
       <q-scroll-area
