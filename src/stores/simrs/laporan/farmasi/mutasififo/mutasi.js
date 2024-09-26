@@ -12,7 +12,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       page: 1,
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
-      kode_ruang: 'Gd-05010100',
+      kode_ruang: 'all',
       jenis: 'detail'
     },
     bulans: [
@@ -30,6 +30,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       { nama: 'Desember', value: '12' }
     ],
     gudangs: [
+      { nama: 'Semua', value: 'all' },
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
     ],
@@ -116,6 +117,54 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             tgl: res.tgl,
             keluar: res,
             ket: this.params.jenis === 'detail' ? res?.header?.norm + ' ' + (res?.header?.datapasien?.rs2 ?? '') : 'resep'
+          }
+          it.data.push(temp)
+          const adaPen = masuk.filter(a => a.kdobat === res.kdobat && (a.nopenerimaan === res.nopenerimaan || a.harga === res.harga))
+          let diminta = res.jumlah
+          if (adaPen.length) {
+            let index = 0
+            while (diminta > 0 && index < adaPen.length) {
+              if (adaPen[index].jumlah >= diminta) {
+                const sisa = adaPen[index].jumlah - diminta
+                adaPen[index].jumlah = sisa
+                adaPen[index].sub = adaPen[index].jumlah * adaPen[index].harga
+                diminta = 0
+              }
+              else {
+                const sisa = diminta - adaPen[index].jumlah
+                diminta = sisa
+                adaPen[index].jumlah = 0
+                index += 1
+              }
+              // console.log('if', adaPen[index], diminta)
+            }
+          }
+          else {
+            let index = 0
+            while (diminta > 0 && index < masuk.length) {
+              if (masuk[index].jumlah >= diminta) {
+                const sisa = masuk[index].jumlah - diminta
+                masuk[index].jumlah = sisa
+                // masuk[index].jumlah -= diminta
+                masuk[index].sub = masuk[index].jumlah * masuk[index].harga
+                diminta = 0
+              }
+              else {
+                const sisa = diminta - masuk[index].jumlah
+                diminta = sisa
+                masuk[index].jumlah = 0
+                index += 1
+              }
+              // console.log('else', masuk[index])
+            }
+          }
+        })
+        const pak = it.pemakaian
+        pak.forEach(res => {
+          const temp = {
+            tgl: res.tgl,
+            keluar: res,
+            ket: this.params.jenis === 'detail' ? (res?.ruangan?.uraian ?? '') : 'ruangan'
           }
           it.data.push(temp)
           const adaPen = masuk.filter(a => a.kdobat === res.kdobat && (a.nopenerimaan === res.nopenerimaan || a.harga === res.harga))

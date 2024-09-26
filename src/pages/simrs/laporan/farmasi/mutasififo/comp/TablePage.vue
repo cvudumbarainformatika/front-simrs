@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table style="width: 100vw;">
     <thead class="my-sticky-header-table">
       <tr>
         <th
