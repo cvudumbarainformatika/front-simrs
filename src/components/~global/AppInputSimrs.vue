@@ -17,7 +17,7 @@
 
     :error="errorFromServer?.length > 0"
     :error-message="errorFromServer?.length ? errorFromServer[0]: null"
-    @update:model-value="emits('update:modelValue', $event)"
+    @update:model-value="updatedModel"
   >
     <template v-if="append" #append>
       <q-icon v-if="!appendBtn" :name="appendIcon" size="xs" class="cursor-pointer" v-ripple @click="emits('appendClick')" />
@@ -145,6 +145,10 @@ const isNumberRule = (val) => {
 const isValidMail = (val) => {
   const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
   return emailPattern.test(val)
+}
+
+const updatedModel = (e) => {
+  emits('update:modelValue', e)
 }
 
 </script>
