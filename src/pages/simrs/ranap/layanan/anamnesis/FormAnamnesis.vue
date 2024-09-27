@@ -822,17 +822,14 @@
             <div class="text-weight-bold">
               Kajian Nyeri
             </div>
-            <q-radio v-model="store.form.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" />
+            <q-radio v-model="store.form.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('form')" />
           </div>
-          <!-- <div class="text-grey-8 f-10">
-            Pilih Kajian Nyeri Pasien diatas
-          </div> -->
           <q-separator />
         </q-card-section>
         <q-card-section>
-          <div v-if="store.form.kajianNyeri==='Wong Baker Face Scale'">
-            <div class="">
-              Keluhan Nyeri (Wong Baker Face Scale) :
+          <div v-if="store.form.keluhannyeri.kajianNyeri==='Wong Baker Face Scale'" class="row items-center q-col-gutter-md">
+            <div class="col-4">
+              <!-- Keluhan Nyeri ({{ store.form.keluhannyeri.kajianNyeri.text }}) : -->
               <span class="q-ml-sm">
                 <q-icon
                   size="lg"
@@ -840,32 +837,51 @@
                   :name="iconNyeri"
                 />
               </span>
-              <em class="text-primary q-ml-sm">{{ store.form.keluhanNyeri }}</em>
+              <em class="text-primary q-ml-sm">{{ store.form.keluhannyeri.ket }}</em>
             </div>
-            <q-separator class="q-my-xs" />
-            <q-slider
-              v-model="store.form.skorNyeri"
-              color="primary"
-              thumb-color="primary"
-              label-color="primary"
-              label-text-color="yellow"
-              markers
-              :marker-labels="(val)=> fnMarkerLabel"
-              marker-labels-class="text-primary"
-              label-always
-              switch-label-side
-              :min="0"
-              :max="10"
-              @update:model-value="store.setKeteranganSkornyeri"
-              style="width: 70%;"
-            />
+            <div class="col-8">
+              <q-slider
+                v-model="store.form.keluhannyeri.skorNyeri"
+                color="primary"
+                thumb-color="primary"
+                label-color="primary"
+                label-text-color="yellow"
+                markers
+                :marker-labels="(val)=> fnMarkerLabel"
+                marker-labels-class="text-primary"
+                label-always
+                switch-label-side
+                :min="0"
+                :max="10"
+                @update:model-value="(val)=>store.setKeteranganSkornyeri(val, 'form')"
+                style="width: 100%;"
+              />
+            </div>
           </div>
           <div v-else>
-            <div class="">
-              Behavioral Pain Scale (BPS)
-            </div>
             <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
+            <template v-for="(val, key) in store.form.keluhannyeri?.form" :key="val">
+              <div class="row q-col-gutter-md">
+                <div class="col-3 text-weight-bold">
+                  {{ key }} :
+                </div>
+                <div class="col-9">
+                  <div class="flex q-gutter-sm items-center">
+                    <q-radio
+                      dense size="sm" v-model="store.form.keluhannyeri.form[key]" v-for="aa in store.formNyeris?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa" @update:model-value="(val)=> {
+                        // store.form.ekspresiWajahKet = aa?.text
+                        console.log('aa',val);
+
+                        store.hitungSkorNyeri('form')
+                      }"
+                    />
+                  </div>
+                </div>
+              </div>
+              <q-separator class="q-my-sm" />
+            </template>
+
+            <!-- <div class="text-weight-bold">
               Ekspresi Wajah :
             </div>
             <q-separator class="q-my-xs" />
@@ -894,21 +910,20 @@
             <div class="text-weight-bold">
               Kepatuhan terhadap ventilasi mekanik :
             </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
+            <q-separator class="q-my-xs" /> -->
+            <!-- <div class="flex q-gutter-sm items-center">
               <q-radio
                 dense size="sm" v-model="store.form.kebutuhanVentilasi" v-for="aa in store.kebutuhanVentilasi" :key="aa" :label="aa?.text" :val="aa?.value" @update:model-value="(val)=> {
                   store.form.kebutuhanVentilasiKet = aa?.text
                   store.hitungSkorNyeri('form')
                 }"
               />
-            </div>
+            </div> -->
+            <q-card-section class="row items-center justify-between q-py-sm q-px-md text-primary text-bold">
+              <div>SKOR NYERI : {{ store.form?.keluhannyeri?.skorNyeri }}</div>
+              <div>{{ store.form?.keluhannyeri?.ket }}</div>
+            </q-card-section>
           </div>
-        </q-card-section>
-        <q-separator />
-        <q-card-section class="row items-center justify-between q-py-sm q-px-md text-primary text-bold">
-          <div>SKOR NYERI : {{ store.form?.skorNyeri }}</div>
-          <div>{{ store.form?.keluhanNyeri }}</div>
         </q-card-section>
       </q-card>
 
@@ -1167,7 +1182,8 @@ defineExpose({
 })
 
 const iconNyeri = computed(() => {
-  const val = store?.form.skorNyeri
+  // const val = store?.form.skorNyeri
+  const val = store?.form.keluhannyeri?.skorNyeri
   let icon = 'icon-my-emoticon-excited-outline'
   if (val < 2) {
     icon = 'icon-my-emoticon-excited-outline'
@@ -1192,8 +1208,10 @@ const iconNyeri = computed(() => {
 })
 
 onMounted(() => {
-  store.getRiwayatKehamilan()
-  store.initReset()
+  Promise.all([
+    store.getRiwayatKehamilan(),
+    store.initReset()
+  ])
 })
 
 const hitungSkorGizi = () => {

@@ -67,8 +67,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       keterangan: null,
       biayatransfer: 0,
       rincians: [],
-      rincimanual: [],
-      penerimaans: []
+      rincimanual: []
     },
     rinci:
     {

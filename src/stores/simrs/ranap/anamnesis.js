@@ -16,15 +16,24 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       rwAlergi: [],
       ketRwAlergi: null,
 
-      kajianNyeri: 'Wong Baker Face Scale',
-      skorNyeri: 0,
-      keluhanNyeri: null,
-      ekspresiWajah: 0,
-      ekspresiWajahKet: null,
-      gerakanTangan: 0,
-      gerakanTanganKet: null,
-      kebutuhanVentilasi: 0,
-      kebutuhanVentilasiKet: null,
+      // kajianNyeri: 'Wong Baker Face Scale',
+      // skorNyeri: 0,
+      // keluhanNyeri: null,
+      // ekspresiWajah: 0,
+      // ekspresiWajahKet: null,
+      // gerakanTangan: 0,
+      // gerakanTanganKet: null,
+      // kebutuhanVentilasi: 0,
+      // kebutuhanVentilasiKet: null,
+
+      keluhannyeri: {
+        kajianNyeri: 'Wong Baker Face Scale',
+        skorNyeri: 0,
+        ket: null,
+        form: null
+
+      },
+
       sgd: { // skreening gizi dewasa
         bb: 0, // penurunan bb
         am: 0, // asupan makan
@@ -189,6 +198,8 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
 
     },
 
+    loadingSave: false,
+
     formRiwayatKehamilan: {},
     riwayatKehamilans: [],
     openDialogFormRiwayat: false,
@@ -223,23 +234,37 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
     aktifitasBermains: ['Sendiri', 'Dengan orang Tua', 'Dengan teman sebaya'],
 
     pilihanNyeris: [{ text: 'Wong Baker Face Scale', value: 'a' }, { text: 'Behavioral Pain Scale (BPS)', value: 'b' }],
-    ekspresiWajah: [
-      { text: 'Santai, tanpa ketegangan', value: 1 },
-      { text: 'Sedikit tegang, seperti dahi berkerut', value: 2 },
-      { text: 'Sangat tegang, mata tertutup rapat', value: 3 },
-      { text: 'Ekspresi menunjukkan nyeri parah, seperti menangis atau mengerutkan wajah', value: 4 }
-    ],
-    gerakanTangan: [
-      { text: 'Tidak ada gerakan', value: 1 },
-      { text: 'Ada gerakan ringan, seperti mengerutkan atau menggerakkan telapak tangan tanpa arah ', value: 2 },
-      { text: 'Ada gerakan kuat, seperti menarik tangan atau berusaha melepas alat medis', value: 3 },
-      { text: 'Gerakan tidak terkendali, seperti upaya melarikan diri', value: 4 }
-    ],
-    kebutuhanVentilasi: [
-      { text: 'Toleran. tidak ada perlawanan', value: 1 },
-      { text: 'Sedikit tidak toleran, batuk sekali atau melawan sedikit', value: 2 },
-      { text: 'Sering batuk atau melawan ventilasi', value: 3 },
-      { text: 'Tidak toleran sama sekali, melawan ventilasi secara konstan', value: 4 }
+    formNyeris: [
+      {
+        kode: 'ekspresiWajah',
+        label: 'Ekspresi Wajah',
+        values: [
+          { text: 'Santai, tanpa ketegangan', skor: 1 },
+          { text: 'Sedikit tegang, seperti dahi berkerut', skor: 2 },
+          { text: 'Sangat tegang, mata tertutup rapat', skor: 3 },
+          { text: 'Ekspresi menunjukkan nyeri parah, seperti menangis atau mengerutkan wajah', skor: 4 }
+        ]
+      },
+      {
+        kode: 'gerakanTangan',
+        label: 'Gerakan Tangan',
+        values: [
+          { text: 'Tidak ada gerakan', skor: 1 },
+          { text: 'Ada gerakan ringan, seperti mengerutkan atau menggerakkan telapak tangan tanpa arah ', skor: 2 },
+          { text: 'Ada gerakan kuat, seperti menarik tangan atau berusaha melepas alat medis', skor: 3 },
+          { text: 'Gerakan tidak terkendali, seperti upaya melarikan diri', skor: 4 }
+        ]
+      },
+      {
+        kode: 'kebutuhanVentilasi',
+        label: 'Kepatuhan terhadap ventilasi mekanik',
+        values: [
+          { text: 'Toleran. tidak ada perlawanan', skor: 1 },
+          { text: 'Sedikit tidak toleran, batuk sekali atau melawan sedikit', skor: 2 },
+          { text: 'Sering batuk atau melawan ventilasi', skor: 3 },
+          { text: 'Tidak toleran sama sekali, melawan ventilasi secara konstan', skor: 4 }
+        ]
+      }
     ],
 
     ekspresiWajahNeo: [
@@ -326,15 +351,23 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         rwAlergi: [],
         ketRwAlergi: null,
 
-        kajianNyeri: 'Wong Baker Face Scale',
-        skorNyeri: 0,
-        keluhanNyeri: null,
-        ekspresiWajah: 0,
-        ekspresiWajahKet: null,
-        gerakanTangan: 0,
-        gerakanTanganKet: null,
-        kebutuhanVentilasi: 0,
-        kebutuhanVentilasiKet: null,
+        // kajianNyeri: 'Wong Baker Face Scale',
+        // skorNyeri: 0,
+        // keluhanNyeri: null,
+        // ekspresiWajah: 0,
+        // ekspresiWajahKet: null,
+        // gerakanTangan: 0,
+        // gerakanTanganKet: null,
+        // kebutuhanVentilasi: 0,
+        // kebutuhanVentilasiKet: null,
+
+        keluhannyeri: {
+          kajianNyeri: 'Wong Baker Face Scale',
+          skorNyeri: 0,
+          ket: null,
+          form: null
+
+        },
 
         sgd: { // skreening gizi dewasa
           bb: 0, // penurunan bb
@@ -345,6 +378,14 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         sgdKet: null
 
       }
+
+      const formNyeri = {}
+      for (let i = 0; i < this.formNyeris.length; i++) {
+        const el = this.formNyeris[i]
+        formNyeri[el?.kode] = el?.values?.find(x => x.skor === 1)
+      }
+      this.form.keluhannyeri.form = formNyeri
+      // console.log('el', el)
 
       this.formKebidanan = {
         // ini untuk 4.2
@@ -513,9 +554,17 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         this.formNeoNatal.skorNyeri = skor
         this.setKeteranganSkornyeri(skor, 'formNeoNatal')
       }
-      else {
-        skor = parseInt(this.form.ekspresiWajah) + parseInt(this.form.gerakanTangan) + parseInt(this.form.kebutuhanVentilasi)
-        this.setKeteranganSkornyeri(skor, 'form')
+      else if (jns === 'form') {
+        if (this.form.keluhannyeri.kajianNyeri === 'Wong Baker Face Scale') {
+          this.setKeteranganSkornyeri(this.form.keluhannyeri.skorNyeri, 'form')
+        }
+        else {
+          // skor = parseInt(this.form.ekspresiWajah) + parseInt(this.form.gerakanTangan) + parseInt(this.form.kebutuhanVentilasi)
+          skor = parseInt(this.form.keluhannyeri.form?.ekspresiWajah?.skor ?? 0) + parseInt(this.form.keluhannyeri.form?.gerakanTangan?.skor ?? 0) + parseInt(this.form.keluhannyeri.form?.kebutuhanVentilasi?.skor ?? 0)
+          this.form.keluhannyeri.skorNyeri = skor
+          this.setKeteranganSkornyeri(skor, 'form')
+        }
+
         // console.log('bener')
       }
     },
@@ -528,12 +577,23 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         else if (val >= 5 && val <= 7) ket = 'Nyeri Sedang - Berat'
         this.formNeoNatal.keluhanNyeri = ket
       }
-      else {
-        if (val === 0) ket = 'tidak ada nyeri'
-        else if (val > 0 && val <= 3) ket = 'nyeri ringan'
-        else if (val > 3 && val <= 6) ket = 'nyeri sedang'
-        else if (val > 6 && val <= 10) ket = 'nyeri berat'
-        this.form.keluhanNyeri = ket
+      else if (jns === 'form') {
+        if (this.form.keluhannyeri.kajianNyeri === 'Wong Baker Face Scale') {
+          if (val === 0) ket = 'Tidak ada nyeri'
+          else if (val > 0 && val <= 3) ket = 'Nyeri Ringan'
+          else if (val > 3 && val <= 6) ket = 'Nyeri Sedang'
+          else if (val > 6 && val <= 10) ket = 'Nyeri Berat'
+          // this.form.keluhanNyeri = ket
+          this.form.keluhannyeri.ket = ket
+        }
+        else {
+          if (val === 0) ket = 'Tidak ada nyeri'
+          else if (val > 0 && val <= 3) ket = 'Nyeri minimal atau tidak ada nyeri.'
+          else if (val > 3 && val <= 6) ket = 'Nyeri ringan hingga sedang.'
+          else if (val > 6 && val <= 9) ket = 'Nyeri sedang hingga berat.'
+          else if (val > 9) ket = 'Nyeri berat hingga sangat berat.'
+          this.form.keluhannyeri.ket = ket
+        }
       }
     },
 
@@ -632,6 +692,33 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
             reject(err)
           })
       })
+    },
+
+    async saveForm (jnsKasus, pasien) {
+      this.loadingSave = true
+      const req = {
+        noreg: pasien?.noreg ?? null,
+        norm: pasien?.norm,
+        form: this.form,
+        formKebidanan: jnsKasus.gruping === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
+        formNeoNatal: jnsKasus.gruping === '4.3' ? this.formNeoNatal : null,
+        formPediatrik: jnsKasus.gruping === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
+      }
+
+      // console.log('form, jenis kasus', req, jnsKasus)
+
+      try {
+        const resp = await api.post('v1/simrs/ranap/layanan/anamnesis/simpananamnesis', req)
+        console.log('resp', resp)
+        if (resp.status === 200) {
+          // xxx
+        }
+        this.loadingSave = false
+      }
+      catch (error) {
+        console.log('error', error)
+        this.loadingSave = false
+      }
     }
   }
 })

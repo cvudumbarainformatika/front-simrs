@@ -19,14 +19,62 @@
           :rules="[val => !!val || 'Harap diisi']"
           hide-bottom-space
         />
-        <app-input-simrs label="BB (kg)" class-tambahan="col-2" v-model="store.form.bb" :valid="{ number: true }" :lazy-rules="false" />
-        <app-input-simrs label="TB (cm)" class="col-2" v-model="store.form.tb" :valid="{ number: true }" />
-        <app-input-simrs label="N (x/mnt)" class="col-2" v-model="store.form.nadi" :valid="{ number: true }" :lazy-rules="true" />
-        <app-input-simrs label="Sis (mmHg)" class="col-2" v-model="store.form.sistole" :valid="{ number: true }" :lazy-rules="true" />
-        <app-input-simrs label="Dia (mmHg)" class="col-2" v-model="store.form.diastole" :valid="{ number: true }" :lazy-rules="true" />
-        <app-input-simrs label="RR (x/mnt)" class="col-2" v-model="store.form.pernapasan" :valid="{ number: true }" :lazy-rules="true" />
-        <app-input-simrs label="Spo (%)" class="col-2" v-model="store.form.spo" :valid="{ number: true }" :lazy-rules="true" />
-        <app-input-simrs label="Suhu C" class="col-3" v-model="store.form.suhu" :valid="{ number: true }" :lazy-rules="true" />
+        <app-input-simrs
+          label="BB (kg)" class-tambahan="col-2" v-model="store.form.bb" :valid="{ number: true }" :lazy-rules="false"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.bb=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="TB (cm)" class="col-2" v-model="store.form.tb" :valid="{ number: true }"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.tb=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="N (x/mnt)" class="col-2" v-model="store.form.nadi" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.nadi=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="Sis (mmHg)" class="col-2" v-model="store.form.sistole" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.sistole=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="Dia (mmHg)" class="col-2" v-model="store.form.diastole" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.diastole=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="RR (x/mnt)" class="col-2" v-model="store.form.pernapasan" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.pernapasan=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="SpO2 (%)" class="col-2" v-model="store.form.spo" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.spo=_removedZeros
+          }"
+        />
+        <app-input-simrs
+          label="Suhu C" class="col-3" v-model="store.form.suhu" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.suhu=_removedZeros
+          }"
+        />
 
         <q-select
           v-model="store.form.tkKesadaran"
