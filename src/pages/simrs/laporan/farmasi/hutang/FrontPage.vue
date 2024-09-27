@@ -2,22 +2,8 @@
   <div
     class="column full-height q-ma-sm"
   >
-    <div class="col-auto bg-red">
-      <q-tabs
-        v-model="tab"
-        no-caps
-        inline-label
-        class="bg-primary text-white shadow-2"
-        align="left"
-        dense
-        active-color="yellow"
-        active-bg-color="dark"
-        @update:model-value="cekPanel"
-      >
-        <template v-for="opt in optionTabs" :key="opt">
-          <q-tab :name="opt.name" :label="opt.label" />
-        </template>
-      </q-tabs>
+    <div class=" q-pa-md bg-primary text-white f-14 text-weight-bold">
+      LAPORAN HUTANG FARMASI
     </div>
 
     <div class="col-auto">
@@ -44,7 +30,7 @@
 <script setup>
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
-const tab = ref('konsi')
+const tab = ref('hutang')
 const optionTabs = ref([
 
   { name: 'hutang', label: 'Hutang', compo: shallowRef(defineAsyncComponent(() => import('./comp/HutangPage.vue'))) },
