@@ -67,7 +67,7 @@
                 label="Ambil Data"
                 :disable="store.loading"
                 :loading="store.loading"
-                @click="store.getDataTable"
+                @click="store.getInitialData(1)"
               />
             </div>
           </div>
@@ -138,10 +138,13 @@
       <div class="row justify-center f-16 text-weight-bold q-my-sm">
         Laporan Mutasi FIFO Farmasi periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
       </div>
-      <div class="q-pa-sm">
-        <TableComp />
+      <div>
+        <!-- <q-scroll-observer @scroll="scrollHandler" /> -->
+        <div ref="refScroll" class="q-pa-sm" v-scroll="onScroll">
+          <TableComp />
+        </div>
       </div>
-      <div class="q-mt-md">
+      <div class="q-mt-md" ref="refTt">
         <div class="q-my-md">
           <div class="row q-mb-md">
             <div class="col-4" />
@@ -378,6 +381,20 @@ const store = useLaporanMutasiFiFoFarmasiStore()
 
 const TableComp = defineAsyncComponent(() => import('./comp/TablePage.vue'))
 
+const refScroll = ref(null)
+const refTt = ref(null)
+function onScroll (pos) {
+  const height = refScroll.value.clientHeight - 125 // pas nya 119
+  const currPage = store.meta.current_page
+  if ((store.meta.current_page < store.meta.last_page) && pos >= height) {
+    store.setPage(currPage + 1)
+    // console.log('meta', store.meta)
+    console.log('pos', pos, refScroll.value.clientHeight, height)
+  }
+}
+// function scrollHandler (observ) {
+// console.log('observ', observ)
+// }
 const refTop = ref(null)
 const h = ref(0)
 onMounted(() => {
