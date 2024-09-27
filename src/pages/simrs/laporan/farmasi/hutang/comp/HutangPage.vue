@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <q-card>
       <q-card-section>
         <div class="row items-center garis-bawah">
@@ -79,6 +79,9 @@
       <div v-else-if="store.params.jenisreport === '4'">
         <HutangByTransaksi />
       </div>
+      <div v-else-if="store.params.jenisreport === '5'">
+        <HutangKonsinyasi />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -93,6 +96,7 @@ import HutangpertanggalByPenerimaanVue from './HutangpertanggalByPenerimaan.vue'
 import HutangpertanggalByBAST from './HutangpertanggalByBAST.vue'
 import MutasiHutangObat from './MutasiHutangObat.vue'
 import HutangByTransaksi from './HutangByTransaksi.vue'
+import HutangKonsinyasi from './HutangKonsinyasi.vue'
 
 const store = usehutangObatPerTanggalStore()
 // const storebast = usehutangObatPerTanggalBastStore()
@@ -112,6 +116,10 @@ const jenisreport = ref([
   {
     kodereport: '4',
     namareport: 'Laporan Hutang By Transaksi'
+  },
+  {
+    kodereport: '5',
+    namareport: 'Laporan Hutang Konsinyasi'
   }
 ])
 
@@ -128,9 +136,13 @@ function pilihjenislaporan (val) {
     store.params.jenisreport = '3'
     store.judulreport = 'Laporan Mutasi Hutang Obat'
   }
-  else {
+  else if (val === '4') {
     store.params.jenisreport = '4'
     store.judulreport = 'Laporan Hutang By Transaksi'
+  }
+  else {
+    store.params.jenisreport = '5'
+    store.judulreport = 'Laporan Hutang Konsinyasi'
   }
 }
 

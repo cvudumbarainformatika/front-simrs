@@ -282,7 +282,7 @@
               <!-- saldo akhir-->
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.akhir?.jumlah),2)) }}
+                  {{ cekNan(formatDouble(parseFloat(data?.akhir?.jumlah ?? data?.subtotal?.jumlah),2)) }}
                 </div>
               </td>
               <td>
@@ -292,7 +292,7 @@
               </td>
               <td>
                 <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub),2)) }}
+                  {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub ?? data?.subtotal?.sub),2)) }}
                 </div>
               </td>
               <td>
@@ -302,6 +302,132 @@
               </td>
             </tr>
           </template>
+        </template>
+        <template v-if="store.loadingNext">
+          <tr
+            v-for="m in store.params.per_page"
+            :key="m"
+          >
+            <td width="5%">
+              <q-skeleton
+                type="text"
+                width="20px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="150px"
+                height="25px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+            <td>
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </td>
+          </tr>
         </template>
         <!-- <tr class="text-weight-bold">
           <td colspan="6">
