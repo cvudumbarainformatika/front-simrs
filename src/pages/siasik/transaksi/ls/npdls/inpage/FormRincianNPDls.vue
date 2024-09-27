@@ -115,6 +115,16 @@
               store.rinci.hargals = 0
               store.rinci.totalls = 0
               store.rinci.nominalpembayaran = 0
+              store.rinci.kode_lo = cari?.kode_lo
+              store.rinci.uraian_lo = cari?.uraian_lo
+              store.rinci.kode_neraca1 = cari?.kode_neraca1
+              store.rinci.uraian_neraca1 = cari?.uraian_neraca1
+              store.rinci.kode_neraca2 = cari?.kode_neraca2
+              store.rinci.uraian_neraca2 = cari?.uraian_neraca2
+              store.rinci.kode_lpsal = cari?.kode_lpsal
+              store.rinci.uraian_lpsal = cari?.uraian_lpsal
+              store.rinci.kode_lak = cari?.kode_lak
+              store.rinci.uraian_lak = cari?.uraian_lak
             }"
           />
         </div>

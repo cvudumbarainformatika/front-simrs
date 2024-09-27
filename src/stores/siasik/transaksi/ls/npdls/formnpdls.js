@@ -100,7 +100,19 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       volumels: null,
       hargals: null,
       totalls: null,
-      nominalpembayaran: null
+      nominalpembayaran: null,
+
+      // jurnal
+      kode_lo: null,
+      uraian_lo: null,
+      kode_neraca1: null,
+      uraian_neraca1: null,
+      kode_neraca2: null,
+      uraian_neraca2: null,
+      kode_lpsal: null,
+      uraian_lpsal: null,
+      kode_lak: null,
+      uraian_lak: null
     },
     dariserahterima: [
       { nama: '-', value: '1' },
@@ -321,7 +333,18 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0),
             sisapagu: parseFloat(x.pagu) - (x.realisasi.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0) +
             x.realisasi_spjpanjar.map((x) => parseFloat(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0) -
-            x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0))
+            x.contrapost.map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0)),
+
+            kode_lo: x?.jurnal?.kode_lo,
+            uraian_lo: x?.jurnal?.uraian_lo,
+            kode_neraca1: x?.jurnal?.kode_neraca1,
+            uraian_neraca1: x?.jurnal?.uraian_neraca1,
+            kode_neraca2: x?.jurnal?.kode_neraca2,
+            uraian_neraca2: x?.jurnal?.uraian_neraca2,
+            kode_lpsal: x?.jurnal?.kode_lpsal,
+            uraian_lpsal: x?.jurnal?.uraian_lpsal,
+            kode_lak: x?.jurnal?.kode_lak,
+            uraian_lak: x?.jurnal?.uraian_lak
           }
         })
         : []
