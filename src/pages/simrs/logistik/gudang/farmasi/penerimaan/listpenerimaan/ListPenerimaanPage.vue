@@ -523,13 +523,15 @@
             icon="icon-mat-lock"
             dense
             color="negative"
-            @click="info(row)"
+            :loading="row.loading"
+            :disable="row.loading"
+            @click="bukakunci(row)"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Cetak Penerimaan
+              Buka Kunci
             </q-tooltip>
           </q-btn>
           <q-btn
@@ -558,7 +560,7 @@
 </template>
 <script setup>
 import { dateFullFormat, formatDouble, formatDoubleKoma } from 'src/modules/formatter'
-import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
 import CetakPenerimaanComp from './comp/CetakPenerimaanComp.vue'
@@ -568,6 +570,7 @@ import { useRouter } from 'vue-router'
 import { ref, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
+import { Dialog } from 'quasar'
 
 const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
@@ -679,10 +682,28 @@ function onClick (val) {
   val.item.highlight = !val.item.highlight
 }
 
-function info (val) {
+function bukakunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  notifSuccessVue('Penerimaan nomor ' + val.nopenerimaan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
+
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Akan Membuka kunci untuk penerimaan ini?',
+    ok: {
+      push: true,
+      'no-caps': true,
+      color: 'negative',
+      label: 'Buka Kunci'
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      color: 'dark',
+      label: 'Batal'
+    }
+  }).onOk(() => {
+    store.bukaKunci(val)
+  })
 }
 
 const printCetakPenerimaan = ref(false)
