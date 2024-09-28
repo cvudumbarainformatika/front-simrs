@@ -72,12 +72,12 @@
         </div>
       </template>
       <template #cell-FlagTerbayar="{row}">
-        <div class="row justify-center">
+        <div class="text-right">
           {{ row?.FlagTerbayar === '1' ? 'Lunas': '' }}
         </div>
       </template>
       <template #cell-TotalBast="{row}">
-        <div class="row justify-center">
+        <div class="text-right">
           {{ formatDouble(row?.TotalBast) }}
         </div>
       </template>
@@ -103,13 +103,13 @@
                 <td>{{ i+1 }}</td>
                 <td>{{ rincix?.nopenerimaan }}</td>
                 <td> {{ rincix?.obat?.nama_obat }}</td>
-                <td>
+                <td class="text-right">
                   {{ rincix?.jumlah }}
                 </td>
-                <td>
+                <td class="text-right">
                   {{ formatDouble(rincix?.harga_net) }}
                 </td>
-                <td>
+                <td class="text-right">
                   {{ formatDouble(rincix?.subtotal) }}
                 </td>
               </tr>

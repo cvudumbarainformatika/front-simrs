@@ -7,7 +7,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
   state: () => ({
     loading: false,
     items: [],
-    kodetigas: [],
+    kodekelompok: [],
+    kodejenis: [],
     meta: {},
     params: {
       q: '',
@@ -17,7 +18,8 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       tahun: date.formatDate(Date.now(), 'YYYY'),
       bidang: '',
       kegiatan: '',
-      kodebidang: null
+      kodebidang: null,
+      levels: null
     },
     display: {
       dari: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -37,7 +39,13 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     pembiayaans: [],
     realisasiPembiayaans: [],
     paguPembiayaans: [],
-    kurangiKASs: []
+    kurangiKASs: [],
+    level: [
+      { nama: 'Akun', value: '1' },
+      { nama: 'Kelompok', value: '2' },
+      { nama: 'Jenis', value: '3' },
+      { nama: 'Objek', value: '4' }
+    ]
   }),
   actions: {
     setParameter (key, val) {
@@ -57,7 +65,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       const params = { params: this.params }
       return new Promise((resolve) => {
         api.get('v1/laporan/lra/bidang', params).then((resp) => {
-          console.log('bidang', resp)
+          // console.log('bidang', resp)
           if (resp.status === 200) {
             this.mapbidangptk = resp.data
             // this.bidangs = resp.data
@@ -119,23 +127,27 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         )
         : []
       this.kegiatans = data
-      console.log('ddd', this.kegiatans)
+      console.log('kegiatans', this.kegiatans)
     },
     getDataRealisasi() {
       this.loading = true
       const params = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/laporan/lra/laplra', params).then(resp => {
-          console.log('realisasi', resp)
+          // console.log('realisasi', resp)
           if (resp.status === 200) {
+            // RESET HASIL GET
             this.items = []
+            this.kodekelompok = []
+            this.kodejenis = []
+            this.pembiayaans = []
+            // ---------//
             this.realisasipends = resp.data?.realisasipendapatan
             this.nilaipends = resp.data?.nilaipendapatan
             this.realisasiPembiayaans = resp.data?.silpa
             this.paguPembiayaans = resp.data?.silpa
             this.kurangiKASs = resp.data?.kurangikaskecil
             this.items = resp.data
-            this.pembiayaans = []
             this.paguAnggaran(resp.data?.belanja)
             this.mapRekening(resp.data?.belanja)
             this.mapPendapatan(resp.data?.pendapatan)
@@ -500,7 +512,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      console.log('KODE 2', kode2)
+      // console.log('KODE 2', kode2)
       // const kode2 = {}
       // for (let i = 0; i < kode.length; i++) {
       //   const el = kode.reduce(
@@ -659,7 +671,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      console.log('kode3', kode3)
+      // console.log('kode3', kode3)
       // KODE4
       const kod4 = this.items.length
         ? this.items.map((x) => {
@@ -954,7 +966,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
-      console.log('kode5', kod5)
+      // console.log('kode5', kod5)
       // const kode2 = []
       // for (let i = 0; i < kode?.length; i++) {
       //   const kodkelompok = {
@@ -989,21 +1001,29 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       // const join = kode1?.concat(kode2, kode3, kode4, kode5)
       // console.log('al al', join)
       this.items.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
-
-      const obj = {
-        kode1,
-        kode2,
-        kode3
-      }
-      this.kodetigas = obj
-      console.log('kode 3 all', this.kodetigas)
-      // const sortkode3 = this.kodetigas.sort(({ kodeall3: a }, { kodeall3: b }) =>
-      //   a < b ? -1 : a > b ? 1 : 0
-      // )
       const sort = this.items.sort(({ kodeall3: a }, { kodeall3: b }) =>
         a < b ? -1 : a > b ? 1 : 0
       )
-      return sort
+
+      this.kodeakun.push(kode1, ...kode2)
+      console.log('kelompok', this.kodeakun)
+      const sortkode1 = this.kodeakun.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+
+      this.kodekelompok.push(kode1, ...kode2)
+      console.log('kelompok', this.kodekelompok)
+      const sortkode2 = this.kodekelompok.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+
+      this.kodejenis.push(kode1, ...kode2, ...kode3)
+      console.log('jenis', this.kodejenis)
+      const sortkode3 = this.kodejenis.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+
+      return sort && sortkode1 && sortkode2 && sortkode3
     },
 
     dataUnik(x) {
