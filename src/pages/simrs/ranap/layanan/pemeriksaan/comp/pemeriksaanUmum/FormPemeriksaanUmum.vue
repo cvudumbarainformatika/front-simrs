@@ -7,6 +7,7 @@
       <q-separator />
       <q-card-section class="q-pa-sm row q-col-gutter-xs ">
         <q-select
+          ref="refKeadaanUmum"
           v-model="store.form.keadaanUmum"
           dense
           standout="bg-yellow-3 text-black"
@@ -160,7 +161,7 @@
           hide-bottom-space
           class="col-6"
         />
-        <q-list flat bordered separator class="col-12 q-mt-xs">
+        <!-- <q-list flat bordered separator class="col-12 q-mt-xs">
           <q-item v-for="item in store.form.edukasi" :key="item">
             <q-item-section>
               <q-item-label>{{ item?.label }}</q-item-label>
@@ -168,6 +169,21 @@
             <q-item-section>
               <div class="flex q-gutter-sm">
                 <q-radio dense v-for="n in store.yaTidaks" :key="n" v-model="item.value" :val="n" :label="n" />
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list> -->
+        <q-list flat bordered separator class="col-12 q-mt-xs">
+          <q-item v-for="item in store.frmEdukasis" :key="item">
+            <q-item-section>
+              <q-item-label>{{ item?.label }}</q-item-label>
+            </q-item-section>
+            <q-item-section style="max-width: 35%;">
+              <div class="flex q-gutter-sm">
+                <q-radio dense v-for="n in item.values" :key="n" v-model="store.form.edukasi[item?.kode]" :val="n" :label="n?.value" />
+              </div>
+              <div v-if="item?.kode==='butuhEdukasi' && store.form.edukasi[item?.kode]?.value==='Ya'" class="q-mt-sm">
+                <app-input-simrs label="Jenis Edukasi yg Dibutuhkan" v-model="store.form.edukasi[item?.kode].ket" class="full-width" />
               </div>
             </q-item-section>
           </q-item>
@@ -612,7 +628,7 @@
 
 <script setup>
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 
 const AutocompleteInput = defineAsyncComponent(() => import('../../../components/AutocompleteInput.vue'))
 const SelectInput = defineAsyncComponent(() => import('../../../components/SelectInput.vue'))
@@ -628,7 +644,10 @@ const props = defineProps({
     default: null
   }
 })
-
+const refKeadaanUmum = ref(null)
+defineExpose({
+  refKeadaanUmum
+})
 const store = usePemeriksaanUmumRanapStore()
 
 onMounted(() => {

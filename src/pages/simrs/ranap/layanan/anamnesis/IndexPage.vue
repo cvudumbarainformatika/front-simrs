@@ -5,12 +5,12 @@
       <div :class="`${full ? 'col-12' : 'col-8'} full-height`">
         <div class="fit bg-white column">
           <div class="col-auto">
-            <BarComp title="Form Anamnesse" bg-color="bg-primary" text-color="text-white" :fullpage="full" @full="full = !full" />
+            <BarComp title="ANAMNESSE KEPERAWATAN" bg-color="bg-primary" text-color="text-white" :fullpage="full" @full="full = !full" />
             <q-separator />
           </div>
           <div class="col full-height scroll">
             <q-form ref="myForm" class="q-pa-md">
-              <FormAnamnesis ref="formRef" :pasien="props.pasien" :kasus="props.kasus" />
+              <FormAnamnesis ref="formRef" :pasien="props.pasien" :kasus="props.kasus" :key="pasien" />
               <q-separator class="q-my-md" />
               <div class="flex justify-end">
                 <q-btn :loading="store.loadingSave" :disable="store.loadingSave" type="button" color="primary" label="Simpan" @click="validate" />
@@ -25,8 +25,8 @@
           <div class="col-auto">
             <BarComp title="Informasi" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
           </div>
-          <div class="col full-height scroll">
-            <RightPage :pasien="pasien" :kasus="kasus" />
+          <div class="col full-height">
+            <RightPage :pasien="pasien" :kasus="kasus" :key="pasien" />
           </div>
         </div>
       </div>
@@ -85,10 +85,10 @@ const validate = () => {
 // eslint-disable-next-line no-unused-vars
 function scrollToElement (el) {
   const target = getScrollTarget(el)
-  console.log('target', target)
+  // console.log('target', target)
 
   const offset = el.offsetTop
-  console.log('offset', offset)
+  // console.log('offset', offset)
 
   const duration = 200
   setVerticalScrollPosition(target, offset, duration)

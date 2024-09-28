@@ -1,11 +1,11 @@
 import { api } from 'src/boot/axios'
-import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
+import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 // import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 // eslint-disable-next-line no-unused-vars
 import { onMounted, reactive, ref } from 'vue'
 
 export default function useRightPanel (pasien) {
-  const store = useAnamnesisRanapStore()
+  const store = usePemeriksaanUmumRanapStore()
   // const pengunjung = usePengunjungRanapStore()
 
   onMounted(() => {
@@ -36,12 +36,12 @@ export default function useRightPanel (pasien) {
         noreg: pasien?.noreg
       }
     }
-    const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
+    const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
     console.log('resp', resp)
-    if (resp.status === 200) {
-      store.items = resp.data
-      store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
-    }
+    // if (resp.status === 200) {
+    //   store.items = resp.data
+    //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+    // }
   }
 
   return {

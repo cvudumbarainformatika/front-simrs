@@ -26,7 +26,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     jnsKasusPasien: null,
     loading: false,
     pageLayanan: false,
-    loadingLayanan: false
+    loadingLayanan: false,
+    pasien: null
   }),
 
   actions: {
@@ -96,6 +97,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         const datax = findPasien[0]
         datax.newapotekrajal = data?.newapotekrajal
         datax.diagnosa = data?.diagnosa
+        datax.anamnesis = []
+        datax.pemeriksaan = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false
@@ -224,12 +227,13 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
+        // data[kode] = val
         if (kode === 'kd_jeniskasus') {
           data[kode] = val
         }
         else {
           const target = data[kode]?.find(x => x?.id === val?.id) ?? null
-          // console.log('inject target pasien', target)
+          console.log('inject target pasien', target)
           // console.log('inject kode pasien', kode)
           // console.log('inject isi pasien', val)
 
@@ -237,20 +241,18 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             Object.assign(target, val)
           }
           else {
-          // if (kode === 'kd_jeniskasus') {
-          //   data[kode] = val
-          // }
-          // else if (kode === 'dokumenluar') {
-          //   const trg = data[kode]
-          //   if (trg) {
-          //     data[kode] = []
-          //     data[kode] = val
-          //   }
-          // }
-          // else {
-          //   data[kode]?.splice(0, 0, val)
-          // }
+            data[kode]?.splice(0, 0, val)
           }
+        }
+      }
+    },
+    deleteInjectanNull (noreg, kode) {
+      const findPasien = this.pasiens.filter(x => x.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => x?.id === null) ?? null
+        if (target) {
+          data[kode]?.splice(data[kode]?.findIndex(x => x?.id === null), 1)
         }
       }
     }

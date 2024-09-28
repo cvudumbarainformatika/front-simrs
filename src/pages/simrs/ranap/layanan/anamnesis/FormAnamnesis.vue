@@ -9,6 +9,7 @@
       standout="bg-yellow-3"
       label="Keluhan Utama"
       :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+      :lazy-rules="true"
       hide-bottom-space
       style="width:50%"
     />
@@ -146,6 +147,7 @@
                 :label="g"
                 color="primary"
               />
+              <app-input-simrs v-if="store.formKebidanan.rwGynecology.includes('Lain-lain')" v-model="store.formKebidanan.rwGynecologyLain" label="Jelaskan" class="full-width" />
             </div>
             <q-separator class="q-my-sm" />
             <div class="text-bold q-mt-sm">
@@ -154,8 +156,8 @@
             <q-separator class="q-my-xs" />
             <div class="row q-col-gutter-xs">
               <app-input-simrs v-model="store.formKebidanan.rwKbJns" label="Jenis" class="col-4" />
-              <app-input-simrs v-model="store.formKebidanan.rwKbLama" label="Lama" class="col-4" />
-              <app-input-simrs v-model="store.formKebidanan.rwKbKeluhan" label="Keluhan" class="col-4" />
+              <app-input-simrs v-model="store.formKebidanan.rwKbLama" label="Lama" class="col-2" />
+              <app-input-simrs v-model="store.formKebidanan.rwKbKeluhan" label="Keluhan" class="col-6" />
             </div>
             <q-separator class="q-my-sm" />
             <div class="text-bold q-mt-sm">
@@ -163,8 +165,8 @@
             </div>
             <q-separator class="q-my-xs" />
             <div class="row q-col-gutter-xs">
-              <app-input-simrs v-model="store.formKebidanan.menarche" label="Menarche (th)" class="col-4" />
-              <app-input-simrs v-model="store.formKebidanan.siklusHari" label="Siklus (hr)" class="col-4" />
+              <app-input-simrs v-model="store.formKebidanan.menarche" label="Menarche (th)" class="col-2" />
+              <app-input-simrs v-model="store.formKebidanan.siklusHari" label="Siklus (hr)" class="col-2" />
               <q-select
                 v-model="store.formKebidanan.siklus"
                 dense
@@ -177,7 +179,7 @@
                 input-class="ellipsis"
                 fill-input
                 hide-bottom-space
-                class="col-4"
+                class="col-3"
               />
               <app-input-simrs v-model="store.formKebidanan.lamaMens" label="Lama (hr)" class="col-2" :valid="{number: true}" />
               <q-select
@@ -192,15 +194,16 @@
                 input-class="ellipsis"
                 fill-input
                 hide-bottom-space
-                class="col-6"
+                class="col-5"
               />
-              <app-input-simrs v-model="store.formKebidanan.hpht" label="HPHT (hr)" class="col-4" :valid="{number: true}" />
+              <app-input-simrs v-model="store.formKebidanan.hpht" label="HPHT (hr)" class="col-2" :valid="{number: true}" />
               <app-input-date
                 v-model="store.formKebidanan.tglPerkPersalinan"
-                label="Tanggal Perk. Persalinan"
+                label="Tgl Prk. Persalinan"
                 outlined
                 dense
                 @set-model="(val)=>{store.formKebidanan.tglPerkPersalinan=val}"
+                valid
                 class="col-3"
               />
 
@@ -301,14 +304,21 @@
                 class="col-2"
               />
               <app-input-simrs v-model="store.formKebidanan.bak" label="BAK x/hr" class="col-2" :valid="{number: true}" />
-              <div class="col-12 q-gutter-sm flex">
-                <div>Keluhan BAK :</div>
-                <q-checkbox dense size="sm" v-for="n in store.keluhanBaks" :key="n" v-model="store.formKebidanan.keluhanBak" :val="n" :label="n" />
+              <div class="col-12">
+                <q-separator class="q-my-sm" />
+                <div class="flex q-gutter-sm">
+                  <div>Keluhan BAK :</div>
+                  <q-checkbox dense size="sm" v-for="n in store.keluhanBaks" :key="n" v-model="store.formKebidanan.keluhanBak" :val="n" :label="n" />
+                </div>
+                <q-separator class="q-my-sm" />
+
+                <div class="q-gutter-sm flex">
+                  <div>Keluhan :</div>
+                  <q-checkbox dense size="sm" v-for="n in store.keluhans" :key="n" v-model="store.formKebidanan.keluhans" :val="n" :label="n" />
+                </div>
+                <q-separator class="q-my-xs" />
               </div>
-              <div class="col-12 q-gutter-sm flex q-mb-sm">
-                <div>Keluhan :</div>
-                <q-checkbox dense size="sm" v-for="n in store.keluhans" :key="n" v-model="store.formKebidanan.keluhans" :val="n" :label="n" />
-              </div>
+
               <app-input-simrs v-model="store.formKebidanan.jmlBak" label="Jml. BAK ml/hr" class="col-3" :valid="{number: true}" />
               <!-- <q-select
                 v-model="store.formKebidanan.warnaUrine"
@@ -345,7 +355,7 @@
                 dense
                 standout="bg-yellow-3 text-black"
                 outlined
-                label="Terp. Kateter"
+                label="Terpsg Kateter"
                 :options="store.yaTidaks"
                 emit-value
                 map-options
@@ -365,6 +375,60 @@
         <q-card-section>
           <div class="text-weight-bold">
             Form 4.3 (Neonatal)
+          </div>
+          <q-separator class="q-my-sm" />
+          <div class="text-weight-bold">
+            Informasi Bayi
+          </div>
+          <q-separator class="q-my-xs" />
+          <div class="row q-col-gutter-xs">
+            <q-select
+              v-model="store.formNeoNatal.crMasuk"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Cara Masuk"
+              :options="store.caraMasuks"
+              emit-value
+              map-options
+              input-class="ellipsis"
+              fill-input
+              hide-bottom-space
+              class="col-4"
+            />
+            <q-select
+              v-model="store.formNeoNatal.asalMasuk"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Asal Masuk"
+              :options="store.asalMasuks"
+              emit-value
+              map-options
+              input-class="ellipsis"
+              fill-input
+              hide-bottom-space
+              class="col-8"
+            />
+            <app-input-simrs v-model="store.formNeoNatal.penanggungJawab" label="Nama Penanggung Jawab" class="col-6" />
+            <app-input-simrs v-model="store.formNeoNatal.noHpPj" label="No Telp /HP penanggung jawab" class="col-5" />
+            <app-input-simrs v-model="store.formNeoNatal.alamatPj" label="Alamat penanggung jawab" class="col-8" />
+            <q-select
+              v-model="store.formNeoNatal.hubPj"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Hub. penanggung jawab"
+              :options="store.hubPj"
+              hide-selected
+              fill-input
+              use-input
+              input-debounce="0"
+              hide-bottom-space
+              hide-dropdown-icon
+              @input-value="(val)=> store.formNeoNatal.hubPj=val"
+              class="col-4"
+            />
           </div>
           <q-separator class="q-my-xs" />
           <div class="text-weight-bold">
@@ -542,7 +606,46 @@
             Golongan Darah
           </div>
           <q-separator class="q-my-xs" />
-          <div class="row q-col-gutter-xs">
+          <q-list bordered separator>
+            <q-item>
+              <q-item-section>
+                <div class="row q-gutter-md items-center">
+                  <div style="width: 50px;">
+                    Ayah
+                  </div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.golDarahAyah" v-for="aa in store.golDarahs" :key="aa" :label="aa" :val="aa" />
+                  <div>RH</div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.rhDarahAyah" v-for="aa in store.rhesus" :key="aa" :label="aa" :val="aa" />
+                </div>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <div class="row q-gutter-md items-center">
+                  <div style="width: 50px;">
+                    Ibu
+                  </div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.golDarahIbu" v-for="aa in store.golDarahs" :key="aa" :label="aa" :val="aa" />
+                  <div>RH</div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.rhDarahIbu" v-for="aa in store.rhesus" :key="aa" :label="aa" :val="aa" />
+                </div>
+              </q-item-section>
+            </q-item>
+
+            <q-item>
+              <q-item-section>
+                <div class="row q-gutter-md items-center">
+                  <div style="width: 50px;">
+                    Bayi
+                  </div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.golDarahBayi" v-for="aa in store.golDarahs" :key="aa" :label="aa" :val="aa" />
+                  <div>RH</div>
+                  <q-radio dense size="sm" v-model="store.formNeoNatal.rhDarahBayi" v-for="aa in store.rhesus" :key="aa" :label="aa" :val="aa" />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <!-- <div class="row q-col-gutter-xs">
             <q-select
               v-model="store.formNeoNatal.golDarahIbu"
               dense
@@ -585,7 +688,7 @@
               hide-bottom-space
               class="col-4"
             />
-          </div>
+          </div> -->
         </q-card-section>
       </q-card>
 
@@ -649,11 +752,51 @@
             Riwayat Tumbuh Kembang Anak
           </div>
           <q-separator class="q-my-xs" />
-          <div class="row q-col-gutter-xs">
-            <app-input-simrs v-model="store.formPediatrik.gigiPertama" label="Gigi Pertama, Usia" class="col-3" />
+          <div class="row q-col-gutter-x-md">
+            <div class="col-4">
+              <div class="row items-center">
+                <div class="col-auto q-mr-md">
+                  Gigi Pertama, Usia
+                </div>
+                <app-input-simrs v-model="store.formPediatrik.gigiPertama" label="" class="col-3" />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row items-center">
+                <div class="col-auto q-mr-md">
+                  Mulai Berjalan, Usia
+                </div>
+                <app-input-simrs v-model="store.formPediatrik.berjalan" label="" class="col-3" />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row items-center">
+                <div class="col-auto q-mr-md">
+                  Bisa membaca, usia
+                </div>
+                <app-input-simrs v-model="store.formPediatrik.membaca" label="" class="col-3" />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row items-center">
+                <div class="col-auto q-mr-md">
+                  Bisa duduk, usia
+                </div>
+                <app-input-simrs v-model="store.formPediatrik.duduk" label="" class="col-3" />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row items-center">
+                <div class="col-auto q-mr-md">
+                  Bisa Bicara, usia
+                </div>
+                <app-input-simrs v-model="store.formPediatrik.bicara" label="" class="col-3" />
+              </div>
+            </div>
+            <!-- <app-input-simrs v-model="store.formPediatrik.gigiPertama" label="Gigi Pertama, Usia" class="col-3" />
             <app-input-simrs v-model="store.formPediatrik.berjalan" label="Berjalan, Usia" class="col-3" />
             <app-input-simrs v-model="store.formPediatrik.duduk" label="Duduk, Usia" class="col-3" />
-            <app-input-simrs v-model="store.formPediatrik.bicara" label="Bicara, Usia" class="col-3" />
+            <app-input-simrs v-model="store.formPediatrik.bicara" label="Bicara, Usia" class="col-3" /> -->
           </div>
           <q-separator class="q-my-sm" />
           <div class="text-weight-bold">
@@ -863,14 +1006,15 @@
             <template v-for="(val, key) in store.form.keluhannyeri?.form" :key="val">
               <div class="row q-col-gutter-md">
                 <div class="col-3 text-weight-bold">
-                  {{ key }} :
+                  {{ store.formNyeris?.find(x=> x.kode===key)?.label }}
                 </div>
                 <div class="col-9">
                   <div class="flex q-gutter-sm items-center">
                     <q-radio
-                      dense size="sm" v-model="store.form.keluhannyeri.form[key]" v-for="aa in store.formNyeris?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa" @update:model-value="(val)=> {
+                      dense size="sm" v-model="store.form.keluhannyeri.form[key]" v-for="aa in store.formNyeris?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa"
+                      @update:model-value="(val)=> {
                         // store.form.ekspresiWajahKet = aa?.text
-                        console.log('aa',val);
+                        // console.log('aa',val);
 
                         store.hitungSkorNyeri('form')
                       }"
@@ -927,73 +1071,189 @@
         </q-card-section>
       </q-card>
 
-      <!-- KAJIAN NYERI 4.3 NEONATAL -->
-      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
+      <!-- KAJIAN NYERI 4.2 -->
+      <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
-            <div class="text-weight-bold q-py-xs">
-              Kajian Nyeri NIPS (Neonatus Infant Pain Scale)
+            <div class="text-weight-bold">
+              Kajian Nyeri Kebidanan
             </div>
+            <q-radio v-model="store.formKebidanan.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('kebidanan')" />
           </div>
           <q-separator />
         </q-card-section>
         <q-card-section>
-          <div>
-            <div class="text-weight-bold">
-              Ekspresi Wajah :
+          <div v-if="store.formKebidanan.keluhannyeri.kajianNyeri==='Wong Baker Face Scale'" class="row items-center q-col-gutter-md">
+            <div class="col-4">
+              <span class="q-ml-sm">
+                <q-icon
+                  size="lg"
+                  color="teal"
+                  :name="iconNyeri"
+                />
+              </span>
+              <em class="text-primary q-ml-sm">{{ store.formKebidanan.keluhannyeri.ket }}</em>
             </div>
+            <div class="col-8">
+              <q-slider
+                v-model="store.formKebidanan.keluhannyeri.skorNyeri"
+                color="primary"
+                thumb-color="primary"
+                label-color="primary"
+                label-text-color="yellow"
+                markers
+                :marker-labels="(val)=> fnMarkerLabel"
+                marker-labels-class="text-primary"
+                label-always
+                switch-label-side
+                :min="0"
+                :max="10"
+                @update:model-value="(val)=>store.setKeteranganSkornyeri(val, 'kebidanan')"
+                style="width: 100%;"
+              />
+            </div>
+          </div>
+          <div v-else>
             <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.ekspresiWajah" v-for="aa in store.ekspresiWajahNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
-              Menangis :
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.menangis" v-for="aa in store.menangisNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
-              Pola Nafas :
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.polaNafas" v-for="aa in store.polaNafasNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
-              Lengan :
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.lengan" v-for="aa in store.lenganNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
-              Kaki :
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.kaki" v-for="aa in store.kakiNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="text-weight-bold">
-              Keadaan Rangsangan :
-            </div>
-            <q-separator class="q-my-xs" />
-            <div class="flex q-gutter-sm items-center">
-              <q-radio dense size="sm" v-model="store.formNeoNatal.keadaanRangsangan" v-for="aa in store.keadaanRangsanganNeo" :key="aa" :label="aa?.text" :val="aa.skor" @update:model-value="store.hitungSkorNyeri('formNeoNatal')" />
-            </div>
+            <template v-for="(val, key) in store.formKebidanan.keluhannyeri?.form" :key="val">
+              <div class="row q-col-gutter-md">
+                <div class="col-3 text-weight-bold">
+                  {{ store.formNyeris?.find(x=> x.kode===key)?.label }}
+                </div>
+                <div class="col-9">
+                  <div class="flex q-gutter-sm items-center">
+                    <q-radio
+                      dense size="sm" v-model="store.formKebidanan.keluhannyeri.form[key]" v-for="aa in store.formNyeris?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa"
+                      @update:model-value="(val)=> {
+                        // store.form.ekspresiWajahKet = aa?.text
+                        // console.log('aa',val);
+
+                        store.hitungSkorNyeri('kebidanan')
+                      }"
+                    />
+                  </div>
+                </div>
+              </div>
+              <q-separator class="q-my-sm" />
+            </template>
+            <q-card-section class="row items-center justify-between q-py-sm q-px-md text-primary text-bold">
+              <div>SKOR NYERI : {{ store.formKebidanan?.keluhannyeri?.skorNyeri }}</div>
+              <div>{{ store.formKebidanan?.keluhannyeri?.ket }}</div>
+            </q-card-section>
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- KAJIAN NYERI 4.3 NEONATAL -->
+      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
+        <q-card-section>
+          <div class="text-weight-bold">
+            Kajian Nyeri NIPS (Neonatus Infant Pain Scale)
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-section class="row items-center justify-between q-py-sm q-px-md text-primary text-bold">
-          <div>SKOR NYERI : {{ store.formNeoNatal?.skorNyeri }}</div>
-          <div>{{ store.formNeoNatal?.keluhanNyeri }}</div>
+        <q-card-section class="q-pa-none">
+          <q-list bordered separator>
+            <q-item v-for="(val, key) in store.formNeoNatal.keluhannyeri?.form" :key="val">
+              <q-item-section style="max-width: 25%;">
+                <q-item-label>
+                  {{ store.formNyeriNeonatals?.find(x=> x.kode===key)?.label }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <div class="flex q-gutter-sm items-center">
+                  <q-radio
+                    dense size="sm" v-model="store.formNeoNatal.keluhannyeri.form[key]" v-for="aa in store.formNyeriNeonatals?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa"
+                    @update:model-value="(val)=> {
+                      store.hitungSkorNyeri('formNeoNatal')
+                    }"
+                  />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="row items-center justify-between  text-primary text-bold">
+          <div>SKOR NYERI : {{ store.formNeoNatal?.keluhannyeri?.skorNyeri }}</div>
+          <div>{{ store.formNeoNatal?.keluhannyeri?.ket }}</div>
         </q-card-section>
       </q-card>
+
+      <!-- KAJIAN NYERI 4.4 Pediatrik -->
+      <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="q-mb-sm">
+        <q-card-section class="q-py-xs q-px-md">
+          <div class="flex q-gutter-xs items-center">
+            <div class="text-weight-bold">
+              Kajian Nyeri
+            </div>
+            <q-radio v-model="store.formPediatrik.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('pediatrik')" />
+          </div>
+          <q-separator />
+        </q-card-section>
+        <q-card-section>
+          <div v-if="store.formPediatrik.keluhannyeri.kajianNyeri==='Wong Baker Face Scale'" class="row items-center q-col-gutter-md">
+            <div class="col-4">
+              <!-- Keluhan Nyeri ({{ store.form.keluhannyeri.kajianNyeri.text }}) : -->
+              <span class="q-ml-sm">
+                <q-icon
+                  size="lg"
+                  color="teal"
+                  :name="iconNyeri"
+                />
+              </span>
+              <em class="text-primary q-ml-sm">{{ store.formPediatrik.keluhannyeri.ket }}</em>
+            </div>
+            <div class="col-8">
+              <q-slider
+                v-model="store.formPediatrik.keluhannyeri.skorNyeri"
+                color="primary"
+                thumb-color="primary"
+                label-color="primary"
+                label-text-color="yellow"
+                markers
+                :marker-labels="(val)=> fnMarkerLabel"
+                marker-labels-class="text-primary"
+                label-always
+                switch-label-side
+                :min="0"
+                :max="10"
+                @update:model-value="(val)=>store.setKeteranganSkornyeri(val, 'pediatrik')"
+                style="width: 100%;"
+              />
+            </div>
+          </div>
+          <div v-else>
+            <q-separator class="q-my-xs" />
+            <template v-for="(val, key) in store.formPediatrik.keluhannyeri?.form" :key="val">
+              <div class="row q-col-gutter-md">
+                <div class="col-3 text-weight-bold">
+                  {{ store.formNyeris?.find(x=> x.kode===key)?.label }}
+                </div>
+                <div class="col-9">
+                  <div class="flex q-gutter-sm items-center">
+                    <q-radio
+                      dense size="sm" v-model="store.formPediatrik.keluhannyeri.form[key]" v-for="aa in store.formNyeris?.find(x=> x.kode===key)?.values" :key="aa" :label="aa?.text" :val="aa"
+                      @update:model-value="(val)=> {
+                        // store.form.ekspresiWajahKet = aa?.text
+                        // console.log('aa',val);
+
+                        store.hitungSkorNyeri('pediatrik')
+                      }"
+                    />
+                  </div>
+                </div>
+              </div>
+              <q-separator class="q-my-sm" />
+            </template>
+            <q-card-section class="row items-center justify-between q-py-sm q-px-md text-primary text-bold">
+              <div>SKOR NYERI : {{ store.formPediatrik?.keluhannyeri?.skorNyeri }}</div>
+              <div>{{ store.formPediatrik?.keluhannyeri?.ket }}</div>
+            </q-card-section>
+          </div>
+        </q-card-section>
+      </q-card>
+
       <!-- GIZI 4.1 DEWASA -->
       <div v-if="kasus?.gruping==='4.1'" class="skreening-gizi-dewasa">
         <q-card flat bordered>
@@ -1003,47 +1263,28 @@
             </div>
             <q-separator />
           </q-card-section>
-          <q-card-section class="row">
-            <div class="col-9">
-              Apakah Ada Penurunan Berat badan yang tidak diinginkan selama 6 Bulan terakhir ?
-            </div>
-            <div class="col-3 flex q-gutter-sm">
-              <q-radio dense v-model="store.form.sgd.bb" :val="2" label="Iya" @update:model-value="hitungSkorGizi" />
-              <q-radio dense v-model="store.form.sgd.bb" :val="0" label="Tidak" @update:model-value="hitungSkorGizi" />
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="row">
-            <div class="col-9">
-              Apakah Asupan Makan berkurang karena tidak nafsu makan ?
-            </div>
-            <div class="col-3 flex q-gutter-sm">
-              <q-radio dense v-model="store.form.sgd.am" :val="1" label="Iya" @update:model-value="hitungSkorGizi" />
-              <q-radio dense v-model="store.form.sgd.am" :val="0" label="Tidak" @update:model-value="hitungSkorGizi" />
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="row">
-            <div class="col-9">
-              Apakah pasien memiliki diagnosa khusus / kondisi khusus ?
-            </div>
-            <div class="col-3 flex q-gutter-sm">
-              <q-radio dense v-model="store.form.sgd.kk" :val="2" label="Iya" @update:model-value="hitungSkorGizi" />
-              <q-radio dense v-model="store.form.sgd.kk" :val="0" label="Tidak" @update:model-value="hitungSkorGizi" />
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section>
-            <div class="flex items-center q-gutter-sm justify-end text-primary">
-              <div><strong>SKOR : {{ store.form.sgdSkor }}</strong> => </div>
-              <div><strong>{{ store.form.sgdKet }}</strong></div>
-            </div>
+
+          <template v-for="(val, key) in store.form.skreeninggizi?.form" :key="val">
+            <q-card-section class="row">
+              <div class="col-9">
+                {{ store.formGizis?.find(x=> x.kode===key)?.label }}
+              </div>
+              <div class="col-3 flex q-gutter-sm justify-end">
+                <q-radio v-for="aa in store.formGizis?.find(x=>x.kode===key)?.values" dense v-model="store.form.skreeninggizi.form[key]" :val="aa" :label="aa?.text" @update:model-value="hitungSkorGizi" />
+              </div>
+            </q-card-section>
+            <q-separator />
+          </template>
+
+          <q-card-section class="row items-center justify-between q-py-md q-px-md text-primary text-bold">
+            <div>SKOR GIZI : {{ store.form.skreeninggizi.skor }}</div>
+            <div>{{ store.form.skreeninggizi.ket }}</div>
           </q-card-section>
         </q-card>
       </div>
       <!-- GIZI 4.2 KEBIDANAN -->
       <div v-if="kasus?.gruping==='4.2'" class="skreening-gizi-kebidanan">
-        <q-card flat bordered>
+        <!-- <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
               <strong>Skrining Gizi Pasien Obstetric / Kehamilan / Nifas</strong>
@@ -1098,6 +1339,31 @@
               <div><strong>{{ store.formKebidanan.sgkKet }}</strong></div>
             </div>
           </q-card-section>
+        </q-card> -->
+        <q-card flat bordered>
+          <q-card-section class="q-py-sm q-px-md">
+            <div>
+              <strong>Skrining Gizi Pasien Obstetric / Kehamilan / Nifas</strong>
+            </div>
+            <q-separator />
+          </q-card-section>
+
+          <template v-for="(val, key) in store.formKebidanan.skreeninggizi?.form" :key="val">
+            <q-card-section class="row">
+              <div class="col-9">
+                {{ store.formGiziObgyns?.find(x=> x.kode===key)?.label }}
+              </div>
+              <div class="col-3 flex q-gutter-sm justify-end">
+                <q-radio v-for="aa in store.formGiziObgyns?.find(x=>x.kode===key)?.values" dense v-model="store.formKebidanan.skreeninggizi.form[key]" :val="aa" :label="aa?.text" @update:model-value="store.hitungSkorSgk" />
+              </div>
+            </q-card-section>
+            <q-separator />
+          </template>
+
+          <q-card-section class="row items-center justify-between q-py-md q-px-md text-primary text-bold">
+            <div>SKOR GIZI : {{ store.formKebidanan?.skreeninggizi?.skor }}</div>
+            <div>{{ store.formKebidanan?.skreeninggizi?.ket }}</div>
+          </q-card-section>
         </q-card>
       </div>
       <!-- GIZI 4.3 NEONATAL -->
@@ -1109,46 +1375,61 @@
             </div>
             <q-separator />
           </q-card-section>
-          <q-card-section class="row">
-            <div class="col-3">
-              {{ store.sgn?.nm?.text }}
-            </div>
-            <div class="col-9 flex q-gutter-sm">
-              <q-radio v-for="n in store.sgn?.nm?.pilihan" :key="n" dense v-model="store.formNeoNatal.sgn.nm" :val="n.skor" :label="n.text" @update:model-value="store.hitungSkorSgn" />
-            </div>
+
+          <template v-for="(val, key) in store.formNeoNatal.skreeninggizi?.form" :key="val">
+            <q-card-section class="row">
+              <div class="col-3">
+                {{ store.formGiziNeonatals?.find(x=> x.kode===key)?.label }}
+              </div>
+              <div class="col-9 flex q-gutter-sm">
+                <q-radio v-for="aa in store.formGiziNeonatals?.find(x=>x.kode===key)?.values" dense v-model="store.formNeoNatal.skreeninggizi.form[key]" :val="aa" :label="aa?.text" @update:model-value="store.hitungSkorSgn" />
+              </div>
+            </q-card-section>
+            <q-separator />
+          </template>
+
+          <q-card-section class="row items-center justify-between q-py-md q-px-md text-primary text-bold">
+            <div>SKOR GIZI : {{ store.formNeoNatal?.skreeninggizi?.skor }}</div>
+            <div>{{ store.formNeoNatal?.skreeninggizi?.ket }}</div>
           </q-card-section>
-          <q-separator />
-          <q-card-section class="row">
-            <div class="col-3">
-              {{ store.sgn?.km?.text }}
-            </div>
-            <div class="col-9 flex q-gutter-sm">
-              <q-radio v-for="n in store.sgn?.km?.pilihan" :key="n" dense v-model="store.formNeoNatal.sgn.km" :val="n.skor" :label="n.text" @update:model-value="store.hitungSkorSgn" />
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="row">
-            <div class="col-3">
-              {{ store.sgn?.fs?.text }}
-            </div>
-            <div class="col-9 flex q-gutter-sm">
-              <q-radio v-for="n in store.sgn?.fs?.pilihan" :key="n" dense v-model="store.formNeoNatal.sgn.fs" :val="n.skor" :label="n.text" @update:model-value="store.hitungSkorSgn" />
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="row">
-            <div class="col-3">
-              {{ store.sgn?.bb?.text }}
-            </div>
-            <div class="col-9 flex q-gutter-sm">
-              <q-radio v-for="n in store.sgn?.bb?.pilihan" :key="n" dense v-model="store.formNeoNatal.sgn.bb" :val="n.skor" :label="n.text" @update:model-value="store.hitungSkorSgn" />
-            </div>
-          </q-card-section>
-          <q-separator />
         </q-card>
       </div>
 
-      <!-- {{ store.form.ekspresiWajahKet }} -->
+      <!-- GIZI 4.4 PEDIATRIK -->
+      <div v-if="kasus?.gruping==='4.4'" class="skreening-gizi-pediatrik">
+        <q-card flat bordered>
+          <q-card-section class="">
+            <div>
+              <strong>Skrining Gizi Pediatrik</strong>
+            </div>
+          </q-card-section>
+
+          <q-separator />
+          <q-card-section class="q-pa-none">
+            <q-list separator>
+              <q-item v-for="(val, aa) in store.formPediatrik?.skreeninggizi?.form" :key="aa">
+                <q-item-section class="q-gutter-sm">
+                  <div v-for="(ll, i) in store.formGiziPediatrik?.find(x => x?.kode === aa)?.label" :key="i" :class="i===0? '':'text-italic'">
+                    <div :class="i>0 ? 'q-ml-sm':''">
+                      <span v-if="i>0">-</span> {{ ll }}
+                    </div>
+                  </div>
+                </q-item-section>
+                <q-item-section style="max-width:22%" top>
+                  <div class="flex q-gutter-sm">
+                    <q-radio dense v-for="n in store.formGiziPediatrik?.find(x=>x?.kode === aa)?.values" :key="n" size="sm" v-model="store.formPediatrik.skreeninggizi.form[aa]" :label="n?.text" :val="n" @update:model-value="store.hitungSkorSgp" />
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card-section>
+          <q-separator />
+          <q-card-section class="row items-center justify-between q-py-md q-px-md text-primary text-bold">
+            <div>SKOR GIZI : {{ store.formPediatrik?.skreeninggizi?.skor }}</div>
+            <div>{{ store.formPediatrik?.skreeninggizi?.ket }}</div>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
 
     <!-- DIALOG -->
@@ -1200,7 +1481,7 @@ const iconNyeri = computed(() => {
   else if (val >= 8 && val < 10) {
     icon = 'icon-my-emoticon-angry-outline'
   }
-  else if (val === 10) {
+  else if (val >= 10) {
     icon = 'icon-my-emoticon-cry-outline'
   }
 
@@ -1209,11 +1490,12 @@ const iconNyeri = computed(() => {
 
 onMounted(() => {
   Promise.all([
-    store.getRiwayatKehamilan(),
-    store.initReset()
+    store.getRiwayatKehamilan()
+    // store.initReset(null)
   ])
 })
 
+// eslint-disable-next-line no-unused-vars
 const hitungSkorGizi = () => {
   store.hitungSkorSgd()
 }

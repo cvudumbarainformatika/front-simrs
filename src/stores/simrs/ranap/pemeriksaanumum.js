@@ -22,10 +22,11 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       spiritual: null,
       statusPsikologis: 'Tidak ada kelainan',
       ansuransi: 'Ada',
-      edukasi: [
-        { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
-        { label: 'Apakah membutuhkan edukasi?', value: null }
-      ],
+      // edukasi: [
+      //   { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
+      //   { label: 'Apakah membutuhkan edukasi?', value: null }
+      // ],
+      edukasi: {},
 
       // kultural
       penyebabSakit: null,
@@ -164,6 +165,25 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       verbal: null
     },
 
+    frmEdukasis: [
+      {
+        kode: 'tahuPenanganan',
+        label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?',
+        values: [
+          { value: 'Ya' },
+          { value: 'Tidak' }
+        ]
+      },
+      {
+        kode: 'butuhEdukasi',
+        label: 'Apakah membutuhkan edukasi?',
+        values: [
+          { value: 'Ya', ket: null },
+          { value: 'Tidak' }
+        ]
+      }
+    ],
+
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' }, // 248234008
@@ -269,7 +289,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
   },
   actions: {
 
-    initReset () {
+    initReset (data) {
       this.form = {
         // ini untuk 4.1
 
@@ -290,10 +310,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         spiritual: null,
         statusPsikologis: 'Tidak ada kelainan',
         ansuransi: 'Ada',
-        edukasi: [
-          { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
-          { label: 'Apakah membutuhkan edukasi?', value: null }
-        ],
+        edukasi: {},
 
         // kultural
         penyebabSakit: null,
@@ -304,6 +321,15 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
         // pemeriksaan fisik
       }
+
+      const frmEd = {}
+      for (let i = 0; i < this.frmEdukasis.length; i++) {
+        const el = this.frmEdukasis[i]
+        frmEd[el.kode] = el?.values?.find(x => x?.value === data?.edukasi[el.kode]?.value) ?? el?.values?.find(x => x?.value === 'Tidak') ?? null
+      }
+      this.form.edukasi = frmEd
+
+      console.log('form', this.form)
 
       this.formKebidanan = {
         nyeri: 'Normal',

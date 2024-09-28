@@ -31,14 +31,6 @@
             <!-- <PemeriksaanUmumPage :pasien="props?.pasien" /> -->
             <component :is="menu?.comp" :pasien="pasien" :kasus="kasus" />
           </q-tab-panel>
-
-          <!-- <q-tab-panel name="fisik" class="q-pa-none">
-            <PemeriksaaFisikPage :pasien="props?.pasien" />
-          </q-tab-panel>
-          <q-tab-panel name="penilaian" class="q-pa-none">
-            <PenilaianPage :pasien="props?.pasien" />
-          </q-tab-panel> -->
-          <!-- END PANEL -->
         </q-tab-panels>
       </div>
       <!-- <div class="absolute-bottom bg-dark text-white">
@@ -62,21 +54,17 @@ defineProps({
   }
 })
 
-// const PemeriksaanUmumPage = defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
-// const PemeriksaaFisikPage = defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
-// const PenilaianPage = defineAsyncComponent(() => import('./comp/PenilaianPage.vue'))
-
 const tab = ref('umum')
 
 const tabs = [
   {
-    label: 'Umum',
+    label: 'Fisik & Umum',
     name: 'umum',
     icon: 'icon-my-stethoscope',
     comp: defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
   },
-  { label: 'Fisik', name: 'fisik', icon: 'icon-my-stethoscope', comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue')) },
-  { label: 'Penilaian', name: 'penilaian', icon: 'icon-my-stethoscope', comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue')) }
+  { label: 'Penilaian', name: 'penilaian', icon: 'icon-mat-description', comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue')) },
+  { label: 'Anatomi', name: 'fisik', icon: 'icon-my-human-back-svgrepo-com', comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue')) }
 ]
 
 const menu = computed(() => {
