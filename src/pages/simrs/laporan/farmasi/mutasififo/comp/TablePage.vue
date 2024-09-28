@@ -221,7 +221,7 @@
             </template>
           </tr>
           <template v-if="item?.data?.length">
-            <tr v-for="(data) in item?.data" :key="data" :class="n%2===0?'even':'odd'">
+            <tr v-for="(data) in item?.data" :key="data" :class="n%2===0?'even':'odd'" class="hv">
               <td>
                 <div class="text-right q-mr-xs">
                   {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.jumlah),2)) }}
@@ -460,6 +460,10 @@ function cekNan (val) {
 </script>
 
 <style lang="scss" scoped>
+.hv:hover{
+  background-color: #0D5A86;
+  color:#fff
+}
 .gt{
   border-top: 1px solid black;
 }
