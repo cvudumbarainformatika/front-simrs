@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+// eslint-disable-next-line no-unused-vars
+import { formatDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 
 export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo_farmasi', {
   state: () => ({
     loading: false,
-    loadingNext: true,
+    loadingNext: false,
+    loadingDownload: false,
     items: [],
     meta: {},
     params: {
@@ -42,7 +46,13 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     total: 0,
     tTotal: 0,
     htotal: 0,
-    htTotal: 0
+    htTotal: 0,
+    fields: {
+      No: 'no',
+      'Kode Obat': 'kd_obat',
+      'Nama Obat': 'nama_obat',
+      'Jumlah Saldo Awal': 'jmlSalA'
+    }
   }),
   actions: {
     setParams (key, val) {
@@ -67,7 +77,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       this.setParams('page', 1)
       this.getDataTable()
     },
-    mapingItem (val) {
+    mapingItem (val, array) {
       val.forEach(it => {
         it.data = []
         if (it?.resepkeluarracikan.length) {
@@ -282,13 +292,13 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           // Subtract the dates to get a value that is either negative, positive, or zero
           return dateA - dateB
         })
-        const index = this.items.findIndex(a => a.kd_obat === it.kd_obat)
-        if (index >= 0) this.items[index] = it
-        else this.items.push(it)
+        const index = array.findIndex(a => a.kd_obat === it.kd_obat)
+        if (index >= 0) array[index] = it
+        else array.push(it)
       })
 
-      // this.items = val
-      console.log('metani items', this.items)
+      // array = val
+      console.log('metani items', array)
     },
     getInitialData (val) {
       this.setParams('page', val)
@@ -296,6 +306,34 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       this.meta = {}
       this.items = []
     },
+
+    async fetch () {
+      const param = { params: this.params }
+      const data = []
+      const resp = await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
+      // .then(resp => {
+      const items = []
+
+      if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
+      this.mapingItem(resp?.data?.data, items)
+      items.forEach((item, i) => {
+        console.log('item', item)
+
+        const temp = {}
+
+        temp.no = i + 1
+        temp.kd_obat = item?.kd_obat
+        temp.nama_obat = item?.nama_obat
+
+        data.push(temp)
+      })
+
+      console.log('items', data)
+      return data
+      // })
+    },
+    startDownload () { this.loadingDownload = true },
+    finishDownload () { this.loadingDownload = false },
     async getDataTable () {
       if (this.params.page === 1) this.loading = true
       else this.loadingNext = true
@@ -307,7 +345,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           // console.log('data tabel', resp.data)
           this.meta = resp.data?.meta
           // this.items = resp?.data?.data
-          this.mapingItem(resp?.data?.data)
+          this.mapingItem(resp?.data?.data, this.items)
         })
         .catch(() => {
           this.loading = false

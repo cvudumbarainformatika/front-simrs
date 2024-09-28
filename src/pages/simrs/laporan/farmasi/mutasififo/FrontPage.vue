@@ -14,7 +14,7 @@
       </div>
 
       <div
-        class="row justify-between print-hide"
+        class="row justify-between items-center print-hide"
       >
         <div class="col-grow">
           <div class="row q-col-gutter-sm q-my-sm">
@@ -90,6 +90,25 @@
                 Print
               </q-tooltip>
             </q-btn>
+            <!-- <div class="q-ml-sm">
+              <download-excel
+                class="btn"
+                :fields="store.fields"
+                :fetch="store.fetch"
+                :before-generate="store.startDownload"
+                :before-finish="store.finishDownload"
+                :name="'Mutasi Obat Bulan ' + bulan() + ' '+ store.params.tahun +'.xls'"
+              >
+                <app-btn
+                  color="orange"
+                  label="Download Excel"
+                  icon="icon-mat-download"
+                  push
+                  :loading="store.loadingDownload"
+                  :disable="store.loadingDownload"
+                />
+              </download-excel>
+            </div> -->
           </div>
         </div>
       </div>
@@ -380,7 +399,11 @@ import { defineAsyncComponent, onMounted, ref } from 'vue'
 const store = useLaporanMutasiFiFoFarmasiStore()
 
 const TableComp = defineAsyncComponent(() => import('./comp/TablePage.vue'))
-
+// eslint-disable-next-line no-unused-vars
+function bulan () {
+  const bul = store.bulans.find(a => a.value === store.params.bulan)
+  return bul?.nama ?? '-'
+}
 const refScroll = ref(null)
 const refTt = ref(null)
 function onScroll (pos) {

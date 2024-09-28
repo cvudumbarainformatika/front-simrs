@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 // import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
   state: () => ({
@@ -150,6 +151,25 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
           })
           .catch(() => {
             this.loadingcetak = false
+          })
+      })
+    },
+    bukaKunci (row) {
+      row.loading = true
+      const form = {
+        nopenerimaan: row?.nopenerimaan
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/buka-kunci-penerimaan', form)
+          .then(resp => {
+            delete row.loading
+            row.kunci = resp?.data?.data?.head?.kunci ?? '1'
+            console.log('buka kunci', resp?.data?.data?.head)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete row.loading
           })
       })
     }
