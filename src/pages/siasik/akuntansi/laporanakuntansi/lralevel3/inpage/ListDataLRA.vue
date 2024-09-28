@@ -2,7 +2,60 @@
   <div class="justify-content-center">
     <formGetdata />
     <div class="q-pa-md full-width">
-      <template v-if="store.params.levels === '2' && !store.loading">
+      <template v-if="store.reqlevels === '1' && !store.loading">
+        <q-table
+          class="my-sticky-table"
+          :rows="store.kodeakun"
+          :columns="columns"
+          row-key="name"
+          wrap-cells
+          :loading="store.loading"
+          :rows-per-page-options="[0]"
+          hide-bottom
+          :rows-number="[0]"
+        >
+          <template #body="props">
+            <q-tr>
+              <q-td key="kode" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 1 ? 'text-bold' : '' ">
+                  {{ props.row?.kodeall3 }}
+                </div>
+              </q-td>
+              <q-td key="rekening" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 1 ? 'text-bold' : '' ">
+                  {{ props.row?.uraian }}
+                </div>
+              </q-td>
+              <q-td key="pagu" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 1 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.totalPagu) }}
+                </div>
+              </q-td>
+              <!-- <q-td key="realisasi" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasiSebelumnya) }}
+                </div>
+              </q-td>
+              <q-td key="realisasix" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasi) }}
+                </div>
+              </q-td> -->
+              <q-td key="totalreal" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 1 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.RealisasiSemua) }}
+                </div>
+              </q-td>
+              <q-td key="selisih" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 1 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.selisih) }}
+                </div>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </template>
+      <template v-if="store.reqlevels === '2' && !store.loading">
         <q-table
           class="my-sticky-table"
           :rows="store.kodekelompok"
@@ -55,7 +108,7 @@
           </template>
         </q-table>
       </template>
-      <template v-if="store.params.levels === '3'">
+      <template v-if="store.reqlevels === '3' && !store.loading">
         <q-table
           class="my-sticky-table"
           :rows="store.kodejenis"
@@ -101,6 +154,165 @@
               </q-td>
               <q-td key="selisih" :props="props" class="text-right">
                 <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.selisih) }}
+                </div>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </template>
+      <template v-if="store.reqlevels === '4' && !store.loading">
+        <q-table
+          class="my-sticky-table"
+          :rows="store.kodeobjek"
+          :columns="columns"
+          row-key="name"
+          wrap-cells
+          :loading="store.loading"
+          :rows-per-page-options="[0]"
+          hide-bottom
+          :rows-number="[0]"
+        >
+          <template #body="props">
+            <q-tr>
+              <q-td key="kode" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ props.row?.kodeall3 }}
+                </div>
+              </q-td>
+              <q-td key="rekening" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ props.row?.uraian }}
+                </div>
+              </q-td>
+              <q-td key="pagu" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.totalPagu) }}
+                </div>
+              </q-td>
+              <!-- <q-td key="realisasi" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasiSebelumnya) }}
+                </div>
+              </q-td>
+              <q-td key="realisasix" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasi) }}
+                </div>
+              </q-td> -->
+              <q-td key="totalreal" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.RealisasiSemua) }}
+                </div>
+              </q-td>
+              <q-td key="selisih" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 3 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.selisih) }}
+                </div>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </template>
+      <template v-if="store.reqlevels === '5' && !store.loading">
+        <q-table
+          class="my-sticky-table"
+          :rows="store.koderinciobjek"
+          :columns="columns"
+          row-key="name"
+          wrap-cells
+          :loading="store.loading"
+          :rows-per-page-options="[0]"
+          hide-bottom
+          :rows-number="[0]"
+        >
+          <template #body="props">
+            <q-tr>
+              <q-td key="kode" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ props.row?.kodeall3 }}
+                </div>
+              </q-td>
+              <q-td key="rekening" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ props.row?.uraian }}
+                </div>
+              </q-td>
+              <q-td key="pagu" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.totalPagu) }}
+                </div>
+              </q-td>
+              <!-- <q-td key="realisasi" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasiSebelumnya) }}
+                </div>
+              </q-td>
+              <q-td key="realisasix" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasi) }}
+                </div>
+              </q-td> -->
+              <q-td key="totalreal" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.RealisasiSemua) }}
+                </div>
+              </q-td>
+              <q-td key="selisih" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.selisih) }}
+                </div>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </template>
+      <template v-if="store.reqlevels === '6' && !store.loading">
+        <q-table
+          class="my-sticky-table"
+          :rows="store.items"
+          :columns="columns"
+          row-key="name"
+          wrap-cells
+          :loading="store.loading"
+          :rows-per-page-options="[0]"
+          hide-bottom
+          :rows-number="[0]"
+        >
+          <template #body="props">
+            <q-tr>
+              <q-td key="kode" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ props.row?.kodeall3 }}
+                </div>
+              </q-td>
+              <q-td key="rekening" :props="props" class="text-left">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ props.row?.uraian }}
+                </div>
+              </q-td>
+              <q-td key="pagu" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.totalPagu) }}
+                </div>
+              </q-td>
+              <!-- <q-td key="realisasi" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasiSebelumnya) }}
+                </div>
+              </q-td>
+              <q-td key="realisasix" :props="props" class="text-right">
+                <div>
+                  {{ formattanpaRp(props.row?.totalRealisasi) }}
+                </div>
+              </q-td> -->
+              <q-td key="totalreal" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
+                  {{ formattanpaRp(props.row?.RealisasiSemua) }}
+                </div>
+              </q-td>
+              <q-td key="selisih" :props="props" class="text-right">
+                <div :class="props?.row?.kodeall3.length <= 6 ? 'text-bold' : '' ">
                   {{ formattanpaRp(props.row?.selisih) }}
                 </div>
               </q-td>
@@ -168,54 +380,6 @@ const tables = [
 ]
 // eslint-disable-next-line no-unused-vars
 const columns = ref(tables)
-
-// const jenis = [
-//   {
-//     label: 'Kode Rekening',
-//     name: 'kode',
-//     field: row => [row.kodeall3],
-//     align: 'center'
-//   },
-//   {
-//     label: 'Uraian',
-//     name: 'rekening',
-//     field: row => [row.uraian],
-//     align: 'center',
-//     headerStyle: 'width: 200px;'
-//   },
-//   {
-//     label: 'Pagu Anggaran (Rp.)',
-//     name: 'pagu',
-//     field: row => [row.totalPagu],
-//     align: 'center'
-//   },
-//   // {
-//   //   label: 'Reaslisasi Sebelumnya (Rp.)',
-//   //   name: 'realisasi',
-//   //   field: row => [row.totalRealisasiSebelumnya],
-//   //   align: 'center'
-//   // },
-//   // {
-//   //   label: 'Reaslisasi Sekarang (Rp.)',
-//   //   name: 'realisasix',
-//   //   field: row => [row.totalRealisasi],
-//   //   align: 'center'
-//   // },
-//   {
-//     label: 'Total Realisasi (Rp.)',
-//     name: 'totalreal',
-//     field: row => [row.RealisasiSemua],
-//     align: 'center'
-//   },
-//   {
-//     label: 'Sisa Pagu (Rp.)',
-//     name: 'selisih',
-//     field: row => [row.selisih],
-//     align: 'center'
-//   }
-// ]
-// // eslint-disable-next-line no-unused-vars
-// const columnsjenis = ref(jenis)
 
 </script>
 <style lang="scss">

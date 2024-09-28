@@ -299,7 +299,7 @@ export const useLaporanBkuPengeluaranStore = defineStore(
             })
             : 0
 
-          console.log('husye', spjnyaPanjar)
+          // console.log('husye', spjnyaPanjar)
           const obj = {
             tgl: el[i].tglspjpanjar,
             notrans: el[i].nospjpanjar,

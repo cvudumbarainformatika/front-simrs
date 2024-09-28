@@ -78,7 +78,7 @@ function setSampai (val) {
 }
 function ambilData () {
   // store.hitungharidalamBulan();
-  store.params.levels = berdasar.value
+  store.reqlevels = berdasar.value
   store.getDataRealisasi().then(() => {
     store.emptyForm()
   })
