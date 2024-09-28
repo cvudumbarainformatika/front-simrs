@@ -18,9 +18,14 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
       kredit: 0
     },
     datasaldo: [],
-    akuns: []
+    akuns: [],
+    saldo: []
   }),
   actions: {
+    setSearch (val) {
+      this.reqs.q = val
+      this.getRekening()
+    },
     emptyForm () {
       this.form.kodepsap13 = ''
       this.form.uraianpsap13 = ''
@@ -34,6 +39,9 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
     refreshTable () {
       this.getDataTable()
     },
+    setFormSaldo (key, val) {
+      this.form[key] = val
+    },
     getSaldoAwal () {
       this.loading = true
       const params = { params: this.reqs }
@@ -43,11 +51,20 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
           if (resp.status === 200) {
             this.datasaldo = resp.data
             // console.log('KodeRekening', this.datasaldo)
+            this.nilaiSaldo()
             this.loading = false
             resolve(resp.data)
           }
         }).catch(() => { this.loading = false })
       })
+    },
+    nilaiSaldo () {
+      const arr = {
+        debit: (this.datasaldo.length ? this.datasaldo.map((x) => parseFloat(x.debit)) : []).reduce((a, b) => a + b, 0),
+        kredit: (this.datasaldo.length ? this.datasaldo.map((x) => parseFloat(x.kredit)) : []).reduce((a, b) => a + b, 0)
+      }
+      this.saldo = arr
+      console.log('nilai Saldo', this.saldo)
     },
     getRekening () {
       this.loading = true

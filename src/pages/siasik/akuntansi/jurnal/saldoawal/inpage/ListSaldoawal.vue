@@ -4,7 +4,6 @@
       <q-table
         class="my-sticky-table"
         wrap-cells
-        title="Data Saldo Awal"
         :rows="store.datasaldo"
         :columns="columns"
         row-key="name"
@@ -22,12 +21,55 @@
               {{ props.row?.uraianpsap13 }}
             </q-td>
             <q-td key="debit" :props="props">
-              {{ parseFloat(props.row?.debit) }}
+              {{ formattanpaRp(props.row?.debit) }}
             </q-td>
             <q-td key="kredit" :props="props">
-              {{ parseFloat(props.row?.kredit) }}
+              {{ formattanpaRp(props.row?.kredit) }}
             </q-td>
           </q-tr>
+        </template>
+        <template #bottom-row>
+          <q-tr class="full-width text-bold">
+            <q-td colspan="2" class="text-center">
+              SUBTOTAL
+            </q-td>
+            <q-td class="text-right text-bold">
+              {{ formattanpaRp(store?.saldo?.debit) }}
+            </q-td>
+            <q-td class="text-right text-bold">
+              {{ formattanpaRp(store?.saldo?.kredit) }}
+            </q-td>
+          </q-tr>
+        </template>
+        <template #bottom>
+          <div class="items-center">
+            <app-btn
+              class="bg-warning text-black text-bold"
+              label="Verif Saldo"
+              :disable="store.loading"
+              :loading="store.loading"
+              type="submit"
+              @click="()=>{
+                if (store?.saldo?.debit != store?.saldo?.kredit) {
+                  $q.notify({
+                    color: 'red-5',
+                    textColor: 'white',
+                    icon: 'icon-mat-warning',
+                    message: 'Maaf Nilai Saldo Tidak Sama',
+                    position: 'center'
+                  })
+                } else{
+                  $q.notify({
+                    color: 'green-5',
+                    textColor: 'white',
+                    icon: 'icon-mat-done_all',
+                    message: 'Terimakasih, Nilai Saldo Sudah Sama',
+                    position: 'center'
+                  })
+                }
+              }"
+            />
+          </div>
         </template>
       </q-table>
     </div>
@@ -36,8 +78,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { saldoawalJurnal } from 'src/stores/siasik/akuntansi/jurnal/saldoawal'
+import { formattanpaRp } from 'src/modules/formatter'
+import { useQuasar } from 'quasar'
 
 const store = saldoawalJurnal()
+const $q = useQuasar()
 onMounted(() => {
   store.getSaldoAwal()
   // store.getDataTable()
@@ -49,18 +94,18 @@ const listSaldo = [
     field: 'kodepsap13'
   },
   {
-    label: 'Uraian',
+    label: 'Uraian Rekening',
     name: 'uraian',
     field: 'uraianpsap13',
     align: 'left'
   },
   {
-    label: 'Debit',
+    label: 'Debit (Rp.)',
     name: 'debit',
     field: 'debit'
   },
   {
-    label: 'Kredit',
+    label: 'Kredit (Rp.)',
     name: 'kredit',
     field: 'kredit'
   }
