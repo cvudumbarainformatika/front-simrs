@@ -1,63 +1,64 @@
 <template>
   <div
-    class="full-height q-pa-sm"
+    class="column full-height q-ma-sm"
+    style="overflow: hidden;"
   >
-    <div class="row q-col-gutter-x-xs full-height">
-      <div class="col-6 full-height">
-        <FormAnamnesis
-          :key="props.pasien"
-          :pasien="props.pasien"
-          tooltip="History Pasien (Shift + H)"
-          @open-history="seamless = !seamless"
-        />
+    <div class="column">
+      <div class="col-auto bg-grey-4 shadow-2 text-grey-8 ">
+        <q-tabs
+          v-model="store.tab"
+          no-caps
+          inline-label
+          rounded
+          class=" bg-grey-4 shadow-2 text-grey-8"
+          align="left"
+          dense
+          active-color="yellow"
+          active-bg-color="primary"
+          @update:model-value="cekPanel"
+        >
+          <q-tab
+            v-for="(item, i) in store.tabs"
+            :key="i"
+            :name="item.page"
+            :label="item.name"
+            style="border-top-left-radius: 100px;border-bottom-right-radius: 100px;"
+          />
+        </q-tabs>
       </div>
-      <div class="col-6 full-height">
-        <ListAnamnesis
-          :key="props.pasien"
-          :pasien="props.pasien"
-          :loadingaja="loadingaja"
-        />
+      <div class="col-grow bg-yellow">
+        <q-tab-panels
+          v-model="store.tab"
+          animated
+          class="full-height"
+        >
+          <q-tab-panel
+            v-for="(panel, n) in store.tabs"
+            :key="n"
+            :name="panel.page"
+            class="full-height q-pa-none"
+          >
+            <component
+              :is="cekPanel()"
+              :key="props.pasien"
+              :pasien="props.pasien"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
       </div>
     </div>
-
-    <!-- dialog -->
-
-    <!-- <HistoryAnamnesis
-      :key="props.pasien"
-      :seamless="seamless"
-      :pasien="props.pasien"
-      @close="seamless =!seamless"
-    /> -->
-    <app-drawer-right-new
-      :key="props.pasien"
-      :seamless="seamless"
-      :pasien="props.pasien"
-      @click-btn="clickslideRight"
-    >
-      <template #content>
-        <HistoryKanan
-          :key="pasien"
-          :pasien="pasien"
-          title="HISTORY ANAMNESSIS LALU"
-        />
-      </template>
-    </app-drawer-right-new>
   </div>
 </template>
 
 <script setup>
-// import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
-import ListAnamnesis from './comanamnesis/ListAnamnesis.vue'
-import FormAnamnesis from './comanamnesis/FormAnamnesis.vue'
-// eslint-disable-next-line no-unused-vars
-import HistoryAnamnesis from './comanamnesis/HistoryAnamnesis.vue'
-import HistoryKanan from './comanamnesis/HistoryKanan.vue'
-import { onMounted, onUnmounted, ref } from 'vue'
 
-// const store = useAnamnesis()
-const seamless = ref(false)
-// const text = ref('')
+import { defineAsyncComponent, onMounted } from 'vue'
+import { useAnamnesis } from 'src/stores/simrs/igd/anamnesis'
+import { findWithAttr } from 'src/modules/utils'
+import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
 
+const store = useAnamnesis()
+const storepenilaian = usePenilaianAnamnesisIgd()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -68,24 +69,22 @@ const props = defineProps({
     default: false
   }
 })
+
+const comp = [
+  { nama: 'AnamnesisKeperawatan', page: defineAsyncComponent(() => import('./AnamnesisKeperawatanPage.vue')) },
+  { nama: 'AnamnesisKebidanan', page: defineAsyncComponent(() => import('./AnamnesisKebidananPage.vue')) },
+  { nama: 'Penilaian', page: defineAsyncComponent(() => import('./PenilaianPage.vue')) }
+]
+
+const cekPanel = () => {
+  const val = store.tab
+  const ganti = val.replace(/ /g, '')
+  const arr = findWithAttr(comp, 'nama', ganti)
+  return arr >= 0 ? comp[arr].page : ''
+}
+
 onMounted(() => {
-  // console.log(text.value)
-  document.addEventListener('keypress', handleKeypress, false)
+  storepenilaian.masterpenilaian()
+  storepenilaian.usia = props.pasien.usia
 })
-
-onUnmounted(() => {
-  document.removeEventListener('keypress', handleKeypress, true)
-})
-
-const handleKeypress = (evt) => {
-  if (evt.key === 'H' && evt.shiftKey) {
-    seamless.value = !seamless.value
-  }
-}
-
-const clickslideRight = () => {
-  // console.log('ok')
-  seamless.value = !seamless.value
-}
-
 </script>

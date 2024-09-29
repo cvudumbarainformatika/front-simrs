@@ -9,7 +9,7 @@
           v-model="store.tab"
           no-caps
           inline-label
-          class="bg-primary text-white shadow-2"
+          class="bg-primary text-white"
           align="left"
           dense
           active-color="yellow"
@@ -36,10 +36,6 @@
             :name="panel.page"
             class="full-height q-pa-none"
           >
-            <!-- <q-tab-panel
-            name="Laborat"
-            class="full-height q-pa-none"
-          > -->
             <component
               :is="cekPanel()"
               :key="props.pasien"
