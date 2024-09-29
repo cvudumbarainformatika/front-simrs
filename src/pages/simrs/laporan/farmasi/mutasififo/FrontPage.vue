@@ -19,6 +19,16 @@
         <div class="col-grow">
           <div class="row q-col-gutter-sm q-my-sm">
             <div class="col-2">
+              <app-input
+                v-model="store.params.q"
+                label="Cari obat"
+                outlined
+                valid
+                :loading="store.loading"
+                @keyup.enter="store.setSearch"
+              />
+            </div>
+            <div class="col-2">
               <app-autocomplete
                 v-model="store.params.jenis"
                 label="Jenis"
@@ -28,6 +38,7 @@
                 outlined
                 :source="store.optionJenis"
                 :loading="store.loading"
+                @update:model-value="setJenis"
               />
             </div>
             <div class="col-2">
@@ -403,6 +414,10 @@ const TableComp = defineAsyncComponent(() => import('./comp/TablePage.vue'))
 function bulan () {
   const bul = store.bulans.find(a => a.value === store.params.bulan)
   return bul?.nama ?? '-'
+}
+function setJenis (val) {
+  // console.log(val)
+  if (store.items.length) store.getInitialData(1)
 }
 const refScroll = ref(null)
 const refTt = ref(null)

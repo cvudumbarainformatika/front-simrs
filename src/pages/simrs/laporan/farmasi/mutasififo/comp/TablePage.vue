@@ -11,6 +11,9 @@
         <th rowspan="2">
           Obat
         </th>
+        <th v-if="store.params.jenis==='rekap'" rowspan="2">
+          Kode Belanja
+        </th>
         <th rowspan="2">
           Keterangan
         </th>
@@ -55,6 +58,13 @@
               type="text"
               width="20px"
               height="14px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='rekap'">
+            <q-skeleton
+              type="text"
+              width="150px"
+              height="25px"
             />
           </td>
           <td>
@@ -172,7 +182,12 @@
         </tr>
       </template>
       <template v-else-if="!store.items.length">
-        <tr>
+        <tr v-if="store.params.jenis==='rekap'">
+          <td colspan="18">
+            <app-no-data />
+          </td>
+        </tr>
+        <tr v-else>
           <td colspan="17">
             <app-no-data />
           </td>
@@ -201,6 +216,9 @@
                   ({{ item?.satuan_k }})
                 </div>
               </div>
+            </td>
+            <td v-if="store.params.jenis==='rekap'" :rowspan="rowspanObat(item)">
+              {{ item?.uraian50 }}
             </td>
             <template v-if="!item?.data?.length">
               <td />
