@@ -1,5 +1,5 @@
 <template>
-  <table style="width: 100vw;">
+  <table style="width: calc(100vw - 80px);">
     <thead class="my-sticky-header-table">
       <tr>
         <th
@@ -10,6 +10,12 @@
         </th>
         <th rowspan="2">
           Obat
+        </th>
+        <th v-if="store.params.jenis==='rekap'" rowspan="2">
+          Kode Belanja
+        </th>
+        <th rowspan="2">
+          Keterangan
         </th>
         <th colspan="3">
           Saldo Awal
@@ -22,9 +28,6 @@
         </th>
         <th colspan="3">
           Saldo Akhir
-        </th>
-        <th rowspan="2">
-          Keterangan
         </th>
       </tr>
       <tr>
@@ -55,6 +58,13 @@
               type="text"
               width="20px"
               height="14px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='rekap'">
+            <q-skeleton
+              type="text"
+              width="150px"
+              height="25px"
             />
           </td>
           <td>
@@ -172,7 +182,12 @@
         </tr>
       </template>
       <template v-else-if="!store.items.length">
-        <tr>
+        <tr v-if="store.params.jenis==='rekap'">
+          <td colspan="18">
+            <app-no-data />
+          </td>
+        </tr>
+        <tr v-else>
           <td colspan="17">
             <app-no-data />
           </td>
@@ -202,6 +217,9 @@
                 </div>
               </div>
             </td>
+            <td v-if="store.params.jenis==='rekap'" :rowspan="rowspanObat(item)">
+              {{ item?.uraian50 }}
+            </td>
             <template v-if="!item?.data?.length">
               <td />
               <td />
@@ -222,6 +240,11 @@
           </tr>
           <template v-if="item?.data?.length">
             <tr v-for="(data) in item?.data" :key="data" :class="n%2===0?'even':'odd'" class="hv">
+              <td>
+                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
+                  {{ data?.ket }}
+                </div>
+              </td>
               <td>
                 <div class="text-right q-mr-xs">
                   {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.jumlah),2)) }}
@@ -281,23 +304,18 @@
               </td>
               <!-- saldo akhir-->
               <td>
-                <div class="text-right q-mr-xs">
+                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.jumlah ?? data?.subtotal?.jumlah),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
+                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.harga),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
+                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub ?? data?.subtotal?.sub),2)) }}
-                </div>
-              </td>
-              <td>
-                <div class="text-right q-mr-xs">
-                  {{ data?.ket }}
                 </div>
               </td>
             </tr>

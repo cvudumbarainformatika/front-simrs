@@ -7,8 +7,12 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
   state: () => ({
     loading: false,
     items: [],
+    kodeakun: [],
     kodekelompok: [],
     kodejenis: [],
+    kodeobjek: [],
+    koderinciobjek: [],
+    kodesubrinciobjek: [],
     meta: {},
     params: {
       q: '',
@@ -18,14 +22,14 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       tahun: date.formatDate(Date.now(), 'YYYY'),
       bidang: '',
       kegiatan: '',
-      kodebidang: null,
-      levels: null
+      kodebidang: null
     },
     display: {
       dari: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       sampai: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
+    reqlevels: null,
     pendapatans: [],
     nilaipends: [],
     realisasipends: [],
@@ -44,7 +48,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       { nama: 'Akun', value: '1' },
       { nama: 'Kelompok', value: '2' },
       { nama: 'Jenis', value: '3' },
-      { nama: 'Objek', value: '4' }
+      { nama: 'Objek', value: '4' },
+      { nama: 'Rincian Objek', value: '5' },
+      { nama: 'SubRincian Objek', value: '6' }
     ]
   }),
   actions: {
@@ -138,8 +144,12 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           if (resp.status === 200) {
             // RESET HASIL GET
             this.items = []
+            this.kodeakun = []
             this.kodekelompok = []
             this.kodejenis = []
+            this.kodeobjek = []
+            this.koderinciobjek = []
+            this.kodesubrinciobjek = []
             this.pembiayaans = []
             // ---------//
             this.realisasipends = resp.data?.realisasipendapatan
@@ -1005,7 +1015,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         a < b ? -1 : a > b ? 1 : 0
       )
 
-      this.kodeakun.push(kode1, ...kode2)
+      this.kodeakun.push(kode1)
       console.log('kelompok', this.kodeakun)
       const sortkode1 = this.kodeakun.sort(({ kodeall3: a }, { kodeall3: b }) =>
         a < b ? -1 : a > b ? 1 : 0
@@ -1023,7 +1033,25 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         a < b ? -1 : a > b ? 1 : 0
       )
 
-      return sort && sortkode1 && sortkode2 && sortkode3
+      this.kodeobjek.push(kode1, ...kode2, ...kode3, ...kode4)
+      console.log('jenis', this.kodeobjek)
+      const sortkode4 = this.kodeobjek.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+
+      this.koderinciobjek.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
+      console.log('jenis', this.koderinciobjek)
+      const sortkode5 = this.koderinciobjek.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+
+      // this.kodesubrinciobjek.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
+      // console.log('jenis', this.kodesubrinciobjek)
+      // const sortkode6 = this.kodesubrinciobjek.sort(({ kodeall3: a }, { kodeall3: b }) =>
+      //   a < b ? -1 : a > b ? 1 : 0
+      // )
+
+      return sort && sortkode1 && sortkode2 && sortkode3 && sortkode4 && sortkode5
     },
 
     dataUnik(x) {

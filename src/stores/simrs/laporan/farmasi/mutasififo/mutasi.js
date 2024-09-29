@@ -13,6 +13,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     items: [],
     meta: {},
     params: {
+      q: '',
       per_page: 10,
       page: 1,
       bulan: date.formatDate(Date.now(), 'MM'),
@@ -61,6 +62,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     setSearch (payload) {
       console.log(this.params.q)
       // this.setParams('q', payload)
+      this.items = []
       this.setParams('page', 1)
       this.getDataTable()
     },
