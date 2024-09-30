@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 
 export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
   state: () => ({
+
     barthels: [],
     formBarthel: null,
 
@@ -49,8 +50,8 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
     getGroupArray (arr) {
       this.barthels = arr?.find(item => item.kode === 'barthel') ?? null
       this.nortons = arr?.find(item => item.kode === 'norton') ?? null
-      this.humptys = arr?.find(item => item.kode === 'humpty-dumpty') ?? null
-      this.morses = arr?.find(item => item.kode === 'morse-fall') ?? null
+      this.humptys = arr?.find(item => item.kode === 'humpty_dumpty') ?? null
+      this.morses = arr?.find(item => item.kode === 'morse_fall') ?? null
       this.ontarios = arr?.find(item => item.kode === 'ontario') ?? null
     },
 
@@ -76,6 +77,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
         const el = this.barthels.form[i]
         formBarthel[el.kode] = el.categories[el.categories.length - 1]
       }
+      // formBarthel['kode'] = usia
       this.formBarthel = formBarthel
 
       // norton
@@ -155,7 +157,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       // console.log('formBarthel', this.formBarthel)
 
       const arr = Object.keys(this.formBarthel).map(key => this.formBarthel[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 0 && totalSkor <= 4) {
         ket = 'Ketergantungan Total'
@@ -194,7 +196,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formNorton.skorNorton = result
       const arr = Object.keys(this.formNorton).map(key => this.formNorton[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 14) {
         ket = 'Risiko kecil'
@@ -224,7 +226,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formHumpty.skorHumpty = result
       const arr = Object.keys(this.formHumpty).map(key => this.formHumpty[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 6 && totalSkor <= 11) {
         ket = 'Risiko rendah'
@@ -252,7 +254,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formMorse.skorMorse = result
       const arr = Object.keys(this.formMorse).map(key => this.formMorse[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 45) {
         ket = 'Risiko tinggi'
@@ -286,8 +288,8 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       // const arr = Object.keys(this.formOntario).map(key => this.formOntario[key])
       const arr = Object.keys(this.formOntario)
       const elim = ['transfertk', 'mobilitas']
-      const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b.skor, 0)
-      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b.skor, 0)
+      const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
+      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
       // console.log('arr ontario', skor1)
       // console.log('arr ontario 2', skor2)
       // console.log('arr', arr)
@@ -319,6 +321,20 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       }
       this.formOntario.skorOntario = result
       // console.log('result ontario', this.formOntario)
+    },
+
+    saveData () {
+      console.groupCollapsed('[setDataForm]')
+      const form = {
+        barthel: this.formBarthel ?? null,
+        norton: this.formNorton ?? null,
+        humpty_dumpty: this.formHumpty ?? null,
+        morse_fall: this.formMorse ?? null,
+        ontario: this.formOntario ?? null
+      }
+
+      console.log('form: ', form)
+      console.groupEnd()
     }
 
   }

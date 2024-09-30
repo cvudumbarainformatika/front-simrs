@@ -1,5 +1,5 @@
 <template>
-  <q-bar :class="`${bgColor} ${textColor}`">
+  <q-bar :class="`${bgColor} ${textColor}`" @mouseover="emits('hover')" @mouseleave="emits('leave')">
     <div class="f-12 text-weight-bold">
       {{ title }}
     </div>
@@ -61,5 +61,5 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['full', 'min'])
+const emits = defineEmits(['full', 'min', 'hover', 'leave'])
 </script>

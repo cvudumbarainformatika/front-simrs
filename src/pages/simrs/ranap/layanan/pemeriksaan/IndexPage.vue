@@ -12,7 +12,7 @@
           align="left"
           class=" bg-transparent text-grey-8"
           active-color="white"
-          active-bg-color="primary"
+          active-bg-color="dark"
         >
           <q-tab v-for="tb in tabs" :key="tb.name" :ripple="true" :name="tb?.name" content-class="tab-classes">
             <template #default>

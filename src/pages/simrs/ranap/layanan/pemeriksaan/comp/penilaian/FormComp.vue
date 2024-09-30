@@ -1,6 +1,7 @@
 <template>
   <div class="row q-col-gutter-xs full-width">
-    <q-card flat bordered class="col-12">
+    <!-- barthel -->
+    <q-card v-if="store?.barthels?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.barthels?.desc }}</strong>
       </q-card-section>
@@ -28,7 +29,7 @@
     </q-card>
 
     <!-- Resiko Ulkus Dekubitus Skala Norton -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="store?.nortons?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.nortons?.desc }}</strong>
       </q-card-section>
@@ -131,7 +132,7 @@
     </q-card> -->
 
     <!-- humpty untuk usia < 14 tahun -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
@@ -261,7 +262,7 @@
     </q-card> -->
 
     <!-- Resiko Jatuh Morse Fall Scale (14 - 59 tahun) -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.morses?.desc }}</strong>
       </q-card-section>
@@ -281,18 +282,18 @@
           </div>
           <q-separator class="q-my-sm" />
         </div>
-        <div v-if="store.formMorse.skorMorse" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
-          <div>NILAI SKOR : {{ store.formMorse.skorMorse?.skor }} </div>
+        <div v-if="store.formMorse?.skorMorse" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
+          <div>NILAI SKOR : {{ store.formMorse?.skorMorse?.skor }} </div>
           <div>KET : {{ store.formMorse.skorMorse?.label }}</div>
         </div>
-        <div v-if="store.formMorse.skorMorse.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
+        <div v-if="store.formMorse?.skorMorse?.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
           PASIEN DIHARAP PAKAI STICKER KUNING
         </div>
       </q-card-section>
     </q-card>
 
     <!-- Resiko Jatuh Ontario / Sidney Scoring (geriatric dg usia >=60 tahun) -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="store?.ontarios?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.ontarios?.desc }}</strong>
       </q-card-section>
@@ -343,10 +344,10 @@
 
       <div class="full-width flex justify-end q-px-md q-pb-md">
         <div v-if="store.formOntario?.skorOntario" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
-          <div>NILAI SKOR : {{ store.formOntario.skorOntario?.skor }} </div>
-          <div>KET : {{ store.formOntario.skorOntario?.label }}</div>
+          <div>NILAI SKOR : {{ store.formOntario?.skorOntario?.skor }} </div>
+          <div>KET : {{ store.formOntario?.skorOntario?.label }}</div>
         </div>
-        <div v-if="store.formOntario?.skorOntario.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-9 q-mt-xs">
+        <div v-if="store.formOntario?.skorOntario?.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-9 q-mt-xs">
           PASIEN DIHARAP PAKAI STICKER KUNING
         </div>
       </div>
@@ -356,19 +357,33 @@
 
 <script setup>
 import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian.js'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  kasus: {
+    type: Object,
+    default: null
   }
+})
+
+const jnsKasusKep = computed(() => {
+  if (props.kasus) {
+    return props.kasus?.gruping
+  }
+  return null
 })
 
 onMounted(async () => {
   const ageInMonths = store.calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
 
   console.log('usia', ageInMonths / 12)
+  console.log('store', store.barthels)
+  console.log('kasus', jnsKasusKep.value)
+
   // console.log('pasien', props?.pasien)
   await store.getMaster()
     .then(() => {

@@ -5,7 +5,7 @@
         <div class=" full-height" :class="full ? 'col-12' : 'col-8'">
           <q-card flat bordered class="column fit" style="overflow: hidden;">
             <div class="col-auto">
-              <BarComp title="Form Pemeriksaan Umum" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
+              <BarComp title="Form Pemeriksaan Umum & Fisik (Keperawatan)" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
             </div>
             <q-card-section class="col full-height scroll">
               <q-form ref="myForm" class="">
@@ -19,7 +19,7 @@
         <div v-if="!full" class="full-height" :class="full ? 'col-0' : 'col-4'">
           <q-card flat bordered class="fit column bg-transparent">
             <div class="col-auto">
-              <BarComp title="List Pemeriksaan Umum" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+              <BarComp title="Informasi Pemeriksaan Umum & Fisik" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
             </div>
             <div class="col full-height scroll">
               <ListPemeriksaanUmum :pasien="pasien" :kasus="kasus" />
@@ -35,6 +35,7 @@
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 import { defineAsyncComponent, ref } from 'vue'
 import { scroll } from 'quasar'
+import { notifErrVue } from 'src/modules/utils'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
@@ -44,7 +45,8 @@ const ListPemeriksaanUmum = defineAsyncComponent(() => import('./pemeriksaanUmum
 // eslint-disable-next-line no-unused-vars
 const store = usePemeriksaanUmumRanapStore()
 
-defineProps({
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
   pasien: {
     type: Object,
     default: () => null
@@ -69,12 +71,13 @@ const validate = () => {
   myForm.value.validate().then(success => {
     if (success) {
       // yay, models are correct
-      // console.log('success')
-      // store.saveForm(props?.kasus, props.pasien)
+      // console.log('success', store.formKebidanan)
+      store.saveForm(props?.kasus, props.pasien)
     }
     else {
       // oh no, user has filled in
       // at least one invalid value
+      notifErrVue('Mohon Lengkapi Data Terlebih Dahulu')
       console.log('failed')
       formRef.value?.refKeadaanUmum.focus()
       scrollToElement(formRef.value?.refKeadaanUmum.$el)

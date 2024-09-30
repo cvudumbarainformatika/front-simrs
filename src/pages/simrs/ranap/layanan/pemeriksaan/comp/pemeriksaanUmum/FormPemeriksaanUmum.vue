@@ -18,6 +18,7 @@
           input-class="ellipsis"
           fill-input
           :rules="[val => !!val || 'Harap diisi']"
+          :lazy-rules="true"
           hide-bottom-space
         />
         <app-input-simrs
@@ -76,6 +77,36 @@
             if (val > 1) store.form.suhu=_removedZeros
           }"
         />
+        <div v-if="kasus?.gruping==='4.4'" class="col-12 row q-col-gutter-xs">
+          <app-input-simrs
+            label="Lila (cm)" class="col-2" v-model="store.formPediatrik.lila" :valid="{ number: true }" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              const _removedZeros = val.replace(/^0+/, '')
+              if (val > 1) store.formPediatrik.lila=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="Lida (cm)" class="col-2" v-model="store.formPediatrik.lida" :valid="{ number: true }" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              const _removedZeros = val.replace(/^0+/, '')
+              if (val > 1) store.formPediatrik.lida=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="Lirut (cm)" class="col-2" v-model="store.formPediatrik.lirut" :valid="{ number: true }" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              const _removedZeros = val.replace(/^0+/, '')
+              if (val > 1) store.formPediatrik.lirut=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="Ling. Leng. atas (cm)" class="col-3" v-model="store.formPediatrik.lilengtas" :valid="{ number: true }" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              const _removedZeros = val.replace(/^0+/, '')
+              if (val > 1) store.formPediatrik.lilengtas=_removedZeros
+            }"
+          />
+        </div>
 
         <q-select
           v-model="store.form.tkKesadaran"
@@ -98,7 +129,7 @@
             <div class="f-12 ">
               SKOR
             </div>
-            <div class="f-18 text-bold">
+            <div class="text-h4 text-bold">
               0
             </div>
           </q-card-section>
@@ -182,8 +213,8 @@
               <div class="flex q-gutter-sm">
                 <q-radio dense v-for="n in item.values" :key="n" v-model="store.form.edukasi[item?.kode]" :val="n" :label="n?.value" />
               </div>
-              <div v-if="item?.kode==='butuhEdukasi' && store.form.edukasi[item?.kode]?.value==='Ya'" class="q-mt-sm">
-                <app-input-simrs label="Jenis Edukasi yg Dibutuhkan" v-model="store.form.edukasi[item?.kode].ket" class="full-width" />
+              <div v-if="item?.kode==='butuhEdukasi'" class="q-mt-sm">
+                <app-input-simrs v-if="store.form.edukasi.butuhEdukasi?.value==='Ya'" label="Jenis Edukasi yg Dibutuhkan" v-model="store.form.ketEdukasi" class="full-width" />
               </div>
             </q-item-section>
           </q-item>
@@ -263,8 +294,8 @@
           dense
           standout="bg-yellow-3 text-black"
           outlined
-          label="Nyeri"
-          :options="store.normals"
+          label="Lochea"
+          :options="store.locheas"
           emit-value
           map-options
           input-class="ellipsis"
@@ -277,7 +308,7 @@
           dense
           standout="bg-yellow-3 text-black"
           outlined
-          label="Penyuluhan"
+          label="Protein Urin"
           :options="store.proteinUrins"
           emit-value
           map-options
@@ -287,31 +318,36 @@
           class="col-4"
         />
       </q-card-section>
-      <q-card-section class="q-px-sm q-py-none">
-        <strong>Anatomi</strong>
-      </q-card-section>
-      <q-separator class="q-my-xs" />
-      <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none">
-        <autocomplete-input v-model="store.formKebidanan.mata" :options="store.matas" label="Mata" class="col-4" @set-model="(val)=> store.formKebidanan.mata=val" />
-        <autocomplete-input v-model="store.formKebidanan.leher" :options="store.lehers" label="Leher" class="col-4" @set-model="(val)=> store.formKebidanan.leher=val" />
-        <autocomplete-input v-model="store.formKebidanan.dada" :options="store.dadas" label="Dada" class="col-4" @set-model="(val)=> store.formKebidanan.dada=val" />
-      </q-card-section>
-      <q-card-section class="q-px-sm q-py-none q-pt-sm">
-        <em>Payudara / Puting Susu :</em>
-      </q-card-section>
-      <q-separator class="q-my-xs" />
-      <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none">
-        <app-input-simrs label="Menonjol" class="col-4" v-model="store.formKebidanan.putingMenonjol" />
-        <autocomplete-input v-model="store.formKebidanan.hiperpigmentasi" :options="store.yaTidaks" label="Hiperpigmentasi Areola" class="col-4" @set-model="(val)=> store.formKebidanan.hiperpigmentasi=val" />
-        <app-input-simrs label="Kolostrum" class="col-4" v-model="store.formKebidanan.kolostrum" />
-        <autocomplete-input v-model="store.formKebidanan.konsistensiPayudara" :options="store.konsistensis" label="Konsistensi Payudara" class="col-4" @set-model="(val)=> store.formKebidanan.konsistensiPayudara=val" />
 
-        <app-input-simrs label="Nyeri Tekan" class="col-4" v-model="store.formKebidanan.nyeriTekan" />
-        <select-input v-model="store.formKebidanan.benjolan" :options="store.adaTidaks" label="Benjolan Abnormal" class="col-4" />
-        <autocomplete-input v-model="store.formKebidanan.abdomen" :options="store.abdomens" label="Abdomen" class="col-4" @set-model="(val)=> store.formKebidanan.abdomen=val" />
-        <autocomplete-input v-model="store.formKebidanan.anoGenital" :options="store.anogenitals" label="Anogenital" class="col-4" @set-model="(val)=> store.formKebidanan.anoGenital=val" />
-        <autocomplete-input v-model="store.formKebidanan.ekstremitasTungkai" :options="store.ekstremitas" label="Ekstremitas Tungkai" class="col-4" @set-model="(val)=> store.formKebidanan.ekstremitasTungkai=val" />
-      </q-card-section>
+      <!-- <q-separator class="q-my-xs" /> -->
+      <q-card bordered class="q-py-sm">
+        <q-card-section class="q-px-sm q-py-xs">
+          <strong>Anatomi (Wajib diisi)</strong>
+        </q-card-section>
+        <q-separator class="q-my-sm" />
+        <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none">
+          <autocomplete-input v-model="store.formKebidanan.mata" :options="store.matas" label="Mata" class="col-4" @set-model="(val)=> store.formKebidanan.mata=val" :valid="{required: false}" />
+          <autocomplete-input v-model="store.formKebidanan.leher" :options="store.lehers" label="Leher" class="col-4" @set-model="(val)=> store.formKebidanan.leher=val" :valid="{required: false}" />
+          <autocomplete-input v-model="store.formKebidanan.dada" :options="store.dadas" label="Dada" class="col-4" @set-model="(val)=> store.formKebidanan.dada=val" :valid="{required: false}" />
+        </q-card-section>
+        <q-card-section class="q-px-sm q-py-none q-pt-sm">
+          <em><strong>Payudara / Puting Susu :</strong></em>
+        </q-card-section>
+        <q-separator class="q-my-xs" />
+        <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none">
+          <app-input-simrs label="Menonjol" class="col-4" v-model="store.formKebidanan.putingMenonjol" :valid="{required: false}" :lazy-rules="false" />
+          <autocomplete-input v-model="store.formKebidanan.hiperpigmentasi" :options="store.yaTidaks" label="Hiperpigmentasi Areola" class="col-4" @set-model="(val)=> store.formKebidanan.hiperpigmentasi=val" :valid="{required: false}" />
+          <app-input-simrs label="Kolostrum" class="col-4" v-model="store.formKebidanan.kolostrum" :valid="{required: false}" :lazy-rules="false" />
+          <autocomplete-input v-model="store.formKebidanan.konsistensiPayudara" :options="store.konsistensis" label="Konsistensi Payudara" class="col-4" @set-model="(val)=> store.formKebidanan.konsistensiPayudara=val" :valid="{required: false}" />
+
+          <app-input-simrs label="Nyeri Tekan" class="col-4" v-model="store.formKebidanan.nyeriTekan" :valid="{required: false}" :lazy-rules="false" />
+          <select-input v-model="store.formKebidanan.benjolan" :options="store.adaTidaks" label="Benjolan Abnormal" class="col-4" :valid="{required: false}" />
+          <autocomplete-input v-model="store.formKebidanan.abdomen" :options="store.abdomens" label="Abdomen" class="col-4" @set-model="(val)=> store.formKebidanan.abdomen=val" :valid="{required: false}" />
+          <autocomplete-input v-model="store.formKebidanan.anoGenital" :options="store.anogenitals" label="Anogenital" class="col-4" @set-model="(val)=> store.formKebidanan.anoGenital=val" :valid="{required: false}" />
+          <autocomplete-input v-model="store.formKebidanan.ekstremitasTungkai" :options="store.ekstremitas" label="Ekstremitas Tungkai" class="col-4" @set-model="(val)=> store.formKebidanan.ekstremitasTungkai=val" :valid="{required: false}" />
+        </q-card-section>
+      </q-card>
+
       <q-card-section class="q-px-sm q-py-none q-pt-sm">
         <strong>Pemeriksaan Khusus</strong>
       </q-card-section>
@@ -383,6 +419,24 @@
         <select-input v-model="store.formKebidanan.nfsVgnDrjLuka" :options="store.derajats" label="Derajat Luka" class="col-3" />
         <select-input v-model="store.formKebidanan.nfsVgnLukaPost" :options="store.adaTidaks" label="Luka Post Sectio" class="col-3" />
       </q-card-section>
+
+      <q-separator class="q-my-xs" />
+      <q-card-section class="q-px-sm q-py-none q-pt-sm">
+        <strong>Gynecologi</strong>
+      </q-card-section>
+      <q-separator class="q-my-xs" />
+      <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none q-pb-xs">
+        <app-input-simrs label="Palpasi" class="col-8" v-model="store.formKebidanan.gynecologiPalpasi" />
+      </q-card-section>
+      <q-card-section class="q-px-sm q-py-none">
+        <em>Inspekulo</em>
+      </q-card-section>
+      <q-separator class="q-my-xs" />
+      <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none q-pb-md">
+        <app-input-simrs label="Vagina" class="col-4" v-model="store.formKebidanan.gynecologiInsVgn" />
+        <app-input-simrs label="Portio" class="col-4" v-model="store.formKebidanan.gynecologiInsPortio" />
+        <app-input-simrs label="Vagina Toucher" class="col-4" v-model="store.formKebidanan.gynecologiInsVgnToucher" />
+      </q-card-section>
     </q-card>
 
     <!-- start 4.3 -->
@@ -390,14 +444,13 @@
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.3 NEONATAL</strong>
       </q-card-section>
-      <q-card-section class="q-px-sm q-py-none q-pt-sm">
+      <!-- <q-card-section class="q-px-sm q-py-none q-pt-sm">
         <div class="row items-center justify-between">
           <div><strong>APGAR SCORE : {{ store.formNeonatal.apgarScore }}</strong></div>
           <div><em class="text-orange-10">{{ store.formNeonatal.apgarKet }}</em></div>
         </div>
-      </q-card-section>
-      <q-separator class="q-my-xs" />
-      <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none q-pb-md">
+      </q-card-section> -->
+      <!-- <q-card-section class="row q-col-gutter-xs q-px-sm q-py-none q-pb-md">
         <q-select
           dense
           v-model="store.formNeonatal.appearance"
@@ -484,6 +537,36 @@
           class="col-12"
           @update:model-value="store.hitungSkorApgar"
         />
+      </q-card-section> -->
+      <q-card-section class="q-pa-none">
+        <q-list bordered separator>
+          <q-item v-for="item in store.frmApgarScores" :key="item">
+            <q-item-section style="max-width:35%">
+              <q-item-label> - {{ item?.label }}</q-item-label>
+            </q-item-section>
+            <q-item-section>
+              <div class="column">
+                <q-radio
+                  size="xs" v-for="n in item.values" :key="n" v-model="store.formNeonatal.apgarScores[item?.kode]" :val="n" :label="n?.label"
+                  @update:model-value="store.hitungSkorApgar"
+                />
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section style="max-width:25%">
+              <q-item-label class="text-bold f-14">
+                APGAR SCORE : {{ store.formNeonatal.apgarScore }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-bold">
+                {{ store.formNeonatal.apgarKet }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-card-section>
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>ANTOPOMETRI</strong>
@@ -504,7 +587,7 @@
       <q-card-section class="q-px-sm q-py-none">
         <strong>Pengkajian Persistem</strong>
       </q-card-section>
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>1. Sistem Susunan Syaraf Pusat</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -516,7 +599,7 @@
         <autocomplete-input v-model="store.formNeonatal.tngsBayi" :options="store.tngsBayis" label="Tangis Bayi" class="col-4" @set-model="(val)=> store.formNeonatal.tngsBayi=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>2. Sistem Penglihatan</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -528,7 +611,7 @@
         <autocomplete-input v-model="store.formNeonatal.sklera" :options="store.skleras" label="Sklera" class="col-6" @set-model="(val)=> store.formNeonatal.sklera=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>3. Sistem Pendengaran</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -536,7 +619,7 @@
         <autocomplete-input v-model="store.formNeonatal.pendengaran" :options="store.pendengarans" label="Penciuman" class="col-12" @set-model="(val)=> store.formNeonatal.pendengaran=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>4. Sistem Penciuman</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -544,7 +627,7 @@
         <autocomplete-input v-model="store.formNeonatal.penciuman" :options="store.penciumans" label="Penciuman" class="col-12" @set-model="(val)=> store.formNeonatal.penciuman=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>5. Sistem Kardiovaskular</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -555,7 +638,7 @@
         <autocomplete-input v-model="store.formNeonatal.sirkulasi" :options="store.sirkulasis" label="Dennyut Nadi" class="col-3" @set-model="(val)=> store.formNeonatal.sirkulasi=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>6. Sistem Pernapasan</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -569,7 +652,7 @@
         <autocomplete-input v-model="store.formNeonatal.suaraNapas" :options="store.suaraNapas" label="Suara Napas" class="col-4" @set-model="(val)=> store.formNeonatal.suaraNapas=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>7. Sistem Pencernaan</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -591,7 +674,7 @@
         <autocomplete-input v-model="store.formNeonatal.warnaUrine" :options="store.warnaUrines" label="Warna Urin" class="col-6" @set-model="(val)=> store.formNeonatal.warnaUrine=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>9. Sistem Reproduksi</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -600,7 +683,7 @@
         <autocomplete-input v-model="store.formNeonatal.perempuan" :options="store.perempuans" label="Perempuan" class="col-6" @set-model="(val)=> store.formNeonatal.perempuan=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>10. Sistem Integument</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -612,7 +695,7 @@
         <autocomplete-input v-model="store.formNeonatal.kulit" :options="store.kulits" label="Kulit" class="col-4" @set-model="(val)=> store.formNeonatal.kulit=val" />
       </q-card-section>
       <q-separator class="q-my-xs" />
-      <q-card-section class="q-px-sm q-py-none">
+      <q-card-section class="q-px-sm q-py-none text-bold">
         <em>11. Sistem Muskuloskkeletal</em>
       </q-card-section>
       <q-separator class="q-my-xs" />
@@ -621,6 +704,44 @@
         <autocomplete-input v-model="store.formNeonatal.tungkai" :options="store.tungkals" label="Tungkal" class="col-6" @set-model="(val)=> store.formNeonatal.tungkai=val" />
         <autocomplete-input v-model="store.formNeonatal.rekoilTelinga" :options="store.rekoilTelingas" label="Rekoil Telinga" class="col-6" @set-model="(val)=> store.formNeonatal.rekoilTelinga=val" />
         <autocomplete-input v-model="store.formNeonatal.grsTlpkKaki" :options="store.grsTelapakKakis" label="Garis Telapak Kaki" class="col-6" @set-model="(val)=> store.formNeonatal.grsTlpkKaki=val" />
+      </q-card-section>
+    </q-card>
+
+    <!-- start 4.4 -->
+    <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="col-12">
+      <q-card-section class="q-pa-sm bg-grey-4">
+        <strong>Glasgow Coma Scale</strong>
+      </q-card-section>
+      <q-separator />
+      <q-card-section class="q-pa-none">
+        <q-list separator bordered>
+          <q-item v-for="item in store.frmGlasgows" :key="item">
+            <q-item-section style="max-width:15%">
+              <q-item-label> {{ item?.label }}</q-item-label>
+            </q-item-section>
+            <q-item-section>
+              <div class="column q-gutter-sm">
+                <q-radio
+                  size="sm" dense v-for="n in item.values" :key="n" v-model="store.formPediatrik.glasgow[item?.kode]" :val="n" :label="n?.label"
+                  @update:model-value="store.hitungSkorGlasgow"
+                />
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
+              <div class="f-14 text-bold">
+                SKOR : {{ store.formPediatrik.glasgowSkor }}
+              </div>
+            </q-item-section>
+            <q-item-section side>
+              <div class="text-bold text-dark">
+                {{ store.formPediatrik.glasgowKet }}
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-card-section>
     </q-card>
   </div>

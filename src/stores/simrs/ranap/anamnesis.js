@@ -1083,6 +1083,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         formDefault.skreeninggizi = null
         formDefault.keluhannyeri = null
       }
+      // eslint-disable-next-line no-unused-vars
       const req = {
         noreg: pasien?.noreg ?? null,
         norm: pasien?.norm,
@@ -1100,7 +1101,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         id: this.form.id,
         noreg: pasien?.noreg,
         norm: pasien?.norm,
-        kdruang: null,
+        kdruang: pasien?.kdruangan,
         nakes: auth?.user?.pegawai?.kdgroupnakes,
         tgl: date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss'),
         petugas: { nama: auth?.user?.nama }
@@ -1110,12 +1111,13 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       const pengunjung = usePengunjungRanapStore()
       pengunjung.injectDataPasien(pasien?.noreg, pushSementara, 'anamnesis')
 
-      // console.log('form, jenis kasus', req, jnsKasus)
+      console.log('form, jenis kasus', req)
 
       try {
         const resp = await api.post('v1/simrs/ranap/layanan/anamnesis/simpananamnesis', req)
         console.log('resp', resp)
         if (resp.status === 200) {
+          notifSuccess(resp)
           const result = resp?.data?.result
           if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
         }

@@ -9,7 +9,7 @@
             </div>
             <q-card-section class="col full-height scroll">
               <q-form ref="myForm" class="" @submit="onSubmit">
-                <FormComp :pasien="pasien" />
+                <FormComp :pasien="pasien" :kasus="kasus" />
                 <q-separator class="q-my-md" />
                 <q-btn label="Simpan" type="submit" color="primary" />
 
@@ -19,8 +19,13 @@
           </q-card>
         </div>
         <div v-if="!full" class="full-height col-4">
-          <q-card flat bordered class="fit">
-            ooi
+          <q-card flat bordered class="fit column bg-transparent">
+            <div class="col-auto">
+              <BarComp title="Informasi Penilain" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+            </div>
+            <div class="col full-height scroll">
+              ooo
+            </div>
           </q-card>
         </div>
       </div>
@@ -29,6 +34,7 @@
 </template>
 
 <script setup>
+import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
 import { defineAsyncComponent, ref } from 'vue'
 
 const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
@@ -37,15 +43,20 @@ defineProps({
   pasien: {
     type: Object,
     default: () => null
+  },
+  kasus: {
+    type: Object,
+    default: () => null
   }
 })
 
 const full = ref(false)
 const myForm = ref(null)
 
-const onSubmit = () => {
-  console.log('submit')
+const store = usePenilaianRanapStore()
 
+const onSubmit = () => {
+  store.saveData()
   // myForm.value.validate().then((success) => {
   //   if (success) {
   //     myForm.value.reset()

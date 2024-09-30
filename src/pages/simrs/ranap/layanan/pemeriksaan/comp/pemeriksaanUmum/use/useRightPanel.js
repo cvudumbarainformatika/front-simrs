@@ -8,6 +8,21 @@ export default function useRightPanel (pasien) {
   const store = usePemeriksaanUmumRanapStore()
   // const pengunjung = usePengunjungRanapStore()
 
+  const settings = reactive({
+    splitMin: 50,
+    hoverred: false
+  })
+
+  const fields = reactive({
+    igd: [
+      { row: 'beratbadan', label: 'Berat Badan (kg)' },
+      { row: 'tinggibadan', label: 'Tinggi Badan (cm)' },
+      { row: 'tensi', label: 'Tekanan Darah (mmHg)' },
+      { row: 'nadiigd', label: 'Nadi (x/menit)' },
+      { row: 'pernapasanigd', label: 'Pernapasan (x/menit)' }
+    ]
+  })
+
   onMounted(() => {
     // console.log('did mount', pengunjung.pasiens)
     setPasien()
@@ -37,14 +52,14 @@ export default function useRightPanel (pasien) {
       }
     }
     const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
-    console.log('resp', resp)
-    // if (resp.status === 200) {
-    //   store.items = resp.data
-    //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
-    // }
+    console.log('resp right', resp)
+    if (resp.status === 200) {
+      // store.items = resp.data
+      store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+    }
   }
 
   return {
-    store
+    store, settings, fields
   }
 }
