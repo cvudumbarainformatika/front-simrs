@@ -101,24 +101,39 @@
                 Print
               </q-tooltip>
             </q-btn>
-            <!-- <div class="q-ml-sm">
+            <div class="q-ml-sm">
               <download-excel
                 class="btn"
                 :fields="store.fields"
                 :fetch="store.fetch"
                 :before-generate="store.startDownload"
                 :before-finish="store.finishDownload"
-                :name="'Mutasi Obat Bulan ' + bulan() + ' '+ store.params.tahun +'.xls'"
+                :name="'Mutasi Obat Bulan ' + bulan() + ' '+ store.params.tahun +jenis()+'.xls'"
               >
-                <app-btn
-                  color="orange"
-                  label="Download Excel"
+                <q-btn
+                  color="green"
+                  round
+                  size="sm"
                   icon="icon-mat-download"
                   push
                   :loading="store.loadingDownload"
                   :disable="store.loadingDownload"
-                />
+                >
+                  <q-tooltip>Download Excel</q-tooltip>
+                </q-btn>
               </download-excel>
+            </div>
+            <!-- test export langsung -->
+            <!-- <div class="q-ml-sm">
+              <app-btn
+                color="orange"
+                label="Download Excel"
+                icon="icon-mat-download"
+                push
+                :loading="store.loadingDownload"
+                :disable="store.loadingDownload"
+                @click="exportExcel"
+              />
             </div> -->
           </div>
         </div>
@@ -401,6 +416,7 @@
       </div>
     </div>
   </div>
+  <!-- <print v-model="printOpen" :html="isiHtml" /> -->
 </template>
 <script setup>
 import { date } from 'quasar'
@@ -415,6 +431,10 @@ function bulan () {
   const bul = store.bulans.find(a => a.value === store.params.bulan)
   return bul?.nama ?? '-'
 }
+function jenis () {
+  const bul = store.optionJenis.find(a => a.value === store.params.jenis)
+  return ' (' + bul?.nama + ')' ?? '-'
+}
 function setJenis (val) {
   // console.log(val)
   if (store.items.length) store.getInitialData(1)
@@ -425,7 +445,7 @@ function onScroll (pos) {
   const height = refScroll.value.clientHeight - (refTt.value.clientHeight + 30)
   const currPage = store.meta.current_page
   if ((store.meta.current_page < store.meta.last_page) && pos >= height) {
-    store.setPage(currPage + 1)
+    if (!store.loadingNext) store.setPage(currPage + 1)
     // console.log('meta', store.meta)
     console.log('pos', pos, 'height', height, 'scroll client height', refScroll.value.clientHeight, 'tt height', refTt.value.clientHeight)
   }
@@ -433,6 +453,25 @@ function onScroll (pos) {
 }
 // function scrollHandler (observ) {
 // console.log('observ', observ)
+// }
+// const print = defineAsyncComponent(() => import('./print/IndexPage.vue'))
+// const isiHtml = ref(null)
+// const printOpen = ref(false)
+// function exportExcel () {
+//   const htmltable = document.getElementById('printMe')
+//   printOpen.value = true
+//   isiHtml.value = htmltable.outerHTML
+//   // window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html), '_blank')
+
+//   console.log(
+//     'type',
+//     // typeof isiHtml.value,
+//     encodeURIComponent(isiHtml.value),
+//     // 'html',
+//     // isiHtml.value,
+//     'encode',
+//     encodeURIComponent(isiHtml.value)
+//   )
 // }
 const refTop = ref(null)
 const h = ref(0)

@@ -17,33 +17,45 @@
         <th rowspan="2">
           Keterangan
         </th>
-        <th colspan="3">
+        <th :colspan="store.params.jenis==='detail'?'3':'2'">
           Saldo Awal
         </th>
-        <th colspan="4">
+        <th :colspan="store.params.jenis==='detail'?'4':'2'">
           Masuk
         </th>
-        <th colspan="4">
+        <th :colspan="store.params.jenis==='detail'?'4':'2'">
           Keluar
         </th>
-        <th colspan="3">
+        <th :colspan="store.params.jenis==='detail'?'3':'2'">
           Saldo Akhir
         </th>
       </tr>
       <tr>
         <th>Jml</th>
-        <th>Harga</th>
+        <th v-if="store.params.jenis==='detail'">
+          Harga
+        </th>
         <th>Subtotal</th>
-        <th>Tgl Masuk</th>
+        <th v-if="store.params.jenis==='detail'">
+          Tgl Masuk
+        </th>
         <th>Jml</th>
-        <th>Harga</th>
+        <th v-if="store.params.jenis==='detail'">
+          Harga
+        </th>
         <th>Subtotal</th>
-        <th>Tgl Keluar</th>
+        <th v-if="store.params.jenis==='detail'">
+          Tgl Keluar
+        </th>
         <th>Jml</th>
-        <th>Harga</th>
+        <th v-if="store.params.jenis==='detail'">
+          Harga
+        </th>
         <th>Subtotal</th>
         <th>Jml</th>
-        <th>Harga</th>
+        <th v-if="store.params.jenis==='detail'">
+          Harga
+        </th>
         <th>Subtotal</th>
       </tr>
     </thead>
@@ -63,127 +75,127 @@
           <td v-if="store.params.jenis==='rekap'">
             <q-skeleton
               type="text"
-              width="150px"
+              width="60px"
               height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="150px"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
+              height="25px"
+            />
+          </td>
+          <td v-if="store.params.jenis==='detail'">
+            <q-skeleton
+              type="text"
+              width="60px"
               height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
           <td>
             <q-skeleton
               type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
-            />
-          </td>
-          <td>
-            <q-skeleton
-              type="text"
-              width="100px"
-              height="14px"
+              width="60px"
+              height="25px"
             />
           </td>
         </tr>
       </template>
       <template v-else-if="!store.items.length">
         <tr v-if="store.params.jenis==='rekap'">
-          <td colspan="18">
+          <td colspan="12">
             <app-no-data />
           </td>
         </tr>
@@ -221,12 +233,12 @@
               {{ item?.uraian50 }}
             </td>
             <template v-if="!item?.data?.length">
-              <td />
-              <td />
-              <td />
-              <td />
-              <td />
-              <td />
+              <td v-if="store.params.jenis==='detail'" />
+              <td v-if="store.params.jenis==='detail'" />
+              <td v-if="store.params.jenis==='detail'" />
+              <td v-if="store.params.jenis==='detail'" />
+              <td v-if="store.params.jenis==='detail'" />
+              <td v-if="store.params.jenis==='detail'" />
               <td />
               <td />
               <td />
@@ -241,80 +253,80 @@
           <template v-if="item?.data?.length">
             <tr v-for="(data) in item?.data" :key="data" :class="n%2===0?'even':'odd'" class="hv">
               <td>
-                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
+                <div class="text-right q-mr-xs" :class="data?.subtotal || (store.params.jenis !== 'detail' && data?.akhir)?'text-weight-bold':''">
                   {{ data?.ket }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.jumlah),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subAw?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.jumlah ?? data?.subAw?.jumlah),2)) }}
                 </div>
               </td>
-              <td>
-                <div class="text-right q-mr-xs">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs">
                   {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.harga),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.sub),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subAw?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.saldoawal?.sub ?? data?.subAw?.sub),2)) }}
                 </div>
               </td>
               <!-- masuk -->
-              <td>
-                <div class="text-right q-mr-xs">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs">
                   {{ data?.masuk?.tgl?dateFullFormat(data?.masuk?.tgl):'' }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.jumlah),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subMs?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.jumlah ?? data?.subMs?.jumlah),2)) }}
                 </div>
               </td>
-              <td>
-                <div class="text-right q-mr-xs">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs">
                   {{ cekNan(formatDouble(parseFloat(data?.masuk?.harga),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.sub),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subMs?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.masuk?.sub ?? data?.subMs?.sub),2)) }}
                 </div>
               </td>
               <!-- keluar -->
-              <td>
-                <div class="text-right q-mr-xs">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs">
                   {{ data?.keluar?.tgl?dateFullFormat(data?.keluar?.tgl):'' }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.keluar?.jumlah),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subKel?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.keluar?.jumlah ?? data?.subKel?.jumlah),2)) }}
                 </div>
               </td>
-              <td>
-                <div class="text-right q-mr-xs">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs">
                   {{ cekNan(formatDouble(parseFloat(data?.keluar?.harga),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs">
-                  {{ cekNan(formatDouble(parseFloat(data?.keluar?.sub),2)) }}
+                <div class="text-right q-mr-xs" :class="data?.subKel?'text-weight-bold':''">
+                  {{ cekNan(formatDouble(parseFloat(data?.keluar?.sub ??data?.subKel?.sub),2)) }}
                 </div>
               </td>
               <!-- saldo akhir-->
               <td>
-                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
+                <div class="text-right q-mr-xs" :class="data?.subtotal || store.params.jenis !== 'detail'?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.jumlah ?? data?.subtotal?.jumlah),2)) }}
                 </div>
               </td>
-              <td>
-                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
+              <td v-if="store.params.jenis==='detail'">
+                <div v-if="store.params.jenis === 'detail'" class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.harga),2)) }}
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs" :class="data?.subtotal?'text-weight-bold':''">
+                <div class="text-right q-mr-xs" :class="data?.subtotal || store.params.jenis !== 'detail'?'text-weight-bold':''">
                   {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub ?? data?.subtotal?.sub),2)) }}
                 </div>
               </td>
@@ -333,116 +345,123 @@
                 height="14px"
               />
             </td>
-            <td>
+            <td v-if="store.params.jenis==='rekap'">
               <q-skeleton
                 type="text"
-                width="150px"
+                width="60px"
                 height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
+              />
+            </td>
+            <td v-if="store.params.jenis==='detail'">
+              <q-skeleton
+                type="text"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
             <td>
               <q-skeleton
                 type="text"
-                width="100px"
-                height="14px"
-              />
-            </td>
-            <td>
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </td>
-            <td>
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </td>
-            <td>
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </td>
-            <td>
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </td>
-            <td>
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
+                width="60px"
+                height="25px"
               />
             </td>
           </tr>
