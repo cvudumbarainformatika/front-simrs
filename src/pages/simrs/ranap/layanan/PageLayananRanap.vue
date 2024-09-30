@@ -5,6 +5,7 @@
     :maximized="true"
     transition-show="slide-left"
     transition-hide="slide-right"
+    @show="onShow"
   >
     <q-card
       square
@@ -101,6 +102,7 @@ import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
 // import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 // import AppLoader from 'src/components/~global/AppLoader.vue'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -120,6 +122,7 @@ const props = defineProps({
 })
 
 const store = usePengunjungRanapStore()
+const penilaian = usePenilaianRanapStore()
 
 const menus = ref([
   // {
@@ -151,6 +154,12 @@ const menu = ref(menus.value[0])
 
 function menuDiganti (val) {
   menu.value = val
+}
+
+const onShow = () => {
+  Promise.all([
+    penilaian.getMaster()
+  ])
 }
 
 watchEffect(() => {

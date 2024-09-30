@@ -131,23 +131,26 @@
       </q-card-section>
     </q-card> -->
 
-    <!-- humpty untuk usia < 14 tahun -->
-    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
+    <!-- humpty untuk usia < 18 tahun -->
+    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && store.usia < 18" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
       <q-separator />
       <q-card-section v-if="store.formHumpty" class="q-pa-sm row q-col-gutter-xs">
-        <div v-for="obj in store.humptys.form" :key="obj.kode" class="col-12">
+        <div v-for="obj in store.humptys.form" :key="obj" class="col-12">
           <div class="row">
             <div class="col-3">
-              {{ obj?.label }} :
+              {{ obj?.label }}
             </div>
             <div class="col-9 q-gutter-sm">
               <q-radio
                 v-for="(item, i) in obj?.categories" :key="i" dense size="sm" v-model="store.formHumpty[obj.kode]" :val="item" :label="`${item?.label}`"
                 @update:model-value="store.hitungSkorHumpty"
               />
+              <!-- <div v-for="(item, i) in obj?.categories" :key="i">
+                {{ item }} {{ store.formHumpty[obj.kode] === item ? 'sama' : 'tidak' }} {{ store.formHumpty[obj.kode].skor }}
+              </div> -->
             </div>
           </div>
           <q-separator class="q-my-sm" />
@@ -261,8 +264,8 @@
       </q-card-section>
     </q-card> -->
 
-    <!-- Resiko Jatuh Morse Fall Scale (14 - 59 tahun) -->
-    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
+    <!-- Resiko Jatuh Morse Fall Scale (18 - 59 tahun) -->
+    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep) && (store.usia >= 18 && store.usia <= 59)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.morses?.desc }}</strong>
       </q-card-section>
@@ -293,7 +296,7 @@
     </q-card>
 
     <!-- Resiko Jatuh Ontario / Sidney Scoring (geriatric dg usia >=60 tahun) -->
-    <q-card v-if="store?.ontarios?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
+    <q-card v-if="store?.ontarios?.grupings?.includes(jnsKasusKep) && (store.usia >= 60)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.ontarios?.desc }}</strong>
       </q-card-section>
@@ -378,17 +381,15 @@ const jnsKasusKep = computed(() => {
 })
 
 onMounted(async () => {
-  const ageInMonths = store.calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
-
-  console.log('usia', ageInMonths / 12)
-  console.log('store', store.barthels)
-  console.log('kasus', jnsKasusKep.value)
+  // console.log('usia', ageInMonths / 12)
+  // console.log('store', store.barthels)
+  // console.log('kasus', jnsKasusKep.value)
 
   // console.log('pasien', props?.pasien)
-  await store.getMaster()
-    .then(() => {
-      store.initReset(props?.pasien)
-    })
+  // await store.getMaster()
+  // .then(() => {
+  //   store.initReset(jnsKasusKep, props?.pasien)
+  // })
   // console.log('form', store.form)
 })
 

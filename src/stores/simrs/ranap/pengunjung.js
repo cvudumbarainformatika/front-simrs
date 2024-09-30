@@ -99,6 +99,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.diagnosa = data?.diagnosa
         datax.anamnesis = []
         datax.pemeriksaan = []
+        datax.penilaian = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false

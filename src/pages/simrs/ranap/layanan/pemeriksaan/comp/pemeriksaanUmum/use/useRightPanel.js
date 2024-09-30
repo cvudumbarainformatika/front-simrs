@@ -51,8 +51,8 @@ export default function useRightPanel (pasien) {
         noreg: pasien?.noreg
       }
     }
-    const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
-    console.log('resp right', resp)
+    const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/penilaian', params)
+    console.log('resp right penilaian', resp)
     if (resp.status === 200) {
       // store.items = resp.data
       store.PISAH_DATA_RANAP_IGD(resp.data, pasien)

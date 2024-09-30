@@ -24,7 +24,7 @@
               <BarComp title="Informasi Penilain" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
             </div>
             <div class="col full-height scroll">
-              ooo
+              <ListPenilaian :pasien="pasien" :kasus="kasus" />
             </div>
           </q-card>
         </div>
@@ -35,11 +35,12 @@
 
 <script setup>
 import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-import { defineAsyncComponent, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 
 const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
 const FormComp = defineAsyncComponent(() => import('./penilaian/FormComp.vue'))
-defineProps({
+const ListPenilaian = defineAsyncComponent(() => import('./penilaian/ListPenilaian.vue'))
+const props = defineProps({
   pasien: {
     type: Object,
     default: () => null
@@ -55,8 +56,15 @@ const myForm = ref(null)
 
 const store = usePenilaianRanapStore()
 
+const jnsKasusKep = computed(() => {
+  if (props.kasus) {
+    return props.kasus?.gruping
+  }
+  return null
+})
+
 const onSubmit = () => {
-  store.saveData()
+  store.saveData(jnsKasusKep.value, props.pasien)
   // myForm.value.validate().then((success) => {
   //   if (success) {
   //     myForm.value.reset()
