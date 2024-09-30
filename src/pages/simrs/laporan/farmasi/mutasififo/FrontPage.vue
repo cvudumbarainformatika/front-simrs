@@ -422,13 +422,14 @@ function setJenis (val) {
 const refScroll = ref(null)
 const refTt = ref(null)
 function onScroll (pos) {
-  const height = refScroll.value.clientHeight - 125 // pas nya 119
+  const height = refScroll.value.clientHeight - (refTt.value.clientHeight + 30)
   const currPage = store.meta.current_page
   if ((store.meta.current_page < store.meta.last_page) && pos >= height) {
     store.setPage(currPage + 1)
     // console.log('meta', store.meta)
-    console.log('pos', pos, refScroll.value.clientHeight, height)
+    console.log('pos', pos, 'height', height, 'scroll client height', refScroll.value.clientHeight, 'tt height', refTt.value.clientHeight)
   }
+  // console.log('pos', pos, 'height', height, 'scroll client height', refScroll.value.clientHeight, 'tt height', refTt.value.clientHeight)
 }
 // function scrollHandler (observ) {
 // console.log('observ', observ)
