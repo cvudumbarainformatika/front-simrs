@@ -12,7 +12,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     kodejenis: [],
     kodeobjek: [],
     koderinciobjek: [],
-    kodesubrinciobjek: [],
+    dataitems: [],
     meta: {},
     params: {
       q: '',
@@ -149,7 +149,6 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
             this.kodejenis = []
             this.kodeobjek = []
             this.koderinciobjek = []
-            this.kodesubrinciobjek = []
             this.pembiayaans = []
             // ---------//
             this.realisasipends = resp.data?.realisasipendapatan
@@ -157,7 +156,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
             this.realisasiPembiayaans = resp.data?.silpa
             this.paguPembiayaans = resp.data?.silpa
             this.kurangiKASs = resp.data?.kurangikaskecil
-            this.items = resp.data
+            this.dataitems = resp.data
             this.paguAnggaran(resp.data?.belanja)
             this.mapRekening(resp.data?.belanja)
             this.mapPendapatan(resp.data?.pendapatan)
@@ -172,7 +171,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           }
         }).catch(() => {
           this.loading = false
-          this.items = []
+          // this.items = []
         })
       })
     },
@@ -285,7 +284,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
     paguAnggaran (val) {
       // this.items = []
-      // const Anggaran = []
+      // const anggaran = []
       for (let i = 0; i < val?.length; i++) {
         const el = val[i].anggaran
 
@@ -342,10 +341,13 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         val[i].selisih = val[i].totalPagu - (val[i].totalRealisasiSebelumnya + val[i].totalRealisasi)
         val[i].persen = ((parseFloat(val[i].totalRealisasiSebelumnya) + parseFloat(val[i].totalRealisasi)) / parseFloat(val[i].totalPagu) * 100).toFixed(2)
         // console.log('xxxx', pagu)
-        // Anggaran.push(pagu)
+
         // this.items = pagu
-        this.items = val
       }
+      // anggaran.push(...val)
+      this.items = val
+      // this.dataitems = this.items
+      console.log('thisitem', this.items)
       // val = Anggaran
       // console.log('paguuuu', val)
       // return this.items
@@ -374,7 +376,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         selisih: pagu.reduce((a, b) => a + b, 0) - realisasiSebelumnya.reduce((a, b) => a + b, 0) - realisasi.reduce((a, b) => a + b, 0),
         persen: ((realisasiSebelumnya.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) + realisasi.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)) / pagu.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) * 100).toFixed(2)
       }
-      // console.log('lo lo lo', kode1)
+      console.log('KODE 1', kode1)
       // KODE2
       const kod2 = this.items.length
         ? this.items.map((x) => {
@@ -1045,9 +1047,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         a < b ? -1 : a > b ? 1 : 0
       )
 
-      // this.kodesubrinciobjek.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
-      // console.log('jenis', this.kodesubrinciobjek)
-      // const sortkode6 = this.kodesubrinciobjek.sort(({ kodeall3: a }, { kodeall3: b }) =>
+      // this.dataitems.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
+      // console.log('jenis', this.dataitems)
+      // const sortkode6 = this.dataitems.sort(({ kodeall3: a }, { kodeall3: b }) =>
       //   a < b ? -1 : a > b ? 1 : 0
       // )
 
