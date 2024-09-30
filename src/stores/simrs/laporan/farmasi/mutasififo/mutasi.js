@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 // eslint-disable-next-line no-unused-vars
-import { formatDouble } from 'src/modules/formatter'
+import { formatDoubleKoma } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 
 export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo_farmasi', {
@@ -464,32 +464,33 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
             if (this.params.jenis === 'rekap') {
               ada.ket = dat?.ket
-              ada.jumlSalAwal = this.cekNan(formatDouble(parseFloat(dat?.saldoawal?.jumlah), 2))
-              ada.nilaiSalAwal = this.cekNan(formatDouble(parseFloat(dat?.saldoawal?.sub), 2))
-              ada.jumlMasuk = this.cekNan(formatDouble(parseFloat(dat?.masuk?.jumlah), 2))
-              ada.nilaiMasuk = this.cekNan(formatDouble(parseFloat(dat?.masuk?.sub), 2))
-              ada.jumlKeluar = this.cekNan(formatDouble(parseFloat(dat?.keluar?.jumlah), 2))
-              ada.nilaiKeluar = this.cekNan(formatDouble(parseFloat(dat?.keluar?.sub), 2))
-              ada.jumlSalAkhir = this.cekNan(formatDouble(parseFloat(dat?.akhir?.jumlah), 2))
-              ada.nilaiSalAkhir = this.cekNan(formatDouble(parseFloat(dat?.akhir?.sub), 2))
+              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
+              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
+              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
+              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
+              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
+              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
+              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
+              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
             }
             else {
               ada.ket = dat?.ket
-              ada.jumlSalAwal = this.cekNan(formatDouble(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
-              ada.harSalAwal = this.cekNan(formatDouble(parseFloat(dat?.saldoawal?.harga), 2))
-              ada.nilaiSalAwal = this.cekNan(formatDouble(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
+              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
+              ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
+              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
               ada.tglMasuk = dat?.masuk?.tgl
-              ada.jumlMasuk = this.cekNan(formatDouble(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
-              ada.harMasuk = this.cekNan(formatDouble(parseFloat(dat?.masuk?.harga), 2))
-              ada.nilaiMasuk = this.cekNan(formatDouble(parseFloat(dat?.masuk?.sub ?? dat?.subMS?.sub), 2))
+              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
+              ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
+              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
               ada.tglKeluar = dat?.keluar?.tgl
-              ada.jumlKeluar = this.cekNan(formatDouble(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
-              ada.harKeluar = this.cekNan(formatDouble(parseFloat(dat?.keluar?.harga), 2))
-              ada.nilaiKeluar = this.cekNan(formatDouble(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
-              ada.jumlSalAkhir = this.cekNan(formatDouble(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
-              ada.harSalAkhir = this.cekNan(formatDouble(parseFloat(dat?.akhir?.harga), 2))
-              ada.nilaiSalAkhir = this.cekNan(formatDouble(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
+              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
+              ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
+              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
+              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
+              ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
+              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
             }
+
             data.push(ada)
           })
         }
