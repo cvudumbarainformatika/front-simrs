@@ -16,6 +16,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       q: '',
       per_page: 20,
       page: 1,
+      // bulan: '06',
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       kode_ruang: 'all',
@@ -119,6 +120,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
             else masuk.push(per)
           })
+          // console.log('masuk', masuk)
+
           res?.forEach(res => {
             const temp = {
               tgl: res?.tgl ?? this.params.tahun + '-' + this.params.bulan + '-31 23:00:00',
@@ -132,6 +135,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             let nilaiDiminta = res.sub
             while (diminta > 0) {
               const index = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.nopenerimaan === res.nopenerimaan)
+              // console.log('index res', index)
               if (index >= 0) {
                 if (masuk[index].jumlah >= diminta) {
                   const sisa = masuk[index].jumlah - diminta
@@ -154,6 +158,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               }
               else {
                 const index1 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.harga === res.harga)
+                // console.log('index res 1', index1)
                 if (index1 >= 0) {
                   if (masuk[index1].jumlah >= diminta) {
                     const sisa = masuk[index1].jumlah - diminta
@@ -176,6 +181,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 }
                 else {
                   const index2 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat)
+                  // console.log('index res 2', index2)
                   if (index2 >= 0) {
                     if (masuk[index2].jumlah >= diminta) {
                       const sisa = masuk[index2].jumlah - diminta
@@ -196,6 +202,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       masuk[index2].sub = 0
                     }
                   }
+                  else diminta = 0
                 }
               }
             }
@@ -290,6 +297,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
             while (diminta > 0) {
               const index = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.nopenerimaan === res.nopenerimaan)
+              // console.log('index pak', index)
               if (index >= 0) {
                 if (masuk[index].jumlah >= diminta) {
                   const sisa = masuk[index].jumlah - diminta
@@ -312,6 +320,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               }
               else {
                 const index1 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.harga === res.harga)
+                // console.log('index pak 1', index1)
                 if (index1 >= 0) {
                   if (masuk[index1].jumlah >= diminta) {
                     const sisa = masuk[index1].jumlah - diminta
@@ -334,6 +343,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 }
                 else {
                   const index2 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat)
+                  // console.log('index pak 2', index2)
                   if (index2 >= 0) {
                     if (masuk[index2].jumlah >= diminta) {
                       const sisa = masuk[index2].jumlah - diminta
@@ -354,6 +364,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       masuk[index2].sub = 0
                     }
                   }
+                  else diminta = 0
                 }
               }
             }
@@ -477,11 +488,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            it.data.push({
-              tgl: raw?.tgl,
-              masuk: raw,
-              ket: 'Retur Penjualan'
-            })
             const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index >= 0) {
               const jumM = masuk[index].jumlah + raw.jumlah
@@ -490,6 +496,12 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masuk[index].jumlah = jumM
               masuk[index].sub = subM
             }
+
+            it.data.push({
+              tgl: raw?.tgl,
+              masuk: raw,
+              ket: 'Retur Penjualan'
+            })
           }
           if (it?.resepkeluar?.length) {
             const raw = {
@@ -554,9 +566,20 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           s.tgl = this.params.tahun + '-' + this.params.bulan + '-31 23:59:50'
           const temp = {
             tgl: s.tgl,
-            akhir: s,
             ket: 'Saldo Akhir'
           }
+          if (this.params.jenis === 'rekap' && it.data.filter(f => f.masuk)?.map(m => m.masuk)?.length > 1) {
+            temp.akhir = s
+            temp.masuk = {
+              jumlah: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+              sub: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+            }
+          }
+          else {
+            temp.akhir = s
+          }
+          // console.log('temp akhir', temp)
+
           it.data.push(temp)
         })
         const jumAk = it?.akhir?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0)
