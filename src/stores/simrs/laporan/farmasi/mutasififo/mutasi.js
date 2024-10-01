@@ -14,7 +14,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     meta: {},
     params: {
       q: '',
-      per_page: 10,
+      per_page: 20,
       page: 1,
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
@@ -48,9 +48,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     tTotal: 0,
     htotal: 0,
     htTotal: 0,
-    fields: {
-
-    }
+    fields: {}
   }),
   actions: {
     setParams (key, val) {
@@ -699,11 +697,11 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                   ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
                   ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
                   ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
-                  ada.tglMasuk = dat?.masuk?.tgl
+                  ada.tglMasuk = dat?.masuk?.tgl ?? ''
                   ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
                   ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
                   ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
-                  ada.tglKeluar = dat?.keluar?.tgl
+                  ada.tglKeluar = dat?.keluar?.tgl ?? ''
                   ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
                   ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
                   ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
@@ -734,6 +732,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     startDownload () { this.loadingDownload = true },
     finishDownload () { this.loadingDownload = false },
     async getDataTable () {
+      this.setParams('action', '')
+      this.setParams('per_page', 20)
       if (this.params.page === 1) this.loading = true
       else this.loadingNext = true
       const param = { params: this.params }
