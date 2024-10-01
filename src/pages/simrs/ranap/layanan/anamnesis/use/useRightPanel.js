@@ -8,27 +8,24 @@ export default function useRightPanel (pasien) {
   const store = useAnamnesisRanapStore()
   // const pengunjung = usePengunjungRanapStore()
 
-  onMounted(() => {
-    // console.log('did mount', pengunjung.pasiens)
-    setPasien()
-    getData()
+  const settings = reactive({
+    splitMin: 50,
+    hoverred: false
   })
 
-  const setPasien = () => {
-    // const findPasien = pengunjung?.pasiens.filter(x => x?.noreg === pasien?.noreg)
-    // console.log('find', findPasien)
-
-    // this.pasiens[indexPasien] = data
-    // // console.log('wew', this.pasiens[indexPasien])
-    // if (findPasien.length) {
-    //   const datax = findPasien[0]
-    //   datax.newapotekrajal = data?.newapotekrajal
-    //   datax.diagnosa = data?.diagnosa
-    //   // datax.dokter = data?.datasimpeg?.nama
-    //   // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
-    //   // this.pageLayanan = false
-    // }
-  }
+  const fields = reactive({
+    igd: [
+      { row: 'keluhanUtama', label: 'Keluhan Utama' },
+      { row: 'riwayatpenyakitsekarang', label: 'Riwayat Penyakit Skrg' },
+      { row: 'riwayatpenyakit', label: 'Riwayat Penyakit Dhl' },
+      { row: 'riwayatpengobatan', label: 'Riwayat Pengobatan' },
+      { row: 'riwayatpengobatan', label: 'Riwayat Pengobatan' },
+      { row: 'riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya', label: 'Rwyt Pkrjaan yg berhubungan dg zat berbahaya' }
+    ]
+  })
+  onMounted(() => {
+    getData()
+  })
 
   const getData = async () => {
     const params = {
@@ -45,6 +42,6 @@ export default function useRightPanel (pasien) {
   }
 
   return {
-    store
+    store, settings, fields
   }
 }

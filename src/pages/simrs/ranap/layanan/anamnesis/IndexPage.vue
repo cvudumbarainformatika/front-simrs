@@ -20,15 +20,23 @@
           </div>
         </div>
       </div>
-      <div v-if="!full" :class="`full-height ${full ? 'col-0' : 'col-4'}`">
-        <div class="column fit">
+      <div v-if="!full" class="full-height col-4 relative-position">
+        <q-card flat bordered class="fit column bg-transparent">
+          <div class="col-auto">
+            <BarComp title="Informasi Anamnesis" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+          </div>
+          <div class="col full-height scroll">
+            <RightPage :pasien="pasien" :kasus="kasus" :key="pasien" />
+          </div>
+        </q-card>
+        <!-- <div class="column fit">
           <div class="col-auto">
             <BarComp title="Informasi" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
           </div>
           <div class="col full-height">
             <RightPage :pasien="pasien" :kasus="kasus" :key="pasien" />
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- </div> -->

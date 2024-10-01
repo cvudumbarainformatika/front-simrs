@@ -22,7 +22,6 @@ export default function useRightPanel (pasien) {
     // await store.getMaster().then(() => {
     //   getData()
     // })
-
     getData()
   })
 

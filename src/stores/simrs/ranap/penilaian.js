@@ -76,11 +76,16 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       return months
     },
 
-    initReset (pasien, data) {
-      const ageInMonth = this.calculateAgeInMonths(pasien?.tglLahir ?? null)
+    getUsia (pasien) {
+      const ageInMonth = this.calculateAgeInMonths(pasien?.tgllahir ?? null)
       const usia = Math.floor(ageInMonth / 12)
       this.usia = usia
+      console.log('usia: ', usia)
+      console.log('pasien: ', pasien)
+    },
 
+    initReset (pasien, data) {
+      const usia = this.usia
       this.form = {
         id: data?.id ?? null
       }
@@ -322,20 +327,39 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       this.formOntario.skorOntario = result
       // const arr = Object.keys(this.formOntario).map(key => this.formOntario[key])
       const arr = Object.keys(this.formOntario)
-      const elim = ['transfertk', 'mobilitas']
-      const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
-      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
-      // console.log('arr ontario', skor1)
+
+      const rwytJth = ['riwayatJth_a', 'riwayatJth_b']
+      let gbng1 = arr.filter((xx) => rwytJth.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng1 >= 6 ? gbng1 = 6 : gbng1 = 0
+
+      const mental = ['statusMental_a', 'statusMental_b', 'statusMental_c']
+      let gbng2 = arr.filter((xx) => mental.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng2 >= 14 ? gbng2 = 14 : gbng2 = 0
+
+      const pnglihatan = ['penglihatan_a', 'penglihatan_b', 'penglihatan_c']
+      const gbng3 = arr.filter((xx) => pnglihatan.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0) >= 1 ? 1 : 0
+      // gbng3 >= 1 ? gbng3 = 1 : gbng3 = 0
+
+      const kemih = ['berkemih_a']
+      let gbng4 = arr.filter((xx) => kemih.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng4 >= 2 ? gbng4 = 2 : gbng4 = 0
+
+      // console.log('arr gabung', gbng3)
       // console.log('arr ontario 2', skor2)
-      // console.log('arr', arr)
+      console.log('arr', arr)
+
+      const elim = ['transfertk', 'mobilitas']
+      // const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
+      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
+
       if (skor2 >= 0 && skor2 <= 3) {
-        skor2 = 3
+        skor2 = 0
       }
       else if (skor2 >= 4 && skor2 <= 6) {
         skor2 = 7
       }
 
-      const totalSkor = skor1 + skor2
+      const totalSkor = (gbng1 + gbng2 + gbng3 + gbng4) + (skor2)
 
       if (totalSkor >= 17) {
         ket = 'Risiko tinggi'

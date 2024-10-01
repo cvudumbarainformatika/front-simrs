@@ -132,7 +132,7 @@
     </q-card> -->
 
     <!-- humpty untuk usia < 18 tahun -->
-    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && store.usia < 18" flat bordered class="col-12">
+    <q-card v-if="(store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18))" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
@@ -381,7 +381,7 @@ const jnsKasusKep = computed(() => {
 })
 
 onMounted(async () => {
-  // console.log('usia', ageInMonths / 12)
+  console.log('usia', store.usia)
   // console.log('store', store.barthels)
   // console.log('kasus', jnsKasusKep.value)
 

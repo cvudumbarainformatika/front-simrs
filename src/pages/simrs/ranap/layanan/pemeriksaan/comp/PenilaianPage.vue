@@ -35,7 +35,7 @@
 
 <script setup>
 import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-import { computed, defineAsyncComponent, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
 const FormComp = defineAsyncComponent(() => import('./penilaian/FormComp.vue'))
@@ -55,6 +55,12 @@ const full = ref(false)
 const myForm = ref(null)
 
 const store = usePenilaianRanapStore()
+
+onMounted(() => {
+  console.log('onMounted', props.pasien)
+
+  store.getUsia(props.pasien)
+})
 
 const jnsKasusKep = computed(() => {
   if (props.kasus) {
