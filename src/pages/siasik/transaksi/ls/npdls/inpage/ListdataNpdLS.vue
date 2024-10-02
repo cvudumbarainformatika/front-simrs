@@ -100,22 +100,56 @@
                   class="bg-dark"
                   size="sm"
                   color="warning"
-                  icon="icon-mat-visibility"
-                  @click="viewRincian(props?.row)"
+                  icon="icon-fa-file-regular"
                 >
-                  <q-tooltip class="bg-accent">
-                    Lihat Rinci
-                  </q-tooltip>
+                  <q-menu dark style="min-width: 150px">
+                    <q-list style="min-width: 150px;">
+                      <q-item clickable v-close-popup @click="viewRincian(props?.row)">
+                        <q-item-section>Lihat Rincian</q-item-section>
+                      </q-item>
+                      <q-item clickable v-close-popup @click="editNpdls(props?.row)">
+                        <q-item-section>Edit NPD</q-item-section>
+                      </q-item>
+                      <q-item clickable v-close-popup @click="viewDataNpdls(props?.row)">
+                        <q-item-section>Cetak NPD</q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
                 </q-btn>
-                <!-- <div class="q-pl-sm" />
-                <q-btn
-                  size="sm"
-                  class="q-pl-md"
-                  color="negative"
-                  icon="icon-mat-delete"
-                  @click="deleteData(props?.row)"
-                />
-              </div> -->
+                <!-- <q-btn-dropdown label="coba">
+                  <q-list>
+                    <q-btn
+                      flat
+                      round
+                      class="bg-dark"
+                      size="sm"
+                      color="warning"
+                      icon="icon-mat-visibility"
+                      @click="viewRincian(props?.row)"
+                    >
+                      <q-tooltip class="bg-accent">
+                        Lihat Rinci
+                      </q-tooltip>
+                    </q-btn>
+                    <div class="q-pl-md">
+                      <q-btn
+                        unelevated
+                        color="dark"
+                        round
+                        size="sm"
+                        icon="icon-mat-description"
+                        @click="viewDataNpdls(props?.row)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Print
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
+                  </q-list>
+                </q-btn-dropdown> -->
               </div>
             </q-td>
           </q-tr>
@@ -124,6 +158,14 @@
       <app-dialog-rincian
         v-model="store.openDialogRinci"
         :npd="npd"
+      />
+      <printdi-npdls
+        v-model="store.dialogCetakNpd"
+        :datanpds="datanpds"
+      />
+      <editdata-npdls
+        v-model="store.dialogEditNpd"
+        :editnpds="editnpds"
       />
     </div>
   </template>
@@ -136,6 +178,8 @@ import { formatRpDouble } from 'src/modules/formatter'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
 import { defineAsyncComponent, onMounted, ref } from 'vue'
 const AppDialogRincian = defineAsyncComponent(() => import('./DialogRincian.vue'))
+const PrintdiNpdls = defineAsyncComponent(() => import('../print/PrintdiListNPD.vue'))
+const EditdataNpdls = defineAsyncComponent(() => import('../inpage/DialogEditnpdls.vue'))
 
 const store = formNotaPermintaanDanaLS()
 
@@ -144,6 +188,7 @@ onMounted(() => {
   // onReset()
   store.listdatanpd()
 })
+
 // eslint-disable-next-line no-unused-vars
 const clearSearch = () => {
   store.reqs.q = ''
@@ -212,6 +257,7 @@ const listnpdls = [
 const columnsnpd = ref(listnpdls)
 
 const npd = ref(null)
+// eslint-disable-next-line no-unused-vars
 function viewRincian (row) {
   store.openDialogRinci = true
   npd.value = row.rincian
@@ -221,6 +267,21 @@ function viewRincian (row) {
 const onRowClick = (row) =>
   alert([row?.nopencairan, row?.total])
 
+const datanpds = ref(null)
+// eslint-disable-next-line no-unused-vars
+function viewDataNpdls (row) {
+  store.dialogCetakNpd = true
+  datanpds.value = row
+  store.npddatasave = datanpds.value
+  console.log('openNPD', store.npddatasave)
+}
+const editnpds = ref(null)
+function editNpdls (row) {
+  store.dialogEditNpd = true
+  editnpds.value = row
+  store.form = editnpds.value
+  console.log('Edit NPD', editnpds.value)
+}
 </script>
 
 <!-- <style lang="scss">

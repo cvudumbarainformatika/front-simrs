@@ -48,7 +48,7 @@
               Nota Permintaan Dana Langsung (NPD-LS)
             </div>
             <div class="row justify-center text-weight-bold q-py-xs">
-              Nomor : {{ store.form.nonpdls }}
+              Nomor : {{ store.npddatasave.nonpdls }}
             </div>
           </div>
           <q-separator style="margin-top: -10px;" />
@@ -77,29 +77,29 @@
                 </div>
                 <div class="col full-width">
                   <div class="q-py-xs">
-                    : {{ store.form.kegiatanblud }}
+                    : {{ store.npddatasave.kegiatanblud }}
                   </div>
                   <div>
-                    : {{ store.form.penerima }}
+                    : {{ store.npddatasave.penerima }}
                   </div>
                   <div class="q-py-xs">
-                    : {{ store.form.bank }}
+                    : {{ store.npddatasave.bank }}
                   </div>
                   <div>
-                    : {{ store.form.rekening }}
+                    : {{ store.npddatasave.rekening }}
                   </div>
                   <div class="q-py-xs">
-                    : {{ store.form.npwp }}
+                    : {{ store.npddatasave.npwp }}
                   </div>
                   <div>
-                    : {{ store.form.keterangan }}
+                    : {{ store.npddatasave.keterangan }}
                   </div>
                 </div>
               </div>
             </div>
           </q-card-section>
           <q-card-section class="q-pa-md full-width">
-            <template v-if="store.reqs.rincianmanual">
+            <!-- <template v-if="!store.npddatasave.rincian.nopenerimaan">
               <table
                 class="full-width"
               >
@@ -120,7 +120,7 @@
                   </tr>
                 </thead>
                 <tbody class="align-middle q-pl-sm">
-                  <tr v-for="item in store.form.rincians" :key="item">
+                  <tr v-for="item in store.npddatasave.rincian" :key="item">
                     <td>
                       <div>{{ item.koderek50 }}</div>
                     </td>
@@ -144,59 +144,53 @@
                   </tr>
                 </tbody>
               </table>
-            </template>
-            <template v-else>
-              <table
-                class="float-center bordered"
-              >
-                <thead>
-                  <tr>
-                    <th width="25%">
-                      Nomor BAST
-                    </th>
-                    <th width="10%">
-                      Kode Rekening 50
-                    </th>
-                    <th width="30%">
-                      Rincian Belanja
-                    </th>
-                    <th width="20%">
-                      Item Belanja
-                    </th>
-                    <th width="30%">
-                      Nominal Pembayaran
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="align-middle q-pl-sm">
-                  <tr v-for="item in store.form.rincians" :key="item">
-                    <td>
-                      <div>{{ item.nopenerimaan }}</div>
-                    </td>
-                    <td>
-                      <div>{{ item.koderek50 }}</div>
-                    </td>
-                    <td>
-                      <div>{{ item.rincianbelanja }}</div>
-                    </td>
-                    <td>
-                      <div>{{ item.itembelanja }}</div>
-                    </td>
-                    <td class="text-right">
-                      <div>{{ formattanpaRp(item.nominalpembayaran) }}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="4" class="text-center text-bold">
-                      <div>Jumlah Pengajuan</div>
-                    </td>
-                    <td class="text-right text-bold">
-                      <div>{{ formattanpaRp(store.reqs.subtotal) }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </template>
+            </template> -->
+
+            <table
+              class="float-center bordered"
+            >
+              <thead>
+                <tr>
+                  <th width="30%">
+                    Kode Rekening 50
+                  </th>
+                  <th width="30%">
+                    Rincian Belanja
+                  </th>
+                  <th width="20%">
+                    Item Belanja
+                  </th>
+                  <th width="15%">
+                    Nominal Pembayaran
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="align-middle q-pl-sm">
+                <tr v-for="item in store.npddatasave.rincian" :key="item">
+                  <td>
+                    <div>{{ item.nopenerimaan }}</div>
+                    <div>{{ item.koderek50 }}</div>
+                  </td>
+                  <td>
+                    <div>{{ item.rincianbelanja }}</div>
+                  </td>
+                  <td>
+                    <div>{{ item.itembelanja }}</div>
+                  </td>
+                  <td class="text-right">
+                    <div>{{ formattanpaRp(item.nominalpembayaran) }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-center text-bold">
+                    <div>Jumlah Pengajuan</div>
+                  </td>
+                  <td class="text-right text-bold">
+                    <div>{{ formattanpaRp(store.npddatasave.total) }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <div class="col-auto q-pt-md text-bold">
               <div class="row q-col-gutter-md full-width">
                 <div class="col-auto">
@@ -207,187 +201,13 @@
                 </div>
                 <div class="col full-width">
                   <div class="q-py-xs">
-                    : {{ 'Rp. ' + formattanpaRp(store.reqs.subtotal) }}
+                    : {{ 'Rp. ' + formattanpaRp(store.npddatasave.total) }}
                   </div>
-                  <div>: {{ terbilangRupiah(store.reqs.subtotal) + ' Rupiah' }} </div>
+                  <div>: {{ terbilangRupiah(store.npddatasave.total) + ' Rupiah' }} </div>
                 </div>
               </div>
             </div>
           </q-card-section>
-
-          <!-- <template v-else>
-            <div class="col-12 q-pt-md">
-              <div class="row justify-center text-weight-bold q-py-xs">
-                Nota Permintaan Dana Langsung (NPD-LS)
-              </div>
-              <div class="row justify-center text-weight-bold q-py-xs">
-                Nomor jsjsjsjs: {{ store.reqs.npddatasave.nonpdls }}
-              </div>
-            </div>
-            <q-separator style="margin-top: -10px;" />
-            <q-card-section class="q-pa-sm full-width">
-              <div class="col-auto">
-                <div class="row q-col-gutter-md full-width">
-                  <div class="col-auto">
-                    <div class="q-py-xs">
-                      Kegiatan BLUD
-                    </div>
-                    <div>
-                      Pihak Ketiga
-                    </div>
-                    <div class="q-py-xs">
-                      Nama Bank
-                    </div>
-                    <div>
-                      No. Rekening
-                    </div>
-                    <div class="q-py-xs">
-                      NPWP
-                    </div>
-                    <div>
-                      Keterangan
-                    </div>
-                  </div>
-                  <div class="col full-width">
-                    <div class="q-py-xs">
-                      : {{ store.reqs.npddatasave.kegiatanblud }}
-                    </div>
-                    <div>
-                      : {{ store.reqs.npddatasave.penerima }}
-                    </div>
-                    <div class="q-py-xs">
-                      : {{ store.reqs.npddatasave }}
-                    </div>
-                    <div>
-                      : {{ store.form.rekening }}
-                    </div>
-                    <div class="q-py-xs">
-                      : {{ store.form.npwp }}
-                    </div>
-                    <div>
-                      : {{ store.form.keterangan }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-card-section class="q-pa-md full-width">
-              <template v-if="store.reqs.rincianmanual">
-                <table
-                  class="full-width"
-                >
-                  <thead>
-                    <tr>
-                      <th width="20%">
-                        Kode Rekening 50
-                      </th>
-                      <th width="40%">
-                        Rincian Belanja
-                      </th>
-                      <th width="20%">
-                        Item Belanja
-                      </th>
-                      <th width="20%">
-                        Nominal Pembayaran
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="align-middle q-pl-sm">
-                    <tr v-for="item in store.form.rincians" :key="item">
-                      <td>
-                        <div>{{ item.koderek50 }}</div>
-                      </td>
-                      <td>
-                        <div>{{ item.rincianbelanja }}</div>
-                      </td>
-                      <td>
-                        <div>{{ item.itembelanja }}</div>
-                      </td>
-                      <td class="text-right">
-                        <div>{{ formattanpaRp(item.nominalpembayaran) }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="3" class="text-center text-bold">
-                        <div>Jumlah Pengajuan</div>
-                      </td>
-                      <td class="text-right text-bold">
-                        <div>{{ formattanpaRp(store.reqs.subtotal) }}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </template>
-              <template v-else>
-                <table
-                  class="float-center bordered"
-                >
-                  <thead>
-                    <tr>
-                      <th width="25%">
-                        Nomor BAST
-                      </th>
-                      <th width="10%">
-                        Kode Rekening 50
-                      </th>
-                      <th width="30%">
-                        Rincian Belanja
-                      </th>
-                      <th width="20%">
-                        Item Belanja
-                      </th>
-                      <th width="30%">
-                        Nominal Pembayaran
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="align-middle q-pl-sm">
-                    <tr v-for="item in store.form.rincians" :key="item">
-                      <td>
-                        <div>{{ item.nopenerimaan }}</div>
-                      </td>
-                      <td>
-                        <div>{{ item.koderek50 }}</div>
-                      </td>
-                      <td>
-                        <div>{{ item.rincianbelanja }}</div>
-                      </td>
-                      <td>
-                        <div>{{ item.itembelanja }}</div>
-                      </td>
-                      <td class="text-right">
-                        <div>{{ formattanpaRp(item.nominalpembayaran) }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center text-bold">
-                        <div>Jumlah Pengajuan</div>
-                      </td>
-                      <td class="text-right text-bold">
-                        <div>{{ formattanpaRp(store.reqs.subtotal) }}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </template>
-              <div class="col-auto q-pt-md text-bold">
-                <div class="row q-col-gutter-md full-width">
-                  <div class="col-auto">
-                    <div class="q-py-xs">
-                      Nilai Pengajuan
-                    </div>
-                    <div>Terbilang</div>
-                  </div>
-                  <div class="col full-width">
-                    <div class="q-py-xs">
-                      : {{ 'Rp. ' + formattanpaRp(store.reqs.subtotal) }}
-                    </div>
-                    <div>: {{ terbilangRupiah(store.reqs.subtotal) + ' Rupiah' }} </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-          </template> -->
 
           <div class="ttd-kanan">
             <div class="q-py-xs">
@@ -414,11 +234,11 @@
             </div>
             <div style="padding-bottom: 40px" />
             <div class="underline text-bold q-py-xs">
-              {{ store.form.pptk }}
+              {{ store.npddatasave.pptk }}
               <div class="garis-bawah" style="text-decoration-line: underline;" />
             </div>
             <div>
-              NIP. {{ store.form.kodepptk }}
+              NIP. {{ store.npddatasave.kodepptk }}
             </div>
           </div>
         </div>

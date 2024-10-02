@@ -52,7 +52,7 @@
                   class="q-pl-md"
                   color="negative"
                   icon="icon-mat-delete"
-                  @click="deleteData(props?.row)"
+                  @click="deleteData(props?.row?.nopenerimaan)"
                 />
               </div>
             </q-td>
@@ -75,7 +75,47 @@
     <q-form ref="rincianNpd" class="fit" @submit="simpanRinci">
       <div class="row">
         <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
-          <app-autocomplete
+          <q-select
+            v-model="store.rinci.koderek50"
+            label="Rekening Belanja"
+            use-input
+            outlined
+            standout="bg-yellow-3"
+            dense
+            emit-value
+            map-options
+            autocomplete="rincianbelanja"
+            option-value="rek50"
+            hide-bottom-space
+            :disable="store.loading"
+            :loading="store.loading"
+            :option-label="opt => Object(opt) === opt && 'rincianbelanja' in opt ? opt.rek50 + ' - ' + opt.rincianbelanja : ' '"
+            input-debounce="0"
+            :options="options"
+            :key="store.reqs.kodekegiatan"
+            @filter="filterFn"
+            @clear="store.setFormInput('koderek50', null)"
+            @update:model-value="(val)=>pilihRekening50(val)"
+          >
+            <template
+              v-if="store.rinci.koderek50"
+              #append
+            >
+              <q-icon
+                name="icon-mat-cancel"
+                class="cursor-pointer"
+                @click.stop.prevent="store.setFormInput('koderek50', null)"
+              />
+            </template>
+            <template #no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  Tidak ditemukan
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+          <!-- <app-autocomplete
             v-model="store.rinci.koderek50"
             label="Rekening Belanja"
             autocomplete="rincianbelanja"
@@ -86,7 +126,7 @@
             :source="store.rekening50"
             :key="store.reqs.kodekegiatan"
             @selected="(val)=>pilihRekening50(val)"
-          />
+          /> -->
         </div>
 
         <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
@@ -218,6 +258,7 @@
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 import { formNotaPermintaanDanaLS } from 'src/stores/siasik/transaksi/ls/npdls/formnpdls'
@@ -227,10 +268,12 @@ import { formattanpaRp } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 
 const $q = useQuasar()
+// eslint-disable-next-line no-unused-vars
 const emits = defineEmits(['deleteIds'])
 const carisrt = dataBastFarmasi()
 const rincianNpd = ref([])
 // const rincians = ref([])
+const options = ref([])
 const store = formNotaPermintaanDanaLS()
 // const onReset = () => {
 //   rincianNpd.value.resetValidation()
@@ -241,7 +284,56 @@ onMounted(() => {
   store.getRincianBelanja()
   $q.localStorage.set('rincian_npd', [])
 })
+async function filterFn (val, update) {
+  if (val === '') {
+    update(() => {
+      options.value = store.rekening50
+    })
+    return
+  }
+  if (val === null) {
+    update(() => {
+      options.value = store.rekening50
+    })
+    return
+  }
+  const params = {
+    q: val
+  }
 
+  const param = { params }
+
+  const resp = await api.get('/v1/transaksi/belanja_ls/anggaran', param)
+  console.log('resp', resp.data)
+  const data = resp.data
+
+  update(() => {
+    options.value = data
+    // const filter = ['rek50', 'rincianbelanja']
+    // const needle = val.toLowerCase()
+    // const multiFilter = (data = [], filterKeys = [], value = '') =>
+    //   data.filter((item) => filterKeys.some(
+    //     (key) =>
+    //       item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+    //         item[key]
+    //   )
+    //   )
+    // let filteredData = multiFilter(store.rekening50, filter, needle)
+    // if (!filteredData.length) {
+    //   if (val !== '') {
+    //     store.getRincianBelanja(val).then(() => {
+    //       filteredData = multiFilter(store.options, filter, needle)
+    //       options.value = filteredData
+    //     })
+    //   }
+    // }
+    // else {
+    //   options.value = filteredData
+    // }
+
+    // options.value = filteredData
+  })
+}
 const tablebast = [
   {
     label: 'No BAST',
@@ -296,15 +388,20 @@ const tablebast = [
 const columns = ref(tablebast)
 const selected = ref([])
 
-function deleteData () {
+function deleteData (row) {
+  console.log('row', row)
   $q.dialog({
     title: 'Peringatan',
     message: 'Apakah Data ini akan dihapus?',
     cancel: true
     // persistent: true
   }).onOk(() => {
+    console.log('nonpd', store.npddatasave.nonpdls)
+    store.hapusRinci(row)
+    // store.setForm = props?.row
+    console.log('vv', store.hapusRinci(row))
     // const params = { id: selected.value }
-    emits('deleteIds', selected.value)
+    // emits('deleteIds', selected.value)
   }).onCancel(() => {
     console.log('Cancel')
     selected.value = []
@@ -312,6 +409,12 @@ function deleteData () {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+// function editItem (item) {
+//   console.log(item)
+//   store.kandungan = null
+//   store.kandungan = item
+//   store.initForm()
+// }
 // const form = ref({
 //   koderek50: null,
 //   itembelanja: null
