@@ -26,6 +26,7 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.bb=_removedZeros
+            cekEws('bb', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -33,6 +34,7 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.tb=_removedZeros
+            cekEws('tb', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -40,6 +42,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.nadi=_removedZeros
+
+            cekEws('nadi', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -47,6 +51,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.sistole=_removedZeros
+
+            cekEws('sistole', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -54,6 +60,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.diastole=_removedZeros
+
+            cekEws('diastole', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -61,6 +69,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.pernapasan=_removedZeros
+
+            cekEws('rr', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -68,6 +78,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.spo=_removedZeros
+
+            cekEws('spo2', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -75,6 +87,8 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.suhu=_removedZeros
+
+            cekEws('suhu', _removedZeros)
           }"
         />
         <div v-if="kasus?.gruping==='4.4'" class="col-12 row q-col-gutter-xs">
@@ -83,6 +97,8 @@
             @update:model-value="(val)=>{
               const _removedZeros = val.replace(/^0+/, '')
               if (val > 1) store.formPediatrik.lila=_removedZeros
+
+            // cekEws('bb', _removedZeros)
             }"
           />
           <app-input-simrs
@@ -130,7 +146,7 @@
               SKOR
             </div>
             <div class="text-h4 text-bold">
-              0
+              {{ skoring }}
             </div>
           </q-card-section>
         </q-card>
@@ -750,6 +766,7 @@
 <script setup>
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 import { defineAsyncComponent, onMounted, ref } from 'vue'
+import useEws from '../../../Ews/useEws'
 
 const AutocompleteInput = defineAsyncComponent(() => import('../../../components/AutocompleteInput.vue'))
 const SelectInput = defineAsyncComponent(() => import('../../../components/SelectInput.vue'))
@@ -765,7 +782,9 @@ const props = defineProps({
     default: null
   }
 })
+const { cekEws, skoring } = useEws(props?.pasien, props?.kasus)
 const refKeadaanUmum = ref(null)
+
 defineExpose({
   refKeadaanUmum
 })
