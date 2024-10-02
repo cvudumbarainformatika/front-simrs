@@ -134,8 +134,10 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             let diminta = res.jumlah
             let nilaiDiminta = res.sub
             while (diminta > 0) {
-              const index = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.nopenerimaan === res.nopenerimaan)
+              const index = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat && a.nopenerimaan === res.nopenerimaan)
               // console.log('index res', index)
+              // if (masuk[index].harga !== res.harga) console.log('index res', masuk[index], res)
+              // if (index >= 0 && masuk[index].harga === res.harga) {
               if (index >= 0) {
                 if (masuk[index].jumlah >= diminta) {
                   const sisa = masuk[index].jumlah - diminta
@@ -157,7 +159,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 }
               }
               else {
-                const index1 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat && a.harga === res.harga)
+                const index1 = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat && a.harga === res.harga)
                 // console.log('index res 1', index1)
                 if (index1 >= 0) {
                   if (masuk[index1].jumlah >= diminta) {
@@ -180,8 +182,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                   }
                 }
                 else {
-                  const index2 = masuk.findIndex(a => (a.jumlah > 0 && a.sub > 0) && a.kdobat === res.kdobat)
-                  // console.log('index res 2', index2)
+                  const index2 = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat)
+                  console.log('index res 2', index2, masuk[index2], res)
                   if (index2 >= 0) {
                     if (masuk[index2].jumlah >= diminta) {
                       const sisa = masuk[index2].jumlah - diminta
@@ -202,7 +204,11 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       masuk[index2].sub = 0
                     }
                   }
-                  else diminta = 0
+                  // kalo sampe else coba cek mana yang ga match
+                  else {
+                    console.log('index res 2', index2, masuk[index2], res)
+                    diminta = 0
+                  }
                 }
               }
             }
@@ -687,70 +693,70 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
       const data = []
       const items = []
-      // const resp = await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
-      await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
-        .then(resp => {
-          if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
-          this.mapingItem(resp?.data?.data, items)
-          items.forEach((item, i) => {
-            // console.log('item', item)
-            if (item?.data?.length) {
-              item?.data.forEach((dat, d) => {
-                const ada = {}
-                if (d === 0) {
-                  ada.no = i + 1
-                  ada.kd_obat = item?.kd_obat
-                  ada.nama_obat = item?.nama_obat
-                  ada.satuan_k = item?.satuan_k
-                  if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
-                }
-                if (this.params.jenis === 'rekap') {
-                  ada.ket = dat?.ket
-                  ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
-                  ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
-                  ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
-                  ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
-                  ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
-                  ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
-                  ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
-                  ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
-                }
-                else {
-                  ada.ket = dat?.ket
-                  ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
-                  ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
-                  ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
-                  ada.tglMasuk = dat?.masuk?.tgl ?? ''
-                  ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
-                  ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
-                  ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
-                  ada.tglKeluar = dat?.keluar?.tgl ?? ''
-                  ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
-                  ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
-                  ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
-                  ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
-                  ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
-                  ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
-                }
-
-                data.push(ada)
-              })
+      const resp = await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
+      // await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
+      // .then(resp => {
+      if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
+      this.mapingItem(resp?.data?.data, items)
+      items.forEach((item, i) => {
+        // console.log('item', item)
+        if (item?.data?.length) {
+          item?.data.forEach((dat, d) => {
+            const ada = {}
+            if (d === 0) {
+              ada.no = i + 1
+              ada.kd_obat = item?.kd_obat
+              ada.nama_obat = item?.nama_obat
+              ada.satuan_k = item?.satuan_k
+              if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
+            }
+            if (this.params.jenis === 'rekap') {
+              ada.ket = dat?.ket
+              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
+              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
+              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
+              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
+              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
+              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
+              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
+              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
             }
             else {
-              const temp = {}
-
-              temp.no = i + 1
-              temp.kd_obat = item?.kd_obat
-              temp.nama_obat = item?.nama_obat
-              temp.satuan_k = item?.satuan_k
-              if (this.params.jenis === 'rekap') temp.uraian50 = item?.uraian50
-              data.push(temp)
+              ada.ket = dat?.ket
+              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
+              ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
+              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
+              ada.tglMasuk = dat?.masuk?.tgl ?? ''
+              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
+              ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
+              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
+              ada.tglKeluar = dat?.keluar?.tgl ?? ''
+              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
+              ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
+              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
+              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
+              ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
+              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
             }
-          })
 
-          console.log('items', data)
-          return data
-        })
+            data.push(ada)
+          })
+        }
+        else {
+          const temp = {}
+
+          temp.no = i + 1
+          temp.kd_obat = item?.kd_obat
+          temp.nama_obat = item?.nama_obat
+          temp.satuan_k = item?.satuan_k
+          if (this.params.jenis === 'rekap') temp.uraian50 = item?.uraian50
+          data.push(temp)
+        }
+      })
+
+      console.log('items', data)
+      return data
+      // })
     },
     startDownload () { this.loadingDownload = true },
     finishDownload () { this.loadingDownload = false },
