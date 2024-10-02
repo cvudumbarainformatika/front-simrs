@@ -47,6 +47,21 @@
       </div>
     </template>
     <template #top-right>
+      <!-- refresh Ids -->
+      <q-btn
+        unelevated
+        round
+        size="sm"
+        icon="icon-mat-refresh"
+        @click="store.goToPage(1)"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Refresh Table
+        </q-tooltip>
+      </q-btn>
       <q-btn
         flat
         icon="icon-my-file-excel"
@@ -329,19 +344,17 @@ function hitungPenyesuaianKeluar (arr) {
 }
 
 function stokSekarang (arr) {
-  let jumlah = 0
+  // let jumlah = 0
   const bulanIni = date.formatDate(Date.now(), 'MM')
-  // console.log('bulan', bulanIni, store.params.bulan, bulanIni === store.params.bulan)
+  // console.log('bulan', bulanIni, store.params.bulan, bulanIni === store.params.bulan.toString())
 
-  if (bulanIni === store.params.bulan) {
-    keteranganStok.value = 'Stok Sekarang'
-    jumlah = arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  if (bulanIni === store.params.bulan.toString()) {
+    // console.log('jumlah', arr?.stok?.map(m => m.jumlah), arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0))
+    return arr?.stok?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
   }
   else {
-    keteranganStok.value = 'Stok Opname'
-    jumlah = arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+    return arr?.saldoakhir?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
   }
-  return jumlah
 }
 function stokFisik (arr) {
   return arr?.fisik?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)

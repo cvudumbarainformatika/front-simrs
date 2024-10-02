@@ -56,9 +56,9 @@ const refCardStok = ref(null)
 
 onMounted(() => {
   store.getInitialData()
-    .then(() => {
-      store.getData()
-    })
+  // .then(() => {
+  //   store.getData()
+  // })
 
   console.log('refCardStok', refCardStok.value)
 })

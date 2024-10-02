@@ -14,7 +14,7 @@
       </div>
 
       <div
-        class="row justify-between items-center print-hide"
+        class="row no-wrap justify-between items-center print-hide"
       >
         <div class="col-grow">
           <div class="row q-col-gutter-sm q-my-sm">
