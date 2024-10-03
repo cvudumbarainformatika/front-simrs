@@ -431,7 +431,10 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       masuk[index2].sub = 0
                     }
                   }
-                  else diminta = 0
+                  else {
+                    console.log('kode obat tidak ada', res, masuk.filter(f => f.jumlah > 0))
+                    diminta = 0
+                  }
                 }
               }
             }
@@ -816,7 +819,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
               ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
             }
-            console.log('ada', ada)
+            // console.log('ada', ada)
             data.push(ada)
             dataForTotal.push(tmpForTot)
           })
