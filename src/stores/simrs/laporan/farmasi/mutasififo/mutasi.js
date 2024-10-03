@@ -78,55 +78,65 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     mapingItem (val, array) {
       val.forEach(it => {
         it.data = []
-        it?.saldoawal.forEach(s => {
-          const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
-          const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
-          console.log('har', harTr, harga)
-          s.harga = harga
-          s.sub = harga * s.jumlah
-        })
-        it?.saldo.forEach(s => {
-          const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
-          const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
-          s.harga = harga
-          s.sub = harga * s.jumlah
-        })
-        if (it?.resepkeluar.length) {
-          it?.resepkeluar.forEach(res => {
-            const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
-            res.harga = harga
-            res.sub = harga * res.jumlah
-          })
-        }
-        if (it?.returpenjualan.length) {
-          it?.returpenjualan.forEach(res => {
-            const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
-            res.harga = harga
-            res.sub = harga * res.jumlah
-          })
-        }
-        if (it?.resepkeluarracikan.length) {
-          it?.resepkeluarracikan.forEach(rac => {
-            const harTr = rac?.rincipenerimaan?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
-            const harSt = rac?.opname?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
-            const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? rac?.herga)
-            rac.harga = harga
-            rac.sub = harga * rac.jumlah
+        // --- harga dan sub dg bawa penerimaan rinci start ---
+        // it?.saldoawal.forEach(s => {
+        //   const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
+        //   const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
+        //   console.log('har', harTr, harga)
+        //   s.harga = harga
+        //   s.sub = harga * s.jumlah
+        // })
+        // it?.saldo.forEach(s => {
+        //   const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
+        //   const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
+        //   s.harga = harga
+        //   s.sub = harga * s.jumlah
+        // })
+        // if (it?.resepkeluar.length) {
+        //   it?.resepkeluar.forEach(res => {
+        //     const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //     const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
+        //     res.harga = harga
+        //     res.sub = harga * res.jumlah
+        //   })
+        // }
+        // if (it?.returpenjualan.length) {
+        //   it?.returpenjualan.forEach(res => {
+        //     const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //     const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
+        //     res.harga = harga
+        //     res.sub = harga * res.jumlah
+        //   })
+        // }
+        // if (it?.resepkeluarracikan.length) {
+        //   it?.resepkeluarracikan.forEach(rac => {
+        //     const harTr = rac?.rincipenerimaan?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
+        //     const harSt = rac?.opname?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
+        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? rac?.herga)
+        //     rac.harga = harga
+        //     rac.sub = harga * rac.jumlah
 
-            const index = this.params.jenis === 'rekap' ? it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat) : it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat && a.nopenerimaan === rac.nopenerimaan)
-            if (index >= 0) {
-              const jum = parseFloat(it.resepkeluar[index].jumlah) + parseFloat(rac.jumlah)
-              const sub = parseFloat(it.resepkeluar[index].sub) + parseFloat(rac.sub)
-              it.resepkeluar[index].jumlah = jum
-              it.resepkeluar[index].sub = sub
-            }
-            else it.resepkeluar.push(rac)
-          })
-        }
+        //     const index = this.params.jenis === 'rekap' ? it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat) : it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat && a.nopenerimaan === rac.nopenerimaan)
+        //     if (index >= 0) {
+        //       const jum = parseFloat(it.resepkeluar[index].jumlah) + parseFloat(rac.jumlah)
+        //       const sub = parseFloat(it.resepkeluar[index].sub) + parseFloat(rac.sub)
+        //       it.resepkeluar[index].jumlah = jum
+        //       it.resepkeluar[index].sub = sub
+        //     }
+        //     else it.resepkeluar.push(rac)
+        //   })
+        // }
+
+        // it?.retur?.forEach(per => {
+        //   const harTr = per?.rincipenerimaan?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
+        //   const harSt = per?.opname?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
+        //   const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? per?.harga)
+        //   per.harga = harga
+        //   per.sub = harga * per.jumlah
+        // })
+        // di pemakaian memang tidak ada harga beli
         it?.pemakaian?.forEach(res => {
           const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
           const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
@@ -134,14 +144,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           res.harga = harga
           res.sub = harga * res.jumlah
         })
-
-        it?.retur?.forEach(per => {
-          const harTr = per?.rincipenerimaan?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
-          const harSt = per?.opname?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
-          const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? per?.harga)
-          per.harga = harga
-          per.sub = harga * per.jumlah
-        })
+        // --- harga dan sub dg bawa penerimaan rinci start ---
         const masuk = []
         const resep = it.resepkeluar
         const pak = it.pemakaian
@@ -755,6 +758,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       param.params.action = 'download'
 
       const data = []
+      const dataForTotal = []
       const items = []
       const resp = await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
       // await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
@@ -766,6 +770,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         if (item?.data?.length) {
           item?.data.forEach((dat, d) => {
             const ada = {}
+            const tmpForTot = {}
             if (d === 0) {
               ada.no = i + 1
               ada.kd_obat = item?.kd_obat
@@ -773,6 +778,16 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               ada.satuan_k = item?.satuan_k
               if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
             }
+            // ini untuk menjmlah total
+            tmpForTot.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
+            tmpForTot.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
+            tmpForTot.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
+            tmpForTot.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
+            tmpForTot.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
+            tmpForTot.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
+            tmpForTot.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
+            tmpForTot.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
+
             if (this.params.jenis === 'rekap') {
               ada.ket = dat?.ket
               ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
@@ -803,6 +818,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
             console.log('ada', ada)
             data.push(ada)
+            dataForTotal.push(tmpForTot)
           })
         }
         else {
@@ -819,14 +835,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       // total
       const tot = {
         ket: 'Total',
-        jumlSalAwal: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.jumlSalAwal) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlSalAwal), 0), 2)),
-        nilaiSalAwal: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.nilaiSalAwal) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiSalAwal), 0), 2)),
-        jumlMasuk: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.jumlMasuk) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlMasuk), 0), 2)),
-        nilaiMasuk: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.nilaiMasuk) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiMasuk), 0), 2)),
-        jumlKeluar: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.jumlKeluar) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlKeluar), 0), 2)),
-        nilaiKeluar: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.nilaiKeluar) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiKeluar), 0), 2)),
-        jumlSalAkhir: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.jumlSalAkhir) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlSalAkhir), 0), 2)),
-        nilaiSalAkhir: this.cekNan(formatDoubleKoma(data?.filter(f => parseFloat(f.nilaiSalAkhir) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiSalAkhir), 0), 2))
+        jumlSalAwal: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.jumlSalAwal) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlSalAwal), 0), 2)),
+        nilaiSalAwal: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.nilaiSalAwal) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiSalAwal), 0), 2)),
+        jumlMasuk: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.jumlMasuk) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlMasuk), 0), 2)),
+        nilaiMasuk: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.nilaiMasuk) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiMasuk), 0), 2)),
+        jumlKeluar: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.jumlKeluar) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlKeluar), 0), 2)),
+        nilaiKeluar: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.nilaiKeluar) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiKeluar), 0), 2)),
+        jumlSalAkhir: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.jumlSalAkhir) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlSalAkhir), 0), 2)),
+        nilaiSalAkhir: this.cekNan(formatDoubleKoma(dataForTotal?.filter(f => parseFloat(f.nilaiSalAkhir) > 0)?.reduce((a, b) => parseFloat(a) + parseFloat(b.nilaiSalAkhir), 0), 2))
       }
       data.push(tot)
       console.log('items', data)
