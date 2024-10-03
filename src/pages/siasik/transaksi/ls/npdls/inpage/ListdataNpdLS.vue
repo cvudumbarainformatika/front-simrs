@@ -113,6 +113,9 @@
                       <q-item clickable v-close-popup @click="viewDataNpdls(props?.row)">
                         <q-item-section>Cetak NPD</q-item-section>
                       </q-item>
+                      <q-item clickable v-close-popup @click="PrintPencairan(props?.row)">
+                        <q-item-section>Cetak Pencairan</q-item-section>
+                      </q-item>
                     </q-list>
                   </q-menu>
                 </q-btn>
@@ -167,6 +170,10 @@
         v-model="store.dialogEditNpd"
         :editnpds="editnpds"
       />
+      <cetak-pencairan
+        v-model="store.dialogPrintPencairan"
+        :printcair="printcair"
+      />
     </div>
   </template>
 </template>
@@ -180,7 +187,7 @@ import { defineAsyncComponent, onMounted, ref } from 'vue'
 const AppDialogRincian = defineAsyncComponent(() => import('./DialogRincian.vue'))
 const PrintdiNpdls = defineAsyncComponent(() => import('../print/PrintdiListNPD.vue'))
 const EditdataNpdls = defineAsyncComponent(() => import('../inpage/DialogEditnpdls.vue'))
-
+const CetakPencairan = defineAsyncComponent(() => import('../print/DialogPrintPencairan.vue'))
 const store = formNotaPermintaanDanaLS()
 
 onMounted(() => {
@@ -281,6 +288,14 @@ function editNpdls (row) {
   editnpds.value = row
   store.form = editnpds.value
   console.log('Edit NPD', editnpds.value)
+}
+const printcair = ref(null)
+function PrintPencairan (row) {
+  console.log('cetak Pencairan', row)
+  store.dialogPrintPencairan = true
+  printcair.value = row
+  store.npddatasave = printcair.value
+  console.log('openNPD', store.npddatasave)
 }
 </script>
 

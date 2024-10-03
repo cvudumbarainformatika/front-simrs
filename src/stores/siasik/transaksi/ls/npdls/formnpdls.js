@@ -146,6 +146,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     dialogEditNpd: false,
     // datafarmasi: [],
     // bastfarmasis: [],
+    dialogPrintPencairan: false,
     dialogCetakNpd: false,
     openDialogFarmasi: false,
     openDialogSiasik: false,
@@ -388,6 +389,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
           const arr = this.listnpdls[i]
           console.log('rincianqqq', arr)
           const head = {
+            nonpk: arr.nonpk,
             nonpdls: arr.nonpdls,
             tglnpdls: arr.tglnpdls,
             bidang: arr.bidang,
@@ -404,7 +406,10 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             serahterimapekerjaan: arr.serahterimapekerjaan,
             tglcair: arr.npkrinci?.header?.tglpindahbuku,
             total: arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
-            rincian: arr.npdlsrinci
+            rincian: arr.npdlsrinci,
+            pajak: arr.pajak,
+            totalpajak: parseFloat(arr.pajak?.ppnpusat) + parseFloat(arr.pajak?.pph21) + parseFloat(arr.pajak?.pph22) + parseFloat(arr.pajak?.pph23) + parseFloat(arr.pajak?.pph25) + parseFloat(arr.pajak?.pajakdaerah) + parseFloat(arr.pajak?.pasal4),
+            totalbayar: (arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)) - (parseFloat(arr.pajak?.ppnpusat) + parseFloat(arr.pajak?.pph21) + parseFloat(arr.pajak?.pph22) + parseFloat(arr.pajak?.pph23) + parseFloat(arr.pajak?.pph25) + parseFloat(arr.pajak?.pajakdaerah) + parseFloat(arr.pajak?.pasal4))
           }
           // console.log('head', head)
           // const el = arr.npdlsrinci
