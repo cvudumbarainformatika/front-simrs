@@ -23,7 +23,7 @@ const props = defineProps({
 const min = ref(false)
 
 // eslint-disable-next-line no-unused-vars
-const { store, settings, fields } = useRightPanel(props.pasien)
+const { store, settings, fields, nakes } = useRightPanel(props.pasien)
 
 const beforeEnter = (el) => {
   el.style.opacity = 0
@@ -58,7 +58,7 @@ const enter = (el, done) => {
               <div v-for="(item, i) in pasien?.pemeriksaan" :key="i" v-ripple class="q-card q-pa-md q-mb-sm cursor-pointer">
                 <q-item-section>
                   <q-item-label class="text-bold">
-                    ASESMENT AWAL KEPERAWATAN
+                    {{ nakes?.dokter ? 'ASESMENT AWAL MEDIS' : 'ASESMENT AWAL KEPERAWATAN' }}
                   </q-item-label>
                   <q-item-label>Data Pemeriksaan Tersimpan</q-item-label>
                   <q-item-label caption>

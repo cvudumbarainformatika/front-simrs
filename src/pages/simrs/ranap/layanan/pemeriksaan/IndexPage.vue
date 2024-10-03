@@ -41,7 +41,10 @@
 </template>
 
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { computed, defineAsyncComponent, ref } from 'vue'
+
+const auth = useAplikasiStore()
 
 defineProps({
   pasien: {
@@ -53,25 +56,45 @@ defineProps({
     default: null
   }
 })
-
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
+})
 const tab = ref('umum')
 
-const tabs = [
+const tabsxx = [
   {
     label: 'Fisik & Umum',
     name: 'umum',
     icon: 'icon-my-stethoscope',
+    nakes: ['1', '2'],
     comp: defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
   },
-  { label: 'Penilaian', name: 'penilaian', icon: 'icon-mat-description', comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue')) },
-  { label: 'Anatomi', name: 'fisik', icon: 'icon-my-human-back-svgrepo-com', comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue')) }
+  {
+    label: 'Penilaian',
+    name: 'penilaian',
+    icon: 'icon-mat-description',
+    nakes: ['2'],
+    comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue'))
+  },
+  {
+    label: 'Anatomi',
+    name: 'fisik',
+    icon: 'icon-my-human-back-svgrepo-com',
+    nakes: ['1', '2'],
+    comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
+  }
 ]
 
 const menu = computed(() => {
   const by = tab.value
 
-  return tabs.find(i => i.name === by)
+  return tabs.value.find(i => i.name === by)
 })
+
+const tabs = computed(() => {
+  return tabsxx.filter(i => i.nakes.includes(nakes.value))
+})
+
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 import { api } from 'src/boot/axios'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 // import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 // eslint-disable-next-line no-unused-vars
@@ -7,6 +8,8 @@ import { onMounted, reactive, ref } from 'vue'
 export default function useRightPanel (pasien) {
   const store = usePemeriksaanUmumRanapStore()
   // const pengunjung = usePengunjungRanapStore()
+
+  const auth = useAplikasiStore()
 
   const settings = reactive({
     splitMin: 50,
@@ -23,27 +26,16 @@ export default function useRightPanel (pasien) {
     ]
   })
 
-  onMounted(() => {
-    // console.log('did mount', pengunjung.pasiens)
-    setPasien()
-    getData()
+  const nakes = reactive({
+    dokter: !!(auth?.user?.pegawai?.kdgroupnakes === '1' || auth?.user?.pegawai?.kdgroupnakes === 1),
+    perawat: !!(auth?.user?.pegawai?.kdgroupnakes === '2' || auth?.user?.pegawai?.kdgroupnakes === 2)
+
   })
 
-  const setPasien = () => {
-    // const findPasien = pengunjung?.pasiens.filter(x => x?.noreg === pasien?.noreg)
-    // console.log('find', findPasien)
-
-    // this.pasiens[indexPasien] = data
-    // // console.log('wew', this.pasiens[indexPasien])
-    // if (findPasien.length) {
-    //   const datax = findPasien[0]
-    //   datax.newapotekrajal = data?.newapotekrajal
-    //   datax.diagnosa = data?.diagnosa
-    //   // datax.dokter = data?.datasimpeg?.nama
-    //   // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
-    //   // this.pageLayanan = false
-    // }
-  }
+  onMounted(() => {
+    // console.log('did mount', pengunjung.pasiens)
+    getData()
+  })
 
   const getData = async () => {
     const params = {
@@ -51,8 +43,8 @@ export default function useRightPanel (pasien) {
         noreg: pasien?.noreg
       }
     }
-    const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/penilaian', params)
-    console.log('resp right penilaian', resp)
+    const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
+    console.log('resp right pemeriksaan', resp)
     if (resp.status === 200) {
       // store.items = resp.data
       store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
@@ -60,6 +52,6 @@ export default function useRightPanel (pasien) {
   }
 
   return {
-    store, settings, fields
+    store, settings, fields, nakes
   }
 }

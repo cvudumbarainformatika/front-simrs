@@ -1111,7 +1111,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       const pengunjung = usePengunjungRanapStore()
       pengunjung.injectDataPasien(pasien?.noreg, pushSementara, 'anamnesis')
 
-      console.log('form, jenis kasus', req)
+      // console.log('form, jenis kasus', req)
 
       try {
         const resp = await api.post('v1/simrs/ranap/layanan/anamnesis/simpananamnesis', req)
@@ -1138,17 +1138,34 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
       const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns) ?? []
 
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
+
       this.items.igd = igd
       this.items.ranap = ranap
 
       const pengunjung = usePengunjungRanapStore()
 
-      const form = ranap.length ? ranap[0] : null
-      if (form) {
-        pengunjung.injectDataPasien(pasien?.noreg, form, 'anamnesis')
+      // baru ada penyesuaian nakes
+      let form = null
+      const dokter = jns === '1' || jns === 1
+      if (dokter) {
+        if (ranap.length) { form = ranap[0] }
+        else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
+      }
+      else {
+        form = ranap.length ? ranap[0] : null
+      }
+
+      if (form) ranap.length ? form.id = ranap[0].id : form.id = null
+      const isianList = ranap.length ? ranap[0] : null
+
+      if (isianList) {
+        pengunjung.injectDataPasien(pasien?.noreg, isianList, 'anamnesis')
         pengunjung.deleteInjectanNull(pasien?.noreg, 'anamnesis')
       }
       this.initReset(form)
+      if (dokter) this.form.keluhannyeri = null
+      if (dokter) this.form.skreeninggizi = null
     },
     SPLICE_ITEMS_RANAP (arr) {
       const idx = arr?.findIndex(x => x.id === null)

@@ -168,6 +168,10 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       lida: 0,
       lirut: 0,
       lilengtas: 0,
+      bbi: null,
+      bmi: null,
+      statusGizi: null,
+      kesimpulan: null,
 
       glasgow: {},
       glasgowSkor: 0,
@@ -291,8 +295,8 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       { value: 'Cemas', label: 'Cemas' },
       { value: 'Takut', label: 'Takut' },
       { value: 'Marah', label: 'Marah' },
-      { value: 'Sedih', label: 'Sedih' },
-      { value: 'Lain-lain', label: 'Lain-lain' }
+      { value: 'Sedih', label: 'Sedih' }
+      // { value: 'Lain-lain', label: 'Lain-lain' }
     ],
     penyebabs: ['Hukuman', 'Ujian', 'Takdir', 'Buatan Orang Lain', 'Keturunan'],
     komunikasi: ['Normal', 'Introvert', 'Extrovert'],
@@ -417,7 +421,16 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         // pemeriksaan fisik
       }
 
-      if (data) this.setForm('form', data, ['edukasi'], null)
+      // if (data) this.setForm('form', data, ['edukasi'], null)
+
+      if (data) {
+        Object.keys(this.form).forEach(key => {
+          if (key !== 'edukasi') {
+            this.form[key] = data[key] ?? null
+          }
+        })
+      }
+
       if (data?.edukasi) this.setAnotherForm(this.frmEdukasis, data, 'edukasi', 'form')
 
       this.formKebidanan = {
@@ -469,9 +482,15 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         gynecologiInsVgnToucher: null
 
       }
-      if (data?.kebidanan) this.setForm('formKebidanan', data, [], 'kebidanan')
+      // if (data?.kebidanan) this.setForm('formKebidanan', data, [], 'kebidanan')
 
-      // console.log('formKebidanan: ', this.formKebidanan)
+      if (data?.kebidanan) {
+        Object.keys(this.formKebidanan).forEach(key => {
+          // if (key !== 'edukasi') {
+          this.formKebidanan[key] = data?.kebidanan[key] ?? null
+          // }
+        })
+      }
 
       this.formNeonatal = {
         lila: 0,
@@ -535,7 +554,16 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         apgarKet: null
       }
 
-      if (data?.neonatal) this.setForm('formNeonatal', data, ['apgarScores'], 'neonatal')
+      // if (data?.neonatal) this.setForm('formNeonatal', data, ['apgarScores'], 'neonatal')
+
+      if (data?.neonatal) {
+        Object.keys(this.formNeonatal).forEach(key => {
+          if (key !== 'apgarScores') {
+            this.formNeonatal[key] = data?.neonatal[key] ?? null
+          }
+        })
+      }
+
       const apggar = {}
       for (let i = 0; i < this.frmApgarScores.length; i++) {
         const el = this.frmApgarScores[i]
@@ -544,20 +572,32 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
       this.formNeonatal.apgarScores = apggar
 
-      console.log('formNeonatal: ', this.formNeonatal)
+      // console.log('formNeonatal: ', this.formNeonatal)
 
       this.formPediatrik = {
         lila: 0,
         lida: 0,
         lirut: 0,
         lilengtas: 0,
+        bbi: null,
+        bmi: null,
+        statusGizi: null,
+        kesimpulan: null,
 
         glasgow: {},
         glasgowSkor: 0,
         glasgowKet: null
       }
 
-      if (data?.pediatrik) this.setForm('formPediatrik', data, ['glasgow'], 'pediatrik')
+      // if (data?.pediatrik) this.setForm('formPediatrik', data, ['glasgow'], 'pediatrik')
+      if (data?.pediatrik) {
+        Object.keys(this.formPediatrik).forEach(key => {
+          if (key !== 'glasgow') {
+            this.formPediatrik[key] = data?.pediatrik[key] ?? null
+          }
+        })
+      }
+
       const glass = {}
       for (let i = 0; i < this.frmGlasgows.length; i++) {
         const el = this.frmGlasgows[i]
@@ -708,6 +748,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
       const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns) ?? []
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
 
       this.items.igd = igd
       this.items.ranap = ranap
@@ -716,12 +757,26 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
       const pengunjung = usePengunjungRanapStore()
 
-      const form = ranap.length ? ranap[0] : null
-      if (form) {
-        pengunjung.injectDataPasien(pasien?.noreg, form, 'pemeriksaan')
+      // baru ada penyesuaian nakes
+      let form = null
+      const dokter = jns === '1' || jns === 1
+      if (dokter) {
+        if (ranap.length) { form = ranap[0] }
+        else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
+      }
+      else {
+        form = ranap.length ? ranap[0] : null
+      }
+
+      if (form) ranap.length ? form.id = ranap[0].id : form.id = null
+      const isianList = ranap.length ? ranap[0] : null
+
+      if (isianList) {
+        pengunjung.injectDataPasien(pasien?.noreg, isianList, 'pemeriksaan')
         pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
       }
       this.initReset(form)
+      console.log('form', form)
     },
 
     SPLICE_ITEMS_RANAP (arr) {

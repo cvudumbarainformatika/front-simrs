@@ -26,7 +26,7 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.bb=_removedZeros
-            cekEws('bb', _removedZeros)
+            // cekEws('bb', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -34,7 +34,7 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.tb=_removedZeros
-            cekEws('tb', _removedZeros)
+            // cekEws('tb', _removedZeros)
           }"
         />
         <app-input-simrs
@@ -43,7 +43,7 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.nadi=_removedZeros
 
-            cekEws('nadi', _removedZeros)
+            cekEws()
           }"
         />
         <app-input-simrs
@@ -52,7 +52,7 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.sistole=_removedZeros
 
-            cekEws('sistole', _removedZeros)
+            cekEws()
           }"
         />
         <app-input-simrs
@@ -61,7 +61,7 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.diastole=_removedZeros
 
-            cekEws('diastole', _removedZeros)
+            cekEws()
           }"
         />
         <app-input-simrs
@@ -70,7 +70,7 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.pernapasan=_removedZeros
 
-            cekEws('rr', _removedZeros)
+            cekEws()
           }"
         />
         <app-input-simrs
@@ -79,7 +79,7 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.spo=_removedZeros
 
-            cekEws('spo2', _removedZeros)
+            cekEws()
           }"
         />
         <app-input-simrs
@@ -88,10 +88,10 @@
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.suhu=_removedZeros
 
-            cekEws('suhu', _removedZeros)
+            cekEws()
           }"
         />
-        <div v-if="kasus?.gruping==='4.4'" class="col-12 row q-col-gutter-xs">
+        <div v-if="gruping==='4.4' || gruping==='5.4'" class="col-12 row q-col-gutter-xs">
           <app-input-simrs
             label="Lila (cm)" class="col-2" v-model="store.formPediatrik.lila" :valid="{ number: true }" :lazy-rules="true"
             @update:model-value="(val)=>{
@@ -124,6 +124,38 @@
           />
         </div>
 
+        <q-separator class="q-my-xs col-12" />
+        <div v-if="gruping==='5.4'" class="col-12 row q-col-gutter-xs">
+          <app-input-simrs
+            label="BBI" class="col-4" v-model="store.formPediatrik.bbi" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              // const _removedZeros = val.replace(/^0+/, '')
+              // if (val > 1) store.formPediatrik.lila=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="BMI" class="col-4" v-model="store.formPediatrik.bmi" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              // const _removedZeros = val.replace(/^0+/, '')
+              // if (val > 1) store.formPediatrik.lila=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="Status Gizi" class="col-4" v-model="store.formPediatrik.statusGizi" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              // const _removedZeros = val.replace(/^0+/, '')
+              // if (val > 1) store.formPediatrik.lila=_removedZeros
+            }"
+          />
+          <app-input-simrs
+            label="Kesimpulan Antropometri" class="col-10" v-model="store.formPediatrik.kesimpulan" :lazy-rules="true"
+            @update:model-value="(val)=>{
+              // const _removedZeros = val.replace(/^0+/, '')
+              // if (val > 1) store.formPediatrik.lila=_removedZeros
+            }"
+          />
+        </div>
+
         <q-select
           v-model="store.form.tkKesadaran"
           dense
@@ -137,6 +169,7 @@
           fill-input
           hide-bottom-space
           class="col-8"
+          @update:model-value="cekEws()"
         />
       </q-card-section>
       <div class="absolute q-pa-md" style="right: 0; bottom:0">
@@ -145,7 +178,7 @@
             <div class="f-12 ">
               SKOR
             </div>
-            <div class="text-h4 text-bold">
+            <div class="f-24 text-bold">
               {{ skoring }}
             </div>
           </q-card-section>
@@ -286,7 +319,7 @@
 
     <!-- end 4.1 -->
     <!-- start 4.2 -->
-    <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.2'" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.2 KEBIDANAN</strong>
       </q-card-section>
@@ -456,7 +489,7 @@
     </q-card>
 
     <!-- start 4.3 -->
-    <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.3'" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.3 NEONATAL</strong>
       </q-card-section>
@@ -724,7 +757,7 @@
     </q-card>
 
     <!-- start 4.4 -->
-    <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.4'" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>Glasgow Coma Scale</strong>
       </q-card-section>
@@ -765,12 +798,14 @@
 
 <script setup>
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import useEws from '../../../Ews/useEws'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const AutocompleteInput = defineAsyncComponent(() => import('../../../components/AutocompleteInput.vue'))
 const SelectInput = defineAsyncComponent(() => import('../../../components/SelectInput.vue'))
 
+const auth = useAplikasiStore()
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
@@ -782,6 +817,27 @@ const props = defineProps({
     default: null
   }
 })
+
+// eslint-disable-next-line no-unused-vars
+const gruping = computed(() => {
+  const nakes = auth?.user?.pegawai?.kdgroupnakes
+  const dokter = nakes === '1' || nakes === 1
+  const perawat = nakes === '2' || nakes === 2
+
+  let gruping = null
+  if (dokter) gruping = props?.kasus?.medis
+  else if (perawat) gruping = props?.kasus?.perawat
+
+  console.log('gruping', gruping, nakes)
+
+  return gruping
+})
+
+// eslint-disable-next-line no-unused-vars
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
+})
+
 const { cekEws, skoring } = useEws(props?.pasien, props?.kasus)
 const refKeadaanUmum = ref(null)
 

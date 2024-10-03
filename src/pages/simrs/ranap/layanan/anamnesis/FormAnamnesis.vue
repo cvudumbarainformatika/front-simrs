@@ -64,7 +64,7 @@
       style="width:50%"
     />
 
-    <div class="col-12">
+    <div v-if="!nakes==='1'" class="col-12">
       <!-- RIWAYAT ALERGI -->
       <q-card flat bordered class="q-mb-sm">
         <q-card-section>
@@ -99,7 +99,7 @@
       </q-card>
 
       <!-- FORM 4.2 -->
-      <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.2'" flat bordered class="q-mb-sm">
         <q-card-section class="row q-col-gutter-xs">
           <div class="text-weight-bold col-12">
             Form 4.2 (Kebidanan)
@@ -371,7 +371,7 @@
       </q-card>
 
       <!-- FORM 4.3 -->
-      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.3'" flat bordered class="q-mb-sm">
         <q-card-section>
           <div class="text-weight-bold">
             Form 4.3 (Neonatal)
@@ -693,7 +693,7 @@
       </q-card>
 
       <!-- FORM 4.4 -->
-      <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.4'" flat bordered class="q-mb-sm">
         <q-card-section>
           <div class="text-weight-bold">
             Form 4.4 (Pediatrik)
@@ -959,7 +959,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.1 -->
-      <q-card v-if="kasus?.gruping==='4.1'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.1'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
             <div class="text-weight-bold">
@@ -1072,7 +1072,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.2 -->
-      <q-card v-if="kasus?.gruping==='4.2'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.2'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
             <div class="text-weight-bold">
@@ -1145,7 +1145,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.3 NEONATAL -->
-      <q-card v-if="kasus?.gruping==='4.3'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.3'" flat bordered class="q-mb-sm">
         <q-card-section>
           <div class="text-weight-bold">
             Kajian Nyeri NIPS (Neonatus Infant Pain Scale)
@@ -1181,7 +1181,7 @@
       </q-card>
 
       <!-- KAJIAN NYERI 4.4 Pediatrik -->
-      <q-card v-if="kasus?.gruping==='4.4'" flat bordered class="q-mb-sm">
+      <q-card v-if="gruping==='4.4'" flat bordered class="q-mb-sm">
         <q-card-section class="q-py-xs q-px-md">
           <div class="flex q-gutter-xs items-center">
             <div class="text-weight-bold">
@@ -1255,7 +1255,7 @@
       </q-card>
 
       <!-- GIZI 4.1 DEWASA -->
-      <div v-if="kasus?.gruping==='4.1'" class="skreening-gizi-dewasa">
+      <div v-if="gruping==='4.1'" class="skreening-gizi-dewasa">
         <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1283,7 +1283,7 @@
         </q-card>
       </div>
       <!-- GIZI 4.2 KEBIDANAN -->
-      <div v-if="kasus?.gruping==='4.2'" class="skreening-gizi-kebidanan">
+      <div v-if="gruping==='4.2'" class="skreening-gizi-kebidanan">
         <!-- <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1367,7 +1367,7 @@
         </q-card>
       </div>
       <!-- GIZI 4.3 NEONATAL -->
-      <div v-if="kasus?.gruping==='4.3'" class="skreening-gizi-neonatal">
+      <div v-if="gruping==='4.3'" class="skreening-gizi-neonatal">
         <q-card flat bordered>
           <q-card-section class="q-py-sm q-px-md">
             <div>
@@ -1396,7 +1396,7 @@
       </div>
 
       <!-- GIZI 4.4 PEDIATRIK -->
-      <div v-if="kasus?.gruping==='4.4'" class="skreening-gizi-pediatrik">
+      <div v-if="gruping==='4.4'" class="skreening-gizi-pediatrik">
         <q-card flat bordered>
           <q-card-section class="">
             <div>
@@ -1430,6 +1430,8 @@
           </q-card-section>
         </q-card>
       </div>
+
+      <!-- {{ gruping }} -->
     </div>
 
     <!-- DIALOG -->
@@ -1438,6 +1440,7 @@
 </template>
 
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
@@ -1446,7 +1449,7 @@ const DialogFormRiwayat = defineAsyncComponent(() => import('./comp/DialogFormRi
 
 const store = useAnamnesisRanapStore()
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -1455,6 +1458,27 @@ defineProps({
     type: Object,
     default: null
   }
+})
+
+const auth = useAplikasiStore()
+
+// eslint-disable-next-line no-unused-vars
+const gruping = computed(() => {
+  const nakes = auth?.user?.pegawai?.kdgroupnakes
+  const dokter = nakes === '1' || nakes === 1
+  const perawat = nakes === '2' || nakes === 2
+
+  let gruping = null
+  if (dokter) gruping = props?.kasus?.medis
+  else if (perawat) gruping = props?.kasus?.perawat
+
+  console.log('gruping', gruping, nakes)
+
+  return gruping
+})
+
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
 })
 
 const refInputKu = ref(null)
