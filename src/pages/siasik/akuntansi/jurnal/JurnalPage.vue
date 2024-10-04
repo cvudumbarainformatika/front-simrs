@@ -72,7 +72,7 @@ const title = computed(() => {
   // //   return 'LIST MOBILE JKN'
   // }
   else {
-    return 'SALDO AWAL'
+    return 'REGJURNAL'
   }
 })
 
@@ -86,7 +86,7 @@ const subtitle = computed(() => {
   // //   return 'List Kunjungan dari m-JKN'
   // }
   else {
-    return 'Saldo Awal Akuntansi'
+    return 'Register Jurnal'
   }
 })
 
