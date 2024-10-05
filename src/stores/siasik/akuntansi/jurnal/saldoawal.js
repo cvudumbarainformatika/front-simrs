@@ -5,7 +5,9 @@ import { notifSuccess } from 'src/modules/utils'
 export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
   state: () => ({
     loading: false,
+    deleteloading: false,
     disabled: false,
+    dialogEdit: false,
     reqs: {
       q: '',
       simpanform: []
@@ -93,6 +95,23 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
             resolve(resp)
           }
         }).catch(() => { this.loading = false })
+      })
+    },
+    deleteSaldo (id) {
+      const payload = id
+      this.deleteloading = true
+      return new Promise((resolve) => {
+        api.post('v1/akuntansi/saldoawal/delete', payload).then((resp) => {
+          if (resp.status === 200) {
+            this.deleteloading = false
+            console.log('delete', resp)
+            notifSuccess(resp)
+            this.refreshTable()
+            resolve(resp)
+          }
+        }).catch(() => {
+          this.deleteloading = false
+        })
       })
     }
   }

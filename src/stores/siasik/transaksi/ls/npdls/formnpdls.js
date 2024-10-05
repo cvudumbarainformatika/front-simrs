@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { date } from 'quasar'
 import { notifSuccess } from 'src/modules/utils'
+import { dataBastFarmasi } from './databast'
 // import ListdataNpdLS from 'src/pages/siasik/transaksi/ls/npdls/inpage/ListdataNpdLS.vue'
 // import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 
@@ -429,14 +430,17 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         console.log('rinciiii', this.datanpd)
       }
     },
-    hapusRinci (val, row) {
-      console.log('hapus rinci', val)
+    hapusRinci (row) {
+      console.log('hapus rinci', row)
       this.loadingHapus = true
       return new Promise(resolve => {
-        api.post('/v1/transaksi/belanja_ls/deleterinci', val)
+        api.post('/v1/transaksi/belanja_ls/deleterinci', row)
           .then(resp => {
             this.loadingHapus = false
-            console.log('hapus head', resp)
+            console.log('hapus data', resp)
+
+            const bst = dataBastFarmasi()
+            bst.refreshTable()
             // const index = row.rincian.findIndex(x => x.id === val.id)
             // if (index >= 0) {
             //   row.rincian.splice(index, 1)
@@ -447,7 +451,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
           })
           .catch(() => {
             this.loadingHapus = false
-            val.loading = false
+            row.loading = false
           })
       })
     }

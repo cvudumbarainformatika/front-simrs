@@ -30,9 +30,14 @@
 </template>
 <script setup>
 import { registerJurnal } from 'src/stores/siasik/akuntansi/jurnal/regjurnal'
+import { onMounted } from 'vue'
 
 const store = registerJurnal()
 
+onMounted(() => {
+  store.getRegJurnal()
+  store.serahterima()
+})
 // eslint-disable-next-line no-unused-vars
 function ambilData () {
   store.getRegJurnal()

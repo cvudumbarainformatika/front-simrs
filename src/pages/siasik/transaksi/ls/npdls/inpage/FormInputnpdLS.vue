@@ -5,7 +5,7 @@
         <app-input-simrs
           v-model="store.form.nonpdls"
           label="Nomor NPD-LS"
-          disable
+          readonly
           outlined
           dense
         />
@@ -497,7 +497,11 @@ function onSimpan (val) {
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
     store.reqs.subtotal = subtotal
   }
-  store.simpanNpdls()
+  store.simpanNpdls().then(() => {
+    // const npd = store.reqs.nonpdls
+    // store.form.rincians.push(npd)
+    console.log('sssss', store.form.rincians)
+  })
   // return notifSuccessVue('Sukses Disimpan')
 
   // console.log('sisa', carisrt.itembelanja)

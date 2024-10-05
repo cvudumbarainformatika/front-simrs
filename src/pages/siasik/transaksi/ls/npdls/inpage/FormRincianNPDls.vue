@@ -268,8 +268,6 @@ import { formattanpaRp } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 
 const $q = useQuasar()
-// eslint-disable-next-line no-unused-vars
-const emits = defineEmits(['deleteIds'])
 const carisrt = dataBastFarmasi()
 const rincianNpd = ref([])
 // const rincians = ref([])
@@ -393,13 +391,21 @@ function deleteData (row) {
   $q.dialog({
     title: 'Peringatan',
     message: 'Apakah Data ini akan dihapus?',
-    cancel: true
-    // persistent: true
+    cancel: true,
+    persistent: true
   }).onOk(() => {
-    console.log('nonpd', store.npddatasave.nonpdls)
-    store.hapusRinci(row)
+    console.log('nonpd', store.form.nonpdls)
+    const payload = {
+      nonpdls: store.form.nonpdls,
+      nopenerimaan: row
+    }
+
+    store.hapusRinci(payload, row).then(() => {
+      carisrt.refreshTable()
+      $q.localStorage.getItem('rincian_npd')
+    })
     // store.setForm = props?.row
-    console.log('vv', store.hapusRinci(row))
+    // console.log('vv', store.hapusRinci(row))
     // const params = { id: selected.value }
     // emits('deleteIds', selected.value)
   }).onCancel(() => {

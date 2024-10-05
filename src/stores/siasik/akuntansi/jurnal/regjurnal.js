@@ -28,7 +28,8 @@ export const registerJurnal = defineStore('register_jurnal', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
     ],
-    regjurnal: []
+    regjurnal: [],
+    datastp: []
   }),
   actions: {
     getRegJurnal () {
@@ -41,10 +42,26 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.regjurnal = resp.data
 
             this.loading = false
+            this.serahterima()
             resolve(resp.data)
           }
         }).catch(() => { this.loading = false })
       })
+    },
+    serahterima () {
+      const stp = []
+      for (let i = 0; i < this.regjurnal.length; i++) {
+        const el = this.regjurnal
+        console.log('iiii', el)
+        const obj = {
+          notrans: el[i].noserahterimapekerjaan,
+          kegiatan: el[i].kegiatanblud,
+          koderek: el[i].rinci.map((x) => x.jurnal.kode_lra)
+        }
+        stp.push(obj)
+      }
+      this.datastp = stp
+      console.log('data STP', this.datastp)
     }
   }
 

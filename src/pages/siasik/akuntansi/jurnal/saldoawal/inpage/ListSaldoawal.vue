@@ -26,6 +26,26 @@
             <q-td key="kredit" :props="props">
               {{ formattanpaRp(props.row?.kredit) }}
             </q-td>
+            <q-td>
+              <div class="row justify-end">
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  color="warning"
+                  icon="icon-mat-edit"
+                  @click="editSa(props?.row)"
+                />
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  class="bg-warning"
+                  icon="icon-mat-delete"
+                  @click="deleteSa(props?.row)"
+                />
+              </div>
+            </q-td>
           </q-tr>
         </template>
         <template #bottom-row>
@@ -72,14 +92,20 @@
           </div>
         </template>
       </q-table>
+      <!-- <edit-data
+        v-model="store.dialogEdit"
+        :edit="edit"
+      /> -->
     </div>
   </template>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { saldoawalJurnal } from 'src/stores/siasik/akuntansi/jurnal/saldoawal'
 import { formattanpaRp } from 'src/modules/formatter'
 import { useQuasar } from 'quasar'
+// const EditData = defineAsyncComponent(() => import('./DialogEdit.vue'))
 
 const store = saldoawalJurnal()
 const $q = useQuasar()
@@ -108,6 +134,9 @@ const listSaldo = [
     label: 'Kredit (Rp.)',
     name: 'kredit',
     field: 'kredit'
+  },
+  {
+    label: 'Aksi'
   }
 ]
 const columns = ref(listSaldo)
@@ -115,6 +144,32 @@ const columns = ref(listSaldo)
 
 //   store.getDataTable()
 // }
+const edit = ref(null)
+function editSa (row) {
+  console.log('row edit', row)
+  store.dialogEdit = true
+  edit.value = row
+  store.form = edit.value
+  // store.form = row
+}
+
+const datasal = ref([])
+function deleteSa (row) {
+  console.log('gg', row)
+  $q.dialog({
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true
+  }).onOk(() => {
+    // console.log('saldohapus', store.datasaldo.id)
+    store.deleteSaldo(row)
+  }).onCancel(() => {
+    // console.log('Cancel')
+    datasal.value = []
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 </script>
 <style lang="scss">
 .my-sticky-table{
