@@ -155,9 +155,12 @@ function filterFn (val, update) {
     options.value = filteredData
   })
 }
-// const formReff = ref(null)
+const formReff = ref(null)
 function onSimpan () {
   store.saveSaldo().then(() => {
+    if (formReff.value != null) {
+      formReff.value.resetValidation()
+    }
     store.emptyForm()
   })
 }

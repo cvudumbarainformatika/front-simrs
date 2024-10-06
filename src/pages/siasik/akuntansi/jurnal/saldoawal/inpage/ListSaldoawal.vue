@@ -144,11 +144,10 @@ const columns = ref(listSaldo)
 
 //   store.getDataTable()
 // }
-const edit = ref(null)
-function editSa (row) {
-  console.log('row edit', row)
-  store.dialogEdit = true
-  edit.value = row
+const edit = ref([])
+function editSa (id) {
+  console.log('row edit', id)
+  edit.value = id
   store.form = edit.value
   // store.form = row
 }

@@ -400,9 +400,8 @@ function deleteData (row) {
       nopenerimaan: row
     }
 
-    store.hapusRinci(payload, row).then(() => {
+    store.hapusRinci(payload).then(() => {
       carisrt.refreshTable()
-      $q.localStorage.getItem('rincian_npd')
     })
     // store.setForm = props?.row
     // console.log('vv', store.hapusRinci(row))

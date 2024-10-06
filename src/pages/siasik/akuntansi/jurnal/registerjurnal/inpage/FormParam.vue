@@ -35,7 +35,6 @@ import { onMounted } from 'vue'
 const store = registerJurnal()
 
 onMounted(() => {
-  store.getRegJurnal()
   store.serahterima()
 })
 // eslint-disable-next-line no-unused-vars

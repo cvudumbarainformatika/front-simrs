@@ -29,6 +29,13 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
       this.getRekening()
     },
     emptyForm () {
+      // this.form = {}
+      // const columns = [
+      //   'id'
+      // ]
+      // for (let i = 0; i < columns.length; i++) {
+      //   this.setFormSaldo(columns[i], null)
+      // }
       this.form.kodepsap13 = ''
       this.form.uraianpsap13 = ''
       this.form.debetkredit = ''

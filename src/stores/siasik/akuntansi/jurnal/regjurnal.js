@@ -50,13 +50,71 @@ export const registerJurnal = defineStore('register_jurnal', {
     },
     serahterima () {
       const stp = []
+      const arr50 = []
       for (let i = 0; i < this.regjurnal.length; i++) {
         const el = this.regjurnal
-        console.log('iiii', el)
+        const rinci = el[i].rinci.map((x) => {
+          return {
+            kode50: x.jurnal.kode_lra,
+            uraian: x.jurnal.uraian_lra,
+            kode_lo: x.jurnal.kode_lo,
+            uraian_lo: x.jurnal.uraian_lo,
+            kode_neraca: x.jurnal.kode_neraca2,
+            uraian_neraca: x.jurnal.uraian_neraca2,
+            nilai: parseFloat(x.nominalpembayaran)
+          }
+        })
+        arr50.push(...rinci)
+        const unik50 = rinci.map((s) => s.kode50)
+        const unik = unik50.length ? [...new Set(unik50)] : []
+
+        const kode50x = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            koderek50: arr50.filter((x) => x.kode50 === el)[0]?.kode50,
+            uraian50: arr50.filter((x) => x.kode50 === el)[0]?.uraian
+          }
+          kode50x.push(ob)
+          // console.log('nilaaaaaaaai', ob.nilai)
+        }
+        const rincidebit = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            kode_lo: arr50.filter((x) => x.kode50 === el)[0]?.kode_lo,
+            uraian_lo: arr50.filter((x) => x.kode50 === el)[0]?.uraian_lo,
+            kode_neraca: null,
+            uraian_neraca: null,
+            debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
+            kredit: 0
+          }
+          rincidebit.push(ob)
+          // console.log('nilaaaaaaaai', ob.nilai)
+        }
+        const rincikredit = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            kode_lo: null,
+            uraian_lo: null,
+            kode_neraca: arr50.filter((x) => x.kode50 === el)[0]?.kode_neraca,
+            uraian_neraca: arr50.filter((x) => x.kode50 === el)[0]?.uraian_neraca,
+            debit: 0,
+            kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
+          }
+          rincikredit.push(ob)
+          // console.log('nilaaaaaaaai', ob.nilai)
+        }
+        // console.log('arr50', kode50x)
         const obj = {
+          tanggal: el[i].tgltrans,
           notrans: el[i].noserahterimapekerjaan,
           kegiatan: el[i].kegiatanblud,
-          koderek: el[i].rinci.map((x) => x.jurnal.kode_lra)
+          koderek50: kode50x.map((x) => x.koderek50),
+          uraian50: kode50x.map((x) => x.uraian50),
+          debit: rincidebit,
+          kredit: rincikredit
         }
         stp.push(obj)
       }
