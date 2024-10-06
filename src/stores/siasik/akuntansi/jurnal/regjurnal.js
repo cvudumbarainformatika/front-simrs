@@ -59,6 +59,8 @@ export const registerJurnal = defineStore('register_jurnal', {
             uraian: x.jurnal.uraian_lra,
             kode_lo: x.jurnal.kode_lo,
             uraian_lo: x.jurnal.uraian_lo,
+            kode_nrc: x.jurnal.kode_neraca1,
+            uraian_nrc: x.jurnal.uraian_neraca1,
             kode_neraca: x.jurnal.kode_neraca2,
             uraian_neraca: x.jurnal.uraian_neraca2,
             nilai: parseFloat(x.nominalpembayaran)
@@ -84,8 +86,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const ob = {
             kode_lo: arr50.filter((x) => x.kode50 === el)[0]?.kode_lo,
             uraian_lo: arr50.filter((x) => x.kode50 === el)[0]?.uraian_lo,
-            kode_neraca: null,
-            uraian_neraca: null,
+            kode_neraca: arr50.filter((x) => x.kode50 === el)[0]?.kode_nrc,
+            uraian_neraca: arr50.filter((x) => x.kode50 === el)[0]?.uraian_nrc,
             debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
           }
