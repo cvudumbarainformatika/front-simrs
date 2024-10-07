@@ -36,11 +36,17 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
       // for (let i = 0; i < columns.length; i++) {
       //   this.setFormSaldo(columns[i], null)
       // }
+      // (delete) this.form.id
+      // this.form = null
+
+      // DELETE ID KARENA BACKAND REQUEST HAS ID
+      delete this.form.id
       this.form.kodepsap13 = ''
       this.form.uraianpsap13 = ''
       this.form.debetkredit = ''
       this.form.debit = 0
       this.form.kredit = 0
+      console.log('kosong', this.form)
     },
     getDataTable () {
       this.getSaldoAwal()
@@ -98,7 +104,7 @@ export const saldoawalJurnal = defineStore('saldoawal_Jurnal', {
           if (resp.status === 200) {
             this.loading = false
             notifSuccess(resp)
-            this.refreshTable()
+
             resolve(resp)
           }
         }).catch(() => { this.loading = false })
