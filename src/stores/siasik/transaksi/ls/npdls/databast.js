@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { formNotaPermintaanDanaLS } from './formnpdls'
 
 export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
   state: () => ({
@@ -12,7 +13,8 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
       kodepenerima: null,
       kodekegiatan: null,
       kodebast: null,
-      rincianbast: null
+      rincianbast: null,
+      nonpdls: null
     },
     form: {
       bast: null
@@ -57,6 +59,10 @@ export const dataBastFarmasi = defineStore('data_Bast_Farmasi', {
             if (resp.status === 200) {
               this.bastfarmasis = []
               this.konsinyasis = []
+
+              const sve = formNotaPermintaanDanaLS()
+              this.reqs.nonpdls = sve.form.nonpdls
+              console.log('nomer npd', this.reqs.nonpdls)
 
               console.log('farmasi', resp.data)
               this.loading = false

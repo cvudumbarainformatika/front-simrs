@@ -1,12 +1,12 @@
 <template>
-  <div class="container q-pa-md">
+  <div class="container q-pa-sm">
     <q-card class="items-center full-width">
       <div class="row">
         <FormSaldoawal />
       </div>
     </q-card>
   </div>
-  <div class="container q-px-md q-pb-md">
+  <div class="container q-px-sm q-pb-sm">
     <q-card class="items-center full-width">
       <div class="row">
         <ListSaldoawal />

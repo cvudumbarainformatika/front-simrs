@@ -19,12 +19,12 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
-          :outline="path!=='/akuntansi/jurnal/saldoawal'"
+          :outline="path!=='/akuntansi/jurnal/register'"
           glossy
           size="md"
           color="primary"
-          label="Saldo Awal"
-          @click="goTo('/akuntansi/jurnal/saldoawal')"
+          label="Reg Jurnal"
+          @click="goTo('/akuntansi/jurnal/register')"
         />
         <q-btn
           :outline="path!=='/akuntansi/jurnal/jurnalumum'"

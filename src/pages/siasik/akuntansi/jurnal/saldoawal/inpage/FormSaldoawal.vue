@@ -1,4 +1,3 @@
-<!-- eslint-disable no-const-assign -->
 <template>
   <q-form class="fit" ref="refsaldo" @submit="onSubmit" @reset="onReset">
     <div class="row">
@@ -32,7 +31,7 @@
           option-value="kodeall3"
           :disable="store.loading"
           :loading="store.loading"
-          :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : 'Silahkan Dipilih'"
+          :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : ''"
           input-debounce="0"
           :options="options"
           @filter="filterFn"
@@ -53,7 +52,7 @@
               @click.stop.prevent="store.setFormSaldo('kodepsap13', null)"
             />
           </template>
-          <template #no-option>
+          <template v-else #no-option>
             <q-item>
               <q-item-section class="text-grey">
                 Tidak ditemukan
@@ -144,6 +143,10 @@ function filterFn (val, update) {
           options.value = filteredData
         })
       }
+      else {
+        store.loading = false
+        // options.value = filteredData
+      }
     }
     else {
       options.value = filteredData
@@ -152,9 +155,12 @@ function filterFn (val, update) {
     options.value = filteredData
   })
 }
-// const formReff = ref(null)
+const formReff = ref(null)
 function onSimpan () {
   store.saveSaldo().then(() => {
+    if (formReff.value != null) {
+      formReff.value.resetValidation()
+    }
     store.emptyForm()
   })
 }

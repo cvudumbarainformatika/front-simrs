@@ -5,10 +5,47 @@
         <app-input-simrs
           v-model="store.form.nonpdls"
           label="Nomor NPD-LS"
-          disable
+          readonly
           outlined
           dense
         />
+        <!-- <q-select
+          v-model="store.form.kodepptk"
+          label="Pejabat Teknis Kegiatan"
+          autocomplete="nama"
+          :option-label="opt => Object(opt) === opt && 'nip' in opt ? opt.nama + ' - ' + opt.nip : 'Silahkan Dipilih'"
+          option-value="nip"
+          use-input
+          standout="bg-yellow-3 text-dark"
+          dense
+          outlined
+          emit-value
+          map-options
+          borderless
+          input-debounce="0"
+          :options="options"
+          @filter="filterFn"
+          @clear="store.setFormInput('kodepptk', null)"
+          @update:model-value="(val)=>pilihPTK(val)"
+        >
+          <template
+            v-if="store.form.kodepptk"
+            #append
+          >
+            <q-icon
+              name="icon-mat-cancel"
+              class="cursor-pointer"
+              @click.stop.prevent="store.setFormInput('kodepptk', null)"
+            />
+          </template>
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                Tidak ditemukan
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select> -->
         <app-autocomplete
           v-model="store.form.kodepptk"
           label="Pejabat Teknis Kegiatan"
@@ -308,11 +345,72 @@ const PrintNpdls = defineAsyncComponent(() => import('../print/PrintNpdls.vue'))
 // })
 // const emits = defineEmits(['cetakNPD'])
 // const tarik = useLaporanLraLaprealisasianggaranStore()
+// const options = ref([])
 const ambil = formKontrakPekerjaan()
 const store = formNotaPermintaanDanaLS()
 const carisrt = dataBastFarmasi()
 // const data = useLaporanBkuPtkStore()
 const formNpdLS = ref(null)
+
+onMounted(() => {
+  onReset()
+  // store.getRincianBelanja()
+  Promise.all([
+    // data.getPtks(),
+    store.getDataBidang(),
+    store.filterPtk(),
+    ambil.getPihaktiga()
+    // carisrt.selectbastFarmasi(),
+    // pilihKegiatan()
+    // pilihPTK()
+    // store.selectbastFarmasi()
+  ])
+})
+
+onBeforeUnmount(() => {
+  store.resetFORM()
+})
+// FITER 2 OBJECT DLM 1 FORM
+// function filterFn (val, update) {
+//   if (val === '') {
+//     update(() => {
+//       options.value = store.ptks
+//     })
+//     return
+//   }
+//   if (val === null) {
+//     update(() => {
+//       options.value = store.ptks
+//     })
+//     return
+//   }
+
+//   update(() => {
+//     const filter = ['nip', 'nama']
+//     const needle = val.toLowerCase()
+//     const multiFilter = (data = [], filterKeys = [], value = '') =>
+//       data.filter((item) => filterKeys.some(
+//         (key) =>
+//           item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+//             item[key]
+//       )
+//       )
+//     let filteredData = multiFilter(store.ptks, filter, needle)
+//     if (!filteredData.length) {
+//       if (val !== '') {
+//         store.getRekening(val).then(() => {
+//           filteredData = multiFilter(store.options, filter, needle)
+//           options.value = filteredData
+//         })
+//       }
+//     }
+//     else {
+//       options.value = filteredData
+//     }
+
+//     options.value = filteredData
+//   })
+// }
 
 const tablerinci = [
   {
@@ -353,24 +451,6 @@ const onSubmit = () => {
 const onReset = () => {
   formNpdLS.value.resetValidation()
 }
-onMounted(() => {
-  onReset()
-  // store.getRincianBelanja()
-  Promise.all([
-    // data.getPtks(),
-    store.getDataBidang(),
-    store.filterPtk(),
-    ambil.getPihaktiga()
-    // carisrt.selectbastFarmasi(),
-    // pilihKegiatan()
-    // pilihPTK()
-    // store.selectbastFarmasi()
-  ])
-})
-
-onBeforeUnmount(() => {
-  store.resetFORM()
-})
 
 // function hitungSubtotal () {
 //   const arr = store.form.rincians
@@ -396,6 +476,7 @@ function onSimpan (val) {
   // if (store.reqs.subtotal > store.itembelanja.sisapagu) {
   //   return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
   // }
+
   const unikjumlah = store.form.rincians.map((x) => x.koderek108)
   const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
   const arr = []
@@ -416,7 +497,11 @@ function onSimpan (val) {
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
     store.reqs.subtotal = subtotal
   }
-  store.simpanNpdls()
+  store.simpanNpdls().then(() => {
+    // const npd = store.reqs.nonpdls
+    // store.form.rincians.push(npd)
+    console.log('sssss', store.form.rincians)
+  })
   // return notifSuccessVue('Sukses Disimpan')
 
   // console.log('sisa', carisrt.itembelanja)

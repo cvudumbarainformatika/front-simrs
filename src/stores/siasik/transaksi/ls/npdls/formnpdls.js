@@ -2,12 +2,14 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { date } from 'quasar'
 import { notifSuccess } from 'src/modules/utils'
+import { dataBastFarmasi } from './databast'
 // import ListdataNpdLS from 'src/pages/siasik/transaksi/ls/npdls/inpage/ListdataNpdLS.vue'
 // import { dataBastFarmasi } from 'src/stores/siasik/transaksi/ls/npdls/databast'
 
 export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
   state: () => ({
     loading: false,
+    loadingHapus: false,
     disabled: false,
     params: {
       q: '',
@@ -30,7 +32,8 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       rincianmanual: null,
       subtotal: null,
       jmlperkoderek108: [],
-      listrinci: []
+      listrinci: [],
+      nonpdls: null
       // page: 1,
       // rowsPerPage: 10,
       // rowsNumber: 0
@@ -137,10 +140,14 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
     rekening50: [],
     itembelanja: [],
 
+    npddatasave: [],
+    editnpd: [],
     // utuk list tersimpan
     rincians: [],
+    dialogEditNpd: false,
     // datafarmasi: [],
     // bastfarmasis: [],
+    dialogPrintPencairan: false,
     dialogCetakNpd: false,
     openDialogFarmasi: false,
     openDialogSiasik: false,
@@ -173,6 +180,9 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       this.reqs[key] = val
       // this.openDialogFarmasi = false
       // console.log('form', this.form)
+    },
+    setFormInput (key, val) {
+      this.rinci[key] = val
     },
     emptyForm () {
       this.form = {}
@@ -254,6 +264,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             // console.log('isian', resp)
             // Ini Buat Memunculkan Nomer NPD di Front ketika disimpan
             this.form.nonpdls = resp.data?.result?.nonpdls
+            this.reqs.nonpdls = resp.data?.result?.nonpdls
             this.loading = false
             notifSuccess(resp)
             resolve(resp.data)
@@ -377,19 +388,29 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         const sas = []
         for (let i = 0; i < this.listnpdls.length; i++) {
           const arr = this.listnpdls[i]
-          // console.log('rincianqqq', arr)
+          console.log('rincianqqq', arr)
           const head = {
+            nonpk: arr.nonpk,
             nonpdls: arr.nonpdls,
             tglnpdls: arr.tglnpdls,
             bidang: arr.bidang,
             pptk: arr.pptk,
+            kodepptk: arr.kodepptk,
             kegiatanblud: arr.kegiatanblud,
             penerima: arr.penerima,
+            kodepenerima: arr.kodepenerima,
+            bank: arr.bank,
+            rekening: arr.rekening,
+            npwp: arr.npwp,
             keterangan: arr.keterangan,
             nopencairan: arr.nopencairan,
+            serahterimapekerjaan: arr.serahterimapekerjaan,
             tglcair: arr.npkrinci?.header?.tglpindahbuku,
             total: arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
-            rincian: arr.npdlsrinci
+            rincian: arr.npdlsrinci,
+            pajak: arr.pajak,
+            totalpajak: parseFloat(arr.pajak?.ppnpusat) + parseFloat(arr.pajak?.pph21) + parseFloat(arr.pajak?.pph22) + parseFloat(arr.pajak?.pph23) + parseFloat(arr.pajak?.pph25) + parseFloat(arr.pajak?.pajakdaerah) + parseFloat(arr.pajak?.pasal4),
+            totalbayar: (arr.npdlsrinci?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)) - (parseFloat(arr.pajak?.ppnpusat) + parseFloat(arr.pajak?.pph21) + parseFloat(arr.pajak?.pph22) + parseFloat(arr.pajak?.pph23) + parseFloat(arr.pajak?.pph25) + parseFloat(arr.pajak?.pajakdaerah) + parseFloat(arr.pajak?.pasal4))
           }
           // console.log('head', head)
           // const el = arr.npdlsrinci
@@ -408,6 +429,31 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         this.datanpd = sas
         console.log('rinciiii', this.datanpd)
       }
+    },
+    hapusRinci (row) {
+      console.log('hapus rinci', row)
+      this.loadingHapus = true
+      return new Promise(resolve => {
+        api.post('/v1/transaksi/belanja_ls/deleterinci', row)
+          .then(resp => {
+            this.loadingHapus = false
+            console.log('hapus data', resp)
+
+            const bst = dataBastFarmasi()
+            bst.refreshTable()
+            // const index = row.rincian.findIndex(x => x.id === val.id)
+            // if (index >= 0) {
+            //   row.rincian.splice(index, 1)
+            // }
+            // if (!row.rincian.length) this.cariRencanaBeli()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingHapus = false
+            row.loading = false
+          })
+      })
     }
   }
 })
