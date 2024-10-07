@@ -11,6 +11,7 @@
           inline-label
           rounded
           class=" bg-grey-4 shadow-2 text-grey-8"
+
           align="left"
           dense
           active-color="yellow"
@@ -22,7 +23,7 @@
             :key="i"
             :name="item.page"
             :label="item.name"
-            style="border-top-left-radius: 100px;border-bottom-right-radius: 100px;"
+            style="border-top-left-radius: 100px;border-bottom-right-radius: 100px;width: 100%;"
           />
         </q-tabs>
       </div>

@@ -20,11 +20,11 @@
         square
         class="col-6 full-height"
       >
-        <ListAnamnesis
+        <!-- <ListAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
-        />
+        /> -->
       </q-card>
     </div>
   </div>
