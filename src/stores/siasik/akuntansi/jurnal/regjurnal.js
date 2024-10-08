@@ -28,7 +28,8 @@ export const registerJurnal = defineStore('register_jurnal', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
     ],
-    regjurnal: [],
+    bastfarmasi: [],
+    stp: [],
     datastp: []
   }),
   actions: {
@@ -39,7 +40,8 @@ export const registerJurnal = defineStore('register_jurnal', {
         api.get('v1/akuntansi/registerjurnal/regjurnal', params).then((resp) => {
           console.log('Register Jurnal', resp.data)
           if (resp.status === 200) {
-            this.regjurnal = resp.data
+            this.stp = resp.data.stp
+            this.bastfarmasi = resp.data.bastfarmasi
 
             this.loading = false
             this.serahterima()
@@ -49,10 +51,11 @@ export const registerJurnal = defineStore('register_jurnal', {
       })
     },
     serahterima () {
+      // DATA SERAHTERIMA SIASIK //
       const stp = []
       const arr50 = []
-      for (let i = 0; i < this.regjurnal.length; i++) {
-        const el = this.regjurnal
+      for (let i = 0; i < this.stp.length; i++) {
+        const el = this.stp
         const rinci = el[i].rinci.map((x) => {
           return {
             kode50: x.jurnal.kode_lra,
@@ -120,7 +123,93 @@ export const registerJurnal = defineStore('register_jurnal', {
         }
         stp.push(obj)
       }
-      this.datastp = stp
+
+      // DATA SERAHTERIMA FARMASI //
+      const bastfarm = []
+      const arr50bast = []
+      for (let i = 0; i < this.bastfarmasi.length; i++) {
+        const el = this.bastfarmasi
+        console.log('ll', el)
+        const ri = el[i].rincianbast
+        const rinci = ri.map((x) => {
+          return {
+            nobast: x.nobast,
+            kode50: x.masterobat.jurnal.kode_lra,
+            uraian: x.masterobat.jurnal.uraian_lra,
+            kode_lo: x.masterobat.jurnal.kode_lo,
+            uraian_lo: x.masterobat.jurnal.uraian_lo,
+            kode_nrc: x.masterobat.jurnal.kode_neraca1,
+            uraian_nrc: x.masterobat.jurnal.uraian_neraca1,
+            kode_neraca: x.masterobat.jurnal.kode_neraca2,
+            uraian_neraca: x.masterobat.jurnal.uraian_neraca2,
+            nilai: parseFloat(x.subtotal)
+          }
+        })
+        arr50bast.push(...rinci)
+        // console.log('xnilai', arr50bast)
+        const unik50 = rinci.map((s) => s.nobast)
+        const unik = unik50.length ? [...new Set(unik50)] : []
+        // console.log('unik', unik)
+        const kode50x = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            koderek50: arr50bast.filter((x) => x.nobast === el)[0]?.kode50,
+            uraian50: arr50bast.filter((x) => x.nobast === el)[0]?.uraian
+          }
+          kode50x.push(ob)
+          // console.log('nilaaaaaaaai', kode50x)
+        }
+        const rincidebit = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            kode_lo: arr50bast.filter((x) => x.nobast === el)[0]?.kode_lo,
+            uraian_lo: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_lo,
+            kode_neraca: null,
+            uraian_neraca: null,
+            debit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
+            kredit: 0
+          }
+          rincidebit.push(ob)
+          // console.log('nilaaaaaaaai', ob.nilai)
+        }
+        const rincikredit = []
+        for (let i = 0; i < unik.length; i++) {
+          const el = unik[i]
+          const ob = {
+            kode_lo: null,
+            uraian_lo: null,
+            kode_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.kode_neraca,
+            uraian_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_neraca,
+            debit: 0,
+            kredit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
+          }
+          rincikredit.push(ob)
+          // console.log('nilaaaaaaaai', ob.nilai)
+        }
+        const obj = {
+          tanggal: el[i].tgl_bast,
+          notrans: el[i].nobast,
+          kegiatan: 'Pelayanan Farmasi',
+          koderek50: kode50x.map((x) => x.koderek50),
+          uraian50: kode50x.map((x) => x.uraian50),
+          debit: rincidebit,
+          kredit: rincikredit
+        }
+        bastfarm.push(obj)
+        // console.log('rincibast', bastfarm)
+      }
+
+      const gabungan = stp?.concat(
+        bastfarm
+      )
+      const sortByDate = (gabungan) =>
+        gabungan.sort(({ tgl: a }, { tgl: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrJurnal = sortByDate(gabungan)
+      this.datastp = arrJurnal
       console.log('data STP', this.datastp)
     }
   }

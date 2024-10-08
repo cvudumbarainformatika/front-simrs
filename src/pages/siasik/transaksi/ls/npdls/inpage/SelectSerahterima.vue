@@ -38,7 +38,7 @@
               v-model:pagination="carisrt.reqs"
               :filter="carisrt.reqs.q"
               :loading="carisrt.loading"
-              :rows-per-page-options="[10,20,50]"
+              :rows-per-page-options="[10,50,100,200,500]"
             >
               <template #top-left>
                 <div class="flex q-qutter-sm z-top">

@@ -36,20 +36,21 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
     metaniItem () {
       this.items.forEach(item => {
         item.checked = false
-        if (item.header) {
-          const resep = item?.resep?.find(x => x.noreg === item.header.noreg)
-          if (resep) item.header.resep = resep
-        }
-        const penerimaan = item?.penerimaanrinci?.find(x => x.kdobat === item?.kd_obat && x.nopenerimaan === item?.nopenerimaan)
+        // if (item.header) {
+        //   const resep = item?.resep?.find(x => x.noreg === item.heder.noreg)
+        //   if (resep) item.header.resep = resep
+        // }
+        const penerimaan = item?.penerimaanrinci?.find(x => x.kdobat === item?.kdobat && x.nopenerimaan === item?.nopenerimaan)
         item.penerimaan = penerimaan ?? {}
-        const rinciresep = item?.rincian?.find(x => x.kdobat === item?.kd_obat && x.noresep === item?.noresep)
-        item.reseprinci = rinciresep ?? {}
-        item.harga = rinciresep?.harga_beli ?? 0
-        item.subtotal = parseFloat(item?.jumlah_resep) * parseFloat(item?.harga)
+        const rincipermintaanok = item?.rincian?.find(x => x.kd_obat === item?.kdobat && x.noresep === item?.noresep)
+        item.rincipermintaanok = rincipermintaanok ?? {}
+        item.harga = item?.harga_beli ?? 0
+        item.subtotal = parseFloat(item?.jumlah) * parseFloat(item?.harga)
       })
     },
     async getData () {
       this.items = []
+      this.form.items = []
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/gudang/list-pemakaian-konsinyasi', param)

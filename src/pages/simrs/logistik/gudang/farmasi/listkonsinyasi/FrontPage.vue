@@ -41,8 +41,8 @@ const Header = defineAsyncComponent(() => import('./comp/PageHead.vue'))
 const head = ref('konsi')
 const heads = ref([
   { page: 'konsi', label: 'List Konsinyasi', color: 'deep-orange' },
-  { page: 'list', label: 'Konsinyasi Siap BAST ', color: 'green' },
-  { page: 'belum', label: 'Belum Masuk List', color: 'blue' }
+  { page: 'list', label: 'Konsinyasi Siap BAST ', color: 'green' }
+  // { page: 'belum', label: 'Belum Masuk List', color: 'blue' }
 ])
 function gantiHead (val) {
   head.value = val

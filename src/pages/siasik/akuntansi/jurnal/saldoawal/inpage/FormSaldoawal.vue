@@ -93,7 +93,7 @@
         label="Simpan Saldo"
         :disable="store.loading"
         :loading="store.loading"
-        @click="onSimpan()"
+        type="submit"
       />
     </div>
   </q-form>
@@ -155,20 +155,26 @@ function filterFn (val, update) {
     options.value = filteredData
   })
 }
-const formReff = ref(null)
-function onSimpan () {
-  store.saveSaldo().then(() => {
-    if (formReff.value != null) {
-      formReff.value.resetValidation()
-    }
-    store.emptyForm()
-  })
-}
+// const formReff = ref(null)
+// function onSimpan () {
+//   store.saveSaldo().then(() => {
+//     if (formReff.value != null) {
+//       formReff.value.resetValidation()
+//     }
+//     store.emptyForm()
+//     store.refreshTable()
+//   })
+// }
 const onSubmit = () => {
+  console.log('form', store.form)
   store.saveSaldo().then(() => {
-    if (refsaldo.value != null) {
-      refsaldo.value.resetValidation()
-    }
+    // if (refsaldo.value != null) {
+    //   refsaldo.value.resetValidation()
+    // }
+    console.log('empty')
+    store.emptyForm()
+
+    store.refreshTable()
   })
 }
 const onReset = () => {

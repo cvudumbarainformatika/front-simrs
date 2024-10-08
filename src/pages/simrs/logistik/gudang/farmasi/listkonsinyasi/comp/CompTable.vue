@@ -47,18 +47,18 @@
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
           <div class="row">
-            {{ item?.header?.resep?.noresep }}
+            {{ item?.noresep }}
           </div>
           <div class="row text-italic f-10">
-            {{ item?.header?.nopermintaan }}
+            {{ item?.rincipermintaanok?.nopermintaan }}
           </div>
           <div class="row text-italic f-10">
-            {{ item?.header?.resep?.dokter?.nama }}
+            {{ item?.heder?.dokter?.nama }}
           </div>
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
           <div class="row">
-            {{ item?.obat?.nama_obat }}
+            {{ item?.mobat?.nama_obat }}
           </div>
           <!-- <div class="row text-italic f-10">
             ({{ item?.obat?.satuan_k }})
@@ -80,13 +80,13 @@
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
           <div class="row items-end">
-            {{ item?.header?.resep?.datapasien?.rs2 }} <span class="text-italic f-10 q-ml-sm">  ({{ item?.header?.noreg }})</span>
+            {{ item?.heder?.datapasien?.rs2 }} <span class="text-italic f-10 q-ml-sm">  ({{ item?.heder?.noreg }})</span>
           </div>
           <div class="row justify-end">
-            {{ item?.jumlah_resep }} ({{ item?.obat?.satuan_k }})
+            {{ item?.jumlah }} ({{ item?.mobat?.satuan_k }})
           </div>
           <div class="row justify-end">
-            {{ formatDouble( item?.reseprinci?.harga_beli,2) }}
+            {{ formatDouble( item?.harga_beli,2) }}
           </div>
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
@@ -148,37 +148,38 @@ function setCheck (evt, item) {
   // console.log('ref')
   // console.log('evt', evt)
   console.log('item', item)
+  const temp = {
+    nopermintaan: item?.rincipermintaanok?.nopermintaan ?? '',
+    nopenerimaan: item?.nopenerimaan,
+    noresep: item?.noresep,
+    kdobat: item?.kdobat,
+    tgl_pakai: item?.heder?.tgl_selesai,
+    tgl_penerimaan: item?.penerimaan?.header.tglpenerimaan,
+    dokter: item?.heder?.dokter?.kdpegsimrs,
+    noreg: item?.heder?.noreg,
+    norm: item?.heder?.norm,
+    // jumlah: item?.reseprinci?.jumlah,
+    jumlah: item?.jumlah,
+    harga: item?.penerimaan?.harga_kcl,
+    diskon: item?.penerimaan?.diskon,
+    ppn: item?.penerimaan?.ppn,
+    diskon_rp: item?.penerimaan?.diskon_rp_kecil,
+    ppn_rp: item?.penerimaan?.ppn_rp_kecil,
+    harga_net: item?.penerimaan?.harga_netto_kecil,
+    subtotal: item?.subtotal
+
+  }
+  // console.log('temp', temp)
   if (item.checked) {
     // item.dipakai = item.dipakai ?? 0
-    const temp = {
-      nopermintaan: item?.nopermintaan,
-      nopenerimaan: item?.nopenerimaan,
-      kdobat: item?.kd_obat,
-      tgl_pakai: item?.header?.resep?.tgl_permintaan,
-      tgl_penerimaan: item?.penerimaan?.header?.tglpenerimaan,
-      noresep: item?.noresep,
-      dokter: item?.header?.resep?.dokter?.kdpegsimrs,
-      noreg: item?.header?.noreg,
-      norm: item?.header?.norm,
-      // jumlah: item?.reseprinci?.jumlah,
-      jumlah: item?.jumlah_resep,
-      harga: item?.penerimaan?.harga_kcl,
-      diskon: item?.penerimaan?.diskon,
-      ppn: item?.penerimaan?.ppn,
-      diskon_rp: item?.penerimaan?.diskon_rp_kecil,
-      ppn_rp: item?.penerimaan?.ppn_rp_kecil,
-      harga_net: item?.penerimaan?.harga_netto_kecil,
-      subtotal: item?.subtotal
-
-    }
-    console.log('item', temp)
-    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep && a.nopermintaan === item.nopermintaan)
+    const index = store.form.items.findIndex(a => a.kdobat === temp.kdobat && a.noresep === temp.noresep && a.nopermintaan === temp.nopermintaan && a.nopenerimaan === temp.nopenerimaan)
     console.log('index', index)
     if (index < 0) store.form.items.push(temp)
+    // console.log('form', store.form.items)
   }
   else {
     // console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep && a.nopermintaan === item.nopermintaan)
+    const index = store.form.items.findIndex(a => a.kdobat === temp.kdobat && a.noresep === temp.noresep && a.nopermintaan === temp.nopermintaan && a.nopenerimaan === temp.nopenerimaan)
     // console.log('not checked', index)
     console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
