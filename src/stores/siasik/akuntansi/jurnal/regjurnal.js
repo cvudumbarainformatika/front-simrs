@@ -129,9 +129,11 @@ export const registerJurnal = defineStore('register_jurnal', {
       const arr50bast = []
       for (let i = 0; i < this.bastfarmasi.length; i++) {
         const el = this.bastfarmasi
-        // const ri = el[i].rincianbast
-        const rinci = el[i].rincianbast.map((x) => {
+        console.log('ll', el)
+        const ri = el[i].rincianbast
+        const rinci = ri.map((x) => {
           return {
+            nobast: x.nobast,
             kode50: x.masterobat.jurnal.kode_lra,
             uraian: x.masterobat.jurnal.uraian_lra,
             kode_lo: x.masterobat.jurnal.kode_lo,
@@ -144,29 +146,29 @@ export const registerJurnal = defineStore('register_jurnal', {
           }
         })
         arr50bast.push(...rinci)
-
-        const unik50 = rinci.map((s) => s.kode50)
+        // console.log('xnilai', arr50bast)
+        const unik50 = rinci.map((s) => s.nobast)
         const unik = unik50.length ? [...new Set(unik50)] : []
-        console.log('nilaaaaaaaai', unik)
+        // console.log('unik', unik)
         const kode50x = []
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            koderek50: arr50bast.filter((x) => x.kode50 === el)[0]?.kode50,
-            uraian50: arr50bast.filter((x) => x.kode50 === el)[0]?.uraian
+            koderek50: arr50bast.filter((x) => x.nobast === el)[0]?.kode50,
+            uraian50: arr50bast.filter((x) => x.nobast === el)[0]?.uraian
           }
           kode50x.push(ob)
-          // console.log('nilaaaaaaaai', ob.nilai)
+          // console.log('nilaaaaaaaai', kode50x)
         }
         const rincidebit = []
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            kode_lo: arr50bast.filter((x) => x.kode50 === el)[0]?.kode_lo,
-            uraian_lo: arr50bast.filter((x) => x.kode50 === el)[0]?.uraian_lo,
+            kode_lo: arr50bast.filter((x) => x.nobast === el)[0]?.kode_lo,
+            uraian_lo: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_lo,
             kode_neraca: null,
             uraian_neraca: null,
-            debit: arr50bast.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
+            debit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
           }
           rincidebit.push(ob)
@@ -178,10 +180,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const ob = {
             kode_lo: null,
             uraian_lo: null,
-            kode_neraca: arr50bast.filter((x) => x.kode50 === el)[0]?.kode_neraca,
-            uraian_neraca: arr50bast.filter((x) => x.kode50 === el)[0]?.uraian_neraca,
+            kode_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.kode_neraca,
+            uraian_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_neraca,
             debit: 0,
-            kredit: arr50bast.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
+            kredit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
           }
           rincikredit.push(ob)
           // console.log('nilaaaaaaaai', ob.nilai)
@@ -196,7 +198,7 @@ export const registerJurnal = defineStore('register_jurnal', {
           kredit: rincikredit
         }
         bastfarm.push(obj)
-        console.log('rincibast', bastfarm)
+        // console.log('rincibast', bastfarm)
       }
 
       const gabungan = stp?.concat(
