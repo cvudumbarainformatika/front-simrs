@@ -23,7 +23,7 @@
           glossy
           size="md"
           color="primary"
-          label="Reg Jurnal"
+          label="Register Jurnal"
           @click="goTo('/akuntansi/jurnal/register')"
         />
         <q-btn
