@@ -5,42 +5,35 @@ import { api } from 'src/boot/axios'
 export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
   state: () => ({
     loading: false,
+    dialog: false,
+    totald: 0,
+    totalk: 0,
     items: [],
     tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     rekening50: [],
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      koderekening: '',
+      koderekening: [],
       tahun: null
     },
     params: {
-      tahuncari: null
+      tahuncari: new Date().getFullYear()
     },
     tahun: []
   }),
   actions: {
     getRekenining50 () {
-      this.loading = true
+      // this.loading = true
       const params = { params: this.reqs }
       return new Promise((resolve) => {
         api.get('v1/akuntansi/jurnalumum/permen50', params).then((resp) => {
           if (resp.status === 200) {
             this.rekening50 = resp.data
-            this.loading = false
+            // this.loading = false
             resolve(resp.data)
           }
         }).catch(() => { this.loading = false })
       })
-    },
-    caritahun () {
-      const max = new Date().getFullYear()
-      const min = max - 2
-      const years = []
-
-      for (let i = max; i >= min; i--) {
-        this.tahun.push(i)
-      }
-      console.log('sasasa', years)
     },
     async getJurnalUmum () {
       this.loading = true
@@ -51,13 +44,28 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
         if (resp.status === 200) {
           this.items = resp.data
           this.loading = false
-          console.log('wew', this.items)
+          this.gettotal(this.items)
         }
         this.loading = false
       }
       catch (error) {
         this.loadingMasterLab = false
       }
+    },
+    async gettotal (val) {
+      const hasil = []
+      val.forEach(x => {
+        const rinci = x?.rincianjurnalumum
+        const totald = rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.debet), 0)
+        const totalk = rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.kredit), 0)
+        const totals = {
+          totdebet: totald,
+          totkredit: totalk
+        }
+        hasil.push(totals)
+      })
+      this.totald = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totdebet), 0)
+      this.totalk = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totkredit), 0)
     }
   }
 })

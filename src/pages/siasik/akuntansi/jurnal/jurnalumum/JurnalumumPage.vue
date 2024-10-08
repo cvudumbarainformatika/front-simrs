@@ -11,7 +11,7 @@
           transition-show="flip-up"
           transition-hide="flip-down"
           label="Tahun"
-          :options="store.tahun"
+          :options="tahun"
         />
         <app-btn
           color="primary"
@@ -19,9 +19,10 @@
           tooltip="Ambil Dataa"
           type="submit"
           tip
-          :loading="store.loadingForm"
+          :loading="store.loading"
           @click="store.getJurnalUmum()"
         />
+        <app-btn label="Tambah" color="primary" @click="store.dialog = true" />
       </div>
     </q-card>
     <q-card
@@ -30,10 +31,10 @@
       square
       class="items-center bg-white full-width full-height"
     >
-      <q-markup-table>
+      <q-markup-table :separator="separator" flat bordered>
         <thead>
           <tr class="bg-primary text-white">
-            <th>NO. BUKTI</th>
+            <th>NO. BUKTI </th>
             <th>TANGGAL</th>
             <th>KETERANGAN</th>
             <th>KODE AKUN</th>
@@ -52,7 +53,7 @@
               {{ item?.nobukti }}
             </td>
             <td class="text-center">
-              {{ item?.tanggal }}
+              {{ dateFullFormat(item?.tanggal) }}
             </td>
             <td class="text-center">
               {{ item?.keterangan }}
@@ -108,116 +109,42 @@
             <td colspan="5" class="text-right text-weight-bold">
               SUBTOTAL
             </td>
+            <td class="text-right text-weight-bold">
+              <span><q-badge color="red-5">
+                {{ formatRpDouble(store?.totald) }}
+              </q-badge></span>
+            </td>
+            <td class="text-right text-weight-bold">
+              <span><q-badge color="teal">
+                {{ formatRpDouble(store?.totalk) }}
+              </q-badge></span>
+            </td>
           </tr>
         </tbody>
       </q-markup-table>
     </q-card>
   </div>
-  <!-- <div class="container q-pa-md">
-    <q-card class="items-center bg-white q-pa-xl full-width">
-      <div class="row q-col-gutter-sm">
-        <div class="col-3">
-          <q-input
-            label="No. Bukti"
-            outlined
-            dense
-            disable
-          />
-        </div>
-        <div class="col-3">
-          <app-input-date-human
-            :model="store.tanggal"
-            label="Tanggal"
-            outlined
-            @rn-model="setTo"
-            @set-display="setToDisp"
-          />
-        </div>
-        <div class="col-6">
-          <q-input
-            label="Keterangan"
-            outlined
-            dense
-          />
-        </div>
-      </div>
-    </q-card>
-  </div> -->
-  <!-- <div class="container q-px-md">
-    <q-card class="items-center bg-white q-pa-xl full-width">
-      <div class="row flex-center">
-        <div class="col">
-          <q-markup-table class="full-width" :separator="cell" flat bordered>
-            <thead>
-              <tr class="bg-primary text-white items-center">
-                <th class="text-weight-bold text-white">
-                  Kode Rekening 50
-                </th>
-                <th class="text-weight-bold text-white">
-                  Uraian  Rekening 50
-                </th>
-                <th class="text-weight-bold text-white">
-                  Debet
-                </th>
-                <th class="text-weight-bold text-white">
-                  Kredit
-                </th>
-                <th class="text-weight-bold text-white">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ rincix?.nopenerimaan }}</td>
-                <td> {{ rincix?.obat?.nama_obat }}</td>
-                <td class="text-right">
-                  {{ rincix?.jumlah }}
-                </td>
-                <td class="text-right">
-                  ghjhjk
-                </td>
-                <td class="text-right">
-                  jghj
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <q-select
-                    v-model="store.form.koderekening"
-                    label="Kode Rekening 50"
-                    outlined
-                    emit-value
-                    map-options
-                    standout="bg-yellow-3"
-                    dense
-                    transition-show="flip-up"
-                    transition-hide="flip-down"
-                    :options="store.rekening50"
-                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </q-markup-table>
-        </div>
-      </div>
-    </q-card>
-  </div> -->
+  <form-jurnal-umum />
 </template>
 <script setup>
-import { formatRpDouble } from 'src/modules/formatter'
+import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { usejurnalumummanual } from 'src/stores/siasik/akuntansi/jurnal/umummanual'
+import { onMounted, ref } from 'vue'
+import FormJurnalUmum from './FormJurnalUmum.vue'
+
 const store = usejurnalumummanual()
+const separator = ref('cell')
+const tahun = ref([])
 
-store.getRekenining50()
-store.caritahun()
+onMounted(() => {
+  const max = new Date().getFullYear()
+  const min = max - 2
+  // eslint-disable-next-line no-unused-vars
+  const years = []
 
-// function setTo (val) {
-//   store.form.tanggal = val
-// }
+  for (let i = max; i >= min; i--) {
+    tahun.value.push(i)
+  }
+})
 
-// function setToDisp (vaal) {
-//   store.tanggal = vaal
-// }
 </script>
