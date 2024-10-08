@@ -72,12 +72,18 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
 
       if (usiatahun <= 18) {
         this.formpenilaians = itemform.find(({ kode }) => kode === 'humpty_dumpty')
+        this.form.ontario = null
+        this.form.morse_fall = null
       }
       else if (usiatahun > 18 && usiatahun <= 60) {
         this.formpenilaians = itemform.find(({ kode }) => kode === 'morse_fall')
+        this.form.ontario = null
+        this.form.humpty_dumpty = null
       }
       else {
         this.formpenilaians = itemform.find(({ kode }) => kode === 'ontario')
+        this.form.morse_fall = null
+        this.form.humpty_dumpty = null
       }
       this.formpenilaians.form.forEach(x => {
         this.form[this.formpenilaians.kode][x.kode] = {}
@@ -90,6 +96,24 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
     },
     setForm (key, val) {
       this.form[key] = val
+    },
+    initReset () {
+      this.form = null
+      return new Promise((resolve, reject) => {
+        this.form = {
+          noreg: '',
+          norm: '',
+          barthel: '',
+          norton: '',
+          ontario: {},
+          morse_fall: {},
+          humpty_dumpty: {},
+          kdruang: ''
+        }
+        this.selection = []
+
+        resolve()
+      })
     }
   }
 })

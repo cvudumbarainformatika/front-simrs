@@ -20,17 +20,18 @@
         square
         class="col-6 full-height"
       >
-        <!-- <ListAnamnesis
+        <ListPenilaian
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
-        /> -->
+        />
       </q-card>
     </div>
   </div>
 </template>
 <script setup>
 import FormPenilaian from './comanamnesis/FormPenilaian.vue'
+import ListPenilaian from './comanamnesis/ListPenilaian.vue'
 const props = defineProps({
   pasien: {
     type: Object,
