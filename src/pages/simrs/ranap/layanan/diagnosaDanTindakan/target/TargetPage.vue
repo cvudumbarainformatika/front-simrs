@@ -3,8 +3,6 @@ import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormTarget = defineAsyncComponent(() => import('./comp/FormTarget.vue'))
-// const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
 
 const props = defineProps({
   pasien: {
