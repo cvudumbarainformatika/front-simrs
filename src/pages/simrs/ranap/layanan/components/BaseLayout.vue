@@ -26,6 +26,22 @@ const props = defineProps({
   nota: {
     type: Boolean,
     default: false
+  },
+  btnFullBefore: {
+    type: Boolean,
+    default: true
+  },
+  btnFullAfter: {
+    type: Boolean,
+    default: false
+  },
+  titleBefore: {
+    type: String,
+    default: 'Form Tindakan'
+  },
+  titleAfter: {
+    type: String,
+    default: 'List Tindakan'
   }
 })
 
@@ -48,7 +64,9 @@ const splitterModel = ref(props.split)
         <div class="column fit bg-white">
           <div class="col-auto">
             <BarComp
-              title="Form Tindakan" bg-color="bg-primary" text-color="text-white" @full="()=> {
+              :title="titleBefore" bg-color="bg-primary" text-color="text-white"
+              :btn-full="btnFullBefore"
+              @full="()=> {
                 full = !full
                 splitterModel = full ? 100 : split
               }"
@@ -64,10 +82,10 @@ const splitterModel = ref(props.split)
         <div class="column fit">
           <div class="col-auto full-width">
             <BarComp
-              title="List Tindakan" bg-color="bg-dark" text-color="text-white" :btn-full="false"
+              :title="titleAfter" bg-color="bg-dark" text-color="text-white" :btn-full="btnFullAfter"
             >
               <template #other v-if="nota">
-                <q-input dark dense outlined label="Nota" color="white" style="min-width:200px;" />
+                <slot name="nota" />
               </template>
             </BarComp>
           </div>

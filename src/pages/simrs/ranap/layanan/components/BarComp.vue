@@ -1,6 +1,6 @@
 <template>
   <div :class="`${bgColor} ${textColor}`" @mouseover="emits('hover')" @mouseleave="emits('leave')">
-    <div class="flex justify-between items-center q-px-md q-py-xs">
+    <div class="flex justify-between items-center q-px-md" :class="btnFull? 'q-py-xs' : 'q-py-sm'">
       <div class="kiri">
         <div class="f-12 text-weight-bold">
           {{ title }}

@@ -1,16 +1,21 @@
 <script setup>
 import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+// eslint-disable-next-line no-unused-vars
 import { defineAsyncComponent, onMounted, ref } from 'vue'
 
-const AutocompleteNakesMulti = defineAsyncComponent(() => import('./AutocompleteNakesMulti.vue')) // lazy-loaded
+// const AutocompleteNakesMulti = defineAsyncComponent(() => import('./AutocompleteNakesMulti.vue')) // lazy-loaded
+// const AutocompleteNakesMulti = import('./AutocompleteNakesMulti.vue')
+import AutocompleteNakesMulti from './AutocompleteNakesMulti.vue'
 
 const store = useTindakanRanapStore()
 // eslint-disable-next-line no-unused-vars
-const { formtindakan, listTindakan, listPetugas, setKdTindakan } = store
+// const { listTindakan, listPetugas, setKdTindakan, saveTindakan } = store
 
 const options = ref([])
 
 const formmRef = ref(null)
+const pelaksanaSatuRef = ref(null)
+const pelaksanaDuaRef = ref(null)
 const inpQtyRef = ref(null)
 
 const props = defineProps({
@@ -26,7 +31,7 @@ const props = defineProps({
 
 onMounted(() => {
   console.log('pasien', props.pasien)
-  options.value = filterArrayTindakan(listTindakan, props.pasien)
+  options.value = filterArrayTindakan(store.listTindakan, props.pasien)
 })
 
 const filterArrayTindakan = (arr, pasien) => {
@@ -40,10 +45,22 @@ const filterArrayTindakan = (arr, pasien) => {
 const onSubmit = () => {
   // console.log('formtindakan', props.pasien)
   store.saveTindakan(props.pasien)
+    .then(() => {
+      store.searchtindakan = ''
+
+      store.initReset()
+      formmRef.value?.reset()
+      formmRef.value?.resetValidation()
+
+      pelaksanaSatuRef?.value?.refAutocomplete.reset()
+      pelaksanaDuaRef?.value?.refAutocomplete.reset()
+
+      // console.log('autocomplete', pelaksanaSatuRef.value.refAutocomplete)
+    })
 }
 
 function updateSearchTindakan (val) {
-  setKdTindakan(val).then(() => {
+  store.setKdTindakan(val).then(() => {
     inpQtyRef.value.focus()
   })
 }
@@ -56,7 +73,7 @@ function filterFn (val, update, abort) {
 
   update(() => {
     const needle = val.toLowerCase()
-    const arr = props.pasien.kodepoli === 'POL041' ? listTindakan : listTindakan?.filter(x => x?.kdpoli?.includes(props.pasien?.kdgroup_ruangan))
+    const arr = props.pasien.kodepoli === 'POL041' ? store.listTindakan : store.listTindakan?.filter(x => x?.kdpoli?.includes(props.pasien?.kdgroup_ruangan))
     // console.log('arr', arr)
     const filter = ['kdtindakan', 'tindakan', 'icd9']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
@@ -113,7 +130,7 @@ function filterFn (val, update, abort) {
             </div>
             <div class="col-12">
               <q-input
-                v-model="formtindakan.tindakan"
+                v-model="store.formtindakan.tindakan"
                 label="Tindakan (Otomatis)"
                 dense
                 outlined
@@ -126,7 +143,7 @@ function filterFn (val, update, abort) {
 
             <div class="col-9">
               <q-input
-                v-model="formtindakan.tarif"
+                v-model="store.formtindakan.tarif"
                 label="Biaya (Otomatis)"
                 dense
                 outlined
@@ -139,7 +156,7 @@ function filterFn (val, update, abort) {
             <div class="col-3">
               <q-input
                 ref="inpQtyRef"
-                v-model="formtindakan.jmltindakan"
+                v-model="store.formtindakan.jmltindakan"
                 label="Qty"
                 dense
                 outlined
@@ -152,7 +169,7 @@ function filterFn (val, update, abort) {
             </div>
             <div class="col-12">
               <q-input
-                v-model="formtindakan.keterangan"
+                v-model="store.formtindakan.keterangan"
                 label="Keterangan"
                 autogrow
                 outlined
@@ -165,6 +182,8 @@ function filterFn (val, update, abort) {
             </div>
 
             <AutocompleteNakesMulti
+              v-model="store.formtindakan.pelaksanaSatu"
+              ref="pelaksanaSatuRef"
               label="Pelaksana Satu"
               placeholder="Pelaksana Satu"
               class="col-12"
@@ -174,16 +193,18 @@ function filterFn (val, update, abort) {
               map-options
               emit-value
               use-chips
-              :model="formtindakan.pelaksanaSatu"
-              :source="listPetugas"
+              :model="store.formtindakan.pelaksanaSatu"
+              :source="store.listPetugas"
               @update:model-value="(val)=> {
                 // console.log('update model', val);
-                formtindakan.pelaksanaSatu = val
+                store.formtindakan.pelaksanaSatu = val
               }"
 
               :rules="[val => !!val?.length || 'Harap diisi']"
             />
             <AutocompleteNakesMulti
+              ref="pelaksanaDuaRef"
+              v-model="store.formtindakan.pelaksanaDua"
               label="Pelaksana Dua"
               placeholder="Pelaksana Dua"
               class="col-12"
@@ -193,11 +214,11 @@ function filterFn (val, update, abort) {
               map-options
               emit-value
               use-chips
-              :model="formtindakan.pelaksanaDua"
-              :source="listPetugas"
+              :model="store.formtindakan.pelaksanaDua"
+              :source="store.listPetugas"
               @update:model-value="(val)=> {
                 // console.log('update model', val);
-                formtindakan.pelaksanaDua = val
+                store.formtindakan.pelaksanaDua = val
               }"
             />
           </q-card-section>

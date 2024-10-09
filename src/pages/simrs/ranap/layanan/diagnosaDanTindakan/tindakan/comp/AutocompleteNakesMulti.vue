@@ -5,13 +5,16 @@ import { ref, toRef } from 'vue'
 //   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 // ]
 
-const props = defineProps({ model: [String, Array], source: [Array] })
+const props = defineProps({ model: [Array, String], source: [Array] })
 
 // eslint-disable-next-line no-undef
-const { model } = toRef(props)
+const model = toRef(props.model, 'model')
 
 // const stringOptions = toRef(source)
 const filterOptions = ref([])
+const refAutocomplete = ref(null)
+
+defineExpose({ refAutocomplete })
 
 const createValue = (val, done) => {
   // Calling done(var) when new-value-mode is not set or is "add", or done(var, "add") adds "var" content to the model
@@ -49,6 +52,7 @@ const createValue = (val, done) => {
     // done(val, 'add-unique')
     done(null)
     if (modelValue && model?.value) model.value = modelValue
+    else model.value = val
   }
 }
 
@@ -82,10 +86,10 @@ const filterFn = (val, update) => {
 
 <template>
   <q-select
+    ref="refAutocomplete"
     outlined
     standout="bg-yellow-3"
     label="Select multiple values"
-    v-model="model"
     use-input
     use-chips
     multiple

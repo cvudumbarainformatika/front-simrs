@@ -313,8 +313,8 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
 
-      const pelaksanaSatu = this.formtindakan.pelaksanaSatu.length ? this.formtindakan.pelaksanaSatu.join(';') : '' // this.formtindakan.pelaksanaSatu
-      const pelaksanaDua = this.formtindakan.pelaksanaDua.length ? this.formtindakan.pelaksanaDua.join(';') : '' // this.formtindakan.pelaksanaSatu
+      const pelaksanaSatu = this.formtindakan?.pelaksanaSatu?.length ? this.formtindakan?.pelaksanaSatu?.join(';') : '' // this.formtindakan.pelaksanaSatu
+      const pelaksanaDua = this.formtindakan?.pelaksanaDua?.length ? this.formtindakan?.pelaksanaDua?.join(';') : '' // this.formtindakan.pelaksanaSatu
 
       this.loadingFormTindakan = true
 
@@ -329,26 +329,52 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       form.kddpjp = pasien?.kddokter
       form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
 
-      console.log('form', form, pasien)
+      // console.log('form', form, pasien)
 
-      try {
-        const resp = await api.post('v1/simrs/ranap/layanan/tindakan/simpantindakanranap', form)
-        console.log('simpan tindakan', resp)
-        if (resp.status === 200) {
-          const storePasien = usePengunjungRanapStore()
-          const isi = resp?.data?.result
-          isi.mastertindakan = { rs2: form.tindakan }
-          storePasien.injectDataPasien(pasien?.noreg, isi, 'tindakan')
-          this.setNotas(resp?.data?.nota)
-          notifSuccess(resp)
-          this.loadingFormTindakan = false
-          this.initReset('Tindakan Medik')
-        }
-        this.loadingFormTindakan = false
-      }
-      catch (error) {
-        this.loadingFormTindakan = false
-      }
+      // try {
+      //   const resp = await api.post('v1/simrs/ranap/layanan/tindakan/simpantindakanranap', form)
+      //   // console.log('simpan tindakan', resp)
+      //   if (resp.status === 200) {
+      //     this.setNotas(resp?.data?.nota)
+      //     const storePasien = usePengunjungRanapStore()
+      //     const isi = resp?.data?.result
+      //     isi.mastertindakan = { rs2: form.tindakan }
+      //     storePasien.injectDataPasien(pasien?.noreg, isi, 'tindakan')
+      //     this.loadingFormTindakan = false
+      //     this.initReset('Tindakan Medik')
+
+      //     console.log('inject', this.formtindakan)
+
+      //     notifSuccess(resp)
+      //   }
+      //   this.loadingFormTindakan = false
+      // }
+      // catch (error) {
+      //   this.loadingFormTindakan = false
+      // }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/ranap/layanan/tindakan/simpantindakanranap', form)
+          .then((resp) => {
+            if (resp.status === 200) {
+              this.setNotas(resp?.data?.nota)
+              const storePasien = usePengunjungRanapStore()
+              const isi = resp?.data?.result
+              isi.mastertindakan = { rs2: form.tindakan }
+              storePasien.injectDataPasien(pasien?.noreg, isi, 'tindakan')
+              this.loadingFormTindakan = false
+              notifSuccess(resp)
+            }
+            else {
+              this.loadingFormTindakan = false
+            }
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loadingFormTindakan = false
+            reject(err)
+          })
+      })
     },
 
     setNotas (array) {
@@ -438,7 +464,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
         // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungRanapStore()
-          storePasien.hapusDataTindakan(pasien, id)
+          storePasien.hapusDataInjectan(pasien, id, 'tindakan')
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
@@ -449,28 +475,29 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     },
 
     initReset (x) {
-      return new Promise((resolve, reject) => {
-        // tindakan
-        this.searchtindakan = ''
-        this.formtindakan = {
-          kdtindakan: '',
-          tindakan: '',
-          biaya: 0,
-          hargasarana: 0,
-          tarif: 0,
-          hargapelayanan: 0,
-          jmltindakan: 1,
-          subtotal: 0,
-          // pelaksana: '',
-          keterangan: ''
-        }
-        // icd
-        this.formicd = {
-          kdprocedure: ''
-        }
+      // return new Promise((resolve, reject) => {
+      // tindakan
+      this.searchtindakan = ''
+      this.formtindakan = {
+        kdtindakan: '',
+        tindakan: '',
+        biaya: 0,
+        hargasarana: 0,
+        tarif: 0,
+        hargapelayanan: 0,
+        jmltindakan: 1,
+        subtotal: 0,
+        pelaksanaSatu: [],
+        pelaksanaDua: [],
+        keterangan: ''
+      }
+      // icd
+      this.formicd = {
+        kdprocedure: ''
+      }
 
-        resolve()
-      })
+      // resolve()
+      // })
     },
     // =====
     setFormIcd (key, val) {

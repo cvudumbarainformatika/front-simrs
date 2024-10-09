@@ -235,8 +235,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
           data[kode] = val
         }
         else {
-          const target = data[kode]?.find(x => x?.id === val?.id) ?? null
-          console.log('inject target pasien', target)
+          const target = data[kode]?.find(x => x.id === val?.id) ?? null
+          console.log('inject target pasien', target, kode, val, data)
           // console.log('inject kode pasien', kode)
           // console.log('inject isi pasien', val)
 
@@ -245,6 +245,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
           }
           else {
             data[kode]?.splice(0, 0, val)
+            // data[kode].push(val)
           }
         }
       }
@@ -262,8 +263,12 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
 
     hapusDataInjectan (pasien, id, key) {
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+      console.log('find pasien', findPasien)
+
       if (findPasien.length) {
         const data = findPasien[0][key]
+        console.log('data', data)
+
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

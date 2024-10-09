@@ -1,5 +1,6 @@
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
@@ -17,11 +18,16 @@ const props = defineProps({
   nakes: {
     type: String,
     default: null
-  },
-  items: {
-    type: Array,
-    default: () => []
   }
+})
+
+const store = useTindakanRanapStore()
+
+onMounted(() => {
+  Promise.all([
+    store.getNota(props?.pasien),
+    store.getTindakan(props?.pasien)
+  ])
 })
 
 </script>
@@ -33,8 +39,21 @@ const props = defineProps({
     </template>
     <template #list>
       <div class="fit">
-        <ListTindakan :pasien="props.pasien" :kasus="props.kasus" />
+        <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" />
       </div>
+    </template>
+
+    <template #nota>
+      <q-select
+        v-model="store.notaTindakan"
+        outlined
+        standout="bg-yellow-3"
+        bg-color="white"
+        dense
+        :options="store.notaTindakans"
+        :display-value="`NOTA: ${store.notaTindakan==='' || store.notaTindakan === 'BARU'? 'BARU': store.notaTindakan}`"
+        style="min-width: 200px;"
+      />
     </template>
   </BaseLayout>
 </template>
