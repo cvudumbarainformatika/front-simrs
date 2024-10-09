@@ -78,7 +78,8 @@
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
-                  :kasus="store.jnsKasusPasien"
+                  :kasus="store?.jnsKasusPasien"
+                  :nakes="auth?.user?.pegawai?.kdgroupnakes"
                   depo="rnp"
                 />
               </template>
@@ -97,12 +98,14 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 // import HeaderLayout from './layoutcomp/HeaderLayout.vue'
 // import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 // import AppLoader from 'src/components/~global/AppLoader.vue'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
-import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+// import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -122,7 +125,9 @@ const props = defineProps({
 })
 
 const store = usePengunjungRanapStore()
-const penilaian = usePenilaianRanapStore()
+// const penilaian = usePenilaianRanapStore()
+const auth = useAplikasiStore()
+// const diagnosa = useDiagnosaStore()
 
 const menus = ref([
   // {
@@ -144,22 +149,34 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
   },
   {
+    name: 'DiagTindPage',
+    label: 'Diagnosa & Tindakan',
+    icon: 'icon-mat-health_and_safety',
+    comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
     comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
   }
 ])
+
 const menu = ref(menus.value[0])
+
+onMounted(() => {
+  menu.value = menus.value[0]
+})
 
 function menuDiganti (val) {
   menu.value = val
 }
 
 const onShow = () => {
-  Promise.all([
-    penilaian.getMaster()
-  ])
+  // Promise.all([
+  // penilaian.getMaster(),
+  // diagnosa.getDiagnosaDropdown()
+  // ])
 }
 
 watchEffect(() => {

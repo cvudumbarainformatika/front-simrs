@@ -1,10 +1,10 @@
 <template>
   <div class="full-height">
-    <div class="q-pa-md text-weight-bold">
-      FORM DIAGNOSA
+    <div class="q-pa-sm text-weight-bold">
+      <!-- FORM DIAGNOSA
       <div class="f-10 text-weight-light">
         <em>form Diagnosa sekaligus pensimulasian INACBG </em>
-      </div>
+      </div> -->
       <q-btn
         color="primary"
         class="q-pa-none"
@@ -137,6 +137,7 @@
           outlined
           standout="bg-yellow-3"
           :rules="[val => !!val || 'Harus diisi']"
+          :lazy-rules="true"
           hide-bottom-space
           readonly
           style="max-width: 150px;"
@@ -153,6 +154,7 @@
           autogrow
           standout="bg-yellow-3"
           :rules="[val => !!val || 'Harus diisi']"
+          :lazy-rules="true"
           hide-bottom-space
           readonly
         />
@@ -188,20 +190,26 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+// import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+// import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  nakes: {
+    type: String,
+    default: null
   }
 })
 
 const formRef = ref(null)
-const store = useLayananPoli()
-const pengunjung = usePengunjungPoliStore()
+const store = useDiagnosaStore()
+const pengunjung = usePengunjungRanapStore()
 const emits = defineEmits(['savePemeriksaan'])
 
 const memoDokter = ref('')
@@ -247,6 +255,8 @@ const options = ref([])
 const listDiagnosa = ref([])
 
 onMounted(() => {
+  // console.log(props.pasien)
+
   options.value = store.listDiagnosa
   store.initReset().then(() => {
     resetValidation()
@@ -313,7 +323,7 @@ function ganti (val) {
 }
 
 function diagnosaUtamaDiubah (val) {
-  console.log(props.pasien)
+  // console.log(props.pasien)
   if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
     $q.notify({
       color: 'negative',
@@ -338,7 +348,7 @@ function gantiMemo () {
 }
 
 watch(() => props.pasien?.diagnosa, (obj) => {
-  console.log('watch pilihan kasus', obj)
+  // console.log('watch pilihan kasus', obj)
   ganti(store.formdiagnosa.kasus)
 }, { deep: true })
 

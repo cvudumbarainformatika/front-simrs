@@ -97,9 +97,11 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         const datax = findPasien[0]
         datax.newapotekrajal = data?.newapotekrajal
         datax.diagnosa = data?.diagnosa
+        datax.diagnosamedis = []
         datax.anamnesis = []
         datax.pemeriksaan = []
         datax.penilaian = []
+        datax.tindakan = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false
@@ -255,6 +257,15 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         if (target) {
           data[kode]?.splice(data[kode]?.findIndex(x => x?.id === null), 1)
         }
+      }
+    },
+
+    hapusDataInjectan (pasien, id, key) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+      if (findPasien.length) {
+        const data = findPasien[0][key]
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
       }
     }
   }
