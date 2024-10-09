@@ -6,6 +6,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
   state: () => ({
     loading: false,
     dialog: false,
+    fixed: false,
     totald: 0,
     totalk: 0,
     items: [],

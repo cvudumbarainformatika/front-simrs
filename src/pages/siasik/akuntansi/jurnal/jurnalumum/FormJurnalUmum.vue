@@ -48,6 +48,11 @@
                   />
                 </div>
               </div>
+              <div class="items-center bg-white q-pa-sm full-width rounded-borders">
+                <div class="col-12 rounded-borders">
+                  <app-btn label="Tambah" color="primary" @click="store.fixed = true" class="items-center" />
+                </div>
+              </div>
             </q-card>
           </div>
           <div class="container q-px-md">
@@ -77,7 +82,7 @@
                     <tbody>
                       <tr>
                         <td>
-                          <q-select
+                          <!-- <q-select
                             v-model="model"
                             label="Kode Rekening 50"
                             outlined
@@ -95,7 +100,7 @@
                             :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                             @filter="filterFn"
                             @update:model-value="(val) => store.rekening50(val)"
-                          />
+                          /> -->
                           <!-- <template>
                             <q-item v-bind="scope.itemProps">
                               <q-item-section avatar>
@@ -123,42 +128,19 @@
           </div>
         </q-card-section>
       </q-card>
+      <form-rincian-jurnal-umum />
     </q-dialog>
   </div>
 </template>
 <script setup>
 import { usejurnalumummanual } from 'src/stores/siasik/akuntansi/jurnal/umummanual'
 import { onMounted, ref } from 'vue'
+import FormRincianJurnalUmum from './FormRincianJurnalUmum.vue'
 
 const maximizedToggle = ref(true)
 const store = usejurnalumummanual()
 const separator = ref('cell')
-const model = ref(null)
-
-const stringOptions = store.rekening50
-const options = ref(stringOptions)
-
-// eslint-disable-next-line no-unused-vars
-const scope = ref()
-
-function filterFn (val, update) {
-  if (val === '') {
-    update(() => {
-      options.value = stringOptions
-
-      // here you have access to "ref" which
-      // is the Vue reference of the QSelect
-    })
-    return
-  }
-  update(() => {
-    const needle = val.toLowerCase()
-
-    options.value = stringOptions.filter(
-      (v) => v.name.toString().toLowerCase().indexOf(needle) > -1
-    )
-  })
-}
+// const model = ref(null)
 
 onMounted(() => {
   store.getRekenining50()
