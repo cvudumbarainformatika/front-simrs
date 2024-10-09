@@ -68,11 +68,16 @@
                 </div>
               </div>
               <div class="col-3">
-                <div v-if="rinc?.tgl">
-                  {{ dateFullFormat(rinc?.tgl) }}
+                <div class="row">
+                  <div v-if="rinc?.tgl">
+                    {{ dateFullFormat(rinc?.tgl) }}
+                  </div>
+                  <div v-else-if="rinc?.tgl_permintaan">
+                    {{ dateFullFormat(rinc?.tgl_permintaan) }}
+                  </div>
                 </div>
-                <div v-else-if="rinc?.tgl_permintaan">
-                  {{ dateFullFormat(rinc?.tgl_permintaan) }}
+                <div class="row f-10">
+                  ({{ rinc?.no_permintaan }})
                 </div>
               </div>
               <div class="col-3">

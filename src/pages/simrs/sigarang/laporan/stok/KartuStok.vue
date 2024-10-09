@@ -25,6 +25,7 @@
             :loading="store.loadingBarang"
             @buang="cariBarang"
             @on-select="barangSelected"
+            clearable
           />
         </div>
         <div class="col-2">
@@ -567,47 +568,51 @@ for (let index = 0; index < 11; index++) {
 }
 
 // barang dipilih
-function barangSelected(val) {
+function barangSelected (val) {
   console.log('barang dipilih ', val)
   const index = findWithAttr(store.barangs, 'kode', val)
   if (index >= 0) {
     store.item = store.barangs[index]
     store.setParams('kd_tempat', store.item.kode_depo)
     console.log('barang ', store.item)
-  } else {
+  }
+  else {
     store.item = null
   }
 }
 
 // cari barang
-function cariBarang(val) {
+function cariBarang (val) {
   store.paramBarang.q = val
   // console.log('cari barang ', store.paramBarang)
   store.getDataBarang()
 }
 // cari tempat
-function cariTempat(val) {
+function cariTempat (val) {
   // store.paramBarang.q = val
   // console.log('cari tempat ', val)
   store.getDataRuangan(val)
 }
 // cari data di kartu stok
-function cariDataStok() {
+function cariDataStok () {
   if (store.params.kd_tempat) {
     if (store.params.kd_tempat.includes('Gd-')) {
       if (store.params.kd_tempat === 'Gd-02010100' && (props.role === 'gudang' || props.role === 'gizi' || props.role === 'root')) {
         // console.log('params Ke gudang', store.params)
         store.getKartuStokGudang()
-      } else {
+      }
+      else {
         // console.log('params Ke Depo', store.params)
         store.getKartuStokDepo()
       }
-    } else {
+    }
+    else {
       // console.log('params ruangan', store.params)
       // console.log('role ', props.role)
       store.getKartuStokRuangan()
     }
-  } else {
+  }
+  else {
     // console.log('ga onok ruangane cak ')
     notifErrVue('Tempat belum dipilih')
   }
