@@ -28,7 +28,7 @@
               dense
               transition-show="flip-up"
               transition-hide="flip-down"
-              :options="options"
+              :options="store.rekening50"
               clearable
               use-input
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
