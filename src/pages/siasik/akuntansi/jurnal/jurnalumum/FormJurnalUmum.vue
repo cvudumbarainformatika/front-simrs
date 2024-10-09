@@ -82,42 +82,16 @@
                     <tbody>
                       <tr>
                         <td>
-                          <!-- <q-select
-                            v-model="model"
-                            label="Kode Rekening 50"
-                            outlined
-                            emit-value
-                            map-options
-                            option-label="uraian"
-                            option-value="kodeall"
-                            standout="bg-yellow-3"
-                            dense
-                            transition-show="flip-up"
-                            transition-hide="flip-down"
-                            :options="store.rekening50"
-                            clearable
-                            use-input
-                            :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                            @filter="filterFn"
-                            @update:model-value="(val) => store.rekening50(val)"
-                          /> -->
-                          <!-- <template>
-                            <q-item v-bind="scope.itemProps">
-                              <q-item-section avatar>
-                                <q-item-label> {{ scope.opt.name }} <br> </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                          </template> -->
+                          <span>asdasdas</span>
                         </td>
                         <td>
-                          <q-input
-                            v-model="store.form.koderekeningx"
-                            label="Kode Rekening 50"
-                            outlined
-                            standout="bg-yellow-3"
-                            dense
-                            :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                          />
+                          <span>asdasdas</span>
+                        </td>
+                        <td>
+                          <span>asdasdas</span>
+                        </td>
+                        <td>
+                          <span>asdasdas</span>
                         </td>
                       </tr>
                     </tbody>

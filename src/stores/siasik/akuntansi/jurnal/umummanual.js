@@ -14,7 +14,8 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
     rekening50: [],
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      koderekening: [],
+      koderekening: '',
+      uraian: '',
       tahun: null
     },
     params: {
@@ -67,6 +68,9 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       })
       this.totald = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totdebet), 0)
       this.totalk = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totkredit), 0)
+    },
+    rekening50selected (val) {
+      console.log('val', val)
     }
   }
 })
