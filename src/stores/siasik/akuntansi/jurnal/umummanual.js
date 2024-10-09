@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
   state: () => ({
@@ -10,16 +11,21 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
     totald: 0,
     totalk: 0,
     items: [],
-    tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+    rincis: [],
+    tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
     rekening50: [],
     form: {
+      nobukti: null,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       koderekening: '',
       uraian: '',
-      tahun: null
+      tahun: new Date().getFullYear()
     },
     params: {
       tahuncari: new Date().getFullYear()
+    },
+    paramsrinci: {
+      nobukti: ''
     },
     tahun: []
   }),
@@ -51,7 +57,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
         this.loading = false
       }
       catch (error) {
-        this.loadingMasterLab = false
+        this.loading = false
       }
     },
     async gettotal (val) {
@@ -69,8 +75,45 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       this.totald = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totdebet), 0)
       this.totalk = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totkredit), 0)
     },
-    rekening50selected (val) {
-      console.log('val', val)
+    async saveData () {
+      this.loading = true
+      try {
+        const resp = await api.post('v1/akuntansi/jurnalumum/simpanjurnalmanual', this.form)
+        if (resp.status === 200) {
+          this.form.nobukti = resp?.data?.nobukti
+          this.paramsrinci.nobukti = resp?.data?.nobukti
+          notifSuccess(resp)
+          this.resetformrinci()
+          this.getrincians()
+          this.loading = false
+        }
+        this.loadingForm = false
+      }
+      catch (error) {
+        this.loading = false
+        notifErr(error)
+      }
+    },
+    resetformrinci () {
+      this.form.koderekening = ''
+      this.form.uraian = ''
+      this.form.jenis = ''
+    },
+    async getrincians () {
+      this.loading = true
+      const params = { params: this.paramsrinci }
+      try {
+        const resp = await api.get('v1/akuntansi/jurnalumum/getrincian', params)
+        // console.log('masterlaborat', resp)
+        if (resp.status === 200) {
+          this.rincis = resp.data
+          this.loading = false
+        }
+        this.loading = false
+      }
+      catch (error) {
+        this.loading = false
+      }
     }
   }
 })

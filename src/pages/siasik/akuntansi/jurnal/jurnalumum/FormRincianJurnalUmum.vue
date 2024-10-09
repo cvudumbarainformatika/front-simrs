@@ -5,10 +5,14 @@
         <q-form
           ref="refForm"
           class="full-height"
+          @submit="onSubmit"
         >
           <q-card-section>
-            <div class="text-h6 text-center">
-              Masukkan Kode Rekening 50 dan Jumlah Debet Kredit
+            <div class="text-h6 text-center text-weight-bold">
+              Masukkan Kode Rekening 50 dan Jumlah Debet Kredit <br>
+              <q-badge color="red" class="text-h6 text-center">
+                No. Bukti:   {{ store?.form?.nobukti }}
+              </q-badge>
             </div>
           </q-card-section>
 
@@ -17,28 +21,14 @@
           <q-card-section style="max-height: 50vh" class="scroll">
             <div class="row q-mt-sm">
               <div class="col-12">
-                <q-input
+                <q-select
                   ref="refkoderek"
                   v-model="store.form.koderekening"
-                  label="Kode Rekening"
-                  standout="bg-yellow-3"
-                  dense
-                  outlined
-                  disable
-                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                />
-              </div>
-            </div>
-            <div class="row q-mt-sm">
-              <div class="col-12">
-                <q-select
-                  ref="refuraian"
-                  v-model="store.form.uraian"
-                  label="Uraian Rekening 50"
+                  label="Kode Rekening 50"
                   outlined
                   emit-value
                   map-options
-                  option-label="uraian"
+                  option-label="kodeall3"
                   option-value="kodeall3"
                   standout="bg-yellow-3"
                   dense
@@ -75,6 +65,20 @@
             </div>
             <div class="row q-mt-sm">
               <div class="col-12">
+                <q-input
+                  ref="refuraian"
+                  v-model="store.form.uraian"
+                  label="Uraian Rekening"
+                  standout="bg-yellow-3"
+                  dense
+                  outlined
+                  disable
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                />
+              </div>
+            </div>
+            <div class="row q-mt-sm">
+              <div class="col-12">
                 <q-select
                   ref="refjenistransaksi"
                   v-model="store.form.jenis"
@@ -92,20 +96,25 @@
                 <q-input
                   v-model="store.form.nominal"
                   ref="refnominal"
-                  mask="##.##"
+                  mask="######.##"
                   label="Nominal"
                   reverse-fill-mask
                   dense
                   outlined
+                  standout="bg-yellow-3"
                   input-class="text-right"
+                  :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                 />
               </div>
             </div>
           </q-card-section>
           <q-separator />
           <q-card-actions align="right">
-            <q-btn flat label="Decline" color="primary" v-close-popup />
-            <q-btn flat label="Accept" color="primary" v-close-popup />
+            <q-btn
+              flat label="Simpan Data" class="bg-primary" color="white" tooltip="Simpan Data"
+              type="submit" :loading="store.loading"
+            />
+            <q-btn flat label="Batal" class="bg-red" color="white" v-close-popup />
           </q-card-actions>
         </q-form>
       </q-card>
@@ -147,25 +156,16 @@ function filterFn (val, update) {
 
 function selected (val) {
   if (val !== null) {
-    store.form.koderekening = val
+    const koderekening = store?.rekening50.find((x) => x.kodeall3 === val)
+    store.form.uraian = koderekening?.uraian
   }
 }
 
-// function formatRupiah (angka, prefix) {
-//   let number_string = angka.replace(/[^,\d]/g, '').toString(),
-//     split = number_string.split(','),
-//     sisa = split[0].length % 3,
-//     rupiah = split[0].substr(0, sisa),
-//     ribuan = split[0].substr(sisa).match(/\d{3}/gi)
-
-//   if (ribuan) {
-//     separator = sisa ? '.' : ''
-//     rupiah += separator + ribuan.join('.')
-//   }
-
-//   rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah
-//   return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '')
-// }
+function onSubmit () {
+  store.saveData().then(() => {
+    refForm.value.resetValidation()
+  })
+}
 
 onBeforeMount(() => {
   store.form.koderekening = ''
