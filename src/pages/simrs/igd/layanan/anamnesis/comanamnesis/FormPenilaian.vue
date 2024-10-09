@@ -58,6 +58,7 @@
                       </span>
                       <span v-for="(kategori , xl) in submenu?.categories" :key="xl">
                         <q-radio
+                          ref="refkategori"
                           class="q-py-xs q-pa-sm"
                           v-model="storepenilaian.form[storepenilaian?.formpenilaians?.kode][item.kode][submenu.kode]"
                           :val="kategori"
@@ -76,6 +77,7 @@
                     :key="xl"
                   >
                     <q-radio
+                      ref="refkategori"
                       class="q-py-xs q-pa-sm"
                       v-model="storepenilaian.form[storepenilaian?.formpenilaians?.kode][item.kode]"
                       :val="kategori"
@@ -154,6 +156,7 @@ import { ref } from 'vue'
 
 const storepenilaian = usePenilaianAnamnesisIgd()
 const refForm = ref(null)
+const refkategori = ref(null)
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {

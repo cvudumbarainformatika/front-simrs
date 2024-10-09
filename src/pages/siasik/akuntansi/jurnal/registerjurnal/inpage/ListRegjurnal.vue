@@ -64,26 +64,26 @@
             </q-td>
             <q-td key="koderek" :props="props" class="text-left vertical-bottom">
               <div v-for="it in props.row?.debit" :key="it">
-                <template v-if="it.kode_lo.length">
-                  <q-badge color="pink">
-                    {{ it.kode_lo }}
-                  </q-badge>
-                </template>
-                <template v-else>
-                  <q-badge color="pink">
+                <!-- <template v-if="it.kode_lo.length"> -->
+                <q-badge color="white" class="text-weight-bold text-pink-6">
+                  {{ it.kode_bast }}
+                </q-badge>
+                <!-- </template> -->
+                <!-- <template v-else>
+                  <q-badge color="white" class="text-weight-bold text-pink-6">
                     {{ it.kode_neraca }}
                   </q-badge>
-                </template>
+                </template> -->
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <template v-if="it.kode_neraca.length">
-                  <q-badge color="lime" text-color="dark">
-                    {{ it.kode_neraca }}
-                  </q-badge>
-                </template>
+                <!-- <template v-if="it.kode_bastx.length"> -->
+                <q-badge color="white" class="text-weight-bold text-lime-9">
+                  {{ it.kode_bastx }}
+                </q-badge>
+                <!-- </template>
                 <template v-else>
                   <div />
-                </template>
+                </template> -->
               </div>
             </q-td>
 
@@ -92,37 +92,37 @@
                 {{ props.row?.kegiatan }}
               </div>
               <div v-for="it in props.row?.debit" :key="it">
-                <template v-if="it.kode_lo.length">
-                  <q-badge color="pink">
-                    {{ it.uraian_lo }}
-                  </q-badge>
-                </template>
+                <!-- <template v-if="it.kode_lo.length"> -->
+                <q-badge color="white" class="text-weight-bold text-pink-6">
+                  {{ it.uraian_bast }}
+                </q-badge>
+                <!-- </template>
                 <template v-else>
-                  <q-badge color="pink">
+                  <q-badge color="white" class="text-weight-bold text-pink-6">
                     {{ it.uraian_neraca }}
                   </q-badge>
-                </template>
+                </template> -->
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <template v-if="it.kode_neraca.length">
-                  <q-badge color="lime" text-color="dark">
-                    {{ it.uraian_neraca }}
-                  </q-badge>
-                </template>
+                <!-- <template v-if="it.kode_bastx.length"> -->
+                <q-badge color="white" class="text-weight-bold text-lime-9">
+                  {{ it.uraian_bastx }}
+                </q-badge>
+                <!-- </template>
                 <template v-else>
                   <div />
-                </template>
+                </template> -->
               </div>
             </q-td>
 
             <q-td key="debit" :props="props" class="text-right vertical-bottom">
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="pink">
+                <q-badge color="pink-6">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="lime" text-color="dark">
+                <q-badge color="lime-9">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
               </div>
@@ -130,12 +130,12 @@
 
             <q-td key="kredit" :props="props" class="text-right vertical-bottom">
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="pink">
+                <q-badge color="pink-6">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="lime" text-color="dark">
+                <q-badge color="lime-9">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
               </div>

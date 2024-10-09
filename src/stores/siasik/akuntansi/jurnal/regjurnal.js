@@ -58,14 +58,12 @@ export const registerJurnal = defineStore('register_jurnal', {
         const el = this.stp
         const rinci = el[i].rinci.map((x) => {
           return {
-            kode50: x.jurnal.kode_lra,
-            uraian: x.jurnal.uraian_lra,
-            kode_lo: x.jurnal.kode_lo,
-            uraian_lo: x.jurnal.uraian_lo,
-            kode_nrc: x.jurnal.kode_neraca1,
-            uraian_nrc: x.jurnal.uraian_neraca1,
-            kode_neraca: x.jurnal.kode_neraca2,
-            uraian_neraca: x.jurnal.uraian_neraca2,
+            kode50: x.jurnal.kode50,
+            uraian: x.jurnal.uraian50,
+            kode_bast: x.jurnal.kode_bast,
+            uraian_bast: x.jurnal.uraian_bast,
+            kode_bastx: x.jurnal.kode_bastx,
+            uraian_bastx: x.jurnal.uraian_bastx,
             nilai: parseFloat(x.nominalpembayaran)
           }
         })
@@ -87,10 +85,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            kode_lo: arr50.filter((x) => x.kode50 === el)[0]?.kode_lo,
-            uraian_lo: arr50.filter((x) => x.kode50 === el)[0]?.uraian_lo,
-            kode_neraca: arr50.filter((x) => x.kode50 === el)[0]?.kode_nrc,
-            uraian_neraca: arr50.filter((x) => x.kode50 === el)[0]?.uraian_nrc,
+            kode_bast: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
+            uraian_bast: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
+            kode_bastx: null,
+            uraian_bastx: null,
             debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
           }
@@ -101,10 +99,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            kode_lo: null,
-            uraian_lo: null,
-            kode_neraca: arr50.filter((x) => x.kode50 === el)[0]?.kode_neraca,
-            uraian_neraca: arr50.filter((x) => x.kode50 === el)[0]?.uraian_neraca,
+            kode_bast: null,
+            uraian_bast: null,
+            kode_bastx: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
+            uraian_bastx: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
             debit: 0,
             kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
           }
@@ -129,19 +127,17 @@ export const registerJurnal = defineStore('register_jurnal', {
       const arr50bast = []
       for (let i = 0; i < this.bastfarmasi.length; i++) {
         const el = this.bastfarmasi
-        console.log('ll', el)
+        // console.log('ll', el)
         const ri = el[i].rincianbast
         const rinci = ri.map((x) => {
           return {
             nobast: x.nobast,
-            kode50: x.masterobat.jurnal.kode_lra,
-            uraian: x.masterobat.jurnal.uraian_lra,
-            kode_lo: x.masterobat.jurnal.kode_lo,
-            uraian_lo: x.masterobat.jurnal.uraian_lo,
-            kode_nrc: x.masterobat.jurnal.kode_neraca1,
-            uraian_nrc: x.masterobat.jurnal.uraian_neraca1,
-            kode_neraca: x.masterobat.jurnal.kode_neraca2,
-            uraian_neraca: x.masterobat.jurnal.uraian_neraca2,
+            kode50: x.masterobat.jurnal.kode50,
+            uraian: x.masterobat.jurnal.uraia50,
+            kode_bast: x.masterobat.jurnal.kode_bast,
+            uraian_bast: x.masterobat.jurnal.uraian_bast,
+            kode_bastx: x.masterobat.jurnal.kode_bastx,
+            uraian_bastx: x.masterobat.jurnal.uraian_bastx,
             nilai: parseFloat(x.subtotal)
           }
         })
@@ -164,10 +160,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            kode_lo: arr50bast.filter((x) => x.nobast === el)[0]?.kode_lo,
-            uraian_lo: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_lo,
-            kode_neraca: null,
-            uraian_neraca: null,
+            kode_bast: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bast,
+            uraian_bast: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bast,
+            kode_bastx: null,
+            uraian_bastx: null,
             debit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
           }
@@ -178,10 +174,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-            kode_lo: null,
-            uraian_lo: null,
-            kode_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.kode_neraca,
-            uraian_neraca: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_neraca,
+            kode_bast: null,
+            uraian_bast: null,
+            kode_bastx: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bastx,
+            uraian_bastx: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bastx,
             debit: 0,
             kredit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
           }
