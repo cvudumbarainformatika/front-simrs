@@ -27,6 +27,7 @@
           dense
           emit-value
           map-options
+          clearable
           autocomplete="uraian"
           option-value="kodeall3"
           :disable="store.loading"
@@ -118,42 +119,49 @@ function filterFn (val, update) {
     })
     return
   }
-  if (val === null) {
-    update(() => {
-      options.value = store.akuns
-    })
-    return
-  }
-
+  // if (val === null) {
+  //   update(() => {
+  //     options.value = store.akuns
+  //   })
+  //   return
+  // }
   update(() => {
-    const filter = ['kodeall3', 'uraian']
     const needle = val.toLowerCase()
-    const multiFilter = (data = [], filterKeys = [], value = '') =>
-      data.filter((item) => filterKeys.some(
-        (key) =>
-          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
-            item[key]
-      )
-      )
-    let filteredData = multiFilter(store.akuns, filter, needle)
-    if (!filteredData.length) {
-      if (val !== '') {
-        store.getRekening(val).then(() => {
-          filteredData = multiFilter(store.options, filter, needle)
-          options.value = filteredData
-        })
-      }
-      else {
-        store.loading = false
-        // options.value = filteredData
-      }
-    }
-    else {
-      options.value = filteredData
-    }
 
-    options.value = filteredData
+    options.value = store.akuns.filter(
+      (v) => v.uraian.toLowerCase().indexOf(needle) > -1 || v.kodeall3.toLowerCase().indexOf(needle) > -1
+    )
   })
+
+  // update(() => {
+  //   const filter = ['kodeall3', 'uraian']
+  //   const needle = val.toLowerCase()
+  //   const multiFilter = (data = [], filterKeys = [], value = '') =>
+  //     data.filter((item) => filterKeys.some(
+  //       (key) =>
+  //         item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+  //           item[key]
+  //     )
+  //     )
+  //   let filteredData = multiFilter(store.akuns, filter, needle)
+  //   if (!filteredData.length) {
+  //     if (val !== '') {
+  //       store.getRekening(val).then(() => {
+  //         filteredData = multiFilter(store.options, filter, needle)
+  //         options.value = filteredData
+  //       })
+  //     }
+  //     else {
+  //       store.loading = false
+  //       // options.value = filteredData
+  //     }
+  //   }
+  //   else {
+  //     options.value = filteredData
+  //   }
+
+  //   options.value = filteredData
+  // })
 }
 // const formReff = ref(null)
 // function onSimpan () {
