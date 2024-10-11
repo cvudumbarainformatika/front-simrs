@@ -1,19 +1,24 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifErr, notifSuccess } from 'src/modules/utils'
+import { notifErr, notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
   state: () => ({
     loading: false,
+    loadingverif: false,
     dialog: false,
     fixed: false,
     totald: 0,
     totalk: 0,
+    totalrincid: 0,
+    totalrincik: 0,
     items: [],
+    transall: [],
     rincis: [],
     tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
     rekening50: [],
+    flagVerif: '',
     form: {
       nobukti: null,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -85,7 +90,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
           notifSuccess(resp)
           this.resetformrinci()
           this.getrincians()
-          this.loading = false
+          // this.loading = false
         }
         this.loadingForm = false
       }
@@ -104,15 +109,82 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       const params = { params: this.paramsrinci }
       try {
         const resp = await api.get('v1/akuntansi/jurnalumum/getrincian', params)
-        // console.log('masterlaborat', resp)
         if (resp.status === 200) {
-          this.rincis = resp.data
+          this.transall = resp.data
+          const hasilglobal = []
           this.loading = false
+          this.transall?.forEach(x => {
+            const nobukti = x?.nobukti
+            const verif = x?.verif
+            // const rincisx = x?.rincianjurnalumum
+            const debet = x?.rincianjurnalumum.reduce((x, y) => parseFloat(x) + parseFloat(y.debet), 0)
+            const kredit = x?.rincianjurnalumum?.reduce((a, b) => parseFloat(a) + parseFloat(b.kredit), 0)
+            const hasil = {
+              nobukti,
+              verif,
+              debet,
+              kredit
+
+            }
+            this.totalrincid = hasil?.debet
+            this.totalrincik = hasil?.kredit
+
+            hasilglobal.push(hasil)
+          })
         }
-        this.loading = false
       }
       catch (error) {
         this.loading = false
+      }
+    },
+    async hapusrincians (val) {
+      this.loading = true
+      const id = { id: val?.id, nobukti: val?.nobukti }
+      try {
+        const resp = await api.post('v1/akuntansi/jurnalumum/hapusrincians', id)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          this.form.nobukti = resp?.data?.nobukti
+          this.paramsrinci.nobukti = resp?.data?.nobukti
+          this.getrincians()
+        }
+        this.loadingForm = false
+      }
+      catch (error) {
+        this.loading = false
+        notifErr(error)
+      }
+    },
+    editForm (val) {
+      this.dialog = true
+      this.form.nobukti = val?.nobukti
+      this.form.tanggal = val?.tanggal
+      this.form.keterangan = val?.keterangan
+      this.paramsrinci.nobukti = val?.nobukti
+      this.flagVerif = val?.verif
+      this.getrincians()
+    },
+    async VerifData (val, debet, kredit) {
+      this.loadingverif = true
+      if (debet !== kredit) {
+        notifErrVue('Maaf Debet Dan Kredit Harus Balance')
+        this.loadingverif = false
+      }
+      else {
+        const nobukti = { nobukti: val }
+        try {
+          const resp = await api.post('v1/akuntansi/jurnalumum/VerifData', nobukti)
+          if (resp.status === 200) {
+            notifSuccess(resp)
+            this.paramsrinci.nobukti = val
+            this.getrincians()
+            this.loadingverif = false
+          }
+        }
+        catch (error) {
+          this.loadingverif = false
+          notifErr(error)
+        }
       }
     }
   }

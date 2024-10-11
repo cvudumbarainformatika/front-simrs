@@ -1,5 +1,30 @@
 <template>
-  <div class="q-pa-md full-width">
+  <div class="q-pa-md full-width" v-if="store.loading === true">
+    <q-card>
+      <q-item>
+        <q-item-section avatar>
+          <q-skeleton type="QAvatar" />
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
+            <q-skeleton type="text" />
+          </q-item-label>
+          <q-item-label caption>
+            <q-skeleton type="text" />
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-skeleton height="200px" square />
+
+      <q-card-actions align="right" class="q-gutter-md">
+        <q-skeleton type="QBtn" />
+        <q-skeleton type="QBtn" />
+      </q-card-actions>
+    </q-card>
+  </div>
+  <div class="q-pa-md full-width" v-else>
     <q-markup-table
       flat bordered
       :separator="separator"
@@ -17,18 +42,28 @@
       </thead>
       <tbody>
         <tr
-          v-for="(item , n) in store.rincis"
+          v-for="(item , n) in store.items"
           :key="n"
           class="list-move"
         >
           <td class="text-left text-weight-bold">
-            {{ item?.nobukti }}
+            <span v-if="item.verif === ''"><q-btn
+              dense
+              round
+              style="padding: 1px;"
+              color="indigo"
+              class="q"
+              icon="icon-mat-edit"
+              @click="store.editForm(item)"
+            /></span> {{ item?.nobukti }}
           </td>
           <td class="text-center">
             {{ dateFullFormat(item?.tanggal) }}
           </td>
           <td class="text-center">
-            {{ item?.keterangan }}
+            <div style="width: 100px; white-space: normal !important;">
+              {{ item?.keterangan }}
+            </div>
           </td>
           <td class="text-center text-weight-bold">
             <div
@@ -42,8 +77,9 @@
             <div
               v-for="(rinciannmakun , rn) in item?.rincianjurnalumum"
               :key="rn"
+              style="width: 500px; white-space: normal !important;"
             >
-              <span>{{ rinciannmakun?.uraianpsap13 }}</span>
+              <span style="overflow-wrap: normal;">{{ rinciannmakun?.uraianpsap13 }}</span>
             </div>
           </td>
           <td class="text-right">
@@ -83,12 +119,12 @@
           </td>
           <td class="text-right text-weight-bold">
             <span><q-badge color="red-5">
-              {{ formatRpDouble(store?.totald) }}
+              {{ formatRpDouble(store?.totald,2) }}
             </q-badge></span>
           </td>
           <td class="text-right text-weight-bold">
             <span><q-badge color="teal">
-              {{ formatRpDouble(store?.totalk) }}
+              {{ formatRpDouble(store?.totalk,2) }}
             </q-badge></span>
           </td>
         </tr>

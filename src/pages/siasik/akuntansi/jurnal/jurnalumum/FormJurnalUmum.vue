@@ -43,6 +43,7 @@
                       label="Tanggal"
                       outlined
                       standout="bg-yellow-3"
+                      :disable="store.form.nobukti !== '' "
                       :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                     />
                   </div>
@@ -55,30 +56,54 @@
                       dense
                       standout="bg-yellow-3"
                       :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                      :disable="store.form.nobukti !== '' "
                     />
                   </div>
                   <div class="col-1">
-                    <q-btn type="submit" rounded color="primary" class="items-center" size="sm">
-                      <q-icon left size="3em" name="icon-mat-add" />
-                      <q-tooltip class="bg-red text-white">
-                        Input Rincian
-                      </q-tooltip>
-                    </q-btn>
+                    <span
+                      v-if="store?.transall?.verif !== '1'"
+                    >
+                      <q-btn type="submit" rounded color="primary" class="items-center" :loading="store.loadingverif" size="sm">
+                        <q-icon left size="3em" name="icon-mat-add" />
+                        <q-tooltip class="bg-red text-white">
+                          Input Rincian
+                        </q-tooltip>
+                      </q-btn>
+                    </span>
                   </div>
                 </div>
               </q-card>
             </div>
             <div class="container q-px-md">
-              <q-card class="items-center bg-white q-pa-xl full-width">
+              <q-card class="items-center bg-white q-pa-xl full-width" v-if="store.loading === true">
+                <q-item>
+                  <q-item-section avatar>
+                    <q-skeleton type="QAvatar" />
+                  </q-item-section>
+
+                  <q-item-section>
+                    <q-item-label>
+                      <q-skeleton type="text" />
+                    </q-item-label>
+                    <q-item-label caption>
+                      <q-skeleton type="text" />
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-skeleton height="200px" square />
+
+                <q-card-actions align="right" class="q-gutter-md">
+                  <q-skeleton type="QBtn" />
+                  <q-skeleton type="QBtn" />
+                </q-card-actions>
+              </q-card>
+              <q-card class="items-center bg-white q-pa-xl full-width" v-else>
                 <div class="row flex-center">
-                  <div class="col items-center" v-if="store.loading">
-                    <q-spinner-hourglass
-                      color="purple"
-                      size="4em"
-                      class="items-center"
-                    />
-                  </div>
-                  <div class="col" v-else>
+                  <div
+                    class="col" v-for="(item , n) in store?.transall"
+                    :key="n"
+                  >
                     <q-markup-table class="full-width" :separator="separator" flat bordered>
                       <thead>
                         <tr class="bg-primary text-white items-center">
@@ -101,29 +126,57 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(item , n) in store.rincis"
-                          :key="n"
+                          v-for="(rincian , x) in item?.rincianjurnalumum"
+                          :key="x"
                           class="list-move"
                         >
                           <td>
-                            <span>{{ item?.kodepsap13 }}</span>
+                            <span><q-badge outline color="indigo">{{ rincian?.kodepsap13 }}</q-badge></span>
                           </td>
                           <td>
-                            <span>{{ item?.uraianpsap13 }}</span>
+                            <span>{{ rincian?.uraianpsap13 }}</span>
                           </td>
                           <td class="text-right">
-                            <span>{{ item?.debet }}</span>
+                            <span v-if="rincian?.debet !== '0.00'">
+                              <q-badge color="red-5">{{ formatRpDouble(rincian?.debet,2) }}</q-badge>
+                            </span>
                           </td>
                           <td class="text-right">
-                            <span>{{ item?.kredit }}</span>
+                            <span v-if="rincian?.kredit !== '0.00'">
+                              <q-badge color="teal">  {{ formatRpDouble(rincian?.kredit,2) }} </q-badge>
+                            </span>
                           </td>
                           <td class="text-right">
-                            <q-btn rounded color="red" class="items-center" size="sm">
-                              <q-icon left size="1em" name="icon-mat-delete" />
-                              <q-tooltip class="bg-primary text-white">
-                                Input Rincian
-                              </q-tooltip>
-                            </q-btn>
+                            <span
+                              v-if="item?.verif !== '1'"
+                            >
+                              <q-btn rounded color="red" class="items-center" size="sm" :loading="store.loadingverif" @click="store.hapusrincians(rincian)">
+                                <q-icon left size="1em" name="icon-mat-delete" />
+                                <q-tooltip class="bg-primary text-white">
+                                  Hapus
+                                </q-tooltip>
+                              </q-btn> </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2" class="text-right">
+                            <q-badge outline color="indigo">
+                              SUBTOTAL
+                            </q-badge>
+                          </td>
+                          <td class="text-right text-weight-bold">
+                            <span><q-badge color="red-5">
+                              {{ formatRpDouble(store?.totalrincid,2) }}
+                            </q-badge></span>
+                          </td>
+                          <td class="text-right text-weight-bold">
+                            <span><q-badge color="teal">
+                              {{ formatRpDouble(store?.totalrincik,2) }}
+                            </q-badge></span>
+                          </td>
+                          <td class="text-lefth text-weight-bold">
+                            <span v-if="item.verif === ''"><q-btn label="Verif" color="primary" :loading="store.loadingverif" rounded dense @click="store.VerifData(item?.nobukti,store?.totalrincid,store?.totalrincik)" /></span>
+                            <span v-else><q-badge rounded color="indigo">Sudah Terverif</q-badge></span>
                           </td>
                         </tr>
                       </tbody>
@@ -143,6 +196,7 @@
 import { usejurnalumummanual } from 'src/stores/siasik/akuntansi/jurnal/umummanual'
 import { onBeforeMount, onMounted, ref } from 'vue'
 import FormRincianJurnalUmum from './FormRincianJurnalUmum.vue'
+import { formatRpDouble } from 'src/modules/formatter'
 
 const maximizedToggle = ref(true)
 const store = usejurnalumummanual()
@@ -164,6 +218,7 @@ onMounted(() => {
 onBeforeMount(() => {
   store.form.nobukti = ''
   store.form.keterangan = ''
+  store.transall = []
 })
 
 // function setTo (val) {

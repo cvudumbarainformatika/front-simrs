@@ -114,7 +114,7 @@
               flat label="Simpan Data" class="bg-primary" color="white" tooltip="Simpan Data"
               type="submit" :loading="store.loading"
             />
-            <q-btn flat label="Batal" class="bg-red" color="white" v-close-popup />
+            <q-btn flat label="Keluar" class="bg-red" color="white" v-close-popup />
           </q-card-actions>
         </q-form>
       </q-card>
