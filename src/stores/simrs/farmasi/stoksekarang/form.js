@@ -143,7 +143,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
       await api.get('v1/simrs/master/cariObat', param)
         .then(resp => {
           this.loadingObat = false
-          console.log('obat', resp)
+          // console.log('obat', resp)
           this.obats = resp?.data
           this.allObats = resp?.data
         })

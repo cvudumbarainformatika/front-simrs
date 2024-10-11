@@ -229,7 +229,7 @@ function simpanTemplate () {
   const obat = store.items.filter(f => f?.jenis_perbekalan?.toLowerCase() === 'obat')
   const racik = store.items.filter(f => f?.kodeobat?.includes('racik'))
   const tot = obat.length + racik.length
-  const batas = store.batases.find(f => f.depo === store.templateSelected.kodedepo)
+  const batas = store.batases.find(f => f.depo === store?.templateSelected?.kodedepo)
   if (tot > batas?.batas) return notifErrVue('Batas Item Obat + Racikan adalah ' + batas?.batas)
 
   $q.dialog({

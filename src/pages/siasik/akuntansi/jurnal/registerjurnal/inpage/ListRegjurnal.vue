@@ -1,10 +1,10 @@
 <template>
-  <template v-if="store.datastp.length">
+  <template v-if="store.jurnals.length">
     <div class="q-pa-md full-width">
       <q-table
         class="my-sticky-table"
         wrap-cells
-        :rows="store.datastp"
+        :rows="store.jurnals"
         :columns="columns"
         dense
         flat bordered
@@ -63,79 +63,175 @@
               </div>
             </q-td>
             <q-td key="koderek" :props="props" class="text-left vertical-bottom">
+              <div class="row" v-for="it in props.row?.d_bendpg" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
+                  {{ it.kd_bend }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.blud" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-brown">
+                  {{ it.kd_blud }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.belanja" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-primary">
+                  {{ it.kd_belanja }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.kcair1" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-lime-9">
+                  {{ it.kode_cair1 }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.cairx" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
+                  {{ it.kode_cairx }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.kasbend" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-deep-purple-5">
+                  {{ it.kd_kasbend }}
+                </q-badge>
+              </div>
               <div v-for="it in props.row?.debit" :key="it">
-                <!-- <template v-if="it.kode_lo.length"> -->
-                <q-badge color="white" class="text-weight-bold text-pink-6">
+                <q-badge color="white" class="row full-width text-weight-bold text-amber-6">
                   {{ it.kode_bast }}
                 </q-badge>
-                <!-- </template> -->
-                <!-- <template v-else>
-                  <q-badge color="white" class="text-weight-bold text-pink-6">
-                    {{ it.kode_neraca }}
-                  </q-badge>
-                </template> -->
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <!-- <template v-if="it.kode_bastx.length"> -->
-                <q-badge color="white" class="text-weight-bold text-lime-9">
+                <q-badge color="white" class="row full-width text-weight-bold text-lime-9">
                   {{ it.kode_bastx }}
                 </q-badge>
-                <!-- </template>
-                <template v-else>
-                  <div />
-                </template> -->
               </div>
             </q-td>
 
-            <q-td key="uraian" :props="props" class="text-left">
+            <q-td key="uraian" :props="props" class="text-left vertical-bottom">
               <div class="text-bold">
                 {{ props.row?.kegiatan }}
               </div>
-              <div v-for="it in props.row?.debit" :key="it">
-                <!-- <template v-if="it.kode_lo.length"> -->
-                <q-badge color="white" class="text-weight-bold text-pink-6">
+              <div class="row" v-for="it in props.row?.d_bendpg" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
+                  {{ it.ur_bend }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.blud" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-brown">
+                  {{ it.ur_blud }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.belanja" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-primary">
+                  {{ it.urai_belanja }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.kcair1" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-lime-9">
+                  {{ it.uraian_cair1 }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.cairx" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
+                  {{ it.uraian_cairx }}
+                </q-badge>
+              </div>
+              <div class="row q-pl-md" v-for="it in props.row?.kasbend" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-deep-purple-5">
+                  {{ it.ur_kasbend }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.debit" :key="it">
+                <q-badge color="white" class="row full-width text-weight-bold text-amber-6">
                   {{ it.uraian_bast }}
                 </q-badge>
-                <!-- </template>
-                <template v-else>
-                  <q-badge color="white" class="text-weight-bold text-pink-6">
-                    {{ it.uraian_neraca }}
-                  </q-badge>
-                </template> -->
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <!-- <template v-if="it.kode_bastx.length"> -->
-                <q-badge color="white" class="text-weight-bold text-lime-9">
+                <q-badge color="white" class="row full-width text-weight-bold text-lime-9">
                   {{ it.uraian_bastx }}
                 </q-badge>
-                <!-- </template>
-                <template v-else>
-                  <div />
-                </template> -->
               </div>
             </q-td>
 
             <q-td key="debit" :props="props" class="text-right vertical-bottom">
+              <div class="row" v-for="it in props.row?.d_bendpg" :key="it">
+                <q-badge color="teal-6" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.blud" :key="it">
+                <q-badge color="brown-5" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.belanja" :key="it">
+                <q-badge color="primary" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.kcair1" :key="it">
+                <q-badge color="lime-9" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.cairx" :key="it">
+                <q-badge color="orange-6" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.kasbend" :key="it">
+                <q-badge color="deep-purple-4" class="row justify-end full-width">
+                  {{ formattanpaRp(it.debit) }}
+                </q-badge>
+              </div>
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="pink-6">
+                <q-badge color="amber-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="lime-9">
+                <q-badge color="lime-9" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
               </div>
             </q-td>
 
             <q-td key="kredit" :props="props" class="text-right vertical-bottom">
+              <div class="row" v-for="it in props.row?.d_bendpg" :key="it">
+                <q-badge color="teal-6" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.blud" :key="it">
+                <q-badge color="brown-5" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.belanja" :key="it">
+                <q-badge color="primary" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.kcair1" :key="it">
+                <q-badge color="lime-9" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.cairx" :key="it">
+                <q-badge color="orange-6" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
+              <div class="row" v-for="it in props.row?.kasbend" :key="it">
+                <q-badge color="deep-purple-4" class="row justify-end full-width">
+                  {{ formattanpaRp(it.kredit) }}
+                </q-badge>
+              </div>
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="pink-6">
+                <q-badge color="amber-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="lime-9">
+                <q-badge color="lime-9" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
               </div>
@@ -179,25 +275,25 @@ const listRegjurnal = [
     label: 'Kode Rekening',
     name: 'koderek',
     align: 'center',
-    field: row => [row.debit, row.kredit]
+    field: row => [row.kredit, row.d_bendpg, row.belanja, row.cairx]
   },
   {
     label: 'Uraian',
     name: 'uraian',
     align: 'center',
-    field: row => [row.kegiatan, row.debit, row.kredit]
+    field: row => [row.kegiatan, row.kredit, row.d_bendpg, row.belanja, row.cairx]
   },
   {
     label: 'Debit (Rp.)',
     name: 'debit',
     align: 'center',
-    field: row => [row.debit, row.kredit]
+    field: row => [row.kredit, row.d_bendpg, row.belanja, row.cairx]
   },
   {
     label: 'Kredit (Rp.)',
     name: 'kredit',
     align: 'center',
-    field: row => [row.debit, row.kredit]
+    field: row => [row.kredit, row.d_bendpg, row.belanja, row.cairx]
   }
 ]
 const columns = ref(listRegjurnal)

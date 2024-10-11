@@ -80,7 +80,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
       await api.get('v1/gudang/gudang', param)
         .then(resp => {
           // this.loading = false
-          console.log('gudang ', resp.data)
+          // console.log('gudang ', resp.data)
           this.gudangs = resp?.data
         })
         // .catch(() => { this.loading = false })
@@ -91,7 +91,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
         api.get('v1/simrs/farmasinew/penerimaan/list-ruang-ranap')
           .then(resp => {
             this.ruangRanaps = resp?.data?.data ?? resp?.data
-            console.log(this.ruangRanaps)
+            // console.log(this.ruangRanaps)
             resolve(resp)
           })
           // .catch(() => { this.loading = false })
@@ -104,7 +104,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
         api.get('v1/simrs/farmasinew/penerimaan/list-stok-sekarang', param)
           .then(resp => {
             this.loading = false
-            console.log('setok ', resp.data)
+            // console.log('setok ', resp.data)
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
             resolve(resp)
@@ -172,7 +172,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
         api.post('v1/simrs/farmasinew/stok/cek-penerimaan', form)
           .then(resp => {
             val.loadingCek = false
-            console.log('penye ', resp?.data)
+            console.log('penerimaan ', resp?.data)
             notifSuccess(resp)
             // this.getDataTable()
             resolve(resp)
