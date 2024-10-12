@@ -12,7 +12,7 @@
         <q-bar class="text-white bg-primary">
           <q-space />
 
-          <q-btn dense flat icon="icon-mat-close" v-close-popup>
+          <q-btn dense flat icon="icon-mat-close" v-close-popup @click="store.getJurnalUmum()">
             <q-tooltip class="bg-white text-dark">
               Close
             </q-tooltip>
@@ -59,17 +59,15 @@
                       :disable="store.form.nobukti !== '' "
                     />
                   </div>
-                  <div class="col-1">
-                    <span
-                      v-if="store?.transall?.verif !== '1'"
-                    >
-                      <q-btn type="submit" rounded color="primary" class="items-center" :loading="store.loadingverif" size="sm">
-                        <q-icon left size="3em" name="icon-mat-add" />
-                        <q-tooltip class="bg-red text-white">
-                          Input Rincian
-                        </q-tooltip>
-                      </q-btn>
-                    </span>
+                  <div
+                    class="col-1" v-if="store?.flagVerif !== '1'"
+                  >
+                    <q-btn type="submit" rounded color="primary" class="items-center" :loading="store.loadingverif" size="sm">
+                      <q-icon left size="3em" name="icon-mat-add" />
+                      <q-tooltip class="bg-red text-white">
+                        Input Rincian
+                      </q-tooltip>
+                    </q-btn>
                   </div>
                 </div>
               </q-card>
@@ -218,6 +216,7 @@ onMounted(() => {
 onBeforeMount(() => {
   store.form.nobukti = ''
   store.form.keterangan = ''
+  store.flagVerif = ''
   store.transall = []
 })
 

@@ -53,7 +53,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       const params = { params: this.params }
       try {
         const resp = await api.get('v1/akuntansi/jurnalumum/jurnalumumotot', params)
-        // console.log('masterlaborat', resp)
+        console.log('masterlaborat', resp)
         if (resp.status === 200) {
           this.items = resp.data
           this.loading = false
@@ -176,6 +176,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
           const resp = await api.post('v1/akuntansi/jurnalumum/VerifData', nobukti)
           if (resp.status === 200) {
             notifSuccess(resp)
+            this.flagVerif = '1'
             this.paramsrinci.nobukti = val
             this.getrincians()
             this.loadingverif = false
