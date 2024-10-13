@@ -295,7 +295,7 @@ const validate = () => {
       <!-- <div class="col-12"> -->
       <q-card flat bordered class="q-pa-sm">
         <q-card-actions align="right" class="q-py-md">
-          <q-btn size="md" outline rounded color="primary" @click="validate">
+          <q-btn :loading="store.loadingSave" :disabled="store.loadingSave" size="md" outline rounded color="primary" @click="validate">
             <div class="q-px-lg">
               Simpan Catatan Pasien
             </div>

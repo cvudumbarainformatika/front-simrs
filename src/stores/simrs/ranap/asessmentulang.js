@@ -10,6 +10,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
 
     items: [],
     previousData: null,
+    loadingSave: false,
 
     form: {
       asessment: null,
@@ -76,6 +77,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
     // },
 
     saveCppt (pasien, jnsKasus) {
+      this.loadingSave = true
       const kasusKep = jnsKasus?.gruping
 
       const storeAnamnesis = useAnamnesisRanapStore()
@@ -164,9 +166,11 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
               this.form.radiologi = null
               this.form.diagnosa = null
             }
+            this.loadingSave = false
             resolve(resp)
           })
           .catch((err) => {
+            this.loadingSave = false
             console.log(err)
             reject(err)
           })
