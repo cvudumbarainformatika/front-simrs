@@ -1,7 +1,7 @@
 <template>
   <div class="row q-col-gutter-xs full-width">
     <!-- barthel -->
-    <q-card v-if="store?.barthels?.grupings?.includes(jnsKasusKep)" flat bordered class="col-12">
+    <q-card v-if="store?.barthels?.grupings?.includes(jnsKasusKep) && !ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.barthels?.desc }}</strong>
       </q-card-section>
@@ -132,7 +132,7 @@
     </q-card> -->
 
     <!-- humpty untuk usia < 18 tahun -->
-    <q-card v-if="(store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18))" flat bordered class="col-12">
+    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
@@ -265,7 +265,7 @@
     </q-card> -->
 
     <!-- Resiko Jatuh Morse Fall Scale (18 - 59 tahun) -->
-    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep) && (store.usia >= 18 && store.usia <= 59)" flat bordered class="col-12">
+    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep) && (store.usia >= 18 && store.usia < 60)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.morses?.desc }}</strong>
       </q-card-section>
@@ -370,6 +370,10 @@ const props = defineProps({
   kasus: {
     type: Object,
     default: null
+  },
+  ulang: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -380,17 +384,12 @@ const jnsKasusKep = computed(() => {
   return null
 })
 
-onMounted(async () => {
-  console.log('usia', store.usia)
-  // console.log('store', store.barthels)
-  // console.log('kasus', jnsKasusKep.value)
+// const humptyOpen = computed(() => {
+//   return (store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18))
+// })
 
-  // console.log('pasien', props?.pasien)
-  // await store.getMaster()
-  // .then(() => {
-  //   store.initReset(jnsKasusKep, props?.pasien)
-  // })
-  // console.log('form', store.form)
+onMounted(async () => {
+  store.initReset(props?.pasien)
 })
 
 // eslint-disable-next-line no-unused-vars

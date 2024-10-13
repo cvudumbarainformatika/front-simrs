@@ -68,14 +68,21 @@ const tabsxx = [
     label: 'Diagnosa Medis',
     name: 'diagnosaMedik',
     icon: 'icon-mat-health_and_safety',
-    nakes: ['1'],
+    nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./diagnosamedik/DiagnosaPage.vue'))
+  },
+  {
+    label: 'Diagnosa Keperawatan',
+    name: 'diagnosaKeperawatan',
+    icon: 'icon-mat-health_and_safety',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./diagnosakeperawatan/DiagnosaKeperawatanPage.vue'))
   },
   {
     label: 'Tindakan',
     name: 'tindakan',
     icon: 'icon-mat-description',
-    nakes: ['1', '2'],
+    nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./tindakan/TindakanPage.vue'))
   },
   {

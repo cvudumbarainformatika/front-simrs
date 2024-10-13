@@ -102,18 +102,6 @@ const enter = (el, done) => {
                         />
                       </div>
                     </q-item-label>
-                    <q-item-label
-                      lines="2"
-                    >
-                      <div class="row q-gutter-sm">
-                        <div class="col-auto text-italic f-10 text-weight-bold">
-                          Tanggal Input :
-                        </div>
-                        <div class="col-auto text-italic f-10 text-weight-bold">
-                          {{ dateFullFormat( item?.rs12) }}
-                        </div>
-                      </div>
-                    </q-item-label>
                   </q-item-section>
 
                   <q-item-section
@@ -127,7 +115,7 @@ const enter = (el, done) => {
                       size="sm"
                       icon="icon-mat-edit"
                       @click="store.editFormDiagnosa(item)"
-                      class="q-mb-md"
+                      class="q-my-md"
                     />
                     <q-btn
                       flat
@@ -135,8 +123,20 @@ const enter = (el, done) => {
                       size="sm"
                       icon="icon-mat-delete"
                       color="negative"
+                      class="q-mb-md"
                       @click="hapusItem(item.id)"
                     />
+
+                    <q-item-label class="absolute-top-right q-pa-xs q-pr-md">
+                      <div class="row q-gutter-sm">
+                        <div class="col-auto text-italic f-10 text-weight-bold">
+                          Tgl :
+                        </div>
+                        <div class="col-auto text-italic f-10 text-weight-bold">
+                          {{ dateFullFormat( item?.rs12) }}
+                        </div>
+                      </div>
+                    </q-item-label>
                   </q-item-section>
                 </q-item>
               </div>
@@ -205,6 +205,8 @@ const enter = (el, done) => {
                         />
                       </div>
                     </q-item-label>
+                  </q-item-section>
+                  <q-item-section side class="absolute-bottom-right q-ma-md">
                     <q-item-label
                       lines="2"
                     >

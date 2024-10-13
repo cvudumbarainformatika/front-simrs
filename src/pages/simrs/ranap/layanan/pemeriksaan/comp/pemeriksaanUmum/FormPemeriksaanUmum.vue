@@ -186,8 +186,54 @@
       </div>
     </q-card>
 
+    <!-- kultural -->
+    <q-card v-if="!ulang" flat bordered class="col-12">
+      <q-card-section class="q-pa-sm bg-grey-4">
+        <strong>Kultural</strong>
+      </q-card-section>
+      <q-card-section class="row q-pa-sm q-col-gutter-xs">
+        <q-select
+          v-model="store.form.penyebabSakit"
+          dense
+          standout="bg-yellow-3 text-black"
+          outlined
+          label="Penyebab Penyakit"
+          :options="store.penyebabs"
+          emit-value
+          map-options
+          input-class="ellipsis"
+          fill-input
+          hide-bottom-space
+          class="col-6"
+        />
+        <q-select
+          v-model="store.form.komunikasi"
+          dense
+          standout="bg-yellow-3 text-black"
+          outlined
+          label="Pola Komunikasi"
+          :options="store.komunikasi"
+          stack-label
+          emit-value
+          map-options
+          input-class="ellipsis"
+          fill-input
+          hide-bottom-space
+          class="col-6"
+        />
+        <div class="col-6">
+          <div class="col-6 flex q-gutter-sm q-my-xs">
+            <div>Makanan Pokok : </div>
+            <q-radio dense v-for="m in store.makanans" :val="m" :label="m" v-model="store.form.makananPokok" />
+          </div>
+          <app-input-simrs v-if="store.form.makananPokok==='Selain Nasi'" label="Selain Nasi" class="full-width" v-model="store.form.makananPokokLain" />
+        </div>
+        <app-input-simrs class="col-6" label="Pantangan Makanan" v-model="store.form.pantanganMkanan" />
+      </q-card-section>
+    </q-card>
+
     <!-- psikologis , ekonomi, spiritual -->
-    <q-card flat bordered class="col-12">
+    <q-card v-if="!ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>Pemeriksaan Psikologis, Sosial Ekonomi, Spiritual</strong>
       </q-card-section>
@@ -271,55 +317,9 @@
       </q-card-section>
     </q-card>
 
-    <!-- kultural -->
-    <q-card flat bordered class="col-12">
-      <q-card-section class="q-pa-sm bg-grey-4">
-        <strong>Kultural</strong>
-      </q-card-section>
-      <q-card-section class="row q-pa-sm q-col-gutter-xs">
-        <q-select
-          v-model="store.form.penyebabSakit"
-          dense
-          standout="bg-yellow-3 text-black"
-          outlined
-          label="Penyebab Penyakit"
-          :options="store.penyebabs"
-          emit-value
-          map-options
-          input-class="ellipsis"
-          fill-input
-          hide-bottom-space
-          class="col-6"
-        />
-        <q-select
-          v-model="store.form.komunikasi"
-          dense
-          standout="bg-yellow-3 text-black"
-          outlined
-          label="Pola Komunikasi"
-          :options="store.komunikasi"
-          stack-label
-          emit-value
-          map-options
-          input-class="ellipsis"
-          fill-input
-          hide-bottom-space
-          class="col-6"
-        />
-        <div class="col-6">
-          <div class="col-6 flex q-gutter-sm q-my-xs">
-            <div>Makanan Pokok : </div>
-            <q-radio dense v-for="m in store.makanans" :val="m" :label="m" v-model="store.form.makananPokok" />
-          </div>
-          <app-input-simrs v-if="store.form.makananPokok==='Selain Nasi'" label="Selain Nasi" class="full-width" v-model="store.form.makananPokokLain" />
-        </div>
-        <app-input-simrs class="col-6" label="Pantangan Makanan" v-model="store.form.pantanganMkanan" />
-      </q-card-section>
-    </q-card>
-
     <!-- end 4.1 -->
     <!-- start 4.2 -->
-    <q-card v-if="gruping==='4.2'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.2' && !ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.2 KEBIDANAN</strong>
       </q-card-section>
@@ -489,7 +489,7 @@
     </q-card>
 
     <!-- start 4.3 -->
-    <q-card v-if="gruping==='4.3'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.3' && !ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>FORM 4.3 NEONATAL</strong>
       </q-card-section>
@@ -757,7 +757,7 @@
     </q-card>
 
     <!-- start 4.4 -->
-    <q-card v-if="gruping==='4.4'" flat bordered class="col-12">
+    <q-card v-if="gruping==='4.4' && !ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>Glasgow Coma Scale</strong>
       </q-card-section>
@@ -815,6 +815,10 @@ const props = defineProps({
   kasus: {
     type: Object,
     default: null
+  },
+  ulang: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -826,7 +830,7 @@ const gruping = computed(() => {
 
   let gruping = null
   if (dokter) gruping = props?.kasus?.medis
-  else if (perawat) gruping = props?.kasus?.perawat
+  else if (perawat) gruping = props?.kasus?.gruping
 
   console.log('gruping', gruping, nakes)
 
@@ -847,6 +851,6 @@ defineExpose({
 const store = usePemeriksaanUmumRanapStore()
 
 onMounted(() => {
-  store.initReset()
+  // store.initReset()
 })
 </script>

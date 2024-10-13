@@ -102,6 +102,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.pemeriksaan = []
         datax.penilaian = []
         datax.tindakan = []
+        datax.diagnosakeperawatan = []
+        datax.cppt = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false
@@ -225,6 +227,26 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       // }
     },
 
+    gantiMemo (form, pasien) {
+      // console.log(form)
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/pelayanan/gantimemo', form)
+          .then(resp => {
+            // console.log(resp)
+            if (resp.status === 200) {
+              const findPasien = this.pasiens.filter(x => x.noreg === pasien?.noreg)
+              if (findPasien.length) {
+                const data = findPasien[0]
+                data.memodiagnosa = resp?.data?.result?.diagnosa
+              }
+            }
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+          })
+      })
+    },
+
     injectDataPasien (noreg, val, kode, arr) {
       const findPasien = this.pasiens.filter(x => x.noreg === noreg)
       // console.log('inject pasien', findPasien)
@@ -236,7 +258,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         }
         else {
           const target = data[kode]?.find(x => x.id === val?.id) ?? null
-          console.log('inject target pasien', target, kode, val, data)
+          // console.log('inject target pasien', target, kode, val, data)
           // console.log('inject kode pasien', kode)
           // console.log('inject isi pasien', val)
 
@@ -262,6 +284,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     },
 
     hapusDataInjectan (pasien, id, key) {
+      console.log('hapusDataInjectan', key, id, pasien)
+
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       console.log('find pasien', findPasien)
 

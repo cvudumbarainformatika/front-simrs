@@ -23,27 +23,27 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
       kddiagnosa: '',
       diagnosa: '',
       keterangan: '',
-      kasus: '',
+      kasus: 'Baru',
       tipediagnosa: '',
       dtd: ''
     },
     // tindakan
-    searchtindakan: '',
-    notaTindakans: [],
-    notaTindakan: 'BARU',
-    formtindakan: {
-      kdtindakan: '',
-      tindakan: '',
-      biaya: 0,
-      hargasarana: 0,
-      tarif: 0,
-      hargapelayanan: 0,
-      jmltindakan: 1,
-      subtotal: 0,
-      // pelaksana: '',
-      keterangan: ''
-    },
-    loadingFormTindakan: false,
+    // searchtindakan: '',
+    // notaTindakans: [],
+    // notaTindakan: 'BARU',
+    // formtindakan: {
+    //   kdtindakan: '',
+    //   tindakan: '',
+    //   biaya: 0,
+    //   hargasarana: 0,
+    //   tarif: 0,
+    //   hargapelayanan: 0,
+    //   jmltindakan: 1,
+    //   subtotal: 0,
+    //   // pelaksana: '',
+    //   keterangan: ''
+    // },
+    // loadingFormTindakan: false,
     //= === Prosedur (icd 9) ===
     optionsIcd9: [],
     loadingIcd: false,
@@ -66,13 +66,6 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
         this.listDiagnosa = resp.data
       }
     },
-    // async getTindakanDropdown () {
-    //   const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
-    //   // console.log('list tindakan', resp)
-    //   if (resp.status === 200) {
-    //     this.listTindakan = resp.data
-    //   }
-    // },
 
     //= ===
     async cariIcd9 (val) {
@@ -118,37 +111,6 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
     setFormDianosa (key, val) {
       this.formdiagnosa[key] = val
     },
-
-    // setKdTindakan (val) {
-    //   this.formtindakan.kdtindakan = val
-    //   const ada = this.listTindakan.length > 0
-    //   if (ada) {
-    //     const target = this.listTindakan.filter(x => x.kdtindakan === val)
-    //     target.length
-    //       ? this.formtindakan.tindakan = target[0].tindakan
-    //       : this.formtindakan.tindakan = ''
-    //     target.length
-    //       ? this.formtindakan.tarif = target[0].tarif
-    //       : this.formtindakan.tarif = 0
-    //     target.length
-    //       ? this.formtindakan.hargasarana = target[0].sarana
-    //       : this.formtindakan.sarana = 0
-    //     target.length
-    //       ? this.formtindakan.hargapelayanan = target[0].pelayanan
-    //       : this.formtindakan.pelayanan = 0
-    //     target.length
-    //       ? this.formtindakan.biaya = (parseInt(target[0].pelayanan) + parseInt(target[0].sarana))
-    //       : this.formtindakan.biaya = 0
-    //     target.length
-    //       ? this.formtindakan.subtotal = parseInt(this.formtindakan.biaya) * this.formtindakan.jumlah
-    //       : this.formtindakan.subtotal = 0
-    //   }
-
-    //   // console.log('setKdTindakana', this.formtindakan)
-    //   return new Promise((resolve, reject) => {
-    //     resolve()
-    //   })
-    // },
 
     async simpanDiagnosa (pasien) {
       if (pasien?.kddokter === null || pasien?.kddokter === '') {
@@ -216,30 +178,11 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
       // console.log('items', this.items, ranap)
 
       const pengunjung = usePengunjungRanapStore()
-
-      // baru ada penyesuaian nakes
-      // let form = null
-      // const dokter = jns === '1' || jns === 1
-      // if (dokter) {
-      //   if (ranap.length) { form = ranap[0] }
-      //   else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
-      // }
-      // else {
-      // }
-      // const form = ranap.length ? ranap[0] : null
-
-      // if (form) ranap.length ? form.id = ranap[0].id : form.id = null
-      // const isianList = ranap.length ? ranap[0] : null
-
-      // if (isianList) {
-      // const diag = pasien?.diagnosa
       ranap?.forEach(x => {
         pengunjung.injectDataPasien(pasien?.noreg, x, 'diagnosamedis')
       })
 
-      // pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
-      // }
-      this.initReset()
+      this.initReset(pasien)
       // console.log('pasien stelah di inject', pasien)
     },
 
@@ -276,169 +219,17 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
 
     // ==================================================================================== TINDAKAN =========================================================================
 
-    // async saveTindakan (pasien) {
-    //   if (!pasien?.kodedokter) {
-    //     return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
-    //   }
-    //   this.loadingFormTindakan = true
-
-    //   const form = this.formtindakan
-    //   form.noreg = pasien.noreg
-    //   form.norm = pasien.norm
-    //   form.kdpoli = pasien?.kodepoli
-    //   form.kodedokter = pasien?.kodedokter
-    //   form.kdsistembayar = pasien?.kodesistembayar
-    //   form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
-    //   try {
-    //     const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
-    //     // console.log('simpan tindakan', resp)
-    //     if (resp.status === 200) {
-    //       const storePasien = usePengunjungRanapStore()
-    //       const isi = resp?.data?.result
-    //       isi.mastertindakan = { rs2: form.tindakan }
-    //       storePasien.injectDataPasien(pasien, isi, 'tindakan')
-    //       this.setNotas(resp?.data?.nota)
-    //       notifSuccess(resp)
-    //       this.loadingFormTindakan = false
-    //       this.initReset('Tindakan Medik')
-    //     }
-    //     this.loadingFormTindakan = false
-    //   }
-    //   catch (error) {
-    //     this.loadingFormTindakan = false
-    //   }
-    // },
-
-    // async getNota (pasien) {
-    //   const params = {
-    //     params: {
-    //       noreg: pasien?.noreg
-    //     }
-    //   }
-
-    //   const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
-    //   // console.log('notas', resp)
-    //   if (resp.status === 200) {
-    //     const arr = resp.data.map(x => x.nota)
-    //     this.notaTindakans = arr.length ? arr : []
-    //     this.notaTindakans.push('BARU')
-    //     this.notaTindakan = this.notaTindakans[0]
-    //   }
-    // },
-
-    // uploadImages (file, id, pasien) {
-    //   const files = file
-    //   // console.log('store upload image', id)
-    //   const data = new FormData()
-    //   for (let i = 0; i < files.length; i++) {
-    //     const images = files[i]
-    //     data.append(`images[${i}]`, images)
-    //   }
-    //   data.append('rs73_id', id)
-    //   return new Promise((resolve, reject) => {
-    //     api.post('v1/simrs/pelayanan/simpandokumentindakanpoli', data, {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data'
-    //       }
-    //     })
-    //       .then(res => {
-    //         // console.log('uploads', res)
-    //         if (res.status === 200) {
-    //           const storePasien = usePengunjungRanapStore()
-    //           const tindakan = res?.data?.result
-    //           storePasien.injectDokumenTindakan(pasien, tindakan)
-    //         }
-    //         // const objIndex = this.items.findIndex(obj => obj.id === res?.data?.result?.id)
-    //         // if (objIndex > -1) {
-    //         //   this.items[objIndex] = res?.data?.result
-    //         // }
-    //         notifSuccess(res)
-    //         resolve(res)
-    //       }).catch(err => {
-    //         console.log('upload err', err)
-    //       })
-    //   })
-    // },
-
-    // hapusDokumen (pasien, id) {
-    //   // hapusdokumentindakan
-    //   const payload = { id }
-
-    //   return new Promise((resolve, reject) => {
-    //     api.post('v1/simrs/pelayanan/hapusdokumentindakan', payload)
-    //       .then((resp) => {
-    //         if (resp.status === 200) {
-    //           const storePasien = usePengunjungRanapStore()
-    //           const tindakan = resp?.data?.result
-    //           storePasien.injectDokumenTindakan(pasien, tindakan)
-    //           notifSuccess(resp)
-    //           resolve(resp)
-    //         }
-    //       })
-    //       .catch(error => {
-    //         reject(error)
-    //       })
-    //   })
-    // },
-
-    // async hapusTindakan (pasien, id) {
-    //   const payload = { id, noreg: pasien?.noreg }
-
-    //   try {
-    //     const resp = await api.post('v1/simrs/pelayanan/hapustindakanpoli', payload)
-    //     // console.log(resp)
-    //     if (resp.status === 200) {
-    //       const storePasien = usePengunjungRanapStore()
-    //       storePasien.hapusDataTindakan(pasien, id)
-    //       this.setNotas(resp?.data?.nota)
-    //       notifSuccess(resp)
-    //     }
-    //   }
-    //   catch (error) {
-    //     console.log('hapus tindakan poli', error)
-    //   }
-    // },
-
-    // setNotas (array) {
-    //   const arr = array.map(x => x.nota)
-    //   this.notaTindakans = arr.length ? arr : []
-    //   this.notaTindakans.push('BARU')
-    //   this.notaTindakan = this.notaTindakans[0]
-    // },
-
-    initReset (x) {
-      const tabbed = x ?? 'Diagnosa Medik'
+    initReset (pasien) {
       return new Promise((resolve, reject) => {
-        this.tab = tabbed
-        this.tabs = ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)', 'Diagnosa Keperawatan', 'Diagnosa Kebidanan', 'Laporan Tindakan', 'Pra Anestesia']
-
         this.searchdiagnosa = ''
         this.formdiagnosa = {
           kddiagnosa: '',
           diagnosa: '',
           keterangan: '',
-          // kasus: '',
-          tipediagnosa: '',
+          kasus: 'Baru',
+          tipediagnosa: pasien?.diagnosamedis?.length ? 'Sekunder' : 'Primer',
           dtd: ''
         }
-        // tindakan
-        // this.searchtindakan = ''
-        // this.formtindakan = {
-        //   kdtindakan: '',
-        //   tindakan: '',
-        //   biaya: 0,
-        //   hargasarana: 0,
-        //   tarif: 0,
-        //   hargapelayanan: 0,
-        //   jmltindakan: 1,
-        //   subtotal: 0,
-        //   // pelaksana: '',
-        //   keterangan: ''
-        // }
-        // icd
-        // this.formicd = {
-        //   kdprocedure: ''
-        // }
 
         resolve()
       })
@@ -447,60 +238,6 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
     setFormIcd (key, val) {
       this.formicd[key] = val
     }
-    // saveIcd (pasien) {
-    //   this.loadingSaveIcd = true
-    //   // this.setFormIcd('noreg', pasien?.noreg)
-    //   // console.log('form icd', this.formicd)
-    //   return new Promise(resolve => {
-    //     api.post('v1/simrs/pelayanan/simpanprocedure', this.formicd)
-    //       .then(resp => {
-    //         this.loadingSaveIcd = false
-    //         if (resp.status === 200) {
-    //           const storePasien = usePengunjungRanapStore()
-    //           const isi = resp?.data?.result
-    //           storePasien.injectDataPasien(pasien, isi, 'prosedur')
-    //           const storeIna = useInacbgPoli()
-    //           storeIna.getDataIna(pasien)
-    //           this.initReset('Prosedur (Icd 9)')
-    //         }
-    //         resolve(resp)
-    //       })
-    //       .catch(() => {
-    //         this.loadingSaveIcd = false
-    //       })
-    //   })
-    // },
-    // getListProsedur (pasien) {
-    //   const payload = {
-    //     params: { noreg: pasien?.noreg }
-    //   }
-    //   return new Promise(resolve => {
-    //     api.get('v1/simrs/pelayanan/simpanprocedure', payload)
-    //       .then(resp => {
-    //         // console.log('list', resp.data)
-    //         resolve(resp)
-    //       })
-    //   })
-    // },
-    // hapusProsedur (pasien, id) {
-    //   this.loadingSaveIcd = true
-    //   const payload = { id, noreg: pasien?.noreg }
-    //   return new Promise(resolve => {
-    //     api.post('v1/simrs/pelayanan/hapusprocedure', payload)
-    //       .then(resp => {
-    //         this.loadingSaveIcd = false
-    //         const storePasien = usePengunjungRanapStore()
-    //         storePasien.hapusDataProsedur(pasien, id)
-    //         const storeIna = useInacbgPoli()
-    //         storeIna.getDataIna(pasien)
-    //         notifSuccess(resp)
-    //         resolve(resp)
-    //       })
-    //       .catch(() => {
-    //         this.loadingSaveIcd = false
-    //       })
-    //   })
-    // }
 
   }
 })

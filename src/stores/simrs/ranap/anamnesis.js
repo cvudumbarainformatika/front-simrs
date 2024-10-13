@@ -567,6 +567,20 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
   // },
   actions: {
 
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
+      console.log('resp anamnesis', resp)
+      if (resp.status === 200) {
+        this.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
     initReset (data) {
       // console.log('data init reset', data)
 
@@ -601,7 +615,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       const formNyeri = {}
       for (let i = 0; i < this.formNyeris.length; i++) {
         const el = this.formNyeris[i]
-        formNyeri[el?.kode] = el?.values?.find(x => x?.skor === data?.keluhannyeri?.dewasa?.form[el.kode]?.skor) ?? el?.values?.find(x => x.skor === 1) ?? null
+        formNyeri[el?.kode] = el?.values?.find(x => x?.skor === data?.keluhannyeri?.dewasa?.form[el.kode]?.skor) ?? null
       }
       this.form.keluhannyeri.form = formNyeri
 
@@ -914,6 +928,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         const frm = jns === 'form' ? this.form : (jns === 'kebidanan' ? this.formKebidanan : this.formPediatrik)
         if (frm.keluhannyeri.kajianNyeri === 'Wong Baker Face Scale') {
           this.setKeteranganSkornyeri(frm.keluhannyeri.skorNyeri, jns)
+          // frm.keluhannyeri.form = null
         }
         else {
           skor = parseInt(frm.keluhannyeri.form?.ekspresiWajah?.skor ?? 0) + parseInt(frm.keluhannyeri.form?.gerakanTangan?.skor ?? 0) + parseInt(frm.keluhannyeri.form?.kebutuhanVentilasi?.skor ?? 0)
@@ -937,7 +952,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
           if (val === 0) ket = 'Tidak ada nyeri'
           else if (val > 0 && val <= 3) ket = 'Nyeri Ringan'
           else if (val > 3 && val <= 6) ket = 'Nyeri Sedang'
-          else if (val > 6 && val >= 10) ket = 'Nyeri Berat'
+          else if (val > 6) ket = 'Nyeri Berat'
           // frm.keluhanNyeri = ket
           frm.keluhannyeri.ket = ket
         }
@@ -1090,6 +1105,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         kdruang: pasien?.kdruangan,
         id: this.form.id,
         form: formDefault,
+        awal: '1',
         formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
         formNeoNatal: kasusKep === '4.3' ? this.formNeoNatal : null,
         formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik

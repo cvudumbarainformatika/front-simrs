@@ -11,7 +11,7 @@
         flat
         dense
       >
-        {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
+        MEMO : {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
         <q-menu
           style="width: 400px;"
         >
@@ -40,22 +40,6 @@
         <div>Kasus Baru ?</div>
       </div>
       <div class="col-9 q-gutter-sm">
-        <!-- <q-radio
-        v-model="store.formdiagnosa.kasus"
-        dense
-        val="Baru"
-        label="Iya"
-        name="kasus"
-        color="primary"
-      />
-      <q-radio
-        v-model="store.formdiagnosa.kasus"
-        dense
-        val="Lama"
-        label="Tidak"
-        name="kasus"
-        color="negative"
-      /> -->
         <q-option-group
           v-model="store.formdiagnosa.kasus"
           name="kasus"
@@ -78,7 +62,7 @@
           :options="optionsDiagutama"
           inline
           dense
-          disable
+          :disable="pasien?.diagnosamedis.length > 0"
           @update:model-value="diagnosaUtamaDiubah"
         />
       <!-- <q-radio
@@ -194,6 +178,7 @@ import { useQuasar } from 'quasar'
 // import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+// eslint-disable-next-line no-unused-vars
 import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -252,39 +237,42 @@ function resetValidation () {
 }
 defineExpose({ resetValidation })
 const options = ref([])
-const listDiagnosa = ref([])
+// const listDiagnosa = ref([])
 
 onMounted(() => {
-  // console.log(props.pasien)
-
+  // ganti()
   options.value = store.listDiagnosa
-  store.initReset().then(() => {
+  store.initReset(props.pasien).then(() => {
     resetValidation()
   })
+  // console.log('onMounted', options.value)
 })
 
 function filterFn (val, update, abort) {
-  if (val.length < 1) {
+  if (val.length < 2) {
     abort()
+    options.value = []
     return
   }
 
-  if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
-    $q.notify({
-      color: 'negative',
-      textColor: 'white',
-      icon: 'icon-mat-warning',
-      message: 'Maaf Kasus Baru Atau Lama harus dipilih',
-      position: 'top-left'
-    })
-    abort()
-    return
-  }
+  // if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
+  //   $q.notify({
+  //     color: 'negative',
+  //     textColor: 'white',
+  //     icon: 'icon-mat-warning',
+  //     message: 'Maaf Kasus Baru Atau Lama harus dipilih',
+  //     position: 'top-left'
+  //   })
+  //   abort()
+  //   return
+  // }
 
   update(() => {
     const needle = val.toLowerCase()
     // const arr = store.listDiagnosa
-    const arr = listDiagnosa.value
+    const arr = store.listDiagnosa
+    // console.log('update', arr, needle, store.listDiagnosa)
+
     const filter = ['kode', 'keterangan']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
       data.filter((item) => filterKeys.some(
@@ -303,23 +291,30 @@ function kasusDiUbah (val) {
 }
 
 function ganti (val) {
-  const arr = store.listDiagnosa
-  const arr2 = props.pasien?.diagnosa
-  if (val === 'Baru' && arr2.length === 0) {
-    // listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
-    listDiagnosa.value = arr.length ? arr : []
-  }
-  else if (val === 'Baru' && arr2.length > 0) {
-    // listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
-    listDiagnosa.value = arr.length ? arr : []
-  }
-  else if (val === 'Lama' && arr2.length === 0) {
-    listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
-  }
-  else if (val === 'Lama' && arr2.length > 0) {
-    listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
-  }
+  // const arr = store.listDiagnosa
+  // // console.log(arr)
+  // listDiagnosa.value = arr
+
+  const arr2 = props.pasien?.diagnosamedis
+
+  // if (val === 'Baru' && arr2.length === 0) {
+  //   listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+  //   // listDiagnosa.value = arr.length ? arr : []
+  // }
+  // else if (val === 'Baru' && arr2.length > 0) {
+  //   // listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+  //   listDiagnosa.value = arr.length ? arr : []
+  // }
+  // else if (val === 'Lama' && arr2.length === 0) {
+  //   listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+  // }
+  // else if (val === 'Lama' && arr2.length > 0) {
+  //   listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+  // }
+  // listDiagnosa.value = arr.length ? arr : []
   arr2.length ? store.setFormDianosa('tipediagnosa', 'Sekunder') : store.setFormDianosa('tipediagnosa', 'Primer')
+
+  // console.log('diag', arr)
 }
 
 function diagnosaUtamaDiubah (val) {
@@ -347,8 +342,8 @@ function gantiMemo () {
   pengunjung.gantiMemo(form, props.pasien)
 }
 
-watch(() => props.pasien?.diagnosa, (obj) => {
-  // console.log('watch pilihan kasus', obj)
+watch(() => props.pasien?.diagnosamedis, (obj) => {
+  console.log('watch pilihan kasus', obj)
   ganti(store.formdiagnosa.kasus)
 }, { deep: true })
 

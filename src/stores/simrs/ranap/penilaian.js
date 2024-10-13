@@ -57,6 +57,20 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       })
     },
 
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/penilaian', params)
+      console.log('resp right', resp)
+      if (resp.status === 200) {
+        // store.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
     getGroupArray (arr) {
       this.barthels = arr?.find(item => item.kode === 'barthel') ?? null
       this.nortons = arr?.find(item => item.kode === 'norton') ?? null
@@ -80,12 +94,14 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       const ageInMonth = this.calculateAgeInMonths(pasien?.tgllahir ?? null)
       const usia = Math.floor(ageInMonth / 12)
       this.usia = usia
-      console.log('usia: ', usia)
-      console.log('pasien: ', pasien)
+      // console.log('usia: ', usia)
+      // console.log('pasien: ', pasien)
     },
 
     initReset (pasien, data) {
       const usia = this.usia
+      // console.log('usia from store', usia)
+
       this.form = {
         id: data?.id ?? null
       }
@@ -393,6 +409,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
         kdruang: pasien?.kdruangan ?? null,
         noreg: pasien?.noreg,
         norm: pasien?.norm,
+        awal: '1',
         id: this.form?.id ?? null
       }
       console.log('ooi: ', this.humptys.grupings?.includes(jnsKasus))

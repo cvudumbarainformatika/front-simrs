@@ -57,7 +57,7 @@ const myForm = ref(null)
 const store = usePenilaianRanapStore()
 
 onMounted(() => {
-  console.log('onMounted', props.pasien)
+  // console.log('onMounted', props.pasien)
 
   store.getUsia(props.pasien)
 })

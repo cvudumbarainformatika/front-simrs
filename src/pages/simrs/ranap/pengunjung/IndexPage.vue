@@ -40,16 +40,20 @@ import { onMounted } from 'vue'
 import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
 import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
 const penilaian = usePenilaianRanapStore()
 const diagnosa = useDiagnosaStore()
+const diagnosakeperawatan = useDiagnosaKeperawatan()
 const tindakan = useTindakanRanapStore()
+
 onMounted(() => {
   Promise.all([
     penilaian.getMaster(),
     diagnosa.getDiagnosaDropdown(),
+    diagnosakeperawatan.getData(),
     tindakan.getTindakanDropdown(),
     tindakan.getAllPetugas()
   ])

@@ -83,7 +83,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     },
     async getAllPetugas () {
       const resp = await api.get('v1/simrs/ranap/ruangan/allNakes')
-      console.log('list pegawai', resp)
+      // console.log('list pegawai', resp)
       if (resp.status === 200) {
         this.listPetugas = resp.data
       }

@@ -79,7 +79,7 @@
                   :key="pasien"
                   :pasien="pasien"
                   :kasus="store?.jnsKasusPasien"
-                  :nakes="auth?.user?.pegawai?.kdgroupnakes"
+                  :nakes="nakes"
                   depo="rnp"
                 />
               </template>
@@ -98,13 +98,14 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 // import HeaderLayout from './layoutcomp/HeaderLayout.vue'
 // import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 // import AppLoader from 'src/components/~global/AppLoader.vue'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 // import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 // import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
@@ -125,9 +126,12 @@ const props = defineProps({
 })
 
 const store = usePengunjungRanapStore()
-// const penilaian = usePenilaianRanapStore()
 const auth = useAplikasiStore()
-// const diagnosa = useDiagnosaStore()
+const anamnesis = useAnamnesisRanapStore()
+
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
+})
 
 const menus = ref([
   // {
@@ -140,24 +144,35 @@ const menus = ref([
     name: 'AnamnesisPage',
     label: 'Anamnesse $ Riwayat',
     icon: 'icon-mat-medical_information',
+    nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
   },
   {
     name: 'PemeriksaanPage',
     label: 'Pemeriksaan',
     icon: 'icon-my-stethoscope',
+    nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
   },
   {
     name: 'DiagTindPage',
     label: 'Diagnosa & Tindakan',
     icon: 'icon-mat-health_and_safety',
+    nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
+  },
+  {
+    name: 'AsessmentUlang',
+    label: 'Asessment Ulang',
+    icon: 'icon-fa-book-medical-solid',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
   },
   {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
+    nakes: ['1'],
     comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
   }
 ])
@@ -165,6 +180,8 @@ const menus = ref([
 const menu = ref(menus.value[0])
 
 onMounted(() => {
+  // console.log('nakes', nakes.value)
+
   menu.value = menus.value[0]
 })
 
@@ -173,10 +190,9 @@ function menuDiganti (val) {
 }
 
 const onShow = () => {
-  // Promise.all([
-  // penilaian.getMaster(),
-  // diagnosa.getDiagnosaDropdown()
-  // ])
+  Promise.all([
+    anamnesis.getRiwayatKehamilan(props.pasien)
+  ])
 }
 
 watchEffect(() => {

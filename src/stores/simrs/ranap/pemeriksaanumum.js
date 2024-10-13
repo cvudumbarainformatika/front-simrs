@@ -386,6 +386,20 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
   },
   actions: {
 
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
+      console.log('resp right pemeriksaan', resp)
+      if (resp.status === 200) {
+        // store.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
     initReset (data) {
       this.form = {
         // ini untuk 4.1
@@ -700,6 +714,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         norm: pasien?.norm,
         kdruang: pasien?.kdruangan,
         form: formDefault,
+        awal: '1',
         formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
         formNeonatal: kasusKep === '4.3' ? this.formNeonatal : null,
         formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
