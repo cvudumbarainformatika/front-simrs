@@ -32,6 +32,9 @@ export const registerJurnal = defineStore('register_jurnal', {
     stp: [],
     cairnostp: [],
     cairstp: [],
+    contrapost: [],
+    spmup: [],
+    spmgu: [],
     jurnals: []
   }),
   actions: {
@@ -46,6 +49,9 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.bastfarmasi = resp.data.bastfarmasi
             this.cairnostp = resp.data.cair_nostp
             this.cairstp = resp.data.cair_stp
+            this.contrapost = resp.data.contrapost
+            this.spmup = resp.data.spmup
+            this.spmgu = resp.data.spmgu
 
             this.loading = false
             this.serahterima()
@@ -90,8 +96,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = unik[i]
           const ob = {
 
-            kode_bast: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
-            uraian_bast: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
+            kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
+            uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
 
             debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
@@ -104,8 +110,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = unik[i]
           const ob = {
 
-            kode_bastx: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
-            uraian_bastx: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
+            kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
+            uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
             debit: 0,
             kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
           }
@@ -164,8 +170,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = unik[i]
           const ob = {
 
-            kode_bast: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bast,
-            uraian_bast: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bast,
+            kode: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bast,
+            uraian: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bast,
 
             debit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
             kredit: 0
@@ -178,8 +184,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = unik[i]
           const ob = {
 
-            kode_bastx: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bastx,
-            uraian_bastx: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bastx,
+            kode: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bastx,
+            uraian: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bastx,
             debit: 0,
             kredit: arr50bast.filter((x) => x.nobast === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
           }
@@ -215,79 +221,75 @@ export const registerJurnal = defineStore('register_jurnal', {
         }
         kode50x.push(kode50)
 
+        const arrfilter = arr.filter((x) => x.nonpdls === el).map((x) => x)
         const bendpg = []
-        const bend = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < bend.length; y++) {
-          const er = bend[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // kas bendahara
-            kd_bend: er.kode_cair2,
-            ur_bend: er.uraian_cair2,
+            kode: er.kode_cair2,
+            uraian: er.uraian_cair2,
             debit: parseFloat(er.total),
             kredit: 0
           }
           bendpg.push(cair1)
         }
         const blud = []
-        const cairblud = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cairblud.length; v++) {
-          const er = cairblud[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
             // kas blud
-            kd_blud: er.kd_blud,
-            ur_blud: er.ur_blud,
+            kode: er.kd_blud,
+            uraian: er.ur_blud,
             debit: 0,
             kredit: parseFloat(er.total)
           }
           blud.push(cair1)
         }
+
         const belanja = []
-        const blj = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < blj.length; y++) {
-          const er = blj[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // Belanja
-            kd_belanja: er.kode50,
-            urai_belanja: er.rincianbelanja,
+            kode: er.kode50,
+            uraian: er.rincianbelanja,
             debit: parseFloat(er.total),
             kredit: 0
           }
           belanja.push(cair1)
         }
         const kcair1 = []
-        const cairzx = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cairzx.length; v++) {
-          const er = cairzx[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
-            // kas blud
-            kode_cair1: er.kode_cair1,
-            uraian_cair1: er.uraian_cair1,
+            // epsal
+            kode: er.kode_cair1,
+            uraian: er.uraian_cair1,
             debit: 0,
             kredit: parseFloat(er.total)
           }
           kcair1.push(cair1)
         }
         const cairx = []
-        const cairxs = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < cairxs.length; y++) {
-          const er = cairxs[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // utang / beban / aset
-            kode_cairx: er.kode_cairx,
-            uraian_cairx: er.uraian_cairx,
+            kode: er.kode_cairx,
+            uraian: er.uraian_cairx,
             debit: parseFloat(er.total),
             kredit: 0
           }
           cairx.push(cair1)
         }
         const kasbend = []
-        const cair2s = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cair2s.length; v++) {
-          const er = cair2s[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
             // kas bendahara
-            kd_kasbend: er.kode_cair2,
-            ur_kasbend: er.uraian_cair2,
+            kode: er.kode_cair2,
+            uraian: er.uraian_cair2,
             debit: 0,
             kredit: parseFloat(er.total)
           }
@@ -303,12 +305,18 @@ export const registerJurnal = defineStore('register_jurnal', {
           uraian50: kode50x.map((x) => x.uraian50),
           // debit: rincidebit,
           // kredit: rincikredit,
-          d_bendpg: bendpg,
-          blud,
-          belanja,
-          kcair1,
-          cairx,
-          kasbend
+          // debit
+          debit_1: bendpg,
+          // kredit
+          kredit_1: blud,
+          // debit
+          debit_2: belanja,
+          // kredit
+          kredit_2: kcair1,
+          // debit
+          debit_3: cairx,
+          // kredit
+          kredit_3: kasbend
         }
         // console.log('hhhh', obj)
         cairnonstp.push(obj)
@@ -331,79 +339,74 @@ export const registerJurnal = defineStore('register_jurnal', {
         }
         kode50x.push(kode50)
 
+        const arrfilter = arr.filter((x) => x.nonpdls === el).map((x) => x)
         const bendpg = []
-        const bend = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < bend.length; y++) {
-          const er = bend[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // kas bendahara
-            kd_bend: er.kode_bastcair2,
-            ur_bend: er.uraian_bastcair2,
+            kode: er.kode_bastcair2,
+            uraian: er.uraian_bastcair2,
             debit: parseFloat(er.total),
             kredit: 0
           }
           bendpg.push(cair1)
         }
         const blud = []
-        const cairblud = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cairblud.length; v++) {
-          const er = cairblud[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
             // kas blud
-            kd_blud: er.kd_blud,
-            ur_blud: er.ur_blud,
+            kode: er.kd_blud,
+            uraian: er.ur_blud,
             debit: 0,
             kredit: parseFloat(er.total)
           }
           blud.push(cair1)
         }
         const belanja = []
-        const blj = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < blj.length; y++) {
-          const er = blj[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // Belanja
-            kd_belanja: er.kode50,
-            urai_belanja: er.rincianbelanja,
+            kode: er.kode50,
+            uraian: er.rincianbelanja,
             debit: parseFloat(er.total),
             kredit: 0
           }
           belanja.push(cair1)
         }
         const kcair1 = []
-        const cairzx = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cairzx.length; v++) {
-          const er = cairzx[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
-            // kas blud
-            kode_cair1: er.kode_bastcair1,
-            uraian_cair1: er.uraian_bastcair1,
+            // epsal
+            kode: er.kode_bastcair1,
+            uraian: er.uraian_bastcair1,
             debit: 0,
             kredit: parseFloat(er.total)
           }
           kcair1.push(cair1)
         }
         const cairx = []
-        const cairxs = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let y = 0; y < cairxs.length; y++) {
-          const er = cairxs[y]
+        for (let y = 0; y < arrfilter.length; y++) {
+          const er = arrfilter[y]
           const cair1 = {
             // utang / beban / aset
-            kode_cairx: er.kode_bastcairx,
-            uraian_cairx: er.uraian_bastcairx,
+            kode: er.kode_bastcairx,
+            uraian: er.uraian_bastcairx,
             debit: parseFloat(er.total),
             kredit: 0
           }
           cairx.push(cair1)
         }
         const kasbend = []
-        const cair2s = arr.filter((x) => x.nonpdls === el).map((x) => x)
-        for (let v = 0; v < cair2s.length; v++) {
-          const er = cair2s[v]
+        for (let v = 0; v < arrfilter.length; v++) {
+          const er = arrfilter[v]
           const cair1 = {
             // kas bendahara
-            kd_kasbend: er.kode_bastcair2,
-            ur_kasbend: er.uraian_bastcair2,
+            kode: er.kode_bastcair2,
+            uraian: er.uraian_bastcair2,
             debit: 0,
             kredit: parseFloat(er.total)
           }
@@ -417,22 +420,181 @@ export const registerJurnal = defineStore('register_jurnal', {
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
-          d_bendpg: bendpg,
-          blud,
-          belanja,
-          kcair1,
-          cairx,
-          kasbend
+          // debit
+          debit_1: bendpg,
+          // kredit
+          kredit_1: blud,
+          // debit
+          debit_2: belanja,
+          // kredit
+          kredit_2: kcair1,
+          // debit
+          debit_3: cairx,
+          // kredit
+          kredit_3: kasbend
         }
         // console.log('hhhh', obj)
         cairstpz.push(obj)
         // console.log('cairstpz', cairstpz)
       }
+
+      // DATA CONTRAPOST //
+      const unikcp = this.contrapost.map((x) => x.nocontrapost)
+      const dataunik = unikcp.length ? [...new Set(unikcp)] : []
+      // eslint-disable-next-line no-unused-vars
+      const cp = []
+
+      for (let c = 0; c < dataunik.length; c++) {
+        const el = dataunik[c]
+        const arr = this.contrapost
+        console.log('arr', arr)
+
+        // eslint-disable-next-line no-unused-vars
+        const epsal = []
+        const arrfilter = arr.filter((x) => x.nocontrapost === el).map((x) => x)
+        for (let i = 0; i < arrfilter.length; i++) {
+          const er = arrfilter[i]
+          const el = {
+            // epsal
+            kode: er.kode_cair1,
+            uraian: er.uraian_cair1,
+            debit: parseFloat(er.nominalcontrapost),
+            kredit: 0
+          }
+          epsal.push(el)
+        }
+
+        const belanja = []
+        for (let i = 0; i < arrfilter.length; i++) {
+          const er = arrfilter[i]
+          const el = {
+            // belanja
+            kode: er.kode50,
+            uraian: er.rincianbelanja,
+            debit: 0,
+            kredit: parseFloat(er.nominalcontrapost)
+          }
+          belanja.push(el)
+        }
+
+        const kasbend = []
+        for (let i = 0; i < arrfilter.length; i++) {
+          const er = arrfilter[i]
+          const el = {
+            // belanja
+            kode: er.kode_cair2,
+            uraian: er.uraian_cair2,
+            debit: parseFloat(er.nominalcontrapost),
+            kredit: 0
+          }
+          kasbend.push(el)
+        }
+
+        const bebanaset = []
+        for (let i = 0; i < arrfilter.length; i++) {
+          const er = arrfilter[i]
+          const el = {
+            // belanja
+            kode: er.kode_cairx,
+            uraian: er.uraian_cairx,
+            debit: 0,
+            kredit: parseFloat(er.nominalcontrapost)
+          }
+          bebanaset.push(el)
+        }
+        const obj = {
+          tanggal: date.formatDate(arr.filter((x) => x.nocontrapost === el)[0]?.tglcontrapost, 'YYYY-MM-DD'),
+          notrans: arr.filter((x) => x.nocontrapost === el)[0]?.nocontrapost,
+          kegiatan: arr.filter((x) => x.nocontrapost === el)[0]?.kegiatanblud,
+          debit_1: epsal,
+          kredit_1: belanja,
+          debit_2: kasbend,
+          kredit_2: bebanaset
+        }
+        cp.push(obj)
+      }
+
+      // DATA SPM UP //
+      const dataspmup = []
+      for (let i = 0; i < this.spmup.length; i++) {
+        const arr = this.spmup
+
+        const kasblud = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.04.01.0001',
+            uraian: 'Kas di BLUD',
+            debit: parseFloat(er.jumlahspp),
+            kredit: 0
+          }
+          kasblud.push(el)
+        }
+        const kasbend = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.jumlahspp)
+          }
+          kasbend.push(el)
+        }
+        const obj = {
+          tanggal: arr[i].tglSpm,
+          notrans: arr[i].noSpm,
+          kegiatan: arr[i].uraianPekerjaan,
+          debit_1: kasblud,
+          kredit_1: kasbend
+        }
+        dataspmup.push(obj)
+        console.log('SPM UP', dataspmup)
+      }
+
+      // DATA SPM GU //
+      const dataspmgu = []
+      for (let i = 0; i < this.spmgu.length; i++) {
+        const arr = this.spmgu
+
+        const kasblud = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.04.01.0001',
+            uraian: 'Kas di BLUD',
+            debit: parseFloat(er.jumlahspp),
+            kredit: 0
+          }
+          kasblud.push(el)
+        }
+        const kasbend = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.jumlahspp)
+          }
+          kasbend.push(el)
+        }
+        const obj = {
+          tanggal: arr[i].tglSpm,
+          notrans: arr[i].noSpm,
+          kegiatan: arr[i].uraianPekerjaan,
+          debit_1: kasblud,
+          kredit_1: kasbend
+        }
+        dataspmgu.push(obj)
+        console.log('SPM GU', dataspmgu)
+      }
+
       const gabungan = stp?.concat(
-        bastfarm, cairnonstp, cairstpz
+        bastfarm, cairnonstp, cairstpz, cp, dataspmup, dataspmgu
       )
       const sortByDate = (gabungan) =>
-        gabungan.sort(({ tgl: a }, { tgl: b }) =>
+        gabungan.sort(({ tanggal: a }, { tanggal: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
       const arrJurnal = sortByDate(gabungan)
