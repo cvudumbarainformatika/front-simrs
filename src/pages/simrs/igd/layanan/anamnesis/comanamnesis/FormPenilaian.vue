@@ -84,7 +84,7 @@
                       dense
                       :label="kategori.label"
                       color="primary"
-                      @update:model-value="updateSelection($event,item)"
+                      @update:model-value="updateSelection(item)"
                     /></span>
                 </div>
                 <q-separator class="q-my-xs" />
@@ -174,8 +174,23 @@ function onSubmit () {
     refForm.value.resetValidation()
   })
 }
-function updateSelection (evt, item, val) {
-  console.log('val', storepenilaian?.form.humpty_dumpty)
+function updateSelection (val) {
+  console.log('val', val)
+  if (storepenilaian?.formpenilaians?.kode === 'humpty_dumpty') {
+    const form = storepenilaian.formpenilaians.form
+    form?.forEach(label => {
+      console.log('label', label)
+      let score = 0
+      const kodelabel = label?.kode
+      const kategori = label?.categories
+      kategori?.forEach(nilai => {
+        if (kodelabel === val?.kode) {
+          score = storepenilaian.form[storepenilaian?.formpenilaians?.kode][label.kode]
+          console.log('label', kodelabel, score)
+        }
+      })
+    })
+  }
 }
 
 </script>

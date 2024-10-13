@@ -48,11 +48,19 @@
         >
           <transition-group name="list">
             <div
-              v-for="(item , n) in lists"
+              v-for="(item , n) in pasien?.penilaiananamnesis"
               :key="n"
             >
-              <div v-if="item?.morse_fall !== null">
-                asdasdasdasda
+              <!-- {{ item.humpty_dumpty }} -->
+              <div
+                v-for="(sub , x) in item?.humpty_dumpty"
+                :key="x"
+              >
+                {{ x }} : {{ sub?.label }}
+              </div>
+
+              <!-- <div v-if="item?.morse_fall !== null">
+                <div></div>
               </div>
               <div v-if="item?.humpty_dumpty !== null">
                 <q-item
@@ -66,29 +74,30 @@
               <div v-if="item?.ontario !== null">
                 ontario
               </div>
-            </div>
+            </div> -->
 
-            <q-item-section
-              side
-            >
-              <div class="q-gutter-sm">
-                <!-- <q-btn
+              <q-item-section
+                side
+              >
+                <div class="q-gutter-sm">
+                  <!-- <q-btn
                     flat
                     round
                     size="sm"
                     icon="icon-mat-edit"
                     @click="store.editForm(item)"
                   /> -->
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-delete"
-                  color="negative"
-                  @click="hapusItem(item.id)"
-                />
-              </div>
-            </q-item-section>
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-delete"
+                    color="negative"
+                    @click="hapusItem(item.id)"
+                  />
+                </div>
+              </q-item-section>
+            </div>
           </transition-group>
           <q-separator />
         </q-list>
@@ -100,7 +109,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
-import { computed } from 'vue'
+// import { computed } from 'vue'
 const store = usePenilaianAnamnesisIgd()
 const $q = useQuasar()
 const props = defineProps({
@@ -114,10 +123,10 @@ const props = defineProps({
   }
 })
 
-const lists = computed(() => {
-  const arr = props.pasien?.penilaiananamnesis
-  return arr?.sort((a, b) => { return b.id - a.id })
-})
+// const lists = computed(() => {
+//   const arr = props.pasien?.penilaiananamnesis
+//   return arr?.sort((a, b) => { return b.id - a.id })
+// })
 
 function hapusItem (id) {
   $q.dialog({
