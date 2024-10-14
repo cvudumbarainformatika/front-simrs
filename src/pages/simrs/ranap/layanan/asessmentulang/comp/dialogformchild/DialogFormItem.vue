@@ -3,7 +3,9 @@
     <q-card style="min-width: 40vw; min-height: 80vh; max-height: 80vh" class="column full-height">
       <q-bar class="col-auto">
         <q-icon name="icon-mat-edit_document" />
-        <div>9:34</div>
+        <div class="f-12">
+          {{ currentTime }}
+        </div>
 
         <q-space />
 
@@ -39,7 +41,9 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
+// import { date } from 'quasar'
+// eslint-disable-next-line no-unused-vars
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 
 const FormAnamnesis = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/anamnesis/FormAnamnesis.vue'))
 const FormPemeriksaanUmum = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/pemeriksaanUmum/FormPemeriksaanUmum.vue'))
@@ -65,4 +69,22 @@ defineProps({
 })
 
 const emits = defineEmits(['onHide', 'onClick'])
+
+const currentTime = ref('')
+
+onMounted(() => {
+  setInterval(() => {
+    const date = new Date()
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+    currentTime.value = `${hours}:${minutes}:${seconds}`
+  }, 1000) // 1000ms = 1s
+
+  console.log('currentTime', currentTime.value)
+})
+
+onUnmounted(() => {
+  clearInterval()
+})
 </script>

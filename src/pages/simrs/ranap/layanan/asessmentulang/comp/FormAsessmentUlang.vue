@@ -99,7 +99,7 @@ onMounted(() => {
             </q-item-section>
 
             <q-item-section class="text-bold">
-              OBYEKTIF
+              OBJECTIVE
             </q-item-section>
           </template>
 
@@ -131,7 +131,7 @@ onMounted(() => {
             </q-item-section>
 
             <q-item-section class="text-bold">
-              ASESSMENT
+              ASSESSMENT
             </q-item-section>
           </template>
 

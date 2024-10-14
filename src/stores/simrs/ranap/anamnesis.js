@@ -937,6 +937,9 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         }
       }
     },
+    // hitungWongBakerFaceScale (jns) {
+    //   let skor = 0
+    // },
     setKeteranganSkornyeri (val, jns) {
       let ket = null
       if (jns === 'formNeoNatal') {

@@ -30,7 +30,7 @@
           </template>
 
           <q-card bordered flat class="bg-grey-4">
-            <div class="q-pa-md row">
+            <div class="q-pa-md">
               <div class="row q-col-gutter-sm">
                 <!-- subjective -->
                 <div class="col-3">
@@ -166,19 +166,30 @@
 
                     <q-card-section class="col full-height scroll">
                       <div class="column">
-                        <q-input
-                          ref="refInputAsessment"
-                          v-model="item.asessment"
-                          outlined
-                          autogrow
-                          stack-label
-                          standout="bg-yellow-3"
-                          label="Asessment"
-                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                          :lazy-rules="true"
-                          hide-bottom-space
-                          readonly
-                        />
+                        <div>
+                          <span v-html="getNewLine(item?.asessment ?? 'Belum Terisi')" />
+                          <q-popup-edit
+                            buttons
+                            v-model="item.asessment"
+                            :cover="false"
+                            :offset="[0, 10]"
+                            v-slot="scope"
+                            :validate="validInput"
+                            @hide="validInput"
+                            @save="(val,initial)=> {
+                              // console.log('initial', initial); // before
+                              // console.log('valid', isErrInput); //now
+                              updateAsPlanInst(item,val,initial,'asessment')
+                            }"
+                          >
+                            <q-input
+                              type="textarea"
+                              v-model="scope.value"
+                              autofocus
+                              @keyup.enter.stop
+                            />
+                          </q-popup-edit>
+                        </div>
                       </div>
                     </q-card-section>
                   </q-card>
@@ -189,7 +200,7 @@
                   <q-card flat bordered class="column full-height full-width" style="min-height: 300px; max-width: 100%;">
                     <q-card-section class="col-auto flex justify-between items-center">
                       <div class="f-20">
-                        Plann
+                        Plan
                       </div>
                       <!-- <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
@@ -202,19 +213,30 @@
 
                     <q-card-section class="col full-height scroll">
                       <div class="column">
-                        <q-input
-                          ref="refInputPlann"
-                          v-model="item.plann"
-                          outlined
-                          autogrow
-                          stack-label
-                          standout="bg-yellow-3"
-                          label="Asessment"
-                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                          :lazy-rules="true"
-                          hide-bottom-space
-                          readonly
-                        />
+                        <div>
+                          <span v-html="getNewLine(item?.plann ?? 'Belum Terisi')" />
+                          <q-popup-edit
+                            buttons
+                            v-model="item.plann"
+                            :cover="false"
+                            :offset="[0, 10]"
+                            v-slot="scope"
+                            :validate="validInput"
+                            @hide="validInput"
+                            @save="(val,initial)=> {
+                              // console.log('initial', initial); // before
+                              // console.log('val', val); //now
+                              updateAsPlanInst(item,val,initial,'plann')
+                            }"
+                          >
+                            <q-input
+                              type="textarea"
+                              v-model="scope.value"
+                              autofocus
+                              @keyup.enter.stop
+                            />
+                          </q-popup-edit>
+                        </div>
                       </div>
                     </q-card-section>
                   </q-card>
@@ -231,19 +253,33 @@
                     <q-separator inset />
 
                     <q-card-section>
-                      <q-input
-                        ref="refInputInstruksi"
-                        v-model="item.instruksi"
-                        outlined
-                        autogrow
-                        stack-label
-                        standout="bg-yellow-3"
-                        label="Instruksi"
-                        :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-                        :lazy-rules="true"
-                        hide-bottom-space
-                        readonly
-                      />
+                      <div class="column">
+                        <div>
+                          <span v-html="getNewLine(item?.instruksi ?? 'Belum Terisi')" />
+                          <q-popup-edit
+                            buttons
+                            v-model="item.instruksi"
+                            :cover="false"
+                            :offset="[0, 10]"
+
+                            v-slot="scope"
+                            @save="(val,initial)=> {
+                              // console.log('initial', initial); // before
+                              // console.log('val', val); //now
+                              updateAsPlanInst(item,val,initial,'instruksi')
+                            }"
+                          >
+                            <q-input
+                              type="textarea"
+                              v-model="scope.value"
+                              autofocus
+                              :error="isErrInput"
+                              :error-message="errMsg"
+                              @keyup.enter.stop
+                            />
+                          </q-popup-edit>
+                        </div>
+                      </div>
                     </q-card-section>
                   </q-card>
                 </div>
@@ -275,7 +311,7 @@
 
 <script setup>
 import { dateFullFormat, jamTnpDetik } from 'src/modules/formatter'
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import useForm from './useForm'
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
@@ -290,7 +326,7 @@ const props = defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const { settings, editFormAnamnesis, editFormPemeriksaan, updateToServerAnamnesis, updateToServerPemeriksaan, store, storePenilaian } = useForm(props?.pasien)
+const { settings, editFormAnamnesis, editFormPemeriksaan, updateToServerAnamnesis, updateToServerPemeriksaan, updateAsPlanInst, store, storePenilaian } = useForm(props?.pasien)
 
 const items = computed(() => {
   return store.items
@@ -300,5 +336,19 @@ function getNewLine (text) {
   // console.log('text', text)
 
   return text?.replace(/\n/g, '<br/>')
+}
+
+const isErrInput = ref(false)
+const errMsg = ref('')
+
+const validInput = (val) => {
+  if (val?.trim().length === 0) {
+    isErrInput.value = true
+    errMsg.value = 'Tidak boleh kosong'
+    return false
+  }
+  isErrInput.value = false
+  errMsg.value = ''
+  return true
 }
 </script>

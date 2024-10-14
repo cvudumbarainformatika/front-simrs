@@ -9,7 +9,7 @@
       <div class="bg-primary text-white col-auto">
         <div class="row justify-between items-center q-px-md q-py-xs">
           <div class="f-12">
-            Form Asesmen Ulang
+            Form Assessment Ulang
           </div>
           <q-btn size="12px" dense flat icon="icon-mat-close" v-close-popup>
             <q-tooltip class="bg-white text-primary">
@@ -59,7 +59,7 @@
       </div>
 
       <q-card-section class="col full-height scroll">
-        <FormSoap :pasien="pasien" :kasus="kasus" :nakes="nakes" />
+        <FormSoap :pasien="pasien" :kasus="kasus" :nakes="nakes" @exit="emits('exit')" />
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -85,6 +85,8 @@ const props = defineProps({
     default: null
   }
 })
+
+const emits = defineEmits(['exit'])
 
 const { store } = useForm(props?.pasien)
 </script>

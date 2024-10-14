@@ -26,7 +26,7 @@
       <ListSoap :pasien="pasien" :kasus="kasus" :nakes="nakes" :items="store.items" />
     </div>
 
-    <DialogForm v-model="settings.isForm" :pasien="pasien" :kasus="kasus" :nakes="nakes" />
+    <DialogForm v-model="settings.isForm" :pasien="pasien" :kasus="kasus" :nakes="nakes" @exit="settings.isForm = false" />
   </q-card>
 </template>
 

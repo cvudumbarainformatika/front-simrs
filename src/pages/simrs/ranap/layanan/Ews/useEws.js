@@ -54,6 +54,7 @@ export default function useEws (pasien, kasus) {
     console.log('getEwsHamil', params)
     let skor = 0
     const { rr, spo2, suhu, sistole, diastole, nadi, tk } = params
+
     if (parseInt(rr) < 12) skor = 3
     else if (parseInt(rr) >= 12 && parseInt(rr) <= 20) skor = 0
     else if (parseInt(rr) >= 21 && parseInt(rr) <= 25) skor = 2
@@ -129,7 +130,7 @@ export default function useEws (pasien, kasus) {
 
       if (sistole <= 90) d = 3
       else if (sistole > 90 && sistole <= 100) d = 2
-      else if (sistole >= 101 && sistole <= 110) d = 1
+      else if (sistole > 100 && sistole <= 110) d = 1
       else if (sistole >= 111 && sistole <= 219) d = 0
       else if (sistole > 220) d = 3
 
@@ -140,7 +141,7 @@ export default function useEws (pasien, kasus) {
 
       // if (diastole || !diastole) skor =0
 
-      if (nadi <= 40) e = 3
+      if (nadi < 41) e = 3
       else if (nadi >= 41 && nadi <= 50) e = 1
       else if (nadi > 50 && nadi <= 90) e = 0
       else if (nadi > 90 && nadi <= 110) e = 1

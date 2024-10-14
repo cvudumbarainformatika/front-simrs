@@ -171,6 +171,34 @@ export default function useForm (pasien) {
     })
   }
 
+  const updateAsPlanInst = (item, val, initial, kode) => {
+    const target = store.items.find(x => x?.id === item.id)
+
+    let payload = null
+    if (target) {
+      target[kode] = val
+      payload = {
+        id: item?.id,
+        asessment: target?.asessment,
+        plann: target?.plann,
+        instruksi: target?.instruksi
+      }
+    }
+    console.log('updateAsPlanInst', payload)
+    console.log('target', target)
+
+    return new Promise((resolve, reject) => {
+      api.post('v1/simrs/ranap/layanan/cppt/updateasplaninst', payload)
+        .then(resp => {
+          console.log('resp update', resp)
+          resolve(resp)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
   return {
     settings,
     store,
@@ -182,6 +210,8 @@ export default function useForm (pasien) {
     updateToServerAnamnesis,
 
     editFormPemeriksaan,
-    updateToServerPemeriksaan
+    updateToServerPemeriksaan,
+
+    updateAsPlanInst
   }
 }

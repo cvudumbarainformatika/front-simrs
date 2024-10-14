@@ -111,7 +111,14 @@
               Kajian Nyeri
             </div>
             <!-- <q-separator class="q-my-sm" /> -->
-            <q-radio v-model="store.form.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('form')" />
+            <q-radio
+              v-model="store.form.keluhannyeri.kajianNyeri"
+              v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text"
+              @update:model-value="(val)=>{
+                if (val==='Wong Baker Face Scale') store.form.keluhannyeri.skorNyeri=0
+                store.hitungSkorNyeri('form')
+              }"
+            />
           </div>
         </q-card-section>
         <q-separator />
@@ -189,7 +196,14 @@
             <div class="text-weight-bold">
               Kajian Nyeri Kebidanan
             </div>
-            <q-radio v-model="store.formKebidanan.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('kebidanan')" />
+            <q-radio
+              v-model="store.formKebidanan.keluhannyeri.kajianNyeri"
+              v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text"
+              @update:model-value="(val)=>{
+                if (val==='Wong Baker Face Scale') store.formKebidanan.keluhannyeri.skorNyeri=0
+                store.hitungSkorNyeri('form')
+              }"
+            />
           </div>
           <q-separator />
         </q-card-section>
@@ -300,7 +314,14 @@
             <div class="text-weight-bold">
               Kajian Nyeri
             </div>
-            <q-radio v-model="store.formPediatrik.keluhannyeri.kajianNyeri" v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text" @update:model-value="store.hitungSkorNyeri('pediatrik')" />
+            <q-radio
+              v-model="store.formPediatrik.keluhannyeri.kajianNyeri"
+              v-for="dd in store.pilihanNyeris" :key="dd" :label="dd?.text" :val="dd.text"
+              @update:model-value="(val)=>{
+                if (val==='Wong Baker Face Scale') store.formPediatrik.keluhannyeri.skorNyeri=0
+                store.hitungSkorNyeri('form')
+              }"
+            />
           </div>
           <q-separator />
         </q-card-section>

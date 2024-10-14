@@ -4,9 +4,9 @@ import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue'
 import useForm from './useForm.js'
 import { notifCenterVue, notifErrVue, notifSuccess, notifSuccessVue } from 'src/modules/utils.js'
 
-const FormAnamnesis = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/anamnesis/FormAnamnesis.vue'))
-const FormPemeriksaanUmum = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/pemeriksaanUmum/FormPemeriksaanUmum.vue'))
-const FormComp = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/penilaian/FormComp.vue'))
+// const FormAnamnesis = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/anamnesis/FormAnamnesis.vue'))
+// const FormPemeriksaanUmum = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/pemeriksaanUmum/FormPemeriksaanUmum.vue'))
+// const FormComp = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/penilaian/FormComp.vue'))
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
 const DialogFormItem = defineAsyncComponent(() => import('./dialogformchild/DialogFormItem.vue'))
@@ -27,6 +27,8 @@ const props = defineProps({
     default: null
   }
 })
+
+const emits = defineEmits(['exit'])
 
 const myForm = ref(null)
 
@@ -64,12 +66,13 @@ const validate = () => {
 
   myForm.value.validate().then(success => {
     if (success) {
-      // yay, models are correct
-      // console.log('success')
-      // store.saveForm(props?.kasus, props.pasien)
+      if (storePemeriksaanUmum.form.keadaanUmum === null) {
+        notifErrVue('Harap isi form Objective Terlebih dahulu!')
+        return
+      }
       store.saveCppt(props.pasien, props.kasus)
         .then((res) => {
-          settings.isForm = false
+          emits('exit')
           notifSuccessVue('Data Berhasil disimpan')
         })
     }
@@ -203,7 +206,7 @@ const validate = () => {
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
             <div class="f-20">
-              Asessment
+              Assessment
             </div>
           </q-card-section>
 
@@ -231,7 +234,7 @@ const validate = () => {
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
             <div class="f-20">
-              Plann
+              Plan
             </div>
           </q-card-section>
 
