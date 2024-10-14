@@ -77,6 +77,7 @@
         <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
           <q-select
             v-model="store.rinci.koderek50"
+            class="ellipsis-2-lines"
             label="Rekening Belanja"
             use-input
             outlined

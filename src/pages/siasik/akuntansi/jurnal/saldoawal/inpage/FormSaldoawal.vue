@@ -21,13 +21,13 @@
         <q-select
           v-model="store.form.kodepsap13"
           label="Akun Rekening"
+          class="ellipsis-2-lines q-pt-sm"
           use-input
           outlined
           standout="bg-yellow-3"
           dense
           emit-value
           map-options
-          clearable
           autocomplete="uraian"
           option-value="kodeall3"
           :disable="store.loading"
@@ -64,6 +64,7 @@
       </div>
       <div class="q-pa-sm q-gutter-y-md" style="width:25%">
         <app-input-simrs
+          class="q-pt-sm"
           v-model="store.form.debit"
           label="Debit"
           :valid="{required:true, number:true}"
@@ -77,6 +78,7 @@
       </div>
       <div class="q-pa-sm q-gutter-y-md" style="width:25%">
         <app-input-simrs
+          class="q-pt-sm"
           v-model="store.form.kredit"
           label="Kredit"
           :valid="{required:true, number:true}"
