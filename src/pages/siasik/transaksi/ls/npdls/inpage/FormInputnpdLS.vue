@@ -199,7 +199,6 @@
             color="dark"
             round
             size="sm"
-            :disable="store.disabled"
             :loading="store.loading"
             icon="icon-mat-add"
             :source="store.dariserahterima"
