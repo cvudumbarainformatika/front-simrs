@@ -7,6 +7,7 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
     loadingForm: false,
     loadingHistory: false,
     items: [],
+    skortotal: '',
     usia: {},
     formpenilaians: {},
     humpty_dumpty: [],

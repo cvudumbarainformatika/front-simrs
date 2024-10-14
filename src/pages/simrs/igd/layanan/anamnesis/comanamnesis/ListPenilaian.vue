@@ -47,35 +47,32 @@
           separator
         >
           <transition-group name="list">
-            <div
+            <q-item
               v-for="(item , n) in pasien?.penilaiananamnesis"
               :key="n"
             >
-              <!-- {{ item.humpty_dumpty }} -->
-              <div
+              <q-item-section>
+                <div
+                  class="row f-12" v-for="(sub , x) in item?.humpty_dumpty"
+                  :key="x"
+                >
+                  <div class="col-2 q-mb-md">
+                    <q-item-label>
+                      <span>{{ x.toUpperCase() }} </span>
+                    </q-item-label>
+                  </div>
+                  <q-item-label class="col-9">
+                    <span class="text-weight-bold"> : {{ sub?.label }} </span>
+                    <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
+                  </q-item-label>
+                </div>
+              </q-item-section>
+              <!-- <div
                 v-for="(sub , x) in item?.humpty_dumpty"
                 :key="x"
               >
                 {{ x }} : {{ sub?.label }}
-              </div>
-
-              <!-- <div v-if="item?.morse_fall !== null">
-                <div></div>
-              </div>
-              <div v-if="item?.humpty_dumpty !== null">
-                <q-item
-                  v-for="(humpty_dumpty , a) in item?.humpty_dumpty"
-                  :key="a"
-                  class="list-move"
-                >
-                  {{ humpty_dumpty?.usia }}
-                </q-item>
-              </div>
-              <div v-if="item?.ontario !== null">
-                ontario
-              </div>
-            </div> -->
-
+              </div> -->
               <q-item-section
                 side
               >
@@ -97,7 +94,7 @@
                   />
                 </div>
               </q-item-section>
-            </div>
+            </q-item>
           </transition-group>
           <q-separator />
         </q-list>
@@ -109,6 +106,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
+import { onMounted } from 'vue'
 // import { computed } from 'vue'
 const store = usePenilaianAnamnesisIgd()
 const $q = useQuasar()
@@ -144,5 +142,19 @@ function hapusItem (id) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+
+onMounted(() => {
+  console.log('sasa', props?.pasien?.penilaiananamnesis)
+  const penilaians = props?.pasien?.penilaiananamnesis
+  penilaians.forEach(x => {
+    console.log('sasesesax', x)
+    //   if (x?.humpty_dumpty !== '') {
+    const wew = penilaians?.humpty_dumpty
+    wew?.forEach(xxx => {
+      console.log('sasax', xxx)
+    })
+  //  }
+  })
+})
 
 </script>
