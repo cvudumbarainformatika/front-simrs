@@ -258,7 +258,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           )
           : []
         const obj = {
-          tgl: el[i].tglnpk,
+          tgl: el[i].tglpindahbuku,
           notrans: el[i].nonpk,
           nonpd,
           // nonpd: nonpd,

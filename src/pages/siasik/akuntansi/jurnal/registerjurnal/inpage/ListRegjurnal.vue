@@ -107,7 +107,10 @@
 
             <q-td key="uraian" :props="props" class="text-left vertical-bottom">
               <div class="text-bold">
-                {{ props.row?.kegiatan }}
+                {{ props.row?.keterangan }}
+              </div>
+              <div class="text-bold">
+                Kegiatan {{ props.row?.kegiatan }}
               </div>
               <div class="row" v-for="it in props.row?.debit_1" :key="it">
                 <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
