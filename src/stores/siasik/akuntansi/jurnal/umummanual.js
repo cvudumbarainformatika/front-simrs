@@ -16,11 +16,11 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
     items: [],
     transall: [],
     rincis: [],
-    tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+    tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     rekening50: [],
     flagVerif: '',
     form: {
-      nobukti: null,
+      nobukti: '',
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       koderekening: '',
       uraian: '',
@@ -53,7 +53,6 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       const params = { params: this.params }
       try {
         const resp = await api.get('v1/akuntansi/jurnalumum/jurnalumumotot', params)
-        console.log('masterlaborat', resp)
         if (resp.status === 200) {
           this.items = resp.data
           this.loading = false
@@ -81,6 +80,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
       this.totalk = hasil.reduce((a, b) => parseFloat(a) + parseFloat(b.totkredit), 0)
     },
     async saveData () {
+      console.log('no', this.form.nobukti)
       this.loading = true
       try {
         const resp = await api.post('v1/akuntansi/jurnalumum/simpanjurnalmanual', this.form)
@@ -90,6 +90,7 @@ export const usejurnalumummanual = defineStore('jurnal_umum_manual', {
           notifSuccess(resp)
           this.resetformrinci()
           this.getrincians()
+          this.getJurnalUmum()
           // this.loading = false
         }
         this.loadingForm = false

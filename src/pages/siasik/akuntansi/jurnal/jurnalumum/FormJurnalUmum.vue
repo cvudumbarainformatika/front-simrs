@@ -3,7 +3,6 @@
   <div class="q-pa-md q-gutter-sm">
     <q-dialog
       v-model="store.dialog"
-      @hide="resetclose()"
       persistent
       :maximized="maximizedToggle"
       transition-show="slide-up"
@@ -13,7 +12,7 @@
         <q-bar class="text-white bg-primary">
           <q-space />
 
-          <q-btn dense flat icon="icon-mat-close" v-close-popup @click="store.getJurnalUmum()">
+          <q-btn dense flat icon="icon-mat-close" v-close-popup>
             <q-tooltip class="bg-white text-dark">
               Close
             </q-tooltip>
@@ -40,12 +39,14 @@
                   <div class="col-5">
                     <app-input-date-human
                       ref="reftanggal"
-                      v-model="store.form.tanggal"
+                      :model="store.tanggal"
                       label="Tanggal"
                       outlined
                       standout="bg-yellow-3"
                       :disable="store.form.nobukti !== '' "
                       :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                      @db-model="tanggal"
+                      @set-display="setTanggal"
                     />
                   </div>
                   <div class="col-6">
@@ -207,6 +208,13 @@ const reftanggal = ref(null)
 const refketerangan = ref(null)
 // const model = ref(null)
 
+function tanggal (val) {
+  store.form.tanggal = val
+}
+function setTanggal (val) {
+  store.tanggal = val
+}
+
 function onSubmit () {
   store.fixed = true
 }
@@ -215,12 +223,12 @@ onMounted(() => {
   store.getRekenining50()
 })
 
-function resetclose () {
-  store.form.nobukti = ''
-  store.form.keterangan = ''
-  store.flagVerif = ''
-  store.transall = []
-}
+// function resetclose () {
+//   store.form.nobukti = ''
+//   store.form.keterangan = ''
+//   store.flagVerif = ''
+//   store.transall = []
+// }
 // onBeforeUnmount(() => {
 //   console.log('jalan')
 //   store.form.nobukti = ''

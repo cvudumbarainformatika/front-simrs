@@ -54,19 +54,37 @@
               :key="n"
             >
               <q-item-section>
-                <div
-                  class="row f-12" v-for="(sub , x) in item.humpty_dumpty"
-                  :key="x"
-                >
-                  <div class="col-2 q-mb-md">
-                    <q-item-label>
-                      <span>{{ x.toUpperCase() }} </span>
+                <div v-if="item.humpty_dumpty">
+                  <div
+                    class="row f-12" v-for="(sub , x) in item.humpty_dumpty"
+                    :key="x"
+                  >
+                    <div class="col-2 q-mb-md">
+                      <q-item-label>
+                        <span>{{ x.toUpperCase() }} </span>
+                      </q-item-label>
+                    </div>
+                    <q-item-label class="col-9">
+                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
+                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
                     </q-item-label>
                   </div>
-                  <q-item-label class="col-9">
-                    <span class="text-weight-bold"> : {{ sub?.label }} </span>
-                    <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
-                  </q-item-label>
+                </div>
+                <div v-if="item.morse_fall">
+                  <div
+                    class="row f-12" v-for="(sub , x) in item.morse_fall"
+                    :key="x"
+                  >
+                    <div class="col-2 q-mb-md">
+                      <q-item-label>
+                        <span>{{ x.toUpperCase() }} </span>
+                      </q-item-label>
+                    </div>
+                    <q-item-label class="col-9">
+                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
+                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
+                    </q-item-label>
+                  </div>
                 </div>
               </q-item-section>
               <!-- <div
