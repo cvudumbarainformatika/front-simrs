@@ -11,7 +11,8 @@
         row-key="name"
         :filter="store.reqs.q"
         :loading="store.loading"
-        :rows-per-page-options="[50,100,200]"
+        :rows-per-page-options="[0]"
+        :rows-number="[0]"
       >
         <template #loading>
           <q-inner-loading showing color="warning" />
@@ -25,7 +26,7 @@
                 dark
                 color="warning"
                 dense
-                placeholder="Cari Nomer Transaksi..."
+                placeholder="Cari Transaksi..."
                 debounce="0"
                 style="min-width: 300px;"
               >
@@ -265,7 +266,7 @@ const listRegjurnal = [
   {
     label: 'Tanggal',
     name: 'tgltrans',
-    field: 'tangal',
+    field: row => [row.tanggal],
     align: 'center'
   },
   {
@@ -279,7 +280,7 @@ const listRegjurnal = [
     name: 'koderek',
     align: 'center',
     field: row => [
-      row.debit, row.kredit,
+      row.debit?.kode, row.kredit?.kode,
       row.debit_1, row.kredit_1,
       row.debit_2, row.kredit_2,
       row.debit_3, row.kredit_3
@@ -290,7 +291,8 @@ const listRegjurnal = [
     name: 'uraian',
     align: 'center',
     field: row => [
-      row.debit, row.kredit,
+      row.kegiatan, row.keterangan,
+      row.debit?.uraian, row.kredit?.uraian,
       row.debit_1, row.kredit_1,
       row.debit_2, row.kredit_2,
       row.debit_3, row.kredit_3

@@ -8,6 +8,7 @@ export const registerJurnal = defineStore('register_jurnal', {
     disabled: false,
     reqs: {
       q: '',
+      page: 1,
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY')
     },
@@ -35,10 +36,15 @@ export const registerJurnal = defineStore('register_jurnal', {
     contrapost: [],
     spmup: [],
     spmgu: [],
+    spjpanjar: [],
     nihil: [],
     jurnals: []
   }),
   actions: {
+    goToPage (val) {
+      this.reqs.page = val
+      this.getRegJurnal()
+    },
     getRegJurnal () {
       this.loading = true
       const params = { params: this.reqs }
@@ -54,6 +60,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.spmup = resp.data.spmup
             this.spmgu = resp.data.spmgu
             this.nihil = resp.data.nihil
+            this.spjpanjar = resp.data.spjpanjar
 
             this.loading = false
             this.serahterima()
@@ -64,74 +71,123 @@ export const registerJurnal = defineStore('register_jurnal', {
     },
     serahterima () {
       // DATA SERAHTERIMA SIASIK //
+      const unikstp = this.stp.map((x) => x.noserahterimapekerjaan)
+      const dataunikstp = unikstp.length ? [...new Set(unikstp)] : []
       const stp = []
-      const arr50 = []
-      for (let i = 0; i < this.stp.length; i++) {
-        const el = this.stp
-        const rinci = el[i].rinci.map((x) => {
-          return {
-            kode50: x.jurnal.kode50,
-            uraian: x.jurnal.uraian50,
-            kode_bast: x.jurnal.kode_bast,
-            uraian_bast: x.jurnal.uraian_bast,
-            kode_bastx: x.jurnal.kode_bastx,
-            uraian_bastx: x.jurnal.uraian_bastx,
-            nilai: parseFloat(x.nominalpembayaran)
-          }
-        })
-        arr50.push(...rinci)
-        const unik50 = rinci.map((s) => s.kode50)
-        const unik = unik50.length ? [...new Set(unik50)] : []
+      for (let i = 0; i < dataunikstp.length; i++) {
+        const el = dataunikstp[i]
+        const arr = this.stp
 
-        const kode50x = []
-        for (let i = 0; i < unik.length; i++) {
-          const el = unik[i]
-          const ob = {
-            koderek50: arr50.filter((x) => x.kode50 === el)[0]?.kode50,
-            uraian50: arr50.filter((x) => x.kode50 === el)[0]?.uraian
-          }
-          kode50x.push(ob)
-          // console.log('nilaaaaaaaai', ob.nilai)
-        }
-        const rincidebit = []
-        for (let i = 0; i < unik.length; i++) {
-          const el = unik[i]
-          const ob = {
+        const arrfilter = arr.filter((x) => x.noserahterimapekerjaan === el).map((x) => x)
+        // console.log('coba', arrfilter)
+        const unik50 = arrfilter.map((x) => x.koderek50)
+        const unik50x = unik50.length ? [...new Set(unik50)] : []
 
-            kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
-            uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
-
-            debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
+        const beban = []
+        for (let k = 0; k < unik50x.length; k++) {
+          const es = unik50x[k]
+          const arrs = arrfilter
+          const el = {
+            // beban
+            kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bast,
+            uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bast,
+            debit: parseFloat(arrs.filter((x) => x.koderek50 === es)[0]?.nominalpembayaran),
             kredit: 0
           }
-          rincidebit.push(ob)
-          // console.log('nilaaaaaaaai', ob.nilai)
+          beban.push(el)
+          // console.log('unikkkkks', beban)
         }
-        const rincikredit = []
-        for (let i = 0; i < unik.length; i++) {
-          const el = unik[i]
-          const ob = {
 
-            kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
-            uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
+        const utangstp = []
+        for (let k = 0; k < unik50x.length; k++) {
+          const es = unik50x[k]
+          const arrs = arrfilter
+          const el = {
+            // beban
+            kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bastx,
+            uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bastx,
             debit: 0,
-            kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
+            kredit: parseFloat(arrs.filter((x) => x.koderek50 === es)[0]?.nominalpembayaran)
           }
-          rincikredit.push(ob)
-          // console.log('nilaaaaaaaai', ob.nilai)
+          utangstp.push(el)
         }
-        // console.log('arr50', kode50x)
         const obj = {
-          tanggal: el[i].tgltrans,
-          notrans: el[i].noserahterimapekerjaan,
-          kegiatan: el[i].kegiatanblud,
-          koderek50: kode50x.map((x) => x.koderek50),
-          uraian50: kode50x.map((x) => x.uraian50),
-          debit: rincidebit,
-          kredit: rincikredit
+          tanggal: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.tgltrans,
+          notrans: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.noserahterimapekerjaan,
+          kegiatan: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.kegiatanblud,
+          debit_1: beban,
+          kredit_1: utangstp
         }
         stp.push(obj)
+        // console.log('datastp', stp)
       }
+      // const arr50 = []
+      // for (let i = 0; i < this.stp.length; i++) {
+      //   const el = this.stp
+      //   const rinci = el[i].rinci.map((x) => {
+      //     return {
+      //       kode50: x.jurnal.kode50,
+      //       uraian: x.jurnal.uraian50,
+      //       kode_bast: x.jurnal.kode_bast,
+      //       uraian_bast: x.jurnal.uraian_bast,
+      //       kode_bastx: x.jurnal.kode_bastx,
+      //       uraian_bastx: x.jurnal.uraian_bastx,
+      //       nilai: parseFloat(x.nominalpembayaran)
+      //     }
+      //   })
+      //   arr50.push(...rinci)
+      //   const unik50 = rinci.map((s) => s.kode50)
+      //   const unik = unik50.length ? [...new Set(unik50)] : []
+
+      //   const kode50x = []
+      //   for (let i = 0; i < unik.length; i++) {
+      //     const el = unik[i]
+      //     const ob = {
+      //       koderek50: arr50.filter((x) => x.kode50 === el)[0]?.kode50,
+      //       uraian50: arr50.filter((x) => x.kode50 === el)[0]?.uraian
+      //     }
+      //     kode50x.push(ob)
+      //     // console.log('nilaaaaaaaai', ob.nilai)
+      //   }
+      //   const rincidebit = []
+      //   for (let i = 0; i < unik.length; i++) {
+      //     const el = unik[i]
+      //     const ob = {
+
+      //       kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
+      //       uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
+
+      //       debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
+      //       kredit: 0
+      //     }
+      //     rincidebit.push(ob)
+      //     // console.log('nilaaaaaaaai', ob.nilai)
+      //   }
+      //   const rincikredit = []
+      //   for (let i = 0; i < unik.length; i++) {
+      //     const el = unik[i]
+      //     const ob = {
+
+      //       kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
+      //       uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
+      //       debit: 0,
+      //       kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
+      //     }
+      //     rincikredit.push(ob)
+      //     // console.log('nilaaaaaaaai', ob.nilai)
+      //   }
+      // console.log('arr50', kode50x)
+      //   const obj = {
+      //     tanggal: el[i].tgltrans,
+      //     notrans: el[i].noserahterimapekerjaan,
+      //     kegiatan: el[i].kegiatanblud,
+      //     koderek50: kode50x.map((x) => x.koderek50),
+      //     uraian50: kode50x.map((x) => x.uraian50),
+      //     debit: rincidebit,
+      //     kredit: rincikredit
+      //   }
+      //   stp.push(obj)
+      // }
 
       // DATA SERAHTERIMA FARMASI //
       const bastfarm = []
@@ -451,7 +507,7 @@ export const registerJurnal = defineStore('register_jurnal', {
       for (let c = 0; c < dataunik.length; c++) {
         const el = dataunik[c]
         const arr = this.contrapost
-        console.log('arr', arr)
+        // console.log('arr', arr)
 
         // eslint-disable-next-line no-unused-vars
         const epsal = []
@@ -594,6 +650,76 @@ export const registerJurnal = defineStore('register_jurnal', {
         // console.log('SPM GU', dataspmgu)
       }
 
+      // DATA SPJ PANJAR //
+      const unikspj = this.spjpanjar.map((x) => x.nospjpanjar)
+      const unikno = unikspj.length ? [...new Set(unikspj)] : []
+
+      const spjpjr = []
+      for (let i = 0; i < unikno.length; i++) {
+        const el = unikno[i]
+        const arr = this.spjpanjar
+        const arrfilter = arr.filter((x) => x.nospjpanjar === el).map((x) => x)
+
+        const belanja = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const el = {
+            kode: er.kode50,
+            uraian: er.rincianbelanja50,
+            debit: parseFloat(er.jumlahbelanjapanjar),
+            kredit: 0
+          }
+          belanja.push(el)
+        }
+
+        const epsal = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const el = {
+            kode: er.kode_cair1,
+            uraian: er.uraian_cair1,
+            debit: 0,
+            kredit: parseFloat(er.jumlahbelanjapanjar)
+          }
+          epsal.push(el)
+        }
+
+        const beban = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const el = {
+            kode: er.kode_cairx,
+            uraian: er.uraian_cairx,
+            debit: parseFloat(er.jumlahbelanjapanjar),
+            kredit: 0
+          }
+          beban.push(el)
+        }
+
+        const kasbend = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const el = {
+            kode: er.kode_cair2,
+            uraian: er.uraian_cair2,
+            debit: 0,
+            kredit: parseFloat(er.jumlahbelanjapanjar)
+          }
+          kasbend.push(el)
+        }
+        const obj = {
+          tanggal: arr.filter((x) => x.nospjpanjar === el)[0].tglspjpanjar,
+          notrans: arr.filter((x) => x.nospjpanjar === el)[0].nospjpanjar,
+          kegiatan: arr.filter((x) => x.nospjpanjar === el)[0].kegiatanblud,
+          debit_1: belanja,
+          kredit_1: epsal,
+          debit_2: beban,
+          kredit_2: kasbend
+        }
+
+        spjpjr.push(obj)
+      }
+
       // DATA PENGEMBALIAN NIHIL //
       const datanihil = []
       for (let i = 0; i < this.nihil.length; i++) {
@@ -633,8 +759,9 @@ export const registerJurnal = defineStore('register_jurnal', {
       }
 
       const gabungan = stp?.concat(
-        bastfarm, cairnonstp, cairstpz, cp, dataspmup, dataspmgu,
-        datanihil
+        bastfarm, cairnonstp,
+        cairstpz, cp, dataspmup,
+        dataspmgu, spjpjr, datanihil
       )
       const sortByDate = (gabungan) =>
         gabungan.sort(({ tanggal: a }, { tanggal: b }) =>
