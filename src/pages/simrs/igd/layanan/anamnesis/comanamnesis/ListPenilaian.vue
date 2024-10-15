@@ -11,10 +11,11 @@
       style="width: inherit;"
     >
       <div class="f-12">
-        Data Triage
+        Data Penilaian Anamnesis
       </div>
       <q-space />
     </q-bar>
+
     <q-card-section
       style="padding:0"
       class="full-height bg-grey"
@@ -48,12 +49,13 @@
         >
           <transition-group name="list">
             <q-item
+
               v-for="(item , n) in pasien?.penilaiananamnesis"
               :key="n"
             >
               <q-item-section>
                 <div
-                  class="row f-12" v-for="(sub , x) in item?.humpty_dumpty"
+                  class="row f-12" v-for="(sub , x) in item.humpty_dumpty"
                   :key="x"
                 >
                   <div class="col-2 q-mb-md">
@@ -101,12 +103,13 @@
       </q-scroll-area>
     </q-card-section>
   </q-card>
+  {{ props?.pasien?.penilaiananamnesis }}
 </template>
 
 <script setup>
 import { useQuasar } from 'quasar'
 import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
-import { onMounted } from 'vue'
+
 // import { computed } from 'vue'
 const store = usePenilaianAnamnesisIgd()
 const $q = useQuasar()
@@ -143,18 +146,18 @@ function hapusItem (id) {
   })
 }
 
-onMounted(() => {
-  console.log('sasa', props?.pasien?.penilaiananamnesis)
-  const penilaians = props?.pasien?.penilaiananamnesis
-  penilaians.forEach(x => {
-    console.log('sasesesax', x)
-    //   if (x?.humpty_dumpty !== '') {
-    const wew = penilaians?.humpty_dumpty
-    wew?.forEach(xxx => {
-      console.log('sasax', xxx)
-    })
-  //  }
-  })
-})
+// onMounted(() => {
+//   console.log('sasa', props?.pasien?.penilaiananamnesis)
+//   const penilaians = props?.pasien?.penilaiananamnesis
+//   penilaians.forEach(x => {
+//     console.log('sasesesax', x)
+//     //   if (x?.humpty_dumpty !== '') {
+//     const wew = penilaians?.humpty_dumpty
+//     wew?.forEach(xxx => {
+//       console.log('sasax', xxx)
+//     })
+//   //  }
+//   })
+// })
 
 </script>
