@@ -19,9 +19,6 @@
       </div>
     </q-bar>
     <div class="col-grow bg-grey">
-      <!-- {{ filterredTable }}
-      {{ pasien?.laborats }} -->
-      <!-- jika belum ada pemeriksaan -->
       <div
         v-if="fillterTable(pasien?.laborats) === 0"
         class="column full-height flex-center text-white"
@@ -52,7 +49,9 @@
                       lines="2"
                       class="f-12"
                     >
-                      <span class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      {{ loading ? 'loading!!!!' : 'item?.name' }}
+                      <span v-if="!loading" class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      <q-skeleton v-else type="text" />
                     </q-item-label>
                     <q-item-label
                       lines="2"
@@ -63,24 +62,11 @@
                         :class="item?.value.length === 1 ? 'text-orange' : 'text-primary'"
                       >{{ item?.value.length === 1 ? 'NON-PAKET' : 'PAKET' }}</span>
                     </q-item-label>
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-12"
-                    >
-                      <span class=""> {{ item?.details[0]?.pemeriksaanlab?.rs21 !== ''? item?.details[0]?.pemeriksaanlab?.rs21: item?.details[0]?.pemeriksaanlab?.rs2 }} </span>
-                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section
                     side
                     top
                   >
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-10"
-                    >
-                      <span class="text-primary">{{ dateFullFormat(item?.tgl_order) }} </span>
-                    </q-item-label> -->
-
                     <q-item-label>
                       <q-badge
                         outline
@@ -177,6 +163,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -191,7 +181,7 @@ const props = defineProps({
 //   // return arr
 // })
 
-function fillterTable(val) {
+function fillterTable (val) {
   if (val) {
     const s = store.notalaborat
     const res = val?.filter(x => x.nota === s)
@@ -203,15 +193,17 @@ function fillterTable(val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function mapping(item) {
+function mapping (item) {
   const arr = item
-  const arr2 = arr.length > 0 ? arr.map(x =>
-    ({
-      gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
-      jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
-      aslix: x
-    })
-  ) : []
+  const arr2 = arr.length > 0
+    ? arr.map(x =>
+      ({
+        gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
+        jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
+        aslix: x
+      })
+    )
+    : []
   // console.log('aslix', arr)
   const groupped = groupBy(arr2, gruper => gruper.gruper)
   // console.log('group', groupped)
@@ -219,7 +211,7 @@ function mapping(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function hapusItem(item) {
+function hapusItem (item) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -238,14 +230,15 @@ function hapusItem(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function groupBy(list, keyGetter) {
+function groupBy (list, keyGetter) {
   const map = new Map()
   list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {
       map.set(key, [item])
-    } else {
+    }
+    else {
       collection.push(item)
     }
   })

@@ -23,10 +23,15 @@
       {{ pasien?.laborats }} -->
       <!-- jika belum ada pemeriksaan -->
       <div
-        v-if="fillterTable(pasien?.laborats) === 0"
-        class="column full-height flex-center text-white"
+        v-if="fillterTable(pasien?.laborats)?.length === 0"
+        class="column full-height flex-center text-white relative-position"
       >
-        Belum Ada Permintaan Order ke Laborat
+        <div v-if="!loading">
+          Belum Ada Permintaan Order ke Laborat
+        </div>
+        <div v-else class="absolute-top fit">
+          <app-loader bg-color="transparent" />
+        </div>
       </div>
       <q-scroll-area
         v-else
@@ -52,16 +57,24 @@
                       lines="2"
                       class="f-12"
                     >
-                      <span class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      <span v-if="!loading" class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      <div v-else>
+                        <q-skeleton type="text" />
+                        <q-skeleton type="text" width="50%" />
+                      </div>
                     </q-item-label>
                     <q-item-label
                       lines="2"
                       class="f-12"
                     >
                       <span
+                        v-if="!loading"
                         class="text-weight-bold"
                         :class="item?.value.length === 1 ? 'text-orange' : 'text-primary'"
                       >{{ item?.value.length === 1 ? 'NON-PAKET' : 'PAKET' }}</span>
+                      <div v-else>
+                        <q-skeleton type="text" height="30px" width="20%" />
+                      </div>
                     </q-item-label>
                     <!-- <q-item-label
                       lines="2"
@@ -83,14 +96,17 @@
 
                     <q-item-label>
                       <q-badge
+                        v-if="!loading"
                         outline
                         color="primary"
                         :label="`Rp. ${formatRp(parseInt(item?.value[0]?.aslix.rs6) + parseInt(item?.value[0]?.aslix.rs13))}`"
                       />
+                      <q-skeleton v-else type="text" height="30px" width="80px" />
                     </q-item-label>
                     <q-item-label>
                       <div class="row q-my-xs">
                         <q-btn
+                          v-if="!loading"
                           flat
                           round
                           size="sm"
@@ -99,6 +115,7 @@
                           class="z-top"
                           @click="hapusItem(item)"
                         />
+                        <q-skeleton v-else type="text" height="30px" width="15px" />
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -177,6 +194,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -191,7 +212,7 @@ const props = defineProps({
 //   // return arr
 // })
 
-function fillterTable(val) {
+function fillterTable (val) {
   if (val) {
     const s = store.notalaborat
     const res = val?.filter(x => x.nota === s)
@@ -203,15 +224,17 @@ function fillterTable(val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function mapping(item) {
+function mapping (item) {
   const arr = item
-  const arr2 = arr.length > 0 ? arr.map(x =>
-    ({
-      gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
-      jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
-      aslix: x
-    })
-  ) : []
+  const arr2 = arr.length > 0
+    ? arr.map(x =>
+      ({
+        gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
+        jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
+        aslix: x
+      })
+    )
+    : []
   // console.log('aslix', arr)
   const groupped = groupBy(arr2, gruper => gruper.gruper)
   // console.log('group', groupped)
@@ -219,7 +242,7 @@ function mapping(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function hapusItem(item) {
+function hapusItem (item) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -238,14 +261,15 @@ function hapusItem(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function groupBy(list, keyGetter) {
+function groupBy (list, keyGetter) {
   const map = new Map()
   list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {
       map.set(key, [item])
-    } else {
+    }
+    else {
       collection.push(item)
     }
   })

@@ -64,6 +64,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       this.loadingLayanan = true
       const form = { noreg: pasien?.noreg }
 
+      this.persiapanInjectPasien(pasien)
+
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
           .then(resp => {
@@ -89,14 +91,12 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       })
     },
 
-    setPasien (pasien, data) {
-      const findPasien = this.pasiens.filter(x => x?.noreg === data?.noreg)
-      // this.pasiens[indexPasien] = data
-      // // console.log('wew', this.pasiens[indexPasien])
+    persiapanInjectPasien (pasien) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       if (findPasien.length) {
         const datax = findPasien[0]
-        datax.newapotekrajal = data?.newapotekrajal
-        datax.diagnosa = data?.diagnosa
+        // datax.newapotekrajal = data?.newapotekrajal ?? []
+        // datax.diagnosa = data?.diagnosa ?? []
         datax.diagnosamedis = []
         datax.anamnesis = []
         datax.pemeriksaan = []
@@ -104,6 +104,29 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.tindakan = []
         datax.diagnosakeperawatan = []
         datax.cppt = []
+        datax.laborats = []
+        // datax.dokter = data?.datasimpeg?.nama
+        // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
+        // this.pageLayanan = false
+      }
+    },
+
+    setPasien (pasien, data) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+      // this.pasiens[indexPasien] = data
+      // // console.log('wew', this.pasiens[indexPasien])
+      if (findPasien.length) {
+        const datax = findPasien[0]
+        datax.newapotekrajal = data?.newapotekrajal ?? []
+        datax.diagnosa = data?.diagnosa ?? []
+        // datax.diagnosamedis = []
+        // datax.anamnesis = []
+        // datax.pemeriksaan = []
+        // datax.penilaian = []
+        // datax.tindakan = []
+        // datax.diagnosakeperawatan = []
+        // datax.cppt = []
+        // datax.laborats = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false
@@ -270,6 +293,21 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             // data[kode].push(val)
           }
         }
+      }
+    },
+
+    injectDataArray (noreg, arr, kode) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === noreg)
+      // console.log('inject pasien', findPasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+
+        // const target = data[kode]?.find(x => x.id === val?.id) ?? null
+        // console.log('inject target pasien', target, kode, val, data)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
+
+        data[kode] = arr
       }
     },
     deleteInjectanNull (noreg, kode) {

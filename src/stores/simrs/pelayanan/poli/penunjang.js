@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 import { dateDbFormat, dateFullFormat, formatJam } from 'src/modules/formatter'
 import { usePengunjungPoliStore } from './pengunjung'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { usePengunjungRanapStore } from '../../ranap/pengunjung'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
@@ -64,42 +65,46 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
   }),
   actions: {
     // =============================================================================================================================================LABORAT
-    async getMasterLaborat() {
+    async getMasterLaborat () {
       this.loadingMasterLab = true
       try {
         const resp = await api.get('v1/simrs/penunjang/laborat/dialoglaboratpoli')
         // // console.log('masterlaborat', resp)
         if (resp.status === 200) {
           const arr = resp.data
-          const arr2 = arr.length > 0 ? arr.map(x =>
-            ({
-              gruper: x.gruper !== '' ? x.gruper : x.pemeriksaan,
-              pemeriksaan: x.pemeriksaan,
-              jenis: x.gruper !== '' ? 'PAKET' : 'NON-PAKET',
-              biayapoliumum: parseInt(x.hargapelayananpoliumum) + parseInt(x.hargasaranapoliumum),
-              biayapolispesialis: parseInt(x.hargapelayananpolispesialis) + parseInt(x.hargasaranapolispesialis),
-              kode: x.kode,
-              aslix: x
-            })
-          ) : []
+          const arr2 = arr.length > 0
+            ? arr.map(x =>
+              ({
+                gruper: x.gruper !== '' ? x.gruper : x.pemeriksaan,
+                pemeriksaan: x.pemeriksaan,
+                jenis: x.gruper !== '' ? 'PAKET' : 'NON-PAKET',
+                biayapoliumum: parseInt(x.hargapelayananpoliumum) + parseInt(x.hargasaranapoliumum),
+                biayapolispesialis: parseInt(x.hargapelayananpolispesialis) + parseInt(x.hargasaranapolispesialis),
+                kode: x.kode,
+                aslix: x
+              })
+            )
+            : []
           const groupped = this.groupBy(arr2, gruper => gruper.gruper)
           this.masterlaborat = groupped
           this.loadingMasterLab = false
           // console.log('group pemeriksaan', groupped)
         }
         this.loadingMasterLab = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingMasterLab = false
       }
     },
-    groupBy(list, keyGetter) {
+    groupBy (list, keyGetter) {
       const map = new Map()
       list.forEach((item) => {
         const key = keyGetter(item)
         const collection = map.get(key)
         if (!collection) {
           map.set(key, [item])
-        } else {
+        }
+        else {
           collection.push(item)
         }
       })
@@ -107,7 +112,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       return arr
     },
 
-    async getNota(pasien) {
+    async getNota (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/laborat/getnota', payload)
       // // console.log('notalaborat', resp)
@@ -119,17 +124,17 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         // this.notalaborat = this.notalaborats[0]
       }
     },
-    setCariLabNull() {
+    setCariLabNull () {
       this.caripemeriksaanlab = null
     },
-    setForm(key, value) {
+    setForm (key, value) {
       this.form[key] = value
     },
-    setPermintaanLaborats(val, arr) {
+    setPermintaanLaborats (val, arr) {
       this.permintaanLaborats = val
       this.permintaans = arr
     },
-    setDetails(pemeriksaan) {
+    setDetails (pemeriksaan) {
       // this.form.details = []
       const thumb = []
       // // console.log('pemeriksaan', pemeriksaan)
@@ -149,7 +154,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       //   resolve()
       // })
     },
-    async saveOrderLaborat(pasien) {
+    async saveOrderLaborat (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -181,13 +186,15 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           this.initReset()
         }
         this.loadingSaveLab = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
 
-    async saveOrderLaboratBaru(pasien) {
+    async saveOrderLaboratBaru (pasien, isRanap) {
+      console.log('pasien', pasien)
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -229,8 +236,11 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       }
 
       this.form.kodepoli = pasien?.kodepoli
+      this.form.isRanap = isRanap
 
       const formbaru = { form: arr }
+
+      // console.log('formbaru', formbaru)
 
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
@@ -242,6 +252,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
             for (let i = 0; i < arr.length; i++) {
               const isi = arr[i]
               storePasien.injectDataPasien(pasien, isi, 'laborats')
+              if (isRanap) this.kirimKePasienKunjunganRanap(pasien, isi, 'laborats', resp.data)
             }
           }
           this.setNotas(resp?.data?.nota)
@@ -250,13 +261,14 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           this.initReset()
         }
         this.loadingSaveLab = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
 
-    percentage(val) {
+    percentage (val) {
       if (!isNaN(val)) {
         const hasil = val + (val * 25 / 100)
         return hasil
@@ -264,7 +276,12 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       return 0
     },
 
-    async hapusLaborat(pasien, id) {
+    kirimKePasienKunjunganRanap (pasien, isi, kode, resp) {
+      const storePasien = usePengunjungRanapStore()
+      storePasien.injectDataPasien(pasien?.noreg, isi, kode)
+    },
+
+    async hapusLaborat (pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaborat', payload)
@@ -275,11 +292,12 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         // console.log('hapus laborat', error)
       }
     },
-    setNotas(array) {
+    setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notalaborats = arr.length ? arr : []
       this.notalaborats.push('LIHAT SEMUA')
@@ -288,7 +306,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     },
     // =============================================================================================================================================LABORAT
 
-    initReset() {
+    initReset () {
       this.caripemeriksaanlab = null
       // this.permintaanLaborats = ''
       // this.form.prioritas_pemeriksaan = 'Tidak'

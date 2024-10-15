@@ -3,7 +3,7 @@
     <div class="loader" />
   </div> -->
 
-  <div class="fit absolute column flex-center bg-primary">
+  <div class="fit absolute column flex-center" :class="`bg-${bgColor}`">
     <q-spinner-box
       color="white"
       size="10em"
@@ -12,15 +12,19 @@
     <div class="text-white">
       Harap Tunggu
       <q-spinner-comment
-        color="primary"
+        :color="`${bgColor}`"
         size="2em"
       />
     </div>
-    <div class="f-18 text-secondary">
+    <div class="f-18 text-white">
       SEDANG SINKRON DATA
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps(['bgColor'])
+</script>
 
 <style lang="scss" scoped>
 $black : #000;

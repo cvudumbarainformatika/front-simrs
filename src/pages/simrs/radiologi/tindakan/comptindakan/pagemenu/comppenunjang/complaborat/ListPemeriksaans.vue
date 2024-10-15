@@ -192,15 +192,17 @@ const filterredTable = computed(() => {
 })
 
 // eslint-disable-next-line no-unused-vars
-function mapping(item) {
+function mapping (item) {
   const arr = item
-  const arr2 = arr.length > 0 ? arr.map(x =>
-    ({
-      gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
-      jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
-      aslix: x
-    })
-  ) : []
+  const arr2 = arr.length > 0
+    ? arr.map(x =>
+      ({
+        gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
+        jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
+        aslix: x
+      })
+    )
+    : []
   console.log('aslix', arr)
   const groupped = groupBy(arr2, gruper => gruper.gruper)
   console.log('group', groupped)
@@ -208,7 +210,7 @@ function mapping(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -226,14 +228,15 @@ function hapusItem(id) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function groupBy(list, keyGetter) {
+function groupBy (list, keyGetter) {
   const map = new Map()
   list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {
       map.set(key, [item])
-    } else {
+    }
+    else {
       collection.push(item)
     }
   })
