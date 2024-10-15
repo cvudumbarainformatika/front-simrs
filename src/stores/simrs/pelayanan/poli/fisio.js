@@ -2,13 +2,14 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
+import { usePengunjungRanapStore } from '../../ranap/pengunjung'
 
 export const useFisioPoli = defineStore('fisio-poli', {
   state: () => ({
     notas: [],
     form: {
       noreg: '', // rs1
-      nota: '', // rs2
+      nota: null, // rs2
       kodepoli: '', // rs10
       permintaan: '', // rs4
       kodesistembayar: '',
@@ -22,7 +23,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
   // },
   actions: {
 
-    async saveOrder(pasien) {
+    async saveOrder (pasien, isRanap) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -31,26 +32,47 @@ export const useFisioPoli = defineStore('fisio-poli', {
       this.form.kodepoli = pasien?.kodepoli
       this.form.kodedokter = pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
-      this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
+      this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA') ? null : this.form.nota
+      this.form.isRanap = isRanap
+
+      // console.log(this.form)
+
       try {
         const resp = await api.post('v1/simrs/penunjang/fisioterapi/permintaanfisioterapipoli', this.form)
-        // console.log('save penunjang fisio', resp.data)
+        console.log('save penunjang fisio', resp.data)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
+          const storeRanap = usePengunjungRanapStore()
           const isi = resp?.data?.result
           storePasien.injectDataPasien(pasien, isi, 'fisio')
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'fisio')
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
           this.loadingOrder = false
           this.initReset()
         }
         this.loadingOrder = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingOrder = false
       }
     },
 
-    async getNota(pasien) {
+    async getData (pasien) {
+      const payload = { params: { noreg: pasien?.noreg } }
+      const resp = await api.get('v1/simrs/penunjang/fisioterapi/getdata', payload)
+      // console.log('nota fisio', resp.data)
+      if (resp.status === 200) {
+        // this.setNotas(resp?.data)
+        const data = resp?.data
+        const storeRanap = usePengunjungRanapStore()
+        for (let i = 0; i < data.length; i++) {
+          const isi = data[i]
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'fisio')
+        }
+      }
+    },
+    async getNota (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/fisioterapi/getnota', payload)
       // console.log('nota fisio', resp.data)
@@ -59,14 +81,15 @@ export const useFisioPoli = defineStore('fisio-poli', {
       }
     },
 
-    setNotas(array) {
+    setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
+      this.notas.unshift('SEMUA')
       this.form.nota = this.notas[0]
     },
 
-    async hapusPermintaan(pasien, id) {
+    async hapusPermintaan (pasien, id) {
       this.loadingHapus = true
       const payload = { noreg: pasien?.noreg, id }
       try {
@@ -75,20 +98,23 @@ export const useFisioPoli = defineStore('fisio-poli', {
         // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
+          const storeRanap = usePengunjungRanapStore()
           storePasien.hapusDataFisio(pasien, id)
+          storeRanap.hapusDataInjectan(pasien, id, 'fisio')
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingHapus = false
         // console.log(error)
       }
     },
 
-    initReset() {
+    initReset () {
       this.form = {
         noreg: '', // rs1
-        nota: this.notas?.length ? this.notas[0] : '', // rs2
+        nota: this.notas?.length ? this.notas[0] : 'SEMUA', // rs2
         kodepoli: '', // rs10
         permintaan: '', // rs4
         kodesistembayar: '',

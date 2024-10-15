@@ -1,13 +1,11 @@
 <script setup>
 // import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
-import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+import { useFisioPoli } from 'src/stores/simrs/pelayanan/poli/fisio'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
-// const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
-const FormOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/compradiologi/FormOrder.vue'))
-const ListOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/compradiologi/ListOrder.vue'))
+const FormOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/compfisio/FormOrder.vue'))
+const ListOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/compfisio/ListOrder.vue'))
 
 const props = defineProps({
   pasien: {
@@ -24,7 +22,7 @@ const props = defineProps({
   }
 })
 
-const store = useRadiologiPoli()
+const store = useFisioPoli()
 
 onMounted(() => {
   Promise.all([
@@ -38,8 +36,8 @@ onMounted(() => {
 <template>
   <BaseLayout
     :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :split="50" nota
-    title-before="RADIOLOGHY"
-    title-after="List Permintaan Radiologi"
+    title-before="FISO"
+    title-after="List Permintaan Fisioterapi"
   >
     <template #form>
       <FormOrder :pasien="props.pasien" unit="ranap" />

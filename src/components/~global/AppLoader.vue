@@ -23,7 +23,12 @@
 </template>
 
 <script setup>
-defineProps(['bgColor'])
+defineProps({
+  bgColor: {
+    type: String,
+    default: 'primary'
+  }
+})
 </script>
 
 <style lang="scss" scoped>

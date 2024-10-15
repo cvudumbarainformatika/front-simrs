@@ -55,12 +55,17 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  unit: {
+    type: String,
+    default: null
   }
 })
 console.log(props?.pasien)
 
-function saveOrder() {
-  store.saveOrder(props.pasien).then(() => {
+function saveOrder () {
+  const isRanap = props?.unit === 'ranap'
+  store.saveOrder(props.pasien, isRanap).then(() => {
     formRef.value.resetValidation()
   })
 }

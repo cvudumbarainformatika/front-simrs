@@ -63,6 +63,7 @@ const nakes = computed(() => {
 const tab = ref('laborat')
 
 const lab = useLaboratPoli()
+
 onMounted(() => {
   tab.value = tabs.value[0]?.name
   lab.getNota(props.pasien)
@@ -82,14 +83,14 @@ const tabsxx = [
     icon: 'icon-mat-description',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/radiologi/IndexPage.vue'))
+  },
+  {
+    label: 'Fisio',
+    name: 'fisioterapi',
+    icon: 'icon-mat-personal_injury',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/fisio/IndexPage.vue'))
   }
-  // {
-  //   label: 'Anatomi',
-  //   name: 'fisik',
-  //   icon: 'icon-my-human-back-svgrepo-com',
-  //   nakes: ['1', '2'],
-  //   comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
-  // }
 ]
 
 const menu = computed(() => {

@@ -42,6 +42,7 @@ import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
+import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -50,6 +51,7 @@ const diagnosa = useDiagnosaStore()
 const diagnosakeperawatan = useDiagnosaKeperawatan()
 const tindakan = useTindakanRanapStore()
 const lab = useLaboratPoli()
+const radiologi = useRadiologiPoli()
 
 onMounted(() => {
   Promise.all([
@@ -61,7 +63,10 @@ onMounted(() => {
 
     // penunjang
 
-    lab.getMasterLaborat()
+    lab.getMasterLaborat(),
+    radiologi.getRadiologi(),
+    radiologi.getJenisRadiologi()
+
   ])
 })
 </script>

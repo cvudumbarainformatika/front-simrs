@@ -218,7 +218,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
     },
 
     async saveOrderLaboratBaru (pasien, isRanap) {
-      console.log('pasien', pasien)
+      // console.log('pasien', pasien)
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -318,10 +318,12 @@ export const useLaboratPoli = defineStore('laborat-poli', {
     },
     async hapusLaboratBaru (pasien, id) {
       this.loading = true
-      const payload = { id, noreg: pasien?.noreg }
+      const payload = { id, noreg: pasien?.noreg } // id ini bisa array
+
+      // console.log('payload', payload)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaru', payload)
-        // console.log('hapus laborat', resp)
+        console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const databaru = resp?.data?.result

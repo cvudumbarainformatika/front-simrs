@@ -13,79 +13,71 @@
           bg-color="white"
           dense
           :options="store.notas"
-          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'BARU' : store.form.nota}`"
+          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'SEMUA' : store.form.nota}`"
           style="min-width: 200px;"
         />
       </div>
     </q-bar>
-    <div class="col-grow bg-grey">
+    <div class="col full-height bg-grey-4">
       <div
-        v-if="filterredTable.length === 0"
+        v-if="pasien?.fisio.length === 0"
         class="column full-height flex-center text-white"
       >
         Belum Ada Permintaan Fisio Terapi
       </div>
       <q-scroll-area
         v-else
-        style="height:calc(100% - 1px)"
+        class="q-pa-sm"
+        style="height: calc(100% - 1px);"
       >
-        <q-list
-          separator
-        >
-          <transition-group>
-            <template
-              v-for="(item, i) in filterredTable"
-              :key="i"
-            >
-              <q-item class="bg-white list-move">
-                <q-item-section>
-                  <q-item-label
-                    lines="2"
-                    class="f-12"
-                  >
-                    <span class="">NOMOR</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
-                  </q-item-label>
-                  <!-- <q-item-label
+        <transition-group name="list">
+          <q-list
+            v-for="(item, i) in filterredTable"
+            :key="i"
+            class="q-mb-sm list-move"
+          >
+            <q-item class="bg-white list-move">
+              <q-item-section>
+                <q-item-label
+                  lines="2"
+                  class="f-12"
+                >
+                  <span class="">NOMOR</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
+                </q-item-label>
+                <!-- <q-item-label
                     lines="2"
                     class="f-12"
                   >
                     <span class=""> Tujuan : </span> <span class="text-weight-bold"> {{ item?.masterpenunjang?.rs2 }} </span>
                   </q-item-label> -->
-                  <q-item-label
-                    lines="2"
-                    class="f-12"
-                  >
-                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs4 }} </em>
-                  </q-item-label>
-                </q-item-section>
-
-                <q-item-section
-                  side
-                  top
+                <q-item-label
+                  lines="2"
+                  class="f-12"
                 >
-                  <div class="row q-my-xs">
-                    <!-- <q-btn
-                      flat
-                      round
-                      size="sm"
-                      icon="icon-mat-edit"
-                    /> -->
-                    <q-btn
-                      flat
-                      round
-                      size="sm"
-                      icon="icon-mat-delete"
-                      color="negative"
-                      :loading="store.loadingHapus"
-                      :disable="store.loadingHapus"
-                      @click="hapusItem(item?.id)"
-                    />
-                  </div>
-                </q-item-section>
-              </q-item>
-            </template>
-          </transition-group>
-        </q-list>
+                  <span>Keterangan : </span> <em class="text-accent">{{ item?.rs4 }} </em>
+                </q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <div class="row q-my-xs">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-delete"
+                    color="negative"
+                    :loading="store.loadingHapus"
+                    :disable="store.loadingHapus"
+                    @click="hapusItem(item?.id)"
+                  />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </transition-group>
       </q-scroll-area>
     </div>
   </div>
@@ -108,12 +100,12 @@ const props = defineProps({
 const filterredTable = computed(() => {
   const val = store?.form?.nota
   const arr = props?.pasien?.fisio
-  console.log('pasien ', props?.pasien)
-  console.log('pasien fisio', arr)
-  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
+  // console.log('pasien ', props?.pasien)
+  // console.log('pasien fisio', arr)
+  return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

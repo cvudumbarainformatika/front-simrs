@@ -157,10 +157,16 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  unit: {
+    type: String,
+    default: null
   }
 })
 
-function pilihPermintaan(val) {
+console.log('props', props?.pasien)
+
+function pilihPermintaan (val) {
   const arr = val.length ? val.map(x => x.val) : []
   const arr2 = val.length ? val.map(x => x.kode) : []
   const implode = arr.length ? arr.join('-. ') : ''
@@ -171,8 +177,9 @@ function pilihPermintaan(val) {
   modalOpen.value = false
 }
 
-function saveOrderRadiologi() {
-  store.saveRadiologi(props.pasien).then(() => {
+function saveOrderRadiologi () {
+  const isRanap = props?.unit === 'ranap'
+  store.saveRadiologi(props.pasien, isRanap).then(() => {
     formRef.value.resetValidation()
   })
 }

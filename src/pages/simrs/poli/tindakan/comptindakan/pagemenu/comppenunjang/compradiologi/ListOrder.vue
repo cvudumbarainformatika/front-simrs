@@ -13,30 +13,31 @@
           bg-color="white"
           dense
           :options="store.notas"
-          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'BARU' : store.form.nota}`"
+          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'SEMUA' : store.form.nota}`"
           style="min-width: 200px;"
         />
       </div>
     </q-bar>
-    <div class="col-grow bg-grey">
-      <!-- jika belum ada pemeriksaan -->
+    <div class="col full-height bg-grey-5">
       <div
-        v-if="filterredTable.length === 0"
+        v-if="pasien?.radiologi?.length === 0"
         class="column full-height flex-center text-white"
       >
         Belum Ada Permintaan Order
       </div>
       <q-scroll-area
+        style="height: calc(100% - 1px);"
         v-else
-        style="height:calc(100% - 1px)"
+        class="q-pa-sm"
       >
-        <q-list
-          separator
-        >
-          <transition-group>
-            <template
-              v-for="(item, i) in filterredTable"
-              :key="i"
+        <transition-group name="list">
+          <template
+            v-for="(item, i) in filterredTable"
+            :key="i"
+          >
+            <q-list
+              separator
+              class="q-mb-sm list-move"
             >
               <q-item class="bg-white">
                 <q-item-section>
@@ -76,9 +77,9 @@
                   />
                 </q-item-section>
               </q-item>
-            </template>
-          </transition-group>
-        </q-list>
+            </q-list>
+          </template>
+        </transition-group>
       </q-scroll-area>
     </div>
   </div>
@@ -99,12 +100,12 @@ const props = defineProps({
 })
 
 const filterredTable = computed(() => {
-  const val = store.form.nota
+  const val = store?.form?.nota
   const arr = props?.pasien?.radiologi
-  return arr.filter(x => x.rs2 === val)
+  return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
