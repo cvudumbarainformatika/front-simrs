@@ -35,6 +35,7 @@ export const registerJurnal = defineStore('register_jurnal', {
     contrapost: [],
     spmup: [],
     spmgu: [],
+    nihil: [],
     jurnals: []
   }),
   actions: {
@@ -52,6 +53,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.contrapost = resp.data.contrapost
             this.spmup = resp.data.spmup
             this.spmgu = resp.data.spmgu
+            this.nihil = resp.data.nihil
 
             this.loading = false
             this.serahterima()
@@ -301,6 +303,7 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr.filter((x) => x.nonpdls === el)[0]?.tglpindahbuku,
           notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
+          keterangan: 'Pencairan Tanpa BAST',
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
           // debit: rincidebit,
@@ -418,6 +421,7 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr.filter((x) => x.nonpdls === el)[0]?.tglpindahbuku,
           notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
+          keterangan: 'Pencairan Dengan BAST',
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
           // debit
@@ -525,8 +529,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = {
             kode: '1.1.01.04.01.0001',
             uraian: 'Kas di BLUD',
-            debit: parseFloat(er.jumlahspp),
-            kredit: 0
+            debit: 0,
+            kredit: parseFloat(er.jumlahspp)
           }
           kasblud.push(el)
         }
@@ -536,8 +540,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = {
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
-            debit: 0,
-            kredit: parseFloat(er.jumlahspp)
+            debit: parseFloat(er.jumlahspp),
+            kredit: 0
           }
           kasbend.push(el)
         }
@@ -545,11 +549,11 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
           kegiatan: arr[i].uraianPekerjaan,
-          debit_1: kasblud,
-          kredit_1: kasbend
+          debit_1: kasbend,
+          kredit_1: kasblud
         }
         dataspmup.push(obj)
-        console.log('SPM UP', dataspmup)
+        // console.log('SPM UP', dataspmup)
       }
 
       // DATA SPM GU //
@@ -563,7 +567,45 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = {
             kode: '1.1.01.04.01.0001',
             uraian: 'Kas di BLUD',
+            debit: 0,
+            kredit: parseFloat(er.jumlahspp)
+          }
+          kasblud.push(el)
+        }
+        const kasbend = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.jumlahspp),
+            kredit: 0
+          }
+          kasbend.push(el)
+        }
+        const obj = {
+          tanggal: arr[i].tglSpm,
+          notrans: arr[i].noSpm,
+          kegiatan: arr[i].uraianPekerjaan,
+          debit_1: kasbend,
+          kredit_1: kasblud
+        }
+        dataspmgu.push(obj)
+        // console.log('SPM GU', dataspmgu)
+      }
+
+      // DATA PENGEMBALIAN NIHIL //
+      const datanihil = []
+      for (let i = 0; i < this.nihil.length; i++) {
+        const arr = this.nihil
+
+        const kasblud = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            kode: '1.1.01.04.01.0001',
+            uraian: 'Kas di BLUD',
+            debit: parseFloat(er.jmlpengembalianreal),
             kredit: 0
           }
           kasblud.push(el)
@@ -575,23 +617,24 @@ export const registerJurnal = defineStore('register_jurnal', {
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
-            kredit: parseFloat(er.jumlahspp)
+            kredit: parseFloat(er.jmlpengembalianreal)
           }
           kasbend.push(el)
         }
         const obj = {
-          tanggal: arr[i].tglSpm,
-          notrans: arr[i].noSpm,
-          kegiatan: arr[i].uraianPekerjaan,
+          tanggal: arr[i].tgltrans,
+          notrans: arr[i].nopengembalian,
+          kegiatan: 'UP GU Nihil',
           debit_1: kasblud,
           kredit_1: kasbend
         }
-        dataspmgu.push(obj)
-        console.log('SPM GU', dataspmgu)
+        datanihil.push(obj)
+        // console.log('nihil', datanihil)
       }
 
       const gabungan = stp?.concat(
-        bastfarm, cairnonstp, cairstpz, cp, dataspmup, dataspmgu
+        bastfarm, cairnonstp, cairstpz, cp, dataspmup, dataspmgu,
+        datanihil
       )
       const sortByDate = (gabungan) =>
         gabungan.sort(({ tanggal: a }, { tanggal: b }) =>
