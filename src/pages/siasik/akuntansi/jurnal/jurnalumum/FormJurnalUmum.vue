@@ -3,6 +3,7 @@
   <div class="q-pa-md q-gutter-sm">
     <q-dialog
       v-model="store.dialog"
+      @hide="resetclose()"
       persistent
       :maximized="maximizedToggle"
       transition-show="slide-up"
@@ -192,7 +193,8 @@
 </template>
 <script setup>
 import { usejurnalumummanual } from 'src/stores/siasik/akuntansi/jurnal/umummanual'
-import { onBeforeMount, onMounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue'
 import FormRincianJurnalUmum from './FormRincianJurnalUmum.vue'
 import { formatRpDouble } from 'src/modules/formatter'
 
@@ -213,12 +215,19 @@ onMounted(() => {
   store.getRekenining50()
 })
 
-onBeforeMount(() => {
+function resetclose () {
   store.form.nobukti = ''
   store.form.keterangan = ''
   store.flagVerif = ''
   store.transall = []
-})
+}
+// onBeforeUnmount(() => {
+//   console.log('jalan')
+//   store.form.nobukti = ''
+//   store.form.keterangan = ''
+//   store.flagVerif = ''
+//   store.transall = []
+// })
 
 // function setTo (val) {
 //   console.log('sa', val)
