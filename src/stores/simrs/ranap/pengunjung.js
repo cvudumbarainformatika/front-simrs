@@ -30,6 +30,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     pasien: null
   }),
 
+  persist: true,
+
   actions: {
     async getData () {
       this.loading = true

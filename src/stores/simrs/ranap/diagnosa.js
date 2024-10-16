@@ -67,6 +67,20 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
       }
     },
 
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/diagnosa/getDiagnosaByNoreg', params)
+      // console.log('resp', resp)
+      if (resp.status === 200) {
+        this.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
     //= ===
     async cariIcd9 (val) {
       if (val.length < 3) {

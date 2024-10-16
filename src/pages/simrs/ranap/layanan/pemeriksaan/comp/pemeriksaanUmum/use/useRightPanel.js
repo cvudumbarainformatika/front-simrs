@@ -50,7 +50,7 @@ export default function useRightPanel (pasien) {
     //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
     // }
 
-    await store.getData(pasien)
+    // await store.getData(pasien)
   }
 
   return {

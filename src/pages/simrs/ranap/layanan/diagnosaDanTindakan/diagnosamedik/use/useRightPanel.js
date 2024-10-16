@@ -1,5 +1,5 @@
 import { useQuasar } from 'quasar'
-import { api } from 'src/boot/axios'
+// import { api } from 'src/boot/axios'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 // import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
@@ -37,17 +37,17 @@ export default function useRightPanel (pasien) {
   })
 
   const getData = async () => {
-    const params = {
-      params: {
-        noreg: pasien?.noreg
-      }
-    }
-    const resp = await api.get('v1/simrs/ranap/layanan/diagnosa/getDiagnosaByNoreg', params)
-    // console.log('resp', resp)
-    if (resp.status === 200) {
-      store.items = resp.data
-      store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
-    }
+    // const params = {
+    //   params: {
+    //     noreg: pasien?.noreg
+    //   }
+    // }
+    // const resp = await api.get('v1/simrs/ranap/layanan/diagnosa/getDiagnosaByNoreg', params)
+    // // console.log('resp', resp)
+    // if (resp.status === 200) {
+    //   store.items = resp.data
+    //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+    // }
   }
 
   const hapusItem = (id) => {

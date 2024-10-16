@@ -90,6 +90,27 @@ const tabsxx = [
     icon: 'icon-mat-personal_injury',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/fisio/IndexPage.vue'))
+  },
+  {
+    label: 'Operasi',
+    name: 'operasi',
+    icon: 'icon-mat-bedroom_parent',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/operasi/IndexPage.vue'))
+  },
+  {
+    label: 'Operasi IRD',
+    name: 'operasiIrd',
+    icon: 'icon-mat-bedroom_parent',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
+  },
+  {
+    label: 'BDRS',
+    name: 'bdrs',
+    icon: 'icon-mat-bedroom_parent',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
   }
 ]
 
