@@ -294,7 +294,7 @@
         @click="onSimpan()"
       />
 
-      <div class="q-pl-md">
+      <!-- <div class="q-pl-md">
         <q-btn
           unelevated
           color="dark"
@@ -314,7 +314,7 @@
       </div>
       <print-npdls
         v-model="store.dialogCetakNpd"
-      />
+      /> -->
     </div>
   </q-form>
 </template>
@@ -334,7 +334,7 @@ import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 const SelectSerahterima = defineAsyncComponent(() => import('./SelectSerahterima.vue'))
 
-const PrintNpdls = defineAsyncComponent(() => import('../print/PrintNpdls.vue'))
+// const PrintNpdls = defineAsyncComponent(() => import('../print/PrintNpdls.vue'))
 
 // defineProps({
 //   data: {

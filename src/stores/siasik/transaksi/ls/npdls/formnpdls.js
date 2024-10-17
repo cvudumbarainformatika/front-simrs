@@ -261,10 +261,10 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
       return new Promise((resolve, reject) => {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
-            // console.log('isian', resp)
+            console.log('nomer', this.form.nonpdls)
             this.form = []
             this.rinci = []
-            this.form.nonpdls = ''
+
             this.reqs.subtotal = ''
             const bst = dataBastFarmasi()
             bst.itembelanja = []
@@ -272,6 +272,10 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
             // Ini Buat Memunculkan Nomer NPD di Front ketika disimpan
             this.form.nonpdls = resp.data?.result?.nonpdls
             this.reqs.nonpdls = resp.data?.result?.nonpdls
+
+            this.form.nonpdls = ''
+            console.log('lihat nomer', this.form.nonpdls)
+
             this.loading = false
             notifSuccess(resp)
             resolve(resp.data)
@@ -395,7 +399,7 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         const sas = []
         for (let i = 0; i < this.listnpdls.length; i++) {
           const arr = this.listnpdls[i]
-          console.log('rincianqqq', arr)
+          // console.log('rincianqqq', arr)
           const head = {
             nonpk: arr.nonpk,
             nonpdls: arr.nonpdls,
