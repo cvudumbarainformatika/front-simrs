@@ -31,7 +31,7 @@
     >
       <thead>
         <tr class="bg-primary text-white max-width">
-          <th>NO. BUKTI </th>
+          <th>NO. BUKTI</th>
           <th>TANGGAL</th>
           <th>KETERANGAN</th>
           <th>KODE AKUN</th>
@@ -40,7 +40,14 @@
           <th>KREDIT</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="store.items == ''">
+        <tr>
+          <td colspan="7">
+            Belum Ada Data {{ store.items }}
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else>
         <tr
           v-for="(item , n) in store.items"
           :key="n"

@@ -191,7 +191,7 @@ const props = defineProps({
 //   // return arr
 // })
 
-function fillterTable(val) {
+function fillterTable (val) {
   if (val) {
     const s = store.notalaborat
     const res = val?.filter(x => x.nota === s)
@@ -203,15 +203,17 @@ function fillterTable(val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function mapping(item) {
+function mapping (item) {
   const arr = item
-  const arr2 = arr.length > 0 ? arr.map(x =>
-    ({
-      gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
-      jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
-      aslix: x
-    })
-  ) : []
+  const arr2 = arr.length > 0
+    ? arr.map(x =>
+      ({
+        gruper: x.pemeriksaanlab?.rs21 !== '' ? x.pemeriksaanlab?.rs21 : x.pemeriksaanlab?.rs2,
+        jenis: x.pemeriksaanlab?.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
+        aslix: x
+      })
+    )
+    : []
   // console.log('aslix', arr)
   const groupped = groupBy(arr2, gruper => gruper.gruper)
   // console.log('group', groupped)
@@ -219,7 +221,7 @@ function mapping(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function hapusItem(item) {
+function hapusItem (item) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -238,14 +240,15 @@ function hapusItem(item) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function groupBy(list, keyGetter) {
+function groupBy (list, keyGetter) {
   const map = new Map()
   list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {
       map.set(key, [item])
-    } else {
+    }
+    else {
       collection.push(item)
     }
   })

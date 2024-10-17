@@ -77,6 +77,7 @@
         <div class="q-pa-sm q-gutter-y-md" style="width: 50%">
           <q-select
             v-model="store.rinci.koderek50"
+            class="ellipsis-2-lines"
             label="Rekening Belanja"
             use-input
             outlined
@@ -464,19 +465,19 @@ function simpanRinci (val) {
 
   const unikjumlah = store.form.rincians.map((x) => x.itembelanja)
   const unik = unikjumlah.length ? [...new Set(unikjumlah)] : []
-  console.log('pxpxpxpx', unik)
+  // console.log('pxpxpxpx', unik)
   const arr = []
   for (let i = 0; i < unik.length; i++) {
     const el = unik[i]
-    console.log('roooow', el)
+    // console.log('roooow', el)
     const obj = {
       jumlah: store.form.rincians.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
       koderek108: el,
       sisapagu: store.rinci.sisapagu
 
     }
-    console.log('jumlahnya', obj?.jumlah)
-    console.log('sisa', obj?.sisapagu)
+    // console.log('jumlahnya', obj?.jumlah)
+    // console.log('sisa', obj?.sisapagu)
     if (obj?.jumlah > obj?.sisapagu) {
       store.form.rincians = ''
       return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
@@ -484,7 +485,7 @@ function simpanRinci (val) {
     arr.push(obj)
 
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
-    console.log('simpan', subtotal)
+    // console.log('simpan', subtotal)
     store.reqs.subtotal = subtotal
   }
 
@@ -539,14 +540,15 @@ function simpanRinciBast (val) {
       sisapagu: store.form.rincians.filter((z) => z.koderek108 === el)[0]?.sisapagu
 
     }
-    console.log('jumlahnya', obj?.jumlah)
-    console.log('sisa', obj?.sisapagu)
+    // console.log('jumlahnya', obj?.jumlah)
+    // console.log('sisa', obj?.sisapagu)
     if (obj?.jumlah > obj?.sisapagu) {
       return notifErrVue('Maaf Pengajuan Lebih dari Sisa Pagu')
     } arr.push(obj)
     const subtotal = arr.map((x) => x.jumlah).reduce((x, y) => x + y, 0)
     store.reqs.subtotal = subtotal
   }
+  store.disabled = true
 }
 // function onSimpan () {
 //   store.simpanNpdls()

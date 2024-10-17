@@ -140,7 +140,8 @@ const diagnosaRef = ref(null)
 const options = ref()
 
 const props = defineProps({
-  pasien: { type: Object, default: null }
+  pasien: { type: Object, default: null },
+  unit: { type: String, default: null }
 })
 
 onMounted(() => {
@@ -149,82 +150,11 @@ onMounted(() => {
   // cariRef.value.focus()
 })
 
-// async function filterFn(val, update, abort) {
-//   if (val.length < 1) {
-//     abort()
-//     return
-//   }
-//   update(
-//     () => {
-//       const needle = val.toLowerCase()
-//       // const arr = 'kdpemeriksaan'
-//       const splits = ['name']
-//       const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
-//       const filteredData = multiFilter(store.masterlaborat, splits, needle)
-//       options.value = filteredData
-//     },
-//     ref => {
-//       if (val !== '' && ref.options.length) {
-//         ref.setOptionIndex(-1)
-//         ref.moveOptionSelection(1, true)
-//       }
-//     }
-//   )
-// }
-
-// function insertList(val) {
-//   console.log(val)
-//   store.setDetails(val)
-//   diagnosaRef.value.focus()
-// }
-
-// function filterAs(val, update) {
-//   update(() => {
-//     if (val === '') {
-//       asalSumberSpesimenOptions.value = asalOptions
-//     } else {
-//       const needle = val.toLowerCase()
-//       asalSumberSpesimenOptions.value = asalOptions.filter(
-//         v => v.toLowerCase().indexOf(needle) > -1
-//       )
-//     }
-//   })
-// }
-
-// function createValueAsalSumberSpesimen(val, done) {
-//   if (val.length > 0) {
-//     if (!asalOptions.includes(val)) {
-//       asalOptions.push(val)
-//     }
-//     done(val, 'add-unique')
-//   }
-// }
-// function filterMs(val, update) {
-//   update(() => {
-//     if (val === '') {
-//       metodePengambilanSpesimenOptions.value = metodeOptions
-//     } else {
-//       const needle = val.toLowerCase()
-//       metodePengambilanSpesimenOptions.value = metodeOptions.filter(
-//         v => v.toLowerCase().indexOf(needle) > -1
-//       )
-//     }
-//   })
-// }
-
-// function createValueMetodePengambilanSpesimen(val, done) {
-//   if (val.length > 0) {
-//     if (!metodeOptions.includes(val)) {
-//       metodeOptions.push(val)
-//     }
-//     done(val, 'add-unique')
-//   }
-// }
-
 function saveOrderLaborat () {
   // INI diganti function baru
   // console.log('save', props.pasien)
-  store.saveOrderLaboratBaru(props.pasien).then(() => {
+  const isRanap = props?.unit === 'ranap'
+  store.saveOrderLaboratBaru(props.pasien, isRanap).then(() => {
     // console.log(formRef.value)
     formRef.value.resetValidation()
   })

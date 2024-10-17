@@ -24,10 +24,10 @@ export const useDietPoli = defineStore('diet-poli', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    async saveOrder(pasien) {
+    async saveOrder (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -50,12 +50,13 @@ export const useDietPoli = defineStore('diet-poli', {
           this.initReset()
         }
         this.loadingOrder = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingOrder = false
       }
     },
 
-    async getDiet(pasien) {
+    async getDiet (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/pelayanan/masterdiet', payload)
       // console.log('diet', resp.data)
@@ -64,14 +65,14 @@ export const useDietPoli = defineStore('diet-poli', {
       }
     },
 
-    setNotas(array) {
+    setNotas (array) {
       // const arr = array.map(x => x.nota)
       this.notas = array
       // this.notas.push('BARU')
       // this.form.nota = this.notas[0]
     },
 
-    async hapusPermintaan(pasien, id) {
+    async hapusPermintaan (pasien, id) {
       this.loadingHapus = true
       const payload = { noreg: pasien?.noreg, id }
       try {
@@ -84,13 +85,14 @@ export const useDietPoli = defineStore('diet-poli', {
           // this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingHapus = false
         // console.log(error)
       }
     },
 
-    initReset() {
+    initReset () {
       this.form = {
         noreg: '', // rs1
         nota: this.notas?.length ? this.notas[0] : '', // rs2

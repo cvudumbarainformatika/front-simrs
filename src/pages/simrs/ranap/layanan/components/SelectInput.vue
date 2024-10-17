@@ -11,11 +11,13 @@
     fill-input
     input-debounce="0"
     hide-bottom-space
+    :rules="[requiredRule]"
+    :lazy-rules="lazyRules"
     @update:model-value="emits('update:modelValue', $event)"
   />
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: 'label'
@@ -23,9 +25,24 @@ defineProps({
   options: {
     type: Array,
     default: () => []
+  },
+  valid: {
+    type: Object,
+    default: null
+  },
+  lazyRules: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emits = defineEmits(['update:modelValue'])
+
+const requiredRule = (val) => {
+  if (props.valid === null) {
+    return true
+  }
+  return (!!val || props.valid?.required || val === 0) || 'Harap diisi'
+}
 
 </script>

@@ -11,11 +11,12 @@
     input-debounce="0"
     hide-bottom-space
     hide-dropdown-icon
+    :rules="[requiredRule]"
     @input-value="(val)=> emits('setModel', val)"
   />
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: 'label'
@@ -23,8 +24,19 @@ defineProps({
   options: {
     type: Array,
     default: () => []
+  },
+  valid: {
+    type: Object,
+    default: null
   }
 })
 
 const emits = defineEmits(['setModel'])
+
+const requiredRule = (val) => {
+  if (props.valid === null) {
+    return true
+  }
+  return (!!val || props.valid?.required || val === 0) || 'Harap diisi'
+}
 </script>

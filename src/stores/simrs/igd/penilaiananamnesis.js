@@ -1,17 +1,20 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifErr, notifSuccess } from 'src/modules/utils'
+import { usePengunjungIgdStore } from './pengunjung'
 
 export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
   state: () => ({
     loadingForm: false,
     loadingHistory: false,
     items: [],
+    skortotal: '',
     usia: {},
     formpenilaians: {},
     humpty_dumpty: [],
     morse_fall: [],
     form: {
+      id: '',
       noreg: '',
       norm: '',
       barthel: '',
@@ -19,7 +22,7 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
       ontario: {},
       morse_fall: {},
       humpty_dumpty: {},
-      kdruang: 'POL014'
+      kdruang: ''
     }
   }),
   actions: {
@@ -48,13 +51,16 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
+      this.form.kdruang = 'POL014'
 
       try {
         const resp = await api.post('v1/simrs/ranap/layanan/pemeriksaan/penilaian/simpan', this.form)
         if (resp.status === 200) {
-          // const storePasien = usePengunjungIgdStore()
-          // const isi = resp.data.result
-          // storePasien.injectDataPasien(pasien, isi, 'triage')
+          const storePasien = usePengunjungIgdStore()
+          const isix = resp.data.result
+          const isi = isix[isix.length - 1]
+
+          storePasien.injectDataPasien(pasien, isi, 'penilaiananamnesis')
           notifSuccess(resp)
           this.initReset()
           this.loadingForm = false
@@ -114,6 +120,22 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
 
         resolve()
       })
+    },
+    async deleteData (pasien, id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/ranap/layanan/pemeriksaan/penilaian/hapus', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          storePasien.hapusDataPenilaian(pasien, id)
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        notifErr(error)
+      }
     }
+
   }
 })

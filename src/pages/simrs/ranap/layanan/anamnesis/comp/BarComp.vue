@@ -13,6 +13,14 @@
           Minimal Page
         </q-tooltip>
       </q-btn>
+      <q-btn v-if="btnMin" dense flat :icon="!minimize? btnMin : 'icon-mat-expand_less'" @click="emits('min')">
+        <q-tooltip v-if="!fullpage">
+          Sembunyikan
+        </q-tooltip>
+        <q-tooltip v-else>
+          Perlihatkan
+        </q-tooltip>
+      </q-btn>
     </div>
   </q-bar>
 </template>
@@ -42,8 +50,16 @@ defineProps({
   fullpage: {
     type: Boolean,
     default: false
+  },
+  btnMin: {
+    type: String,
+    default: null
+  },
+  minimize: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emits = defineEmits(['full'])
+const emits = defineEmits(['full', 'min'])
 </script>

@@ -9,7 +9,7 @@
             </div>
             <q-card-section class="col full-height scroll">
               <q-form ref="myForm" class="" @submit="onSubmit">
-                <FormComp :pasien="pasien" />
+                <FormComp :pasien="pasien" :kasus="kasus" />
                 <q-separator class="q-my-md" />
                 <q-btn label="Simpan" type="submit" color="primary" />
 
@@ -19,8 +19,13 @@
           </q-card>
         </div>
         <div v-if="!full" class="full-height col-4">
-          <q-card flat bordered class="fit">
-            ooi
+          <q-card flat bordered class="fit column bg-transparent">
+            <div class="col-auto">
+              <BarComp title="Informasi Penilain" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+            </div>
+            <div class="col full-height scroll">
+              <ListPenilaian :pasien="pasien" :kasus="kasus" />
+            </div>
           </q-card>
         </div>
       </div>
@@ -29,12 +34,18 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref } from 'vue'
+import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
 const FormComp = defineAsyncComponent(() => import('./penilaian/FormComp.vue'))
-defineProps({
+const ListPenilaian = defineAsyncComponent(() => import('./penilaian/ListPenilaian.vue'))
+const props = defineProps({
   pasien: {
+    type: Object,
+    default: () => null
+  },
+  kasus: {
     type: Object,
     default: () => null
   }
@@ -43,9 +54,23 @@ defineProps({
 const full = ref(false)
 const myForm = ref(null)
 
-const onSubmit = () => {
-  console.log('submit')
+const store = usePenilaianRanapStore()
 
+onMounted(() => {
+  // console.log('onMounted', props.pasien)
+
+  store.getUsia(props.pasien)
+})
+
+const jnsKasusKep = computed(() => {
+  if (props.kasus) {
+    return props.kasus?.gruping
+  }
+  return null
+})
+
+const onSubmit = () => {
+  store.saveData(jnsKasusKep.value, props.pasien)
   // myForm.value.validate().then((success) => {
   //   if (success) {
   //     myForm.value.reset()

@@ -26,8 +26,11 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     jnsKasusPasien: null,
     loading: false,
     pageLayanan: false,
-    loadingLayanan: false
+    loadingLayanan: false,
+    pasien: null
   }),
+
+  persist: true,
 
   actions: {
     async getData () {
@@ -63,6 +66,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       this.loadingLayanan = true
       const form = { noreg: pasien?.noreg }
 
+      this.persiapanInjectPasien(pasien)
+
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
           .then(resp => {
@@ -88,14 +93,44 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       })
     },
 
+    persiapanInjectPasien (pasien) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+      if (findPasien.length) {
+        const datax = findPasien[0]
+        // datax.newapotekrajal = data?.newapotekrajal ?? []
+        // datax.diagnosa = data?.diagnosa ?? []
+        datax.diagnosamedis = []
+        datax.anamnesis = []
+        datax.pemeriksaan = []
+        datax.penilaian = []
+        datax.tindakan = []
+        datax.diagnosakeperawatan = []
+        datax.cppt = []
+        datax.laborats = []
+        datax.radiologi = []
+        datax.fisio = []
+        // datax.dokter = data?.datasimpeg?.nama
+        // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
+        // this.pageLayanan = false
+      }
+    },
+
     setPasien (pasien, data) {
-      const findPasien = this.pasiens.filter(x => x?.noreg === data?.noreg)
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       // this.pasiens[indexPasien] = data
       // // console.log('wew', this.pasiens[indexPasien])
       if (findPasien.length) {
         const datax = findPasien[0]
-        datax.newapotekrajal = data?.newapotekrajal
-        datax.diagnosa = data?.diagnosa
+        datax.newapotekrajal = data?.newapotekrajal ?? []
+        datax.diagnosa = data?.diagnosa ?? []
+        // datax.diagnosamedis = []
+        // datax.anamnesis = []
+        // datax.pemeriksaan = []
+        // datax.penilaian = []
+        // datax.tindakan = []
+        // datax.diagnosakeperawatan = []
+        // datax.cppt = []
+        // datax.laborats = []
         // datax.dokter = data?.datasimpeg?.nama
         // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
         // this.pageLayanan = false
@@ -219,17 +254,38 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       // }
     },
 
+    gantiMemo (form, pasien) {
+      // console.log(form)
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/pelayanan/gantimemo', form)
+          .then(resp => {
+            // console.log(resp)
+            if (resp.status === 200) {
+              const findPasien = this.pasiens.filter(x => x.noreg === pasien?.noreg)
+              if (findPasien.length) {
+                const data = findPasien[0]
+                data.memodiagnosa = resp?.data?.result?.diagnosa
+              }
+            }
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+          })
+      })
+    },
+
     injectDataPasien (noreg, val, kode, arr) {
       const findPasien = this.pasiens.filter(x => x.noreg === noreg)
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
+        // data[kode] = val
         if (kode === 'kd_jeniskasus') {
           data[kode] = val
         }
         else {
-          const target = data[kode]?.find(x => x?.id === val?.id) ?? null
-          // console.log('inject target pasien', target)
+          const target = data[kode]?.find(x => x.id === val?.id) ?? null
+          // console.log('inject target pasien', target, kode, val, data)
           // console.log('inject kode pasien', kode)
           // console.log('inject isi pasien', val)
 
@@ -237,21 +293,50 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
             Object.assign(target, val)
           }
           else {
-          // if (kode === 'kd_jeniskasus') {
-          //   data[kode] = val
-          // }
-          // else if (kode === 'dokumenluar') {
-          //   const trg = data[kode]
-          //   if (trg) {
-          //     data[kode] = []
-          //     data[kode] = val
-          //   }
-          // }
-          // else {
-          //   data[kode]?.splice(0, 0, val)
-          // }
+            data[kode]?.splice(0, 0, val)
+            // data[kode].push(val)
           }
         }
+      }
+    },
+
+    injectDataArray (noreg, arr, kode) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === noreg)
+      // console.log('inject pasien', findPasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+
+        // const target = data[kode]?.find(x => x.id === val?.id) ?? null
+        // console.log('inject target pasien', target, kode, val, data)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
+
+        data[kode] = arr
+      }
+    },
+    deleteInjectanNull (noreg, kode) {
+      const findPasien = this.pasiens.filter(x => x.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => x?.id === null) ?? null
+        if (target) {
+          data[kode]?.splice(data[kode]?.findIndex(x => x?.id === null), 1)
+        }
+      }
+    },
+
+    hapusDataInjectan (pasien, id, key) {
+      console.log('hapusDataInjectan', key, id, pasien)
+
+      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+      console.log('find pasien', findPasien)
+
+      if (findPasien.length) {
+        const data = findPasien[0][key]
+        console.log('data', data)
+
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
       }
     }
   }

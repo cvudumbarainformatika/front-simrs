@@ -102,7 +102,7 @@ const editor = useEditor({
   }
 })
 
-function setcontenteditor(content) {
+function setcontenteditor (content) {
   // console.log($content)
   const isSame = editor.value.getHTML() === content
   if (isSame) {

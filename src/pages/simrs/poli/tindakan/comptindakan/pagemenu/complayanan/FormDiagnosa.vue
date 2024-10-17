@@ -217,7 +217,7 @@ const optionsDiagutama = ref([
   { label: 'Tidak', value: 'Sekunder', color: 'negative' }
 ])
 
-function onSubmit() {
+function onSubmit () {
   if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
     $q.notify({
       color: 'red-5',
@@ -225,19 +225,21 @@ function onSubmit() {
       icon: 'icon-mat-warning',
       message: 'Maaf Kasus Baru Atau Lama harus dipilih'
     })
-  } else if (!store.formdiagnosa.kasus) {
+  }
+  else if (!store.formdiagnosa.kasus) {
     $q.notify({
       color: 'red-5',
       textColor: 'white',
       icon: 'icon-mat-warning',
       message: 'Maaf Kasus Baru Atau Lama harus dipilih'
     })
-  } else {
+  }
+  else {
     emits('savePemeriksaan')
   }
 }
 
-function resetValidation() {
+function resetValidation () {
   // formRef.value.resetValidation()
 }
 defineExpose({ resetValidation })
@@ -251,7 +253,7 @@ onMounted(() => {
   })
 })
 
-function filterFn(val, update, abort) {
+function filterFn (val, update, abort) {
   if (val.length < 1) {
     abort()
     return
@@ -286,28 +288,31 @@ function filterFn(val, update, abort) {
   })
 }
 
-function kasusDiUbah(val) {
+function kasusDiUbah (val) {
   ganti(val)
 }
 
-function ganti(val) {
+function ganti (val) {
   const arr = store.listDiagnosa
   const arr2 = props.pasien?.diagnosa
   if (val === 'Baru' && arr2.length === 0) {
     // listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
     listDiagnosa.value = arr.length ? arr : []
-  } else if (val === 'Baru' && arr2.length > 0) {
+  }
+  else if (val === 'Baru' && arr2.length > 0) {
     // listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
     listDiagnosa.value = arr.length ? arr : []
-  } else if (val === 'Lama' && arr2.length === 0) {
+  }
+  else if (val === 'Lama' && arr2.length === 0) {
     listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
-  } else if (val === 'Lama' && arr2.length > 0) {
+  }
+  else if (val === 'Lama' && arr2.length > 0) {
     listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
   }
   arr2.length ? store.setFormDianosa('tipediagnosa', 'Sekunder') : store.setFormDianosa('tipediagnosa', 'Primer')
 }
 
-function diagnosaUtamaDiubah(val) {
+function diagnosaUtamaDiubah (val) {
   console.log(props.pasien)
   if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
     $q.notify({
@@ -322,7 +327,7 @@ function diagnosaUtamaDiubah(val) {
   }
 }
 
-function gantiMemo() {
+function gantiMemo () {
   // console.log('okkk')
   const form = {
     memo: memoDokter.value,
