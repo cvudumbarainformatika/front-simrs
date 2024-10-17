@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 // import { dateDbFormat, dateFullFormat, formatJam } from 'src/modules/formatter'
 import { usePengunjungPoliStore } from './pengunjung'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { usePengunjungRanapStore } from '../../ranap/pengunjung'
 
 export const useLaboratPoli = defineStore('laborat-poli', {
   state: () => ({
@@ -48,6 +49,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       details: []
     },
     loadingSaveLab: false,
+    loading: false,
     pemeriksaanslab: []
   }),
   actions: {
@@ -108,6 +110,29 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       })
       const arr = Array.from(map, ([name, value]) => ({ name, value }))
       return arr
+    },
+
+    async getData (pasien, waiting) {
+      this.loading = false
+      const payload = { params: { noreg: pasien?.noreg } }
+      try {
+        const resp = await api.get('v1/simrs/penunjang/laborat/getdata', payload)
+        // console.log('data permintaan laborat', resp)
+        if (resp.status === 200) {
+          const data = resp?.data
+          for (let i = 0; i < data.length; i++) {
+            const isi = data[i]
+            this.kirimKePasienKunjunganRanap(pasien, isi, 'laborats')
+          }
+        // const storePasien = usePengunjungRanapStore()
+        // storePasien.injectDataArray(pasien?.noreg, data, 'laborats')
+        }
+        this.loading = false
+      }
+      catch (error) {
+        this.loading = false
+        console.log(error)
+      }
     },
 
     async getNota (pasien) {
@@ -192,11 +217,12 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
     },
 
-    async saveOrderLaboratBaru (pasien) {
+    async saveOrderLaboratBaru (pasien, isRanap) {
+      // console.log('pasien', pasien)
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
-      this.loadingSave = true
+      this.loadingSaveLab = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
       this.form.kodedokter = pasien?.kodedokter
@@ -210,7 +236,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
-      this.form.unit_pengirim = pasien?.kodepoli
+      this.form.unit_pengirim = isRanap ? pasien?.kdgroup_ruangan : pasien?.kodepoli
       // const arr = []
 
       this.form.details = []
@@ -231,8 +257,9 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
 
       // const formbaru = { form: arr }
+      this.form.isRanap = isRanap
       const formbaru = this.form
-      // console.log('payload', formbaru)
+      console.log('payload', formbaru)
 
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
@@ -244,6 +271,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
             for (let i = 0; i < arr.length; i++) {
               const isi = arr[i]
               storePasien.injectDataPasien(pasien, isi, 'laborats')
+              if (isRanap) this.kirimKePasienKunjunganRanap(pasien, isi, 'laborats')
             }
           }
           this.setNotas(resp?.data?.nota)
@@ -267,6 +295,11 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       return 0
     },
 
+    kirimKePasienKunjunganRanap (pasien, isi, kode) {
+      const storePasien = usePengunjungRanapStore()
+      storePasien.injectDataPasien(pasien?.noreg, isi, kode)
+    },
+
     async hapusLaborat (pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
       try {
@@ -284,20 +317,30 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
     },
     async hapusLaboratBaru (pasien, id) {
-      const payload = { id, noreg: pasien?.noreg }
+      this.loading = true
+      const payload = { id, noreg: pasien?.noreg } // id ini bisa array
+
+      // console.log('payload', payload)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaru', payload)
-        // console.log('hapus laborat', resp)
+        console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const databaru = resp?.data?.result
           storePasien.hapusDataLaboratBaru(pasien, id, databaru)
+
+          // hapus data di pasien ranap jika dari ranap
+          const storeRanap = usePengunjungRanapStore()
+          storeRanap.injectDataArray(pasien?.noreg, databaru, 'laborats')
           this.setNotasx(resp?.data?.nota)
+          this.loading = false
           notifSuccess(resp)
         }
+        this.loading = false
       }
       catch (error) {
         console.log('hapus laborat', error)
+        this.loading = false
       }
     },
     setNotas (array) {

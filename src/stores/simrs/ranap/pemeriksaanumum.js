@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia'
+// eslint-disable-next-line no-unused-vars
+import { api } from 'src/boot/axios'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePengunjungRanapStore } from './pengunjung'
+import { notifSuccess } from 'src/modules/utils'
 
 export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-store', {
   state: () => ({
+
+    items: {
+      ranap: [],
+      igd: []
+    },
+    loadingSave: false,
     form: {
       // ini untuk 4.1
 
@@ -22,10 +33,12 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       spiritual: null,
       statusPsikologis: 'Tidak ada kelainan',
       ansuransi: 'Ada',
-      edukasi: [
-        { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
-        { label: 'Apakah membutuhkan edukasi?', value: null }
-      ],
+      // edukasi: [
+      //   { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
+      //   { label: 'Apakah membutuhkan edukasi?', value: null }
+      // ],
+      edukasi: {},
+      ketEdukasi: '',
 
       // kultural
       penyebabSakit: null,
@@ -88,13 +101,6 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
     },
 
     formNeonatal: {
-      appearance: null,
-      pulse: null,
-      grimace: null,
-      activity: null,
-      respiration: null,
-      apgarScore: 0,
-      apgarKet: null,
       lila: 0,
       lida: 0,
       lirut: 0,
@@ -149,7 +155,11 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       lengan: null,
       tungkai: null,
       rekoilTelinga: null,
-      grsTlpkKaki: null
+      grsTlpkKaki: null,
+
+      apgarScores: {},
+      apgarScore: 0,
+      apgarKet: null
 
     },
 
@@ -158,11 +168,118 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       lida: 0,
       lirut: 0,
       lilengtas: 0,
+      bbi: null,
+      bmi: null,
+      statusGizi: null,
+      kesimpulan: null,
 
-      eye: null,
-      motorik: null,
-      verbal: null
+      glasgow: {},
+      glasgowSkor: 0,
+      glasgowKet: null
     },
+
+    frmEdukasis: [
+      {
+        kode: 'tahuPenanganan',
+        label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?',
+        values: [
+          { value: 'Ya' },
+          { value: 'Tidak' }
+        ]
+      },
+      {
+        kode: 'butuhEdukasi',
+        label: 'Apakah membutuhkan edukasi?',
+        values: [
+          { value: 'Ya' },
+          { value: 'Tidak' }
+        ]
+      }
+    ],
+
+    frmApgarScores: [
+      {
+        kode: 'appearances',
+        label: 'Appearance (Warna Kulit)',
+        values: [
+          { value: 0, label: 'Seluruh tubuh bayi berwarna biru atau pucat.' },
+          { value: 1, label: 'Tubuh bayi berwarna merah muda, tetapi tangan dan kaki berwarna biru (sianosis akrosianosis).' },
+          { value: 2, label: 'Seluruh tubuh bayi berwarna merah muda (normal).' }
+        ]
+      },
+      {
+        kode: 'pulses',
+        label: 'P – Pulse (Denyut Jantung)',
+        values: [
+          { value: 0, label: 'Tidak ada denyut jantung.' },
+          { value: 1, label: 'Denyut jantung kurang dari 100 bpm.' },
+          { value: 2, label: 'Denyut jantung 100 bpm atau lebih.' }
+        ]
+      },
+      {
+        kode: 'grimaces',
+        label: 'Grimace (Respons terhadap rangsangan atau refleks)',
+        values: [
+          { value: 0, label: 'Tidak ada respons terhadap rangsangan.' },
+          { value: 1, label: 'Respons minimal (misalnya, meringis atau gerakan kecil) terhadap rangsangan.' },
+          { value: 2, label: 'Menangis, batuk, atau menarik diri dari rangsangan (respons aktif).' }
+        ]
+      },
+      {
+        kode: 'activitys',
+        label: 'Activity (Tonus Otot)',
+        values: [
+          { value: 0, label: 'Bayi lesu atau tidak bergerak.' },
+          { value: 1, label: 'Gerakan lengan dan kaki sedikit, tonus otot rendah.' },
+          { value: 2, label: 'Gerakan aktif, tonus otot baik.' }
+        ]
+      },
+      {
+        kode: 'respirations',
+        label: 'Respiration (Pernapasan)',
+        values: [
+          { value: 0, label: 'Tidak ada pernapasan (apnea).' },
+          { value: 1, label: 'Pernapasan lambat atau tidak teratur, menangis lemah.' },
+          { value: 2, label: 'Pernapasan baik, bayi menangis keras.' }
+        ]
+      }
+    ],
+
+    frmGlasgows: [
+      {
+        kode: 'eye',
+        label: 'Eye',
+        values: [
+          { value: 4, label: 'Membuka mata secara spontan.' },
+          { value: 3, label: 'Membuka mata sebagai respon terhadap perintah suara.' },
+          { value: 2, label: 'Membuka mata sebagai respon terhadap rangsangan nyeri.' },
+          { value: 1, label: 'Tidak ada respon.' }
+        ]
+      },
+      {
+        kode: 'motorik',
+        label: 'Motorik',
+        values: [
+          { value: 6, label: 'Mengikuti perintah.' },
+          { value: 5, label: 'Menarik diri dari nyeri (lokalisasi nyeri).' },
+          { value: 4, label: 'Menarik anggota tubuh dari rangsangan nyeri (withdrawal).' },
+          { value: 3, label: 'Respon fleksi abnormal (dekortikasi).' },
+          { value: 2, label: 'Respon ekstensi abnormal (deserebrasi).' },
+          { value: 2, label: 'Tidak ada respon motorik.' }
+        ]
+      },
+      {
+        kode: 'verbal',
+        label: 'Verbal',
+        values: [
+          { value: 5, label: 'Berorientasi, berbicara dengan jelas.' },
+          { value: 4, label: 'Bingung, tetapi masih bisa berbicara.' },
+          { value: 3, label: 'Mengucapkan kata-kata yang tidak sesuai (disorientasi parah).' },
+          { value: 2, label: 'Mengeluarkan suara yang tidak dimengerti (misalnya, geraman).' },
+          { value: 2, label: 'Tidak ada respon verbal.' }
+        ]
+      }
+    ],
 
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
     optionsTingkatkesadaran: [
@@ -178,8 +295,8 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       { value: 'Cemas', label: 'Cemas' },
       { value: 'Takut', label: 'Takut' },
       { value: 'Marah', label: 'Marah' },
-      { value: 'Sedih', label: 'Sedih' },
-      { value: 'Lain-lain', label: 'Lain-lain' }
+      { value: 'Sedih', label: 'Sedih' }
+      // { value: 'Lain-lain', label: 'Lain-lain' }
     ],
     penyebabs: ['Hukuman', 'Ujian', 'Takdir', 'Buatan Orang Lain', 'Keturunan'],
     komunikasi: ['Normal', 'Introvert', 'Extrovert'],
@@ -204,21 +321,21 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
     locheas: ['Rubra', 'Sanguinolenta', 'Serosa', 'Alba'],
     lukas: ['Utuh', 'Ruptur', 'Episiotomi'],
     derajats: ['1', '2', '3', '4', 'Lain-lain'],
-    appearances: [{ value: 0, label: 'Seluruh tubuh bayi berwarna biru atau pucat.' },
-      { value: 1, label: 'Tubuh bayi berwarna merah muda, tetapi tangan dan kaki berwarna biru (sianosis akrosianosis).' },
-      { value: 2, label: 'Seluruh tubuh bayi berwarna merah muda (normal).' }],
-    pulses: [{ value: 0, label: 'Tidak ada denyut jantung.' },
-      { value: 1, label: 'Denyut jantung kurang dari 100 bpm.' },
-      { value: 2, label: 'Denyut jantung 100 bpm atau lebih.' }],
-    grimaces: [{ value: 0, label: 'Tidak ada respons terhadap rangsangan.' },
-      { value: 1, label: 'Respons minimal (misalnya, meringis atau gerakan kecil) terhadap rangsangan.' },
-      { value: 2, label: 'Menangis, batuk, atau menarik diri dari rangsangan (respons aktif).' }],
-    activitys: [{ value: 0, label: 'Bayi lesu atau tidak bergerak.' },
-      { value: 1, label: 'Gerakan lengan dan kaki sedikit, tonus otot rendah.' },
-      { value: 2, label: 'Gerakan aktif, tonus otot baik.' }],
-    respirations: [{ value: 0, label: 'Tidak ada pernapasan (apnea).' },
-      { value: 1, label: 'Pernapasan lambat atau tidak teratur, menangis lemah.' },
-      { value: 2, label: 'Pernapasan baik, bayi menangis keras.' }],
+    // appearances: [{ value: 0, label: 'Seluruh tubuh bayi berwarna biru atau pucat.' },
+    //   { value: 1, label: 'Tubuh bayi berwarna merah muda, tetapi tangan dan kaki berwarna biru (sianosis akrosianosis).' },
+    //   { value: 2, label: 'Seluruh tubuh bayi berwarna merah muda (normal).' }],
+    // pulses: [{ value: 0, label: 'Tidak ada denyut jantung.' },
+    //   { value: 1, label: 'Denyut jantung kurang dari 100 bpm.' },
+    //   { value: 2, label: 'Denyut jantung 100 bpm atau lebih.' }],
+    // grimaces: [{ value: 0, label: 'Tidak ada respons terhadap rangsangan.' },
+    //   { value: 1, label: 'Respons minimal (misalnya, meringis atau gerakan kecil) terhadap rangsangan.' },
+    //   { value: 2, label: 'Menangis, batuk, atau menarik diri dari rangsangan (respons aktif).' }],
+    // activitys: [{ value: 0, label: 'Bayi lesu atau tidak bergerak.' },
+    //   { value: 1, label: 'Gerakan lengan dan kaki sedikit, tonus otot rendah.' },
+    //   { value: 2, label: 'Gerakan aktif, tonus otot baik.' }],
+    // respirations: [{ value: 0, label: 'Tidak ada pernapasan (apnea).' },
+    //   { value: 1, label: 'Pernapasan lambat atau tidak teratur, menangis lemah.' },
+    //   { value: 2, label: 'Pernapasan baik, bayi menangis keras.' }],
 
     // neonatal anatomy
     aktifs: ['Aktif', 'Tidak Aktif'],
@@ -269,11 +386,26 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
   },
   actions: {
 
-    initReset () {
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
+      console.log('resp right pemeriksaan', resp)
+      if (resp.status === 200) {
+        // store.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
+    initReset (data) {
       this.form = {
         // ini untuk 4.1
 
         // pemeriksaan umum
+        id: null,
         keadaanUmum: null,
         bb: 0,
         tb: 0,
@@ -290,10 +422,8 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         spiritual: null,
         statusPsikologis: 'Tidak ada kelainan',
         ansuransi: 'Ada',
-        edukasi: [
-          { label: 'Apakah pasien / keluarga tahu mengenai penyakit dan perawatannya?', value: null },
-          { label: 'Apakah membutuhkan edukasi?', value: null }
-        ],
+        edukasi: {},
+        ketEdukasi: null,
 
         // kultural
         penyebabSakit: null,
@@ -304,6 +434,18 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
         // pemeriksaan fisik
       }
+
+      // if (data) this.setForm('form', data, ['edukasi'], null)
+
+      if (data) {
+        Object.keys(this.form).forEach(key => {
+          if (key !== 'edukasi') {
+            this.form[key] = data[key] ?? null
+          }
+        })
+      }
+
+      if (data?.edukasi) this.setAnotherForm(this.frmEdukasis, data, 'edukasi', 'form')
 
       this.formKebidanan = {
         nyeri: 'Normal',
@@ -354,15 +496,17 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         gynecologiInsVgnToucher: null
 
       }
+      // if (data?.kebidanan) this.setForm('formKebidanan', data, [], 'kebidanan')
+
+      if (data?.kebidanan) {
+        Object.keys(this.formKebidanan).forEach(key => {
+          // if (key !== 'edukasi') {
+          this.formKebidanan[key] = data?.kebidanan[key] ?? null
+          // }
+        })
+      }
 
       this.formNeonatal = {
-        appearance: null,
-        pulse: null,
-        grimace: null,
-        activity: null,
-        respiration: null,
-        apgarScore: 0,
-        apgarKet: null,
         lila: 0,
         lida: 0,
         lirut: 0,
@@ -400,8 +544,9 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         oesofagus: null,
         abdomen: null,
         bab: null,
+        warnaBab: null,
 
-        warna: null,
+        warnaUrine: null,
         bak: null,
 
         laki: null,
@@ -416,22 +561,242 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         lengan: null,
         tungkai: null,
         rekoilTelinga: null,
-        grsTlpkKaki: null
+        grsTlpkKaki: null,
+
+        apgarScores: {},
+        apgarScore: 0,
+        apgarKet: null
       }
 
+      // if (data?.neonatal) this.setForm('formNeonatal', data, ['apgarScores'], 'neonatal')
+
+      if (data?.neonatal) {
+        Object.keys(this.formNeonatal).forEach(key => {
+          if (key !== 'apgarScores') {
+            this.formNeonatal[key] = data?.neonatal[key] ?? null
+          }
+        })
+      }
+
+      const apggar = {}
+      for (let i = 0; i < this.frmApgarScores.length; i++) {
+        const el = this.frmApgarScores[i]
+        apggar[el.kode] = el?.values?.find(x => x?.value === data?.neonatal?.apgarScores?.[el?.kode]?.value) ?? el?.values?.find(x => x?.value === 2) ?? null
+      }
+
+      this.formNeonatal.apgarScores = apggar
+
+      // console.log('formNeonatal: ', this.formNeonatal)
+
+      this.formPediatrik = {
+        lila: 0,
+        lida: 0,
+        lirut: 0,
+        lilengtas: 0,
+        bbi: null,
+        bmi: null,
+        statusGizi: null,
+        kesimpulan: null,
+
+        glasgow: {},
+        glasgowSkor: 0,
+        glasgowKet: null
+      }
+
+      // if (data?.pediatrik) this.setForm('formPediatrik', data, ['glasgow'], 'pediatrik')
+      if (data?.pediatrik) {
+        Object.keys(this.formPediatrik).forEach(key => {
+          if (key !== 'glasgow') {
+            this.formPediatrik[key] = data?.pediatrik[key] ?? null
+          }
+        })
+      }
+
+      const glass = {}
+      for (let i = 0; i < this.frmGlasgows.length; i++) {
+        const el = this.frmGlasgows[i]
+        glass[el.kode] = el?.values?.find(x => x?.value === data?.pediatrik?.glasgow?.[el?.kode]?.value) ?? null
+      }
+      this.formPediatrik.glasgow = glass
+
       this.hitungSkorApgar()
+      this.hitungSkorGlasgow()
     },
 
+    setForm (frm, data, $except = [], responseName) {
+      // set form
+      // console.groupCollapsed('[setForm]')
+      // console.log(`frm: ${frm}`)
+      // console.log('data: ', data)
+      // console.log('$except: ', $except)
+      const datax = responseName ? data[responseName] : data
+
+      if (data?.id) {
+        const keys = Object.keys(this[frm])
+        // console.log('keys:', keys)
+        for (const key of keys) {
+          if (!$except.includes(key)) {
+            // console.log(`set form ${frm}.${key} = ${data[key]}`)
+            this[frm][key] = datax[key] ?? null
+          }
+        }
+      }
+      // console.groupEnd()
+    },
+
+    setAnotherForm (arr, data, key, frm) {
+      let isData = null
+      if (key === 'edukasi') isData = JSON.parse(data[key]) ?? null
+      else isData = data[key]
+      console.log('isData: ', isData)
+
+      if (isData) {
+        console.groupCollapsed('[setAnotherForm]')
+        console.log(`arr: ${arr}`)
+        console.log('data: ', isData)
+
+        const frmX = {}
+        for (let i = 0; i < arr.length; i++) {
+          const el = arr[i]
+          frmX[el.kode] = el?.values?.find(x => x?.value === isData[el?.kode]?.value) ?? el?.values?.find(x => x?.value === 'Tidak') ?? null
+        }
+        this[frm][key] = frmX
+
+        console.log('frmX: ', this.form)
+        console.groupEnd()
+      }
+    },
     hitungSkorApgar () {
       let skor = 0
       let ket = null
-      skor = parseInt(this.formNeonatal?.appearance?.value ?? 0) + parseInt(this.formNeonatal?.pulse?.value ?? 0) + parseInt(this.formNeonatal?.grimace?.value ?? 0) + parseInt(this.formNeonatal?.activity?.value ?? 0) + parseInt(this.formNeonatal?.respiration?.value ?? 0)
-
-      if (skor >= 0 && skor <= 3) ket = 'Kondisi bayi umumnya baik. Bayi dalam keadaan sehat dan mungkin hanya memerlukan observasi rutin.'
+      // skor = parseInt(this.formNeonatal?.appearance?.value ?? 0) + parseInt(this.formNeonatal?.pulse?.value ?? 0) + parseInt(this.formNeonatal?.grimace?.value ?? 0) + parseInt(this.formNeonatal?.activity?.value ?? 0) + parseInt(this.formNeonatal?.respiration?.value ?? 0)
+      for (let i = 0; i < this.frmApgarScores.length; i++) {
+        const el = this.frmApgarScores[i]
+        skor += parseInt(this.formNeonatal?.apgarScores[el?.kode]?.value ?? 0)
+      }
+      if (skor >= 0 && skor <= 3) ket = 'Kondisi bayi kritis dan membutuhkan tindakan medis segera seperti resusitasi atau tindakan darurat lainnya.'
       else if (skor >= 4 && skor <= 6) ket = 'Bayi membutuhkan pemantauan dan mungkin memerlukan intervensi, seperti bantuan pernapasan atau oksigen.'
-      else if (skor >= 7) ket = 'Bayi membutuhkan pemantauan dan mungkin memerlukan intervensi, seperti bantuan pernapasan atau oksigen.'
+      else if (skor >= 7) ket = 'Kondisi bayi umumnya baik. Bayi dalam keadaan sehat dan mungkin hanya memerlukan observasi rutin.'
       this.formNeonatal.apgarScore = skor
       this.formNeonatal.apgarKet = ket
+    },
+    hitungSkorGlasgow () {
+      let skor = 0
+      let ket = null
+      // skor = parseInt(this.formNeonatal?.appearance?.value ?? 0) + parseInt(this.formNeonatal?.pulse?.value ?? 0) + parseInt(this.formNeonatal?.grimace?.value ?? 0) + parseInt(this.formNeonatal?.activity?.value ?? 0) + parseInt(this.formNeonatal?.respiration?.value ?? 0)
+      for (let i = 0; i < this.frmGlasgows.length; i++) {
+        const el = this.frmGlasgows[i]
+        skor += parseInt(this.formPediatrik?.glasgow[el?.kode]?.value ?? 0)
+      }
+      if (skor >= 13 && skor <= 15) ket = 'Cedera kepala ringan.'
+      else if (skor >= 12 && skor <= 9) ket = 'Cedera kepala sedang.'
+      else if (skor <= 8 && skor >= 3) ket = 'Cedera kepala berat (biasanya dianggap sebagai koma).'
+      this.formPediatrik.glasgowSkor = skor
+      this.formPediatrik.glasgowKet = ket
+    },
+
+    async saveForm (jnsKasus, pasien) {
+      // console.log('jnsKasus', jnsKasus, pasien)
+
+      this.loadingSave = true
+      const kasusKep = jnsKasus?.gruping
+      let formDefault = this.form
+      if (kasusKep === '4.1') {
+        formDefault = this.form
+      }
+      if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
+        formDefault.skreeninggizi = null
+        formDefault.keluhannyeri = null
+      }
+      const req = {
+        id: this.form.id,
+        noreg: pasien?.noreg ?? null,
+        norm: pasien?.norm,
+        kdruang: pasien?.kdruangan,
+        form: formDefault,
+        awal: '1',
+        formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
+        formNeonatal: kasusKep === '4.3' ? this.formNeonatal : null,
+        formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
+      }
+
+      // const timeStamp = Date.now()
+      const auth = useAplikasiStore()
+      const pushSementara = {
+        id: this.form?.id ?? null,
+        noreg: pasien?.noreg,
+        norm: pasien?.norm,
+        kdruang: pasien?.kdruangan ?? null,
+        ruangan: pasien?.ruangan ?? null,
+        nakes: auth?.user?.pegawai?.kdgroupnakes,
+        petugas: { nama: auth?.user?.nama }
+
+      }
+
+      // console.log('push frm sementara', pushSementara)
+
+      const pengunjung = usePengunjungRanapStore()
+      pengunjung.injectDataPasien(pasien?.noreg, pushSementara, 'pemeriksaan')
+
+      console.log('form, jenis kasus', req, jnsKasus)
+
+      try {
+        const resp = await api.post('v1/simrs/ranap/layanan/pemeriksaan/simpan', req)
+        console.log('simpan pemeriksaan', resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          const result = resp?.data?.result
+          if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
+        }
+        this.loadingSave = false
+      }
+      catch (error) {
+        console.log('error', error)
+        this.SPLICE_ITEMS_RANAP(this.items.ranap)
+        this.loadingSave = false
+      }
+    },
+
+    PISAH_DATA_RANAP_IGD (arr, pasien) {
+      const auth = useAplikasiStore()
+      const jns = auth?.user?.pegawai?.kdgroupnakes
+
+      const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns) ?? []
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
+
+      this.items.igd = igd
+      this.items.ranap = ranap
+
+      console.log('items', this.items)
+
+      const pengunjung = usePengunjungRanapStore()
+
+      // baru ada penyesuaian nakes
+      let form = null
+      const dokter = jns === '1' || jns === 1
+      if (dokter) {
+        if (ranap.length) { form = ranap[0] }
+        else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
+      }
+      else {
+        form = ranap.length ? ranap[0] : null
+      }
+
+      if (form) ranap.length ? form.id = ranap[0].id : form.id = null
+      const isianList = ranap.length ? ranap[0] : null
+
+      if (isianList) {
+        pengunjung.injectDataPasien(pasien?.noreg, isianList, 'pemeriksaan')
+        pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
+      }
+      this.initReset(form)
+      console.log('form', form)
+    },
+
+    SPLICE_ITEMS_RANAP (arr) {
+      const idx = arr?.findIndex(x => x.id === null)
+      this.items.ranap = arr.splice(1, idx)
     }
 
   }

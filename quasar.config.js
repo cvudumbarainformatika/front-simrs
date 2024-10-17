@@ -89,12 +89,16 @@ module.exports = configure(function (ctx) {
         viteConf.build = mergeConfig(viteConf.build, {
           chunkSizeWarningLimit: 5000
         })
-      }
+      },
       // viteVuePluginOptions: {},
 
-      // vitePlugins: [
-      //   [ 'package-name', { ..options.. } ]
-      // ]
+      vitePlugins: [
+        // [ 'package-name', { ..options.. } ]
+        // ['vue', { defineModels: true }]
+        // vue({
+        //   defineModels: true
+        // })
+      ]
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer

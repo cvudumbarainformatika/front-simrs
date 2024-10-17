@@ -700,7 +700,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       })
 
       // array = val
-      // console.log('metani items', array)
+      console.log('metani items', array)
     },
     getInitialData (val) {
       this.setParams('page', val)

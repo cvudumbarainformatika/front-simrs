@@ -5,6 +5,7 @@
     :maximized="true"
     transition-show="slide-left"
     transition-hide="slide-right"
+    @show="onShow"
   >
     <q-card
       square
@@ -77,7 +78,8 @@
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
-                  :kasus="store.jnsKasusPasien"
+                  :kasus="store?.jnsKasusPasien"
+                  :nakes="nakes"
                   depo="rnp"
                 />
               </template>
@@ -96,11 +98,24 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 // import HeaderLayout from './layoutcomp/HeaderLayout.vue'
 // import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 // import AppLoader from 'src/components/~global/AppLoader.vue'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+// import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
+import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
+import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
+import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
+import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+import { useFisioPoli } from 'src/stores/simrs/pelayanan/poli/fisio'
+import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
+// import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -120,6 +135,21 @@ const props = defineProps({
 })
 
 const store = usePengunjungRanapStore()
+const auth = useAplikasiStore()
+const anamnesis = useAnamnesisRanapStore()
+const pemeriksaan = usePemeriksaanUmumRanapStore()
+const penilaian = usePenilaianRanapStore()
+const diagnosa = useDiagnosaStore()
+const diagnosaKeperawatan = useDiagnosaKeperawatan()
+const lab = useLaboratPoli()
+const rad = useRadiologiPoli()
+const fisio = useFisioPoli()
+const tindakan = useTindakanRanapStore()
+const asUlang = useAsessmentUlangRanapStore()
+
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
+})
 
 const menus = ref([
   // {
@@ -132,25 +162,76 @@ const menus = ref([
     name: 'AnamnesisPage',
     label: 'Anamnesse $ Riwayat',
     icon: 'icon-mat-medical_information',
+    nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
   },
   {
     name: 'PemeriksaanPage',
     label: 'Pemeriksaan',
     icon: 'icon-my-stethoscope',
+    nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
+  },
+  {
+    name: 'DiagTindPage',
+    label: 'Diagnosa & Tindakan',
+    icon: 'icon-mat-health_and_safety',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
+  },
+  {
+    name: 'Penunjang',
+    label: 'Penunjang',
+    icon: 'icon-mat-post_add',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./penunjang/IndexPage.vue')))
+  },
+  {
+    name: 'AsessmentUlang',
+    label: 'Asessment Ulang',
+    icon: 'icon-fa-book-medical-solid',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
   },
   {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
+    nakes: ['1'],
     comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
   }
 ])
+
 const menu = ref(menus.value[0])
+
+onMounted(() => {
+  menu.value = menus.value[0]
+})
 
 function menuDiganti (val) {
   menu.value = val
+}
+
+const onShow = () => {
+  console.log('pasien', props.pasien)
+  Promise.all([
+    anamnesis.getRiwayatKehamilan(props.pasien),
+    anamnesis.getData(props.pasien),
+    pemeriksaan.getData(props.pasien),
+    penilaian.getData(props.pasien),
+    diagnosa.getData(props.pasien),
+    diagnosaKeperawatan.getDiagnosaByNoreg(props.pasien),
+    lab.getNota(props.pasien),
+    lab.getData(props.pasien),
+    rad.getNota(props.pasien),
+    rad.getData(props.pasien),
+    fisio.getNota(props.pasien),
+    fisio.getData(props.pasien),
+    tindakan.getNota(props.pasien),
+    tindakan.getTindakan(props.pasien),
+    asUlang.getData(props.pasien)
+
+  ])
 }
 
 watchEffect(() => {

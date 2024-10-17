@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
 import { notifErr, notifSuccess } from 'src/modules/utils'
+import { usePengunjungRanapStore } from '../../ranap/pengunjung'
 // import { notifSuccess } from 'src/modules/utils'
 
 export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
@@ -22,7 +23,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getData() {
+    async getData () {
       const resp = await api.get('v1/simrs/pelayanan/diagnosakeperawatan')
       // console.log('diagnosa keperawatan', resp)
       if (resp.status === 200) {
@@ -30,11 +31,20 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
       }
     },
 
-    setDiagnosa(val) {
+    async getDiagnosaByNoreg (pasien) {
+      const resp = await api.get(`v1/simrs/pelayanan/listdiagnosakeperawatan?noreg=${pasien?.noreg}`)
+      console.log('get diagnosa', resp)
+      if (resp.status === 200) {
+        // this.selectDiagnosa = resp.data
+        this.injectToKunjunganPasien(pasien, resp.data, 'ranap')
+      }
+    },
+
+    setDiagnosa (val) {
       this.diagnosa = val
     },
 
-    async simpanDiagnosadanIntervensi(pasien) {
+    async simpanDiagnosadanIntervensi (pasien, cat) {
       this.loadingSave = true
 
       let intv = []
@@ -72,35 +82,64 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
         const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
         // console.log('simpan', resp)
         if (resp.status === 200) {
-          const storePasien = usePengunjungPoliStore()
-          const arr = resp.data.result
-          for (let i = 0; i < arr.length; i++) {
-            const isi = arr[i]
-            storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
-          }
+          this.injectToKunjunganPasien(pasien, resp.data.result, cat)
           notifSuccess(resp)
           this.initReset()
           this.loadingSave = false
         }
         this.loadingSave = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log(error)
         notifErr(error)
       }
     },
 
-    async deleteDiagnosa(pasien, id) {
+    injectToKunjunganPasien (pasien, data, cat) {
+      if (cat === 'ranap') {
+        const storePasien = usePengunjungRanapStore()
+        const arr = data
+        for (let i = 0; i < arr.length; i++) {
+          const isi = arr[i]
+          storePasien.injectDataPasien(pasien?.noreg, isi, 'diagnosakeperawatan')
+        }
+      }
+      else {
+        const storePasien = usePengunjungPoliStore()
+        const arr = data.result
+        for (let i = 0; i < arr.length; i++) {
+          const isi = arr[i]
+          storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
+        }
+      }
+    },
+
+    async deleteDiagnosa (pasien, id, cat) {
       const payload = { id }
       const resp = await api.post('v1/simrs/pelayanan/deletediagnosakeperawatan', payload)
       // console.log('delete', resp)
       if (resp.status === 200) {
-        const storePasien = usePengunjungPoliStore()
-        storePasien.hapusDataDiagnosaKeperawatan(pasien, id)
+        // const storePasien = usePengunjungPoliStore()
+        // storePasien.hapusDataDiagnosaKeperawatan(pasien, id)
+        this.deleteInjectan(pasien, id, cat)
         notifSuccess(resp)
       }
     },
 
-    initReset() {
+    deleteInjectan (pasien, id, cat) {
+      console.log('cat', cat, id, pasien)
+
+      if (cat === 'ranap') {
+        const storePasien = usePengunjungRanapStore()
+        storePasien.hapusDataInjectan(pasien, id, 'diagnosakeperawatan')
+      }
+      else {
+        const storePasien = usePengunjungPoliStore()
+        storePasien.hapusDataInjectan(pasien, id, 'diagnosakeperawatan')
+      }
+    },
+
+    initReset () {
       this.diagnosa = ''
       this.selectDiagnosa = []
     }

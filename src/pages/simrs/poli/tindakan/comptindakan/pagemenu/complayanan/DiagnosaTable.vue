@@ -134,7 +134,7 @@ const props = defineProps({
   }
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

@@ -320,7 +320,8 @@ const asalSumberSpesimenOptions = ref([])
 const metodePengambilanSpesimenOptions = ref([])
 
 const props = defineProps({
-  pasien: { type: Object, default: null }
+  pasien: { type: Object, default: null },
+  unit: { type: String, default: null }
 })
 
 onMounted(() => {
@@ -403,16 +404,17 @@ onMounted(() => {
 //   }
 // }
 
-function saveOrderLaborat() {
+function saveOrderLaborat () {
   // INI diganti function baru
-  store.saveOrderLaboratBaru(props.pasien).then(() => {
+  const isRanap = props?.unit === 'ranap'
+  store.saveOrderLaboratBaru(props.pasien, isRanap).then(() => {
     // console.log(formRef.value)
     formRef.value.resetValidation()
     // cariRef.value.focus()
   })
 }
 
-function pilihPemeriksaans(val) {
+function pilihPemeriksaans (val) {
   // console.log(val)
   modalOpen.value = false
   const arr = val.length ? val.map(x => x.name) : []

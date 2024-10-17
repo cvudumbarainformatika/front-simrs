@@ -1,8 +1,19 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePengunjungRanapStore } from './pengunjung'
+import { notifSuccess } from 'src/modules/utils'
 
 export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
   state: () => ({
+    usia: 0,
+    items: {
+      ranap: [],
+      igd: []
+    },
+
+    form: null,
+
     barthels: [],
     formBarthel: null,
 
@@ -31,7 +42,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/master/penilaian')
           .then(resp => {
-            console.log('resp', resp)
+            console.log('mster penilaian', resp)
 
             if (resp.status === 200) {
               const arr = resp.data
@@ -46,11 +57,25 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       })
     },
 
+    async getData (pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+      const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/penilaian', params)
+      console.log('resp right', resp)
+      if (resp.status === 200) {
+        // store.items = resp.data
+        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      }
+    },
+
     getGroupArray (arr) {
       this.barthels = arr?.find(item => item.kode === 'barthel') ?? null
       this.nortons = arr?.find(item => item.kode === 'norton') ?? null
-      this.humptys = arr?.find(item => item.kode === 'humpty-dumpty') ?? null
-      this.morses = arr?.find(item => item.kode === 'morse-fall') ?? null
+      this.humptys = arr?.find(item => item.kode === 'humpty_dumpty') ?? null
+      this.morses = arr?.find(item => item.kode === 'morse_fall') ?? null
       this.ontarios = arr?.find(item => item.kode === 'ontario') ?? null
     },
 
@@ -65,17 +90,35 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       return months
     },
 
-    initReset (pasien) {
-      const ageInMonth = this.calculateAgeInMonths(pasien?.tglLahir ?? null)
+    getUsia (pasien) {
+      const ageInMonth = this.calculateAgeInMonths(pasien?.tgllahir ?? null)
       const usia = Math.floor(ageInMonth / 12)
+      this.usia = usia
+      // console.log('usia: ', usia)
+      // console.log('pasien: ', pasien)
+    },
+
+    initReset (pasien, data) {
+      const usia = this.usia
+      // console.log('usia from store', usia)
+
+      this.form = {
+        id: data?.id ?? null
+      }
 
       // const barthels = []
       const formBarthel = {}
       // if (this.barthels?.form?.length > 0) {
       for (let i = 0; i < this.barthels?.form?.length; i++) {
         const el = this.barthels.form[i]
-        formBarthel[el.kode] = el.categories[el.categories.length - 1]
+        if (data?.barthel) {
+          formBarthel[el.kode] = el?.categories?.find(item => item.skor === data?.barthel[el.kode]?.skor) ?? el.categories[el.categories.length - 1] ?? null
+        }
+        else {
+          formBarthel[el.kode] = el.categories[el.categories.length - 1] ?? null
+        }
       }
+      // formBarthel['kode'] = usia
       this.formBarthel = formBarthel
 
       // norton
@@ -95,20 +138,32 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       // console.log('humptys', this.humptys)
       // console.log('humptys pasien', pasien?.kelamin)
-      const formHumpty = {}
-      for (let i = 0; i < this.humptys?.form?.length; i++) {
-        const el = this.humptys.form[i]
-        if (el.kode === 'usia') {
-          formHumpty.usia = el.categories?.find(x => x?.skor === cat || x.skor === cat?.toString())
-        }
-        else if (el.kode === 'kelamin') {
-          formHumpty.kelamin = el.categories?.find(x => x?.label === pasien?.kelamin) ?? null
-        }
-        else {
-          formHumpty[el.kode] = el.categories[el.categories.length - 1]
+      let formHumpty = {}
+      if (data?.humpty_dumpty) {
+        formHumpty = { ...data?.humpty_dumpty }
+
+        Object.keys(formHumpty).forEach(key => {
+          // console.log('key humpty', key)
+          formHumpty[key] = this.humptys?.form?.find(x => x.kode === key)?.categories?.find(x => x?.skor === formHumpty[key]?.skor) ?? null
+        })
+        // console.log('formHumpty', formHumpty)
+      }
+      else {
+        for (let i = 0; i < this.humptys?.form?.length; i++) {
+          const el = this.humptys.form[i]
+          if (el.kode === 'usia') {
+            formHumpty.usia = el.categories?.find(x => x?.skor === cat || x.skor === cat?.toString()) ?? null
+          }
+          else if (el.kode === 'kelamin') {
+            formHumpty.kelamin = el.categories?.find(x => x?.label === pasien?.kelamin) ?? null
+          }
+          else {
+            formHumpty[el.kode] = el.categories[el.categories.length - 1] ?? null
+          }
         }
       }
       this.formHumpty = formHumpty
+      // console.log('formHumpty', this.formHumpty)
 
       // morse-fall
       const formMorse = {}
@@ -155,7 +210,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       // console.log('formBarthel', this.formBarthel)
 
       const arr = Object.keys(this.formBarthel).map(key => this.formBarthel[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 0 && totalSkor <= 4) {
         ket = 'Ketergantungan Total'
@@ -194,7 +249,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formNorton.skorNorton = result
       const arr = Object.keys(this.formNorton).map(key => this.formNorton[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 14) {
         ket = 'Risiko kecil'
@@ -224,7 +279,9 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formHumpty.skorHumpty = result
       const arr = Object.keys(this.formHumpty).map(key => this.formHumpty[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      // console.log('arr', arr)
+
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0) ?? 0
 
       if (totalSkor >= 6 && totalSkor <= 11) {
         ket = 'Risiko rendah'
@@ -234,9 +291,10 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
         ket = 'Risiko tinggi'
         kuning = true
       }
+
       result = {
         skor: totalSkor,
-        label: ket,
+        label: ket ?? null,
         kuning
       }
       this.formHumpty.skorHumpty = result
@@ -252,7 +310,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       this.formMorse.skorMorse = result
       const arr = Object.keys(this.formMorse).map(key => this.formMorse[key])
-      const totalSkor = arr.reduce((a, b) => a + b.skor, 0)
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
 
       if (totalSkor >= 45) {
         ket = 'Risiko tinggi'
@@ -285,20 +343,39 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       this.formOntario.skorOntario = result
       // const arr = Object.keys(this.formOntario).map(key => this.formOntario[key])
       const arr = Object.keys(this.formOntario)
-      const elim = ['transfertk', 'mobilitas']
-      const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b.skor, 0)
-      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b.skor, 0)
-      // console.log('arr ontario', skor1)
+
+      const rwytJth = ['riwayatJth_a', 'riwayatJth_b']
+      let gbng1 = arr.filter((xx) => rwytJth.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng1 >= 6 ? gbng1 = 6 : gbng1 = 0
+
+      const mental = ['statusMental_a', 'statusMental_b', 'statusMental_c']
+      let gbng2 = arr.filter((xx) => mental.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng2 >= 14 ? gbng2 = 14 : gbng2 = 0
+
+      const pnglihatan = ['penglihatan_a', 'penglihatan_b', 'penglihatan_c']
+      const gbng3 = arr.filter((xx) => pnglihatan.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0) >= 1 ? 1 : 0
+      // gbng3 >= 1 ? gbng3 = 1 : gbng3 = 0
+
+      const kemih = ['berkemih_a']
+      let gbng4 = arr.filter((xx) => kemih.includes(xx)).map(x => this.formOntario[x]).reduce((a, b) => a + b?.skor, 0)
+      gbng4 >= 2 ? gbng4 = 2 : gbng4 = 0
+
+      // console.log('arr gabung', gbng3)
       // console.log('arr ontario 2', skor2)
-      // console.log('arr', arr)
+      console.log('arr', arr)
+
+      const elim = ['transfertk', 'mobilitas']
+      // const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
+      let skor2 = elim.map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)
+
       if (skor2 >= 0 && skor2 <= 3) {
-        skor2 = 3
+        skor2 = 0
       }
       else if (skor2 >= 4 && skor2 <= 6) {
         skor2 = 7
       }
 
-      const totalSkor = skor1 + skor2
+      const totalSkor = (gbng1 + gbng2 + gbng3 + gbng4) + (skor2)
 
       if (totalSkor >= 17) {
         ket = 'Risiko tinggi'
@@ -319,6 +396,86 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       }
       this.formOntario.skorOntario = result
       // console.log('result ontario', this.formOntario)
+    },
+
+    async saveData (jnsKasus, pasien) {
+      console.groupCollapsed('[setDataForm]')
+      const frm = {
+        barthel: (this.barthels.grupings?.includes(jnsKasus)) ? this.formBarthel : null,
+        norton: (this.nortons.grupings?.includes(jnsKasus)) ? this.formNorton : null,
+        humpty_dumpty: (this.humptys.grupings?.includes(jnsKasus) && (this.usia < 18)) ? this.formHumpty : null,
+        morse_fall: (this.morses.grupings?.includes(jnsKasus) && (this.usia >= 18 && this.usia < 60)) ? this.formMorse : null,
+        ontario: (this.ontarios.grupings?.includes(jnsKasus) && (this.usia >= 60)) ? this.formOntario : null,
+        kdruang: pasien?.kdruangan ?? null,
+        noreg: pasien?.noreg,
+        norm: pasien?.norm,
+        awal: '1',
+        id: this.form?.id ?? null
+      }
+      console.log('ooi: ', this.humptys.grupings?.includes(jnsKasus))
+      console.log('ooi2: ', jnsKasus, this.humptys.grupings?.includes(jnsKasus))
+
+      console.log('form: ', frm)
+
+      // const timeStamp = Date.now()
+      const auth = useAplikasiStore()
+      const pushSementara = {
+        id: this.form?.id ?? null,
+        noreg: pasien?.noreg,
+        norm: pasien?.norm,
+        kdruang: pasien?.kdruangan ?? null,
+        ruangan: pasien?.ruangan ?? null,
+        nakes: auth?.user?.pegawai?.kdgroupnakes,
+        petugas: { nama: auth?.user?.nama }
+
+      }
+
+      // console.log('push frm sementara', pushSementara)
+
+      const pengunjung = usePengunjungRanapStore()
+      pengunjung.injectDataPasien(pasien?.noreg, pushSementara, 'penilaian')
+
+      console.log('form, jenis kasus', frm, jnsKasus)
+
+      try {
+        const resp = await api.post('v1/simrs/ranap/layanan/pemeriksaan/penilaian/simpan', frm)
+        console.log('simpan penilaian', resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          const result = resp?.data?.result
+          if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
+        }
+        this.loadingSave = false
+      }
+      catch (error) {
+        console.log('error', error)
+        // this.SPLICE_ITEMS_RANAP(this.items.ranap)
+        this.loadingSave = false
+      }
+
+      console.groupEnd()
+    },
+
+    PISAH_DATA_RANAP_IGD (arr, pasien) {
+      const auth = useAplikasiStore()
+      const jns = auth?.user?.pegawai?.kdgroupnakes
+
+      const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.group_nakes === jns) ?? []
+
+      this.items.igd = igd
+      this.items.ranap = ranap
+
+      console.log('items', this.items)
+
+      const pengunjung = usePengunjungRanapStore()
+
+      const form = ranap.length ? ranap[0] : null
+      if (form) {
+        pengunjung.injectDataPasien(pasien?.noreg, form, 'penilaian')
+        pengunjung.deleteInjectanNull(pasien?.noreg, 'penilaian')
+      }
+      this.initReset(pasien, form)
     }
 
   }

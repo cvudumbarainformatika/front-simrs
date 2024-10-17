@@ -12,9 +12,15 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="full-height" :class="full ? 'col-0' : 'col-4'">
-          <q-card flat bordered class="fit">
-            ooi
+        <div v-if="!full" class="full-height" :class="full ? 'col-0' : 'col-4'">
+          <q-card flat bordered class="fit column bg-transparent">
+            <div class="col-auto">
+              <BarComp title="Informasi Pemeriksaan Umum & Fisik" bg-color="bg-dark" text-color="text-white" :btn-full="false" />
+            </div>
+            <div class="col full-height scroll">
+              <!-- <ListPemeriksaanUmum :pasien="pasien" :kasus="kasus" /> -->
+              {{ props.nakes }}
+            </div>
           </q-card>
         </div>
       </div>
@@ -25,12 +31,20 @@
 <script setup>
 import { defineAsyncComponent, ref } from 'vue'
 
-const BarComp = defineAsyncComponent(() => import('../../components/BarComp.vue'))
+const BarComp = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BarComp.vue'))
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: () => null
+  },
+  kasus: {
+    type: Object,
+    default: () => null
+  },
+  nakes: {
+    type: String,
+    default: null
   }
 })
 

@@ -18,7 +18,7 @@
         <list-loading v-if="store.loading" />
         <list-pengunjung v-else />
       </q-scroll-area>
-      <div class=" absolute-bottom bg-primary text-white z-top">
+      <div class="absolute-bottom bg-primary text-white z-top">
         <footer-page
           v-if="store.pasiens.length"
           :meta="store.meta"
@@ -36,6 +36,37 @@ import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+import { onMounted } from 'vue'
+import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
+import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
+import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
+
+const penilaian = usePenilaianRanapStore()
+const diagnosa = useDiagnosaStore()
+const diagnosakeperawatan = useDiagnosaKeperawatan()
+const tindakan = useTindakanRanapStore()
+const lab = useLaboratPoli()
+const radiologi = useRadiologiPoli()
+
+onMounted(() => {
+  Promise.all([
+    penilaian.getMaster(),
+    diagnosa.getDiagnosaDropdown(),
+    diagnosakeperawatan.getData(),
+    tindakan.getTindakanDropdown(),
+    tindakan.getAllPetugas(),
+
+    // penunjang
+
+    lab.getMasterLaborat(),
+    radiologi.getRadiologi(),
+    radiologi.getJenisRadiologi()
+
+  ])
+})
 </script>

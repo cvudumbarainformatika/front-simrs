@@ -110,6 +110,7 @@ function bukaLayananPage (item) {
   store.bukaLayanan(true, item)
     .then((val) => {
       pasien.value = val
+      store.pasien = val
     })
 }
 

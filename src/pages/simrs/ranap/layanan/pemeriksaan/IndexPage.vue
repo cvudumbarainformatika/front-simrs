@@ -12,7 +12,7 @@
           align="left"
           class=" bg-transparent text-grey-8"
           active-color="white"
-          active-bg-color="primary"
+          active-bg-color="dark"
         >
           <q-tab v-for="tb in tabs" :key="tb.name" :ripple="true" :name="tb?.name" content-class="tab-classes">
             <template #default>
@@ -31,14 +31,6 @@
             <!-- <PemeriksaanUmumPage :pasien="props?.pasien" /> -->
             <component :is="menu?.comp" :pasien="pasien" :kasus="kasus" />
           </q-tab-panel>
-
-          <!-- <q-tab-panel name="fisik" class="q-pa-none">
-            <PemeriksaaFisikPage :pasien="props?.pasien" />
-          </q-tab-panel>
-          <q-tab-panel name="penilaian" class="q-pa-none">
-            <PenilaianPage :pasien="props?.pasien" />
-          </q-tab-panel> -->
-          <!-- END PANEL -->
         </q-tab-panels>
       </div>
       <!-- <div class="absolute-bottom bg-dark text-white">
@@ -49,7 +41,10 @@
 </template>
 
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { computed, defineAsyncComponent, ref } from 'vue'
+
+const auth = useAplikasiStore()
 
 defineProps({
   pasien: {
@@ -61,29 +56,45 @@ defineProps({
     default: null
   }
 })
-
-// const PemeriksaanUmumPage = defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
-// const PemeriksaaFisikPage = defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
-// const PenilaianPage = defineAsyncComponent(() => import('./comp/PenilaianPage.vue'))
-
+const nakes = computed(() => {
+  return auth?.user?.pegawai?.kdgroupnakes
+})
 const tab = ref('umum')
 
-const tabs = [
+const tabsxx = [
   {
-    label: 'Umum',
+    label: 'Fisik & Umum',
     name: 'umum',
     icon: 'icon-my-stethoscope',
+    nakes: ['1', '2'],
     comp: defineAsyncComponent(() => import('./comp/PemeriksaanUmumPage.vue'))
   },
-  { label: 'Fisik', name: 'fisik', icon: 'icon-my-stethoscope', comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue')) },
-  { label: 'Penilaian', name: 'penilaian', icon: 'icon-my-stethoscope', comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue')) }
+  {
+    label: 'Penilaian',
+    name: 'penilaian',
+    icon: 'icon-mat-description',
+    nakes: ['2'],
+    comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue'))
+  },
+  {
+    label: 'Anatomi',
+    name: 'fisik',
+    icon: 'icon-my-human-back-svgrepo-com',
+    nakes: ['1', '2'],
+    comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
+  }
 ]
 
 const menu = computed(() => {
   const by = tab.value
 
-  return tabs.find(i => i.name === by)
+  return tabs.value.find(i => i.name === by)
 })
+
+const tabs = computed(() => {
+  return tabsxx.filter(i => i.nakes.includes(nakes.value))
+})
+
 </script>
 
 <style lang="scss" scoped>
