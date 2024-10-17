@@ -262,6 +262,13 @@ export const formNotaPermintaanDanaLS = defineStore('form_NPD_LS', {
         api.post('/v1/transaksi/belanja_ls/simpannpd', this.form)
           .then((resp) => {
             // console.log('isian', resp)
+            this.form = []
+            this.rinci = []
+            this.form.nonpdls = ''
+            this.reqs.subtotal = ''
+            const bst = dataBastFarmasi()
+            bst.itembelanja = []
+
             // Ini Buat Memunculkan Nomer NPD di Front ketika disimpan
             this.form.nonpdls = resp.data?.result?.nonpdls
             this.reqs.nonpdls = resp.data?.result?.nonpdls
