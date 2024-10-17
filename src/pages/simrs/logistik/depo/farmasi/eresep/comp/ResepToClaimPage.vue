@@ -63,6 +63,14 @@
                       {{ item?.norm }}
                     </div>
                   </div>
+                  <div class="row q-my-xs">
+                    <div class="col-3">
+                      No. Resep
+                    </div>
+                    <div class="col-9">
+                      {{ item?.noresep }}
+                    </div>
+                  </div>
                   <div class="row no-wrap q-my-xs">
                     <div class="col-3">
                       Alamat
@@ -144,6 +152,9 @@
                           <div class="col-2">
                             <i>{{ rinc?.jumlah }}  {{ rinc?.mobat?.satuan_k }}</i>
                           </div>
+                        </div>
+                        <div v-if="rinc?.keterangan!=='-'" class="row justify-between f-10 text-italic q-mb-xs">
+                          * Ket : {{ rinc?.keterangan }}
                         </div>
                       </div>
                     </div>
