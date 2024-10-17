@@ -13,6 +13,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       igd: []
     },
     loadingSave: false,
+    loading: false,
     form: {
       // ini untuk 4.1
 
@@ -387,16 +388,23 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
   actions: {
 
     async getData (pasien) {
+      this.loading = true
       const params = {
         params: {
           noreg: pasien?.noreg
         }
       }
-      const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
-      console.log('resp right pemeriksaan', resp)
-      if (resp.status === 200) {
+      try {
+        const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
+        console.log('resp right pemeriksaan', resp)
+        if (resp.status === 200) {
         // store.items = resp.data
-        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+          this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+        }
+        this.loading = false
+      }
+      catch (error) {
+        this.loading = false
       }
     },
 
@@ -762,19 +770,19 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       const jns = auth?.user?.pegawai?.kdgroupnakes
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
-      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns) ?? []
-      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns && x?.awal === '1') ?? []
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes !== '1' && x?.awal === '1') ?? []
 
       this.items.igd = igd
       this.items.ranap = ranap
 
-      console.log('items', this.items)
+      // console.log('items', this.items)
 
-      const pengunjung = usePengunjungRanapStore()
+      // const pengunjung = usePengunjungRanapStore()
 
       // baru ada penyesuaian nakes
       let form = null
-      const dokter = jns === '1' || jns === 1
+      const dokter = (jns === '1' || jns === 1)
       if (dokter) {
         if (ranap.length) { form = ranap[0] }
         else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
@@ -784,12 +792,12 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       }
 
       if (form) ranap.length ? form.id = ranap[0].id : form.id = null
-      const isianList = ranap.length ? ranap[0] : null
+      // const isianList = ranap.length ? ranap[0] : null
 
-      if (isianList) {
-        pengunjung.injectDataPasien(pasien?.noreg, isianList, 'pemeriksaan')
-        pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
-      }
+      // if (isianList) {
+      //   pengunjung.injectDataPasien(pasien?.noreg, isianList, 'pemeriksaan')
+      //   pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
+      // }
       this.initReset(form)
       console.log('form', form)
     },

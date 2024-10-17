@@ -96,22 +96,19 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     persiapanInjectPasien (pasien) {
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       if (findPasien.length) {
-        const datax = findPasien[0]
-        // datax.newapotekrajal = data?.newapotekrajal ?? []
-        // datax.diagnosa = data?.diagnosa ?? []
-        datax.diagnosamedis = []
-        datax.anamnesis = []
-        datax.pemeriksaan = []
-        datax.penilaian = []
-        datax.tindakan = []
-        datax.diagnosakeperawatan = []
-        datax.cppt = []
-        datax.laborats = []
-        datax.radiologi = []
-        datax.fisio = []
-        // datax.dokter = data?.datasimpeg?.nama
-        // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
-        // this.pageLayanan = false
+        // const datax = findPasien[0]
+
+        // datax.diagnosamedis = []
+        // datax.anamnesis = []
+        // datax.pemeriksaan = []
+        // datax.penilaian = []
+        // datax.tindakan = []
+        // datax.diagnosakeperawatan = []
+        // datax.cppt = []
+        // datax.laborats = []
+        // datax.radiologi = []
+        // datax.fisio = []
+        // datax.operasi = []
       }
     },
 
@@ -123,17 +120,17 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         const datax = findPasien[0]
         datax.newapotekrajal = data?.newapotekrajal ?? []
         datax.diagnosa = data?.diagnosa ?? []
-        // datax.diagnosamedis = []
-        // datax.anamnesis = []
-        // datax.pemeriksaan = []
-        // datax.penilaian = []
-        // datax.tindakan = []
-        // datax.diagnosakeperawatan = []
-        // datax.cppt = []
-        // datax.laborats = []
-        // datax.dokter = data?.datasimpeg?.nama
-        // datax.kodedokter = data?.datasimpeg?.kdpegsimrs
-        // this.pageLayanan = false
+        datax.anamnesis = data?.anamnesis ?? [] // wes
+        datax.pemeriksaan = data?.pemeriksaan ?? [] // wes
+        datax.penilaian = data?.penilaian ?? [] // wes
+        datax.diagnosamedis = data?.diagnosamedis ?? []
+        datax.tindakan = data?.tindakan ?? []
+        datax.diagnosakeperawatan = data?.diagnosakeperawatan ?? []
+        datax.cppt = data?.cppt ?? []
+        datax.laborats = data?.laborats ?? []
+        datax.radiologi = data?.radiologi ?? []
+        datax.fisio = data?.fisio ?? []
+        datax.operasi = data?.operasi ?? []
       }
     },
     getRuangan () {

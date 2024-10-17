@@ -461,20 +461,20 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       const jns = auth?.user?.pegawai?.kdgroupnakes
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
-      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.group_nakes === jns) ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.group_nakes === jns && x?.awal === '1') ?? []
 
       this.items.igd = igd
       this.items.ranap = ranap
 
-      console.log('items', this.items)
+      // console.log('items', this.items)
 
-      const pengunjung = usePengunjungRanapStore()
+      // const pengunjung = usePengunjungRanapStore()
 
       const form = ranap.length ? ranap[0] : null
-      if (form) {
-        pengunjung.injectDataPasien(pasien?.noreg, form, 'penilaian')
-        pengunjung.deleteInjectanNull(pasien?.noreg, 'penilaian')
-      }
+      // if (form) {
+      //   pengunjung.injectDataPasien(pasien?.noreg, form, 'penilaian')
+      //   pengunjung.deleteInjectanNull(pasien?.noreg, 'penilaian')
+      // }
       this.initReset(pasien, form)
     }
 

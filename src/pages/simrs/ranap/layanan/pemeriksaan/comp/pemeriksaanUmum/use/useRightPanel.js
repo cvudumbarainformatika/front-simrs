@@ -34,10 +34,10 @@ export default function useRightPanel (pasien) {
 
   onMounted(() => {
     // console.log('did mount', pengunjung.pasiens)
-    getData()
+    getData(pasien)
   })
 
-  const getData = async () => {
+  const getData = (pasien) => {
     // const params = {
     //   params: {
     //     noreg: pasien?.noreg
@@ -51,6 +51,7 @@ export default function useRightPanel (pasien) {
     // }
 
     // await store.getData(pasien)
+    store.PISAH_DATA_RANAP_IGD(pasien?.pemeriksaan, pasien)
   }
 
   return {
