@@ -106,11 +106,11 @@ const tabsxx = [
     comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
   },
   {
-    label: 'BDRS',
-    name: 'bdrs',
-    icon: 'icon-mat-bedroom_parent',
+    label: 'Bank Darah',
+    name: 'bankDarah',
+    icon: 'icon-fa-biohazard-solid',
     nakes: ['1', '2', '3'],
-    comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
+    comp: defineAsyncComponent(() => import('./comp/bankdarah/IndexPage.vue'))
   }
 ]
 

@@ -1,10 +1,10 @@
 <script setup>
-import { usePermintaanOperasiIrdRanapStore } from 'src/stores/simrs/ranap/operasiird'
+// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormOrder = defineAsyncComponent(() => import('./comp/FormOrder.vue'))
-const ListOrder = defineAsyncComponent(() => import('./comp/ListOrder.vue'))
+// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
 
 const props = defineProps({
   pasien: {
@@ -21,12 +21,12 @@ const props = defineProps({
   }
 })
 
-const store = usePermintaanOperasiIrdRanapStore()
+// const store = useTindakanRanapStore()
 
 onMounted(() => {
   Promise.all([
-    store.getNota(props?.pasien),
-    store.getData(props?.pasien)
+    // store.getNota(props?.pasien),
+    // store.getTindakan(props?.pasien)
   ])
 })
 
@@ -35,15 +35,15 @@ onMounted(() => {
 <template>
   <BaseLayout
     :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :split="50" nota
-    title-before="PERMINTAAN OPERASI IRD"
-    title-after="List Permintaan Operasi Ird"
+    title-before="FORM PERMINTAAN BANK DARAH"
+    title-after="List Permintaan Darah"
   >
     <template #form>
-      <FormOrder :pasien="props.pasien" />
+      <FormOrder :pasien="props.pasien" :kasus="props.kasus" />
     </template>
     <template #list>
       <div class="fit">
-        <ListOrder :pasien="props.pasien" :items="pasien?.operasi_ird" />
+        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
       </div>
     </template>
 

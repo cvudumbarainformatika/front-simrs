@@ -131,6 +131,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.radiologi = data?.radiologi ?? []
         datax.fisio = data?.fisio ?? []
         datax.operasi = data?.operasi ?? []
+        datax.operasi_ird = data?.operasi_ird ?? []
       }
     },
     getRuangan () {

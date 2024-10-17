@@ -39,7 +39,7 @@ onMounted(() => {
     </template>
     <template #list>
       <div class="fit">
-        <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" />
+        <ListTindakan :pasien="props.pasien" :kasus="props.kasus" />
       </div>
     </template>
 
