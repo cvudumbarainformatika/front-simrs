@@ -99,15 +99,15 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
       if (cat === 'ranap') {
         const storePasien = usePengunjungRanapStore()
         const arr = data
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr?.length; i++) {
           const isi = arr[i]
           storePasien.injectDataPasien(pasien?.noreg, isi, 'diagnosakeperawatan')
         }
       }
       else {
         const storePasien = usePengunjungPoliStore()
-        const arr = data.result
-        for (let i = 0; i < arr.length; i++) {
+        const arr = data
+        for (let i = 0; i < arr?.length; i++) {
           const isi = arr[i]
           storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
         }

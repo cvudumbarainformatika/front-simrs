@@ -68,7 +68,9 @@ onMounted(() => {
     lab.getMasterLaborat(),
     radiologi.getRadiologi(),
     radiologi.getJenisRadiologi(),
-    bankdarah.getMaster()
+    bankdarah.getMaster(),
+
+    store.getNakes()
 
   ])
 })

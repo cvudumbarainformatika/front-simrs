@@ -27,7 +27,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     loading: false,
     pageLayanan: false,
     loadingLayanan: false,
-    pasien: null
+    pasien: null,
+    nakes: null
   }),
 
   persist: true,
@@ -335,6 +336,15 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
 
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+
+    async getNakes () {
+      const resp = await api.get('/v1/simrs/master/pegawai/listnakes')
+      console.log('nakes', resp)
+
+      if (resp.status === 200) {
+        this.nakes = resp.data
       }
     }
   }

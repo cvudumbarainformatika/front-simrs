@@ -1,5 +1,5 @@
 <script setup>
-// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { usePermintaanBankDarahStore } from 'src/stores/simrs/ranap/bankdarah'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
@@ -21,11 +21,11 @@ const props = defineProps({
   }
 })
 
-// const store = useTindakanRanapStore()
+const store = usePermintaanBankDarahStore()
 
 onMounted(() => {
   Promise.all([
-    // store.getNota(props?.pasien),
+    store.initReset()
     // store.getTindakan(props?.pasien)
   ])
 })

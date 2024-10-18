@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-// import { usePengunjungRanapStore } from './pengunjung'
+import { usePengunjungRanapStore } from './pengunjung'
 // eslint-disable-next-line no-unused-vars
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
@@ -13,11 +13,13 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       jenis: '',
       gol: '',
       rhesus: '',
-      sifatpermintaan: '',
-      transfusike: '',
+      sifatpermintaan: 'Biasa',
+      jumlah: 1,
+      transfusike: 0,
       reaksi: '',
       pengirim: '',
-      perawatpeminta: ''
+      perawatpeminta: '',
+      kodeperawat: ''
     },
     loadingOrder: false,
     loadingHapus: false,
@@ -38,7 +40,9 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       { label: 'Urine Gelap / Kemerahan', value: '8' },
       { label: 'Pendarahan / DIC', value: '9' },
       { label: 'Lainnya', value: '10' }
-    ]
+    ],
+    dokters: [],
+    perawats: []
 
   }),
   // getters: {
@@ -64,7 +68,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       catch (error) {
 
       }
-    }
+    },
 
     // async getData (pasien) {
     //   const resp = await api.get(`v1/simrs/penunjang/operasi/getdata?noreg=${pasien?.noreg}`)
@@ -81,41 +85,41 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
     //   }
     // },
 
-    // async saveOrder (pasien) {
-    //   if (!pasien?.kodedokter) {
-    //     return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
-    //   }
-    //   this.loadingOrder = true
-    //   this.form.noreg = pasien?.noreg
-    //   this.form.kodepoli = pasien?.kodepoli
-    //   this.form.kodedokter = pasien?.kodedokter
-    //   this.form.kodesistembayar = pasien?.kodesistembayar
-    //   this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
-    //   this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA') ? null : this.form.nota
-    //   // this.form.isRanap = isRanap
+    async saveOrder (pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
+      this.loadingOrder = true
+      this.form.noreg = pasien?.noreg
+      this.form.kodepoli = pasien?.kodepoli
+      this.form.kodedokter = pasien?.kodedokter
+      this.form.kodesistembayar = pasien?.kodesistembayar
+      this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
+      this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA' || this.form.nota === '' || this.form.nota === null) ? null : this.form.nota
+      // this.form.isRanap = isRanap
 
-    //   console.log(this.form)
+      console.log(this.form)
 
-    //   try {
-    //     const resp = await api.post('v1/simrs/penunjang/operasi/permintaanoperasi', this.form)
-    //     // console.log('save permintaan operasi', resp.data)
-    //     if (resp.status === 200) {
-    //       // const storePasien = usePengunjungPoliStore()
-    //       const storeRanap = usePengunjungRanapStore()
-    //       const isi = resp?.data?.result
-    //       // storePasien.injectDataPasien(pasien, isi, 'fisio')
-    //       storeRanap.injectDataPasien(pasien?.noreg, isi, 'operasi')
-    //       this.setNotas(resp?.data?.nota)
-    //       notifSuccess(resp)
-    //       this.loadingOrder = false
-    //       this.initReset()
-    //     }
-    //     this.loadingOrder = false
-    //   }
-    //   catch (error) {
-    //     this.loadingOrder = false
-    //   }
-    // },
+      try {
+        const resp = await api.post('v1/simrs/penunjang/bankdarah/simpanpermintaan', this.form)
+        console.log('save permintaan', resp.data)
+        if (resp.status === 200) {
+          // const storePasien = usePengunjungPoliStore()
+          // const storeRanap = usePengunjungRanapStore()
+          // const isi = resp?.data?.result
+          // storePasien.injectDataPasien(pasien, isi, 'fisio')
+          // storeRanap.injectDataPasien(pasien?.noreg, isi, 'operasi')
+          // this.setNotas(resp?.data?.nota)
+          // notifSuccess(resp)
+          // this.loadingOrder = false
+          // this.initReset()
+        }
+        this.loadingOrder = false
+      }
+      catch (error) {
+        this.loadingOrder = false
+      }
+    },
 
     // async getNota (pasien) {
     //   const payload = { params: { noreg: pasien?.noreg } }
@@ -156,19 +160,28 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
     //   }
     // },
 
-    // initReset () {
-    //   this.form = {
-    //     noreg: '', // rs1
-    //     nota: this.notas?.length ? this.notas[0] : 'SEMUA', // rs2
-    //     kodepoli: '', // rs10
-    //     permintaan: '', // rs4
-    //     kodesistembayar: '',
-    //     kodedokter: ''
-    //   }
+    initReset () {
+      this.form = {
+        noreg: '',
+        nota: null,
+        jenis: '',
+        gol: '',
+        rhesus: '',
+        sifatpermintaan: 'Biasa',
+        jumlah: 1,
+        transfusike: 0,
+        reaksi: '',
+        pengirim: '',
+        perawatpeminta: ''
+      }
 
-    //   return new Promise((resolve, reject) => {
-    //     resolve()
-    //   })
-    // }
+      const pengunjung = usePengunjungRanapStore()
+      this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
+      this.perawats = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '2' || x?.kdgroupnakes === '3') ?? []
+
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    }
   }
 })
