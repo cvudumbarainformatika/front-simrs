@@ -354,7 +354,7 @@ function PrintPencairan (row) {
 
 <style lang="scss">
 .my-sticky-table{
-  height: 510px;
+  min-height: 510px;
 
   .q-table__top,
   .q-table__bottom,
