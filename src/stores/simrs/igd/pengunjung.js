@@ -198,7 +198,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      // console.log('valid', val.id)
+      console.log('valid', kode, val)
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]

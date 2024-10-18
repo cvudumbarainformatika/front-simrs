@@ -66,6 +66,16 @@
           {{ row?.Suplier }}
         </div>
       </template>
+      <template #cell-NoPemesanan="{row}">
+        <div class="row justify-center">
+          {{ row?.NoPemesanan }}
+        </div>
+      </template>
+      <template #cell-TglPemesanan="{row}">
+        <div class="row justify-center">
+          {{ row?.TglPemesanan }}
+        </div>
+      </template>
       <template #cell-NoDokumen="{row}">
         <div class="row justify-center">
           {{ row?.NoDokumen }}
@@ -155,7 +165,7 @@
       <!-- {{ row }} -->
       </template>
       <template #bottom-row>
-        <td style="color: red;" colspan="8" class="col-1 text-right text-bold">
+        <td style="color: red;" colspan="10" class="col-1 text-right text-bold">
           Total
         </td>
         <td style="color: red;" class="col-1 text-right text-bold">

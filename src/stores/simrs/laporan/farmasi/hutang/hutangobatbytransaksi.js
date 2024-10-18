@@ -9,7 +9,7 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
     detail: [],
     meta: {},
     totalall: 0,
-    kolom: ['NoPenerimaan', 'TglPenerimaan', 'Suplier', 'NoDokumen', 'JenisDokumen', 'TglSurat', 'TglJatuhTempo', 'Total'],
+    kolom: ['NoPenerimaan', 'TglPenerimaan', 'NoPemesanan', 'TglPemesanan', 'Suplier', 'NoDokumen', 'JenisDokumen', 'TglSurat', 'TglJatuhTempo', 'Total'],
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       to: date.formatDate(Date.now(), 'DD MMMM YYYY')
@@ -27,7 +27,7 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
     },
     async laporanobatbytransaksi () {
       this.loading = true
-      this.kolom = ['NoPenerimaan', 'TglPenerimaan', 'Suplier', 'NoDokumen', 'JenisDokumen', 'TglSurat', 'TglJatuhTempo', 'Total']
+      this.kolom = ['NoPenerimaan', 'TglPenerimaan', 'NoPemesanan', 'TglPemesanan', 'Suplier', 'NoDokumen', 'JenisDokumen', 'TglSurat', 'TglJatuhTempo', 'Total']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/hutang/reportHutangByTransaksi', params)
         .then((resp) => {
@@ -46,6 +46,8 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
       val.forEach(x => {
         const nopenerimaan = x?.nopenerimaan
         const tglpenerimaan = x?.tglpenerimaan
+        const nopemesanan = x?.pemeseanan_heder?.nopemesanan
+        const tglpesan = x?.pemeseanan_heder?.tgl_pemesanan
         const pbf = x?.pihakketiga?.nama
         const nomorsurat = x?.nomorsurat
         const jenisdokumen = x?.jenissurat
@@ -55,6 +57,8 @@ export const useHutangObatByTransaksi = defineStore('laporan_hutang_obat_by_tran
         const hasil = {
           NoPenerimaan: nopenerimaan,
           TglPenerimaan: tglpenerimaan,
+          NoPemesanan: nopemesanan,
+          TglPemesanan: tglpesan,
           Suplier: pbf,
           NoDokumen: nomorsurat,
           JenisDokumen: jenisdokumen,

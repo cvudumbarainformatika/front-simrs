@@ -54,7 +54,7 @@
               :key="n"
             >
               <q-item-section>
-                <div v-if="item.humpty_dumpty">
+                <div v-if="item?.humpty_dumpty !== ''">
                   <div
                     class="row f-12" v-for="(sub , x) in item.humpty_dumpty"
                     :key="x"
@@ -70,15 +70,35 @@
                     </q-item-label>
                   </div>
                 </div>
-                <div v-if="item.morse_fall">
+                <div v-if="item.morse_fall !== ''">
                   <div
-                    class="row f-12" v-for="(sub , x) in item.morse_fall"
-                    :key="x"
+                    class="row f-12" v-for="(sub , xx) in item.morse_fall"
+                    :key="xx"
                   >
                     <div class="col-2 q-mb-md">
                       <q-item-label>
-                        <span>{{ x.toUpperCase() }} </span>
+                        <span>{{ xx.toUpperCase() }} </span>
                       </q-item-label>
+                    </div>
+                    <q-item-label class="col-9">
+                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
+                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
+                    </q-item-label>
+                  </div>
+                </div>
+                <div v-if="item.ontario !== ''">
+                  <div
+                    class="row f-12" v-for="(sub , xxx) in item.ontario"
+                    :key="xxx"
+                  >
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span>{{ xxx }} </span>
+                      </q-item-label>
+                    </div>
+                    <div class="col-12">
+                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
+                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
                     </div>
                     <q-item-label class="col-9">
                       <span class="text-weight-bold"> : {{ sub?.label }} </span>
@@ -121,7 +141,6 @@
       </q-scroll-area>
     </q-card-section>
   </q-card>
-  {{ props?.pasien?.penilaiananamnesis }}
 </template>
 
 <script setup>
