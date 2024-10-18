@@ -1,6 +1,6 @@
 <template>
   <div class="fit column scroll">
-    <q-form @submit="onSubmit" class="q-pa-lg">
+    <q-form ref="formRef" @submit="onSubmit" class="q-pa-lg">
       <div class="row">
         <div class="row q-col-gutter-sm full-width">
           <div class="col-3">
@@ -122,7 +122,7 @@
       </div>
       <q-separator class="q-my-md" />
       <div class="row full-width justify-end">
-        <q-btn label="Kirim Permintaan" type="submit" color="primary" />
+        <q-btn :loading="store.loadingOrder" :disable="store.loadingOrder" label="Kirim Permintaan" type="submit" color="primary" />
       </div>
     </q-form>
   </div>
@@ -130,6 +130,7 @@
 
 <script setup>
 import { usePermintaanBankDarahStore } from 'src/stores/simrs/ranap/bankdarah'
+import { ref } from 'vue'
 
 const props = defineProps({
   pasien: {
@@ -143,10 +144,14 @@ const props = defineProps({
 })
 
 const store = usePermintaanBankDarahStore()
+const formRef = ref(null)
 
 function onSubmit () {
   console.log('onSubmit')
   store.saveOrder(props.pasien)
+    .then(() => {
+      formRef.value.resetValidation()
+    })
 }
 
 </script>

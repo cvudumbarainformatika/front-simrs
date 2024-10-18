@@ -4,7 +4,7 @@ import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormOrder = defineAsyncComponent(() => import('./comp/FormOrder.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
+const ListOrder = defineAsyncComponent(() => import('./comp/ListOrder.vue'))
 
 const props = defineProps({
   pasien: {
@@ -24,7 +24,10 @@ const props = defineProps({
 const store = usePermintaanBankDarahStore()
 
 onMounted(() => {
+  console.log('props', props.pasien)
+
   Promise.all([
+    store.getNota(props?.pasien),
     store.initReset()
     // store.getTindakan(props?.pasien)
   ])
@@ -43,21 +46,22 @@ onMounted(() => {
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListOrder :pasien="props.pasien" :kasus="props.kasus" :items="props.pasien?.bankdarah" />
       </div>
     </template>
 
     <template #nota>
-      <!-- <q-select
-        v-model="store.notaTindakan"
+      <q-select
+        v-model="store.form.nota"
         outlined
         standout="bg-yellow-3"
         bg-color="white"
         dense
-        :options="store.notaTindakans"
-        :display-value="`NOTA: ${store.notaTindakan==='' || store.notaTindakan === 'BARU'? 'BARU': store.notaTindakan}`"
+        :options="store.notas"
+        :display-value="`NOTA: ${store.form.nota==='' || store.form.nota === 'BARU' || store.form.nota === null ? 'BARU': store.form.nota}`"
         style="min-width: 200px;"
-      /> -->
+        @update:model-value="(val)=> console.log(val)"
+      />
     </template>
   </BaseLayout>
 </template>

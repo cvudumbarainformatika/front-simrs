@@ -105,14 +105,14 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
         console.log('save permintaan', resp.data)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
-          // const storeRanap = usePengunjungRanapStore()
-          // const isi = resp?.data?.result
+          const storeRanap = usePengunjungRanapStore()
+          const isi = resp?.data?.result
           // storePasien.injectDataPasien(pasien, isi, 'fisio')
-          // storeRanap.injectDataPasien(pasien?.noreg, isi, 'operasi')
-          // this.setNotas(resp?.data?.nota)
-          // notifSuccess(resp)
-          // this.loadingOrder = false
-          // this.initReset()
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'bankdarah')
+          this.setNotas(resp?.data?.nota)
+          notifSuccess(resp)
+          this.loadingOrder = false
+          this.initReset()
         }
         this.loadingOrder = false
       }
@@ -121,44 +121,44 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       }
     },
 
-    // async getNota (pasien) {
-    //   const payload = { params: { noreg: pasien?.noreg } }
-    //   const resp = await api.get('v1/simrs/penunjang/operasi/getnota', payload)
-    //   // console.log('nota fisio', resp.data)
-    //   if (resp.status === 200) {
-    //     this.setNotas(resp?.data)
-    //   }
-    // },
+    async getNota (pasien) {
+      const payload = { params: { noreg: pasien?.noreg } }
+      const resp = await api.get('v1/simrs/penunjang/bankdarah/getnota', payload)
+      // console.log('nota fisio', resp.data)
+      if (resp.status === 200) {
+        this.setNotas(resp?.data)
+      }
+    },
 
-    // setNotas (array) {
-    //   const arr = array.map(x => x.nota)
-    //   this.notas = arr.length ? arr : []
-    //   this.notas.push('BARU')
-    //   this.notas.unshift('SEMUA')
-    //   this.form.nota = this.notas[0]
-    // },
+    setNotas (array) {
+      const arr = array.map(x => x.nota)
+      this.notas = arr.length ? arr : []
+      this.notas.push('BARU')
+      this.notas.unshift('SEMUA')
+      this.form.nota = this.notas[0]
+    },
 
-    // async hapusPermintaan (pasien, id) {
-    //   this.loadingHapus = true
-    //   const payload = { noreg: pasien?.noreg, id }
-    //   try {
-    //     const resp = await api.post('v1/simrs/penunjang/operasi/hapuspermintaan', payload)
-    //     this.loadingHapus = false
-    //     // console.log(resp)
-    //     if (resp.status === 200) {
-    //       // const storePasien = usePengunjungPoliStore()
-    //       const storeRanap = usePengunjungRanapStore()
-    //       // storePasien.hapusDataFisio(pasien, id)
-    //       storeRanap.hapusDataInjectan(pasien, id, 'operasi')
-    //       this.setNotas(resp?.data?.nota)
-    //       notifSuccess(resp)
-    //     }
-    //   }
-    //   catch (error) {
-    //     this.loadingHapus = false
-    //     // console.log(error)
-    //   }
-    // },
+    async hapusPermintaan (pasien, id) {
+      this.loadingHapus = true
+      const payload = { noreg: pasien?.noreg, id }
+      try {
+        const resp = await api.post('v1/simrs/penunjang/bankdarah/hapuspermintaan', payload)
+        this.loadingHapus = false
+        // console.log(resp)
+        if (resp.status === 200) {
+          // const storePasien = usePengunjungPoliStore()
+          const storeRanap = usePengunjungRanapStore()
+          // storePasien.hapusDataFisio(pasien, id)
+          storeRanap.hapusDataInjectan(pasien, id, 'bankdarah')
+          this.setNotas(resp?.data?.nota)
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        this.loadingHapus = false
+        // console.log(error)
+      }
+    },
 
     initReset () {
       this.form = {

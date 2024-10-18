@@ -133,6 +133,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.fisio = data?.fisio ?? []
         datax.operasi = data?.operasi ?? []
         datax.operasi_ird = data?.operasi_ird ?? []
+        datax.bankdarah = data?.bankdarah ?? []
       }
     },
     getRuangan () {
