@@ -111,6 +111,20 @@ const tabsxx = [
     icon: 'icon-fa-biohazard-solid',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/bankdarah/IndexPage.vue'))
+  },
+  {
+    label: 'Apheresis',
+    name: 'apheresis',
+    icon: 'icon-fa-vials-solid',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/apheresis/IndexPage.vue'))
+  },
+  {
+    label: 'Cathlab',
+    name: 'cathlab',
+    icon: 'icon-mat-manage_accounts',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/cathlab/IndexPage.vue'))
   }
 ]
 
