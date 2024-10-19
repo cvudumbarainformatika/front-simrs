@@ -125,6 +125,13 @@ const tabsxx = [
     icon: 'icon-mat-manage_accounts',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/cathlab/IndexPage.vue'))
+  },
+  {
+    label: 'Ambulan',
+    name: 'ambulan',
+    icon: 'icon-mat-local_shipping',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./comp/ambulan/IndexPage.vue'))
   }
 ]
 
