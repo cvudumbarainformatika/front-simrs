@@ -4,26 +4,17 @@ import { usePengunjungRanapStore } from './pengunjung'
 // eslint-disable-next-line no-unused-vars
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
-export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store', {
+export const usePermintaanOksigenStore = defineStore('permintaan-oksigen-store', {
   state: () => ({
-    notas: [],
     form: {
-      nota: null,
-      tujuan: '',
-      keterangan: '',
-      layanansupir: '',
-      layananperawat: '',
-      perawat1: '',
-      perawat2: '',
-      kodedokter: ''
+      tindakan: '',
+      jumlah: 1,
+      js: 0,
+      jp: 0
     },
-    tujuans: [],
-    layanans: [
-      { value: '', label: '---------' },
-      { value: 'Rujukan', label: 'Rujukan' },
-      { value: 'Jenazah', label: 'Jenazah' },
-      { value: 'Emergency', label: 'Emergency' }
-    ],
+
+    options: [],
+
     dokters: [],
     perawats: [],
     loadingOrder: false,
@@ -35,14 +26,14 @@ export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store
   // },
   actions: {
 
-    async getTujuanAmbulance () {
+    async getMaster () {
       try {
-        const resp = await api.get('v1/simrs/penunjang/permintaanambulan/gettujuanambulan')
-        console.log('tujuan ambulance', resp)
+        const resp = await api.get('v1/simrs/penunjang/oksigen/getmaster')
+        console.log('master oksigen', resp)
 
         if (resp.status === 200) {
           const data = resp.data
-          this.tujuans = data
+          this.options = data
         }
       }
       catch (error) {
@@ -61,22 +52,21 @@ export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
       this.form.kelas_ruangan = pasien?.kelas_ruangan
-      this.form.nota = null
       // this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA' || this.form.nota === '' || this.form.nota === null) ? null : this.form.nota
       // this.form.isRanap = isRanap
 
       console.log(this.form)
 
       try {
-        const resp = await api.post('v1/simrs/penunjang/permintaanambulan/simpanpermintaan', this.form)
-        // console.log('save permintaan permintaanambulan', resp.data)
+        const resp = await api.post('v1/simrs/penunjang/oksigen/simpanpermintaan', this.form)
+        // console.log('save permintaan oksigen', resp.data)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
           const storeRanap = usePengunjungRanapStore()
           const isi = resp?.data?.result
           // storePasien.injectDataPasien(pasien, isi, 'fisio')
-          storeRanap.injectDataPasien(pasien?.noreg, isi, 'permintaanambulan')
-          this.setNotas(resp?.data?.nota)
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'oksigen')
+          // this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
           this.loadingOrder = false
           this.initReset()
@@ -88,36 +78,18 @@ export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store
       }
     },
 
-    async getNota (pasien) {
-      const payload = { params: { noreg: pasien?.noreg } }
-      const resp = await api.get('v1/simrs/penunjang/permintaanambulan/getnota', payload)
-      // console.log('nota fisio', resp.data)
-      if (resp.status === 200) {
-        this.setNotas(resp?.data)
-      }
-    },
-
-    setNotas (array) {
-      const arr = array.map(x => x.nota)
-      this.notas = arr.length ? arr : []
-      this.notas.unshift('SEMUA')
-      this.notas.push('BARU')
-      this.form.nota = this.notas[0]
-    },
-
     async hapusPermintaan (pasien, id) {
       this.loadingHapus = true
       const payload = { noreg: pasien?.noreg, id }
       try {
-        const resp = await api.post('v1/simrs/penunjang/permintaanambulan/hapuspermintaan', payload)
+        const resp = await api.post('v1/simrs/penunjang/oksigen/hapuspermintaan', payload)
         this.loadingHapus = false
         // console.log(resp)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
           const storeRanap = usePengunjungRanapStore()
           // storePasien.hapusDataFisio(pasien, id)
-          storeRanap.hapusDataInjectan(pasien, id, 'permintaanambulan')
-          this.setNotas(resp?.data?.nota)
+          storeRanap.hapusDataInjectan(pasien, id, 'oksigen')
           notifSuccess(resp)
         }
       }
@@ -129,14 +101,10 @@ export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store
 
     initReset () {
       this.form = {
-        nota: null,
-        tujuan: '',
-        keterangan: '',
-        layanansupir: '',
-        layananperawat: '',
-        perawat1: '',
-        perawat2: '',
-        kodedokter: ''
+        tindakan: '',
+        jumlah: 1,
+        js: 0,
+        jp: 0
       }
 
       const pengunjung = usePengunjungRanapStore()

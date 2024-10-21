@@ -3,8 +3,8 @@
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
-// const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
+const FormOrder = defineAsyncComponent(() => import('./comp/FormOrder.vue'))
+const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
 
 const props = defineProps({
   pasien: {
@@ -39,11 +39,11 @@ onMounted(() => {
     title-after="List Permintaan Oksigen"
   >
     <template #form>
-      <!-- <FormTindakan :pasien="props.pasien" :kasus="props.kasus" /> -->
+      <FormOrder :pasien="props.pasien" :kasus="props.kasus" />
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListTindakan :pasien="props.pasien" :kasus="props.kasus" />
       </div>
     </template>
 

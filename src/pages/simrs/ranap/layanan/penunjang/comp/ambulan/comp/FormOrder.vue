@@ -19,6 +19,7 @@
               @on-select="(val)=> {
                 store.form.tujuan = val
               }"
+              @clear="store.form.tujuan = ''"
             />
           </div>
 
@@ -93,6 +94,7 @@
               @on-select="(val)=> {
                 store.form.perawat1 = val
               }"
+              @clear="store.form.perawat1 = ''"
             />
           </div>
           <div class="col-3">
@@ -112,6 +114,7 @@
               @on-select="(val)=> {
                 store.form.perawat2 = val
               }"
+              @clear="store.form.perawat2 = ''"
             />
           </div>
           <div class="col-3">
@@ -120,7 +123,7 @@
           <div class="col-9">
             <app-autocomplete-new
               ref="refDokter"
-              :model="store.form.dokter"
+              :model="store.form.kodedokter"
               label="Dokter"
               autocomplete="nama"
               option-value="kdpegsimrs"
@@ -129,8 +132,9 @@
               valid
               :source="store.dokters"
               @on-select="(val)=> {
-                store.form.dokter = val
+                store.form.kodedokter = val
               }"
+              @clear="store.form.kodedokter = ''"
             />
           </div>
         </div>

@@ -1,10 +1,10 @@
 <script setup>
-// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
-// const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
+const FormOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/comppenunjanglain/FormOrder.vue'))
+const ListOrder = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/comppenunjang/comppenunjanglain/ListOrder.vue'))
 
 const props = defineProps({
   pasien: {
@@ -21,11 +21,11 @@ const props = defineProps({
   }
 })
 
-// const store = useTindakanRanapStore()
+const store = usePenunjangLainPoliStore()
 
 onMounted(() => {
   Promise.all([
-    // store.getNota(props?.pasien),
+    store.getNota(props?.pasien)
     // store.getTindakan(props?.pasien)
   ])
 })
@@ -39,11 +39,11 @@ onMounted(() => {
     title-after="List Permintaan Penunjang Lainnya"
   >
     <template #form>
-      <!-- <FormTindakan :pasien="props.pasien" :kasus="props.kasus" /> -->
+      <FormOrder :pasien="props.pasien" unit="ranap" />
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListOrder :pasien="props.pasien" :kasus="props.kasus" />
       </div>
     </template>
 

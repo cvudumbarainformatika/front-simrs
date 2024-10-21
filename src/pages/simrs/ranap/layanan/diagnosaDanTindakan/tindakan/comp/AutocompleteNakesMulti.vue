@@ -5,7 +5,18 @@ import { ref, toRef } from 'vue'
 //   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 // ]
 
-const props = defineProps({ model: [Array, String], source: [Array] })
+// const props = defineProps({ model: [Array, String], source: [Array] })
+
+const props = defineProps({
+  model: {
+    type: [Array, String],
+    default: () => null
+  },
+  source: {
+    type: Array,
+    default: () => []
+  }
+})
 
 // eslint-disable-next-line no-undef
 const model = toRef(props.model, 'model')

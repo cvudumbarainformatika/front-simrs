@@ -5,6 +5,7 @@ import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormOrder = defineAsyncComponent(() => import('./comp/FormOrder.vue'))
+const ListOrder = defineAsyncComponent(() => import('./comp/ListOrder.vue'))
 // const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
 
 const props = defineProps({
@@ -44,7 +45,7 @@ onMounted(() => {
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListOrder :pasien="props.pasien" :kasus="props.kasus" />
       </div>
     </template>
 
