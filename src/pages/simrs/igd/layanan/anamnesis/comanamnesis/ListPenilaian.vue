@@ -88,22 +88,143 @@
                 </div>
                 <div v-if="item.ontario !== ''">
                   <div
-                    class="row f-12" v-for="(sub , xxx) in item.ontario"
-                    :key="xxx"
+                    class="row f-12"
                   >
                     <div class="col-12 q-mb-md">
                       <q-item-label>
-                        <span>{{ xxx }} </span>
+                        <span class="text-weight-bold">Riwayat Jatuh : </span>
                       </q-item-label>
+                      <div class="row">
+                        <div class="col-7 q-ml-md q-mt-md">
+                          <q-item-label>Apakah pasien datang kerumah sakit karena jatuh? </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.riwayatJth_a?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.riwayatJth_a?.skor }}</q-item-label>
+                        </div>
+                        <div class="col-7 q-ml-md ">
+                          <q-item-label>Jika tidak, apakah pasien mengalami jatuh dalam 2 bulan terakhir ini? </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.riwayatJth_b?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.riwayatJth_b?.skor }}</q-item-label>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-12">
-                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
-                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span class="text-weight-bold">Status Mental : </span>
+                      </q-item-label>
+                      <div class="row">
+                        <div class="col-7 q-ml-md q-mt-md">
+                          <q-item-label>- Apakah pasien delirium? (tidak dapat membuat keputusan, pola pikir tidak terorganisir, gangguan daya ingat)? </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.statusMental_a?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.statusMental_a?.skor }}</q-item-label>
+                        </div>
+                        <div class="col-7 q-ml-md ">
+                          <q-item-label>- Apakah pasien disorientasi? (salah menyebutkan waktu, tempat atau orang) </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.statusMental_b?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.statusMental_b?.skor }}</q-item-label>
+                        </div>
+                        <div class="col-7 q-ml-md ">
+                          <q-item-label>- Apakah pasien agitasi? (ketakutan, gelisah dan cemas) </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.statusMental_c?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.statusMental_c?.skor }}</q-item-label>
+                        </div>
+                      </div>
                     </div>
-                    <q-item-label class="col-9">
-                      <span class="text-weight-bold"> : {{ sub?.label }} </span>
-                      <span class="text-weight-bold"> => ( {{ sub?.skor }} )</span>
-                    </q-item-label>
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span class="text-weight-bold">Penglihatan : </span>
+                      </q-item-label>
+                      <div class="row">
+                        <div class="col-7 q-ml-md q-mt-md">
+                          <q-item-label>- Apakah pasien memakai kaca mata? </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.penglihatan_a?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.penglihatan_a?.skor }}</q-item-label>
+                        </div>
+                        <div class="col-7 q-ml-md ">
+                          <q-item-label>- Apakah pasien disorientasi? (salah menyebutkan waktu, tempat atau orang) </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.penglihatan_b?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.penglihatan_b?.skor }}</q-item-label>
+                        </div>
+                        <div class="col-7 q-ml-md ">
+                          <q-item-label>- Apakah pasien mengeluh adanya penglihatan buram? </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.penglihatan_c?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md ">
+                          <q-item-label>{{ item?.ontario?.penglihatan_c?.skor }}</q-item-label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span class="text-weight-bold">Kebiasaan Berkemih : </span>
+                      </q-item-label>
+                      <div class="row">
+                        <div class="col-7 q-ml-md q-mt-md">
+                          <q-item-label>- Apakah terdapat perubahan perilaku berkemih? (frekuensi, urgensi, inkontinensia, nokturia) </q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.berkemih_a?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.berkemih_a?.skor }}</q-item-label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span class="text-weight-bold">Transfer (dr tempat tidur ke kursi dan sebaliknya) : </span>
+                      </q-item-label>
+                      <div class="row">
+                        <div class="col-6 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.transfertk?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.transfertk?.skor }}</q-item-label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 q-mb-md">
+                      <q-item-label>
+                        <span class="text-weight-bold">Mobilitas : </span>
+                      </q-item-label>
+                      <div class="row">
+                        <div class="col-6 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.mobilitas?.label }}</q-item-label>
+                        </div>
+                        <div class="col-2 q-ml-md q-mt-md">
+                          <q-item-label>{{ item?.ontario?.mobilitas?.skor }}</q-item-label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </q-item-section>
