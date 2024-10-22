@@ -151,7 +151,7 @@ const columnsx = [
     align: 'right',
     field: (row) => (
       hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
-      hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
+      hitungPenyesuaianMasuk(row?.penyesuaian) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
     )
   },
   {
@@ -159,7 +159,7 @@ const columnsx = [
     label: 'Stok Keluar',
     align: 'right',
     field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
-      hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
+      hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.penyesuaian) + hitungDistribusi(row?.distribusipersiapan) +
       hitungBarangRusak(row?.barangrusak) + hitungReturDepo(row?.returdepo)
     )
   },
@@ -316,29 +316,33 @@ function newReturResep (arr) {
 // }
 
 function hitungPenyesuaianMasuk (arr) {
-  const penye = arr?.map(m => m?.ssw)
+  // const penye = arr?.map(m => m?.ssw)
+  // console.log('penye', arr)
+
+  const penye = arr
   const masuk = []
-  penye?.forEach(e => {
-    const anu = e?.filter(f => f.penyesuaian > 0)
-    if (anu.length) {
-      anu.forEach(s => {
-        masuk.push(s)
-      })
-    }
-  })
+  const anu = penye?.filter(f => f.penyesuaian > 0)
+  if (anu.length) {
+    anu.forEach(s => {
+      masuk.push(s)
+    })
+  }
+  // penye?.forEach(e => {
+  // })
   return masuk?.reduce((x, y) => parseFloat(x) + parseFloat(y.penyesuaian), 0)
 }
 function hitungPenyesuaianKeluar (arr) {
-  const penye = arr?.map(m => m.ssw)
+  // const penye = arr?.map(m => m.ssw)
+  const penye = arr
   const keluar = []
-  penye?.forEach(e => {
-    const anu = e?.filter(f => f.penyesuaian < 0)
-    if (anu.length) {
-      anu.forEach(s => {
-        keluar.push(s)
-      })
-    }
-  })
+  const anu = penye?.filter(f => f.penyesuaian < 0)
+  if (anu.length) {
+    anu.forEach(s => {
+      keluar.push(s)
+    })
+  }
+  // penye?.forEach(e => {
+  // })
 
   return keluar?.reduce((x, y) => parseFloat(x) + parseFloat(-y.penyesuaian), 0)
 }
@@ -370,10 +374,10 @@ function hitungTotal (row) {
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars
   const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + newReturResep(row?.returpenjualan) +
-  hitungPenyesuaianMasuk(row?.stok) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
+  hitungPenyesuaianMasuk(row?.penyesuaian) + hitungReturDistribusi(row?.persiapanretur) + hitungReturGudang(row?.returgudang)
   // eslint-disable-next-line no-unused-vars
   const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar, row?.distribusipersiapan) +
-  hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.stok) + hitungDistribusi(row?.distribusipersiapan) +
+  hitungResepRacikanKeluar(row?.resepkeluarracikan) + hitungPenyesuaianKeluar(row?.penyesuaian) + hitungDistribusi(row?.distribusipersiapan) +
   hitungBarangRusak(row?.barangrusak) + hitungReturDepo(row?.returdepo)
   // eslint-disable-next-line no-unused-vars
   const total = awal + masuk - keluar

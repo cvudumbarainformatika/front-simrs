@@ -347,11 +347,11 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             // }
           })
           pak?.forEach(res => {
-            const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
-            res.harga = harga
-            res.sub = harga * res.jumlah
+            // const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+            // const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+            // const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
+            // res.harga = harga
+            // res.sub = harga * res.jumlah
             const temp = {
               tgl: res?.tgl ?? this.params.tahun + '-' + this.params.bulan + '-31 23:00:00',
               keluar: res,
@@ -492,11 +492,11 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             // }
           })
           it?.returpenjualan?.forEach(res => {
-            const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
-            res.harga = harga
-            res.sub = harga * res.jumlah
+            // const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+            // const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+            // const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
+            // res.harga = harga
+            // res.sub = harga * res.jumlah
             const temp = {
               tgl: res.tgl,
               masuk: res,

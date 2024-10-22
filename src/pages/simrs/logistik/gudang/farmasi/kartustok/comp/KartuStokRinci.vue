@@ -301,19 +301,19 @@ const bentukArrBaru = computed(() => {
     }
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
-  const penyesuaian = props?.item?.stok?.map(m => {
-    const arr = m.ssw
-    return arr.map(x => {
-      return {
-        tgl: x?.tgl_penyesuaian,
-        tanggal: date.formatDate(x?.tgl_penyesuaian, 'DD, MMM YYYY'),
-        jam: date.formatDate(x?.tgl_penyesuaian, 'HH:mm'),
-        keterangan: 'Koreksi Stok Awal ',
-        masuk: x?.penyesuaian > 0 ? parseFloat(x?.penyesuaian) : 0,
-        keluar: x?.penyesuaian < 0 ? parseFloat(-x?.penyesuaian) : 0,
-        total: 0
-      }
-    })
+  const penyesuaian = props?.item?.penyesuaian?.map(x => {
+    // const arr = m
+    // return arr.map(x => {
+    return {
+      tgl: x?.tgl_penyesuaian,
+      tanggal: date.formatDate(x?.tgl_penyesuaian, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_penyesuaian, 'HH:mm'),
+      keterangan: 'Koreksi Stok Awal ',
+      masuk: x?.penyesuaian > 0 ? parseFloat(x?.penyesuaian) : 0,
+      keluar: x?.penyesuaian < 0 ? parseFloat(-x?.penyesuaian) : 0,
+      total: 0
+    }
+    // })
     // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
   })
 
