@@ -26,10 +26,10 @@
 </template>
 
 <script setup>
-import { usePermintaanOperasiRanapStore } from 'src/stores/simrs/ranap/operasi'
+import { usePermintaanOperasiIrdRanapStore } from 'src/stores/simrs/ranap/operasiird'
 import { ref } from 'vue'
 
-const store = usePermintaanOperasiRanapStore()
+const store = usePermintaanOperasiIrdRanapStore()
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {

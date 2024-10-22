@@ -43,6 +43,9 @@ import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
 import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+import { usePermintaanBankDarahStore } from 'src/stores/simrs/ranap/bankdarah'
+import { usePermintaanApheresisStore } from 'src/stores/simrs/ranap/apheresis'
+import { usePermintaanAmbulanStore } from 'src/stores/simrs/ranap/ambulance'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -52,6 +55,9 @@ const diagnosakeperawatan = useDiagnosaKeperawatan()
 const tindakan = useTindakanRanapStore()
 const lab = useLaboratPoli()
 const radiologi = useRadiologiPoli()
+const bankdarah = usePermintaanBankDarahStore()
+const apheresis = usePermintaanApheresisStore()
+const ambulan = usePermintaanAmbulanStore()
 
 onMounted(() => {
   Promise.all([
@@ -65,7 +71,12 @@ onMounted(() => {
 
     lab.getMasterLaborat(),
     radiologi.getRadiologi(),
-    radiologi.getJenisRadiologi()
+    radiologi.getJenisRadiologi(),
+    bankdarah.getMaster(),
+    apheresis.getMaster(),
+    ambulan.getTujuanAmbulance(),
+
+    store.getNakes()
 
   ])
 })

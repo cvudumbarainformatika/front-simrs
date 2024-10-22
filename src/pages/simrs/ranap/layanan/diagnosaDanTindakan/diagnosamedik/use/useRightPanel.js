@@ -33,10 +33,10 @@ export default function useRightPanel (pasien) {
 
     // console.log('nakes', nakes)
 
-    getData()
+    getData(pasien)
   })
 
-  const getData = async () => {
+  const getData = (pasien) => {
     // const params = {
     //   params: {
     //     noreg: pasien?.noreg
@@ -48,6 +48,8 @@ export default function useRightPanel (pasien) {
     //   store.items = resp.data
     //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
     // }
+
+    store.PISAH_DATA_RANAP_IGD(pasien?.diagnosamedis, pasien)
   }
 
   const hapusItem = (id) => {

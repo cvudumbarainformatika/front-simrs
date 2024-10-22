@@ -55,7 +55,7 @@ const enter = (el, done) => {
         <div class="bg-grey-4 q-pa-sm">
           <info-input-ranap :items="store.items.ranap">
             <transition-group appear tag="div" @before-enter="beforeEnter" @enter="enter">
-              <div v-for="(item, i) in pasien?.penilaian" :key="i" v-ripple class="q-card q-pa-md q-mb-sm cursor-pointer">
+              <div v-for="(item, i) in store?.items?.ranap" :key="i" v-ripple class="q-card q-pa-md q-mb-sm cursor-pointer">
                 <q-item-section>
                   <q-item-label class="text-bold">
                     ASESMENT AWAL KEPERAWATAN

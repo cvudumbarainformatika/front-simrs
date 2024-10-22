@@ -106,15 +106,16 @@ import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 // import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
-import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
-import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
-import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
-import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
-import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
-import { useFisioPoli } from 'src/stores/simrs/pelayanan/poli/fisio'
-import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
-import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
+// import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
+// import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
+// import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+// import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
+// import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
+// import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+// import { useFisioPoli } from 'src/stores/simrs/pelayanan/poli/fisio'
+// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+// import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
+// import { usePermintaanOperasiRanapStore } from 'src/stores/simrs/ranap/operasi'
 // import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
@@ -137,15 +138,16 @@ const props = defineProps({
 const store = usePengunjungRanapStore()
 const auth = useAplikasiStore()
 const anamnesis = useAnamnesisRanapStore()
-const pemeriksaan = usePemeriksaanUmumRanapStore()
-const penilaian = usePenilaianRanapStore()
-const diagnosa = useDiagnosaStore()
-const diagnosaKeperawatan = useDiagnosaKeperawatan()
-const lab = useLaboratPoli()
-const rad = useRadiologiPoli()
-const fisio = useFisioPoli()
-const tindakan = useTindakanRanapStore()
-const asUlang = useAsessmentUlangRanapStore()
+// const pemeriksaan = usePemeriksaanUmumRanapStore()
+// const penilaian = usePenilaianRanapStore()
+// const diagnosa = useDiagnosaStore()
+// const diagnosaKeperawatan = useDiagnosaKeperawatan()
+// const lab = useLaboratPoli()
+// const rad = useRadiologiPoli()
+// const fisio = useFisioPoli()
+// const tindakan = useTindakanRanapStore()
+// const asUlang = useAsessmentUlangRanapStore()
+// const operasi = usePermintaanOperasiRanapStore()
 
 const nakes = computed(() => {
   return auth?.user?.pegawai?.kdgroupnakes
@@ -215,21 +217,23 @@ function menuDiganti (val) {
 const onShow = () => {
   console.log('pasien', props.pasien)
   Promise.all([
-    anamnesis.getRiwayatKehamilan(props.pasien),
-    anamnesis.getData(props.pasien),
-    pemeriksaan.getData(props.pasien),
-    penilaian.getData(props.pasien),
-    diagnosa.getData(props.pasien),
-    diagnosaKeperawatan.getDiagnosaByNoreg(props.pasien),
-    lab.getNota(props.pasien),
-    lab.getData(props.pasien),
-    rad.getNota(props.pasien),
-    rad.getData(props.pasien),
-    fisio.getNota(props.pasien),
-    fisio.getData(props.pasien),
-    tindakan.getNota(props.pasien),
-    tindakan.getTindakan(props.pasien),
-    asUlang.getData(props.pasien)
+    anamnesis.getRiwayatKehamilan(props.pasien)
+    // anamnesis.getData(props.pasien),
+    // pemeriksaan.getData(props.pasien),
+    // penilaian.getData(props.pasien),
+    // diagnosa.getData(props.pasien),
+    // diagnosaKeperawatan.getDiagnosaByNoreg(props.pasien)
+    // lab.getNota(props.pasien),
+    // lab.getData(props.pasien),
+    // rad.getNota(props.pasien),
+    // rad.getData(props.pasien),
+    // fisio.getNota(props.pasien),
+    // fisio.getData(props.pasien),
+    // tindakan.getNota(props.pasien),
+    // tindakan.getTindakan(props.pasien),
+    // asUlang.getData(props.pasien),
+    // operasi.getNota(props.pasien)
+    // operasi.getData(props.pasien)
 
   ])
 }

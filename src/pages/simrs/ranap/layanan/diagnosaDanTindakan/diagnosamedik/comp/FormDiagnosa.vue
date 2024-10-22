@@ -62,7 +62,7 @@
           :options="optionsDiagutama"
           inline
           dense
-          :disable="pasien?.diagnosamedis.length > 0"
+          :disable="pasien?.diagnosamedis?.length > 0"
           @update:model-value="diagnosaUtamaDiubah"
         />
       <!-- <q-radio
