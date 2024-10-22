@@ -75,7 +75,7 @@
                     class="row f-12" v-for="(sub , xx) in item.morse_fall"
                     :key="xx"
                   >
-                    <div class="col-2 q-mb-md">
+                    <div class="col-2 q-mb-sm">
                       <q-item-label>
                         <span>{{ xx.toUpperCase() }} </span>
                       </q-item-label>
@@ -86,36 +86,43 @@
                     </q-item-label>
                   </div>
                 </div>
-                <div v-if="item.ontario !== ''">
-                  <div
-                    class="row f-12"
-                  >
-                    <div class="col-12 q-mb-md">
-                      <q-item-label>
-                        <span class="text-weight-bold">Riwayat Jatuh : </span>
-                      </q-item-label>
-                      <div class="row">
-                        <div class="col-7 q-ml-md q-mt-md">
-                          <q-item-label>Apakah pasien datang kerumah sakit karena jatuh? </q-item-label>
+                <div v-if="item.hasil !== ''">
+                  <div>
+                    <div
+                      v-for="(itemon , on) in item?.hasil"
+                      :key="on"
+                      class="row f-12 col-12 q-mb-sm"
+                    >
+                      <div class="col-12 q-mb-sm">
+                        <q-item-label>
+                          <span class="text-weight-bold">{{ itemon?.label }} : </span>
+                        </q-item-label>
+                        <div v-if="itemon?.submenu?.length > 0">
+                          <div
+                            class="row" v-for="(submenu , sa) in itemon?.submenu"
+                            :key="sa"
+                          >
+                            <div class="col-8 q-ml-md q-mt-sm">
+                              <q-item-label>{{ submenu?.label }} </q-item-label>
+                            </div>
+
+                            <div v-for="(categoris , ct) in submenu?.categories" :key="ct">
+                              <div class="col-2 q-ml-md q-mt-sm">
+                                <q-item-label>{{ categoris?.label }} || Skor: {{ categoris?.skor }}</q-item-label>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div class="col-2 q-ml-md q-mt-md">
-                          <q-item-label>{{ item?.ontario?.riwayatJth_a?.label }}</q-item-label>
-                        </div>
-                        <div class="col-2 q-ml-md q-mt-md">
-                          <q-item-label>{{ item?.ontario?.riwayatJth_a?.skor }}</q-item-label>
-                        </div>
-                        <div class="col-7 q-ml-md ">
-                          <q-item-label>Jika tidak, apakah pasien mengalami jatuh dalam 2 bulan terakhir ini? </q-item-label>
-                        </div>
-                        <div class="col-2 q-ml-md ">
-                          <q-item-label>{{ item?.ontario?.riwayatJth_b?.label }}</q-item-label>
-                        </div>
-                        <div class="col-2 q-ml-md ">
-                          <q-item-label>{{ item?.ontario?.riwayatJth_b?.skor }}</q-item-label>
+                        <div v-else>
+                          <div v-for="(categorisx , xc) in itemon?.categories" :key="xc">
+                            <div class="col-2 q-ml-md q-mt-sm">
+                              <q-item-label>{{ categorisx?.label }} || Skor: {{ categorisx?.skor }}</q-item-label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-12 q-mb-md">
+                    <!-- <div class="col-12 q-mb-md">
                       <q-item-label>
                         <span class="text-weight-bold">Status Mental : </span>
                       </q-item-label>
@@ -224,16 +231,10 @@
                           <q-item-label>{{ item?.ontario?.mobilitas?.skor }}</q-item-label>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </q-item-section>
-              <!-- <div
-                v-for="(sub , x) in item?.humpty_dumpty"
-                :key="x"
-              >
-                {{ x }} : {{ sub?.label }}
-              </div> -->
               <q-item-section
                 side
               >
@@ -267,6 +268,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
+import { watch } from 'vue'
 
 // import { computed } from 'vue'
 const store = usePenilaianAnamnesisIgd()
@@ -303,6 +305,52 @@ function hapusItem (id) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+
+store?.masterpenilaian()
+
+watch(() => {
+  // if(props?.pasien?.penilaiananamnesis?.on)
+  console.log('asd')
+  console.log('sasaxxx', store?.ontarios)
+  const master = []
+  store?.ontarios?.form.forEach(sa => {
+    if (sa?.submenu?.length > 0) {
+      sa?.submenu?.forEach(su => {
+        master.push(su)
+      })
+    }
+    else {
+      master.push(sa)
+    }
+  })
+  console.log('master', master)
+  console.log('pasien', props.pasien)
+  const awal = props?.pasien?.penilaiananamnesis
+  console.log('asd', awal)
+  props?.pasien?.penilaiananamnesis?.forEach(x => {
+    if (x?.ontario) {
+      x.hasil = store?.ontarios?.form
+      x?.hasil?.forEach(ha => {
+        console.log('ha', ha)
+        if (ha?.submenu.length) {
+          ha?.submenu.forEach(su => {
+            su.skor = x.ontario[su.kode]
+          })
+        }
+        else {
+          ha.skor = x.ontario[ha.kode]
+        }
+      })
+    }
+    // const ontario = Object.keys(x?.ontario)
+    // ontario?.forEach(key => {
+    //   console.log('key', key)
+    //   const mas = master.find(a => a.kode === key)
+    //   x.ontario[key].master = mas?.label
+    // })
+    console.log('sasa', x)
+  })
+})
 
 // onMounted(() => {
 //   console.log('sasa', props?.pasien?.penilaiananamnesis)

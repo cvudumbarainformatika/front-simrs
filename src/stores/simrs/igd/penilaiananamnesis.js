@@ -14,6 +14,9 @@ export const usePenilaianAnamnesisIgd = defineStore('penilaian_anamnesis_igd', {
     formpenilaians: {},
     humpty_dumpty: [],
     morse_fall: [],
+    ontarios: [],
+
+    morses: [],
     // form: {
     //   id: '',
     //   noreg: '',
