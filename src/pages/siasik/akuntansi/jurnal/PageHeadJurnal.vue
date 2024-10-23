@@ -34,6 +34,14 @@
           label="Jurnal Umum"
           @click="goTo('/akuntansi/jurnal/jurnalumum')"
         />
+        <q-btn
+          :outline="path!=='/akuntansi/jurnal/postingjurnal'"
+          glossy
+          size="md"
+          color="primary"
+          label="Posting Jurnal"
+          @click="goTo('/akuntansi/jurnal/postingjurnal')"
+        />
         <!-- <q-btn
           :outline="path!=='/akuntansi/laporan/lo'"
           glossy

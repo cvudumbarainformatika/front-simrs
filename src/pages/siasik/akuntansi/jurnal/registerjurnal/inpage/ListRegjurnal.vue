@@ -65,16 +65,30 @@
             </q-td>
             <q-td key="koderek" :props="props" class="text-left vertical-bottom">
               <div class="row" v-for="it in props.row?.debit" :key="it">
-                <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                  {{ it.kode }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="white" class="row full-width text-weight-bold text-teal-6">
+                    {{ at.kode }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
+                    {{ it.kode }}
+                  </q-badge>
+                </template>
               </div>
               <div class="row q-pl-md" v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                  {{ it.kode }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="white" class="row full-width text-weight-bold text-orange-6">
+                    {{ at.kode }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
+                    {{ it.kode }}
+                  </q-badge>
+                </template>
               </div>
-              <div class="row" v-for="it in props.row?.debit_1" :key="it">
+              <!-- <div class="row" v-for="it in props.row?.debit_1" :key="it">
                 <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
                   {{ it.kode }}
                 </q-badge>
@@ -93,8 +107,8 @@
                 <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
                   {{ it.kode }}
                 </q-badge>
-              </div>
-              <div class="row" v-for="it in props.row?.debit_3" :key="it">
+              </div> -->
+              <!-- <div class="row" v-for="it in props.row?.debit_3" :key="it">
                 <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
                   {{ it.kode }}
                 </q-badge>
@@ -103,7 +117,7 @@
                 <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
                   {{ it.kode }}
                 </q-badge>
-              </div>
+              </div> -->
 
               <div class="row" v-for="it in props.row?.d_pjk" :key="it">
                 <div v-for="pjk in it" :key="pjk">
@@ -134,96 +148,6 @@
                 </div>
               </div>
               <div class="row q-pl-md" v-for="it in props.row?.k_pjk1" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk6" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.kode }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk6" :key="it">
                 <div v-for="pjk in it" :key="pjk">
                   <template v-if="pjk.kredit != 0">
                     <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
@@ -244,16 +168,30 @@
                 </div>
               </template>
               <div class="row" v-for="it in props.row?.debit" :key="it">
-                <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                  {{ it.uraian }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="white" class="row full-width text-weight-bold text-teal-6">
+                    {{ at.uraian }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
+                    {{ it.uraian }}
+                  </q-badge>
+                </template>
               </div>
               <div class="row q-pl-md" v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                  {{ it.uraian }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="white" class="row full-width text-weight-bold text-orange-6">
+                    {{ at.uraian }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
+                    {{ it.uraian }}
+                  </q-badge>
+                </template>
               </div>
-              <div class="row" v-for="it in props.row?.debit_1" :key="it">
+              <!-- <div class="row" v-for="it in props.row?.debit_1" :key="it">
                 <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
                   {{ it.uraian }}
                 </q-badge>
@@ -272,8 +210,8 @@
                 <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
                   {{ it.uraian }}
                 </q-badge>
-              </div>
-              <div class="row" v-for="it in props.row?.debit_3" :key="it">
+              </div> -->
+              <!-- <div class="row" v-for="it in props.row?.debit_3" :key="it">
                 <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
                   {{ it.uraian }}
                 </q-badge>
@@ -282,7 +220,7 @@
                 <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
                   {{ it.uraian }}
                 </q-badge>
-              </div>
+              </div> -->
 
               <div class="row" v-for="it in props.row?.d_pjk" :key="it">
                 <div v-for="pjk in it" :key="pjk">
@@ -320,110 +258,34 @@
                   </template>
                 </div>
               </div>
-              <div class="row" v-for="it in props.row?.d_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk6" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-teal-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row q-pl-md" v-for="it in props.row?.k_pjk6" :key="it">
-                <div v-for="pjk in it" :key="pjk">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="white" class="row full-width text-weight-bold text-orange-6">
-                      {{ pjk.uraian }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
             </q-td>
 
             <q-td key="debit" :props="props" class="text-right vertical-bottom">
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="teal-6" class="row justify-end full-width">
-                  {{ formattanpaRp(it.debit) }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="teal-6" class="row justify-end full-width">
+                    {{ formattanpaRp(at.debit) }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="teal-6" class="row justify-end full-width">
+                    {{ formattanpaRp(it.debit) }}
+                  </q-badge>
+                </template>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="orange-6" class="row justify-end full-width">
-                  {{ formattanpaRp(it.debit) }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="orange-6" class="row justify-end full-width">
+                    {{ formattanpaRp(at.debit) }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="orange-6" class="row justify-end full-width">
+                    {{ formattanpaRp(it.debit) }}
+                  </q-badge>
+                </template>
               </div>
-              <div class="row" v-for="it in props.row?.debit_1" :key="it">
+              <!-- <div class="row" v-for="it in props.row?.debit_1" :key="it">
                 <q-badge color="teal-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
@@ -442,8 +304,8 @@
                 <q-badge color="orange-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
-              </div>
-              <div class="row" v-for="it in props.row?.debit_3" :key="it">
+              </div> -->
+              <!-- <div class="row" v-for="it in props.row?.debit_3" :key="it">
                 <q-badge color="teal-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
@@ -452,7 +314,7 @@
                 <q-badge color="orange-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.debit) }}
                 </q-badge>
-              </div>
+              </div> -->
 
               <div class="row" v-for="it in props.row?.d_pjk" :key="it">
                 <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
@@ -482,96 +344,6 @@
                 </div>
               </div>
               <div class="row" v-for="it in props.row?.k_pjk1" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk6" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.debit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk6" :key="it">
                 <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
                   <template v-if="pjk.kredit != 0">
                     <q-badge color="orange-6" class="row justify-end full-width">
@@ -584,16 +356,30 @@
 
             <q-td key="kredit" :props="props" class="text-right vertical-bottom">
               <div v-for="it in props.row?.debit" :key="it">
-                <q-badge color="teal-6" class="row justify-end full-width">
-                  {{ formattanpaRp(it.kredit) }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="teal-6" class="row justify-end full-width">
+                    {{ formattanpaRp(at.kredit) }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="teal-6" class="row justify-end full-width">
+                    {{ formattanpaRp(it.kredit) }}
+                  </q-badge>
+                </template>
               </div>
               <div v-for="it in props.row?.kredit" :key="it">
-                <q-badge color="orange-6" class="row justify-end full-width">
-                  {{ formattanpaRp(it.kredit) }}
-                </q-badge>
+                <template v-if="it.length">
+                  <q-badge v-for="at in it" :key="at" color="orange-6" class="row justify-end full-width">
+                    {{ formattanpaRp(at.kredit) }}
+                  </q-badge>
+                </template>
+                <template v-else>
+                  <q-badge color="orange-6" class="row justify-end full-width">
+                    {{ formattanpaRp(it.kredit) }}
+                  </q-badge>
+                </template>
               </div>
-              <div class="row" v-for="it in props.row?.debit_1" :key="it">
+              <!-- <div class="row" v-for="it in props.row?.debit_1" :key="it">
                 <q-badge color="teal-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
@@ -612,8 +398,8 @@
                 <q-badge color="orange-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
-              </div>
-              <div class="row" v-for="it in props.row?.debit_3" :key="it">
+              </div> -->
+              <!-- <div class="row" v-for="it in props.row?.debit_3" :key="it">
                 <q-badge color="teal-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
@@ -622,7 +408,7 @@
                 <q-badge color="orange-6" class="row justify-end full-width">
                   {{ formattanpaRp(it.kredit) }}
                 </q-badge>
-              </div>
+              </div> -->
 
               <div class="row" v-for="it in props.row?.d_pjk" :key="it">
                 <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
@@ -652,96 +438,6 @@
                 </div>
               </div>
               <div class="row" v-for="it in props.row?.k_pjk1" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk2" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk3" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk4" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk5" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.kredit != 0">
-                    <q-badge color="orange-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.d_pjk6" :key="it">
-                <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
-                  <template v-if="pjk.debit != 0">
-                    <q-badge color="teal-6" class="row justify-end full-width">
-                      {{ formattanpaRp(pjk.kredit) }}
-                    </q-badge>
-                  </template>
-                </div>
-              </div>
-              <div class="row" v-for="it in props.row?.k_pjk6" :key="it">
                 <div v-for="pjk in it" :key="pjk" class="row justify-end full-width">
                   <template v-if="pjk.kredit != 0">
                     <q-badge color="orange-6" class="row justify-end full-width">

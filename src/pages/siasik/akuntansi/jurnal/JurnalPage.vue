@@ -65,9 +65,9 @@ const title = computed(() => {
   if (page.path === '/akuntansi/jurnal/jurnalumum') {
     return 'JURNAL UMUM'
   }
-  // else if (page.path === '/akuntansi/jurnal/jurnalumum') {
-  //   return 'LPSAL'
-  // }
+  else if (page.path === '/akuntansi/jurnal/postingjurnal') {
+    return 'POSTING JURNAL'
+  }
   // else if (page.path === '/pendaftaran/umum/listmjkn') {
   // //   return 'LIST MOBILE JKN'
   // }
@@ -80,8 +80,9 @@ const subtitle = computed(() => {
   if (page.path === '/akuntansi/jurnal/jurnalumum') {
     return 'Jurnal Umum Akuntansi'
   }
-  // else if (page.path === '/pendaftaran/igd/kunjungan') {
-  //   return 'List Kunjungan Pasien Tanpa Ansuransi / Umum'
+  else if (page.path === '/akuntansi/jurnal/postingjurnal') {
+    return 'List Jurnal yang Terposting'
+  }
   // // } else if (page.path === '/pendaftaran/umum/listmjkn') {
   // //   return 'List Kunjungan dari m-JKN'
   // }

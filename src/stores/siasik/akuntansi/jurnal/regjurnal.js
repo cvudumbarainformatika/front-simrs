@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const registerJurnal = defineStore('register_jurnal', {
   state: () => ({
     loading: false,
     disabled: false,
+    dialogJurnal: false,
+    dialogRinci: false,
     reqs: {
       q: '',
       page: 1,
@@ -29,6 +32,10 @@ export const registerJurnal = defineStore('register_jurnal', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
     ],
+    form: {
+      jurnal: []
+      // jurnalall: []
+    },
     bastfarmasi: [],
     stp: [],
     cairnostp: [],
@@ -39,12 +46,85 @@ export const registerJurnal = defineStore('register_jurnal', {
     spjpanjar: [],
     nihil: [],
     pajakls: [],
-    jurnals: []
+
+    // DATA KE FRONTEND
+    jurnals: [],
+
+    // DATA CREATE JURNAL KE DATABASE
+    postingjurnals: []
   }),
   actions: {
     goToPage (val) {
       this.reqs.page = val
       this.getRegJurnal()
+    },
+    // simpan () {
+    //   this.postJurnal()
+    // },
+    posting () {
+      // console.log('notrans', this.jurnals)
+      // this.dialogRinci = true
+      // this.dialogJurnal = true
+
+      this.form.jurnal = this.postingjurnals
+
+      console.log('HASIIIL', this.form)
+      this.postJurnal()
+      // this.simpan()
+      // this.form.kegiatanblud = this.jurnals?.kegiatan
+      // this.form.tanggal = this.jurnals?.tanggal
+      // const koderek = [
+      //   this.jurnals?.debit?.map((x) => x.kode),
+      //   this.jurnals?.kredit?.map((x) => x.kode),
+      //   this.jurnals?.debit_1?.map((x) => x.kode),
+      //   this.jurnals?.kredit_1?.map((x) => x.kode),
+      //   this.jurnals?.debit_2?.map((x) => x.kode),
+      //   this.jurnals?.kredit_2?.map((x) => x.kode),
+      //   this.jurnals?.d_pjk?.map((x) => x.kode),
+      //   this.jurnals?.k_pjk?.map((x) => x.kode),
+      //   this.jurnals?.d_pjk1?.map((x) => x.kode),
+      //   this.jurnals?.k_pjk1?.map((x) => x.kode)
+      // ]
+      // const uraian = [
+      //   this.jurnals?.debit?.map((x) => x.uraian),
+      //   this.jurnals?.kredit?.map((x) => x.uraian),
+      //   this.jurnals?.debit_1?.map((x) => x.uraian),
+      //   this.jurnals?.kredit_1?.map((x) => x.uraian),
+      //   this.jurnals?.debit_2?.map((x) => x.uraian),
+      //   this.jurnals?.kredit_2?.map((x) => x.uraian),
+      //   this.jurnals?.d_pjk?.map((x) => x.uraian),
+      //   this.jurnals?.k_pjk?.map((x) => x.uraian),
+      //   this.jurnals?.d_pjk1?.map((x) => x.uraian),
+      //   this.jurnals?.k_pjk1?.map((x) => x.uraian)
+      // ]
+      // const debit = [
+      //   this.jurnals?.debit?.map((x) => x.debit),
+      //   this.jurnals?.kredit?.map((x) => x.debit),
+      //   this.jurnals?.debit_1?.map((x) => x.debit),
+      //   this.jurnals?.kredit_1?.map((x) => x.debit),
+      //   this.jurnals?.debit_2?.map((x) => x.debit),
+      //   this.jurnals?.kredit_2?.map((x) => x.debit),
+      //   this.jurnals?.d_pjk?.map((x) => x.debit),
+      //   this.jurnals?.k_pjk?.map((x) => x.debit),
+      //   this.jurnals?.d_pjk1?.map((x) => x.debit),
+      //   this.jurnals?.k_pjk1?.map((x) => x.debit)
+      // ]
+      // const kredit = [
+      //   this.jurnals?.debit?.map((x) => x.kredit),
+      //   this.jurnals?.kredit?.map((x) => x.kredit),
+      //   this.jurnals?.debit_1?.map((x) => x.kredit),
+      //   this.jurnals?.kredit_1?.map((x) => x.kredit),
+      //   this.jurnals?.debit_2?.map((x) => x.kredit),
+      //   this.jurnals?.kredit_2?.map((x) => x.kredit),
+      //   this.jurnals?.d_pjk?.map((x) => x.kredit),
+      //   this.jurnals?.k_pjk?.map((x) => x.kredit),
+      //   this.jurnals?.d_pjk1?.map((x) => x.kredit),
+      //   this.jurnals?.k_pjk1?.map((x) => x.kredit)
+      // ]
+      // this.form.koderek = koderek
+      // this.form.uraian = uraian
+      // this.form.debit = debit
+      // this.form.kredit = kredit
     },
     getRegJurnal () {
       this.loading = true
@@ -65,23 +145,24 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.pajakls = resp.data.pajakls
 
             this.loading = false
-            this.serahterima()
+            this.dataregisterjurnal()
             resolve(resp.data)
           }
         }).catch(() => { this.loading = false })
       })
     },
-    serahterima () {
+    dataregisterjurnal () {
       // DATA SERAHTERIMA SIASIK //
       const unikstp = this.stp.map((x) => x.noserahterimapekerjaan)
       const dataunikstp = unikstp.length ? [...new Set(unikstp)] : []
+      const dataserahterima = []
       const stp = []
       for (let i = 0; i < dataunikstp.length; i++) {
         const el = dataunikstp[i]
         const arr = this.stp
 
         const arrfilter = arr.filter((x) => x.noserahterimapekerjaan === el).map((x) => x)
-        // console.log('coba', arrfilter)
+
         const unik50 = arrfilter.map((x) => x.koderek50)
         const unik50x = unik50.length ? [...new Set(unik50)] : []
 
@@ -89,15 +170,21 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let k = 0; k < unik50x.length; k++) {
           const es = unik50x[k]
           const arrs = arrfilter
+          // console.log('arrrs', arrs)
+
           const el = {
             // beban
+            tanggal: arrs.filter((x) => x.koderek50 === es)[0]?.tgltrans,
+            notrans: arrs.filter((x) => x.koderek50 === es)[0]?.noserahterimapekerjaan,
+            keterangan: 'Serahterima Pekerjaan',
+            kegiatan: arrs.filter((x) => x.koderek50 === es)[0]?.kegiatanblud,
             kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bast,
             uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bast,
             debit: parseFloat(arrs.filter((x) => x.koderek50 === es)[0]?.nominalpembayaran),
             kredit: 0
           }
           beban.push(el)
-          // console.log('unikkkkks', beban)
+          // console.log('beban', beban)
         }
 
         const utangstp = []
@@ -105,7 +192,11 @@ export const registerJurnal = defineStore('register_jurnal', {
           const es = unik50x[k]
           const arrs = arrfilter
           const el = {
-            // beban
+            // utangstp
+            tanggal: arrs.filter((x) => x.koderek50 === es)[0]?.tgltrans,
+            notrans: arrs.filter((x) => x.koderek50 === es)[0]?.noserahterimapekerjaan,
+            keterangan: 'Serahterima Pekerjaan',
+            kegiatan: arrs.filter((x) => x.koderek50 === es)[0]?.kegiatanblud,
             kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bastx,
             uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bastx,
             debit: 0,
@@ -116,93 +207,36 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.tgltrans,
           notrans: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.noserahterimapekerjaan,
+          keterangan: 'Serahterima Pekerjaan',
           kegiatan: arr.filter((x) => x.noserahterimapekerjaan === el)[0]?.kegiatanblud,
-          debit_1: beban,
-          kredit_1: utangstp
+          nilai: arr.filter((x) => x.noserahterimapekerjaan === el).map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0),
+          debit: beban,
+          kredit: utangstp,
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
         }
         stp.push(obj)
-        // console.log('datastp', stp)
+
+        dataserahterima.push(...beban, ...utangstp)
+        // console.log('datastp', dataserahterima)
       }
-      // const arr50 = []
-      // for (let i = 0; i < this.stp.length; i++) {
-      //   const el = this.stp
-      //   const rinci = el[i].rinci.map((x) => {
-      //     return {
-      //       kode50: x.jurnal.kode50,
-      //       uraian: x.jurnal.uraian50,
-      //       kode_bast: x.jurnal.kode_bast,
-      //       uraian_bast: x.jurnal.uraian_bast,
-      //       kode_bastx: x.jurnal.kode_bastx,
-      //       uraian_bastx: x.jurnal.uraian_bastx,
-      //       nilai: parseFloat(x.nominalpembayaran)
-      //     }
-      //   })
-      //   arr50.push(...rinci)
-      //   const unik50 = rinci.map((s) => s.kode50)
-      //   const unik = unik50.length ? [...new Set(unik50)] : []
-
-      //   const kode50x = []
-      //   for (let i = 0; i < unik.length; i++) {
-      //     const el = unik[i]
-      //     const ob = {
-      //       koderek50: arr50.filter((x) => x.kode50 === el)[0]?.kode50,
-      //       uraian50: arr50.filter((x) => x.kode50 === el)[0]?.uraian
-      //     }
-      //     kode50x.push(ob)
-      //     // console.log('nilaaaaaaaai', ob.nilai)
-      //   }
-      //   const rincidebit = []
-      //   for (let i = 0; i < unik.length; i++) {
-      //     const el = unik[i]
-      //     const ob = {
-
-      //       kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bast,
-      //       uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bast,
-
-      //       debit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0),
-      //       kredit: 0
-      //     }
-      //     rincidebit.push(ob)
-      //     // console.log('nilaaaaaaaai', ob.nilai)
-      //   }
-      //   const rincikredit = []
-      //   for (let i = 0; i < unik.length; i++) {
-      //     const el = unik[i]
-      //     const ob = {
-
-      //       kode: arr50.filter((x) => x.kode50 === el)[0]?.kode_bastx,
-      //       uraian: arr50.filter((x) => x.kode50 === el)[0]?.uraian_bastx,
-      //       debit: 0,
-      //       kredit: arr50.filter((x) => x.kode50 === el).map((x) => x.nilai).reduce((a, b) => a + b, 0)
-      //     }
-      //     rincikredit.push(ob)
-      //     // console.log('nilaaaaaaaai', ob.nilai)
-      //   }
-      // console.log('arr50', kode50x)
-      //   const obj = {
-      //     tanggal: el[i].tgltrans,
-      //     notrans: el[i].noserahterimapekerjaan,
-      //     kegiatan: el[i].kegiatanblud,
-      //     koderek50: kode50x.map((x) => x.koderek50),
-      //     uraian50: kode50x.map((x) => x.uraian50),
-      //     debit: rincidebit,
-      //     kredit: rincikredit
-      //   }
-      //   stp.push(obj)
-      // }
 
       // DATA SERAHTERIMA FARMASI //
       const bastfarm = []
       const arr50bast = []
       for (let i = 0; i < this.bastfarmasi.length; i++) {
         const el = this.bastfarmasi
-        // console.log('ll', el)
+
         const ri = el[i].rincianbast
+        // console.log('xxxxxxxxxxxxxxxxx', ri)
         const rinci = ri.map((x) => {
           return {
+            tanggal: el[i].tgl_bast,
             nobast: x.nobast,
             kode50: x.masterobat.jurnal.kode50,
-            uraian: x.masterobat.jurnal.uraia50,
+            uraian: x.masterobat.jurnal.uraian50,
             kode_bast: x.masterobat.jurnal.kode_bast,
             uraian_bast: x.masterobat.jurnal.uraian_bast,
             kode_bastx: x.masterobat.jurnal.kode_bastx,
@@ -220,7 +254,8 @@ export const registerJurnal = defineStore('register_jurnal', {
           const el = unik[i]
           const ob = {
             koderek50: arr50bast.filter((x) => x.nobast === el)[0]?.kode50,
-            uraian50: arr50bast.filter((x) => x.nobast === el)[0]?.uraian
+            uraian50: arr50bast.filter((x) => x.nobast === el)[0]?.uraian,
+            nilai: parseFloat(arr50bast.filter((x) => x.nobast === el)[0]?.nilai)
           }
           kode50x.push(ob)
           // console.log('nilaaaaaaaai', kode50x)
@@ -229,7 +264,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-
+            tanggal: arr50bast.filter((x) => x.nobast === el)[0]?.tanggal,
+            notrans: arr50bast.filter((x) => x.nobast === el)[0]?.nobast,
+            keterangan: 'Serahteriama Pekerjaan',
+            kegiatan: 'Pelayanan Farmasi',
             kode: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bast,
             uraian: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bast,
 
@@ -243,7 +281,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let i = 0; i < unik.length; i++) {
           const el = unik[i]
           const ob = {
-
+            tanggal: arr50bast.filter((x) => x.nobast === el)[0]?.tanggal,
+            notrans: arr50bast.filter((x) => x.nobast === el)[0]?.nobast,
+            keterangan: 'Serahteriama Pekerjaan',
+            kegiatan: 'Pelayanan Farmasi',
             kode: arr50bast.filter((x) => x.nobast === el)[0]?.kode_bastx,
             uraian: arr50bast.filter((x) => x.nobast === el)[0]?.uraian_bastx,
             debit: 0,
@@ -255,13 +296,21 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: el[i].tgl_bast,
           notrans: el[i].nobast,
+          nilai: parseFloat(kode50x.map((x) => x.nilai).reduce((a, b) => a + b, 0)),
+          keterangan: 'Serahteriama Pekerjaan',
           kegiatan: 'Pelayanan Farmasi',
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
           debit: rincidebit,
-          kredit: rincikredit
+          kredit: rincikredit,
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
         }
         bastfarm.push(obj)
+        dataserahterima.push(...rincidebit, ...rincikredit)
+        // console.log('FARMASI', dataserahterima)
         // console.log('rincibast', bastfarm)
       }
 
@@ -287,18 +336,27 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // kas bendahara
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kode_cair2,
             uraian: er.uraian_cair2,
             debit: parseFloat(er.total),
             kredit: 0
           }
           bendpg.push(cair1)
+          // console.log('bendpg', bendpg)
         }
         const blud = []
         for (let v = 0; v < arrfilter.length; v++) {
           const er = arrfilter[v]
           const cair1 = {
             // kas blud
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kd_blud,
             uraian: er.ur_blud,
             debit: 0,
@@ -312,6 +370,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // Belanja
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kode50,
             uraian: er.rincianbelanja,
             debit: parseFloat(er.total),
@@ -324,6 +386,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[v]
           const cair1 = {
             // epsal
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kode_cair1,
             uraian: er.uraian_cair1,
             debit: 0,
@@ -336,6 +402,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // utang / beban / aset
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kode_cairx,
             uraian: er.uraian_cairx,
             debit: parseFloat(er.total),
@@ -348,6 +418,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[v]
           const cair1 = {
             // kas bendahara
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Tanpa BAST',
             kode: er.kode_cair2,
             uraian: er.uraian_cair2,
             debit: 0,
@@ -361,27 +435,33 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr.filter((x) => x.nonpdls === el)[0]?.tglpindahbuku,
           notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
+          nilai: arr.filter((x) => x.nonpdls === el).map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0),
           keterangan: 'Pencairan Tanpa BAST',
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
           // debit: rincidebit,
           // kredit: rincikredit,
           // debit
-          debit_1: bendpg,
+          debit: [bendpg, belanja, cairx],
           // kredit
-          kredit_1: blud,
+          kredit: [blud, kcair1, kasbend],
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
           // debit
-          debit_2: belanja,
-          // kredit
-          kredit_2: kcair1,
-          // debit
-          debit_3: cairx,
-          // kredit
-          kredit_3: kasbend
+          // debit_1: belanja,
+          // // kredit
+          // kredit_1: kcair1,
+          // // debit
+          // debit_2: cairx,
+          // // kredit
+          // kredit_2: kasbend
         }
         // console.log('hhhh', obj)
         cairnonstp.push(obj)
-        // console.log('hasil', cairnonstp)
+        dataserahterima.push(...bendpg, ...blud, ...belanja, ...kcair1, ...cairx, ...kasbend)
+        // console.log('hasil dataserahterima', dataserahterima)
       }
 
       // DATA PENCAIRAN DENGAN STP //
@@ -406,6 +486,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // kas bendahara
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kode_bastcair2,
             uraian: er.uraian_bastcair2,
             debit: parseFloat(er.total),
@@ -418,6 +502,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[v]
           const cair1 = {
             // kas blud
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kd_blud,
             uraian: er.ur_blud,
             debit: 0,
@@ -430,6 +518,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // Belanja
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kode50,
             uraian: er.rincianbelanja,
             debit: parseFloat(er.total),
@@ -442,6 +534,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[v]
           const cair1 = {
             // epsal
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kode_bastcair1,
             uraian: er.uraian_bastcair1,
             debit: 0,
@@ -454,6 +550,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[y]
           const cair1 = {
             // utang / beban / aset
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kode_bastcairx,
             uraian: er.uraian_bastcairx,
             debit: parseFloat(er.total),
@@ -466,6 +566,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[v]
           const cair1 = {
             // kas bendahara
+            tanggal: er.tglpindahbuku,
+            notrans: er.nonpdls,
+            kegiatan: er.kegiatanblud,
+            keterangan: 'Pencairan Dengan BAST',
             kode: er.kode_bastcair2,
             uraian: er.uraian_bastcair2,
             debit: 0,
@@ -479,25 +583,31 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr.filter((x) => x.nonpdls === el)[0]?.tglpindahbuku,
           notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
+          nilai: arr.filter((x) => x.nonpdls === el).map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0),
           keterangan: 'Pencairan Dengan BAST',
           koderek50: kode50x.map((x) => x.koderek50),
           uraian50: kode50x.map((x) => x.uraian50),
           // debit
-          debit_1: bendpg,
+          debit: [bendpg, belanja, cairx],
           // kredit
-          kredit_1: blud,
+          kredit: [blud, kcair1, kasbend],
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
           // debit
-          debit_2: belanja,
-          // kredit
-          kredit_2: kcair1,
-          // debit
-          debit_3: cairx,
-          // kredit
-          kredit_3: kasbend
+          // debit_1: belanja,
+          // // kredit
+          // kredit_1: kcair1,
+          // // debit
+          // debit_2: cairx,
+          // // kredit
+          // kredit_2: kasbend
         }
         // console.log('hhhh', obj)
         cairstpz.push(obj)
-        // console.log('cairstpz', cairstpz)
+        dataserahterima.push(...bendpg, ...blud, ...belanja, ...kcair1, ...cairx, ...kasbend)
+        // console.log('hasil dataserahterima', dataserahterima)
       }
 
       // DATA CONTRAPOST //
@@ -518,6 +628,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[i]
           const el = {
             // epsal
+            tanggal: date.formatDate(er?.tglcontrapost, 'YYYY-MM-DD'),
+            notrans: er?.nocontrapost,
+            keterangan: 'Contrapost',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cair1,
             uraian: er.uraian_cair1,
             debit: parseFloat(er.nominalcontrapost),
@@ -531,12 +645,17 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[i]
           const el = {
             // belanja
+            tanggal: date.formatDate(er?.tglcontrapost, 'YYYY-MM-DD'),
+            notrans: er?.nocontrapost,
+            keterangan: 'Contrapost',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode50,
             uraian: er.rincianbelanja,
             debit: 0,
             kredit: parseFloat(er.nominalcontrapost)
           }
           belanja.push(el)
+          // console.log('contrapost', belanja)
         }
 
         const kasbend = []
@@ -544,6 +663,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[i]
           const el = {
             // belanja
+            tanggal: date.formatDate(er?.tglcontrapost, 'YYYY-MM-DD'),
+            notrans: er?.nocontrapost,
+            keterangan: 'Contrapost',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cair2,
             uraian: er.uraian_cair2,
             debit: parseFloat(er.nominalcontrapost),
@@ -557,6 +680,10 @@ export const registerJurnal = defineStore('register_jurnal', {
           const er = arrfilter[i]
           const el = {
             // belanja
+            tanggal: date.formatDate(er?.tglcontrapost, 'YYYY-MM-DD'),
+            notrans: er?.nocontrapost,
+            keterangan: 'Contrapost',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cairx,
             uraian: er.uraian_cairx,
             debit: 0,
@@ -569,12 +696,19 @@ export const registerJurnal = defineStore('register_jurnal', {
           notrans: arr.filter((x) => x.nocontrapost === el)[0]?.nocontrapost,
           keterangan: 'Contrapost',
           kegiatan: arr.filter((x) => x.nocontrapost === el)[0]?.kegiatanblud,
-          debit_1: epsal,
-          kredit_1: belanja,
-          debit_2: kasbend,
-          kredit_2: bebanaset
+          nilai: arr.filter((x) => x.nonpdls === el).map((x) => parseFloat(x.nominalcontrapost)).reduce((a, b) => a + b, 0),
+          debit: [epsal, kasbend],
+          kredit: [belanja, bebanaset],
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
+          // debit_1: kasbend,
+          // kredit_2: bebanaset
         }
         cp.push(obj)
+        dataserahterima.push(...epsal, ...belanja, ...kasbend, ...bebanaset)
+        // console.log('hasil dataserahterima', dataserahterima)
       }
 
       // DATA SPM UP //
@@ -586,17 +720,26 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er.tglSpm,
+            notrans: er.noSpm,
+            keterangan: er.uraianPekerjaan,
+            kegiatan: 'Uang Persediaan Panjar',
             kode: '1.1.01.04.01.0001',
             uraian: 'Kas di BLUD',
             debit: 0,
             kredit: parseFloat(er.jumlahspp)
           }
           kasblud.push(el)
+          console.log('UP', kasblud)
         }
         const kasbend = []
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er.tglSpm,
+            notrans: er.noSpm,
+            keterangan: er.uraianPekerjaan,
+            kegiatan: 'Uang Persediaan Panjar',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.jumlahspp),
@@ -608,10 +751,17 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
           keterangan: arr[i].uraianPekerjaan,
-          debit_1: kasbend,
-          kredit_1: kasblud
+          nilai: arr.map((x) => parseFloat(x.jumlahspp)),
+          kegiatan: 'Uang Persediaan Panjar',
+          debit: kasbend,
+          kredit: kasblud,
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
         }
         dataspmup.push(obj)
+        dataserahterima.push(...kasblud, ...kasbend)
         // console.log('SPM UP', dataspmup)
       }
 
@@ -624,6 +774,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er.tglSpm,
+            notrans: er.noSpm,
+            keterangan: er.uraianPekerjaan,
+            kegiatan: 'Uang Persediaan Panjar',
             kode: '1.1.01.04.01.0001',
             uraian: 'Kas di BLUD',
             debit: 0,
@@ -635,6 +789,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er.tglSpm,
+            notrans: er.noSpm,
+            keterangan: er.uraianPekerjaan,
+            kegiatan: 'Uang Persediaan Panjar',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.jumlahspp),
@@ -646,10 +804,17 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
           keterangan: arr[i].uraianPekerjaan,
-          debit_1: kasbend,
-          kredit_1: kasblud
+          nilai: arr.map((x) => parseFloat(x.jumlahspp)),
+          kegiatan: 'Uang Persediaan Panjar',
+          debit: kasbend,
+          kredit: kasblud,
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
         }
         dataspmgu.push(obj)
+        dataserahterima.push(...kasbend, ...kasblud)
         // console.log('SPM GU', dataspmgu)
       }
 
@@ -667,18 +832,27 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const el = {
+            tanggal: er?.tglspjpanjar,
+            notrans: er?.nospjpanjar,
+            keterangan: 'SPJ Panjar',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode50,
             uraian: er.rincianbelanja50,
             debit: parseFloat(er.jumlahbelanjapanjar),
             kredit: 0
           }
           belanja.push(el)
+          // console.log('SPJ PANJAR', belanja)
         }
 
         const epsal = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const el = {
+            tanggal: er?.tglspjpanjar,
+            notrans: er?.nospjpanjar,
+            keterangan: 'SPJ Panjar',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cair1,
             uraian: er.uraian_cair1,
             debit: 0,
@@ -691,6 +865,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const el = {
+            tanggal: er?.tglspjpanjar,
+            notrans: er?.nospjpanjar,
+            keterangan: 'SPJ Panjar',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cairx,
             uraian: er.uraian_cairx,
             debit: parseFloat(er.jumlahbelanjapanjar),
@@ -703,6 +881,10 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const el = {
+            tanggal: er?.tglspjpanjar,
+            notrans: er?.nospjpanjar,
+            keterangan: 'SPJ Panjar',
+            kegiatan: er?.kegiatanblud,
             kode: er.kode_cair2,
             uraian: er.uraian_cair2,
             debit: 0,
@@ -713,14 +895,22 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: arr.filter((x) => x.nospjpanjar === el)[0].tglspjpanjar,
           notrans: arr.filter((x) => x.nospjpanjar === el)[0].nospjpanjar,
+          keterangan: 'SPJ Panjar',
           kegiatan: arr.filter((x) => x.nospjpanjar === el)[0].kegiatanblud,
-          debit_1: belanja,
-          kredit_1: epsal,
-          debit_2: beban,
-          kredit_2: kasbend
+          nilai: arr.filter((x) => x.nospjpanjar === el).map((x) => parseFloat(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0),
+          debit: [belanja, beban],
+          kredit: [epsal, kasbend],
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
+          // debit_1: beban,
+          // kredit_1: kasbend
         }
 
         spjpjr.push(obj)
+
+        dataserahterima.push(...belanja, ...epsal, ...beban, ...kasbend)
       }
 
       // DATA PENGEMBALIAN NIHIL //
@@ -732,17 +922,26 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.nopengembalian,
+            keterangan: 'UP GU Nihil',
+            kegiatan: 'Uang Pengembalian',
             kode: '1.1.01.04.01.0001',
             uraian: 'Kas di BLUD',
             debit: parseFloat(er.jmlpengembalianreal),
             kredit: 0
           }
           kasblud.push(el)
+          // console.log('nihil', kasblud)
         }
         const kasbend = []
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
           const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.nopengembalian,
+            keterangan: 'UP GU Nihil',
+            kegiatan: 'Uang Pengembalian',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
@@ -754,10 +953,17 @@ export const registerJurnal = defineStore('register_jurnal', {
           tanggal: arr[i].tgltrans,
           notrans: arr[i].nopengembalian,
           keterangan: 'UP GU Nihil',
-          debit_1: kasblud,
-          kredit_1: kasbend
+          kegiatan: 'Uang Pengembalian',
+          nilai: arr.map((x) => parseFloat(x.jmlpengembalianreal)),
+          debit: kasblud,
+          kredit: kasbend,
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
         }
         datanihil.push(obj)
+        dataserahterima.push(...kasblud, ...kasbend)
         // console.log('nihil', datanihil)
       }
 
@@ -774,322 +980,491 @@ export const registerJurnal = defineStore('register_jurnal', {
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pph21),
             kredit: 0
           }
-          pph21x.push(kas)
+          if (er.pph21 > 0) {
+            console.log('ppppppphh21', er.pph21 > 0)
+            pph21x.push(kas)
+          }
         }
         const pph21y = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.01.0001',
             uraian: 'Utang PPh 21',
             debit: 0,
             kredit: parseFloat(er.pph21)
           }
-          pph21y.push(utang)
+          if (er.pph21 > 0) {
+            pph21y.push(utang)
+          }
         }
 
         const pph21a = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.01.0001',
             uraian: 'Utang PPh 21',
             debit: parseFloat(er.pph21),
             kredit: 0
           }
-          pph21a.push(kas)
+          if (er.pph21 > 0) {
+            pph21a.push(kas)
+          }
         }
         const pph21b = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pph21)
           }
-          pph21b.push(utang)
+          if (er.pph21 > 0) {
+            pph21b.push(utang)
+          }
         }
 
         const pph22x = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pph22),
             kredit: 0
           }
-          pph22x.push(kas)
+          if (er.pph22 > 0) {
+            pph22x.push(kas)
+          }
         }
         const pph22y = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.02.0001',
             uraian: 'Utang PPh 22',
             debit: 0,
             kredit: parseFloat(er.pph22)
           }
-          pph22y.push(utang)
+          if (er.pph22 > 0) {
+            pph22y.push(utang)
+          }
         }
 
         const pph22a = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.02.0001',
             uraian: 'Utang PPh 22',
             debit: parseFloat(er.pph22),
             kredit: 0
           }
-          pph22a.push(kas)
+          if (er.pph22 > 0) {
+            pph22a.push(kas)
+          }
         }
         const pph22b = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pph22)
           }
-          pph22b.push(utang)
+          if (er.pph22 > 0) {
+            pph22b.push(utang)
+          }
         }
 
         const pph23x = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pph23),
             kredit: 0
           }
-          pph23x.push(kas)
+          if (er.pph23 > 0) {
+            pph23x.push(kas)
+          }
         }
         const pph23y = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.03.0001',
             uraian: 'Utang PPh 23',
             debit: 0,
             kredit: parseFloat(er.pph23)
           }
-          pph23y.push(utang)
+          if (er.pph23 > 0) {
+            pph23y.push(utang)
+          }
         }
 
         const pph23a = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.03.0001',
             uraian: 'Utang PPh 23',
             debit: parseFloat(er.pph23),
             kredit: 0
           }
-          pph23a.push(kas)
+          if (er.pph23 > 0) {
+            pph23a.push(kas)
+          }
         }
         const pph23b = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pph23)
           }
-          pph23b.push(utang)
+          if (er.pph23 > 0) {
+            pph23b.push(utang)
+          }
         }
 
         const pph25x = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pph25),
             kredit: 0
           }
-          pph25x.push(kas)
+          if (er.pph25 > 0) {
+            pph25x.push(kas)
+          }
         }
         const pph25y = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.04.0001',
             uraian: 'Utang PPh 25',
             debit: 0,
             kredit: parseFloat(er.pph25)
           }
-          pph25y.push(utang)
+          if (er.pph25 > 0) {
+            pph25y.push(utang)
+          }
         }
 
         const pph25a = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.04.0001',
             uraian: 'Utang PPh 25',
             debit: parseFloat(er.pph25),
             kredit: 0
           }
-          pph25a.push(kas)
+          if (er.pph25 > 0) {
+            pph25a.push(kas)
+          }
         }
         const pph25b = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pph25)
           }
-          pph25b.push(utang)
+          if (er.pph25 > 0) {
+            pph25b.push(utang)
+          }
         }
 
         const ppnpusatx = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.ppnpusat),
             kredit: 0
           }
-          ppnpusatx.push(kas)
+          if (er.ppnpusat > 0) {
+            ppnpusatx.push(kas)
+          }
         }
         const ppnpusaty = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.06.01.0001',
             uraian: 'Utang PPN Pusat',
             debit: 0,
             kredit: parseFloat(er.ppnpusat)
           }
-          ppnpusaty.push(utang)
+          if (er.ppnpusat > 0) {
+            ppnpusaty.push(utang)
+          }
         }
 
         const ppnpusata = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.06.01.0001',
             uraian: 'Utang PPN Pusat',
             debit: parseFloat(er.ppnpusat),
             kredit: 0
           }
-          ppnpusata.push(kas)
+          if (er.ppnpusat > 0) {
+            ppnpusata.push(kas)
+          }
         }
         const ppnpusatb = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.ppnpusat)
           }
-          ppnpusatb.push(utang)
+          if (er.ppnpusat > 0) {
+            ppnpusatb.push(utang)
+          }
         }
 
         const pasal4x = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pasal4),
             kredit: 0
           }
-          pasal4x.push(kas)
+          if (er.pasal4 > 0) {
+            pasal4x.push(kas)
+          }
         }
         const pasal4y = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.05.0001',
             uraian: 'Utang Pasal 4 Ayat 2',
             debit: 0,
             kredit: parseFloat(er.pasal4)
           }
-          pasal4y.push(utang)
+          if (er.pasal4 > 0) {
+            pasal4y.push(utang)
+          }
         }
 
         const pasal4a = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.05.05.0001',
             uraian: 'Utang Pasal 4 Ayat 2',
             debit: parseFloat(er.pasal4),
             kredit: 0
           }
-          pasal4a.push(kas)
+          if (er.pasal4 > 0) {
+            pasal4a.push(kas)
+          }
         }
         const pasal4b = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pasal4)
           }
-          pasal4b.push(utang)
+          if (er.pasal4 > 0) {
+            pasal4b.push(utang)
+          }
         }
 
         const pajakdaerahx = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: parseFloat(er.pajakdaerah),
             kredit: 0
           }
-          pajakdaerahx.push(kas)
+          if (er.pajakdaerah > 0) {
+            pajakdaerahx.push(kas)
+          }
         }
         const pajakdaerahy = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.06.02.0001',
             uraian: 'Utang Pajak Daerah',
             debit: 0,
             kredit: parseFloat(er.pajakdaerah)
           }
-          pajakdaerahy.push(utang)
+          if (er.pajakdaerah > 0) {
+            pajakdaerahy.push(utang)
+          }
         }
 
         const pajakdaeraha = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const kas = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '2.1.01.06.02.0001',
             uraian: 'Utang Pajak Daerah',
             debit: parseFloat(er.pajakdaerah),
             kredit: 0
           }
-          pajakdaeraha.push(kas)
+          if (er.pajakdaerah > 0) {
+            pajakdaeraha.push(kas)
+          }
         }
         const pajakdaerahb = []
         for (let x = 0; x < arrfilter.length; x++) {
           const er = arrfilter[x]
           const utang = {
+            tanggal: er?.tglpindahbuku,
+            notrans: er?.nonpdls,
+            kegiatan: er?.kegiatanblud,
+            keterangan: 'Potongan Pajak',
             kode: '1.1.01.03.01.0001',
             uraian: 'Kas di Bendahara Pengeluaran',
             debit: 0,
             kredit: parseFloat(er.pajakdaerah)
           }
-          pajakdaerahb.push(utang)
+          if (er.pajakdaerah > 0) {
+            pajakdaerahb.push(utang)
+          }
         }
 
         const obj = {
@@ -1097,6 +1472,12 @@ export const registerJurnal = defineStore('register_jurnal', {
           notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
           kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
           keterangan: 'Potongan Pajak',
+          nilai: arr.filter((x) => x.nonpdls === el).map((x) =>
+            parseFloat(x.pajakdaerah) + parseFloat(x.pasal4) + parseFloat(x.ppnpusat) +
+            parseFloat(x.pph25) + parseFloat(x.pph23) + parseFloat(x.pph22) + parseFloat(x.pph21)),
+
+          debit: null,
+          kredit: null,
           d_pjk: [pph21x, pph22x, pph23x, pph25x, ppnpusatx, pasal4x, pajakdaerahx],
           k_pjk: [pph21y, pph22y, pph23y, pph25y, ppnpusaty, pasal4y, pajakdaerahy],
           d_pjk1: [pph21a, pph22a, pph23a, pph25a, ppnpusata, pasal4a, pajakdaeraha],
@@ -1116,8 +1497,16 @@ export const registerJurnal = defineStore('register_jurnal', {
 
         }
         pajakls.push(obj)
+        dataserahterima.push(...pph21x, ...pph21y, ...pph21a, ...pph21b,
+          ...pph22x, ...pph22y, ...pph22a, ...pph22b,
+          ...pph23x, ...pph23y, ...pph23a, ...pph23b,
+          ...pph25x, ...pph25y, ...pph25a, ...pph25b,
+          ...ppnpusatx, ...ppnpusaty, ...ppnpusata, ...ppnpusatb,
+          ...pasal4x, ...pasal4y, ...pasal4a, ...pasal4b,
+          ...pajakdaerahx, ...pajakdaerahy, ...pajakdaeraha, ...pajakdaerahb
+        )
       }
-      console.log('pajakls', pajakls)
+      // console.log('pajakls', pajakls)
       const gabungan = stp?.concat(
         bastfarm, cairnonstp,
         cairstpz, pajakls, cp, dataspmup,
@@ -1130,6 +1519,30 @@ export const registerJurnal = defineStore('register_jurnal', {
       const arrJurnal = sortByDate(gabungan)
       this.jurnals = arrJurnal
       console.log('data STP', this.jurnals)
+
+      // DATA POSTING JURNAL CREATE
+      const sortDate = (dataserahterima) =>
+        dataserahterima.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrPosting = sortDate(dataserahterima)
+      this.postingjurnals = arrPosting
+      console.log('data POSTING', this.postingjurnals)
+    },
+    postJurnal () {
+      this.loading = true
+      // const params = { params: this.form }
+      console.log('param', this.form)
+      return new Promise((resolve) => {
+        api.post('v1/akuntansi/registerjurnal/postingjurnal', this.form).then((resp) => {
+          console.log('Posting Jurnal', resp)
+          if (resp.status === 200) {
+            notifSuccess(resp)
+            this.loading = false
+            resolve(resp.data)
+          }
+        }).catch(() => { this.loading = false })
+      })
     }
   }
 

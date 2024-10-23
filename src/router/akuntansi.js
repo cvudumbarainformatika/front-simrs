@@ -26,6 +26,12 @@ const akuntansi = {
           name: 'akuntansi.jurnal.jurnalumum',
           component: () =>
             import('src/pages/siasik/akuntansi/jurnal/jurnalumum/IndexPage.vue')
+        },
+        {
+          path: '/akuntansi/jurnal/postingjurnal',
+          name: 'akuntansi.jurnal.postingjurnal',
+          component: () =>
+            import('src/pages/siasik/akuntansi/jurnal/postingjurnal/IndexPage.vue')
         }
 
       ]

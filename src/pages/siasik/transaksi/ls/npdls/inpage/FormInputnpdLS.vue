@@ -247,10 +247,15 @@
     <template v-if="store.reqs.rincianmanual">
       <div>
         <q-table
+          class="my-sticky-table"
           :rows="store.form.rincians"
           :columns="columns"
           row-key="name"
+          hide-pagination
           hide-bottom
+          wrap-cells
+          :rows-per-page-options="[0]"
+          :rows-number="[0]"
         >
           <template #body="props">
             <q-tr :props="props">
