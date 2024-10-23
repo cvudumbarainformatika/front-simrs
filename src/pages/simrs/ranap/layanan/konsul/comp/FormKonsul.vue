@@ -3,11 +3,11 @@
     <q-form ref="formRef" @submit="onSubmit" class="q-pa-lg">
       <div class="row q-col-gutter-md">
         <div class="col-12">
-          <div><b>Mohon bantuan Sejawat</b></div>
+          <div><b>Mohon bantuan dokter : </b></div>
           <app-autocomplete-new
             ref="refPerawat"
             :model="store.form.dokterkonsul"
-            label="Dokter Konsul"
+            label="Dokter"
             autocomplete="nama"
             option-value="kdpegsimrs"
             option-label="nama"
@@ -19,7 +19,7 @@
             @clear="store.form.dokterkonsul = null"
           />
           <div class="q-mt-lg">
-            <b>Untuk</b>
+            <b>Untuk : </b>
           </div>
           <app-autocomplete-new
             ref="refPerawat"

@@ -9,15 +9,16 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
     form: {
       dokterkonsul: null,
       untuk: '1',
+      untukKet: 'Konsultasikan tindakan masalah medik saat ini',
       keterangan: null
     },
     dokters: [],
     perawats: [],
 
     untuks: [
-      { value: '1', label: 'Konsultasikan tindakan masalah medik saat ini' },
-      { value: '2', label: 'Perawatan Bersama untuk selanjutnya' },
-      { value: '3', label: 'Alih rawat kasus untuk selanjutnya' }
+      { value: '1', label: 'Konsultasikan tindakan masalah medik saat ini' }
+      // { value: '2', label: 'Perawatan Bersama untuk selanjutnya' },
+      // { value: '3', label: 'Alih rawat kasus untuk selanjutnya' }
     ],
 
     loadingOrder: false,
@@ -99,6 +100,7 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
       this.form = {
         dokterkonsul: null,
         untuk: '1',
+        untukKet: 'Konsultasikan tindakan masalah medik saat ini',
         keterangan: 'Atas pasien ini dengan kondisi ' + '\n'
       }
 
