@@ -58,8 +58,8 @@ module.exports = configure(function (ctx) {
         // NODE_OPTIONS: '--max-old-space-size=20480',
         API: ctx.dev
           ? 'http://localhost/api.laborat/public'
-          : 'http://192.168.150.111:3507',
-        // : 'http://192.168.150.111:3501',
+          // : 'http://192.168.150.111:3507',
+          : 'http://192.168.150.111:3501',
 
         WSHOST: ctx.dev
           ? 'localhost'

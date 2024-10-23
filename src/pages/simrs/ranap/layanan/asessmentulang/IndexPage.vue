@@ -37,6 +37,7 @@ import useForm from './comp/useForm'
 const ListSoap = defineAsyncComponent(() => import('./comp/ListSoap.vue'))
 const DialogForm = defineAsyncComponent(() => import('./comp/DialogForm.vue'))
 
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: { type: Object, default: () => null },
   kasus: { type: Object, default: () => null },
@@ -44,14 +45,17 @@ const props = defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const { settings, store, storeAnamnesis, storePemeriksaanUmum, storePenilaian } = useForm()
+const { settings, store, storeAnamnesis, storePemeriksaanUmum, storePenilaian } = useForm(props.pasien)
 
 onMounted(() => {
+  // console.log('props', props?.pasien?.cppt)
+
+  store.getCppt(props?.pasien?.cppt)
   Promise.all([
-    store.getData(props.pasien),
-    storeAnamnesis.getData(props.pasien),
-    storePemeriksaanUmum.getData(props.pasien),
-    storePenilaian.getData(props.pasien)
+    // store.getCppt(props.pasien)
+    // storeAnamnesis.getData(props.pasien),
+    // storePemeriksaanUmum.getData(props.pasien),
+    // storePenilaian.getData(props.pasien)
   ])
 })
 

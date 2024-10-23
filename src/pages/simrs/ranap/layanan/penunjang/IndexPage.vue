@@ -146,7 +146,7 @@ const tabsxx = [
   {
     label: 'Perawatan Jenazah',
     name: 'perawatanJenazah',
-    icon: 'icon-my-human-back-svgrepo-com-1',
+    icon: 'icon-my-footprints-outline-variant-svgrepo-com',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/perawatanJenazah/IndexPage.vue'))
   },
@@ -164,6 +164,7 @@ const tabsxx = [
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/penunjangLainnya/IndexPage.vue'))
   }
+
 ]
 
 const menu = computed(() => {

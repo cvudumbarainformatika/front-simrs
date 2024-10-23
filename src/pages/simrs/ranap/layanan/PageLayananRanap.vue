@@ -39,7 +39,7 @@
           <LeftDrawer
             :key="pasien"
             :pasien="pasien"
-            :menus="menus"
+            :menus="filterredMenus"
             :menu="menu"
             @click-menu="(val)=> menuDiganti(val)"
           />
@@ -50,43 +50,48 @@
           <q-page
             class="contain bg-grey-3"
           >
-            <Suspense
+            <!-- <Suspense
               :key="menu.comp"
               timeout="0"
             >
-              <template #default>
-                <div
-                  v-if="pasien?.dokter==='' || pasien?.dokter === null"
-                  class="column full-height flex-center absolute-center z-top full-width"
-                  style="background-color: black; opacity: .9;"
-                >
-                  <div class="text-white">
-                    Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
-                  </div>
+              <template #default> -->
+            <div class="fit" v-if="loading && !pasien?.anamnesis">
+              <AppLoader />
+            </div>
+            <div v-else class="fit">
+              <div
+                v-if="pasien?.dokter==='' || pasien?.dokter === null"
+                class="column full-height flex-center absolute-center z-top full-width"
+                style="background-color: black; opacity: .9;"
+              >
+                <div class="text-white">
+                  Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
                 </div>
-                <div
-                  v-else-if="pasien?.kd_jeniskasus==='' || pasien?.kd_jeniskasus === null"
-                  class="column full-height flex-center absolute-center z-top full-width"
-                  style="background-color: black; opacity: .9;"
-                >
-                  <div class="text-white">
-                    MAAF, HARAP TENTUKAN DAHULU JENIS KASUS PASIEN
-                  </div>
+              </div>
+              <div
+                v-else-if="pasien?.kd_jeniskasus==='' || pasien?.kd_jeniskasus === null"
+                class="column full-height flex-center absolute-center z-top full-width"
+                style="background-color: black; opacity: .9;"
+              >
+                <div class="text-white">
+                  MAAF, HARAP TENTUKAN DAHULU JENIS KASUS PASIEN
                 </div>
-                <component
-                  v-else
-                  :is="menu.comp"
-                  :key="pasien"
-                  :pasien="pasien"
-                  :kasus="store?.jnsKasusPasien"
-                  :nakes="nakes"
-                  depo="rnp"
-                />
-              </template>
+              </div>
+              <component
+                v-else
+                :is="menu.comp"
+                :key="pasien"
+                :pasien="pasien"
+                :kasus="store?.jnsKasusPasien"
+                :nakes="nakes"
+                depo="rnp"
+              />
+            </div>
+            <!-- </template>
               <template #fallback>
                 <AppLoader />
               </template>
-            </Suspense>
+            </Suspense> -->
           </q-page>
           <!-- <q-page v-else>
             <AppLoader />
@@ -98,31 +103,20 @@
 </template>
 
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
-// import HeaderLayout from './layoutcomp/HeaderLayout.vue'
-// import LeftDrawer from './layoutcomp/LeftDrawer.vue'
-// import AppLoader from 'src/components/~global/AppLoader.vue'
-import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
-// import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+
+// import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
-// import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
-// import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-// import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
-// import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
-// import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
-// import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
-// import { useFisioPoli } from 'src/stores/simrs/pelayanan/poli/fisio'
-// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
-// import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
-// import { usePermintaanOperasiRanapStore } from 'src/stores/simrs/ranap/operasi'
-// import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+import useLayanan from './useLayanan'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
 const AppLoader = defineAsyncComponent(() => import('src/components/~global/AppLoader.vue'))
 
 const drawer = ref(false)
+const anamnesis = useAnamnesisRanapStore()
 
 const props = defineProps({
   pasien: {
@@ -135,116 +129,114 @@ const props = defineProps({
   }
 })
 
-const store = usePengunjungRanapStore()
-const auth = useAplikasiStore()
-const anamnesis = useAnamnesisRanapStore()
-// const pemeriksaan = usePemeriksaanUmumRanapStore()
-// const penilaian = usePenilaianRanapStore()
-// const diagnosa = useDiagnosaStore()
-// const diagnosaKeperawatan = useDiagnosaKeperawatan()
-// const lab = useLaboratPoli()
-// const rad = useRadiologiPoli()
-// const fisio = useFisioPoli()
-// const tindakan = useTindakanRanapStore()
-// const asUlang = useAsessmentUlangRanapStore()
-// const operasi = usePermintaanOperasiRanapStore()
+const { filterredMenus, menu, store, nakes, menuDiganti } = useLayanan(props?.pasien)
 
-const nakes = computed(() => {
-  return auth?.user?.pegawai?.kdgroupnakes
-})
+// const store = usePengunjungRanapStore()
+// const auth = useAplikasiStore()
 
-const menus = ref([
-  // {
-  //   name: 'asessment-awal-page',
-  //   label: 'Asessment Awal',
-  //   icon: 'icon-mat-medical_information',
-  //   comp: shallowRef(defineAsyncComponent(() => import('./asessmentAwal/IndexPage.vue')))
-  // },
-  {
-    name: 'AnamnesisPage',
-    label: 'Anamnesse $ Riwayat',
-    icon: 'icon-mat-medical_information',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
-  },
-  {
-    name: 'PemeriksaanPage',
-    label: 'Pemeriksaan',
-    icon: 'icon-my-stethoscope',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
-  },
-  {
-    name: 'DiagTindPage',
-    label: 'Diagnosa & Tindakan',
-    icon: 'icon-mat-health_and_safety',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
-  },
-  {
-    name: 'Penunjang',
-    label: 'Penunjang',
-    icon: 'icon-mat-post_add',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./penunjang/IndexPage.vue')))
-  },
-  {
-    name: 'AsessmentUlang',
-    label: 'Asessment Ulang',
-    icon: 'icon-fa-book-medical-solid',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
-  },
-  {
-    name: 'e-resep-page',
-    label: 'EResep',
-    icon: 'icon-mat-receipt',
-    nakes: ['1'],
-    comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
-  }
-])
+// const nakes = computed(() => {
+//   return auth?.user?.pegawai?.kdgroupnakes
+// })
 
-const menu = ref(menus.value[0])
+// const menus = ref([
+//   // {
+//   //   name: 'asessment-awal-page',
+//   //   label: 'Asessment Awal',
+//   //   icon: 'icon-mat-medical_information',
+//   //   comp: shallowRef(defineAsyncComponent(() => import('./asessmentAwal/IndexPage.vue')))
+//   // },
+//   {
+//     name: 'AnamnesisPage',
+//     label: 'Anamnesse $ Riwayat',
+//     icon: 'icon-mat-medical_information',
+//     nakes: ['1', '2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
+//   },
+//   {
+//     name: 'PemeriksaanPage',
+//     label: 'Pemeriksaan',
+//     icon: 'icon-my-stethoscope',
+//     nakes: ['1', '2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
+//   },
+//   {
+//     name: 'DiagTindPage',
+//     label: 'Diagnosa & Tindakan',
+//     icon: 'icon-mat-health_and_safety',
+//     nakes: ['1', '2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
+//   },
+//   {
+//     name: 'Penunjang',
+//     label: 'Penunjang',
+//     icon: 'icon-mat-post_add',
+//     nakes: ['1', '2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./penunjang/IndexPage.vue')))
+//   },
+//   {
+//     name: 'AsessmentUlang',
+//     label: 'Asessment Ulang',
+//     icon: 'icon-fa-book-medical-solid',
+//     nakes: ['1', '2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
+//   },
+//   {
+//     name: 'hais',
+//     label: 'HAIs',
+//     icon: 'icon-my-artboard',
+//     nakes: ['2', '3'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./hais/IndexPage.vue')))
+//   },
+//   {
+//     name: 'konsulspesialis',
+//     label: 'Konsul Spesialis',
+//     icon: 'icon-mat-textsms',
+//     nakes: ['1'],
+//     comp: shallowRef(defineAsyncComponent(() => import('./konsul/IndexPage.vue')))
+//   },
+//   {
+//     name: 'e-resep-page',
+//     label: 'EResep',
+//     icon: 'icon-mat-receipt',
+//     nakes: ['1'],
+//     comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
+//   }
+// ])
 
-onMounted(() => {
-  menu.value = menus.value[0]
-})
+// const filterredMenus = computed(() => {
+//   const byPass = auth.user
+//   console.log('byPass', byPass)
 
-function menuDiganti (val) {
-  menu.value = val
-}
+//   return menus.value.filter(menu => menu.nakes.includes(nakes.value))
+// })
+
+// const menu = ref(null)
+
+// onMounted(() => {
+//   console.log('mounted pageLayananRanap', auth?.user?.pegawai?.nik)
+
+//   menu.value = filterredMenus.value[0]
+// })
+
+// function menuDiganti (val) {
+//   menu.value = val
+// }
 
 const onShow = () => {
-  console.log('pasien', props.pasien)
+  // console.log('pasien', props.pasien)
   Promise.all([
     anamnesis.getRiwayatKehamilan(props.pasien)
-    // anamnesis.getData(props.pasien),
-    // pemeriksaan.getData(props.pasien),
-    // penilaian.getData(props.pasien),
-    // diagnosa.getData(props.pasien),
-    // diagnosaKeperawatan.getDiagnosaByNoreg(props.pasien)
-    // lab.getNota(props.pasien),
-    // lab.getData(props.pasien),
-    // rad.getNota(props.pasien),
-    // rad.getData(props.pasien),
-    // fisio.getNota(props.pasien),
-    // fisio.getData(props.pasien),
-    // tindakan.getNota(props.pasien),
-    // tindakan.getTindakan(props.pasien),
-    // asUlang.getData(props.pasien),
-    // operasi.getNota(props.pasien)
-    // operasi.getData(props.pasien)
 
   ])
 }
 
-watchEffect(() => {
-  if (!props.pasien) {
-    console.log('no pasien')
+// watchEffect(() => {
+//   if (!props.pasien) {
+//     console.log('no pasien')
 
-    store.pageLayanan = false
-  }
-})
+//     store.pageLayanan = false
+//   }
+// })
 </script>
 
 <style lang="scss">

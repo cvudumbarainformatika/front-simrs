@@ -67,7 +67,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       this.loadingLayanan = true
       const form = { noreg: pasien?.noreg }
 
-      this.persiapanInjectPasien(pasien)
+      // this.persiapanInjectPasien(pasien)
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/ruangan/bukalayanan', form)
@@ -94,24 +94,24 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       })
     },
 
-    persiapanInjectPasien (pasien) {
-      const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
-      if (findPasien.length) {
-        // const datax = findPasien[0]
+    // persiapanInjectPasien (pasien) {
+    //   const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
+    //   if (findPasien.length) {
+    //     // const datax = findPasien[0]
 
-        // datax.diagnosamedis = []
-        // datax.anamnesis = []
-        // datax.pemeriksaan = []
-        // datax.penilaian = []
-        // datax.tindakan = []
-        // datax.diagnosakeperawatan = []
-        // datax.cppt = []
-        // datax.laborats = []
-        // datax.radiologi = []
-        // datax.fisio = []
-        // datax.operasi = []
-      }
-    },
+    //     // datax.diagnosamedis = []
+    //     // datax.anamnesis = []
+    //     // datax.pemeriksaan = []
+    //     // datax.penilaian = []
+    //     // datax.tindakan = []
+    //     // datax.diagnosakeperawatan = []
+    //     // datax.cppt = []
+    //     // datax.laborats = []
+    //     // datax.radiologi = []
+    //     // datax.fisio = []
+    //     // datax.operasi = []
+    //   }
+    // },
 
     setPasien (pasien, data) {
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
@@ -140,6 +140,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.permintaanambulan = data?.permintaanambulan ?? []
         datax.oksigen = data?.oksigen ?? []
         datax.perawatanjenazah = data?.perawatanjenazah ?? []
+        datax.hais = data?.hais ?? []
       }
     },
     getRuangan () {

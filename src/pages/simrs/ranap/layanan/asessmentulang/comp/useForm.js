@@ -4,7 +4,7 @@ import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 import { usePenilaianRanapStore } from 'src/stores/simrs/ranap/penilaian'
-import { reactive } from 'vue'
+import { reactive, watch, watchEffect } from 'vue'
 
 export default function useForm (pasien) {
   const storeAnamnesis = useAnamnesisRanapStore()
@@ -198,6 +198,16 @@ export default function useForm (pasien) {
         })
     })
   }
+
+  watch(() => pasien?.cppt, (val, old) => {
+    // console.log('watch cppt new', val)
+    // console.log('watch cppt old', old)
+    store.getCppt(val)
+  }, { deep: true })
+
+  watchEffect(() => {
+    // console.log('watchEffect cppt', pasien?.cppt)
+  })
 
   return {
     settings,

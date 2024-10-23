@@ -38,6 +38,7 @@ export default function useRightPanel (pasien) {
     // console.log('nakes', nakes)
 
     // getData(pasien)
+    store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
   })
 
   // const getData = (pasien) => {
@@ -51,7 +52,7 @@ export default function useRightPanel (pasien) {
   }, { deep: true })
 
   watchEffect(() => {
-    console.log('watchEffect pasien', pasien)
+    // console.log('watchEffect pasien', pasien)
     // store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
   })
 

@@ -48,6 +48,7 @@ import { usePermintaanApheresisStore } from 'src/stores/simrs/ranap/apheresis'
 import { usePermintaanAmbulanStore } from 'src/stores/simrs/ranap/ambulance'
 import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
 import { usePermintaanOksigenStore } from 'src/stores/simrs/ranap/oksigen'
+import { useHaisRanapStore } from 'src/stores/simrs/ranap/hais'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -62,6 +63,7 @@ const apheresis = usePermintaanApheresisStore()
 const ambulan = usePermintaanAmbulanStore()
 const penunjanglain = usePenunjangLainPoliStore()
 const oksigen = usePermintaanOksigenStore()
+const hais = useHaisRanapStore()
 
 onMounted(() => {
   Promise.all([
@@ -80,6 +82,7 @@ onMounted(() => {
     apheresis.getMaster(),
     ambulan.getTujuanAmbulance(),
     oksigen.getMaster(),
+    hais.getMaster(),
 
     penunjanglain.getPenunjangLain(),
 

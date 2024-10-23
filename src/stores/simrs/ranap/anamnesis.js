@@ -1159,7 +1159,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
     PISAH_DATA_RANAP_IGD (arr, pasien) {
       const auth = useAplikasiStore()
       const jns = auth?.user?.pegawai?.kdgroupnakes
-      console.log('auth', jns)
+      // console.log('auth', jns)
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
       const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns && x?.awal === '1') ?? []
@@ -1170,6 +1170,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       this.items.ranap = ranap
 
       // const pengunjung = usePengunjungRanapStore()
+      console.log('items', this.items, ranap)
 
       // baru ada penyesuaian nakes
       let form = null
