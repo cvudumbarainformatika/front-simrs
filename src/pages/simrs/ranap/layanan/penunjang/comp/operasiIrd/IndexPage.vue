@@ -1,10 +1,10 @@
 <script setup>
-// import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
+import { usePermintaanOperasiIrdRanapStore } from 'src/stores/simrs/ranap/operasiird'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
-// const FormTindakan = defineAsyncComponent(() => import('./comp/FormTindakan.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
+const FormOrder = defineAsyncComponent(() => import('./comp/FormOrder.vue'))
+const ListOrder = defineAsyncComponent(() => import('./comp/ListOrder.vue'))
 
 const props = defineProps({
   pasien: {
@@ -21,12 +21,12 @@ const props = defineProps({
   }
 })
 
-// const store = useTindakanRanapStore()
+const store = usePermintaanOperasiIrdRanapStore()
 
 onMounted(() => {
   Promise.all([
-    // store.getNota(props?.pasien),
-    // store.getTindakan(props?.pasien)
+    store.getNota(props?.pasien),
+    store.getData(props?.pasien)
   ])
 })
 
@@ -35,16 +35,15 @@ onMounted(() => {
 <template>
   <BaseLayout
     :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :split="50" nota
-    title-before="OPERASI IRD"
+    title-before="PERMINTAAN OPERASI IRD"
     title-after="List Permintaan Operasi Ird"
   >
     <template #form>
-      <!-- <FormTindakan :pasien="props.pasien" :kasus="props.kasus" /> -->
-      hhhhihihi
+      <FormOrder :pasien="props.pasien" />
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListOrder :pasien="props.pasien" :items="pasien?.operasi_ird" />
       </div>
     </template>
 

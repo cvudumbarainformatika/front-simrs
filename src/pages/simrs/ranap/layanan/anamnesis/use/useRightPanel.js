@@ -3,7 +3,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 // import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 // eslint-disable-next-line no-unused-vars
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
 
 export default function useRightPanel (pasien) {
   const store = useAnamnesisRanapStore()
@@ -37,23 +37,24 @@ export default function useRightPanel (pasien) {
 
     // console.log('nakes', nakes)
 
-    getData()
+    // getData(pasien)
+    store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
   })
 
-  const getData = async () => {
-    // const params = {
-    //   params: {
-    //     noreg: pasien?.noreg
-    //   }
-    // }
-    // const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
-    // console.log('resp', resp)
-    // if (resp.status === 200) {
-    //   store.items = resp.data
-    //   store.PISAH_DATA_RANAP_IGD(resp.data, pasien)
-    // }
-    // await store.getData(pasien)
-  }
+  // const getData = (pasien) => {
+  //   store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
+  //   // console.log('anamnesis', store.items)
+  // }
+
+  watch(() => pasien.anamnesis, (val) => {
+    console.log('watch', val)
+    store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
+  }, { deep: true })
+
+  watchEffect(() => {
+    // console.log('watchEffect pasien', pasien)
+    // store.PISAH_DATA_RANAP_IGD(pasien?.anamnesis, pasien)
+  })
 
   return {
     store, settings, fields, nakes

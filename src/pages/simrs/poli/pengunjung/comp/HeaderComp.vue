@@ -225,10 +225,10 @@ const props = defineProps({
   custom: { type: Boolean, default: false }
 })
 const q = computed({
-  get() {
+  get () {
     return props.search
   },
-  set(newVal) {
+  set (newVal) {
     emits('setSearch', newVal)
   }
 })
@@ -238,9 +238,10 @@ const polis = computed(() => {
   let arr = []
   if (aksesruangan === '' || aksesruangan === null) {
     arr = setting.polis
-  } else {
+  }
+  else {
     const split = aksesruangan.split('|')
-    const filt=split?.filter(a=>a?.includes('POL'))
+    const filt = split?.filter(a => a?.includes('POL'))
     // console.log('poli', split,filt);
     const res = []
     for (let i = 0; i < filt.length; i++) {
@@ -262,19 +263,19 @@ const polis = computed(() => {
 const to = ref(dateDbFormat(new Date()))
 const from = ref(dateDbFormat(new Date()))
 
-function hariIni() {
+function hariIni () {
   const cDate = new Date()
   to.value = dateDbFormat(cDate)
   from.value = dateDbFormat(cDate)
 }
-function mingguIni() {
+function mingguIni () {
   const curr = new Date()
   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
   to.value = dateDbFormat(firstday)
   from.value = dateDbFormat(lastday)
 }
-function bulanIni() {
+function bulanIni () {
   const curr = new Date()
   const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
   const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
@@ -282,7 +283,7 @@ function bulanIni() {
   from.value = dateDbFormat(lastday)
 }
 
-function tahunIni() {
+function tahunIni () {
   const curr = new Date()
   const firstday = date.formatDate(curr, 'YYYY') + '-01' + '-01'
   const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
@@ -290,30 +291,36 @@ function tahunIni() {
   from.value = dateDbFormat(lastday)
 }
 
-function gantiStatus(val) {
+function gantiStatus (val) {
   if (val === 'BELUM TERLAYANI') {
     return ''
-  } else if (val === 'TERLAYANI') {
+  }
+  else if (val === 'TERLAYANI') {
     return '1'
-  } else if (val === 'TIDAK DATANG') {
+  }
+  else if (val === 'TIDAK DATANG') {
     return '3'
-  } else {
+  }
+  else {
     return 'all'
   }
 }
 
-function gantiTxt() {
+function gantiTxt () {
   gantiPeriode(periode.value)
 }
 
-function gantiPeriode(val) {
+function gantiPeriode (val) {
   if (val === 1) {
     hariIni()
-  } else if (val === 2) {
+  }
+  else if (val === 2) {
     mingguIni()
-  } else if (val === 3) {
+  }
+  else if (val === 3) {
     bulanIni()
-  } else {
+  }
+  else {
     tahunIni()
   }
 
@@ -327,14 +334,14 @@ function gantiPeriode(val) {
   emits('setPeriode', per)
 }
 
-function gantiPoli(val) {
+function gantiPoli (val) {
   poli.value = val
   const sendt = poli.value?.kodepoli === 'SEMUA POLI' ? polis.value?.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
   // console.log(sendt)
   emits('setPoli', sendt)
 }
 
-function kembaliNormal() {
+function kembaliNormal () {
   periode.value = 1
   txt.value = 'BELUM TERLAYANI'
   gantiPeriode(periode.value)

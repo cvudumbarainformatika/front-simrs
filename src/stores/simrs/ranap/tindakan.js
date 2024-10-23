@@ -66,14 +66,6 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
   // },
   actions: {
 
-    // async getDiagnosaDropdown () {
-    //   const resp = await api.get('v1/simrs/pelayanan/listdiagnosa')
-    //   console.log('list diagnosa', resp)
-
-    //   if (resp.status === 200) {
-    //     this.listDiagnosa = resp.data
-    //   }
-    // },
     async getTindakanDropdown () {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
       // console.log('list tindakan', resp)
@@ -116,23 +108,6 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       this.formtindakan[key] = val
     },
     //= ===
-    // setKode (val) {
-    //   this.formdiagnosa.kddiagnosa = val
-    //   const ada = this.listDiagnosa.length > 0
-    //   if (ada) {
-    //     const target = this.listDiagnosa.filter(x => x.kode === val)
-    //     target.length
-    //       ? this.formdiagnosa.diagnosa = target[0].keterangan
-    //       : this.formdiagnosa.diagnosa = ''
-    //     target.length
-    //       ? this.formdiagnosa.dtd = target[0].dtd ? target[0].dtd : ''
-    //       : this.formdiagnosa.dtd = ''
-    //   }
-    // },
-
-    // setFormDianosa (key, val) {
-    //   this.formdiagnosa[key] = val
-    // },
 
     setKdTindakan (val) {
       this.formtindakan.kdtindakan = val
@@ -165,136 +140,12 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       })
     },
 
-    // async simpanDiagnosa (pasien) {
-    //   if (pasien?.kddokter === null || pasien?.kddokter === '') {
-    //     return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
-    //   }
-    //   const form = this.formdiagnosa
-    //   form.noreg = pasien?.noreg
-    //   form.norm = pasien?.norm
-    //   form.kodedokter = pasien?.kodedokter ?? pasien?.kddokter ?? null
-    //   form.ruangan = pasien?.kodepoli
-
-    //   // console.log('sdiag', form)
-
-    //   this.loadingFormDiagnosa = true
-    //   try {
-    //     const resp = await api.post('v1/simrs/ranap/layanan/diagnosa/simpandiagnosa', form)
-    //     // console.log(resp)
-    //     if (resp.status === 200) {
-    //       // console.log('simpan diagnosa', resp)
-    //       const storePasien = usePengunjungRanapStore()
-    //       let isi = resp.data.result
-    //       if (resp.data.result === 1) {
-    //         form.rs3 = form.kddiagnosa
-    //         form.rs4 = form.tipediagnosa
-    //         form.rs6 = form.keterangan
-    //         form.rs7 = form.kasus
-    //         form.rs9 = form.dtd
-    //         form.masterdiagnosa = { rs4: form.diagnosa }
-    //         isi = form
-    //       }
-    //       isi.masterdiagnosa = { rs4: form.diagnosa }
-    //       storePasien.injectDataPasien(pasien?.noreg, isi, 'diagnosamedis')
-    //       notifSuccess(resp)
-    //       this.loadingFormDiagnosa = false
-    //       this.initReset()
-
-    //       if (resp.data.inacbg?.metadata?.code === 200) {
-    //         // const storeIna = useInacbgPoli()
-    //         // storeIna.setIna(resp.data.inacbg?.response)
-    //         // storeIna.setSpecialOption(resp.data.inacbg)
-    //       }
-
-    //       return new Promise((resolve, reject) => {
-    //         resolve()
-    //       })
-    //     }
-    //     this.loadingFormDiagnosa = false
-    //   }
-    //   catch (error) {
-    //     // console.log(error)
-    //     this.loadingFormDiagnosa = false
-    //   }
-    // },
-
-    // PISAH_DATA_RANAP_IGD (arr, pasien) {
-    //   // const auth = useAplikasiStore()
-
-    //   const igd = arr?.filter(x => x?.rs13 === 'POL014') ?? []
-    //   const ranap = arr?.filter(x => x?.rs13 !== 'POL014') ?? []
-    //   // const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
-
-    //   this.items.igd = igd
-    //   this.items.ranap = ranap
-
-    //   // console.log('items', this.items, ranap)
-
-    //   const pengunjung = usePengunjungRanapStore()
-
-    //   // baru ada penyesuaian nakes
-    //   // let form = null
-    //   // const dokter = jns === '1' || jns === 1
-    //   // if (dokter) {
-    //   //   if (ranap.length) { form = ranap[0] }
-    //   //   else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
-    //   // }
-    //   // else {
-    //   // }
-    //   // const form = ranap.length ? ranap[0] : null
-
-    //   // if (form) ranap.length ? form.id = ranap[0].id : form.id = null
-    //   // const isianList = ranap.length ? ranap[0] : null
-
-    //   // if (isianList) {
-    //   // const diag = pasien?.diagnosa
-    //   ranap?.forEach(x => {
-    //     pengunjung.injectDataPasien(pasien?.noreg, x, 'diagnosamedis')
-    //   })
-
-    //   // pengunjung.deleteInjectanNull(pasien?.noreg, 'pemeriksaan')
-    //   // }
-    //   this.initReset()
-    //   // console.log('pasien stelah di inject', pasien)
-    // },
-
-    // SPLICE_ITEMS_RANAP (arr) {
-    //   const idx = arr?.findIndex(x => x.id === null)
-    //   this.items.ranap = arr.splice(1, idx)
-    // },
-
-    // async deleteDiagnosa (pasien, id) {
-    //   const payload = { id }
-    //   const resp = await api.post('v1/simrs/ranap/layanan/diagnosa/hapusdiagnosa', payload)
-    //   if (resp.status === 200) {
-    //     const storePasien = usePengunjungRanapStore()
-    //     // const storeIna = useInacbgPoli()
-    //     storePasien.hapusDataInjectan(pasien, id, 'diagnosamedis')
-    //     // storeIna.getDataIna(pasien)
-    //     notifSuccess(resp)
-    //   }
-    // },
-
-    // editFormDiagnosa (val) {
-    //   this.formdiagnosa = {
-    //     id: val.id,
-    //     kddiagnosa: val.rs3,
-    //     diagnosa: val.masterdiagnosa?.rs4,
-    //     keterangan: val.rs6,
-    //     dtd: val.rs9,
-    //     kasus: val.rs7,
-    //     tipediagnosa: val.rs4
-    //   }
-    //   // console.log('form', this.form)
-    //   // console.log('xxx', val)
-    // },
-
     // ==================================================================================== TINDAKAN =========================================================================
 
     async getTindakan (pasien) {
       try {
         const resp = await api.get('v1/simrs/ranap/layanan/tindakan/listtindakanranap', { params: { noreg: pasien?.noreg } })
-        console.log('tindakan', resp)
+        // console.log('tindakan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungRanapStore()
 
@@ -327,31 +178,11 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       form.pelaksanaSatu = pelaksanaSatu
       form.pelaksanaDua = pelaksanaDua
       form.kddpjp = pasien?.kddokter
-      form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
-
-      // console.log('form', form, pasien)
-
-      // try {
-      //   const resp = await api.post('v1/simrs/ranap/layanan/tindakan/simpantindakanranap', form)
-      //   // console.log('simpan tindakan', resp)
-      //   if (resp.status === 200) {
-      //     this.setNotas(resp?.data?.nota)
-      //     const storePasien = usePengunjungRanapStore()
-      //     const isi = resp?.data?.result
-      //     isi.mastertindakan = { rs2: form.tindakan }
-      //     storePasien.injectDataPasien(pasien?.noreg, isi, 'tindakan')
-      //     this.loadingFormTindakan = false
-      //     this.initReset('Tindakan Medik')
-
-      //     console.log('inject', this.formtindakan)
-
-      //     notifSuccess(resp)
-      //   }
-      //   this.loadingFormTindakan = false
-      // }
-      // catch (error) {
-      //   this.loadingFormTindakan = false
-      // }
+      form.nota = (this.notaTindakan === 'BARU' || this.notaTindakan === '' ||
+        this.notaTindakan === 'SEMUA' || this.notaTindakan === null
+      )
+        ? ''
+        : this.notaTindakan //
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/layanan/tindakan/simpantindakanranap', form)
@@ -380,6 +211,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notaTindakans = arr.length ? arr : []
+      this.notaTindakans.unshift('SEMUA')
       this.notaTindakans.push('BARU')
       this.notaTindakan = this.notaTindakans[0]
     },
@@ -396,6 +228,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
         this.notaTindakans = arr.length ? arr : []
+        this.notaTindakans.unshift('SEMUA')
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]
       }

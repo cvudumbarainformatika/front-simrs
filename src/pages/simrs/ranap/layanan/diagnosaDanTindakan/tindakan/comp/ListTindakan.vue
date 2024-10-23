@@ -29,7 +29,7 @@ const filterredTable = computed(() => {
   // console.log('pasien ', props?.pasien)
 
   // return arr
-  return arr?.filter(x => x?.rs2 === val)
+  return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
 
 onMounted(() => {

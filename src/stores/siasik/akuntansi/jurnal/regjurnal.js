@@ -38,6 +38,7 @@ export const registerJurnal = defineStore('register_jurnal', {
     spmgu: [],
     spjpanjar: [],
     nihil: [],
+    pajakls: [],
     jurnals: []
   }),
   actions: {
@@ -61,6 +62,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.spmgu = resp.data.spmgu
             this.nihil = resp.data.nihil
             this.spjpanjar = resp.data.spjpanjar
+            this.pajakls = resp.data.pajakls
 
             this.loading = false
             this.serahterima()
@@ -565,6 +567,7 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: date.formatDate(arr.filter((x) => x.nocontrapost === el)[0]?.tglcontrapost, 'YYYY-MM-DD'),
           notrans: arr.filter((x) => x.nocontrapost === el)[0]?.nocontrapost,
+          keterangan: 'Contrapost',
           kegiatan: arr.filter((x) => x.nocontrapost === el)[0]?.kegiatanblud,
           debit_1: epsal,
           kredit_1: belanja,
@@ -604,7 +607,7 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
-          kegiatan: arr[i].uraianPekerjaan,
+          keterangan: arr[i].uraianPekerjaan,
           debit_1: kasbend,
           kredit_1: kasblud
         }
@@ -642,7 +645,7 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
-          kegiatan: arr[i].uraianPekerjaan,
+          keterangan: arr[i].uraianPekerjaan,
           debit_1: kasbend,
           kredit_1: kasblud
         }
@@ -750,7 +753,7 @@ export const registerJurnal = defineStore('register_jurnal', {
         const obj = {
           tanggal: arr[i].tgltrans,
           notrans: arr[i].nopengembalian,
-          kegiatan: 'UP GU Nihil',
+          keterangan: 'UP GU Nihil',
           debit_1: kasblud,
           kredit_1: kasbend
         }
@@ -758,9 +761,366 @@ export const registerJurnal = defineStore('register_jurnal', {
         // console.log('nihil', datanihil)
       }
 
+      // DATA PAJAK LS //
+      const unikpajakls = this.pajakls.map((x) => x.nonpdls)
+      const unpjakls = unikpajakls.length ? [...new Set(unikpajakls)] : []
+      const pajakls = []
+      for (let i = 0; i < unpjakls.length; i++) {
+        const el = unpjakls[i]
+        const arr = this.pajakls
+        const arrfilter = arr.filter((x) => x.nonpdls === el).map((x) => x)
+
+        const pph21x = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pph21),
+            kredit: 0
+          }
+          pph21x.push(kas)
+        }
+        const pph21y = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.05.01.0001',
+            uraian: 'Utang PPh 21',
+            debit: 0,
+            kredit: parseFloat(er.pph21)
+          }
+          pph21y.push(utang)
+        }
+
+        const pph21a = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.05.01.0001',
+            uraian: 'Utang PPh 21',
+            debit: parseFloat(er.pph21),
+            kredit: 0
+          }
+          pph21a.push(kas)
+        }
+        const pph21b = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pph21)
+          }
+          pph21b.push(utang)
+        }
+
+        const pph22x = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pph22),
+            kredit: 0
+          }
+          pph22x.push(kas)
+        }
+        const pph22y = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.05.02.0001',
+            uraian: 'Utang PPh 22',
+            debit: 0,
+            kredit: parseFloat(er.pph22)
+          }
+          pph22y.push(utang)
+        }
+
+        const pph22a = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.05.02.0001',
+            uraian: 'Utang PPh 22',
+            debit: parseFloat(er.pph22),
+            kredit: 0
+          }
+          pph22a.push(kas)
+        }
+        const pph22b = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pph22)
+          }
+          pph22b.push(utang)
+        }
+
+        const pph23x = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pph23),
+            kredit: 0
+          }
+          pph23x.push(kas)
+        }
+        const pph23y = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.05.03.0001',
+            uraian: 'Utang PPh 23',
+            debit: 0,
+            kredit: parseFloat(er.pph23)
+          }
+          pph23y.push(utang)
+        }
+
+        const pph23a = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.05.03.0001',
+            uraian: 'Utang PPh 23',
+            debit: parseFloat(er.pph23),
+            kredit: 0
+          }
+          pph23a.push(kas)
+        }
+        const pph23b = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pph23)
+          }
+          pph23b.push(utang)
+        }
+
+        const pph25x = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pph25),
+            kredit: 0
+          }
+          pph25x.push(kas)
+        }
+        const pph25y = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.05.04.0001',
+            uraian: 'Utang PPh 25',
+            debit: 0,
+            kredit: parseFloat(er.pph25)
+          }
+          pph25y.push(utang)
+        }
+
+        const pph25a = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.05.04.0001',
+            uraian: 'Utang PPh 25',
+            debit: parseFloat(er.pph25),
+            kredit: 0
+          }
+          pph25a.push(kas)
+        }
+        const pph25b = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pph25)
+          }
+          pph25b.push(utang)
+        }
+
+        const ppnpusatx = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.ppnpusat),
+            kredit: 0
+          }
+          ppnpusatx.push(kas)
+        }
+        const ppnpusaty = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.06.01.0001',
+            uraian: 'Utang PPN Pusat',
+            debit: 0,
+            kredit: parseFloat(er.ppnpusat)
+          }
+          ppnpusaty.push(utang)
+        }
+
+        const ppnpusata = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.06.01.0001',
+            uraian: 'Utang PPN Pusat',
+            debit: parseFloat(er.ppnpusat),
+            kredit: 0
+          }
+          ppnpusata.push(kas)
+        }
+        const ppnpusatb = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.ppnpusat)
+          }
+          ppnpusatb.push(utang)
+        }
+
+        const pasal4x = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pasal4),
+            kredit: 0
+          }
+          pasal4x.push(kas)
+        }
+        const pasal4y = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.05.05.0001',
+            uraian: 'Utang Pasal 4 Ayat 2',
+            debit: 0,
+            kredit: parseFloat(er.pasal4)
+          }
+          pasal4y.push(utang)
+        }
+
+        const pasal4a = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.05.05.0001',
+            uraian: 'Utang Pasal 4 Ayat 2',
+            debit: parseFloat(er.pasal4),
+            kredit: 0
+          }
+          pasal4a.push(kas)
+        }
+        const pasal4b = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pasal4)
+          }
+          pasal4b.push(utang)
+        }
+
+        const pajakdaerahx = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: parseFloat(er.pajakdaerah),
+            kredit: 0
+          }
+          pajakdaerahx.push(kas)
+        }
+        const pajakdaerahy = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '2.1.01.06.02.0001',
+            uraian: 'Utang Pajak Daerah',
+            debit: 0,
+            kredit: parseFloat(er.pajakdaerah)
+          }
+          pajakdaerahy.push(utang)
+        }
+
+        const pajakdaeraha = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const kas = {
+            kode: '2.1.01.06.02.0001',
+            uraian: 'Utang Pajak Daerah',
+            debit: parseFloat(er.pajakdaerah),
+            kredit: 0
+          }
+          pajakdaeraha.push(kas)
+        }
+        const pajakdaerahb = []
+        for (let x = 0; x < arrfilter.length; x++) {
+          const er = arrfilter[x]
+          const utang = {
+            kode: '1.1.01.03.01.0001',
+            uraian: 'Kas di Bendahara Pengeluaran',
+            debit: 0,
+            kredit: parseFloat(er.pajakdaerah)
+          }
+          pajakdaerahb.push(utang)
+        }
+
+        const obj = {
+          tanggal: arr.filter((x) => x.nonpdls === el)[0]?.tglpindahbuku,
+          notrans: arr.filter((x) => x.nonpdls === el)[0]?.nonpdls,
+          kegiatan: arr.filter((x) => x.nonpdls === el)[0]?.kegiatanblud,
+          keterangan: 'Potongan Pajak',
+          d_pjk: [pph21x, pph22x, pph23x, pph25x, ppnpusatx, pasal4x, pajakdaerahx],
+          k_pjk: [pph21y, pph22y, pph23y, pph25y, ppnpusaty, pasal4y, pajakdaerahy],
+          d_pjk1: [pph21a, pph22a, pph23a, pph25a, ppnpusata, pasal4a, pajakdaeraha],
+          k_pjk1: [pph21b, pph22b, pph23b, pph25b, ppnpusatb, pasal4b, pajakdaerahb]
+          // d_pjk1: [pph22x, pph22a],
+          // k_pjk1: [pph22y, pph22b],
+          // d_pjk2: [pph23x, pph23a],
+          // k_pjk2: [pph23y, pph23b],
+          // d_pjk3: [pph25x, pph25a],
+          // k_pjk3: [pph25y, pph25b],
+          // d_pjk4: [ppnpusatx, ppnpusata],
+          // k_pjk4: [ppnpusaty, ppnpusatb],
+          // d_pjk5: [pasal4x, pasal4a],
+          // k_pjk5: [pasal4y, pasal4b],
+          // d_pjk6: [pajakdaerahx, pajakdaeraha],
+          // k_pjk6: [pajakdaerahy, pajakdaerahb]
+
+        }
+        pajakls.push(obj)
+      }
+      console.log('pajakls', pajakls)
       const gabungan = stp?.concat(
         bastfarm, cairnonstp,
-        cairstpz, cp, dataspmup,
+        cairstpz, pajakls, cp, dataspmup,
         dataspmgu, spjpjr, datanihil
       )
       const sortByDate = (gabungan) =>

@@ -107,10 +107,10 @@ const filterredTable = computed(() => {
   // console.log('pasien', props?.pasien)
   const val = store?.form?.nota
   const arr = props?.pasien?.penunjanglain
-  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
+  return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

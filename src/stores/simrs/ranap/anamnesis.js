@@ -12,7 +12,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       ranap: [],
       igd: []
     },
-
+    loading: false,
     form: {
       // ini untuk 4.1
       id: null,
@@ -568,16 +568,23 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
   actions: {
 
     async getData (pasien) {
+      this.loading = true
       const params = {
         params: {
           noreg: pasien?.noreg
         }
       }
-      const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
-      console.log('resp anamnesis', resp)
-      if (resp.status === 200) {
-        this.items = resp.data
-        this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+      try {
+        const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
+        console.log('resp anamnesis', resp)
+        if (resp.status === 200) {
+          this.items = resp.data
+          this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
+        }
+        this.loading = false
+      }
+      catch (error) {
+        this.loading = false
       }
     },
 
@@ -1152,21 +1159,22 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
     PISAH_DATA_RANAP_IGD (arr, pasien) {
       const auth = useAplikasiStore()
       const jns = auth?.user?.pegawai?.kdgroupnakes
-      console.log('auth', jns)
+      // console.log('auth', jns)
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
-      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns) ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns && x?.awal === '1') ?? []
 
-      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === '2') ?? []
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes !== '1' && x?.awal === '1') ?? []
 
       this.items.igd = igd
       this.items.ranap = ranap
 
-      const pengunjung = usePengunjungRanapStore()
+      // const pengunjung = usePengunjungRanapStore()
+      console.log('items', this.items, ranap)
 
       // baru ada penyesuaian nakes
       let form = null
-      const dokter = jns === '1' || jns === 1
+      const dokter = (jns === '1' || jns === 1)
       if (dokter) {
         if (ranap.length) { form = ranap[0] }
         else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
@@ -1176,12 +1184,12 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       }
 
       if (form) ranap.length ? form.id = ranap[0].id : form.id = null
-      const isianList = ranap.length ? ranap[0] : null
+      // const isianList = ranap.length ? ranap[0] : null
 
-      if (isianList) {
-        pengunjung.injectDataPasien(pasien?.noreg, isianList, 'anamnesis')
-        pengunjung.deleteInjectanNull(pasien?.noreg, 'anamnesis')
-      }
+      // if (isianList) {
+      //   pengunjung.injectDataPasien(pasien?.noreg, isianList, 'anamnesis')
+      //   pengunjung.deleteInjectanNull(pasien?.noreg, 'anamnesis')
+      // }
       this.initReset(form)
       if (dokter) this.form.keluhannyeri = null
       if (dokter) this.form.skreeninggizi = null

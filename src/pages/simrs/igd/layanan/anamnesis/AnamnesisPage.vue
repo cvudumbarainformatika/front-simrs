@@ -1,9 +1,9 @@
 <template>
   <div
-    class="column full-height q-ma-sm"
+    class="column full-height q-ma-sm "
     style="overflow: hidden;"
   >
-    <div class="column">
+    <div class="column ">
       <div class="col-auto bg-grey-4 shadow-2 text-grey-8 ">
         <q-tabs
           v-model="store.tab"
@@ -43,6 +43,7 @@
               :is="cekPanel()"
               :key="props.pasien"
               :pasien="props.pasien"
+              class="full-height q-pa-none"
             />
           </q-tab-panel>
         </q-tab-panels>

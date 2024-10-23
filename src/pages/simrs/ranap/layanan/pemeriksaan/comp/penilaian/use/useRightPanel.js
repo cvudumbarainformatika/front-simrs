@@ -22,10 +22,10 @@ export default function useRightPanel (pasien) {
     // await store.getMaster().then(() => {
     //   getData()
     // })
-    getData()
+    getData(pasien)
   })
 
-  const getData = async () => {
+  const getData = (pasien) => {
     // eslint-disable-next-line no-unused-vars
     // const params = {
     //   params: {
@@ -40,6 +40,7 @@ export default function useRightPanel (pasien) {
     // }
 
     // store.getData(pasien)
+    store.PISAH_DATA_RANAP_IGD(pasien?.penilaian, pasien)
   }
 
   return {

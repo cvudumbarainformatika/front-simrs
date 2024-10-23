@@ -40,29 +40,6 @@
       />
     </template>
     <template #option="scope">
-      <!-- <div
-        v-bind="scope.itemProps"
-        class="q-px-sm q-py-xs"
-      >
-        <div v-if="typeof(props.optionLabel)==='object'">
-          <div
-            v-for="(item, i) in props.optionLabel"
-            :key="i"
-          >
-            <div
-              class="ellipsis"
-            >
-              {{ scope.opt[item] }}
-            </div>
-          </div>
-        </div>
-        <div
-          v-else
-          class="ellipsis"
-        >
-          {{ scope.opt[optionLabel] }}
-        </div>
-      </div> -->
       <q-item v-bind="scope.itemProps">
         <q-item-section>
           <div v-if="typeof(props.optionLabel)==='object'">

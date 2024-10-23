@@ -120,8 +120,8 @@
             size="40px"
             class="q-ml-sm cursor-pointer bg-grey"
           >
-            <img src="~assets/images/actor.svg">
-            <adm-header-menu-profile />
+            <img :src="PHOTO_USER">
+            <adm-header-menu-profile :user="user" :photo="PHOTO_USER" />
           </q-avatar>
         </div>
       </div>
@@ -166,7 +166,20 @@ const props = defineProps({
   }
 })
 
-// console.log('props', props?.user)
+console.log('props', props?.user)
+
+const PHOTO_USER = computed(() => {
+  const kelamin = props.user?.pegawai?.kelamin
+  const row = props.user?.pegawai
+  if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
+    return kelamin === 'Perempuan'
+      ? new URL('../../../assets/images/actress.svg', import.meta.url).href
+      : new URL('../../../assets/images/user-avatar.svg', import.meta.url).href
+  }
+  else {
+    return 'http://192.168.100.100/simpeg/foto/' + row?.nip + '/' + row?.foto
+  }
+})
 
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
@@ -183,6 +196,8 @@ const optionsPolis = computed(() => {
   return props?.polis?.filter(gud => rsim.value?.includes(gud.kodepoli))
 })
 onMounted(() => {
+  // console.log('onMounted v2 header layout', props.user)
+
   const temp = props.user?.pegawai?.kdruangansim.split('|')
   const ruang = temp.filter(a => a.includes('R-'))
   if (!props.user?.kdruangansim && temp?.length) emit('setGudang', ruang[0] ?? temp[0])

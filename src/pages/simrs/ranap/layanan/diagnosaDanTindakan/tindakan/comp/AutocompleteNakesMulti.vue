@@ -5,7 +5,20 @@ import { ref, toRef } from 'vue'
 //   'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
 // ]
 
-const props = defineProps({ model: [Array, String], source: [Array] })
+// const props = defineProps({ model: [Array, String], source: [Array] })
+
+const props = defineProps({
+  model: {
+    type: [Array, String],
+    default: () => null
+  },
+  source: {
+    type: Array,
+    default: () => []
+  }
+})
+
+const emits = defineEmits(['update:model'])
 
 // eslint-disable-next-line no-undef
 const model = toRef(props.model, 'model')
@@ -100,7 +113,7 @@ const filterFn = (val, update) => {
     @update:model-value="(val)=> {
       // console.log('model', val);
       const j = val.join(';')
-      $emit('update:model', val);
+      emits('update:model', val);
     }"
     hide-bottom-space
   >

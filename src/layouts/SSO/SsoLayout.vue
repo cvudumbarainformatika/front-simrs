@@ -37,10 +37,10 @@ const store = useAuthStore()
 const angka = ref(0)
 document.addEventListener('keypress', intrupt)
 document.addEventListener('mouseover', intrupt)
-function intrupt() {
+function intrupt () {
   localStorage.setItem('activeTime', new Date())
 }
-function timer() {
+function timer () {
   const lgTime = storage.getActiveTime()
   const skr = new Date()
   angka.value = date.getDateDiff(skr, lgTime, 'minutes')

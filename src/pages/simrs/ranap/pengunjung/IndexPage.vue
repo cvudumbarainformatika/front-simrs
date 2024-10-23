@@ -43,6 +43,12 @@ import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
 import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+import { usePermintaanBankDarahStore } from 'src/stores/simrs/ranap/bankdarah'
+import { usePermintaanApheresisStore } from 'src/stores/simrs/ranap/apheresis'
+import { usePermintaanAmbulanStore } from 'src/stores/simrs/ranap/ambulance'
+import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
+import { usePermintaanOksigenStore } from 'src/stores/simrs/ranap/oksigen'
+import { useHaisRanapStore } from 'src/stores/simrs/ranap/hais'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -52,6 +58,12 @@ const diagnosakeperawatan = useDiagnosaKeperawatan()
 const tindakan = useTindakanRanapStore()
 const lab = useLaboratPoli()
 const radiologi = useRadiologiPoli()
+const bankdarah = usePermintaanBankDarahStore()
+const apheresis = usePermintaanApheresisStore()
+const ambulan = usePermintaanAmbulanStore()
+const penunjanglain = usePenunjangLainPoliStore()
+const oksigen = usePermintaanOksigenStore()
+const hais = useHaisRanapStore()
 
 onMounted(() => {
   Promise.all([
@@ -65,7 +77,16 @@ onMounted(() => {
 
     lab.getMasterLaborat(),
     radiologi.getRadiologi(),
-    radiologi.getJenisRadiologi()
+    radiologi.getJenisRadiologi(),
+    bankdarah.getMaster(),
+    apheresis.getMaster(),
+    ambulan.getTujuanAmbulance(),
+    oksigen.getMaster(),
+    hais.getMaster(),
+
+    penunjanglain.getPenunjangLain(),
+
+    store.getNakes()
 
   ])
 })

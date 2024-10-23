@@ -1,5 +1,5 @@
 <template>
-  <div class="full-width full-height q-pa-sm" :class="items.length ? 'scroll' : ''">
+  <div class="full-width full-height q-pa-sm" :class="items?.length ? 'scroll' : ''">
     <div v-if="!items?.length" class="q-pa-md column full-height flex-center">
       <div>Belum Ada Data Tersimpan</div>
     </div>
@@ -57,24 +57,6 @@
 
                         <div class="column q-mb-sm">
                           <div><b>Nyeri :</b></div>
-                          <!-- pediatrik -->
-                          <!-- <div class="q-ml-sm column" v-if="item?.anamnesis?.pediatrik">
-                            <div class="flex flex-wrap">
-                              <div class="flex">
-                                <span> {{ item?.anamnesis?.keluhannyeri?.pediatrik?.ket }}</span>
-                              </div>
-                              <div
-                                v-if="(item?.anamnesis?.keluhannyeri?.pediatrik?.kajianNyeri !== 'Wong Baker Face Scale')" class="column q-ml-sm"
-                              >
-                                <span v-for="(sub, key) in item?.anamnesis?.keluhannyeri?.pediatrik?.form" :key="key"> {{ sub?.text }}</span>
-                              </div>
-                            </div>
-                            <div class="flex">
-                              <div>Skor : </div> <div class="q-ml-sm">
-                                {{ item?.anamnesis?.keluhannyeri?.pediatrik?.skorNyeri }}
-                              </div>
-                            </div>
-                          </div> -->
                           <item-nyeri :item="item?.anamnesis?.keluhannyeri?.pediatrik" v-if="item?.anamnesis?.keluhannyeri?.pediatrik" />
                           <!-- neonatal -->
                           <item-nyeri :item="item?.anamnesis?.keluhannyeri?.neonatal" v-else-if="item?.anamnesis?.keluhannyeri?.neonatal" />

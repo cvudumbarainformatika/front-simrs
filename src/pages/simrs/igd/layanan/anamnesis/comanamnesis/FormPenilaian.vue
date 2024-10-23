@@ -1,197 +1,214 @@
 <template>
-  <q-card
-    flat
-    bordered
-    square
-    class="full-height"
-    style="overflow: hidden;"
-  >
-    <q-form
-      ref="refForm"
-      class="full-height"
-      @submit="onSubmit"
-    >
-      <q-card-section class="q-px-md q-py-xs bg-primary text-white">
-        <div class="row items-center justify-between">
-          <div class="f-12 text-weight-bold">
-            Form Penilaian Kajian Resiko Jatuh
-          </div>
-          <div>
-            <q-btn
-              flat
-              dense
-              size="md"
-              icon="icon-mat-history"
-            >
-              <q-tooltip class="bg-dark text-white">
-                {{ tooltip }}
-              </q-tooltip>
-            </q-btn>
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section
-        class="full-height scroll"
-      >
-        <div class="q-px-md q-py-xs q-pt-xs bg-grey-4 text-weight-bold">
-          {{ storepenilaian?.formpenilaians?.desc }}
-        </div>
-        <q-card-section
-
-          class="full-height "
-        >
-          <div class="row">
-            <div class="col-12 ">
-              <div
-                v-for="(item , n) in storepenilaian?.formpenilaians?.form"
-                :key="n"
-              >
-                <div class="row ">
-                  <div class="col-12 text-weight-bold ">
-                    {{ item.label }}
-                  </div>
-                  <div class="row" v-for="(submenu , x) in item?.submenu" :key="x">
-                    <div class="col-12" v-if="item.submenu.length > 0">
-                      <span>
-                        - {{ submenu.label }}
-                      </span>
-                      <span v-for="(kategori , xl) in submenu?.categories" :key="xl">
-                        <q-radio
-                          ref="refkategori"
-                          class="q-py-xs q-pa-sm"
-                          v-model="storepenilaian.form[storepenilaian?.formpenilaians?.kode][item.kode][submenu.kode]"
-                          :val="kategori"
-                          dense
-                          :label="kategori.label"
-                          color="primary"
-                          @update:model-value="updateSelection($event,item)"
-                        />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <span
-                    v-for="(kategori , xl) in item.categories"
-                    :key="xl"
-                  >
-                    <q-radio
-                      ref="refkategori"
-                      class="q-py-xs q-pa-sm"
-                      v-model="storepenilaian.form[storepenilaian?.formpenilaians?.kode][item.kode]"
-                      :val="kategori"
-                      dense
-                      :label="kategori.label"
-                      color="primary"
-                      @update:model-value="updateSelection(item)"
-                    /></span>
-                </div>
-                <q-separator class="q-my-xs" />
+  <div class="row q-col-gutter-xs full-width">
+    <div class="col">
+      <!-- humpty untuk usia < 18 tahun -->
+      <q-card v-if="store?.usia < 18 " flat bordered class="col-12">
+        <q-card-section class="q-pa-sm bg-primary text-white">
+          <strong>{{ store?.humptys?.desc }}</strong>
+        </q-card-section>
+        <q-separator />
+        <q-card-section v-if="store.formHumpty" class="q-pa-sm row q-col-gutter-xs ">
+          <div v-for="obj in store.humptys.form" :key="obj" class="col-12">
+            <div class="row ">
+              <div class="col-3 ">
+                {{ obj?.label }}
+              </div>
+              <div class="col-9 q-gutter-sm">
+                <q-radio
+                  v-for="(item, i) in obj?.categories" :key="i" dense size="sm" v-model="store.formHumpty[obj.kode]" :val="item" :label="`${item?.label}`"
+                  @update:model-value="store.hitungSkorHumpty"
+                />
+                <!-- <div v-for="(item, i) in obj?.categories" :key="i">
+                  {{ item }} {{ store.formHumpty[obj.kode] === item ? 'sama' : 'tidak' }} {{ store.formHumpty[obj.kode].skor }}
+                </div> -->
               </div>
             </div>
-            <div class="col-12">
-              <div
-                class="text-right"
-                style="margin-bottom: 50px;"
-              >
-                <app-btn
-                  color="primary"
-                  label="Simpan Penilaian"
-                  tooltip="Simpan Data"
-                  type="submit"
-                  tip
-                  :loading="storepenilaian.loadingForm"
-                />
-              </div>
+            <q-separator class="q-my-sm" />
+          </div>
+          <div v-if="store.formHumpty.skorHumpty" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
+            <div>NILAI SKOR : {{ store.formHumpty.skorHumpty?.skor }} </div>
+            <div>KET : {{ store.formHumpty.skorHumpty?.label }}</div>
+          </div>
+          <div v-if="store.formHumpty.skorHumpty.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
+            PASIEN DIHARAP PAKAI STICKER KUNING
+          </div>
+          <div class="col-12">
+            <div
+              class="text-right"
+              style="margin-bottom: 50px;"
+            >
+              <app-btn
+                color="primary"
+                label="Simpan Penilaian"
+                tooltip="Simpan Data"
+                type="submit"
+                tip
+                @click="store.saveData(props.pasien)"
+              />
             </div>
           </div>
         </q-card-section>
-        <!-- <q-card-section
-          v-else
-          class="full-height scroll"
-        >
-          <div class="row q-col-gutter-sm">
-            <div class="col-12">
-              <div
-                class="row items-center" v-for="(item , n) in storepenilaian?.formpenilaians?.form"
-                :key="n"
-              >
-                <div class="col-4">
-                  {{ item.label }} :
+      </q-card>
+
+      <!-- Resiko Jatuh Morse Fall Scale (18 - 59 tahun) -->
+      <q-card v-if="store.usia >= 18 && store.usia < 60" flat bordered class="col-12">
+        <q-card-section class="q-pa-sm bg-primary text-white">
+          <strong>{{ store?.morses?.desc }}</strong>
+        </q-card-section>
+        <q-separator />
+        <q-card-section v-if="store.formMorse" class="q-pa-sm row q-col-gutter-xs">
+          <div v-for="obj in store.morses.form" :key="obj.kode" class="col-12">
+            <div class="row">
+              <div class="col-3">
+                {{ obj?.label }} :
+              </div>
+              <div class="col-9 q-gutter-sm">
+                <q-radio
+                  v-for="(item, i) in obj?.categories" :key="i" dense size="sm" v-model="store.formMorse[obj.kode]" :val="item" :label="`${item?.label}`"
+                  @update:model-value="store.hitungSkorMorse"
+                />
+              </div>
+            </div>
+            <q-separator class="q-my-sm" />
+          </div>
+          <div v-if="store.formMorse?.skorMorse" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
+            <div>NILAI SKOR : {{ store.formMorse?.skorMorse?.skor }} </div>
+            <div>KET : {{ store.formMorse.skorMorse?.label }}</div>
+          </div>
+          <div v-if="store.formMorse?.skorMorse?.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
+            PASIEN DIHARAP PAKAI STICKER KUNING
+          </div>
+          <div class="col-12">
+            <div
+              class="text-right"
+              style="margin-bottom: 50px;"
+            >
+              <app-btn
+                color="primary"
+                label="Simpan Penilaian"
+                tooltip="Simpan Data"
+                type="submit"
+                tip
+                @click="store.saveData(props.pasien)"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- Resiko Jatuh Ontario / Sidney Scoring (geriatric dg usia >=60 tahun) -->
+      <q-card v-if="store.usia >= 60" flat bordered class="col-12">
+        <q-card-section class="q-pa-sm bg-primary text-white">
+          <strong>{{ store?.ontarios?.desc }}</strong>
+        </q-card-section>
+        <q-separator />
+        <q-card-section v-if="store.formOntario" class="q-pa-sm row q-col-gutter-xs">
+          <div v-for="obj in store.ontarios.form" :key="obj.kode" class="col-12">
+            <div v-if="obj.submenu.length" class="row">
+              <div class="col-12 q-pb-xs">
+                <strong>{{ obj?.label }} :</strong>
+              </div>
+              <q-separator />
+              <div class="col-12">
+                <q-list bordered separator>
+                  <q-item v-for="item in obj.submenu" :key="item">
+                    <q-item-section>
+                      <q-item-label>{{ item?.label }}</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <div class="flex q-gutter-sm">
+                        <q-radio
+                          dense size="sm" v-for="n in item.categories" :key="n" v-model="store.formOntario[item.kode]" :val="n" :label="n?.label"
+                          @update:model-value="store.hitungSkorOntario()"
+                        />
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+            </div>
+            <div v-else>
+              <div class="row q-pa-none">
+                <div class="col-6">
+                  <q-item-label>{{ obj?.label }}</q-item-label>
                 </div>
-                <div class="col-8 text-weight-bold">
-                  <span
-                    v-for="(kategori , x) in item.categories"
-                    :key="x"
-                  ><q-radio v-model="storepenilaian.olahform" :val="kategori" :label="kategori.label" color="primary" @update:model-value="updateSelection" /></span>
-                </div>
-                <div class="col-12">
-                  <q-separator class="q-my-xs" />
-                  <div
-                    class="text-right"
-                    style="margin-bottom: 50px;"
-                  >
-                    <app-btn
-                      color="primary"
-                      label="Simpan Penilaian"
-                      tooltip="Simpan Data"
-                      type="submit"
-                      tip
-                      :loading="storepenilaian.loadingForm"
+                <div class="col-6">
+                  <div class="column q-gutter-y-sm">
+                    <q-radio
+                      dense size="sm" v-for="n in obj.categories" :key="n" v-model="store.formOntario[obj.kode]" :val="n" :label="n?.label"
+                      @update:model-value="store.hitungSkorOntario()"
                     />
                   </div>
                 </div>
               </div>
+              <q-separator class="q-my-sm" />
             </div>
           </div>
-        </q-card-section> -->
-      </q-card-section>
-    </q-form>
-  </q-card>
-</template>
-<script setup>
-import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
-import { ref } from 'vue'
+        </q-card-section>
 
-const storepenilaian = usePenilaianAnamnesisIgd()
-const refForm = ref(null)
-const refkategori = ref(null)
+        <div class="full-width flex justify-end q-px-md q-pb-md">
+          <div v-if="store.formOntario?.skorOntario" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
+            <div>NILAI SKOR : {{ store.formOntario?.skorOntario?.skor }} </div>
+            <div>KET : {{ store.formOntario?.skorOntario?.label }}</div>
+          </div>
+          <div v-if="store.formOntario?.skorOntario?.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-9 q-mt-xs">
+            PASIEN DIHARAP PAKAI STICKER KUNING
+          </div>
+        </div>
+        <div class="col-12">
+          <div
+            class="text-right"
+            style="margin-bottom: 50px;"
+          >
+            <app-btn
+              color="primary"
+              label="Simpan Penilaian"
+              tooltip="Simpan Data"
+              type="submit"
+              tip
+              @click="store.saveData(props.pasien)"
+            />
+          </div>
+        </div>
+      </q-card>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis.js'
+import { onMounted } from 'vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
   },
-  loadingaja: {
+  kasus: {
+    type: Object,
+    default: null
+  },
+  ulang: {
     type: Boolean,
     default: false
   }
 })
 
-function onSubmit () {
-  storepenilaian.saveData(props.pasien).then(() => {
-    refForm.value.resetValidation()
-  })
-}
-
-// function updateSelection (val) {
-//   console.log('val', val)
-//   if (storepenilaian?.formpenilaians?.kode === 'humpty_dumpty') {
-//     const form = storepenilaian.formpenilaians.form
-//     form?.forEach(label => {
-//       console.log('label', label)
-//       let score = 0
-//       const kodelabel = label?.kode
-//       const kategori = label?.categories
-//       kategori?.forEach(nilai => {
-//         if (kodelabel === val?.kode) {
-//           score = storepenilaian.form[storepenilaian?.formpenilaians?.kode][label.kode]
-//           console.log('label', kodelabel, score)
-//         }
-//       })
-//     })
+// const jnsKasusKep = computed(() => {
+//   if (props.kasus) {
+//     return props.kasus?.gruping
 //   }
-// }
+//   return null
+// })
+
+onMounted(async () => {
+  const usiaarr = props?.pasien?.usia.split(' ')
+  const usiatahun = usiaarr[0]
+  store.usia = usiatahun
+  store.initReset(props?.pasien)
+})
+
+// eslint-disable-next-line no-unused-vars
+const store = usePenilaianAnamnesisIgd()
 
 </script>

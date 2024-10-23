@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAnamnesisRanapStore } from './anamnesis'
+// eslint-disable-next-line no-unused-vars
 import { usePengunjungRanapStore } from './pengunjung'
 import { usePemeriksaanUmumRanapStore } from './pemeriksaanumum'
 import { usePenilaianRanapStore } from './penilaian'
@@ -27,17 +28,21 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
     doubleCount: (state) => state.counter * 2
   },
   actions: {
-    async getData (pasien) {
-      const resp = await api.get(`v1/simrs/ranap/layanan/cppt/listcppt?noreg=${pasien?.noreg}`)
-      console.log('data cppt', resp)
-      if (resp.status === 200) {
-        this.items = resp.data
-        const pengunjung = usePengunjungRanapStore()
-        for (let i = 0; i < resp?.data?.length; i++) {
-          const isi = resp?.data[i]
-          pengunjung?.injectDataPasien(pasien?.noreg, isi, 'cppt')
-        }
-      }
+    // async getData (pasien) {
+    //   const resp = await api.get(`v1/simrs/ranap/layanan/cppt/listcppt?noreg=${pasien?.noreg}`)
+    //   console.log('data cppt', resp)
+    //   if (resp.status === 200) {
+    //     this.items = resp.data
+    //     const pengunjung = usePengunjungRanapStore()
+    //     for (let i = 0; i < resp?.data?.length; i++) {
+    //       const isi = resp?.data[i]
+    //       pengunjung?.injectDataPasien(pasien?.noreg, isi, 'cppt')
+    //     }
+    //   }
+    // },
+
+    getCppt (cppt) {
+      this.items = cppt ?? []
     },
 
     getPreviousForm (pasien) {
@@ -50,7 +55,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       const storeAnamnesis = useAnamnesisRanapStore()
       const storePemeriksaan = usePemeriksaanUmumRanapStore()
       const storePenilaian = usePenilaianRanapStore()
-      const cekTerbaru = this.items.length ? this.items[0] : null
+      const cekTerbaru = this.items?.length ? this.items[0] : null
       let dataSebelumnya = null
       if (!cekTerbaru) {
         dataSebelumnya = dataAwal
@@ -165,6 +170,8 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
               this.form.terapi = null
               this.form.radiologi = null
               this.form.diagnosa = null
+              const pasienRanap = usePengunjungRanapStore()
+              pasienRanap.injectDataArray(pasien?.noreg, resp.data.result, 'cppt')
             }
             this.loadingSave = false
             resolve(resp)
