@@ -168,7 +168,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           })
           it?.retur?.forEach(per => {
             const ada = masuk.findIndex(a => a.kdobat === per.kdobat && a.nopenerimaan === per.nopenerimaan)
+            const adaH = masuk.findIndex(a => a.kdobat === per.kdobat && a.harga === per.harga)
             if (ada >= 0) {
+              const jum = parseFloat(masuk[ada].jumlah) + parseFloat(per.jumlah)
+              const sub = parseFloat(masuk[ada].sub) + parseFloat(per.sub)
+              masuk[ada].jumlah = jum
+              masuk[ada].sub = sub
+            }
+            else if (adaH >= 0) {
               const jum = parseFloat(masuk[ada].jumlah) + parseFloat(per.jumlah)
               const sub = parseFloat(masuk[ada].sub) + parseFloat(per.sub)
               masuk[ada].jumlah = jum
