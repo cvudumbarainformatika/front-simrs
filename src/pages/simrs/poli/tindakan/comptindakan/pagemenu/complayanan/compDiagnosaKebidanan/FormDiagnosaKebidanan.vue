@@ -79,6 +79,8 @@
             label="Simpan Diagnosa & Intervensi Kebidanan"
             color="primary"
             type="submit"
+            :loading="store.loadingSave"
+            :disable="store.loadingSave"
           />
         </div>
       </q-scroll-area>
@@ -115,7 +117,7 @@ const groups = ref([])
 //   console.log('save')
 // }
 
-function lihatIntervensis(item) {
+function lihatIntervensis (item) {
   const int = item.intervensis
 
   const gr = int.length ? int.map(x => x.group) : []
@@ -130,11 +132,11 @@ onMounted(() => {
   store.getData()
 })
 
-function lihatDiagnosa() {
+function lihatDiagnosa () {
   console.log('lihat', store.selectDiagnosa)
 }
 
-function simpan() {
+function simpan () {
   store.simpanDiagnosadanIntervensi(props?.pasien)
   // console.log('simpan', )
 }

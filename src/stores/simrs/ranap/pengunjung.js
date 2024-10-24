@@ -127,6 +127,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.diagnosamedis = data?.diagnosamedis ?? []
         datax.tindakan = data?.tindakan ?? []
         datax.diagnosakeperawatan = data?.diagnosakeperawatan ?? []
+        datax.diagnosakebidanan = data?.diagnosakebidanan ?? []
         datax.cppt = data?.cppt ?? []
         datax.laborats = data?.laborats ?? []
         datax.radiologi = data?.radiologi ?? []
@@ -141,6 +142,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.oksigen = data?.oksigen ?? []
         datax.perawatanjenazah = data?.perawatanjenazah ?? []
         datax.hais = data?.hais ?? []
+        datax.konsultasi = data?.konsultasi ?? []
       }
     },
     getRuangan () {
@@ -325,15 +327,25 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const findPasien = this.pasiens.filter(x => x.noreg === noreg)
       if (findPasien.length) {
         const data = findPasien[0]
-        const target = data[kode]?.find(x => x?.id === null) ?? null
+        const target = data[kode]?.find(x => x?.id === null || x?.id === '' || x?.id === undefined || !('id' in x)) ?? null
         if (target) {
           data[kode]?.splice(data[kode]?.findIndex(x => x?.id === null), 1)
         }
       }
     },
+    deleteInjectanNull2 (noreg, kode) {
+      const findPasien = this.pasiens.filter(x => x.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => !('id' in x))
+        if (target) {
+          data[kode]?.splice(target, 1)
+        }
+      }
+    },
 
     hapusDataInjectan (pasien, id, key) {
-      console.log('hapusDataInjectan', key, id, pasien)
+      // console.log('hapusDataInjectan', key, id, pasien)
 
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       console.log('find pasien', findPasien)

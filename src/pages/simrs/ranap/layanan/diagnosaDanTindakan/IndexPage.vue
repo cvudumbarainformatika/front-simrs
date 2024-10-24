@@ -79,6 +79,13 @@ const tabsxx = [
     comp: defineAsyncComponent(() => import('./diagnosakeperawatan/DiagnosaKeperawatanPage.vue'))
   },
   {
+    label: 'Diagnosa Kebidanan',
+    name: 'diagnosaKebidanan',
+    icon: 'icon-mat-health_and_safety',
+    nakes: ['1', '2', '3'],
+    comp: defineAsyncComponent(() => import('./diagnosakebidanan/IndexPage.vue'))
+  },
+  {
     label: 'Tindakan',
     name: 'tindakan',
     icon: 'icon-mat-description',

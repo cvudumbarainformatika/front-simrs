@@ -8,13 +8,14 @@
         v-if="props?.pasien?.diagnosakebidanan?.length"
         style="height:calc(100% - 1px)"
       >
-        <q-list
+        <q-card
+          flat
           bordered
-          separator
+          v-for="item in props.pasien?.diagnosakebidanan"
+          :key="item.id"
+          class="q-ma-sm"
         >
           <q-item
-            v-for="item in props.pasien?.diagnosakebidanan"
-            :key="item.id"
             v-ripple
             clickable
           >
@@ -43,7 +44,7 @@
               />
             </q-item-section>
           </q-item>
-        </q-list>
+        </q-card>
       </q-scroll-area>
 
       <div
@@ -70,7 +71,7 @@ const props = defineProps({
   }
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
