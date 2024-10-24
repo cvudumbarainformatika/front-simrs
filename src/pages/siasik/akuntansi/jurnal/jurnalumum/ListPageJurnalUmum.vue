@@ -42,8 +42,8 @@
       </thead>
       <tbody v-if="store.items == ''">
         <tr>
-          <td colspan="7">
-            Belum Ada Data {{ store.items }}
+          <td colspan="7" class="text-center">
+            Belum Ada Data Diambil
           </td>
         </tr>
       </tbody>

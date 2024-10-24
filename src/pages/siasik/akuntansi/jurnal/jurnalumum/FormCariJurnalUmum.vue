@@ -25,7 +25,7 @@
       />
     </div>
     <div class="q-pa-sm">
-      <app-btn label="Tambah" color="primary" @click="store.dialog = true" />
+      <app-btn label="Tambah" color="primary" @click="tambahjurnal()" />
     </div>
   </div>
   <form-jurnal-umum />
@@ -37,6 +37,13 @@ import { onMounted, ref } from 'vue'
 
 const store = usejurnalumummanual()
 const tahun = ref([])
+
+function tambahjurnal () {
+  store.dialog = true
+  store.form.nobukti = ''
+  store.form.keterangan = ''
+  store.transall = ''
+}
 
 onMounted(() => {
   const max = new Date().getFullYear()
