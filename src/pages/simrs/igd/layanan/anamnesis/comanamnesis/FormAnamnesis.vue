@@ -1,6 +1,6 @@
 <template>
-  <div class="row q-col-gutter-xs full-width">
-    <div class="col">
+  <div class="fit column absolute">
+    <div class="col full-height ">
       <q-card
         flat
         bordered
@@ -10,10 +10,10 @@
       >
         <q-form
           ref="refForm"
-          class="full-height"
           @submit="onSubmit"
+          class="column full-height"
         >
-          <q-card-section class="q-px-md q-py-xs bg-primary text-white">
+          <q-card-section class="q-px-md q-py-xs bg-primary text-white col-auto full-width">
             <div class="row items-center justify-between">
               <div class="f-12 text-weight-bold">
                 Form Anamnesis
@@ -33,11 +33,8 @@
               </div>
             </div>
           </q-card-section>
-          <q-separator />
-          <q-card-section
-            class="full-height scroll"
-          >
-            <div class="row q-col-gutter-sm">
+          <q-card-section class="col full-height scroll">
+            <div class="row q-col-gutter-sm ">
               <q-input
                 v-model="store.form.keluhanutama"
                 outlined
@@ -186,16 +183,6 @@
                       @update:model-value="lihatPerubahan"
                     />
                   </div>
-                  <!-- <div class="col-2">
-                <q-input
-                  v-model="store.form.skor"
-                  outlined
-                  dense
-                  standout="bg-yellow-3"
-                  label="Skor"
-                  stack-label
-                />
-              </div> -->
                   <div class="col-12">
                     <q-separator class="q-my-xs" />
                     <div class="flex">
@@ -238,6 +225,152 @@
                   @update:model-value="store.setKeteranganSkornyeri"
                 />
               </div>
+              <div class="col-12 text-bold">
+                Status Fungsional
+              </div>
+              <div class="col-6">
+                - Aktivitas Dan Mobilitas
+                <q-input label="Sebutkan" v-if="store.form.aktivitasmobilitas === 'Perlu Bantuan'" />
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.aktivitasmobilitas"
+                  :options="optionAktivitasMobilitas"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Alat Bantu Jalan
+                <q-input label="Sebutkan" v-if="store.form.aktivitasAlatBnatujalan === 'Ya'" />
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.aktivitasAlatBnatujalan"
+                  :options="optionAlatBantuJalan"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-12 text-bold">
+                Kebutuhan Komunikasi dan Edukasi
+              </div>
+              <div class="col-6">
+                - Bicara
+                <q-input label="Sebutkan" v-if="store.form.kebutuhankomunikasidanedukasi === 'Lainnya'" />
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.kebutuhankomunikasidanedukasi"
+                  :options="optionkebutuhankomunikasidanedukasi"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Dibutuhkan Penerjemah
+                <q-input label="Sebutkan" v-if="store.form.penerjemah === 'Ya'" />
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.penerjemah"
+                  :options="optionpenerjemah"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Bahasa Isyarat
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.bahasaisyarat"
+                  :options="optionbahasaisyarat"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Hambatan
+                <q-input label="Sebutkan" v-if="store.form.hamabatan === 'Ya'" />
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.hamabatan"
+                  :options="optionhamabatan"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-12 text-bold">
+                Batuk
+              </div>
+              <div class="col-6">
+                - Riwayat Demam
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.riwayatdemam"
+                  :options="optionriwayatdemam"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Berkeringan Pada Malam Hari Tanpa Aktivitas
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.berkeringat"
+                  :options="optionberkeringat"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Riwayat Bepergian Dari Daerah Wabah
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.daerahwabah"
+                  :options="optiondaerahwabah"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Riwayat Pemakaian Obat Jangka Panjang
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.obatjangkapanjang"
+                  :options="optionobatjangkapanjang"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                - Riwayat BB Turun Tanpa Sebab Yang Diketauhi
+              </div>
+              <div class="col-6">
+                <q-option-group
+                  v-model="store.form.bbturun"
+                  :options="optionbbturun"
+                  color="primary"
+                  inline
+                  dense
+                />
+              </div>
             </div>
             <q-separator class="q-my-md" />
             <div
@@ -255,6 +388,7 @@
             </div>
           </q-card-section>
         </q-form>
+        <div style="margin-bottom: 100px;" />
       </q-card>
     </div>
   </div>
@@ -276,7 +410,56 @@ const optionAsupanMakan = ref([
   { label: 'Iya (1)', value: 1 },
   { label: 'Tidak (0)', value: 0 }
 ])
+const optionAktivitasMobilitas = ref([
+  { label: 'Mandiri', value: 'Mandiri' },
+  { label: 'Perlu Bantuan, Sebutkan', value: 'Perlu Bantuan' }
+])
+const optionAlatBantuJalan = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya, Sebutkan', value: 'Ya' }
+])
+const optionkebutuhankomunikasidanedukasi = ref([
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Gangguan Bicara', value: 'Gangguan Bicara' },
+  { label: 'Lainnya', value: 'Lainnya' }
+])
+const optionpenerjemah = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 
+])
+const optionriwayatdemam = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+
+])
+
+const optionbahasaisyarat = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
+const optionhamabatan = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
+
+const optionberkeringat = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
+const optiondaerahwabah = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
+const optionobatjangkapanjang = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
+
+const optionbbturun = ref([
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
+])
 const props = defineProps({
   pasien: {
     type: Object,

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="column full-height q-ma-sm "
+    class="column q-ma-sm fit"
     style="overflow: hidden;"
   >
-    <div class="column ">
+    <div class="column fit">
       <div class="col-auto bg-grey-4 shadow-2 text-grey-8 ">
         <q-tabs
           v-model="store.tab"
@@ -31,19 +31,18 @@
         <q-tab-panels
           v-model="store.tab"
           animated
-          class="full-height"
+          class="full-height scroll"
         >
           <q-tab-panel
             v-for="(panel, n) in store.tabs"
             :key="n"
             :name="panel.page"
-            class="full-height q-pa-none"
           >
             <component
               :is="cekPanel()"
               :key="props.pasien"
               :pasien="props.pasien"
-              class="full-height q-pa-none"
+              class="full-height scroll q-pa-none"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -75,7 +74,7 @@ const props = defineProps({
 const comp = [
   { nama: 'AnamnesisKeperawatan', page: defineAsyncComponent(() => import('./AnamnesisKeperawatanPage.vue')) },
   { nama: 'AnamnesisKebidanan', page: defineAsyncComponent(() => import('./AnamnesisKebidananPage.vue')) },
-  { nama: 'Penilaian', page: defineAsyncComponent(() => import('./PenilaianPage.vue')) }
+  { nama: 'PenilaianKajianResikoJatuh', page: defineAsyncComponent(() => import('./PenilaianPage.vue')) }
 ]
 
 const cekPanel = () => {
