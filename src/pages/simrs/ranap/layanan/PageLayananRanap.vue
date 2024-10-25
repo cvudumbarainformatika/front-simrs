@@ -106,8 +106,6 @@
 // eslint-disable-next-line no-unused-vars
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 
-// import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
-// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import useLayanan from './useLayanan'
 
@@ -131,112 +129,13 @@ const props = defineProps({
 
 const { filterredMenus, menu, store, nakes, menuDiganti } = useLayanan(props?.pasien)
 
-// const store = usePengunjungRanapStore()
-// const auth = useAplikasiStore()
-
-// const nakes = computed(() => {
-//   return auth?.user?.pegawai?.kdgroupnakes
-// })
-
-// const menus = ref([
-//   // {
-//   //   name: 'asessment-awal-page',
-//   //   label: 'Asessment Awal',
-//   //   icon: 'icon-mat-medical_information',
-//   //   comp: shallowRef(defineAsyncComponent(() => import('./asessmentAwal/IndexPage.vue')))
-//   // },
-//   {
-//     name: 'AnamnesisPage',
-//     label: 'Anamnesse $ Riwayat',
-//     icon: 'icon-mat-medical_information',
-//     nakes: ['1', '2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./anamnesis/IndexPage.vue')))
-//   },
-//   {
-//     name: 'PemeriksaanPage',
-//     label: 'Pemeriksaan',
-//     icon: 'icon-my-stethoscope',
-//     nakes: ['1', '2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./pemeriksaan/IndexPage.vue')))
-//   },
-//   {
-//     name: 'DiagTindPage',
-//     label: 'Diagnosa & Tindakan',
-//     icon: 'icon-mat-health_and_safety',
-//     nakes: ['1', '2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
-//   },
-//   {
-//     name: 'Penunjang',
-//     label: 'Penunjang',
-//     icon: 'icon-mat-post_add',
-//     nakes: ['1', '2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./penunjang/IndexPage.vue')))
-//   },
-//   {
-//     name: 'AsessmentUlang',
-//     label: 'Asessment Ulang',
-//     icon: 'icon-fa-book-medical-solid',
-//     nakes: ['1', '2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
-//   },
-//   {
-//     name: 'hais',
-//     label: 'HAIs',
-//     icon: 'icon-my-artboard',
-//     nakes: ['2', '3'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./hais/IndexPage.vue')))
-//   },
-//   {
-//     name: 'konsulspesialis',
-//     label: 'Konsul Spesialis',
-//     icon: 'icon-mat-textsms',
-//     nakes: ['1'],
-//     comp: shallowRef(defineAsyncComponent(() => import('./konsul/IndexPage.vue')))
-//   },
-//   {
-//     name: 'e-resep-page',
-//     label: 'EResep',
-//     icon: 'icon-mat-receipt',
-//     nakes: ['1'],
-//     comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
-//   }
-// ])
-
-// const filterredMenus = computed(() => {
-//   const byPass = auth.user
-//   console.log('byPass', byPass)
-
-//   return menus.value.filter(menu => menu.nakes.includes(nakes.value))
-// })
-
-// const menu = ref(null)
-
-// onMounted(() => {
-//   console.log('mounted pageLayananRanap', auth?.user?.pegawai?.nik)
-
-//   menu.value = filterredMenus.value[0]
-// })
-
-// function menuDiganti (val) {
-//   menu.value = val
-// }
-
 const onShow = () => {
-  // console.log('pasien', props.pasien)
+  console.log('pasien pageLayananRanap', props.pasien)
   Promise.all([
     anamnesis.getRiwayatKehamilan(props.pasien)
 
   ])
 }
-
-// watchEffect(() => {
-//   if (!props.pasien) {
-//     console.log('no pasien')
-
-//     store.pageLayanan = false
-//   }
-// })
 </script>
 
 <style lang="scss">

@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
 // eslint-disable-next-line no-unused-vars
 import { notifErr, notifSuccess } from 'src/modules/utils'
+import { usePengunjungRanapStore } from '../../ranap/pengunjung'
 // import { notifSuccess } from 'src/modules/utils'
 
 export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', {
@@ -23,7 +24,7 @@ export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', 
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getData() {
+    async getData () {
       const resp = await api.get('v1/simrs/pelayanan/diagnosakebidanan')
       // console.log('diagnosa kebidanan', resp)
       if (resp.status === 200) {
@@ -31,11 +32,11 @@ export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', 
       }
     },
 
-    setDiagnosa(val) {
+    setDiagnosa (val) {
       this.diagnosa = val
     },
 
-    async simpanDiagnosadanIntervensi(pasien) {
+    async simpanDiagnosadanIntervensi (pasien) {
       this.loadingSave = true
 
       let intv = []
@@ -74,34 +75,39 @@ export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', 
         // console.log('simpan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
+          const storeRanap = usePengunjungRanapStore()
           const arr = resp.data.result
           for (let i = 0; i < arr.length; i++) {
             const isi = arr[i]
             storePasien.injectDataPasien(pasien, isi, 'diagnosakebidanan')
+            storeRanap.injectDataPasien(pasien?.noreg, isi, 'diagnosakebidanan')
           }
           notifSuccess(resp)
           this.initReset()
           this.loadingSave = false
         }
         this.loadingSave = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log(error)
         notifErr(error)
       }
     },
 
-    async deleteDiagnosa(pasien, id) {
+    async deleteDiagnosa (pasien, id) {
       const payload = { id }
       const resp = await api.post('v1/simrs/pelayanan/deletediagnosakebidanan', payload)
       // console.log('delete', resp)
       if (resp.status === 200) {
         const storePasien = usePengunjungPoliStore()
+        const storeRanap = usePengunjungRanapStore()
         storePasien.hapusDataDiagnosaKebidanan(pasien, id)
+        storeRanap.hapusDataInjectan(pasien, id, 'diagnosakebidanan')
         notifSuccess(resp)
       }
     },
 
-    initReset() {
+    initReset () {
       this.diagnosa = ''
       this.selectDiagnosa = []
     }

@@ -6,7 +6,7 @@
           <div><b>Mohon bantuan dokter : </b></div>
           <app-autocomplete-new
             ref="refPerawat"
-            :model="store.form.dokterkonsul"
+            :model="store.form.kddokterkonsul"
             label="Dokter"
             autocomplete="nama"
             option-value="kdpegsimrs"
@@ -14,16 +14,16 @@
             outlined
             :source="store.dokters"
             @on-select="(val)=> {
-              store.form.dokterkonsul = val
+              store.form.kddokterkonsul = val
             }"
-            @clear="store.form.dokterkonsul = null"
+            @clear="store.form.kddokterkonsul = null"
           />
           <div class="q-mt-lg">
             <b>Untuk : </b>
           </div>
           <app-autocomplete-new
             ref="refPerawat"
-            :model="store.form.untuk"
+            :model="store.form.kduntuk"
             label="untuk"
             autocomplete="label"
             option-value="value"
@@ -31,11 +31,12 @@
             outlined
             :source="store.untuks"
             @on-select="(val)=> {
-              store.form.untuk = val
+              store.form.kduntuk = val
+              store.form.ketuntuk = store.untuks?.find(e => e?.value === val)?.label
             }"
-            @clear="store.form.untuk = null"
+            @clear="store.form.kduntuk = null"
           />
-          <q-input v-model="store.form.keterangan" type="textarea" outlined standout="bg-yellow-3" rows="8" />
+          <q-input v-model="store.form.permintaan" type="textarea" outlined standout="bg-yellow-3" rows="8" />
         </div>
       </div>
       <q-separator class="q-my-md" />

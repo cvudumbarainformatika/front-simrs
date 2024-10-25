@@ -7,10 +7,10 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
   state: () => ({
     form: {
-      dokterkonsul: null,
-      untuk: '1',
-      untukKet: 'Konsultasikan tindakan masalah medik saat ini',
-      keterangan: null
+      kddokterkonsul: null,
+      kduntuk: '1',
+      ketuntuk: 'Konsultasikan tindakan masalah medik saat ini',
+      permintaan: null
     },
     dokters: [],
     perawats: [],
@@ -36,9 +36,6 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
       }
       this.loadingOrder = true
 
-      // const isk = this.form.isk
-      // console.log(isk.join(','))
-
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
       this.form.kodepoli = pasien?.kodepoli
@@ -46,47 +43,46 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
       this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
       this.form.kelas_ruangan = pasien?.kelas_ruangan
 
-      // this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA' || this.form.nota === '' || this.form.nota === null) ? null : this.form.nota
-      // this.form.isRanap = isRanap
-
-      // // this.form.isRanap = isRanap
-
       console.log('form', this.form)
 
-      // try {
-      //   const resp = await api.post('v1/simrs/ranap/layanan/hais/simpandata', form)
-      //   console.log('save permintaan hais', resp.data)
-      //   if (resp.status === 200) {
-      //     // const storePasien = usePengunjungPoliStore()
-      //     const storeRanap = usePengunjungRanapStore()
-      //     const isi = resp?.data?.result
-      //     // storePasien.injectDataPasien(pasien, isi, 'fisio')
-      //     storeRanap.injectDataPasien(pasien?.noreg, isi, 'hais')
-      //     this.setNotas(resp?.data?.nota)
-      //     notifSuccess(resp)
-      //     this.loadingOrder = false
-      //     this.initReset()
-      //   }
-      //   this.loadingOrder = false
-      // }
-      // catch (error) {
-      //   this.loadingOrder = false
-      // }
+      const storeRanap = usePengunjungRanapStore()
+      storeRanap.injectDataPasien(pasien?.noreg, this.form, 'konsultasi')
+
+      try {
+        const resp = await api.post('v1/simrs/ranap/layanan/konsultasi/simpandata', this.form)
+        console.log('save permintaan konsultasi', resp.data)
+        if (resp.status === 200) {
+          storeRanap.deleteInjectanNull2(pasien?.noreg, 'konsultasi')
+          const isi = resp?.data?.result
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'konsultasi')
+          notifSuccess(resp)
+          this.loadingOrder = false
+          this.initReset()
+        }
+        this.loadingOrder = false
+      }
+      catch (error) {
+        this.loadingOrder = false
+      }
     },
 
     async hapusPermintaan (pasien, id) {
       this.loadingHapus = true
+
+      if (!id) {
+        return notifErrVue('Tidak dapat dihapus')
+      }
+
       const payload = { noreg: pasien?.noreg, id }
       try {
-        const resp = await api.post('v1/simrs/ranap/layanan/hais/hapusdata', payload)
+        const resp = await api.post('v1/simrs/ranap/layanan/konsultasi/hapusdata', payload)
         this.loadingHapus = false
         // console.log(resp)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
           const storeRanap = usePengunjungRanapStore()
           // storePasien.hapusDataFisio(pasien, id)
-          storeRanap.hapusDataInjectan(pasien, id, 'hais')
-          this.setNotas(resp?.data?.nota)
+          storeRanap.hapusDataInjectan(pasien, id, 'konsultasi')
           notifSuccess(resp)
         }
       }
@@ -99,9 +95,9 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
     initReset () {
       this.form = {
         dokterkonsul: null,
-        untuk: '1',
-        untukKet: 'Konsultasikan tindakan masalah medik saat ini',
-        keterangan: 'Atas pasien ini dengan kondisi ' + '\n'
+        kduntuk: '1',
+        ketuntuk: 'Konsultasikan tindakan masalah medik saat ini',
+        permintaan: 'Atas pasien ini dengan kondisi ' + '\n'
       }
 
       const pengunjung = usePengunjungRanapStore()

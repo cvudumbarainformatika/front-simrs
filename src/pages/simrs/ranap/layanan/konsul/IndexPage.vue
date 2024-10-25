@@ -4,7 +4,7 @@ import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormKonsul = defineAsyncComponent(() => import('./comp/FormKonsul.vue'))
-// const ListTindakan = defineAsyncComponent(() => import('./comp/ListTindakan.vue'))
+const ListKonsul = defineAsyncComponent(() => import('./comp/ListKonsul.vue'))
 
 const props = defineProps({
   pasien: {
@@ -44,7 +44,7 @@ onMounted(() => {
     </template>
     <template #list>
       <div class="fit">
-        <!-- <ListTindakan :pasien="props.pasien" :kasus="props.kasus" :key="pasien?.tindakan" /> -->
+        <ListKonsul :pasien="props.pasien" :kasus="props.kasus" />
       </div>
     </template>
   </BaseLayout>
