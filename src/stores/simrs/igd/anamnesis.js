@@ -11,7 +11,7 @@ export const useAnamnesis = defineStore('anamnesis', {
     tabs: [
       { name: 'Anamnesis Keperawatan', page: 'AnamnesisKeperawatan' },
       { name: 'Anamnesis Kebidanan', page: 'AnamnesisKebidanan' },
-      { name: 'Penilaian', page: 'Penilaian' }
+      { name: 'Penilaian Kajian Resiko Jatuh', page: 'PenilaianKajianResikoJatuh' }
     ],
     form: {
       keluhanutama: '',

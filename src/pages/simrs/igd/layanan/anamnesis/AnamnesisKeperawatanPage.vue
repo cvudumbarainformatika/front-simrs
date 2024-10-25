@@ -1,6 +1,6 @@
 <template>
   <div class="full-height full-width">
-    <div class="row full-height">
+    <div class="row full-height ">
       <q-card
         flat
         bordered
