@@ -240,8 +240,8 @@
                   {{ rin?.kdobat }}
                 </div>
               </div>
-              <div class="col-3">
-                <div class="row justify-between no-wrap">
+              <div class="col-3" style="white-space: normal;">
+                <div class="row justify-between no-wrap" style="white-space: normal;">
                   <div class="q-mr-sm">
                     Pasien
                   </div>
