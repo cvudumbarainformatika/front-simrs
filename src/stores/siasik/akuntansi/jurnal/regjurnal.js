@@ -46,6 +46,7 @@ export const registerJurnal = defineStore('register_jurnal', {
     spjpanjar: [],
     nihil: [],
     pajakls: [],
+    pendapatan: [],
 
     // DATA KE FRONTEND
     jurnals: [],
@@ -143,6 +144,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             this.nihil = resp.data.nihil
             this.spjpanjar = resp.data.spjpanjar
             this.pajakls = resp.data.pajakls
+            this.pendapatan = resp.data.transkeppk
 
             this.loading = false
             this.dataregisterjurnal()
@@ -967,6 +969,95 @@ export const registerJurnal = defineStore('register_jurnal', {
         // console.log('nihil', datanihil)
       }
 
+      // DATA PENDAPATAN //
+      const unikppk = this.pendapatan.map((x) => x.idtrans)
+      const unikpend = unikppk.length ? [...new Set(unikppk)] : []
+      const pendapatan = []
+      for (let i = 0; i < unikpend.length; i++) {
+        const el = unikpend[i]
+        const arr = this.pendapatan
+        const arrfilter = arr.filter((x) => x.idtrans === el).map((x) => x)
+        // console.log('filter pendapatan', arrfilter)
+        const epsal = []
+        for (let k = 0; k < arrfilter.length; k++) {
+          const er = arrfilter[k]
+          const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.idtrans,
+            keterangan: 'Pendapatan BLUD',
+            kegiatan: er?.ket,
+            kode: '3.1.02.05.01.0001',
+            uraian: 'Estimasi Perubahan SAL',
+            debit: parseFloat(er.nilai),
+            kredit: 0
+          }
+          epsal.push(el)
+        }
+        const pend = []
+        for (let k = 0; k < arrfilter.length; k++) {
+          const er = arrfilter[k]
+          const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.idtrans,
+            keterangan: 'Pendapatan BLUD',
+            kegiatan: er?.ket,
+            kode: '4.1.04.16.02.0001',
+            uraian: 'Pendapatan BLUD dari Jasa Layanan',
+            debit: 0,
+            kredit: parseFloat(er.nilai)
+          }
+          pend.push(el)
+          // console.log('nihil', kasblud)
+        }
+        const kasblud = []
+        for (let k = 0; k < arrfilter.length; k++) {
+          const er = arrfilter[k]
+          const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.idtrans,
+            keterangan: 'Pendapatan BLUD',
+            kegiatan: er?.ket,
+            kode: '1.1.01.04.01.0001',
+            uraian: 'Kas di BLUD',
+            debit: parseFloat(er.nilai),
+            kredit: 0
+          }
+          kasblud.push(el)
+        }
+        const pendplo = []
+        for (let k = 0; k < arrfilter.length; k++) {
+          const er = arrfilter[k]
+          const el = {
+            tanggal: er?.tgltrans,
+            notrans: er?.idtrans,
+            keterangan: 'Pendapatan BLUD',
+            kegiatan: er?.ket,
+            kode: '7.1.04.16.02.0001',
+            uraian: 'Pendapatan BLUD dari Jasa Layanan - LO',
+            debit: 0,
+            kredit: parseFloat(er.nilai)
+          }
+          pendplo.push(el)
+        }
+
+        const obj = {
+          tanggal: arr.filter((x) => x.idtrans === el)[0].tgltrans,
+          notrans: arr.filter((x) => x.idtrans === el)[0].idtrans,
+          keterangan: 'Pendapatan BLUD',
+          kegiatan: arr.filter((x) => x.idtrans === el)[0].ket,
+          nilai: arr.filter((x) => x.idtrans === el).map((x) => parseFloat(x.nilai)).reduce((a, b) => a + b, 0),
+          debit: [epsal, kasblud],
+          kredit: [pend, pendplo],
+          d_pjk: null,
+          k_pjk: null,
+          d_pjk1: null,
+          k_pjk1: null
+        }
+        pendapatan.push(obj)
+        dataserahterima.push(...epsal, ...pend, ...kasblud, ...pendplo)
+        // console.log('nihil', datanihil)
+      }
+
       // DATA PAJAK LS //
       const unikpajakls = this.pajakls.map((x) => x.nonpdls)
       const unpjakls = unikpajakls.length ? [...new Set(unikpajakls)] : []
@@ -1510,7 +1601,7 @@ export const registerJurnal = defineStore('register_jurnal', {
       const gabungan = stp?.concat(
         bastfarm, cairnonstp,
         cairstpz, pajakls, cp, dataspmup,
-        dataspmgu, spjpjr, datanihil
+        dataspmgu, spjpjr, datanihil, pendapatan
       )
       const sortByDate = (gabungan) =>
         gabungan.sort(({ tanggal: a }, { tanggal: b }) =>

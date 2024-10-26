@@ -58,6 +58,11 @@ const akuntansi = {
       ]
     },
     {
+      path: '/akuntansi/bukubesar',
+      // name: 'siasik.saldo',
+      component: () => import('pages/siasik/akuntansi/bukubesar/IndexPage.vue')
+    },
+    {
       path: '/akuntansi/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
     }
