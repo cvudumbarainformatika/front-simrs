@@ -1,10 +1,11 @@
 <script setup>
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormKonsul = defineAsyncComponent(() => import('./comp/FormKonsul.vue'))
 const ListKonsul = defineAsyncComponent(() => import('./comp/ListKonsul.vue'))
+const DetailForm = defineAsyncComponent(() => import('./comp/DetailForm.vue'))
 
 const props = defineProps({
   pasien: {
@@ -23,6 +24,9 @@ const props = defineProps({
 
 const store = useKonsulRanapStore()
 
+const detail = ref(null)
+const isDetail = ref(false)
+
 onMounted(() => {
   store.initReset()
   Promise.all([
@@ -30,6 +34,12 @@ onMounted(() => {
     // store.getTindakan(props?.pasien)
   ])
 })
+
+const lihatDetail = (data) => {
+  console.log('detail', data)
+  detail.value = data
+  isDetail.value = true
+}
 
 </script>
 
@@ -44,7 +54,8 @@ onMounted(() => {
     </template>
     <template #list>
       <div class="fit">
-        <ListKonsul :pasien="props.pasien" :kasus="props.kasus" />
+        <ListKonsul v-if="!isDetail" :pasien="props.pasien" :kasus="props.kasus" @detail="lihatDetail" />
+        <DetailForm v-else :item="detail" :pasien="props.pasien" @to-list="isDetail = false" />
       </div>
     </template>
   </BaseLayout>

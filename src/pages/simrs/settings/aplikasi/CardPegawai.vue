@@ -11,6 +11,11 @@
           </q-avatar>
         </div>
         <div class="q-ml-md">
+          <div class="absolute-top-right q-pa-sm">
+            <div class="text-h6">
+              {{ item?.id }}
+            </div>
+          </div>
           <div class="flex flex-nowrap">
             <strong>Nip : </strong> {{ item.nip }}
           </div>
@@ -446,17 +451,17 @@ const gud = ref('')
 const filteredRua = ref(store.ruangansims)
 const koderuang = ref(null)
 const rua = ref('')
-function filter(val) {
+function filter (val) {
   if (val) {
     filtered.value = store.polis.filter(a => a.polirs.toLowerCase().includes(val.toLowerCase()))
   }
 }
-function filterGud(val) {
+function filterGud (val) {
   if (val) {
     filteredGud.value = store.gudangs.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))
   }
 }
-function filterRuang(val) {
+function filterRuang (val) {
   if (val) {
     filteredRua.value = store.ruangansims.filter(a => a.uraian.toLowerCase().includes(val.toLowerCase()))
   }
@@ -477,13 +482,13 @@ defineProps({
 })
 
 const refMenu = ref(null)
-function hideMenu() {
+function hideMenu () {
   kodepolis.value = null
 }
-function setpoli(val) {
+function setpoli (val) {
   kodepolis.value = val.kdruangansim.split('|')
 }
-function simpan() {
+function simpan () {
   const anu = kodepolis.value?.length ? kodepolis.value.filter(a => a.length > 4) : null
   const arr = anu?.join('|') ?? null
   console.log('kode', anu)
@@ -492,7 +497,7 @@ function simpan() {
     refMenu.value.hide()
   })
 }
-function simpanGudang() {
+function simpanGudang () {
   const anu = kodegudangs.value?.length ? kodegudangs.value.filter(a => a.length > 4) : null
   const arr = anu?.join('|') ?? null
   console.log('kode', anu)
@@ -501,7 +506,7 @@ function simpanGudang() {
     refMenu.value.hide()
   })
 }
-function simpanRunganSim() {
+function simpanRunganSim () {
   const anu = koderuang.value?.length ? koderuang.value?.filter(a => a.length > 4) : null
   const arr = anu?.join('|') ?? null
   console.log('kode', anu)
@@ -510,7 +515,7 @@ function simpanRunganSim() {
     refMenu.value.hide()
   })
 }
-function ruangan(val) {
+function ruangan (val) {
   let fin = null
   if (val.kdruangansim) {
     const temp = val.kdruangansim.split('|')
@@ -531,10 +536,10 @@ function ruangan(val) {
   return ruang
 }
 
-function setGudang(val) {
+function setGudang (val) {
   kodegudangs.value = val.kdruangansim.split('|')
 }
-function gudang(val) {
+function gudang (val) {
   let fin = null
   if (val.kdruangansim) {
     const temp = val.kdruangansim.split('|')
@@ -555,10 +560,10 @@ function gudang(val) {
   return ruang
 }
 
-function setRuanganSim(val) {
+function setRuanganSim (val) {
   koderuang.value = val.kdruangansim.split('|')
 }
-function ruangsim(val) {
+function ruangsim (val) {
   let fin = null
   if (val.kdruangansim) {
     const temp = val.kdruangansim.split('|')
@@ -582,13 +587,14 @@ defineEmits(['simpan', 'allCheck', 'appCheck', 'menuCheck', 'submenuCheck'])
 
 const check = ref(false)
 
-function getImage(row) {
+function getImage (row) {
   const kelamin = row.kelamin
   if (row.foto_pegawai === null || row.foto_pegawai === '' || row.foto_pegawai === 'undefined') {
     return kelamin === 'Perempuan'
       ? new URL('../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../assets/images/user-avatar.svg', import.meta.url).href
-  } else {
+  }
+  else {
     // return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
     return row.foto_pegawai
   }

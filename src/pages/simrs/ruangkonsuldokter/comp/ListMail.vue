@@ -1,0 +1,67 @@
+<template>
+  <div class="column fit">
+    <div class="col-auto bg-white q-px-sm q-py-xs">
+      <div class="row justify-between items-center">
+        <div class="kiri">
+          <q-btn icon="icon-mat-refresh" size="sm" flat dense color="dark" @click="emits('refresh')">
+            <q-tooltip>
+              Segarkan
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div class="kanan">
+          <q-pagination
+            v-model="current"
+            :max="5"
+            input
+          />
+        </div>
+      </div>
+    </div>
+    <div v-if="items?.length" class="col full-height scroll">
+      <q-list bordered separator class="rounded-borders">
+        <q-item
+          clickable v-ripple v-for="(item, i) in items" :key="i" :class="{'bg-white text-bold': !item?.flag}"
+          @click="emits('details', item)"
+        >
+          <q-item-section side>
+            <q-item-label>
+              {{ item?.nakesminta?.nama ?? 'Not Valid' }}
+            </q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label lines="1">
+              -- {{ item?.permintaan }}
+            </q-item-label>
+          </q-item-section>
+          <!-- <q-item-section>
+            <q-item-label lines="1">
+              -- {{ item?.jawaban ?'Sudah Ada Jawaban': 'Belum Ada Jawaban' }}
+            </q-item-label>
+          </q-item-section> -->
+          <q-item-section side>
+            {{ humanDate(item?.tgl_permintaan) }} - {{ formatJam(item?.tgl_permintaan) }}
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { formatJam, humanDate } from 'src/modules/formatter'
+import { ref } from 'vue'
+
+defineProps({
+  items: {
+    type: Array,
+    default: () => []
+  }
+
+})
+
+const emits = defineEmits(['details', 'refresh'])
+
+const current = ref(1)
+
+</script>
