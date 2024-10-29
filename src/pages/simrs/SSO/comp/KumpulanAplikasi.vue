@@ -40,7 +40,7 @@
           >
             <div
               v-if="!isMobile"
-              class="card bg-white cursor-pointer"
+              class="card bg-white cursor-pointer relative-position"
               @click="goTo(item)"
             >
               <div class="imgBx column flex-center items-center">
@@ -67,6 +67,11 @@
                   padding="sm"
                   class="absolute-bottom"
                 />
+                <div v-if="item?.singkatan === 'RKD' && notifRkd?.notif > 0" class="absolute-bottom-right z-top" style="right:-10px; bottom:-10px">
+                  <q-btn dense color="negative" round :label="notifRkd?.notif">
+                    <q-tooltip>Ada {{ notifRkd?.notif }} Konsulan Belum di buka</q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </div>
             <div
@@ -160,6 +165,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  notifRkd: {
+    type: Object,
+    default: null
   }
 })
 const emits = defineEmits(['goTo'])
@@ -184,7 +193,7 @@ const filterApps = computed(() => {
 })
 
 onMounted(() => {
-  // console.log(main.value.offsetHeight)
+  console.log('sso kumpulan apps', props.notifRkd)
   h.value = main.value.offsetHeight - (80 + 10)
   // console.log('kumpulan apps', filterApps.value)
   // console.log('kumpulan akses', props.akses)

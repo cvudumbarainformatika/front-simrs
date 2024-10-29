@@ -128,6 +128,9 @@
                     <i>{{ formatDouble(rinc?.harga,2) }}</i>
                   </div>
                 </div>
+                <div v-if="rinc?.keterangan !=='-' && rinc?.keterangan !==''" class="row q-mb-xs q-ml-sm">
+                  Ket. : {{ rinc?.keterangan }}
+                </div>
                 <div v-if="rinc?.keterangan_bypass" class="row q-mb-xs q-ml-sm">
                   Ket. bypass : {{ rinc?.keterangan_bypass }}
                 </div>

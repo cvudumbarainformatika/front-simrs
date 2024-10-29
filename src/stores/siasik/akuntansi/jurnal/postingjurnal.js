@@ -57,7 +57,6 @@ export const postingJurnal = defineStore('posting_jurnal', {
     //   this.reqs.q = val
     //   if (!this.loading) this.getPostJurnal()
     // },
-
     getPostJurnal () {
       this.loading = true
       const params = { params: this.reqs }
@@ -123,7 +122,7 @@ export const postingJurnal = defineStore('posting_jurnal', {
             notrans: arrs.filter((x) => x.keterangan === et)[0]?.notrans,
             keterangan: arrs.filter((x) => x.keterangan === et)[0]?.keterangan,
             kegiatan: arrs.filter((x) => x.keterangan === et)[0]?.kegiatan,
-            nilai: arrs.filter((x) => x.keterangan === et)?.map((x) => parseFloat(x.debit))?.reduce((a, b) => a + b, 0),
+            nilai: arrs.filter((x) => x.keterangan === et)?.map((x) => parseFloat(x.debit))[0] + arrs.filter((x) => x.keterangan === et)?.map((x) => parseFloat(x.debit))[1],
             kode: arrs.filter((x) => x.keterangan === et)?.map((x) => x.kode),
             uraian: arrs.filter((x) => x.keterangan === et)?.map((x) => x.uraian),
             debit: arrs.filter((x) => x.keterangan === et)?.map((x) => parseFloat(x.debit)),

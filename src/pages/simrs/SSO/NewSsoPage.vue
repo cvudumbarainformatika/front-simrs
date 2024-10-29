@@ -37,6 +37,7 @@
               :loading="store.loading"
               :items="apps.items"
               :akses="apps.aksesApps"
+              :notif-rkd="apps.notifRkd"
               @go-to="(item)=>goTo(item)"
             />
           </div>

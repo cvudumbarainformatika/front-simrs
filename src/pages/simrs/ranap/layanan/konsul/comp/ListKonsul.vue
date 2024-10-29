@@ -24,6 +24,8 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['detail'])
+
 const filterredTable = computed(() => {
   const arr = props?.pasien?.konsultasi ?? []
   return arr
@@ -37,7 +39,7 @@ function namaPetugas (item) {
 
 const PHOTO_USER = (item) => {
   const dokter = store.dokters?.find(x => x.kdpegsimrs === item) ?? null
-  console.log('dokter', dokter)
+  // console.log('dokter', dokter)
   const kelamin = 'Laki-laki'
   const row = dokter
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
@@ -138,9 +140,9 @@ function hapusItem (id) {
               size="md"
               icon="icon-mat-sms_black"
               color="primary"
-              @click="hapusItem(item.id)"
+              @click="emits('detail', item)"
             >
-              <q-tooltip>Lihat Detail </q-tooltip>
+              <q-tooltip>Lihat / Input Jawaban & Detail</q-tooltip>
             </q-btn>
           </div>
         </div>

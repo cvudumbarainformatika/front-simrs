@@ -137,7 +137,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
 
       await api.get('/v1/authuser').then(resp => {
-        console.log('resp', resp)
+        console.log('resp get user', resp)
         if (resp.status === 200) {
           storage.setUser(resp?.data?.user)
             .then(hdd => {
@@ -151,6 +151,9 @@ export const useAuthStore = defineStore('auth', {
                 apps.setItems(aplikasi)
                 apps.setAksesApps(akses)
                 apps.setSistemBayars(mSistemBayar)
+
+                apps.notifRkd = resp?.data?.notifRkd ?? null
+
                 setTimeout(() => { this.loading = false }, 200)
               }
               else {
