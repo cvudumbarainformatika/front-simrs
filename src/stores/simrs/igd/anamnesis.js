@@ -83,7 +83,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       // console.log(this.form)
 
       try {
-        const resp = await api.post('v1/simrs/pelayanan/igd/anamnesis/simpananamnesis', this.form)
+        const resp = await api.post('v1/simrs/igd/anamnesis/simpananamnesis', this.form)
         if (resp.status === 200) {
           // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungIgdStore()

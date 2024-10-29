@@ -371,16 +371,17 @@
               </div>
               <div class="col-6 text-bold">
                 Nyeri Hilang
+                <q-input label="Sebutkan" v-model="store.form.sebutkannyerihilang" v-if="store.form.nyerihilang === 'Lainnya'" />
               </div>
               <div class="col-6">
-                <q-select dense outlined v-model="store.form.nyerihilang" />
+                <q-select dense outlined v-model="store.form.nyerihilang" :options="nyerihilang" />
               </div>
               <div class="col-12 text-bold">
                 Status Fungsional
               </div>
               <div class="col-6">
                 - Aktivitas Dan Mobilitas
-                <q-input label="Sebutkan" v-if="store.form.aktivitasmobilitas === 'Perlu Bantuan'" />
+                <q-input label="Sebutkan" v-model="store.form.sebutkanperlubanuan" v-if="store.form.aktivitasmobilitas === 'Perlu Bantuan'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -393,7 +394,7 @@
               </div>
               <div class="col-6">
                 - Alat Bantu Jalan
-                <q-input label="Sebutkan" v-if="store.form.aktivitasAlatBnatujalan === 'Ya'" />
+                <q-input label="Sebutkan" v-model="store.form.sebutkanalatbantujalan" v-if="store.form.aktivitasAlatBnatujalan === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -409,7 +410,7 @@
               </div>
               <div class="col-6">
                 - Bicara
-                <q-input label="Sebutkan" v-if="store.form.kebutuhankomunikasidanedukasi === 'Lainnya'" />
+                <q-input v-model="store.form.sebutkankomunaksilainnya" label="Sebutkan" v-if="store.form.kebutuhankomunikasidanedukasi === 'Lainnya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -422,7 +423,7 @@
               </div>
               <div class="col-6">
                 - Dibutuhkan Penerjemah
-                <q-input label="Sebutkan" v-if="store.form.penerjemah === 'Ya'" />
+                <q-input v-model="store.form.sebutkanpenerjemah" label="Sebutkan" v-if="store.form.penerjemah === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -447,7 +448,7 @@
               </div>
               <div class="col-6">
                 - Hambatan
-                <q-input label="Sebutkan" v-if="store.form.hamabatan === 'Ya'" />
+                <q-input v-model="store.form.sebutkanhambatan" label="Sebutkan" v-if="store.form.hamabatan === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -664,6 +665,10 @@ const kaki = ref([
 const keadaanrangsangan = ref([
   'Tertidur/Bangun',
   'Rewel'
+])
+
+const nyerihilang = ref([
+  'Minum Obat', 'Istirahat', 'Mendengarkan Musik', 'Berubah Posisi Tidur', 'Lainnya'
 ])
 
 const props = defineProps({
@@ -890,6 +895,8 @@ function resetbps () {
   store.form.ekspresiwajah = ''
   store.form.gerakantangan = ''
   store.form.kepatuhanventilasimekanik = ''
+  store.form.scroebps = 0
+  store.form.ketscorebps = ''
 }
 
 function resetnrt () {
@@ -904,5 +911,7 @@ function resetnips () {
   store.form.lengan = ''
   store.form.kaki = ''
   store.form.keadaanrangsangan = ''
+  store.form.scroenips = 0
+  store.form.ketscorenips = ''
 }
 </script>
