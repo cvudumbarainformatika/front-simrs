@@ -207,7 +207,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                   masuk[index].jumlah = sisa
                   diminta = 0
 
-                  const nilaiSisa = masuk[index].sub - nilaiDiminta
+                  const nilaiSisa = masuk[index].sub > 0 ? masuk[index].sub - nilaiDiminta : nilaiDiminta
                   masuk[index].sub = nilaiSisa
                   nilaiDiminta = 0
                 }
@@ -216,7 +216,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                   diminta = sisa
                   masuk[index].jumlah = 0
 
-                  const nilaiSisa = masuk[index].sub - nilaiDiminta
+                  const nilaiSisa = masuk[index].sub > 0 ? masuk[index].sub - nilaiDiminta : nilaiDiminta
                   nilaiDiminta = nilaiSisa
                   masuk[index].sub = 0
                 }
@@ -230,7 +230,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                     masuk[index1].jumlah = sisa
                     diminta = 0
 
-                    const nilaiSisa = masuk[index1].sub - nilaiDiminta
+                    const nilaiSisa = masuk[index1].sub > 0 ? masuk[index1].sub - nilaiDiminta : nilaiDiminta
                     masuk[index1].sub = nilaiSisa
                     nilaiDiminta = 0
                   }
@@ -239,7 +239,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                     diminta = sisa
                     masuk[index1].jumlah = 0
 
-                    const nilaiSisa = masuk[index1].sub - nilaiDiminta
+                    const nilaiSisa = masuk[index1].sub > 0 ? masuk[index1].sub - nilaiDiminta : nilaiDiminta
                     nilaiDiminta = nilaiSisa
                     masuk[index1].sub = 0
                   }
@@ -253,7 +253,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       masuk[index2].jumlah = sisa
                       diminta = 0
 
-                      const nilaiSisa = masuk[index2].sub - nilaiDiminta
+                      const nilaiSisa = masuk[index2].sub > 0 ? masuk[index2].sub - nilaiDiminta : nilaiDiminta
                       masuk[index2].sub = nilaiSisa
                       nilaiDiminta = 0
                     }
@@ -262,7 +262,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                       diminta = sisa
                       masuk[index2].jumlah = 0
 
-                      const nilaiSisa = masuk[index2].sub - nilaiDiminta
+                      const nilaiSisa = masuk[index2].sub > 0 ? masuk[index2].sub - nilaiDiminta : nilaiDiminta
                       nilaiDiminta = nilaiSisa
                       masuk[index2].sub = 0
                     }
