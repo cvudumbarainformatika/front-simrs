@@ -30,8 +30,32 @@ export const useAnamnesis = defineStore('anamnesis', {
 
       // baru skornyeri
       skornyeri: 0,
-      keteranganscorenyeri: 'tidak ada nyeri'
+      keteranganscorenyeri: 'tidak ada nyeri',
+      riwayatdemam: '',
+      berkeringat: '',
+      daerahwabah: '',
+      obatjangkapanjang: '',
+      bbturun: '',
+
+      scroebps: 0,
+      ketscorebps: '',
+
+      scroenips: 0,
+      ketscorenips: ''
+
     },
+    // nilai bps
+    nilaiekspresiwajah: 0,
+    nilaigerakantangan: 0,
+    nilaikepatuhanventilasi: 0,
+
+    // nilai nips
+    nilaiekspresiwajahnips: 0,
+    nilaimenangis: 0,
+    nilaipolanafas: 0,
+    nilailengan: 0,
+    nilaikaki: 0,
+    nilairangsangan: 0,
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
     selection: [],
@@ -59,7 +83,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       // console.log(this.form)
 
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpananamnesis', this.form)
+        const resp = await api.post('v1/simrs/pelayanan/igd/anamnesis/simpananamnesis', this.form)
         if (resp.status === 200) {
           // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungIgdStore()

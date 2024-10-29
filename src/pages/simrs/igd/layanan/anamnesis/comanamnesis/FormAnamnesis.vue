@@ -186,44 +186,194 @@
                   <div class="col-12">
                     <q-separator class="q-my-xs" />
                     <div class="flex">
-                      Skor Skreening Gizi : <div class="q-mx-sm">
-                        <b>{{ store.form.skor }}</b>
+                      Skor Skreening Gizi
+                      = <div class="q-mx-sm">
+                        <q-badge color="green">
+                          {{ store.form.skor }}
+                        </q-badge>
                       </div> <div>
-                        Keterangan : {{ store.keteranganSkorGizi(store.form.skor) }}
+                        Keterangan : <q-badge outline color="green">
+                          {{ store.keteranganSkorGizi(store.form.skor) }}
+                        </q-badge>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <q-separator class="q-my-xs" />
               </div>
-              <div class="col-6">
-                <div class="text-weight-bold">
-                  Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganscorenyeri }}</em>
-                  <span class="q-ml-sm">
-                    <q-icon
-                      size="lg"
-                      color="teal"
-                      :name="iconNyeri"
-                    />
-                  </span>
+              <div class="col-12">
+                <q-radio v-model="metode" val="nrt" label="Numeric Rating Scale" @update:model-value="(val) => chagngereset(val)" />
+                <q-radio v-model="metode" val="bps" label="Behavioral Pain Scale (BPS)" @update:model-value="(val) => chagngereset(val)" />
+                <q-radio v-model="metode" val="nips" label="NIPS (Neonatus Infant Pain Scale)" @update:model-value="(val) => chagngereset(val)" />
+              </div>
+
+              <div class="col-12" v-if="metode === 'nrt'">
+                <div class="col-12 text-weight-bold">
+                  <span>Assesmen Nyeri</span>
                 </div>
-                <q-separator class="q-my-xs" />
-                <q-slider
-                  v-model="store.form.skornyeri"
-                  color="primary"
-                  thumb-color="primary"
-                  label-color="primary"
-                  label-text-color="yellow"
-                  markers
-                  :marker-labels="(val)=> fnMarkerLabel"
-                  marker-labels-class="text-primary"
-                  label-always
-                  switch-label-side
-                  :min="0"
-                  :max="10"
-                  @update:model-value="store.setKeteranganSkornyeri"
-                />
+                <div class="col-12">
+                  <div>
+                    Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganscorenyeri }}</em>
+                    <span class="q-ml-sm">
+                      <q-icon
+                        size="lg"
+                        color="teal"
+                        :name="iconNyeri"
+                      />
+                    </span>
+                  </div>
+                  <q-separator class="q-my-xs" />
+                  <q-slider
+                    v-model="store.form.skornyeri"
+                    color="primary"
+                    thumb-color="primary"
+                    label-color="primary"
+                    label-text-color="yellow"
+                    markers
+                    :marker-labels="(val)=> fnMarkerLabel"
+                    marker-labels-class="text-primary"
+                    label-always
+                    switch-label-side
+                    :min="0"
+                    :max="10"
+                    @update:model-value="store.setKeteranganSkornyeri"
+                  />
+                </div>
+              </div>
+              <br>
+              <div v-if="metode === 'bps'" class="col-12">
+                <div class="col-6 text-bold">
+                  Behavioral Pain Scale (BPS)
+                </div>
+                <div class="col-3">
+                  - Ekspresi Wajah
+                </div>
+                <div class="col-9">
+                  <q-select
+                    v-model="store.form.ekspresiwajah"
+                    transition-show="flip-up"
+                    transition-hide="flip-down"
+                    dense
+                    outlined
+                    :options="ekspresiwajah"
+                    @update:model-value="(val) => nilaiexpresiwajah(val)"
+                  />
+                </div>
+                <div class="col-2">
+                  - Gerakan Tangan
+                </div>
+                <div class="col-10">
+                  <q-select dense outlined v-model="store.form.gerakantangan" :options="gerakantangan" @update:model-value="(val) => nilaigerakantangan(val)" />
+                </div>
+                <div class="col-4">
+                  - Kepatuhan terhadap ventilasi mekanik
+                </div>
+                <div class="col-8">
+                  <q-select dense outlined v-model="store.form.kepatuhanventilasimekanik" :options="kepatuhanventilasimekanik" @update:model-value="(val) => nilaikepatuhanventilasi(val)" />
+                </div>
+                <div class="col-12">
+                  <q-separator class="q-my-xs" />
+                  <div class="flex">
+                    Skor Nyeri (BPS)
+                    = <div class="q-mx-sm">
+                      <q-badge color="green">
+                        {{ store.form.scroebps }}
+                      </q-badge>
+                    </div> <div>
+                      Keterangan : <q-badge outline color="green">
+                        {{ store.form.ketscorebps }}
+                      </q-badge>
+                    </div>
+                  </div>
+                  <q-separator class="q-my-xs" />
+                </div>
+              </div>
+              <div v-if="metode === 'nips'" class="col-12">
+                <div class="col-6 text-bold">
+                  NIPS (Neonatus Infant Pain Scale)
+                </div>
+                <div class="col-6">
+                  - Ekspresi Wajah
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.ekspresiwajahnips" :options="ekspresiwajahnips" @update:model-value="(val) => nilaiekspresiwajahnips(val)" />
+                </div>
+                <div class="col-6">
+                  - Menangis
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.menangis" :options="menangis" @update:model-value="(val) => nilaimenangis(val)" />
+                </div>
+                <div class="col-6">
+                  - Pola Nafas
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.polanafas" :options="polanafas" @update:model-value="(val) => nilaipolanafas(val)" />
+                </div>
+                <div class="col-6">
+                  - Lengan
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.lengan" :options="lengan" @update:model-value="(val) => nilailengan(val)" />
+                </div>
+                <div class="col-6">
+                  - Kaki
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.kaki" :options="kaki" @update:model-value="(val) => nilaikaki(val)" />
+                </div>
+                <div class="col-6">
+                  - Keadaan Rangsangan
+                </div>
+                <div class="col-6">
+                  <q-select dense outlined v-model="store.form.keadaanrangsangan" :options="keadaanrangsangan" @update:model-value="(val) => nilairangsangan(val)" />
+                </div>
+                <div class="col-12">
+                  <q-separator class="q-my-xs" />
+                  <div class="flex">
+                    Skor Nyeri (NIPS)
+                    = <div class="q-mx-sm">
+                      <q-badge color="green">
+                        {{ store.form.scroenips }}
+                      </q-badge>
+                    </div> <div>
+                      Keterangan : <q-badge outline color="green">
+                        {{ store.form.ketscorenips }}
+                      </q-badge>
+                    </div>
+                  </div>
+                  <q-separator class="q-my-xs" />
+                </div>
+              </div>
+              <div class="col-6 text-bold">
+                Lokasi Nyeri
+              </div>
+              <div class="col-6">
+                <q-input dense outlined v-model="store.form.lokasinyeri" />
+              </div>
+              <div class="col-6 text-bold">
+                Durasi Nyeri
+              </div>
+              <div class="col-6">
+                <q-input dense outlined v-model="store.form.durasinyeri" />
+              </div>
+              <div class="col-6 text-bold">
+                Penyebab Nyeri
+              </div>
+              <div class="col-6">
+                <q-input dense outlined v-model="store.form.penyebabnyeri" />
+              </div>
+              <div class="col-6 text-bold">
+                Frekwensi Nyeri
+              </div>
+              <div class="col-6">
+                <q-input dense outlined v-model="store.form.frekwensinyeri" />
+              </div>
+              <div class="col-6 text-bold">
+                Nyeri Hilang
+              </div>
+              <div class="col-6">
+                <q-select dense outlined v-model="store.form.nyerihilang" />
               </div>
               <div class="col-12 text-bold">
                 Status Fungsional
@@ -372,6 +522,7 @@
                 />
               </div>
             </div>
+
             <q-separator class="q-my-md" />
             <div
               class="text-right q-mt-md"
@@ -395,6 +546,7 @@
 </template>
 
 <script setup>
+
 import { useAnamnesis } from 'src/stores/simrs/igd/anamnesis'
 import { computed, ref } from 'vue'
 const store = useAnamnesis()
@@ -402,6 +554,8 @@ const emits = defineEmits(['openHistory'])
 
 const refForm = ref()
 
+const metode = ref('nrt')
+console.log('sasasasas', metode)
 const optionSkreening = ref([
   { label: 'Iya (2)', value: 2 },
   { label: 'Tidak (0)', value: 0 }
@@ -429,37 +583,89 @@ const optionpenerjemah = ref([
 
 ])
 const optionriwayatdemam = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 
 ])
 
 const optionbahasaisyarat = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
 const optionhamabatan = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
 
 const optionberkeringat = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
 const optiondaerahwabah = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
 const optionobatjangkapanjang = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
 
 const optionbbturun = ref([
-  { label: 'Tidak', value: 'Tidak' },
-  { label: 'Ya', value: 'Ya' }
+  { label: 'Tidak', value: 2 },
+  { label: 'Ya', value: 1 }
 ])
+
+const ekspresiwajah = ref([
+  'Santai, Tanpa Ketegangan',
+  'Sedikit Tegang, Seperti Dahi Berkerut',
+  'Sedikit Tegang, Mata Tertutup Rapat',
+  'Ekpresi Menunjukan Nyeri Parah, Seperti Menangis Atau Mengerutkan Wajah'
+])
+
+const gerakantangan = ref([
+  'Tidak Ada Gerakan',
+  'Ada Gerakan Ringan, Seperti Mengerutkan atau Menggerakan Telapak Tangan Tanpa Arah',
+  'Ada Gerakan Kuat, Seperti Menarik Tangan Atau Berusaha Melepas Alat Medis',
+  'Gerakan Tidak Terkendali, Seperti Upaya Melarikan Diri'
+])
+
+const kepatuhanventilasimekanik = ref([
+  'Toleran, Tidak Ada Perlawanan',
+  'Sedikit Tidak Toleran, Batuk Sekali atau Melawan Sedikit',
+  'Sering Batuk atau Melawan Ventilasi',
+  'Tidak Toleran Sama Sekali, Melawan Ventilasi Secara Konstan'
+])
+
+const ekspresiwajahnips = ref([
+  'Santai',
+  'Meringis'
+])
+
+const menangis = ref([
+  'Tidak Menangis',
+  'Merengek/Merintih',
+  'Menangis'
+])
+
+const polanafas = ref([
+  'Santai',
+  'Perubahan Pola Nafas'
+])
+
+const lengan = ref([
+  'Santai',
+  'Flexi/Extensi'
+])
+
+const kaki = ref([
+  'Santai',
+  'Flexi/Extensi'
+])
+const keadaanrangsangan = ref([
+  'Tertidur/Bangun',
+  'Rewel'
+])
+
 const props = defineProps({
   pasien: {
     type: Object,
@@ -485,6 +691,155 @@ function lihatPerubahan () {
   store.hitungNilaiSkor()
 }
 
+function nilaiexpresiwajah (val) {
+  if (val === 'Santai, Tanpa Ketegangan') {
+    store.nilaiekspresiwajah = 1
+  }
+  else if (val === 'Sedikit Tegang, Seperti Dahi Berkerut') {
+    store.nilaiekspresiwajah = 2
+  }
+  else if (val === 'Sedikit Tegang, Mata Tertutup Rapat') {
+    store.nilaiekspresiwajah = 3
+  }
+  else if (val === 'Ekpresi Menunjukan Nyeri Parah, Seperti Menangis Atau Mengerutkan Wajah') {
+    store.nilaiekspresiwajah = 4
+  }
+
+  hitungscorebps()
+}
+
+function nilaigerakantangan (val) {
+  if (val === 'Tidak Ada Gerakan') {
+    store.nilaigerakantangan = 1
+  }
+  else if (val === 'Ada Gerakan Ringan, Seperti Mengerutkan atau Menggerakan Telapak Tangan Tanpa Arah') {
+    store.nilaigerakantangan = 2
+  }
+  else if (val === 'Ada Gerakan Kuat, Seperti Menarik Tangan Atau Berusaha Melepas Alat Medis') {
+    store.nilaigerakantangan = 3
+  }
+  else if (val === 'Gerakan Tidak Terkendali, Seperti Upaya Melarikan Diri') {
+    store.nilaigerakantangan = 4
+  }
+
+  hitungscorebps()
+}
+
+function nilaikepatuhanventilasi (val) {
+  if (val === 'Toleran, Tidak Ada Perlawanan') {
+    store.nilaikepatuhanventilasi = 1
+  }
+  else if (val === 'Sedikit Tidak Toleran, Batuk Sekali atau Melawan Sedikit') {
+    store.nilaikepatuhanventilasi = 2
+  }
+  else if (val === 'Sering Batuk atau Melawan Ventilasi') {
+    store.nilaikepatuhanventilasi = 3
+  }
+  else if (val === 'Tidak Toleran Sama Sekali, Melawan Ventilasi Secara Konstan') {
+    store.nilaikepatuhanventilasi = 4
+  }
+
+  hitungscorebps()
+}
+
+function hitungscorebps () {
+  // store.form.scroebps = parseInt(store.nilaiekspresiwajah) + parseInt(store.nilaigerakantangan) + parseInt(store.nilaikepatuhanventilasi)
+
+  store.form.scroebps = parseInt(store.nilaiekspresiwajah) + parseInt(store.nilaigerakantangan) + parseInt(store.nilaikepatuhanventilasi)
+  if (store.form.scroebps === 3) {
+    store.form.ketscorebps = 'Tidak Ada Nyeri'
+  }
+  else if (store.form.scroebps >= 4 && store.form.scroebps <= 6) {
+    store.form.ketscorebps = 'Nyeri Ringan'
+  }
+  else if (store.form.scroebps >= 7 && store.form.scroebps <= 9) {
+    store.form.ketscorebps = 'Nyeri Sedang'
+  }
+  else if (store.form.scroebps >= 10 && store.form.scroebps <= 12) {
+    store.form.ketscorebps = 'Nyeri Berat'
+  }
+}
+
+function nilaiekspresiwajahnips (val) {
+  if (val === 'Santai') {
+    store.nilaiekspresiwajahnips = 0
+  }
+  else if (val === 'Meringis') {
+    store.nilaiekspresiwajahnips = 1
+  }
+  hitungscorenipsb()
+}
+
+function nilaimenangis (val) {
+  if (val === 'Tidak Menangis') {
+    store.nilaimenangis = 0
+  }
+  else if (val === 'Merengek/Merintih') {
+    store.nilaimenangis = 1
+  }
+  else if (val === 'Menangis') {
+    store.nilaimenangis = 2
+  }
+  hitungscorenipsb()
+}
+
+function nilaipolanafas (val) {
+  if (val === 'Santai') {
+    store.nilaipolanafas = 0
+  }
+  else if (val === 'Perubahan Pola Nafas') {
+    store.nilaipolanafas = 1
+  }
+  hitungscorenipsb()
+}
+
+function nilailengan (val) {
+  if (val === 'Santai') {
+    store.nilailengan = 0
+  }
+  else if (val === 'Flexi/Extensi') {
+    store.nilailengan = 1
+  }
+  hitungscorenipsb()
+}
+
+function nilaikaki (val) {
+  if (val === 'Santai') {
+    store.nilaikaki = 0
+  }
+  else if (val === 'Flexi/Extensi') {
+    store.nilaikaki = 1
+  }
+  hitungscorenipsb()
+}
+
+function nilairangsangan (val) {
+  if (val === 'Tertidur/Bangun') {
+    store.nilairangsangan = 0
+  }
+  else if (val === '') {
+    store.nilairangsangan = 1
+  }
+  hitungscorenipsb()
+}
+
+function hitungscorenipsb () {
+  store.form.scroenips = parseInt(store.nilaiekspresiwajahnips) + parseInt(store.nilaimenangis) + parseInt(store.nilaipolanafas) +
+  parseInt(store.nilailengan) + parseInt(store.nilaikaki) + parseInt(store.nilaipolanafas)
+
+  if (store.form.scroenips === 0) {
+    store.form.ketscorenips = 'Tidak Nyeri'
+  }
+  else if (store.form.scroenips <= 2) {
+    store.form.ketscorenips = 'Tidak Nyaman'
+  }
+  else if (store.form.scroenips > 2 && store.form.scroenips <= 4) {
+    store.form.ketscorenips = 'Nyeri Ringan - Sedang'
+  }
+  else if (store.form.scroenips >= 5 && store.form.scroenips <= 8) {
+    store.form.ketscorenips = 'Nyeri Sedang - Berat'
+  }
+}
 // eslint-disable-next-line no-unused-vars
 function updateSelection (val) {
   // console.log(val.join(','))
@@ -514,4 +869,40 @@ const iconNyeri = computed(() => {
 
   return icon
 })
+
+function chagngereset (val) {
+  console.log('sasasa', val)
+  if (val === 'bps') {
+    resetnrt()
+    resetnips()
+  }
+  else if (val === 'nrt') {
+    resetnips()
+    resetbps()
+  }
+  else if (val === 'nips') {
+    resetnrt()
+    resetbps()
+  }
+}
+
+function resetbps () {
+  store.form.ekspresiwajah = ''
+  store.form.gerakantangan = ''
+  store.form.kepatuhanventilasimekanik = ''
+}
+
+function resetnrt () {
+  store.form.keteranganscorenyeri = 'tidak ada nyeri'
+  store.form.skornyeri = 0
+}
+
+function resetnips () {
+  store.form.ekspresiwajahnips = ''
+  store.form.menangis = ''
+  store.form.polanafas = ''
+  store.form.lengan = ''
+  store.form.kaki = ''
+  store.form.keadaanrangsangan = ''
+}
 </script>
