@@ -25,6 +25,7 @@
             :pasien="pasien"
             @toggle-left-drawer="()=> drawer = !drawer"
             @update:jeniskasus="(val)=> store.gantiJenisKasus(val, pasien)"
+            @gantidpjp="(val)=> store.gantiDpjp(val, pasien)"
           />
         </q-header>
         <!-- LEFT DRAWER ======================================================================================-->

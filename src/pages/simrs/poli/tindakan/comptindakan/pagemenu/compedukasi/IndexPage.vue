@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="col full-height">
-            <q-scroll-area style="height:calc(100% - 1px);">
+            <!-- <q-scroll-area style="height:calc(100% - 1px);">
               <q-card
                 v-for="(item, i) in pasien?.edukasi"
                 :key="i"
@@ -47,7 +47,9 @@
                   />
                 </q-card-section>
               </q-card>
-            </q-scroll-area>
+            </q-scroll-area> -->
+
+            <ListEdukasi :pasien="pasien" />
           </div>
         </div>
         <div
@@ -62,33 +64,34 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
 import FormEdukasi from './FormEdukasi.vue'
-import { useEdukasiPoliStore } from 'src/stores/simrs/pelayanan/poli/edukasi'
+import ListEdukasi from './ListEdukasi.vue'
+// import { useEdukasiPoliStore } from 'src/stores/simrs/pelayanan/poli/edukasi'
 
-const props = defineProps({
+defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
 
-const $q = useQuasar()
-const store = useEdukasiPoliStore()
+// const $q = useQuasar()
+// const store = useEdukasiPoliStore()
 
-function hapusItem(id) {
-  $q.dialog({
-    dark: true,
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    store.hapusItem(props?.pasien, id)
-  }).onCancel(() => {
-    // console.log('Cancel')
-  }).onDismiss(() => {
-    // console.log('I am triggered on both OK and Cancel')
-  })
-}
+// function hapusItem (id) {
+//   $q.dialog({
+//     dark: true,
+//     title: 'Peringatan',
+//     message: 'Apakah Data ini akan dihapus?',
+//     cancel: true,
+//     persistent: true
+//   }).onOk(() => {
+//     store.hapusItem(props?.pasien, id)
+//   }).onCancel(() => {
+//     // console.log('Cancel')
+//   }).onDismiss(() => {
+//     // console.log('I am triggered on both OK and Cancel')
+//   })
+// }
 </script>

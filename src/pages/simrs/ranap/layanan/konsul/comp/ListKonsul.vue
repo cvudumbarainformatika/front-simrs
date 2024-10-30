@@ -14,8 +14,8 @@ const props = defineProps({
     type: Object,
     default: null
   },
-  kasus: {
-    type: Object,
+  auth: {
+    type: String,
     default: null
   },
   nakes: {
@@ -23,6 +23,8 @@ const props = defineProps({
     default: null
   }
 })
+
+// console.log('auth', props?.auth)
 
 const emits = defineEmits(['detail'])
 
@@ -102,8 +104,8 @@ function hapusItem (id) {
                 <span class="text-weight-bold">Konsul</span>
                 -- {{ item?.permintaan }}
               </q-item-label>
-              <q-item-label caption lines="1">
-                <span class="text-weight-bold">Jawaban</span>
+              <q-item-label caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
+                <span v-if="item?.jawaban !== null && item?.jawaban !== ''" class="text-weight-bold">Jawaban</span>
                 -- {{ item?.jawaban ?? 'Belum Ada Jawaban' }}
               </q-item-label>
             </q-item-section>
@@ -125,6 +127,7 @@ function hapusItem (id) {
         <div v-if="hoverredId === item?.id" class="absolute-top-right bg-white full-height column flex-center q-pa-md" style="border-left: 1px solid #ddd ;">
           <div class="flex q-gutter-md">
             <q-btn
+              v-if="(item?.jawaban === null || item?.jawaban === '') && (item?.kdminta === auth || item?.user === auth)"
               flat
               round
               size="md"

@@ -28,7 +28,9 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     pageLayanan: false,
     loadingLayanan: false,
     pasien: null,
-    nakes: null
+    nakes: null,
+
+    loadingSaveGantiDpjp: false
   }),
 
   persist: true,
@@ -143,6 +145,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.perawatanjenazah = data?.perawatanjenazah ?? []
         datax.hais = data?.hais ?? []
         datax.konsultasi = data?.konsultasi ?? []
+        datax.edukasi = data?.edukasi ?? []
+        datax.dokumenluar = data?.dokumenluar ?? []
       }
     },
     getRuangan () {
@@ -238,29 +242,30 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     },
 
     async gantiDpjp (form, pasien) {
-      // console.log(form)
-      // this.loadingSaveGantiDpjp = true
-      // try {
-      //   const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
-      //   // console.log(resp)
-      //   if (resp.status === 200) {
-      //     const findPasien = this.items.filter(x => x.rs1 === pasien?.rs1)
-      //     if (findPasien.length) {
-      //       const data = findPasien[0]
-      //       data.datasimpeg = resp?.data?.result?.datasimpeg
-      //       data.dokter = resp?.data?.result?.datasimpeg?.nama
-      //       data.kodedokter = resp?.data?.result?.datasimpeg?.kdpegsimrs
-      //       this.loadingSaveGantiDpjp = false
-      //     }
+      // console.log('ganti dpjp', form, pasien)
+      this.loadingSaveGantiDpjp = true
+      try {
+        const resp = await api.post('/v1/simrs/ranap/ruangan/gantidpjp', form)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const findPasien = this.pasiens.filter(x => x.noreg === pasien?.noreg)
+          if (findPasien.length) {
+            const data = findPasien[0]
+            // data.datasimpeg = resp?.data?.result?.datasimpeg
+            data.dokter = resp?.data?.result?.datasimpeg?.nama
+            data.kodedokter = resp?.data?.result?.datasimpeg?.kdpegsimrs
+            data.kddokter = resp?.data?.result?.datasimpeg?.kdpegsimrs
+            this.loadingSaveGantiDpjp = false
+          }
 
-      //     this.loadingSaveGantiDpjp = false
-      //   }
-      //   this.loadingSaveGantiDpjp = false
-      // }
-      // catch (error) {
-      //   console.log(error)
-      //   this.loadingSaveGantiDpjp = false
-      // }
+          this.loadingSaveGantiDpjp = false
+        }
+        this.loadingSaveGantiDpjp = false
+      }
+      catch (error) {
+        console.log(error)
+        this.loadingSaveGantiDpjp = false
+      }
     },
 
     gantiMemo (form, pasien) {
@@ -314,13 +319,18 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
-
-        // const target = data[kode]?.find(x => x.id === val?.id) ?? null
-        // console.log('inject target pasien', target, kode, val, data)
-        // console.log('inject kode pasien', kode)
-        // console.log('inject isi pasien', val)
-
         data[kode] = arr
+      }
+    },
+
+    injectUpdatean (noreg, id, val, kode) {
+      const findPasien = this.pasiens.filter(x => x?.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => x?.id === id)
+        if (target) {
+          Object.assign(target, val)
+        }
       }
     },
     deleteInjectanNull (noreg, kode) {

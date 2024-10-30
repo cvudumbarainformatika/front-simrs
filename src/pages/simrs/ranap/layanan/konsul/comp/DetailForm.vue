@@ -34,18 +34,25 @@
             Terimakasih Atas Kerjasamanya
           </div>
 
-          <q-form ref="formRef" class="q-mt-lg" @submit="onSubmit">
+          <q-form v-if="item?.kddokterkonsul === auth" ref="formRef" class="q-mt-lg" @submit="onSubmit">
             <q-input
               outlined standout="bg-yellow-3"
-              v-model="rkd.form.jawaban"
+              v-model="form.jawaban"
               label="" type="textarea" rows="10"
             />
 
             <div class="text-right q-mt-lg q-gutter-md">
               <q-btn color="dark" label="Kembali" @click="emits('toList')" />
-              <q-btn :loading="rkd.loadingSave" :disable="rkd.loadingSave" color="primary" label="Simpan Jawaban" type="submit" />
+              <q-btn :loading="loadingSave" :disable="loadingSave" color="primary" label="Simpan Jawaban" type="submit" />
             </div>
           </q-form>
+
+          <div v-else class="q-mt-lg">
+            <div class="text-weight-bold">
+              Jawaban :
+            </div>
+            <span v-html="getNewLine(item?.jawaban) || 'Belum Ada Jawaban'" />
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +62,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
-import { useRuangKonsulDokterStore } from 'src/stores/simrs/ranap/ruangkonsuldokter'
+import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
+import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 const props = defineProps({
   pasien: {
@@ -65,14 +74,22 @@ const props = defineProps({
   item: {
     type: Object,
     default: null
+  },
+  auth: {
+    type: String,
+    default: null
   }
 })
 
 const emits = defineEmits(['toList'])
 
 const store = useKonsulRanapStore()
-const rkd = useRuangKonsulDokterStore()
+const kunjunganRanap = usePengunjungRanapStore()
 const formRef = ref(null)
+const form = ref({
+  jawaban: 'Dengan Hormat, ' + '\n' + 'Sesuai Permintaan konsultasi pada Pemeriksaan pasien, kami dapati saat ini' + '\n' + '\n' + '\n' + 'Saran Tindakan medik / Pengobatan : ' + '\n'
+})
+const loadingSave = ref(false)
 
 function namaPetugas (item) {
   // console.log('item', item)
@@ -81,21 +98,72 @@ function namaPetugas (item) {
 }
 
 onMounted(() => {
-  rkd.updateFlag(props?.item)
+  console.log('item', props?.item)
+
+  if (props?.auth === props?.item?.kddokterkonsul) {
+    Promise.all([
+      updateFlagRanap(props?.item)
+    ])
+  }
 })
 
+async function updateFlagRanap (item) {
+  const findPasien = kunjunganRanap.pasiens?.find(x => x?.noreg === props?.pasien?.noreg) ?? null
+  const konsultasis = findPasien?.konsultasi ?? []
+  const target = konsultasis?.find(x => x?.id === item?.id) ?? null
+  const targetIndex = konsultasis?.findIndex(x => x?.id === item?.id)
+
+  console.log('find pasien', targetIndex, target)
+  if (target) {
+    if (target.flag === null || target.flag === '' || target.flag === undefined) {
+      target.flag = '1'
+      const payload = { id: target?.id }
+      try {
+        await api.post('v1/simrs/ranap/layanan/konsultasi/updateFlag', payload)
+      }
+      catch (error) {
+        target.flag = null
+      }
+    }
+  }
+
+  if (item?.jawaban) {
+    form.value.jawaban = item?.jawaban
+  }
+}
+
+function getNewLine (text) {
+  return text?.replace(/\n/g, '<br/>')
+}
+
 function onSubmit () {
-  const data = { ...props.item }
-  data.kunjunganranap.kelas_ruangan = props?.pasien?.kelas_ruangan
-  data.kunjunganranap.kdgroup_ruangan = props?.pasien?.kdgroup_ruangan
-  data.kunjunganranap.rs5 = props?.item?.kdruang
+  // eslint-disable-next-line prefer-const
+  const { item, pasien } = props
+  form.value.id = item?.id
+  form.value.noreg = item?.noreg
+  form.value.kelas_ruangan = pasien?.kelas_ruangan
+  form.value.kdgroup_ruangan = pasien?.kdgroup_ruangan
+  form.value.kdruang = pasien?.kodepoli
+  form.value.kodesistembayar = pasien?.kodesistembayar
 
-  console.log('data', data)
+  // console.log('data', form.value)
 
-  // rkd.saveJawaban(props?.item)
-  //   .then(() => {
-  //     emits('toList')
-  //   })
+  loadingSave.value = true
+  return new Promise((resolve, reject) => {
+    api.post('v1/simrs/ranap/layanan/konsultasi/updateJawaban', form.value)
+      .then(resp => {
+        if (resp.status === 200) {
+          kunjunganRanap.injectUpdatean(pasien?.noreg, item?.id, resp.data.result, 'konsultasi')
+          loadingSave.value = false
+          notifSuccess(resp)
+        }
+        resolve(resp)
+      })
+      .catch(err => {
+        loadingSave.value = false
+        reject(err)
+      })
+  })
 }
 
 </script>

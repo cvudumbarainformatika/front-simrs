@@ -54,6 +54,8 @@ const org = useOrganisasiStore()
 const itemFilterred = computed(() => {
   const arr = [...org.items]
 
+  console.log('arr', arr)
+
   if (org.search.length > 0) {
     return arr.filter(i => i?.nama?.toLowerCase().indexOf(org.search.toLowerCase()) > -1 || i?.gruper?.toLowerCase().indexOf(org.search.toLowerCase()) > -1)
   }

@@ -85,6 +85,7 @@ export const useRuangKonsulDokterStore = defineStore('ruang-konsul-store', {
       this.form.kelas_ruangan = val?.kunjunganranap?.kelas_ruangan
       this.form.kdgroup_ruangan = val?.kunjunganranap?.kdgroup_ruangan
       this.form.kdruang = val?.kunjunganranap?.rs5
+      this.form.kodesistembayar = val?.kunjunganranap?.kodesistembayar
 
       this.loadingSave = true
       return new Promise((resolve, reject) => {

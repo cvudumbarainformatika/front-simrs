@@ -24,14 +24,17 @@
           clickable v-ripple v-for="(item, i) in items" :key="i" :class="{'bg-white text-bold': !item?.flag}"
           @click="emits('details', item)"
         >
-          <q-item-section side>
-            <q-item-label>
+          <q-item-section side top>
+            <q-item-label class="text-dark">
               {{ item?.nakesminta?.nama ?? 'Not Valid' }}
             </q-item-label>
           </q-item-section>
           <q-item-section>
             <q-item-label lines="1">
-              -- {{ item?.permintaan }}
+              Pasien -- {{ item?.kunjunganranap?.nama ?? '-' }} ({{ item?.kunjunganranap?.rs2 ?? '-' }}), {{ item?.kunjunganranap?.ruangan ?? '-' }}
+            </q-item-label>
+            <q-item-label lines="1">
+              Diagnosa -- {{ item?.kunjunganranap?.diagnosamedis[0]?.masterdiagnosa?.rs4 ?? 'Belum Ada Diagnosa' }}
             </q-item-label>
           </q-item-section>
           <!-- <q-item-section>

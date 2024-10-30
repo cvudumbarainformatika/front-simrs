@@ -1,6 +1,7 @@
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
 const FormKonsul = defineAsyncComponent(() => import('./comp/FormKonsul.vue'))
@@ -24,6 +25,9 @@ const props = defineProps({
 
 const store = useKonsulRanapStore()
 
+const auth = useAplikasiStore()
+const user = computed(() => auth.user?.pegawai?.kdpegsimrs)
+
 const detail = ref(null)
 const isDetail = ref(false)
 
@@ -36,7 +40,7 @@ onMounted(() => {
 })
 
 const lihatDetail = (data) => {
-  console.log('detail', data)
+  // console.log('detail', data)
   detail.value = data
   isDetail.value = true
 }
@@ -54,8 +58,8 @@ const lihatDetail = (data) => {
     </template>
     <template #list>
       <div class="fit">
-        <ListKonsul v-if="!isDetail" :pasien="props.pasien" :kasus="props.kasus" @detail="lihatDetail" />
-        <DetailForm v-else :item="detail" :pasien="props.pasien" @to-list="isDetail = false" />
+        <ListKonsul v-if="!isDetail" :pasien="props.pasien" :auth="user" @detail="lihatDetail" />
+        <DetailForm v-else :item="detail" :auth="user" :pasien="props.pasien" @to-list="isDetail = false" />
       </div>
     </template>
   </BaseLayout>

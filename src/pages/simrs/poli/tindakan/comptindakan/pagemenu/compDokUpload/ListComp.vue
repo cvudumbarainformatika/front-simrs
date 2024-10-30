@@ -1,7 +1,7 @@
 <template>
   <q-card
-    v-for="file in items"
-    :key="file"
+    v-for="(file, i) in items"
+    :key="i"
     flat
     bordered
     class="q-mb-sm"
@@ -13,7 +13,7 @@
         class="q-mb-md"
       >
         <q-img
-          :src="pathImg + file.url"
+          :src="pathImg + file.url" :key="file.url"
         >
           <div class="absolute-bottom">
             <div class="row items-center justify-between">

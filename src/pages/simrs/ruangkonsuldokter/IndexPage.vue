@@ -9,7 +9,7 @@
         class="fit"
       >
         <template #before>
-          <div class="column fit bg-grey-4">
+          <div class="column fit bg-indigo-1">
             <div class="col-auto q-pa-md">
               <div class="text-h5 text-bold text-center">
                 RKD
@@ -19,7 +19,7 @@
               <q-tabs
                 v-model="innerTab"
                 vertical
-                class="text-primary bg-grey-4"
+                class="text-primary bg-indigo-1"
                 active-color="orange-10"
                 no-caps
               >
@@ -33,7 +33,7 @@
         <template #after>
           <div class="column fit">
             <div class="col-auto full-width">
-              <q-card class="row justify-between items-center q-pa-sm shadow-2 bg-grey-3">
+              <q-card class="row justify-between items-center q-pa-sm shadow-2 bg-indigo-1">
                 <div><b>LEMBAR KONSUL</b></div>
                 <q-btn icon="icon-mat-close" flat dense size="sm" color="dark" @click="router.back()" />
               </q-card>
@@ -46,7 +46,7 @@
                 vertical
                 transition-prev="jump-up"
                 transition-next="jump-up"
-                class="bg-grey-3 fit"
+                class="bg-indigo-1 fit"
               >
                 <q-tab-panel name="innerMails" class="fit q-pa-none">
                   <ListMail

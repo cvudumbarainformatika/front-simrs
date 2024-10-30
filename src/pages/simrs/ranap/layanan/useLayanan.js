@@ -63,12 +63,27 @@ export default function useLayanan (pasien) {
       comp: shallowRef(defineAsyncComponent(() => import('./konsul/IndexPage.vue')))
     },
     {
+      name: 'edukasi-page',
+      label: 'Edukasi',
+      icon: 'icon-mat-people_alt',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./edukasi/IndexPage.vue')))
+    },
+    {
       name: 'e-resep-page',
       label: 'EResep',
       icon: 'icon-mat-receipt',
       nakes: ['1'],
       comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
+    },
+    {
+      name: 'upload-page',
+      label: 'Upload Dokumen Luar',
+      icon: 'icon-mat-cloud_upload',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./upload/IndexPage.vue')))
     }
+
   ])
 
   const nakes = computed(() => {

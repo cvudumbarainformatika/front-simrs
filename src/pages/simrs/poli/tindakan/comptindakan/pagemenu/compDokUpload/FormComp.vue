@@ -98,11 +98,11 @@ const uploader = ref()
 //   }
 // })
 
-function finished() {
+function finished () {
   console.log('finished')
 }
 
-function onRejected() {
+function onRejected () {
   console.log('rejected')
 }
 
@@ -110,7 +110,7 @@ function onRejected() {
 //   console.log('simpan')
 // }
 
-function uploadFiles(file) {
+function uploadFiles (file) {
   // console.log(file)
   store.selectFiles(file)
   // store.selectFiles(file, props.pasien).then(() => {
@@ -119,7 +119,7 @@ function uploadFiles(file) {
   // })
 }
 
-function uploadPercent(files) {
+function uploadPercent (files) {
   console.log('upload percent', files)
 }
 </script>
