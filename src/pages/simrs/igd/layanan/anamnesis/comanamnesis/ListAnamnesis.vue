@@ -73,6 +73,9 @@
                 <q-item-label>
                   <span class="">Riwayat Pengobatan</span> : <span class="text-weight-bold">{{ item?.riwayatpengobatan }}</span>
                 </q-item-label>
+                <q-item-label>
+                  <span class="">Riwayat Pekerjaan Yang Berhubungan Dengan Zat Berbahaya</span> : <span class="text-weight-bold">{{ item?.riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya }}</span>
+                </q-item-label>
                 <q-separator class="q-my-md" />
                 <q-item-label>
                   <span class="text-weight-bold">Skreening Gizi</span>
@@ -84,25 +87,75 @@
                   </div>
                   <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
                 </q-item-label>
-                <q-item-label>
-                  <span class="text-weight-bold">Keluhan Nyeri</span>
+                <br>
+                <q-item-label class="text-bold">
+                  <q-badge color="pink">
+                    Assesmen Nyeri
+                  </q-badge>
                 </q-item-label>
-                <q-item-label>
-                  <div>
-                    - Skor Nyeri : <b>{{ item?.scorenyeri??'-' }}</b>
-                    <span
-                      v-if="!isNaN(parseInt(item?.scorenyeri))"
-                      class="q-mx-sm"
-                    >
-                      <q-icon
-                        size="xs"
-                        color="teal"
-                        :name="iconNyeri(item?.scorenyeri)"
-                      />
-                    </span>
-                    <em class="text-primary"> {{ item?.keteranganscorenyeri ?? '-' }}</em>
-                  </div>
-                </q-item-label>
+                <div>
+                  <q-item-label>
+                    <span class="text-weight-bold">Numeric Rating Scale</span>
+                  </q-item-label>
+                  <q-item-label>
+                    <q-separator class="q-my-xs" style="width: 300px;" />
+                    <div>
+                      - Skor Nyeri : <q-badge color="green">
+                        {{ item?.scorenyeri??'-' }}
+                      </q-badge>
+                      <span
+                        v-if="!isNaN(parseInt(item?.scorenyeri))"
+                        class="q-mx-sm"
+                      >
+                        <q-icon
+                          size="xs"
+                          color="teal"
+                          :name="iconNyeri(item?.scorenyeri)"
+                        />
+                      </span>
+                      <em class="text-primary"> {{ item?.keteranganscorenyeri ?? '-' }}</em>
+                      <q-separator class="q-my-xs" style="width: 300px;" />
+                    </div>
+                  </q-item-label>
+                  <q-item-label>
+                    <span class="text-weight-bold">Behavioral Pain Scale (BPS)</span>
+                  </q-item-label>
+                  <q-item-label>- Ekspresi Wajah : {{ item?.anamnesebps?.ekspresi_wajah }}</q-item-label>
+                  <q-item-label>- Gerakan Tangan : {{ item?.anamnesebps?.gerakan_tangan }}</q-item-label>
+                  <q-item-label>- Kepatuhan terhadap ventilasi mekanik : {{ item?.anamnesebps?.kepatuhan_ventilasi_mekanik }}</q-item-label>
+                  <q-item-label>
+                    <q-separator class="q-my-xs" style="width: 300px;" />
+                    <div>
+                      - Skor Nyeri : <q-badge color="green" class="q-mx-sm">
+                        {{ item?.anamnesebps?.skor ?? '-' }}
+                      </q-badge>
+                      <q-badge outline color="green">
+                        <em>{{ item?.anamnesebps?.keterangan_skor ?? '-' }}</em>
+                      </q-badge>
+                      <q-separator class="q-my-xs" style="width: 300px;" />
+                    </div>
+                  </q-item-label>
+                  <q-item-label>
+                    <span class="text-weight-bold">Neonatus Infant Pain Scale (NIPS)</span>
+                  </q-item-label>
+                  <q-item-label>- Ekspresi Wajah : {{ item?.anamnesenips?.ekspresi_wajah ?? '-' }}</q-item-label>
+                  <q-item-label>- Menangis : {{ item?.anamnesenips?.menangis ?? '-' }}</q-item-label>
+                  <q-item-label>- Lengan : {{ item?.anamnesenips?.lengan ?? '-' }}</q-item-label>
+                  <q-item-label>- Kaki : {{ item?.anamnesenips?.kaki ?? '-' }}</q-item-label>
+                  <q-item-label>- Keadaan Rangsangan : {{ item?.anamnesenips?.keadaan_rangsangan ?? '-' }}</q-item-label>
+                  <q-item-label>
+                    <q-separator class="q-my-xs" style="width: 300px;" />
+                    <div>
+                      - Skor Nyeri : <q-badge color="green" class="q-mx-sm">
+                        {{ item?.anamnesenips?.skor ?? '-' }}
+                      </q-badge>
+                      <q-badge outline color="green">
+                        <em>{{ item?.anamnesenips?.keterangan_skor ?? '-' }}</em>
+                      </q-badge>
+                      <q-separator class="q-my-xs" style="width: 300px;" />
+                    </div>
+                  </q-item-label>
+                </div>
               </q-item-section>
 
               <q-item-section

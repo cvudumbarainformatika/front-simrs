@@ -914,4 +914,6 @@ function resetnips () {
   store.form.scroenips = 0
   store.form.ketscorenips = ''
 }
+
+store.form.metode = 'nrt'
 </script>

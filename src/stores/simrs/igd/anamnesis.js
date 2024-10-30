@@ -88,11 +88,11 @@ export const useAnamnesis = defineStore('anamnesis', {
         if (resp.status === 200) {
           // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungIgdStore()
-          let isi = resp.data.result
+
           if (resp.data.result === 1) {
             this.form.rs4 = this.form.keluhanutama
-            isi = this.form
           }
+          const isi = resp.data.result[0]
           storePasien.injectDataPasien(pasien, isi, 'anamnesis')
           notifSuccess(resp)
           this.initReset()
@@ -194,7 +194,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const params = { params: { norm } }
       try {
         const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
-        console.log('history', resp)
+        // console.log('history', resp)
         if (resp.status === 200) {
           if (resp.data?.length) {
             const arr = resp.data
@@ -217,7 +217,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const params = { params: { cursor } }
       try {
         const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
-        console.log('history', resp)
+        // console.log('history', resp)
         if (resp.status === 200) {
           if (resp.data?.length) {
             const arr = resp.data
@@ -269,7 +269,8 @@ export const useAnamnesis = defineStore('anamnesis', {
 
           // baru skornyeri
           skornyeri: 0,
-          keteranganskornyeri: 'tidak ada nyeri'
+          keteranganskornyeri: 'tidak ada nyeri',
+          metode: 'nrt'
         }
         this.selection = []
 
