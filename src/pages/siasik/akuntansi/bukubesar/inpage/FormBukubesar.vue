@@ -98,7 +98,7 @@
             console.log('val cari', val)
             store.reqs.rekenings = val
             const arr = store.optionrekening
-            const cari = arr.find(x => x.kodeall3 === val)
+            const cari = arr.find(x => x.uraian === val)
             store.form.uraian = cari.uraian
 
           }"
@@ -180,6 +180,12 @@ onMounted(() => {
 function filterFn (val, update) {
   console.log('val filter', val)
   if (val === '') {
+    update(() => {
+      options.value = store.optionrekening
+    })
+    return
+  }
+  if (val === null) {
     update(() => {
       options.value = store.optionrekening
     })

@@ -19,20 +19,28 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
-          :outline="path!=='/akuntansi/laporan/lra'"
+          :outline="path!=='/laporan/akuntansi/bukubesar'"
+          glossy
+          size="md"
+          color="primary"
+          label="BUKU BESAR"
+          @click="goTo('/laporan/akuntansi/bukubesar')"
+        />
+        <q-btn
+          :outline="path!=='/laporan/akuntansi/lra'"
           glossy
           size="md"
           color="primary"
           label="LRA"
-          @click="goTo('/akuntansi/laporan/lra')"
+          @click="goTo('/laporan/akuntansi/lra')"
         />
         <q-btn
-          :outline="path!=='/akuntansi/laporan/lpsal'"
+          :outline="path!=='/laporan/akuntansi/lpsal'"
           glossy
           size="md"
           color="primary"
           label="LPSAL"
-          @click="goTo('/akuntansi/laporan/lpsal')"
+          @click="goTo('/laporan/akuntansi/lpsal')"
         />
         <!-- <q-btn
           :outline="path!=='/akuntansi/laporan/lo'"
