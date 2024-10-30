@@ -141,6 +141,35 @@ const laporan = {
       component: () => import('pages/siasik/laporanrealisasi/lra/IndexPage.vue')
     },
 
+    {
+      path: '/laporan/akuntansi',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/akuntansi/laporanakuntansi/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/laporan/akuntansi/bukubesar' },
+        {
+          path: '/laporan/akuntansi/bukubesar',
+          name: 'laporan.akuntansi.bukubesar',
+          component: () =>
+            import('src/pages/siasik/akuntansi/bukubesar/IndexPage.vue')
+        },
+        {
+          path: '/laporan/akuntansi/lra',
+          name: 'laporan.akuntansi.lra',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/lralevel3/IndexPage.vue')
+        },
+        {
+          path: '/laporan/akuntansi/lpsal',
+          name: 'laporan.akuntansi.lpsal',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/lpsal/IndexPage.vue')
+        }
+
+      ]
+
+    },
+
     // farmasi
     {
       path: '/laporan/farmasi/stok',
