@@ -202,12 +202,12 @@
                 <q-separator class="q-my-xs" />
               </div>
               <div class="col-12">
-                <q-radio v-model="metode" val="nrt" label="Numeric Rating Scale" @update:model-value="(val) => chagngereset(val)" />
-                <q-radio v-model="metode" val="bps" label="Behavioral Pain Scale (BPS)" @update:model-value="(val) => chagngereset(val)" />
-                <q-radio v-model="metode" val="nips" label="NIPS (Neonatus Infant Pain Scale)" @update:model-value="(val) => chagngereset(val)" />
+                <q-radio v-model="store.form.metode" val="nrt" label="Numeric Rating Scale" @update:model-value="(val) => chagngereset(val)" />
+                <q-radio v-model="store.form.metode" val="bps" label="Behavioral Pain Scale (BPS)" @update:model-value="(val) => chagngereset(val)" />
+                <q-radio v-model="store.form.metode" val="nips" label="NIPS (Neonatus Infant Pain Scale)" @update:model-value="(val) => chagngereset(val)" />
               </div>
 
-              <div class="col-12" v-if="metode === 'nrt'">
+              <div class="col-12" v-if="store.form.metode === 'nrt'">
                 <div class="col-12 text-weight-bold">
                   <span>Assesmen Nyeri</span>
                 </div>
@@ -241,7 +241,7 @@
                 </div>
               </div>
               <br>
-              <div v-if="metode === 'bps'" class="col-12">
+              <div v-if="store.form.metode === 'bps'" class="col-12">
                 <div class="col-6 text-bold">
                   Behavioral Pain Scale (BPS)
                 </div>
@@ -288,7 +288,7 @@
                   <q-separator class="q-my-xs" />
                 </div>
               </div>
-              <div v-if="metode === 'nips'" class="col-12">
+              <div v-if="store.form.metode === 'nips'" class="col-12">
                 <div class="col-6 text-bold">
                   NIPS (Neonatus Infant Pain Scale)
                 </div>
@@ -491,7 +491,7 @@
               </div>
               <div class="col-6">
                 <q-option-group
-                  v-model="store.form.daerahwabah"
+                  v-model="store.form.riwayatbepergian"
                   :options="optiondaerahwabah"
                   color="primary"
                   inline
@@ -555,8 +555,8 @@ const emits = defineEmits(['openHistory'])
 
 const refForm = ref()
 
-const metode = ref('nrt')
-console.log('sasasasas', metode)
+// const metode = ref('nrt')
+
 const optionSkreening = ref([
   { label: 'Iya (2)', value: 2 },
   { label: 'Tidak (0)', value: 0 }
@@ -584,36 +584,36 @@ const optionpenerjemah = ref([
 
 ])
 const optionriwayatdemam = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 
 ])
 
 const optionbahasaisyarat = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 const optionhamabatan = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 
 const optionberkeringat = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 const optiondaerahwabah = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 const optionobatjangkapanjang = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 
 const optionbbturun = ref([
-  { label: 'Tidak', value: 2 },
-  { label: 'Ya', value: 1 }
+  { label: 'Tidak', value: 'Tidak' },
+  { label: 'Ya', value: 'Ya' }
 ])
 
 const ekspresiwajah = ref([

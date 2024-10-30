@@ -20,6 +20,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatalergi: '',
       keteranganalergi: '',
       riwayatpengobatan: '',
+      riwayatbepergian: '',
       // baru
       riwayatpekerjaan: '',
       riwayatpenyakitkeluarga: '',
@@ -41,8 +42,8 @@ export const useAnamnesis = defineStore('anamnesis', {
       ketscorebps: '',
 
       scroenips: 0,
-      ketscorenips: ''
-
+      ketscorenips: '',
+      metode: 'nrt'
     },
     // nilai bps
     nilaiekspresiwajah: 0,
