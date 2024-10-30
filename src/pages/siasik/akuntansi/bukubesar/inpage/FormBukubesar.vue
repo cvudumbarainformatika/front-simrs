@@ -65,22 +65,12 @@
           :disable="store.loading"
           :loading="store.loading"
           :source="store.level"
-          @update:model-value="(val)=>store.setLevel(val)"
-        />
-      </div>
-      <div class="q-pa-sm">
-        <app-autocomplete
-          v-model="store.form.kode"
-          label="Pilih Rekening"
-          autocomplete="uraian"
-          option-value="kodeall3"
-          outlined
-          :autofocus="false"
-          :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : ''"
-          :disable="store.loading"
-          :loading="store.loading"
-          :source="store.level4"
-          @selected="(val)=>pilihRekening(val)"
+          @update:model-value="(val)=>{
+            store.reqs.levelberapa = parseInt(val)
+            const arrBaru = store.alllevel?.filter(x=> x?.kodeall3?.length === parseInt(val))
+            console.log('arrBaru', arrBaru)
+            store.optionrekening = arrBaru
+          }"
         />
       </div>
       <div class="q-pa-sm">
@@ -98,12 +88,20 @@
           map-options
           input-debounce="0"
           :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : ''"
-          :disable="store.loading"
+          :disable="store.loading || !store.optionrekening.length"
           :loading="store.loading"
-          :options="options"
+          :options="store.optionrekening"
+          :key="berdasar"
           @filter="filterFn"
           @clear="store.setFormRekening('kode', null)"
-          @update:model-value="(val)=>updateSearchRekening(val)"
+          @update:model-value="(val)=>{
+            console.log('val cari', val)
+            store.reqs.rekenings = val
+            const arr = store.optionrekening
+            const cari = arr.find(x => x.kodeall3 === val)
+            store.form.uraian = cari.uraian
+
+          }"
         >
           <template
             v-if="store.form.kode"
@@ -143,7 +141,7 @@ import { onMounted, ref } from 'vue'
 const store = useBukubesarStore()
 const berdasar = ref('')
 const options = ref([])
-const inpRek = ref(null)
+// const inpRek = ref(null)
 // const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 function tglDari (val) {
   store.setParameter('tgl', val)
@@ -169,44 +167,31 @@ const clearSearch = () => {
 }
 function ambilData () {
   store.getDataBukubesar()
+  // store.hasillevel()
 }
 onMounted(() => {
   Promise.all([
-    store.getAkun(),
-    store.getDataBukubesar()
+    options.value = store.optionrekening,
+    store.getAkun()
+    // store.getDataBukubesar()
   ])
 })
 
-function updateSearchRekening (val) {
-  console.log('val', val)
-  store.setRekening(val).then(() => {
-    inpRek.value.focus()
-  })
-}
 function filterFn (val, update) {
-  console.log('val', val)
+  console.log('val filter', val)
   if (val === '') {
     update(() => {
-      options.value = store.reqlevels
+      options.value = store.optionrekening
     })
     return
   }
   update(() => {
     const needle = val.toLowerCase()
 
-    options.value = store.reqlevels.filter(
+    options.value = store.optionrekening.filter(
       (v) => v.uraian.toLowerCase().indexOf(needle) > -1 || v.kodeall3.toLowerCase().indexOf(needle) > -1
     )
   })
 }
-
-function pilihRekening (val) {
-  console.log('val rekening', val)
-  store.reqs.rekenings = val
-  store.filterRekening()
-}
-// function searchEnter (evt) {
-//   emits('search', evt.target.value)
-// }
 
 </script>

@@ -87,7 +87,7 @@ const formatDoubleKoma = (value, dg) => {
 }
 
 const formattanpaRp = (value) => {
-  if (value !== null) {
+  if (value !== null && value !== '') {
     return (
       Number(value)
         .toFixed(2)
@@ -95,7 +95,8 @@ const formattanpaRp = (value) => {
         // .replace(/\d(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
 
         // koma
-        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+        // .replace(/(\d)(?=(\d{3})+\.)/g, '$&,')
+        .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
     )
   }
 }

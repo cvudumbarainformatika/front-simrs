@@ -20,40 +20,37 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       sampai: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
-    akuns: {
-      q: '',
-      kode1: '',
-      kode2: '',
-      kode3: '',
-      kode4: '',
-      kode5: '',
-      kode6: ''
-    },
     form: {
       uraian: null,
       kode: null
     },
     reqlevels: null,
     level: [
-      { nama: 'Akun', value: '1' },
-      { nama: 'Kelompok', value: '2' },
-      { nama: 'Jenis', value: '3' },
-      { nama: 'Objek', value: '4' },
-      { nama: 'Rincian Objek', value: '5' },
-      { nama: 'SubRincian Objek', value: '6' }
+      { nama: 'Akun', value: '0' },
+      { nama: 'Kelompok', value: '3' },
+      { nama: 'Jenis', value: '6' },
+      { nama: 'Objek', value: '9' },
+      { nama: 'Rincian Objek', value: '12' },
+      { nama: 'SubRincian Objek', value: '17' }
     ],
-    level1: [],
-    level2: [],
-    level3: [],
-    level4: [],
-    level5: [],
-    level6: [],
+    optionrekening: [],
+    // DATA AWAL JURNAL//
     jurnalotoms: [],
     jurnalmanuals: [],
     alljurnal: [],
+    saldoawal: [],
+
+    // HASIL MAPING //
     hasilmapsLevel6: [],
     hasilmapsLevel5: [],
-    hasilmapsLevel1: []
+    hasilmapsLevel1: [],
+    saldoawalmaps6: [],
+    saldoawalmaps5: [],
+    saldoawalmaps1: [],
+    // REKENING //
+    alllevel: [],
+
+    hasilbukuBesar: []
   }),
   actions: {
     setParameter (key, val) {
@@ -69,15 +66,8 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         api.get('v1/akuntansi/bukubesar/akun', params).then((resp) => {
           console.log('getakuns', resp.data)
           if (resp.status === 200) {
-            this.level1 = []
-            this.level2 = []
-
-            this.level1 = resp.data.level1
-            this.level2 = resp.data.level2
-            this.level3 = resp.data.level3
-            this.level4 = resp.data.level4
-            this.level5 = resp.data.level5
-            this.level6 = resp.data.level6
+            this.alllevel = []
+            this.alllevel = resp.data
             this.loading = false
 
             resolve(resp.data)
@@ -85,25 +75,35 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         }).catch(() => { this.loading = false })
       })
     },
-    setLevel (val) {
-      this.reqs.levelberapa = val
-    },
 
-    setRekening (val) {
-      const rek = this.reqs.levelberapa
-      // request untuk hasil bukubesar
-      console.log('setRekening', rek)
-    },
+    // hasillevel () {
+    //   if (this.reqs.levelberapa === 1) {
+    //     return this.hasilmapsLevel1
+    //   }
+    //   else if (this.reqs.levelberapa === 6) {
+    //     return this.hasilmapsLevel6
+    //   }
+    // },
+    // setRekening (val) {
+    //   this.reqs.rekenings = val
+    //   const rek = this.reqs.levelberapa
+    //   // request untuk hasil bukubesar
+    //   console.log('setRekening', rek)
+    // },
     getDataBukubesar () {
       this.loading = true
       const params = { params: this.reqs }
       return new Promise((resolve) => {
         api.get('v1/akuntansi/bukubesar/getbukubesar', params).then((resp) => {
-          console.log('getBUKUbesar', resp.data)
+          console.log('getBUKUbesar', resp?.data)
           if (resp.status === 200) {
-            this.jurnalotoms = resp.data.jurnalotom
-            this.jurnalmanuals = resp.data.jurnalmanual
+            this.jurnalotoms = resp?.data?.jurnalotom
+            this.jurnalmanuals = resp?.data?.jurnalmanual
+            this.saldoawal = resp?.data?.saldoawal
             // this.filterHasilMaps()
+            this.hasilmapsLevel6 = []
+            this.hasilmapsLevel5 = []
+            this.hasilmapsLevel1 = []
             this.mapBukubesar()
             this.loading = false
             resolve(resp)
@@ -115,15 +115,171 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       const arr = []
       const buku6 = []
       const buku5 = []
-      const buku4 = []
-      const buku3 = []
-      const buku2 = []
       const buku1 = []
+      const bukuSaldo6 = []
+      const bukuSaldo5 = []
+      const bukuSaldo1 = []
       const arrotom = this.jurnalotoms
       const arrmanual = this.jurnalmanuals
+      const arrsaldoawal = this.saldoawal
       arr.push(...arrotom, ...arrmanual)
       this.alljurnal = arr
-      console.log('arr all', this.alljurnal)
+      // console.log('arr all', this.alljurnal)
+      // SALDO AWAL//
+      const saldo6 = []
+      for (let z = 0; z < arrsaldoawal.length; z++) {
+        const el = arrsaldoawal[z]
+        const obj = {
+          tanggal: '',
+          notrans: '',
+          kodereqs: el?.kode6,
+          kode: el?.kode6,
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: parseFloat(el?.debit),
+          kredit: parseFloat(el?.kredit)
+        }
+        saldo6.push(obj)
+      }
+
+      const saldo5 = []
+      const unsaldo5 = arrsaldoawal.map((x) => x.kode6)
+      const setsal5 = unsaldo5.length ? [...new Set(unsaldo5)] : []
+      for (let x = 0; x < setsal5.length; x++) {
+        const el = setsal5[x]
+        const arrs = this.saldoawal
+
+        const obj = {
+          tanggal: arrs?.filter((x) => x.kode6 === el)[0].tanggal,
+          kodereqs: arrs?.filter((x) => x.kode6 === el)[0].kode5,
+          kode: arrs?.filter((x) => x.kode6 === el)[0].kode6,
+          uraian: arrs?.filter((x) => x.kode6 === el)[0].uraian,
+          debit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo5.push(obj)
+      }
+      const saldo4 = []
+      const unsaldo4 = arrsaldoawal.map((x) => x.kode6)
+      const setsal4 = unsaldo4.length ? [...new Set(unsaldo4)] : []
+      for (let x = 0; x < setsal4.length; x++) {
+        const el = setsal4[x]
+        const arrs = this.saldoawal
+
+        const obj = {
+          tanggal: arrs?.filter((x) => x.kode6 === el)[0].tanggal,
+          kodereqs: arrs?.filter((x) => x.kode6 === el)[0].kode4,
+          kode: arrs?.filter((x) => x.kode6 === el)[0].kode5,
+          uraian: arrs?.filter((x) => x.kode6 === el).map((x) => x.lvl5)[0]?.uraian,
+          debit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo4.push(obj)
+      }
+
+      const saldo3 = []
+      const unsaldo3 = arrsaldoawal.map((x) => x.kode6)
+      const setsal3 = unsaldo3.length ? [...new Set(unsaldo3)] : []
+      for (let x = 0; x < setsal3.length; x++) {
+        const el = setsal3[x]
+        const arrs = this.saldoawal
+
+        const obj = {
+          tanggal: arrs?.filter((x) => x.kode6 === el)[0].tanggal,
+          kodereqs: arrs?.filter((x) => x.kode6 === el)[0].kode3,
+          kode: arrs?.filter((x) => x.kode6 === el)[0].kode4,
+          uraian: arrs?.filter((x) => x.kode6 === el).map((x) => x.lvl4)[0]?.uraian,
+          debit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo3.push(obj)
+      }
+      const saldo2 = []
+      const unsaldo2 = arrsaldoawal.map((x) => x.kode6)
+      const setsal2 = unsaldo2.length ? [...new Set(unsaldo2)] : []
+      for (let x = 0; x < setsal2.length; x++) {
+        const el = setsal2[x]
+        const arrs = this.saldoawal
+
+        const obj = {
+          tanggal: arrs?.filter((x) => x.kode6 === el)[0].tanggal,
+          kodereqs: arrs?.filter((x) => x.kode6 === el)[0].kode2,
+          kode: arrs?.filter((x) => x.kode6 === el)[0].kode3,
+          uraian: arrs?.filter((x) => x.kode6 === el).map((x) => x.lvl3)[0]?.uraian,
+          debit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo2.push(obj)
+      }
+
+      const saldo1 = []
+      const unsaldo1 = arrsaldoawal.map((x) => x.kode6)
+      const setsal1 = unsaldo1.length ? [...new Set(unsaldo1)] : []
+      for (let x = 0; x < setsal1.length; x++) {
+        const el = setsal1[x]
+        const arrs = this.saldoawal
+
+        const obj = {
+          tanggal: arrs?.filter((x) => x.kode6 === el)[0].tanggal,
+          kodereqs: arrs?.filter((x) => x.kode6 === el)[0].kode2,
+          kode: arrs?.filter((x) => x.kode6 === el)[0].kode1,
+          uraian: arrs?.filter((x) => x.kode6 === el).map((x) => x.lvl1)[0]?.uraian,
+          debit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrs?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo1.push(obj)
+      }
+      // HASIL DATA SALDO AWAL LEVEL 6//
+      // bukuSaldo6.push(...saldo6)
+      // const filtersaldo6 = bukuSaldo6.filter(x => x.kodereqs === this.reqs.rekenings)
+      // const sortByDatesaldo6 = (filtersaldo6) =>
+      //   filtersaldo6.sort(({ tanggal: a }, { tanggal: b }) =>
+      //     a < b ? -1 : a > b ? 1 : 0
+      //   )
+      // const arrSaldoawal = sortByDatesaldo6(filtersaldo6)
+      // this.saldoawalmaps6 = arrSaldoawal
+      // console.log('saldo Awal 6', this.saldoawalmaps6)
+
+      // HASIL DATA SALDO AWAL LEVEL 5 kebawah//
+      bukuSaldo5.push(...saldo5, ...saldo4, ...saldo3, ...saldo2)
+      const filtersaldo5 = bukuSaldo5.filter(x => x.kodereqs === this.reqs.rekenings)
+      console.log('filtersaldo5', filtersaldo5)
+      const set5akhir = []
+      if (filtersaldo5.length > 0) {
+        const uniksal5 = filtersaldo5.map((x) => x.kodereqs)
+        const setsaldo5 = uniksal5.length ? [...new Set(uniksal5)] : []
+        for (let x = 0; x < setsaldo5.length; x++) {
+          const el = setsaldo5[x]
+          const es = filtersaldo5
+          const obj = {
+            kodereqs: es.filter((q) => q.kodereqs === el)[0]?.kodereqs,
+            kode: '',
+            uraian: 'SALDO AWAL PERIODE',
+            debit: es.filter((q) => q.kodereqs === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+            kredit: es.filter((q) => q.kodereqs === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+          }
+          set5akhir.push(obj)
+        }
+      }
+      else {
+        const objx = {
+          kodereqs: '',
+          kode: '',
+          uraian: 'SALDO AWAL PERIODE',
+          debit: parseFloat(0),
+          kredit: parseFloat(0)
+        }
+        set5akhir.push(objx)
+      }
+      const sortByDateSal5 = (set5akhir) =>
+        set5akhir.sort(({ kode: a }, { kode: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrSaldo5 = sortByDateSal5(set5akhir)
+      // this.saldoawalmaps5 = this.hasilMapssaldo(arrSaldo5)
+      // console.log('HASIL SALDO AWAL LVL5 kebwah', this.saldoawalmaps5)
+
+      // JURNAL//
       const kode6 = []
       for (let z = 0; z < arr.length; z++) {
         const el = arr[z]
@@ -139,7 +295,6 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         }
         kode6.push(obj)
       }
-      console.log('kode6', kode6)
 
       const kode5 = []
       const unik5 = this.alljurnal.map((x) => x.notrans)
@@ -194,7 +349,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           }
           unikarr.push(obj)
         }
-        kode5.push(...unikarr)
+        kode4.push(...unikarr)
       }
       const kode3 = []
       const unik3 = this.alljurnal.map((x) => x.notrans)
@@ -220,7 +375,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           }
           unikarr.push(obj)
         }
-        kode5.push(...unikarr)
+        kode3.push(...unikarr)
       }
       const kode2 = []
       const unik2 = this.alljurnal.map((x) => x.notrans)
@@ -246,7 +401,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           }
           unikarr.push(obj)
         }
-        kode5.push(...unikarr)
+        kode2.push(...unikarr)
       }
       const kode1 = []
       const unik1 = this.alljurnal.map((x) => x.notrans)
@@ -274,7 +429,9 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         }
         kode1.push(...unikarr)
       }
-      buku6.push(...kode6)
+
+      // HASIL DATA BUKU BESAR LEVEL 6//
+      buku6.push(...saldo6, ...kode6)
       const filter6 = buku6.filter(x => x.kodereqs === this.reqs.rekenings)
       const sortByDate = (filter6) =>
         filter6.sort(({ tanggal: a }, { tanggal: b }) =>
@@ -284,9 +441,10 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       this.hasilmapsLevel6 = this.hasilMapssaldo(arrJurnal)
       console.log('HASIL LVL 6', this.hasilmapsLevel6)
 
-      buku5.push(...kode5)
-      // console.log('reksss', buku5)
+      // HASIL DATA BUKU BESAR LEVEL 5 kebawah//
+      buku5.push(...kode5, ...kode4, ...kode3, ...kode2)
       const filter5 = buku5.filter(x => x.kodereqs === this.reqs.rekenings)
+      // console.log('reksss', filter5)
       const filterunik5 = filter5.map((x) => x.kodereqs)
       const setfil5 = filterunik5.length ? [...new Set(filterunik5)] : []
       const setakhir5 = []
@@ -302,18 +460,17 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         }
         setakhir5.push(obj)
       }
-      console.log('filter5', setakhir5)
+
       const sortByDate5 = (setakhir5) =>
         setakhir5.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
       const arrJurnal5 = sortByDate5(setakhir5)
-      this.hasilmapsLevel5 = this.hasilMapssaldo(arrJurnal5)
-      console.log('HASIL LVL 5', this.hasilmapsLevel5)
+      this.hasilmapsLevel5 = this.hasilMapssaldo(arrSaldo5.concat(arrJurnal5))
+      console.log('HASIL LVL5 kebwah', this.hasilmapsLevel5)
 
-      buku1.push(...kode1)
-      console.log('buku1', buku1)
-      // const filter1 = buku1.filter(x => x.kodereqs === this.reqs.rekenings)
+      // HASIL DATA BUKU BESAR LEVEL 1 JURNAL + SALDO AWAL//
+      buku1.push(...kode1, ...saldo1)
       const filterunik1 = buku1.map((x) => x.kode)
       const setfil1 = filterunik1.length ? [...new Set(filterunik1)] : []
       const setakhir1 = []
@@ -325,17 +482,18 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           kode: es.filter((q) => q.kode === el)[0]?.kode,
           uraian: es.filter((q) => q.kode === el)[0]?.uraian,
           debit: es.filter((q) => q.kode === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
-          kredit: es.filter((q) => q.kode === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+          kredit: es.filter((q) => q.kode === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          total: es.filter((q) => q.kode === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0) -
+          es.filter((q) => q.kode === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
         }
         setakhir1.push(obj)
       }
-      // console.log('filter5', setakhir1)
       const sortByDate1 = (setakhir1) =>
         setakhir1.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
       const arrJurnal1 = sortByDate1(setakhir1)
-      this.hasilmapsLevel1 = this.hasilMapssaldo(arrJurnal1)
+      this.hasilmapsLevel1 = arrJurnal1
       console.log('HASIL LVL 1', this.hasilmapsLevel1)
     },
     hasilMapssaldo (arr) {
