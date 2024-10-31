@@ -265,7 +265,7 @@
               </div>
               <div v-if="item?.ruanganranap">
                 {{ item?.ruanganranap?.rs2 }}
-                <div v-if!="item?.kunjunganranap?.ruangtitipan?.rs1" class="text-negative">
+                <div v-if="!item?.kunjunganranap?.ruangtitipan?.rs1" class="text-negative">
                   Di Titipkan Di  {{ item?.kunjunganranap?.ruangtitipan?.rs2 }}
                 </div>
               </div>

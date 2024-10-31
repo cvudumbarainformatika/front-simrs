@@ -182,6 +182,11 @@
           option-label="rs3"
           option-value="rs3"
           :source="pasien?.diagnosa"
+          @selected="(val)=>{
+            const diag=pasien?.diagnosa.find(d=>d.rs3===val)?.masterdiagnosa?.rs4??'-'
+            store.setFormRsLain('diagnosa', val + ' - ' + diag)
+            // console.log('diagnosa', val, pasien?.diagnosa, diag)
+          }"
         />
       </div>
       <div class="col-12">
@@ -225,6 +230,7 @@ const props = defineProps({
 
 const store = usePerencanaanPoliStore()
 // const $q = useQuasar()
+
 const optionsJnsKunjungan = ref([
   { value: '', label: '-------' },
   { value: '1', label: 'Rawat Inap' },
@@ -240,12 +246,12 @@ const optionTipeRujukan = ref([
 const refCatat = ref(null)
 const optionsRs = ref([])
 const optionsPoli = ref([])
-function updateModelPoli(val) {
+function updateModelPoli (val) {
   store.formRsLain.polirujukan = val.kode
   store.formRsLain.namapolirujukan = val.nama
   // console.log('poli ', val)
 }
-function updateModelPpk(val) {
+function updateModelPpk (val) {
   store.formRsLain.ppkdirujuk = val.kode
   store.formRsLain.ppkdirujukx = val.nama
   store.formRsLain.namappkdirujuk = val.nama
@@ -318,7 +324,7 @@ watch(() => store.formRsLain, (obj) => {
     // filterPoli(obj?.namapolirujukan)
   }
 }, { deep: true })
-function simpan() {
+function simpan () {
   console.log('ok', store.formRsLain)
   console.log('cat', refCatat.value.validate())
   if (refCatat.value.validate()) {
