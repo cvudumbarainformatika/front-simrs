@@ -399,6 +399,19 @@
           type="checkbox"
           :options="store.jenisPertanyaans"
           inline
+          @update:model-value="(val)=>{
+            store.formInfo.kode=[]
+            if(val.length>0){
+              val?.forEach(anu=>{
+                const ada=store.jenisPertanyaans?.find(x=>x.value===anu)
+                if(ada){
+                  store.formInfo.kode.push(ada)
+                }
+              })
+            }
+            console.log('val',val,store.formInfo.kode);
+
+          }"
         />
       </div>
       <div class="row text-weight-bold q-mt-md">

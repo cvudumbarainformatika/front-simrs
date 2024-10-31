@@ -71,21 +71,21 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     ],
     apotekers: [],
     jenisPertanyaans: [
-      { label: 'Penggunaan Terapetik', value: 'penggunaan_terapetik' },
-      { label: 'Identifikasi Obat', value: 'identifikasi_obat' },
-      { label: 'Interaksi Obat', value: 'interaksi_obat' },
-      { label: 'Kontra Indikasi', value: 'kontra_indikasi' },
-      { label: 'Cara Pemakaian', value: 'cara_pemakaian' },
-      { label: 'Stabilitas Obat', value: 'stabilitas_obat' },
-      { label: 'Dosis Obat', value: 'dosis_obat' },
-      { label: 'Keracunan / OD', value: 'keracunan_od' },
-      { label: 'ESO', value: 'eso' },
-      { label: 'Harga Obat', value: 'harga_obat' },
-      { label: 'Farmakokinetika / Farmakodinamika', value: 'farmako' },
-      { label: 'Ketersediaan Obat', value: 'ketersediaan' },
-      { label: 'Kompatibilitas', value: 'kompatibilitas' },
-      { label: 'Harga', value: 'harga' },
-      { label: 'Obat Alternatif', value: 'obat_alternatif' }
+      { label: 'Penggunaan Terapetik', value: 'penggunaan_terapetik', kode: '01' },
+      { label: 'Identifikasi Obat', value: 'identifikasi_obat', kode: '02' },
+      { label: 'Interaksi Obat', value: 'interaksi_obat', kode: '03' },
+      { label: 'Kontra Indikasi', value: 'kontra_indikasi', kode: '04' },
+      { label: 'Cara Pemakaian', value: 'cara_pemakaian', kode: '05' },
+      { label: 'Stabilitas Obat', value: 'stabilitas_obat', kode: '06' },
+      { label: 'Dosis Obat', value: 'dosis_obat', kode: '07' },
+      { label: 'Keracunan / OD', value: 'keracunan_od', kode: '08' },
+      { label: 'ESO', value: 'eso', kode: '09' },
+      { label: 'Harga Obat', value: 'harga_obat', kode: '10' },
+      { label: 'Farmakokinetika / Farmakodinamika', value: 'farmako', kode: '11' },
+      { label: 'Ketersediaan Obat', value: 'ketersediaan', kode: '12' },
+      { label: 'Kompatibilitas', value: 'kompatibilitas', kode: '13' },
+      { label: 'Harga', value: 'harga', kode: '14' },
+      { label: 'Obat Alternatif', value: 'obat_alternatif', kode: '15' }
     ]
   }),
   actions: {
@@ -108,6 +108,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     },
     closeInfo () {
       this.isInfo = false
+      this.formInfo = {}
     },
     setInfo (val) {
       // console.log('set info', val)
@@ -848,6 +849,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         api.post('v1/simrs/farmasinew/depo/simpan-pelayanan-informasi-obat', this.formInfo)
           .then(resp => {
             this.loadingPelayananInfoObat = false
+
+            this.closeInfo()
             notifSuccess(resp)
             resolve(resp)
           })
