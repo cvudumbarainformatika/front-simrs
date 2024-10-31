@@ -176,7 +176,7 @@ export const useAnamnesis = defineStore('anamnesis', {
     async deleteData (pasien, id) {
       const payload = { id }
       try {
-        const resp = await api.post('v1/simrs/pelayanan/hapusanamnesis', payload)
+        const resp = await api.post('v1/simrs/igd/anamnesis/hapusanamnesis', payload)
         // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
