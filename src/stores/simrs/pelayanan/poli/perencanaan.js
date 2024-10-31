@@ -430,11 +430,13 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       if (!diag) {
         return notifErrVue('Pasien tidak bisa di rujuk karena belum ada Diagnosa')
       }
-      this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      // this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
       this.formRsLain.norm = pasien?.norm
       this.formRsLain.noreg = pasien?.noreg
       this.formRsLain.planing = 'Rumah Sakit Lain'
       this.formRsLain.kodesistembayar = pasien?.kodesistembayar
+      console.log('this.formRsLain', this.formRsLain)
+
       this.loadingSave = true
       const url = this.editRsLain ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
       try {
@@ -499,10 +501,10 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
     initPasien (pasien) {
-      this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
-      this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
-      this.formRsLain.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
-      this.formPrb.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+      // this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      // this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      // this.formRsLain.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+      // this.formPrb.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
 
       this.formRsLain.kodepoli = pasien?.kodepoli
       this.formPrb.kodepoli = pasien?.kodepoli
