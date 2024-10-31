@@ -258,7 +258,7 @@
             class="text-right"
           >
             <div class="row no-wrap justify-end items-center">
-              {{ parseFloat( store.total ?? 0) }}
+              {{ parseFloat( store.total ?? 0).toFixed(2) }}
             </div>
             <div class="row no-wrap justify-end f-8 text-italic print-hide">
               tabel :  {{ parseFloat( store.tTotal.toFixed(2) ?? 0) }}
@@ -377,9 +377,9 @@
           {{ formatDouble(parseFloat(row.akhir),2) }}
           <div
             class="text-italic text-right print-hide"
-            :class="parseFloat(row.akhir)!== parseFloat(row.tAkhir)? 'text-negative text-weight-bold f-14':'f-8 '"
+            :class="parseFloat(row.akhir).toFixed(2)!== parseFloat(row.tAkhir).toFixed(2)? 'text-negative text-weight-bold f-14':'f-8 '"
           >
-            (tabel: {{ parseFloat(row.tAkhir) }})
+            (tabel: {{ parseFloat(row.tAkhir).toFixed(2) }})
           </div>
         </div>
         <!-- <div class="row items-center box-mini ">
