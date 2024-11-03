@@ -74,7 +74,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="store.hasilSal5.length === 0">
+              <!-- <tr v-if="store.hasilSal5.length === 0">
                 <td />
                 <td>SALDO AWAL PERIODE</td>
                 <td class="text-right">
@@ -86,7 +86,7 @@
                 <td class="text-right">
                   {{ formattanpaRp(0) }}
                 </td>
-              </tr>
+              </tr> -->
               <tr v-for="it in store.hasilmapsLevel5" :key="it">
                 <td>{{ it.kode }}</td>
                 <td>{{ it.uraian }}</td>
@@ -142,7 +142,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="store.hasilSal6.length === 0">
+              <!-- <tr v-if="store.hasilSal6.length === 0">
                 <td />
                 <td />
                 <td>SALDO AWAL PERIODE</td>
@@ -155,7 +155,7 @@
                 <td class="text-right">
                   {{ formattanpaRp(0) }}
                 </td>
-              </tr>
+              </tr> -->
               <tr v-for="it in store.hasilmapsLevel6" :key="it">
                 <td>{{ it.tanggal }}</td>
                 <td>{{ it.notrans }}</td>
