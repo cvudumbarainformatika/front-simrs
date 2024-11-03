@@ -188,11 +188,18 @@
                     <div class="flex">
                       Skor Skreening Gizi
                       = <div class="q-mx-sm">
-                        <q-badge color="green">
+                        <q-badge color="green" v-if="store.form.skor < 2">
+                          {{ store.form.skor }}
+                        </q-badge>
+                        <q-badge color="red" v-else>
                           {{ store.form.skor }}
                         </q-badge>
                       </div> <div>
-                        Keterangan : <q-badge outline color="green">
+                        Keterangan :
+                        <q-badge outline color="green" v-if="store.form.skor < 2">
+                          {{ store.keteranganSkorGizi(store.form.skor) }}
+                        </q-badge>
+                        <q-badge outline color="red" v-else>
                           {{ store.keteranganSkorGizi(store.form.skor) }}
                         </q-badge>
                       </div>
@@ -830,7 +837,7 @@ function nilairangsangan (val) {
 
 function hitungscorenipsb () {
   store.form.scroenips = parseInt(store.nilaiekspresiwajahnips) + parseInt(store.nilaimenangis) + parseInt(store.nilaipolanafas) +
-  parseInt(store.nilailengan) + parseInt(store.nilaikaki) + parseInt(store.nilaipolanafas)
+  parseInt(store.nilailengan) + parseInt(store.nilaikaki) + parseInt(store.nilairangsangan)
 
   if (store.form.scroenips === 0) {
     store.form.ketscorenips = 'Tidak Nyeri'

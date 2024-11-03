@@ -1,13 +1,53 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
+import { usePengunjungIgdStore } from './pengunjung'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store', {
   state: () => ({
     loadingForm: false,
     selection: [],
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
+    pilihnyerihilang: [],
     form: {
-      skor: 0
-    }
+      optionskriniggizi: 1,
+      skreeninggizi: 0,
+      asupanmakan: 0,
+      kondisikhusus: '',
+      skor: 0,
+
+      asupanmakanberkurang: 0,
+      metabolisme: 0,
+      penambahanbb: 0,
+      nilaihbberkurang: 0,
+      skorgizix: 0,
+
+      metodenyeri: 'nrt',
+      keteranganscorenyeri: 'tidak ada nyeri',
+      skornyeri: 0,
+
+      scroebps: 0,
+      ketscorebps: 0,
+      ketcolorbps: 'light-green',
+
+      scroenips: 0,
+      ketscorenips: 0,
+      ketcolornips: 'light-green',
+
+      nyerihilang: ''
+
+    },
+    nilaiekspresiwajah: 0,
+    nilaigerakantangan: 0,
+    nilaikepatuhanventilasi: 0,
+
+    nilaiekspresiwajahnips: 0,
+    nilaimenangis: 0,
+    nilaipolanafas: 0,
+    nilailengan: 0,
+    nilaikaki: 0,
+    nilairangsangan: 0
+
   }),
   actions: {
     keteranganSkorGizi (nilai) {
@@ -26,6 +66,53 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
       const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
       this.form.skor = skor
+    },
+    setKeteranganSkornyeri (val) {
+      if (val === 0) {
+        this.form.keteranganscorenyeri = 'tidak ada nyeri'
+      }
+      else if (val > 0 && val <= 3) {
+        this.form.keteranganscorenyeri = 'nyeri ringan'
+      }
+      else if (val > 3 && val <= 6) {
+        this.form.keteranganscorenyeri = 'nyeri sedang'
+      }
+      else if (val > 6 && val <= 10) {
+        this.form.keteranganscorenyeri = 'nyeri berat'
+      }
+    },
+    async saveData (pasien) {
+      this.loadingForm = true
+      this.form.norm = pasien ? pasien.norm : ''
+      this.form.noreg = pasien ? pasien.noreg : ''
+
+      this.hitungNilaiSkor()
+
+      // console.log(this.form)
+
+      try {
+        const resp = await api.post('v1/simrs/igd/anamnesis/simpananamnesis', this.form)
+        if (resp.status === 200) {
+          // console.log('simpan anamnesis', resp)
+          const storePasien = usePengunjungIgdStore()
+
+          if (resp.data.result === 1) {
+            this.form.rs4 = this.form.keluhanutama
+          }
+          const isi = resp.data.result[0]
+          storePasien.injectDataPasien(pasien, isi, 'anamnesis')
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingForm = false
+        }
+
+        this.loadingForm = false
+      }
+      catch (error) {
+        // console.log('anamnesis err', error)
+        this.loadingForm = false
+        notifErr(error)
+      }
     }
   }
 })
