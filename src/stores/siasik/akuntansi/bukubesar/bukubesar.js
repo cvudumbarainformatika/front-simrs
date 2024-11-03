@@ -7,6 +7,8 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
   state: () => ({
     loading: false,
     dialogCetak: false,
+    exportExcel: false,
+    loadingDownload: false,
     reqs: {
       q: '',
       page: 1,
@@ -60,7 +62,8 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
     salsebelum: [],
     hasilbukuBesar: [],
 
-    allsaldosebelum: []
+    allsaldosebelum: [],
+    fields: {}
   }),
   actions: {
     setParameter (key, val) {
@@ -104,6 +107,31 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         }).catch(() => { this.loading = false })
       })
     },
+    setField () {
+      if (this.params.jenis === 'rekap') {
+        this.fields = {
+          Kode: 'kode',
+          Uraian: 'uraian',
+          Debit: 'debit',
+          Kredit: 'kredit',
+          Saldo: 'total'
+        }
+      }
+      else {
+        this.fields = {
+          Tanggal: 'tanggal',
+          Nobukti: 'notrans',
+          Uraian: 'uraian',
+          Debit: 'debit',
+          Kredit: 'kredit',
+          Saldo: 'total',
+          'Keterangan ': 'keterangan',
+          'Kegiatan ': 'keterangan'
+        }
+      }
+    },
+    startDownload () { this.loadingDownload = true },
+    finishDownload () { this.loadingDownload = false },
     getDataBukubesar () {
       this.loading = true
       const params = { params: this.reqs }

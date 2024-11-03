@@ -11,5 +11,5 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
 
-const AsyncComp = defineAsyncComponent(() => import('./PageLpsal.vue'))
+const AsyncComp = defineAsyncComponent(() => import('./PageLapOperasional.vue'))
 </script>

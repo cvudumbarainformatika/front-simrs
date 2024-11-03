@@ -68,9 +68,9 @@ const title = computed(() => {
   else if (page.path === '/laporan/akuntansi/lra') {
     return 'LRA'
   }
-  // else if (page.path === '/pendaftaran/umum/listmjkn') {
-  // //   return 'LIST MOBILE JKN'
-  // }
+  else if (page.path === '/laporan/akuntansi/lo') {
+    return 'LO'
+  }
   else {
     return 'BUKU BESAR'
   }
@@ -83,9 +83,9 @@ const subtitle = computed(() => {
   else if (page.path === '/laporan/akuntansi/lra') {
     return 'Laporan Realisasi Anggaran'
   }
-  // else if (page.path === '/pendaftaran/umum/listmjkn') {
-  // //   return 'List Kunjungan dari m-JKN'
-  // }
+  else if (page.path === '/laporan/akuntansi/lo') {
+    return 'Laporan Operasional'
+  }
   else {
     return 'Buku Besar Akuntansi'
   }

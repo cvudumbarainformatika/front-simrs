@@ -35,6 +35,14 @@
           @click="goTo('/laporan/akuntansi/lra')"
         />
         <q-btn
+          :outline="path!=='/laporan/akuntansi/lo'"
+          glossy
+          size="md"
+          color="primary"
+          label="LO"
+          @click="goTo('/laporan/akuntansi/lo')"
+        />
+        <q-btn
           :outline="path!=='/laporan/akuntansi/lpsal'"
           glossy
           size="md"

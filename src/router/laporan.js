@@ -160,6 +160,12 @@ const laporan = {
             import('src/pages/siasik/akuntansi/laporanakuntansi/lralevel3/IndexPage.vue')
         },
         {
+          path: '/laporan/akuntansi/lo',
+          name: 'laporan.akuntansi.l0',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/LapOperasional/IndexPage.vue')
+        },
+        {
           path: '/laporan/akuntansi/lpsal',
           name: 'laporan.akuntansi.lpsal',
           component: () =>
