@@ -877,7 +877,22 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
             val.loading = false
           })
       })
+    },
+    simpanTelaahResep (item, val) {
+      item.loadingTelaah = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/simpan-telaah-resep', val)
+          .then(resp => {
+            delete item.loadingTelaah
+            console.log('resep', resp)
+            item.telaah = resp?.data.simpan
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingTelaah
+          })
+      })
     }
-
   }
 })
