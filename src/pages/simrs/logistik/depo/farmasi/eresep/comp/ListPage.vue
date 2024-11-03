@@ -385,6 +385,24 @@
                     Download Resep
                   </q-tooltip>
                 </q-btn>
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 4 && parseInt(item?.flag) >= 3 "
+                  round
+                  class="f-10 q-mr-sm"
+                  :color="item?.telaah?'green':'secondary'"
+                  text-color="white"
+                  :loading="item?.loadingTelaah"
+                  :disable="item?.loadingTelaah"
+                  @click="telaahResep(item)"
+                >
+                  Q
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Telaah Resep
+                  </q-tooltip>
+                </q-btn>
                 <!-- selesai -->
                 <q-btn
                   v-if="item?.flag==='2' && (item?.semuaresep && item?.semuaracik)"
@@ -549,6 +567,19 @@
     :head="printHeadOnly"
     @close="openPrintPdf=false"
   />
+  <commpTelaahResep
+    ref="telaah"
+    v-model="openTelaah"
+    :item="itemToTelaah"
+    :apotekers="store.apotekers"
+    :head="printHeadOnly"
+    @close="CloseTelaahResep"
+    @simpan="(val)=>{
+      console.log('val', val);
+      store.simpanTelaahResep(val?.item,val?.form)
+      CloseTelaahResep()
+    }"
+  />
 </template>
 
 <script setup>
@@ -575,6 +606,7 @@ defineProps({
   }
 })
 const emits = defineEmits(['panggilan'])
+
 function highlightText (text) {
   // Implement your text highlighting logic here
   // For example, you can wrap the matching text in <span> with a specific style
@@ -763,6 +795,11 @@ const openPrintPdf = ref(false)
 const itemToPrint = ref(null)
 const pdfResp = ref(null)
 
+const commpTelaahResep = defineAsyncComponent(() => import('./TelaahResep.vue'))
+const openTelaah = ref(false)
+const itemToTelaah = ref(null)
+const telaah = ref(null)
+
 function terimaResep (item) {
   store.terimaResep(item)
   printIdResep(item)
@@ -811,20 +848,7 @@ function setResepToPdf (val) {
       key.jumlahresepAwal = parseFloat(key?.jumlahresep)
       key.jumlahdibutuhkanAwal = key?.jumlahdibutuhkan
 
-      // const racikankeluar = res?.rincianracik?.find(rac => rac?.namaracikan === key?.namaracikan && rac?.kdobat === key?.kdobat)
-      // console.log('racik', key, racikankeluar)
-      // if (racikankeluar) {
-      //   key.jumlah = parseFloat(racikankeluar.jumlah)
-      //   key.harga_jual = parseFloat(racikankeluar?.harga_jual)
-      //   key.jumlahdibutuhkan = parseFloat(racikankeluar?.jumlahdibutuhkan)
-      // }
-      // key.jumlahresep = key.jumlah
-      // if (parseInt(key?.mobat?.kelompok_psikotropika) === 1) {
-      //   key.jumlahobat = this.customRound(key.jumlah)
-      // }
-      // else key.jumlahobat = Math.ceil(key.jumlah)
       const namaracikan = key?.namaracikan
-      // key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual))// + parseFloat(key?.r)
 
       key.groupsistembayar = val?.sistembayar?.groups
       const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
@@ -887,6 +911,15 @@ function setResepToPdf (val) {
   console.log('print', res)
 
   itemToPrint.value = res
+}
+function telaahResep (item) {
+  console.log('telaah item', item)
+  itemToTelaah.value = item
+  openTelaah.value = true
+}
+function CloseTelaahResep () {
+  openTelaah.value = false
+  itemToTelaah.value = null
 }
 // function closePrintId () {
 //   console.log('print id close')

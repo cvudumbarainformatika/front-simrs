@@ -400,24 +400,24 @@ const adaAlergi = ref(false)
 const penyerahan = ref(false)
 // eslint-disable-next-line no-unused-vars
 const komponenReseps = ref([
-  { label: 'Tgl Resep', ada: false, tidak: false },
-  { label: 'No RM Pasien', ada: false, tidak: false },
-  { label: 'Nama Dokter', ada: false, tidak: false },
-  { label: 'Ruangan / poli', ada: false, tidak: false },
-  { label: 'Nama Obat, bentuk sediaan', ada: false, tidak: false },
-  { label: 'Kuantitas Obat', ada: false, tidak: false },
-  { label: 'Kekuatan Sediaan / dosis', ada: false, tidak: false },
-  { label: 'Aturan Pakai', ada: false, tidak: false },
-  { label: 'Ttd / paraf Dokter', ada: false, tidak: false },
-  { label: 'Nama Pasien', ada: false, tidak: false },
-  { label: 'Umur / BB pasien', ada: false, tidak: false }
+  { id: '1', value: 'tgl_resep', kode: '1.1', label: 'Tgl Resep', ada: false, tidak: false },
+  { id: '2', value: 'rm_pasien', kode: '1.2', label: 'No RM Pasien', ada: false, tidak: false },
+  { id: '3', value: 'nama_dokter', kode: '1.3', label: 'Nama Dokter', ada: false, tidak: false },
+  { id: '4', value: 'ruangan_poli', kode: '1.4', label: 'Ruangan / poli', ada: false, tidak: false },
+  { id: '5', value: 'nama_obat_bentuk_sediaan', kode: '1.5', label: 'Nama Obat, bentuk sediaan', ada: false, tidak: false },
+  { id: '6', value: 'kuantitas_obat', kode: '1.6', label: 'Kuantitas Obat', ada: false, tidak: false },
+  { id: '7', value: 'dosis', kode: '1.7', label: 'Kekuatan Sediaan / dosis', ada: false, tidak: false },
+  { id: '8', value: 'aturan_pakai', kode: '1.8', label: 'Aturan Pakai', ada: false, tidak: false },
+  { id: '9', value: 'ttd_paraf', kode: '1.9', label: 'Ttd / paraf Dokter', ada: false, tidak: false },
+  { id: '10', value: 'nama_pasien', kode: '1.10', label: 'Nama Pasien', ada: false, tidak: false },
+  { id: '11', value: 'umur_bb', kode: '1.11', label: 'Umur / BB pasien', ada: false, tidak: false }
 ])
 // eslint-disable-next-line no-unused-vars
 const farmasiKlinises = ref([
-  { label: 'Kontradiksi', ada: false, tidak: false },
-  { label: 'Duplikasi', ada: false, tidak: false },
-  { label: 'Efek Samping', ada: false, tidak: false },
-  { label: 'Interaksi Obat', ada: false, tidak: false }
+  { id: '12', value: 'kontradiksi', kode: '2.1', label: 'Kontradiksi', ada: false, tidak: false },
+  { id: '13', value: 'duplikasi', kode: '2.2', label: 'Duplikasi', ada: false, tidak: false },
+  { id: '14', value: 'efek_samping', kode: '2.3', label: 'Efek Samping', ada: false, tidak: false },
+  { id: '15', value: 'interaksi', kode: '2.4', label: 'Interaksi Obat', ada: false, tidak: false }
 ])
 // eslint-disable-next-line no-unused-vars
 const content = ref(null)

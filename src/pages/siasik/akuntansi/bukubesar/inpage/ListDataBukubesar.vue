@@ -74,6 +74,19 @@
               </tr>
             </thead>
             <tbody>
+              <tr v-if="store.hasilSal5.length === 0">
+                <td />
+                <td>SALDO AWAL PERIODE</td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+              </tr>
               <tr v-for="it in store.hasilmapsLevel5" :key="it">
                 <td>{{ it.kode }}</td>
                 <td>{{ it.uraian }}</td>
@@ -129,6 +142,20 @@
               </tr>
             </thead>
             <tbody>
+              <tr v-if="store.hasilSal6.length === 0">
+                <td />
+                <td />
+                <td>SALDO AWAL PERIODE</td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+                <td class="text-right">
+                  {{ formattanpaRp(0) }}
+                </td>
+              </tr>
               <tr v-for="it in store.hasilmapsLevel6" :key="it">
                 <td>{{ it.tanggal }}</td>
                 <td>{{ it.notrans }}</td>
@@ -151,8 +178,8 @@
                   {{ formattanpaRp(it.total) }}
                 </td>
               </tr>
-              <tr>
-                <td colspan="3" class="text-weight-bold text-center">
+              <tr class="text-weight-bold">
+                <td colspan="3" class="text-center">
                   JUMLAH
                 </td>
                 <td class="text-right">
@@ -236,4 +263,23 @@ function Saldolevel6 () {
   const totalkredit = kredit.reduce((a, b) => a + b, 0)
   return totaldebit - totalkredit
 }
+
+// TOTAL HASIL LEVEL DIBAWAH 5
+// function SaldoAwalDebit () {
+//   const debit = store.hasilSal5.map((x) => x.debit)
+//   const totaldebit = debit.reduce((a, b) => a + b, 0)
+//   return totaldebit
+// }
+// function SaldoAwalKredit () {
+//   const kredit = store.hasilSal5.map((x) => x.kredit)
+//   const totalkredit = kredit.reduce((a, b) => a + b, 0)
+//   return totalkredit
+// }
+// function totalSaldoAwal () {
+//   const debit = store.hasilSal5.map((x) => x.debit)
+//   const totaldebit = debit.reduce((a, b) => a + b, 0)
+//   const kredit = store.hasilSal5.map((x) => x.kredit)
+//   const totalkredit = kredit.reduce((a, b) => a + b, 0)
+//   return totaldebit - totalkredit
+// }
 </script>
