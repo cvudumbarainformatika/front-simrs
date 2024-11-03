@@ -78,22 +78,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="ttd-kiri">
-            <div class="invisible">
-              .
-            </div>
-            <div class="text-bold q-py-xs q-pt-sm">
-              Pejabat Teknis Kegiatan
-            </div>
-            <div style="padding-bottom: 40px" />
-            <div class="underline text-bold q-py-xs">
-              NAMA
-              <div class="garis-bawah" style="text-decoration-line: underline;" />
-            </div>
-            <div>
-              NIP
-            </div>
-          </div> -->
         </div>
       </div>
       <q-card-section class="q-pa-none bg-primary text-white">
