@@ -2,7 +2,7 @@
   <q-dialog persistent backdrop-filter="blur(4px)">
     <q-card style="min-width:80vw; max-width: 80vw;">
       <q-bar class="bg-black text-white">
-        <div>Cetak BUKU BESAR</div>
+        <div>Cetak LAPORAN OPERASIONAL</div>
         <q-space />
 
         <q-btn dense flat icon="icon-mat-close" v-close-popup>
@@ -45,7 +45,7 @@
 
           <div class="col-12 q-pt-md">
             <div class="row justify-center text-weight-bold q-py-xs">
-              BUKU BESAR
+              LAPORAN OPERASIONAL
             </div>
             <div class="row justify-center text-weight-bold q-py-xs">
               Periode {{ store.display.dari + ' - ' + store.display.sampai }}
@@ -63,7 +63,7 @@
           </q-card-section>
 
           <div class="row q-pa-xl full-width justify-end">
-            <div class="q-py-xs text-center" v-for="it in store.ttd" :key="it">
+            <div class="q-py-xs text-center" v-for="it in tt.ttd" :key="it">
               Probolinggo {{ store.display.sekarang }}
               <div class="text-bold">
                 Pengguna Anggaran
@@ -123,17 +123,19 @@
 <script setup>
 import { useBukubesarStore } from 'src/stores/siasik/akuntansi/bukubesar/bukubesar'
 import { onMounted, ref } from 'vue'
+import { useLaporanOperasionalStore } from 'src/stores/siasik/laporan/laporanoperasional/lapoperasional'
 
-import listData from '../inpage/ListDataBukubesar.vue'
-const store = useBukubesarStore()
+import listData from '../inpage/ListDataLo.vue'
+const tt = useBukubesarStore()
+const store = useLaporanOperasionalStore()
 onMounted(() => {
-  store.getTtd()
+  tt.getTtd()
   // store.getDataBukubesar()
 })
 const printed = ref(false)
 const printObj = {
   id: 'printMe',
-  popTitle: 'BUKU BESAR | SIASIK',
+  popTitle: 'Laporan Operasional | SIASIK',
   beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...')

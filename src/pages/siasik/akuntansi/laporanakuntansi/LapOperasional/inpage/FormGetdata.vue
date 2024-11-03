@@ -88,16 +88,17 @@
       <!-- </download-excel> -->
     </div>
   </div>
-  <!-- <cetak-bukubesar
+  <cetak-lo
     v-model="store.dialogCetak"
     :printlo="printlo"
-  /> -->
+  />
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
 import { useLaporanOperasionalStore } from 'src/stores/siasik/laporan/laporanoperasional/lapoperasional'
-import { onMounted, ref, watchEffect } from 'vue'
+import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 
+const CetakLo = defineAsyncComponent(() => import('../printLO/PrintDataLo.vue'))
 const $q = useQuasar()
 const store = useLaporanOperasionalStore()
 const berdasar = ref('')
