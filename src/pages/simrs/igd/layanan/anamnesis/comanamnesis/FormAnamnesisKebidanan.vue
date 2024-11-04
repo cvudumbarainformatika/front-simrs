@@ -720,21 +720,50 @@
               <div class="col-6">
                 <q-input v-model="store.form.umurpertamanikah" outlined type="number" dense label="Berapa Kali" />
               </div>
-              <div class="col-6 ">
-                - Kawin Dengan Sumai Ke
+              <div class="col-12 ">
+                - Kawin Dengan Suami Ke  <q-btn round color="primary" icon="icon-mat-post_add" size="sm" @click="opendialog()" />
               </div>
-              <div class="col-3 ">
-                <q-input v-model="store.form.umurpertamanikah" outlined type="number" dense label="Suami Ke" />
-              </div>
-              <div class="col-3">
-                <q-input v-model="store.form.umurpertamanikah" outlined type="number" dense label="Lama" />
-              </div>
-              <div class="col-6">
-                <q-input
-                  v-model="store.form.keluhankontrasepsi"
-                  outlined
-                  dense
-                />
+              <div class="col-12">
+                <q-card>
+                  <div v-if="lists.length > 0">
+                    <q-list
+                      v-for="(item , n) in lists"
+                      :key="n"
+                    >
+                      <q-item>
+                        <q-item-section>
+                          <q-item-label>Suami Ke :</q-item-label>
+                          <q-item-label>
+                            Lama Pernikahan :
+                          </q-item-label>
+                        </q-item-section>
+                        <q-item-section side top>
+                          <q-item-label caption>
+                            {{ item.suami_ke }}
+                          </q-item-label>
+                          {{ item.lamapernikahan }} Tahun
+                        </q-item-section>
+                        <q-separator vertical color="primary" />
+                        <q-item-section side>
+                          <q-btn
+                            flat
+                            round
+                            size="sm"
+                            icon="icon-mat-delete"
+                            color="negative"
+                            @click="hapusItem(item.id)"
+                          />
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                    </q-list>
+                  </div>
+                  <div v-else class="text-center">
+                    <q-badge color="red" outline>
+                      Data Kawin Dengan Suami Belum Ada..
+                    </q-badge>
+                  </div>
+                </q-card>
               </div>
             </div>
             <q-card-section class="col full-height scroll" />
@@ -744,15 +773,25 @@
       </q-card>
     </div>
   </div>
+  <form-dialog-his-pernikahan :pasien="props.pasien" />
 </template>
 <script setup>
 import { useAnamneseKebidananStore } from 'src/stores/simrs/igd/anamnesekebidanan'
+import { useHistoryPernikahanStore } from 'src/stores/simrs/igd/historypernikahanpasien'
 import { computed, ref } from 'vue'
+import FormDialogHisPernikahan from './FormDialogHisPernikahan.vue'
+import { useQuasar } from 'quasar'
 
 const store = useAnamneseKebidananStore()
+const storeHistoryPernikahan = useHistoryPernikahanStore()
 // const panel = ref(['nrt'])
 
 const refForm = ref()
+const $q = useQuasar()
+
+function opendialog () {
+  storeHistoryPernikahan.fixed = true
+}
 
 const props = defineProps({
   pasien: {
@@ -1135,7 +1174,31 @@ function hitungscorenipsb () {
 //   store.form.ketscorenips = ''
 // }
 
+function hapusItem (id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    storeHistoryPernikahan.deleteData(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
 store.form.optionskriniggizi = 1
 store.form.metode = 'nrt'
+
+// eslint-disable-next-line no-unused-vars
+const lists = computed(() => {
+  const arr = props.pasien?.historyperkawinan
+  console.log('hahaha', arr)
+  return arr?.sort((a, b) => { return b.id - a.id })
+})
 
 </script>
