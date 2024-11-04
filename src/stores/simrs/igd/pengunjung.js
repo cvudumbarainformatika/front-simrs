@@ -238,6 +238,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataHistoryPerkawinan (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].historyperkawinan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
     hapusDataTriage (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {

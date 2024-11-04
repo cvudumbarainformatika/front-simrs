@@ -45,7 +45,7 @@ export const useHistoryPernikahanStore = defineStore('history-pernikahan-store',
         const resp = await api.post('v1/simrs/igd/anamnesis/hapusHistoryPerkawiananPasien', payload)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          storePasien.hapusDataAnamnesis(pasien, id)
+          storePasien.hapusDataHistoryPerkawinan(pasien, id)
           notifSuccess(resp)
         }
       }

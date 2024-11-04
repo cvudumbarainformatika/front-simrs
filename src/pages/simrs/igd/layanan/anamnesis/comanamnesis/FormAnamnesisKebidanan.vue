@@ -765,6 +765,42 @@
                   </div>
                 </q-card>
               </div>
+              <div class="col-12 text-bold">
+                Riwayat Penyakit Menstruasi
+              </div>
+              <div class="col-6">
+                - Menarche Umur (tahun)
+              </div>
+              <div class="col-6">
+                <q-input v-model="store.form.menarcheumur" outlined type="number" dense />
+              </div>
+              <div class="col-6">
+                - Siklus (hari)
+              </div>
+              <div class="col-6">
+                <q-input v-model="store.form.siklus" outlined type="number" dense />
+              </div>
+              <div class="col-6">
+                - Keteraturan
+              </div>
+              <div class="col-6">
+                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+              </div>
+              <div class="col-6">
+                - Lama Hari
+              </div>
+              <div class="col-6">
+                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+              </div>
+              <div class="col-6">
+                - Keluhan Haid
+              </div>
+              <div class="col-6">
+                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+              </div>
+              <div class="12 text-bold">
+                Riwayat Penyakit Ginekologi
+              </div>
             </div>
             <q-card-section class="col full-height scroll" />
           </q-card-section>
@@ -808,6 +844,8 @@ function onSubmit () {
     refForm.value.resetValidation()
   })
 }
+
+const keteraturan = ref(['Teratur', 'Tidak Teratur'])
 
 const iconNyeri = computed(() => {
   const val = store?.form.skornyeri
