@@ -725,7 +725,7 @@
               </div>
               <div class="col-12">
                 <q-card>
-                  <div v-if="lists.length > 0">
+                  <div v-if="lists?.length > 0">
                     <q-list
                       v-for="(item , n) in lists"
                       :key="n"
@@ -766,6 +766,7 @@
                 </q-card>
               </div>
               <div class="col-12 text-bold">
+                <q-separator class="q-mt-sm" />
                 Riwayat Penyakit Menstruasi
               </div>
               <div class="col-6">
@@ -784,22 +785,436 @@
                 - Keteraturan
               </div>
               <div class="col-6">
-                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+                <q-select
+                  v-model="store.form.keteraturan" transition-show="flip-up"
+                  transition-hide="flip-down" outlined :options="keteraturan" dense
+                />
               </div>
               <div class="col-6">
                 - Lama Hari
               </div>
               <div class="col-6">
-                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+                <q-select
+                  v-model="store.form.lamahaid" transition-show="flip-up"
+                  transition-hide="flip-down" outlined :options="keteraturan" dense
+                />
               </div>
               <div class="col-6">
                 - Keluhan Haid
               </div>
               <div class="col-6">
-                <q-select v-model="store.form.keteraturan" outlined :options="keteraturan" dense />
+                <q-select
+                  v-model="store.form.keluhan"
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+
+                  outlined
+                  :options="keluhan"
+                  dense
+                />
+                <q-input dense label="Jelaskan" v-model="store.form.sebutkannyerihilang" v-if="store.form.keluhan === 'Ya'" />
               </div>
-              <div class="12 text-bold">
+              <div class="col-12 text-bold">
+                <q-separator class="q-mt-sm" />
                 Riwayat Penyakit Ginekologi
+              </div>
+              <div class="col-6">
+                - Apakah terdapat riwayat penyakit ginekologi?
+              </div>
+              <div class="col-6">
+                <q-select
+                  v-model="store.form.riwayatginekologi"
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  outlined
+                  :options="riwayatgonekologo"
+                  dense
+                />
+              </div>
+              <div class="col-12">
+                <q-checkbox
+                  v-for="(al, i) in store.ginekologis"
+                  :key="i"
+                  v-model="store.selectionginekologis"
+                  :val="al"
+                  :label="al"
+                  color="primary"
+                  @update:model-value="updateSelectionginekologis"
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkanginekologis" v-if="store.selectionginekologis.includes('Lain-lain')" />
+                <q-separator class="q-mt-sm" />
+              </div>
+              <div class="col-12 text-bold">
+                Riwayat Hamil Ini
+              </div>
+              <div class="col-6">
+                <app-input-date
+                  :model="store.form.haid"
+                  mask="date"
+                  outlined
+                  standout="bg-yellow-3"
+                  label="Hari Pertama Haid Terakir"
+                  @set-model="val=>store.form.haid=val"
+                >
+                  <template #append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="date">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </app-input-date>
+              </div>
+              <div class="col-6">
+                <q-input
+                  dense
+                  v-model="store.form.gravida"
+                  outlined
+                  standout="bg-yellow-3"
+                  label="Gravida"
+                />
+              </div>
+              <div class="col-6">
+                <q-input
+                  v-model="store.form.partus"
+                  outlined
+                  dense
+                  standout="bg-yellow-3"
+                  label="Partus"
+                />
+              </div>
+              <div class="col-6">
+                <q-input
+                  v-model="store.form.abortus"
+                  outlined
+                  dense
+                  standout="bg-yellow-3"
+                  label="Abortus"
+                />
+              </div>
+              <div class="col-6">
+                <app-input-date
+                  :model="store.form.taksiranpartus"
+                  mask="date"
+                  outlined
+                  standout="bg-yellow-3"
+                  label="Taksiran Partus"
+                  @set-model="val=>store.form.taksiranpartus=val"
+                >
+                  <template #append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="date">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </app-input-date>
+              </div>
+              <div class="col-6">
+                <q-select
+                  v-model="store.form.asupanantenatal"
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  label="Asuhan Antenatal "
+                  outlined
+                  :options="asupanantenatal"
+                  dense
+                />
+              </div>
+              <div class="col-12" v-if="store.form.asupanantenatal === 'Ya'">
+                <q-checkbox
+                  v-for="(alx, ix) in store.asupanantenatals"
+                  :key="ix"
+                  v-model="store.selectionasupanantenatal"
+                  :val="alx"
+                  :label="alx"
+                  color="primary"
+                  @update:model-value="updateasupanantenatal"
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkanasupanantenatal" v-if="store.selectionasupanantenatal.includes('Lain-Lain')" />
+              </div>
+              <div class="col-6">
+                <q-select
+                  v-model="store.form.frekuensi"
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  label="Frekuensi"
+                  outlined
+                  :options="frekuensi"
+                  dense
+                />
+              </div>
+              <div class="col-6">
+                <q-select
+                  v-model="store.form.imunisasitt"
+                  transition-show="flip-up"
+                  transition-hide="flip-down"
+                  label="Imunisasi TT"
+                  outlined
+                  :options="imunisasitt"
+                  dense
+                /> <q-input label="Berpa kali" type="number" dense v-model="store.form.sebutkanimunisasitt" v-if="store.form.imunisasitt === 'Ya'" />
+              </div>
+              <div class="col-12 text-bold">
+                - Keluhan saat hamil
+              </div>
+              <div class="col-12">
+                <q-checkbox
+                  v-for="(al, i) in store.keluhanhamils"
+                  :key="i"
+                  v-model="store.selectionkeluhanhamils"
+                  :val="al"
+                  :label="al"
+                  color="primary"
+                  @update:model-value="updateSelectionkeluhanhamils"
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkanginekologis" v-if="store.selectionkeluhanhamils.includes('Lain-lain')" />
+                <q-separator class="q-mt-sm" />
+              </div>
+              <div class="col-12 text-bold">
+                Status Obstetri dan ginekologi
+              </div>
+              <div class="col-12">
+                <q-input label="Periksa Luar" dense outlined v-model="store.form.periksaluarginekologi" />
+              </div>
+              <div class="col-12">
+                <q-input label="Inspekulo" dense outlined v-model="store.form.inspekuloginekologi" />
+              </div>
+              <div class="col-12">
+                <q-input label="Periksa Dalam" dense outlined v-model="store.form.periksadalamginekologi" />
+                <q-separator class="q-mt-sm" />
+              </div>
+              <div class="col-12 text-bold">
+                Riwayat Kehamilan, Persalinan dan Nifas <q-btn round color="primary" icon="icon-mat-post_add" size="sm" @click="opendialogkehamilan()" />
+              </div>
+              <div class="col-12">
+                <q-card>
+                  <div v-if="lists?.length > 0">
+                    <q-list
+                      v-for="(item , n) in lists"
+                      :key="n"
+                    >
+                      <q-item>
+                        <q-item-section>
+                          <q-item-label>Tgl/Tahun Partus :</q-item-label>
+                          <q-item-label>
+                            Tempat :
+                          </q-item-label>
+                          <q-item-label>
+                            Umur Kehamilan (bulan) :
+                          </q-item-label>
+                          <q-item-label>
+                            Jenis Persalinan :
+                          </q-item-label>
+                          <q-item-label>
+                            Penolong :
+                          </q-item-label>
+                          <q-item-label>
+                            Penyulit :
+                          </q-item-label>
+                          <q-item-label>
+                            JK :
+                          </q-item-label>
+                          <q-item-label>
+                            BB :
+                          </q-item-label>
+                          <q-item-label>
+                            PB :
+                          </q-item-label>
+                          <q-item-label>
+                            Nifas :
+                          </q-item-label>
+                          <q-item-label>
+                            Keadaan Anak Sekarang :
+                          </q-item-label>
+                        </q-item-section>
+                        <q-item-section side top>
+                          <q-item-label caption>
+                            {{ item.suami_ke }}
+                          </q-item-label>
+                          {{ item.lamapernikahan }} Tahun
+                        </q-item-section>
+                        <q-separator vertical color="primary" />
+                        <q-item-section side>
+                          <q-btn
+                            flat
+                            round
+                            size="sm"
+                            icon="icon-mat-delete"
+                            color="negative"
+                            @click="hapusItem(item.id)"
+                          />
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                    </q-list>
+                  </div>
+                  <div v-else class="text-center">
+                    <q-badge color="red" outline>
+                      Belum Ada Riwayat Kehamilan, Persalinan dan Nifas...
+                    </q-badge>
+                  </div>
+                </q-card>
+              </div>
+              <div class="col-12 scroll">
+                <table style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Tgl/Tahun Partus
+                      </th>
+                      <th class="text-right">
+                        Tempat
+                      </th>
+                      <th class="text-right">
+                        Umur Kehamilan (bulan)
+                      </th>
+                      <th class="text-right">
+                        Jenis Persalinan
+                      </th>
+                      <th class="text-right">
+                        Penolong
+                      </th>
+                      <th class="text-right">
+                        Penyulit
+                      </th>
+                      <th class="text-right">
+                        JK
+                      </th>
+                      <th class="text-right">
+                        BB
+                      </th>
+                      <th class="text-right">
+                        PB
+                      </th>
+                      <th class="text-right">
+                        Nifas
+                      </th>
+                      <th class="text-right">
+                        Keadaan Anak Sekarang
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-left">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                      <td class="text-right">
+                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-left">
+                        Ice cream sandwich
+                      </td>
+                      <td class="text-right">
+                        237
+                      </td>
+                      <td class="text-right">
+                        9
+                      </td>
+                      <td class="text-right">
+                        37
+                      </td>
+                      <td class="text-right">
+                        4.3
+                      </td>
+                      <td class="text-right">
+                        129
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-left">
+                        Eclair
+                      </td>
+                      <td class="text-right">
+                        262
+                      </td>
+                      <td class="text-right">
+                        16
+                      </td>
+                      <td class="text-right">
+                        23
+                      </td>
+                      <td class="text-right">
+                        6
+                      </td>
+                      <td class="text-right">
+                        337
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-left">
+                        Cupcake
+                      </td>
+                      <td class="text-right">
+                        305
+                      </td>
+                      <td class="text-right">
+                        3.7
+                      </td>
+                      <td class="text-right">
+                        67
+                      </td>
+                      <td class="text-right">
+                        4.3
+                      </td>
+                      <td class="text-right">
+                        413
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-left">
+                        Gingerbread
+                      </td>
+                      <td class="text-right">
+                        356
+                      </td>
+                      <td class="text-right">
+                        16
+                      </td>
+                      <td class="text-right">
+                        49
+                      </td>
+                      <td class="text-right">
+                        3.9
+                      </td>
+                      <td class="text-right">
+                        327
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <q-card-section class="col full-height scroll" />
@@ -817,9 +1232,11 @@ import { useHistoryPernikahanStore } from 'src/stores/simrs/igd/historypernikaha
 import { computed, ref } from 'vue'
 import FormDialogHisPernikahan from './FormDialogHisPernikahan.vue'
 import { useQuasar } from 'quasar'
+import { useHistoryKehamilanStore } from 'src/stores/simrs/igd/historykehamilan'
 
 const store = useAnamneseKebidananStore()
 const storeHistoryPernikahan = useHistoryPernikahanStore()
+const storeHistorykehamilan = useHistoryKehamilanStore()
 // const panel = ref(['nrt'])
 
 const refForm = ref()
@@ -829,8 +1246,16 @@ function opendialog () {
   storeHistoryPernikahan.fixed = true
 }
 
+function opendialogkehamilan () {
+  storeHistorykehamilan.fixed = true
+}
+
 const props = defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  triage: {
     type: Object,
     default: null
   },
@@ -846,6 +1271,10 @@ function onSubmit () {
 }
 
 const keteraturan = ref(['Teratur', 'Tidak Teratur'])
+
+const keluhan = ref(['Ya', 'Tidak'])
+const asupanantenatal = ref(['Ya', 'Tidak'])
+const riwayatgonekologo = ref(['Ya', 'Tidak'])
 
 const iconNyeri = computed(() => {
   const val = store?.form.skornyeri
@@ -904,6 +1333,9 @@ const optionNilaiHb = ref([
 const optionStatusPernikahan = ref([
   'Single', 'Menikah', 'Bercerai'
 ])
+
+const frekuensi = ref(['1x', '2x', '3x', '>3x'])
+const imunisasitt = ref(['Ya', 'Tidak'])
 
 const optionskriniggizi = ref([
   { label: 'Pasien Dengan Masalah Ginekologi/Onkologi', value: 1 },
@@ -1007,6 +1439,19 @@ function updateSelection (val) {
 
 function updateNyerihilang (val) {
   store.setForm('nyerihilang', val.join(', '))
+}
+
+function updateasupanantenatal (val) {
+  store.setForm('updateasupanantenatal', val.join(', '))
+}
+
+function updateSelectionginekologis (val) {
+  // console.log(val.join(','))
+  store.setForm('ginekologis', val.join(', '))
+}
+
+function updateSelectionkeluhanhamils (val) {
+  store.setForm('keluhanhamil', val.join(', '))
 }
 
 function lihatPerubahankasuskehamilan () {
@@ -1231,6 +1676,7 @@ function hapusItem (id) {
 
 store.form.optionskriniggizi = 1
 store.form.metode = 'nrt'
+store.initGpa(props.triage)
 
 // eslint-disable-next-line no-unused-vars
 const lists = computed(() => {

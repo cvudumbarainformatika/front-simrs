@@ -7,8 +7,14 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
   state: () => ({
     loadingForm: false,
     selection: [],
+    selectionginekologis: [],
+    selectionkeluhanhamils: [],
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
+    ginekologis: ['Infertilitas Kanker', 'Infeksi Virus', 'Polip Serviks', 'PMS', 'Myoma', 'Endometriosis', 'Lain-lain'],
+    asupanantenatals: ['Dokter Kandungan', 'Dokter Umum', 'Bidan', 'Lain-Lain'],
+    keluhanhamils: ['Mual', 'Muntah', 'Perdarahan', 'Pusing', 'Lain-lain'],
     pilihnyerihilang: [],
+    selectionasupanantenatal: [],
     form: {
       optionskriniggizi: 1,
       skreeninggizi: 0,
@@ -113,6 +119,12 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
         this.loadingForm = false
         notifErr(error)
       }
+    },
+    initGpa (val) {
+      this.form.gravida = val.gravida
+      this.form.haid = val.haid
+      this.form.partus = val.partus
+      this.form.abortus = val.abortus
     }
   }
 })

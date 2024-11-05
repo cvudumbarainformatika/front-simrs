@@ -8,11 +8,15 @@ export const useTriageIgd = defineStore('triageigd', {
   state: () => ({
     loadingForm: false,
     loadingHistory: false,
+    items: [],
     norm: '',
     noreg: '',
     doak: ['Tidak Ada Nafas', 'Tidak Ada Nadi', 'ECG Flat', 'Pupil Medriasis', 'Reflek Cahaya Pupil'],
     doax: [],
     hiddenall: 'HIDUP',
+    params: {
+      noreg: ''
+    },
     form: {
       id: null,
       pasienhamil: 0,
@@ -111,8 +115,23 @@ export const useTriageIgd = defineStore('triageigd', {
       catch (error) {
         notifErr(error)
       }
+    },
+    async getDataTriage (val) {
+      this.params.noreg = val
+      const params = { params: this.params }
+      await api
+        .get('v1/simrs/pelayanan/igd/getDataTriage', params)
+        .then((resp) => {
+          // this.loading = false
+          if (resp.status === 200) {
+            this.items = resp?.data
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          // this.loading = false
+        })
     }
-
   }
 
 })

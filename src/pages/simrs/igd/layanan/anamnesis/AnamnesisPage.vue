@@ -42,6 +42,7 @@
               :is="cekPanel()"
               :key="props.pasien"
               :pasien="props.pasien"
+              :triage="storeTriage.items"
               class="full-height scroll q-pa-none"
             />
           </q-tab-panel>
@@ -57,9 +58,11 @@ import { defineAsyncComponent, onMounted } from 'vue'
 import { useAnamnesis } from 'src/stores/simrs/igd/anamnesis'
 import { findWithAttr } from 'src/modules/utils'
 import { usePenilaianAnamnesisIgd } from 'src/stores/simrs/igd/penilaiananamnesis'
+import { useTriageIgd } from 'src/stores/simrs/igd/triage'
 
 const store = useAnamnesis()
 const storepenilaian = usePenilaianAnamnesisIgd()
+const storeTriage = useTriageIgd()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -87,5 +90,6 @@ const cekPanel = () => {
 onMounted(() => {
   storepenilaian.masterpenilaian()
   storepenilaian.usia = props.pasien.usia
+  storeTriage.getDataTriage(props.pasien.noreg)
 })
 </script>

@@ -10,6 +10,7 @@
         <FormAnamnesisKebidanan
           :key="props.pasien"
           :pasien="props.pasien"
+          :triage="props.triage"
           tooltip="History Pasien (Shift + H)"
           @open-history="seamless = !seamless"
         />
@@ -49,6 +50,10 @@ import ListAnamnesisKebidanan from './comanamnesis/ListAnamnesisKebidanan.vue'
 
 const props = defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  triage: {
     type: Object,
     default: null
   },
