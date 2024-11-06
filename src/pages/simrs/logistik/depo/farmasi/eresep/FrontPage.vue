@@ -36,6 +36,7 @@
         <ListPage
           :loading-call="speech.isLoading"
           :ruangan="kdruangansim"
+          :user="apps?.user"
           @panggilan="panggil"
         />
       </q-scroll-area>
