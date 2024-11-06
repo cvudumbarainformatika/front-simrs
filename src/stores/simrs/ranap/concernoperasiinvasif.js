@@ -12,7 +12,7 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       pelaksana: null,
       pengedukasi: null,
       penerimaEdukasi: null,
-      diagnosis: null,
+      diagnosis: [],
       dasarDiagnosis: null,
       tindakanMedis: null,
       indikasi: null,
@@ -42,16 +42,16 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       ttdYgMenyatakan: null,
       kdDokter: null,
       kdPetugas: null,
-      kdSaksiRs: null,
+      // kdSaksiRs: null,
       saksiPasien: null,
-      ygMenyatakan: null,
+      // ygMenyatakan: null,
       setuju: 'Iya'
     },
     dokters: [],
     perawats: [],
     nonNakes: [],
 
-    loadingOrder: false,
+    loadingSave: false,
     loadingHapus: false,
 
     hubunganDgPasiens: ['Diri Sendiri', 'Suami', 'Istri', 'Anak', 'Orang Tua', 'Keluarga'],
@@ -67,7 +67,9 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       value: 'Perempuan',
       label: 'P'
     }],
-    loading: false
+    loading: false,
+
+    item: null
 
   }),
   // getters: {
@@ -75,31 +77,29 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
   // },
   actions: {
 
-    async saveData (pasien) {
-      if (!pasien?.kodedokter) {
-        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
-      }
-      this.loadingOrder = true
+    async saveData (pasien, jns) {
+      // if (!pasien?.kodedokter) {
+      //   return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      // }
+      this.loadingSave = true
 
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
-      this.form.kodepoli = pasien?.kodepoli
-      this.form.kodesistembayar = pasien?.kodesistembayar
-      this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
-      this.form.kelas_ruangan = pasien?.kelas_ruangan
+      this.form.kdRuang = pasien?.kodepoli
+      this.form.jenis = jns
 
-      console.log('form', this.form)
+      console.log('save inform form', this.form)
 
       const storeRanap = usePengunjungRanapStore()
-      storeRanap.injectDataPasien(pasien?.noreg, this.form, 'konsultasi')
+      storeRanap.injectDataPasien(pasien?.noreg, this.form, 'informconcern')
 
       try {
-        const resp = await api.post('v1/simrs/ranap/layanan/konsultasi/simpandata', this.form)
-        console.log('save permintaan konsultasi', resp.data)
+        const resp = await api.post('v1/simrs/ranap/layanan/informconcern/simpandata', this.form)
+        console.log('save inform concern', resp.data)
         if (resp.status === 200) {
-          storeRanap.deleteInjectanNull2(pasien?.noreg, 'konsultasi')
+          storeRanap.deleteInjectanNull2(pasien?.noreg, 'informconcern')
           const isi = resp?.data?.result
-          storeRanap.injectDataPasien(pasien?.noreg, isi, 'konsultasi')
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'informconcern')
           notifSuccess(resp)
           this.loadingOrder = false
           this.initReset()
@@ -137,7 +137,7 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       }
     },
 
-    initReset () {
+    initReset (pasien) {
       const hariIni = date.formatDate(Date.now(), 'YYYY-MM-DD')
       this.form = {
         tanggal: hariIni,
@@ -174,9 +174,9 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
         ttdYgMenyatakan: null,
         kdDokter: null,
         kdPetugas: null,
-        kdSaksiRs: null,
+        // kdSaksiRs: null,
         saksiPasien: null,
-        ygMenyatakan: null,
+        // ygMenyatakan: null,
         setuju: 'Iya'
       }
 
@@ -184,6 +184,8 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
       this.perawats = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '2' || x?.kdgroupnakes === '3') ?? []
       this.nonNakes = pengunjung?.nonNakes
+
+      this.item = null
 
       return new Promise((resolve, reject) => {
         resolve()

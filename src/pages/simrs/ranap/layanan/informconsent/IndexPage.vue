@@ -88,7 +88,7 @@ onMounted(() => {
 
 const menus = ref([
   {
-    name: 'OperasiInvasifPage',
+    name: 'OperasiInvasif',
     label: 'SPT Operasi Invasif',
     desc: 'Surat Persetujuan Tindakan Operasi Invasif',
     icon: 'icon-my-file_sign',
@@ -96,7 +96,7 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comp/FormConcernOperasiInvasif.vue')))
   },
   {
-    name: 'SedasiPage',
+    name: 'Sedasi',
     label: 'SP Anestesi Sedasi',
     desc: 'Surat Persetujuan Anestesi Sedasi',
     icon: 'icon-fa-file-regular',
