@@ -386,7 +386,7 @@
                   </q-tooltip>
                 </q-btn>
                 <q-btn
-                  v-if="parseInt(item?.flag)<= 4 && parseInt(item?.flag) >= 3 "
+                  v-if="parseInt(item?.flag)<= 4 && parseInt(item?.flag) >= 1 "
                   round
                   class="f-10 q-mr-sm"
                   :color="item?.telaah?'green':'secondary'"
@@ -571,6 +571,7 @@
     ref="telaah"
     v-model="openTelaah"
     :item="itemToTelaah"
+    :user="user"
     :apotekers="store.apotekers"
     :head="printHeadOnly"
     @close="CloseTelaahResep"
@@ -600,11 +601,16 @@ defineProps({
     type: String,
     default: ''
   },
+  user: {
+    type: Object,
+    default: () => {}
+  },
   loadingCall: {
     type: Boolean,
     default: false
   }
 })
+
 const emits = defineEmits(['panggilan'])
 
 function highlightText (text) {
