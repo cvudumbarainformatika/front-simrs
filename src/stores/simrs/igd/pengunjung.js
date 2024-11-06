@@ -161,6 +161,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].permintaanperawatanjenazah = resp?.data?.permintaanperawatanjenazah
             findPasien[0].historyperkawinan = resp?.data?.historyperkawinan
             findPasien[0].historykehamilan = resp?.data?.historykehamilan
+            findPasien[0].anamnesekebidanan = resp?.data?.anamnesekebidanan
             findPasien[0].fisio = resp?.data?.fisio
             // findPasien[0].gambars = resp?.data?.gambars
             findPasien[0].laborats = resp?.data?.laborats

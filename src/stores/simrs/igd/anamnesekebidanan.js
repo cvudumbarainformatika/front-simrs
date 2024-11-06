@@ -16,6 +16,7 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
     pilihnyerihilang: [],
     selectionasupanantenatal: [],
     form: {
+      ketmetodeskrininggizi: 'Pasien Dengan Masalah Ginekologi/Onkologi',
       optionskriniggizi: 1,
       skreeninggizi: 0,
       asupanmakan: 0,
@@ -92,12 +93,10 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       this.form.norm = pasien ? pasien.norm : ''
       this.form.noreg = pasien ? pasien.noreg : ''
 
-      this.hitungNilaiSkor()
-
-      // console.log(this.form)
+      console.log('ini form', this.form)
 
       try {
-        const resp = await api.post('v1/simrs/igd/anamnesis/simpananamnesis', this.form)
+        const resp = await api.post('v1/simrs/igd/anamnesis/simpanananamesiskebidanan', this.form)
         if (resp.status === 200) {
           // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungIgdStore()

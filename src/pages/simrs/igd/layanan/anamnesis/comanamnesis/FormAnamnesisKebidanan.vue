@@ -302,6 +302,7 @@
                 <span class="text-bold">Assesmen Nyeri</span>
                 <q-option-group
                   v-model="store.form.metodenyeri"
+                  @update:model-value="(val) => chagngereset(val)"
                   inline
                   :options="[
                     { label: 'Numeric Rating Scale', value: 'nrt' },
@@ -653,6 +654,7 @@
               <div class="col-6 ">
                 <div class="row q-col-gutter-sm">
                   <q-input
+                    v-model="store.form.tahunlamapemakaiankontrasepsi"
                     label="Tahun"
                     type="number"
                     dense
@@ -660,6 +662,7 @@
                     style="width: 80px;"
                   />
                   <q-input
+                    v-model="store.form.bulanlamapemakaiankontrasepsi"
                     label="Bulan"
                     type="number"
                     dense
@@ -667,6 +670,7 @@
                     style="width: 80px;"
                   />
                   <q-input
+                    v-model="store.form.minggulamapemakaiankontrasepsi"
                     label="Minggu"
                     type="number"
                     dense
@@ -674,6 +678,7 @@
                     style="width: 80px;"
                   />
                   <q-input
+                    v-model="store.form.harilamapemakaiankontrasepsi"
                     label="Hari"
                     type="number"
                     dense
@@ -718,7 +723,7 @@
                 - Umur Pertama Kali Kawin :
               </div>
               <div class="col-6">
-                <q-input v-model="store.form.umurpertamanikah" outlined type="number" dense label="Berapa Kali" />
+                <q-input v-model="store.form.umurpertamanikah" outlined type="number" dense />
               </div>
               <div class="col-12 ">
                 - Kawin Dengan Suami Ke  <q-btn round color="primary" icon="icon-mat-post_add" size="sm" @click="opendialog()" />
@@ -767,7 +772,7 @@
               </div>
               <div class="col-12 text-bold">
                 <q-separator class="q-mt-sm" />
-                Riwayat Penyakit Menstruasi
+                Riwayat Menstruasi
               </div>
               <div class="col-6">
                 - Menarche Umur (tahun)
@@ -794,25 +799,21 @@
                 - Lama Hari
               </div>
               <div class="col-6">
-                <q-select
-                  v-model="store.form.lamahaid" transition-show="flip-up"
-                  transition-hide="flip-down" outlined :options="keteraturan" dense
-                />
+                <q-input v-model="store.form.lamahaririwayatmens" outlined type="number" dense />
               </div>
               <div class="col-6">
                 - Keluhan Haid
               </div>
               <div class="col-6">
                 <q-select
-                  v-model="store.form.keluhan"
+                  v-model="store.form.keluhanhaid"
                   transition-show="flip-up"
                   transition-hide="flip-down"
-
                   outlined
                   :options="keluhan"
                   dense
                 />
-                <q-input dense label="Jelaskan" v-model="store.form.sebutkannyerihilang" v-if="store.form.keluhan === 'Ya'" />
+                <q-input dense label="Jelaskan" v-model="store.form.sebutkankeluhanhaid" v-if="store.form.keluhanhaid === 'Ya'" />
               </div>
               <div class="col-12 text-bold">
                 <q-separator class="q-mt-sm" />
@@ -829,9 +830,10 @@
                   outlined
                   :options="riwayatgonekologo"
                   dense
+                  @update:model-value="(val) => riwayatgonekologi(val)"
                 />
               </div>
-              <div class="col-12">
+              <div class="col-12" v-if="store.form.riwayatginekologi === 'Ya'">
                 <q-checkbox
                   v-for="(al, i) in store.ginekologis"
                   :key="i"
@@ -844,7 +846,7 @@
                 <q-separator class="q-mt-sm" />
               </div>
               <div class="col-12 text-bold">
-                Riwayat Hamil Ini
+                Riwayat Hamil
               </div>
               <div class="col-6">
                 <app-input-date
@@ -926,6 +928,7 @@
                   outlined
                   :options="asupanantenatal"
                   dense
+                  @update:model-value="(val) => fungsiasupanantenatal(val)"
                 />
               </div>
               <div class="col-12" v-if="store.form.asupanantenatal === 'Ya'">
@@ -959,6 +962,7 @@
                   outlined
                   :options="imunisasitt"
                   dense
+                  @update:model-value="(val) => fungsiimunisasit(val)"
                 /> <q-input label="Berpa kali" type="number" dense v-model="store.form.sebutkanimunisasitt" v-if="store.form.imunisasitt === 'Ya'" />
               </div>
               <div class="col-12 text-bold">
@@ -973,7 +977,7 @@
                   :label="al"
                   color="primary"
                   @update:model-value="updateSelectionkeluhanhamils"
-                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkanginekologis" v-if="store.selectionkeluhanhamils.includes('Lain-lain')" />
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkeluhanhamils" v-if="store.selectionkeluhanhamils.includes('Lain-lain')" />
                 <q-separator class="q-mt-sm" />
               </div>
               <div class="col-12 text-bold">
@@ -1153,6 +1157,7 @@ const props = defineProps({
   }
 })
 function onSubmit () {
+  console.log('wew')
   store.saveData(props.pasien).then(() => {
     refForm.value.resetValidation()
   })
@@ -1314,7 +1319,21 @@ const optionJenisKOntasepsi = ref(['Kondom', 'Pil KB', 'Suntik KB 1 Bulan', 'Sun
 
 function metodeskrininggizi (val) {
   store.form.optionskriniggizi = val
-  console.log(store.form.optionskriniggizi)
+  if (val === 1) {
+    store.form.ketmetodeskrininggizi = 'Pasien Dengan Masalah Ginekologi/Onkologi'
+    store.form.asupanmakanberkurang = 0
+    store.form.metabolisme = 0
+    store.form.penambahanbb = 0
+    store.form.nilaihbberkurang = 0
+    store.form.skorgizix = 0
+  }
+  else {
+    store.form.ketmetodeskrininggizi = 'Pasien Dengan Masalah Obstetri/Kehamilan/Nifas'
+    store.form.skreeninggizi = 0
+    store.form.asupanmakan = 0
+    store.form.kondisikhusus = ''
+    store.form.skor = 0
+  }
 }
 function lihatPerubahan () {
   store.hitungNilaiSkor()
@@ -1330,6 +1349,9 @@ function updateNyerihilang (val) {
 }
 
 function updateasupanantenatal (val) {
+  if (!store.selectionasupanantenatal.includes('Lain-Lain')) {
+    store.form.sebutkanasupanantenatal = ''
+  }
   store.setForm('updateasupanantenatal', val.join(', '))
 }
 
@@ -1339,6 +1361,9 @@ function updateSelectionginekologis (val) {
 }
 
 function updateSelectionkeluhanhamils (val) {
+  if (!store.selectionkeluhanhamils.includes('Lain-lain')) {
+    store.form.sebutkeluhanhamils = ''
+  }
   store.setForm('keluhanhamil', val.join(', '))
 }
 
@@ -1505,45 +1530,52 @@ function hitungscorenipsb () {
   }
 }
 
-// function chagngereset (val) {
-//   console.log('sasasa', val)
-//   if (val === 'bps') {
-//     resetnrt()
-//     resetnips()
-//   }
-//   else if (val === 'nrt') {
-//     resetnips()
-//     resetbps()
-//   }
-//   else if (val === 'nips') {
-//     resetnrt()
-//     resetbps()
-//   }
-// }
+function chagngereset (val) {
+  console.log('sasasa', val)
+  if (val === 'bps') {
+    resetnrt()
+    resetnips()
+  }
+  else if (val === 'nrt') {
+    resetnips()
+    resetbps()
+  }
+  else if (val === 'nips') {
+    resetnrt()
+    resetbps()
+  }
+}
 
-// function resetbps () {
-//   store.form.ekspresiwajah = ''
-//   store.form.gerakantangan = ''
-//   store.form.kepatuhanventilasimekanik = ''
-//   store.form.scroebps = 0
-//   store.form.ketscorebps = ''
-// }
+function riwayatgonekologi (val) {
+  if (val === 'Tidak') {
+    store.selectionginekologis = []
+    store.form.sebutkanginekologis = ''
+  }
+}
 
-// function resetnrt () {
-//   store.form.keteranganscorenyeri = 'tidak ada nyeri'
-//   store.form.skornyeri = 0
-// }
+function resetbps () {
+  store.form.ekspresiwajah = ''
+  store.form.gerakantangan = ''
+  store.form.kepatuhanventilasimekanik = ''
+  store.form.scroebps = 0
+  store.form.ketscorebps = ''
+}
 
-// function resetnips () {
-//   store.form.ekspresiwajahnips = ''
-//   store.form.menangis = ''
-//   store.form.polanafas = ''
-//   store.form.lengan = ''
-//   store.form.kaki = ''
-//   store.form.keadaanrangsangan = ''
-//   store.form.scroenips = 0
-//   store.form.ketscorenips = ''
-// }
+function resetnrt () {
+  store.form.keteranganscorenyeri = 'tidak ada nyeri'
+  store.form.skornyeri = 0
+}
+
+function resetnips () {
+  store.form.ekspresiwajahnips = ''
+  store.form.menangis = ''
+  store.form.polanafas = ''
+  store.form.lengan = ''
+  store.form.kaki = ''
+  store.form.keadaanrangsangan = ''
+  store.form.scroenips = 0
+  store.form.ketscorenips = ''
+}
 
 function hapusItem (id) {
   $q.dialog({
@@ -1577,6 +1609,19 @@ function hapusItemKehamilan (id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function fungsiasupanantenatal (val) {
+  if (val === 'Tidak') {
+    store.selectionasupanantenatal = []
+    store.form.sebutkanasupanantenatal = ''
+  }
+}
+
+function fungsiimunisasit (val) {
+  if (val === 'Tidak') {
+    store.form.sebutkanimunisasitt = ''
+  }
 }
 
 store.form.optionskriniggizi = 1
