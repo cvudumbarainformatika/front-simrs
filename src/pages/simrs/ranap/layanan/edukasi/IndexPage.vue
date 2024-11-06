@@ -86,14 +86,14 @@ const tabsxx = [
     icon: 'icon-my-stethoscope',
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/edukasi/IndexPage.vue'))
-  },
-  {
-    label: 'Inform Consent',
-    name: 'inform-consent',
-    icon: 'icon-mat-description',
-    nakes: ['1', '2', '3'],
-    comp: defineAsyncComponent(() => import('./comp/informconsent/IndexPage.vue'))
   }
+  // {
+  //   label: 'Inform Consent',
+  //   name: 'inform-consent',
+  //   icon: 'icon-mat-description',
+  //   nakes: ['1', '2', '3'],
+  //   comp: defineAsyncComponent(() => import('./comp/informconsent/IndexPage.vue'))
+  // }
 
 ]
 

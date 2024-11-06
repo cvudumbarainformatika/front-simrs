@@ -29,6 +29,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     loadingLayanan: false,
     pasien: null,
     nakes: null,
+    nonNakes: null,
 
     loadingSaveGantiDpjp: false
   }),
@@ -375,6 +376,14 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
 
       if (resp.status === 200) {
         this.nakes = resp.data
+      }
+    },
+    async getNonNakes () {
+      const resp = await api.get('/v1/simrs/master/pegawai/listnonnakes')
+      console.log('non nakes', resp)
+
+      if (resp.status === 200) {
+        this.nonNakes = resp.data
       }
     }
   }

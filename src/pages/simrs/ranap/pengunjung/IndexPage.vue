@@ -86,7 +86,8 @@ onMounted(() => {
 
     penunjanglain.getPenunjangLain(),
 
-    store.getNakes()
+    store.getNakes(),
+    store.getNonNakes()
 
   ])
 })
