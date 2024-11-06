@@ -992,229 +992,115 @@
               <div class="col-12 text-bold">
                 Riwayat Kehamilan, Persalinan dan Nifas <q-btn round color="primary" icon="icon-mat-post_add" size="sm" @click="opendialogkehamilan()" />
               </div>
-              <div class="col-12">
-                <q-card>
-                  <div v-if="lists?.length > 0">
-                    <q-list
-                      v-for="(item , n) in lists"
-                      :key="n"
-                    >
-                      <q-item>
-                        <q-item-section>
-                          <q-item-label>Tgl/Tahun Partus :</q-item-label>
-                          <q-item-label>
-                            Tempat :
-                          </q-item-label>
-                          <q-item-label>
-                            Umur Kehamilan (bulan) :
-                          </q-item-label>
-                          <q-item-label>
-                            Jenis Persalinan :
-                          </q-item-label>
-                          <q-item-label>
+              <div class="col-12 full-width">
+                <div class="row" style="width: 800px;">
+                  <q-markup-table>
+                    <thead>
+                      <tr style="background-color:#31b0d5;">
+                        <th class="text-center">
+                          No.
+                        </th>
+                        <th class="text-center">
+                          Tgl Partus
+                        </th>
+                        <th class="text-center">
+                          Umur Kehamilan <br> (bulan)
+                        </th>
+                        <th class="text-center">
+                          Jenis Persalinan
+                        </th>
+
+                        <th class="text-center">
+                          Penyulit
+                        </th>
+                        <th class="text-center">
+                          JK
+                        </th>
+
+                        <th class="text-center">
+                          Nifas
+                        </th>
+                        <th class="text-center">
+                          Keadaan Anak Sekarang
+                        </th>
+                        <th class="text-center">
+                          #
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(xxx, x) in listskehamilan" :key="x">
+                        <td class="text-center">
+                          {{ x+1 }}
+                        </td>
+                        <td class="text-center">
+                          <span class="text-h7">{{ xxx?.tanggal_partus }} </span>
+                          <br>
+                          <q-badge outline color="primary">
+                            Tempat
+                          </q-badge>  {{ xxx?.tempat }}
+                        </td>
+                        <td class="text-center ">
+                          {{ xxx?.umurkehamilan }}
+                        </td>
+                        <td class="text-center ">
+                          {{ xxx?.jenispersalinan }}
+                          <br>
+                          <q-badge outline color="primary">
                             Penolong :
-                          </q-item-label>
-                          <q-item-label>
-                            Penyulit :
-                          </q-item-label>
-                          <q-item-label>
-                            JK :
-                          </q-item-label>
-                          <q-item-label>
-                            BB :
-                          </q-item-label>
-                          <q-item-label>
-                            PB :
-                          </q-item-label>
-                          <q-item-label>
-                            Nifas :
-                          </q-item-label>
-                          <q-item-label>
-                            Keadaan Anak Sekarang :
-                          </q-item-label>
-                        </q-item-section>
-                        <q-item-section side top>
-                          <q-item-label caption>
-                            {{ item.suami_ke }}
-                          </q-item-label>
-                          {{ item.lamapernikahan }} Tahun
-                        </q-item-section>
-                        <q-separator vertical color="primary" />
-                        <q-item-section side>
+                          </q-badge>{{ xxx?.penolong }}
+                        </td>
+                        <td class="text-center">
+                          {{ xxx?.penyulit }}
+                        </td>
+                        <td class="text-center">
+                          {{ xxx?.jeniskelamin }}
+                          <br>
+                          <q-badge outline color="primary">
+                            BB
+                          </q-badge> : {{ xxx?.beratbadan }}
+                          <br>
+                          <q-badge outline color="primary">
+                            PB
+                          </q-badge>
+                          : {{ xxx?.pb }}
+                        </td>
+
+                        <td class="text-center">
+                          {{ xxx?.nifas }}
+                        </td>
+                        <td class="text-center">
+                          {{ xxx?.penyulit }}
+                        </td>
+                        <td class="text-center">
                           <q-btn
                             flat
                             round
                             size="sm"
                             icon="icon-mat-delete"
                             color="negative"
-                            @click="hapusItem(item.id)"
+                            @click="hapusItemKehamilan(xxx.id)"
                           />
-                        </q-item-section>
-                      </q-item>
-                      <q-separator />
-                    </q-list>
-                  </div>
-                  <div v-else class="text-center">
-                    <q-badge color="red" outline>
-                      Belum Ada Riwayat Kehamilan, Persalinan dan Nifas...
-                    </q-badge>
-                  </div>
-                </q-card>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </q-markup-table>
+                </div>
               </div>
-              <div class="col-12 scroll">
-                <table style="width: 100%">
-                  <thead>
-                    <tr>
-                      <th class="text-left">
-                        Tgl/Tahun Partus
-                      </th>
-                      <th class="text-right">
-                        Tempat
-                      </th>
-                      <th class="text-right">
-                        Umur Kehamilan (bulan)
-                      </th>
-                      <th class="text-right">
-                        Jenis Persalinan
-                      </th>
-                      <th class="text-right">
-                        Penolong
-                      </th>
-                      <th class="text-right">
-                        Penyulit
-                      </th>
-                      <th class="text-right">
-                        JK
-                      </th>
-                      <th class="text-right">
-                        BB
-                      </th>
-                      <th class="text-right">
-                        PB
-                      </th>
-                      <th class="text-right">
-                        Nifas
-                      </th>
-                      <th class="text-right">
-                        Keadaan Anak Sekarang
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="text-left">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                      <td class="text-right">
-                        Frozen Yogurt  Frozen Yogurt  Frozen Yogurt  Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt Frozen Yogurt
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        Ice cream sandwich
-                      </td>
-                      <td class="text-right">
-                        237
-                      </td>
-                      <td class="text-right">
-                        9
-                      </td>
-                      <td class="text-right">
-                        37
-                      </td>
-                      <td class="text-right">
-                        4.3
-                      </td>
-                      <td class="text-right">
-                        129
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        Eclair
-                      </td>
-                      <td class="text-right">
-                        262
-                      </td>
-                      <td class="text-right">
-                        16
-                      </td>
-                      <td class="text-right">
-                        23
-                      </td>
-                      <td class="text-right">
-                        6
-                      </td>
-                      <td class="text-right">
-                        337
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        Cupcake
-                      </td>
-                      <td class="text-right">
-                        305
-                      </td>
-                      <td class="text-right">
-                        3.7
-                      </td>
-                      <td class="text-right">
-                        67
-                      </td>
-                      <td class="text-right">
-                        4.3
-                      </td>
-                      <td class="text-right">
-                        413
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        Gingerbread
-                      </td>
-                      <td class="text-right">
-                        356
-                      </td>
-                      <td class="text-right">
-                        16
-                      </td>
-                      <td class="text-right">
-                        49
-                      </td>
-                      <td class="text-right">
-                        3.9
-                      </td>
-                      <td class="text-right">
-                        327
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="col-12">
+                <div
+                  class="text-right"
+                  style="margin-bottom: 50px;"
+                >
+                  <app-btn
+                    color="primary"
+                    label="Simpan"
+                    tooltip="Simpan Data"
+                    type="submit"
+                    tip
+                    :loading="store.loadingForm"
+                  />
+                </div>
               </div>
             </div>
             <q-card-section class="col full-height scroll" />
@@ -1225,6 +1111,7 @@
     </div>
   </div>
   <form-dialog-his-pernikahan :pasien="props.pasien" />
+  <FormDialogHisKehamilan :pasien="props.pasien" />
 </template>
 <script setup>
 import { useAnamneseKebidananStore } from 'src/stores/simrs/igd/anamnesekebidanan'
@@ -1233,6 +1120,7 @@ import { computed, ref } from 'vue'
 import FormDialogHisPernikahan from './FormDialogHisPernikahan.vue'
 import { useQuasar } from 'quasar'
 import { useHistoryKehamilanStore } from 'src/stores/simrs/igd/historykehamilan'
+import FormDialogHisKehamilan from './FormDialogHisKehamilan.vue'
 
 const store = useAnamneseKebidananStore()
 const storeHistoryPernikahan = useHistoryPernikahanStore()
@@ -1674,6 +1562,23 @@ function hapusItem (id) {
   })
 }
 
+function hapusItemKehamilan (id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    storeHistorykehamilan.deleteData(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
 store.form.optionskriniggizi = 1
 store.form.metode = 'nrt'
 store.initGpa(props.triage)
@@ -1681,7 +1586,11 @@ store.initGpa(props.triage)
 // eslint-disable-next-line no-unused-vars
 const lists = computed(() => {
   const arr = props.pasien?.historyperkawinan
-  console.log('hahaha', arr)
+  return arr?.sort((a, b) => { return b.id - a.id })
+})
+
+const listskehamilan = computed(() => {
+  const arr = props.pasien?.historykehamilan
   return arr?.sort((a, b) => { return b.id - a.id })
 })
 

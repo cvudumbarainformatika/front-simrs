@@ -160,7 +160,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].diagnosa = resp?.data?.diagnosa
             findPasien[0].permintaanperawatanjenazah = resp?.data?.permintaanperawatanjenazah
             findPasien[0].historyperkawinan = resp?.data?.historyperkawinan
-            // findPasien[0].edukasi = resp?.data?.edukasi
+            findPasien[0].historykehamilan = resp?.data?.historykehamilan
             findPasien[0].fisio = resp?.data?.fisio
             // findPasien[0].gambars = resp?.data?.gambars
             findPasien[0].laborats = resp?.data?.laborats
@@ -242,6 +242,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].historyperkawinan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataHistoryKehamilan (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].historykehamilan
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

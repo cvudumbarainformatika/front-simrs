@@ -21,7 +21,7 @@ export const useHistoryKehamilanStore = defineStore('history-kehamilan-store', {
           const storePasien = usePengunjungIgdStore()
 
           const isi = resp.data.result
-          storePasien.injectDataPasien(pasien, isi, 'historyperkawinan')
+          storePasien.injectDataPasien(pasien, isi, 'historykehamilan')
           notifSuccess(resp)
           this.loading = false
           // this.initReset()
@@ -39,10 +39,10 @@ export const useHistoryKehamilanStore = defineStore('history-kehamilan-store', {
     async deleteData (pasien, id) {
       const payload = { id }
       try {
-        const resp = await api.post('v1/simrs/igd/anamnesis/hapusHistoryPerkawiananPasien', payload)
+        const resp = await api.post('v1/simrs/igd/anamnesis/hapusHistoryKehamilan', payload)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          storePasien.hapusDataHistoryPerkawinan(pasien, id)
+          storePasien.hapusDataHistoryKehamilan(pasien, id)
           notifSuccess(resp)
         }
       }
