@@ -307,7 +307,7 @@ function onHide () {
     f.value = 'Sesuai'
   })
   farmasiKlinises.value.forEach(f => {
-    f.value = 'Sesuai'
+    f.value = false
   })
 }
 </script>
