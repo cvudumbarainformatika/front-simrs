@@ -105,7 +105,7 @@ module.exports = configure(function (ctx) {
     devServer: {
       // https: true
       port: ctx.mode.spa
-        ? 9000
+        ? 9001
         : (ctx.mode.pwa ? 9100 : 9200),
       open: true // opens browser window automatically
 
