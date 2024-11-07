@@ -11,7 +11,6 @@
           inline-label
           rounded
           class=" bg-grey-4 shadow-2 text-grey-8"
-
           align="left"
           dense
           active-color="yellow"

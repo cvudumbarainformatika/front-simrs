@@ -1018,7 +1018,7 @@
                           Penyulit
                         </th>
                         <th class="text-center">
-                          JK
+                          Anak
                         </th>
 
                         <th class="text-center">
@@ -1037,7 +1037,7 @@
                         <td class="text-center">
                           {{ x+1 }}
                         </td>
-                        <td class="text-center">
+                        <td class="text-rigth">
                           <span class="text-h7">{{ xxx?.tanggal_partus }} </span>
                           <br>
                           <q-badge outline color="primary">
@@ -1047,7 +1047,7 @@
                         <td class="text-center ">
                           {{ xxx?.umurkehamilan }}
                         </td>
-                        <td class="text-center ">
+                        <td class="text-rigth ">
                           {{ xxx?.jenispersalinan }}
                           <br>
                           <q-badge outline color="primary">
@@ -1057,8 +1057,10 @@
                         <td class="text-center">
                           {{ xxx?.penyulit }}
                         </td>
-                        <td class="text-center">
-                          {{ xxx?.jeniskelamin }}
+                        <td class="text-rigth">
+                          <q-badge outline color="primary">
+                            JK
+                          </q-badge> : {{ xxx?.jeniskelamin }}
                           <br>
                           <q-badge outline color="primary">
                             BB

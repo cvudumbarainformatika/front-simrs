@@ -6,7 +6,7 @@ import { notifErrVue } from 'src/modules/utils'
 export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
   state: () => ({
     tab: 'Diagnosa Medik',
-    tabs: ['Diagnosa Medik', 'Tindakan Medik'],
+    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan', 'Diagnosa Kebidanan'],
     items: [],
     loading: false,
     loadingSaveGantiDpjp: false,
@@ -163,7 +163,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].historykehamilan = resp?.data?.historykehamilan
             findPasien[0].anamnesekebidanan = resp?.data?.anamnesekebidanan
             findPasien[0].fisio = resp?.data?.fisio
-            // findPasien[0].gambars = resp?.data?.gambars
+            findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
             findPasien[0].laborats = resp?.data?.laborats
             findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
             findPasien[0].ok = resp?.data?.ok
@@ -199,17 +199,17 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      console.log('a', pasien)
-      console.log('b', val)
-      console.log('kode', kode)
+      // console.log('a', pasien)
+      // console.log('b', val)
+      // console.log('kode', kode)
       const findPasien = this.items.filter(x => x === pasien)
 
       if (findPasien.length) {
         const data = findPasien[0]
         const target = data[kode]?.find(x => x.id === val.id)
-        console.log('itarget', target)
-        console.log('inject kode pasien', kode)
-        console.log('inject isi pasien', val)
+        // console.log('itarget', target)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
 
         if (target) {
           Object.assign(target, val)
@@ -356,6 +356,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           })
           .catch(() => { this.loadingIcare = false })
       })
+    },
+    hapusDataInjectan (pasien, id, key) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0][key]
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
     }
   }
 })
