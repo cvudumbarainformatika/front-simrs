@@ -80,7 +80,7 @@
                 <q-item-label>
                   <span class="text-weight-bold">Skreening Gizi</span>
                 </q-item-label>
-                <div v-if="item?.optionskriniggizi === '1'">
+                <div v-if="item?.optionskriniggizi === 1">
                   <q-item-label>
                     <span class="">- Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? <b>{{ getYT(item?.skreeninggizi) }}</b></span>
                     <div class="q-my-xs">
@@ -109,7 +109,7 @@
                     </div>
                   </q-item-label>
                 </div>
-                <div v-if="item?.optionskriniggizi === '2'">
+                <div v-if="item?.optionskriniggizi === 2">
                   <q-item-label>
                     <div>- Apakah Asupan Makan Berkurang Karena Tidak Nafsu Makan? <b>{{ getYT(item?.asupanmakanberkurang) }}</b></div>
                     <div>
@@ -137,7 +137,7 @@
                       <q-badge outline color="red" v-else>
                         {{ store.keteranganSkorGizi(item?.skorgizix) }}
                       </q-badge>
-                      <q-separator class="q-my-xs" style="width: 300px;" />
+                      <q-separator class="q-my-sm" />
                     </div>
                   </q-item-label>
                 </div>
@@ -170,9 +170,6 @@
                       <q-item-label>- Kepatuhan terhadap ventilasi mekanik : {{ item?.kepatuhanventilasimekanik }}</q-item-label>
                       <q-item-label>
                         <q-separator class="q-my-xs" style="width: 300px;" />
-                      </q-item-label>
-                      <q-item-label>
-                        <q-separator class="q-my-xs" style="width: 300px;" />
                         <div>
                           Skor Nyeri (BPS) =
                           <q-badge :color="ketcolorbps(item?.scroebps)">
@@ -181,6 +178,28 @@
                           Keterangan : <q-badge outline :color="ketcolorbps(item?.scroebps)">
                             {{ item?.ketscorebps }}
                           </q-badge>
+                          <q-separator class="q-my-xs" />
+                        </div>
+                      </q-item-label>
+                    </div>
+                    <div v-if="item?.metodenyeri === 'nips'">
+                      <q-item-label>- Ekspresi Wajah : {{ item?.ekspresiwajahnips ?? '-' }}</q-item-label>
+                      <q-item-label>- Menangis : {{ item?.menangis ?? '-' }}</q-item-label>
+                      <q-item-label>- Pola Nafas : {{ item?.polanafas ?? '-' }}</q-item-label>
+                      <q-item-label>- Lengan : {{ item?.lengan ?? '-' }}</q-item-label>
+                      <q-item-label>- Kaki : {{ item?.kaki ?? '-' }}</q-item-label>
+                      <q-item-label>- Keadaan Rangsangan : {{ item?.keadaanrangsangan ?? '-' }}</q-item-label>
+                      <q-item-label>
+                        <q-separator class="q-my-xs" style="width: 300px;" />
+                        <div>
+                          Skor Nyeri (NIPS) =
+                          <q-badge :color="ketcolorbps(item?.scroenips)">
+                            {{ item?.scroenips }}
+                          </q-badge>
+                          Keterangan : <q-badge outline :color="ketcolorbps(item?.scroenips)">
+                            {{ item?.ketscorenips }}
+                          </q-badge>
+                          <q-separator class="q-my-xs" />
                         </div>
                       </q-item-label>
                     </div>
@@ -188,141 +207,154 @@
                 </q-item-label>
                 <div>
                   <q-item-label>
-                    <q-separator class="q-my-xs" style="width: 300px;" />
-                    <div>
-                      - Skor Nyeri : <q-badge color="green" class="q-mx-sm">
-                        {{ item?.anamnesebps?.skor ?? '-' }}
-                      </q-badge>
-                      <q-badge outline color="green">
-                        <em>{{ item?.anamnesebps?.keterangan_skor ?? '-' }}</em>
-                      </q-badge>
-                      <q-separator class="q-my-xs" style="width: 300px;" />
-                    </div>
+                    <span class="text-weight-bold"><b>Keterangan Nyeri</b></span>
                   </q-item-label>
+                  <q-item-label>- Lokasi Nyeri : <b> {{ item?.lokasinyeri ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Durasi Nyeri : <b>{{ item?.durasinyeri ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Penyebab Nyeri : <b>{{ item?.penyebabnyeri ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Frekwensi Nyeri : <b>{{ item?.frekwensinyeri ?? '-' }}</b></q-item-label>
                   <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Neonatus Infant Pain Scale (NIPS)</q-badge></span>
+                    - Nyeri Hilang : {{ item?.nyerihilang ?? '-' }}
+                    <span v-if="item?.sebutkannyerihilang !== null">
+                      ( {{ item?.sebutkannyerihilang }} )
+                    </span>
                   </q-item-label>
-                  <q-item-label>- Ekspresi Wajah : {{ item?.anamnesenips?.ekspresi_wajah ?? '-' }}</q-item-label>
-                  <q-item-label>- Menangis : {{ item?.anamnesenips?.menangis ?? '-' }}</q-item-label>
-                  <q-item-label>- Lengan : {{ item?.anamnesenips?.lengan ?? '-' }}</q-item-label>
-                  <q-item-label>- Kaki : {{ item?.anamnesenips?.kaki ?? '-' }}</q-item-label>
-                  <q-item-label>- Keadaan Rangsangan : {{ item?.anamnesenips?.keadaan_rangsangan ?? '-' }}</q-item-label>
-                  <q-item-label>
-                    <q-separator class="q-my-xs" style="width: 300px;" />
-                    <div>
-                      - Skor Nyeri : <q-badge color="green" class="q-mx-sm">
-                        {{ item?.anamnesenips?.skor ?? '-' }}
-                      </q-badge>
-                      <q-badge outline color="green">
-                        <em>{{ item?.anamnesenips?.ket_skor ?? '-' }}</em>
-                      </q-badge>
-                      <q-separator class="q-my-xs" style="width: 300px;" />
-                    </div>
-                  </q-item-label>
+                  <q-separator class="q-my-md" />
                 </div>
-                <!-- <div>
+                <div>
                   <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Keterangan Nyeri</q-badge></span>
-                  </q-item-label>
-                  <q-item-label>- Lokasi Nyeri : {{ item?.anamnesetambahan[0]?.lokasi_nyeri ?? '-' }}</q-item-label>
-                  <q-item-label>- Durasi Nyeri : {{ item?.anamnesetambahan[0]?.durasi_nyeri ?? '-' }}</q-item-label>
-                  <q-item-label>- Penyebab Nyeri : {{ item?.anamnesetambahan[0]?.penyebab_nyeri ?? '-' }}</q-item-label>
-                  <q-item-label>- Frekwensi Nyeri : {{ item?.anamnesetambahan[0]?.frekwensi_nyeri ?? '-' }}</q-item-label>
-                  <q-item-label>
-                    - Nyeri Nyeri : {{ item?.anamnesetambahan[0]?.nyeri_hilang ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkannyerihilang !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkannyerihilang }} )
-                    </span>
-                  </q-item-label>
-                </div> -->
-                <!-- <div>
-                  <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Status Fungsional</q-badge></span>
+                    <span class="text-weight-bold"><b>Kebutuhan Komunikasi dan Edukasi</b></span>
                   </q-item-label>
                   <q-item-label>
-                    - Aktivitas Dan Mobilitas : {{ item?.anamnesetambahan[0]?.aktifitas_mobilitas ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanperlubanuan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanperlubanuan }} )
+                    - Bicara : <b> {{ item?.kebutuhankomunikasidanedukasi ?? '-' }}</b>
+                    <span v-if="item?.sebutkankomunaksilainnya !== null">
+                      ( {{ item?.sebutkankomunaksilainnya }} )
                     </span>
                   </q-item-label>
                   <q-item-label>
-                    - Alat Bantu Jalan : {{ item?.anamnesetambahan[0]?.alat_bantu_jalan ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanalatbantujalan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanalatbantujalan }} )
+                    - Dibutuhkan Penerjemah : <b>{{ item?.penerjemah ?? '-' }}</b>
+                    <span v-if="item?.sebutkanpenerjemah !== null">
+                      ( {{ item?.sebutkanpenerjemah }} )
                     </span>
                   </q-item-label>
-                </div> -->
-                <!-- <div>
+                  <q-item-label>- Bahasa Isyarat : <b>{{ item?.bahasaisyarat ?? '-' }}</b></q-item-label>
                   <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Kebutuhan Komunikasi dan Edukasi</q-badge></span>
-                  </q-item-label>
-                  <q-item-label>
-                    - Bicara : {{ item?.anamnesetambahan[0]?.bicara ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanalatbantujalan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanalatbantujalan }} )
+                    - Hambatan : <b>{{ item?.hamabatan ?? '-' }}</b>
+                    <span v-if="item?.sebutkanhambatan !== null">
+                      ( {{ item?.sebutkanhambatan }} )
                     </span>
                   </q-item-label>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
                   <q-item-label>
-                    - Dibutuhkan Penerjemah : {{ item?.anamnesetambahan[0]?.penerjemah ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanpenerjemah !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanpenerjemah }} )
+                    <span class="text-weight-bold"><b>Riwayat Pemakaian Alat Kontrasepsi</b></span>
+                  </q-item-label>
+                  <q-item-label>- Pernah  : <b> {{ item?.alatkontrasepsi ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Jenis : <b>{{ item?.jeniskontasepsi ?? '-' }}</b></q-item-label>
+                  <q-item-label>
+                    - Lama Pemakaian : <b>{{ item?.tahunlamapemakaiankontrasepsi ?? '0' }} Tahun
+                      {{ item?.bulanlamapemakaiankontrasepsi ?? '0' }} Bulan
+                      {{ item?.minggulamapemakaiankontrasepsi ?? '0' }} Minggu
+                      {{ item?.harilamapemakaiankontrasepsi ?? '0' }} Hari
+                    </b>
+                  </q-item-label>
+                  <q-item-label>- Keluhan  : <b>{{ item?.keluhankontrasepsi ?? '-' }}</b></q-item-label>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
+                  <q-item-label>
+                    <span class="text-weight-bold"><b>Riwayat Pernikahan</b></span>
+                  </q-item-label>
+                  <q-item-label>
+                    - Status Pernikahan  : <b> {{ item?.statuspernikahan ?? '-' }},
+                      <span v-if="item?.jumlahpernikahan !== null">
+                        Jumlah Pernikahan {{ item?.jumlahpernikahan }}
+                      </span>
+                    </b>
+                  </q-item-label>
+                  <q-item-label>- Umur Pertama Kali Kawin : <b>{{ item?.umurpertamanikah ?? '0' }} Tahun</b></q-item-label>
+                  <q-item-label>- Kawin Dengan Suami Ke : </q-item-label>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
+                  <q-item-label>
+                    <span class="text-weight-bold"><b>Riwayat Menstruasi</b></span>
+                  </q-item-label>
+                  <q-item-label>- Menarche Umur  : <b> {{ item?.menarcheumur ?? '-' }} Tahun</b></q-item-label>
+                  <q-item-label>- Siklus : <b>{{ item?.siklus ?? '-' }} Hari</b></q-item-label>
+                  <q-item-label>- Keteraturan : <b>{{ item?.keteraturan ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Lama Hari : <b>{{ item?.lamahaririwayatmens ?? '-' }}</b></q-item-label>
+                  <q-item-label>
+                    - Keluhan Haid : <b>{{ item?.keluhanhaid ?? '-' }}</b>
+                    <span v-if="item?.sebutkankeluhanhaid !== null">
+                      ({{ item?.sebutkankeluhanhaid }})
                     </span>
                   </q-item-label>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
                   <q-item-label>
-                    - Bahasa Isyarat : {{ item?.anamnesetambahan[0]?.bahasa_isyarat ?? '-' }}
+                    <span class="text-weight-bold"><b>Riwayat Penyakit Ginekologi</b></span>
                   </q-item-label>
                   <q-item-label>
-                    - Hambatan : {{ item?.anamnesetambahan[0]?.hambatan ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanhambatan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanhambatan }} )
+                    -  Apakah terdapat riwayat penyakit ginekologi? : <b>{{ item?.riwayatginekologi ?? '-' }}</b>
+                    <span v-if="item?.ginekologis !== null">
+                      ({{ item?.ginekologis }})
+                    </span>
+                    <span v-if="item?.sebutkanginekologis !== null">
+                      ({{ item?.sebutkanginekologis }})
                     </span>
                   </q-item-label>
-                </div> -->
-                <!-- <div>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
                   <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Kebutuhan Komunikasi dan Edukasi</q-badge></span>
+                    <span class="text-weight-bold"><b>Riwayat Hamil</b></span>
                   </q-item-label>
+                  <q-item-label>- Hari Pertama Haid Terakhir : <b>{{ item?.haid ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Gravida : <b>{{ item?.gravida ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Partus : <b>{{ item?.partus ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Abortus : <b>{{ item?.abortus ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Taksiran Partus : <b>{{ item?.taksiranpartus ?? '-' }}</b></q-item-label>
                   <q-item-label>
-                    - Bicara : {{ item?.anamnesetambahan[0]?.bicara ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanalatbantujalan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanalatbantujalan }} )
+                    - Asuhan Antenatal : <b>{{ item?.asupanantenatal ?? '-' }}</b>
+                    <span v-if="item?.updateasupanantenatal !== null">
+                      ({{ item?.updateasupanantenatal }})
+                    </span>
+                    <span v-if="item?.sebutkanasupanantenatal !== null">
+                      ({{ item?.sebutkanasupanantenatal }})
                     </span>
                   </q-item-label>
+                  <q-item-label>- Frekwensi : <b>{{ item?.frekuensi ?? '-' }}</b></q-item-label>
                   <q-item-label>
-                    - Dibutuhkan Penerjemah : {{ item?.anamnesetambahan[0]?.penerjemah ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanpenerjemah !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanpenerjemah }} )
+                    - Imunisasi TT : <b>{{ item?.imunisasitt ?? '-' }}</b>
+                    <span v-if="item?.sebutkanimunisasitt !== null">
+                      ({{ item?.sebutkanimunisasitt }}x)
                     </span>
                   </q-item-label>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
                   <q-item-label>
-                    - Bahasa Isyarat : {{ item?.anamnesetambahan[0]?.bahasa_isyarat ?? '-' }}
+                    <span class="text-weight-bold"><b>Keluhan saat hamil</b></span>
                   </q-item-label>
                   <q-item-label>
-                    - Hambatan : {{ item?.anamnesetambahan[0]?.hambatan ?? '-' }}
-                    <span v-if="item?.anamnesetambahan[0]?.sebutkanhambatan !== null">
-                      ( {{ item?.anamnesetambahan[0]?.sebutkanhambatan }} )
+                    - Keluhan saat hamil : <b>{{ item?.keluhanhamil ?? '-' }}</b>
+                    <span v-if="item?.sebutkeluhanhamils !== null">
+                      ({{ item?.sebutkeluhanhamils }}x)
                     </span>
                   </q-item-label>
-                </div><div>
+                  <q-separator class="q-my-md" />
+                </div>
+                <div>
                   <q-item-label>
-                    <span class="text-weight-bold"><q-badge outline color="red">Batuk</q-badge></span>
+                    <span class="text-weight-bold"><b>Status Obstetri dan ginekologi</b></span>
                   </q-item-label>
-                  <q-item-label>
-                    - Riwayat Demam : {{ item?.anamnesetambahan[0]?.riwayat_demam ?? '-' }}
-                  </q-item-label>
-                  <q-item-label>
-                    - Berkeringan Pada Malam Hari Tanpa Aktivitas : {{ item?.anamnesetambahan[0]?.berkeringat_malam_hari ?? '-' }}
-                  </q-item-label>
-                  <q-item-label>
-                    - Riwayat Bepergian Dari Daerah Wabah : {{ item?.anamnesetambahan[0]?.riwayat_bepergian ?? '-' }}
-                  </q-item-label>
-                  <q-item-label>
-                    - Riwayat Pemakaian Obat Jangka Panjang : {{ item?.anamnesetambahan[0]?.riwayat_pemakaian_obat ?? '-' }}
-                  </q-item-label>
-                  <q-item-label>
-                    - Riwayat BB Turun Tanpa Sebab Yang Diketauhig : {{ item?.anamnesetambahan[0]?.riwayat_bb_turun ?? '-' }}
-                  </q-item-label>
-                </div> -->
+                  <q-item-label>- Periksa Luar : <b>{{ item?.periksaluarginekologi ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Inspekulo : <b>{{ item?.inspekuloginekologi ?? '-' }}</b></q-item-label>
+                  <q-item-label>- Periksa Demam : <b>{{ item?.periksadalamginekologi ?? '-' }}</b></q-item-label>
+                </div>
               </q-item-section>
               <q-item-section
                 side

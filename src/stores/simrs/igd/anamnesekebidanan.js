@@ -104,8 +104,8 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
           if (resp.data.result === 1) {
             this.form.rs4 = this.form.keluhanutama
           }
-          const isi = resp.data.result[0]
-          storePasien.injectDataPasien(pasien, isi, 'anamnesis')
+          const isi = resp.data.result
+          storePasien.injectDataPasien(pasien, isi, 'anamnesekebidanan')
           notifSuccess(resp)
           this.initReset()
           this.loadingForm = false
