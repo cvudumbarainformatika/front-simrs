@@ -43,11 +43,11 @@
             option-value="kdpegsimrs"
             option-label="nama"
             outlined
-            :source="store.nonNakes"
+            :source="store.perawats"
             class="col-6"
             @on-select="(val)=> {
               store.form.kdPetugas = val
-              store.form.pengedukasi = store.nonNakes?.find(item => item?.kdpegsimrs === val)?.nama
+              store.form.pengedukasi = store.perawats?.find(item => item?.kdpegsimrs === val)?.nama
             }"
             @clear="()=> {
               store.form.kdPetugas = null
@@ -121,15 +121,21 @@
             v-model="store.form.dasarDiagnosis"
             label="Dasar Diagnosis" class="col-12"
           />
-          <q-input
-            v-model="store.form.tindakanMedis"
-            label="Tindakan Medis"
-            outlined
-            standout="bg-yellow-3"
-            rows="3"
-            type="textarea"
-            class="col-12"
-          />
+          <div class="text-bold">
+            Pilih Tindakan Medis
+          </div>
+          <div class="col-12">
+            <q-list separator bordered>
+              <q-item v-for="item in store.tindakanMedisSedasis" :key="item" tag="label" v-ripple>
+                <q-item-section avatar>
+                  <q-checkbox dense v-model="store.form.tindakanMedis" :val="item" color="teal" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ item }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
           <q-input
             v-model="store.form.indikasi"
             label="Indikasi"
@@ -145,7 +151,7 @@
           </div>
           <div class="col-12">
             <q-list separator bordered>
-              <q-item v-for="item in store.tujuans" :key="item" tag="label" v-ripple>
+              <q-item v-for="item in store.tujuanSedasis" :key="item" tag="label" v-ripple>
                 <q-item-section avatar>
                   <q-checkbox dense v-model="store.form.tujuan" :val="item" color="teal" />
                 </q-item-section>
@@ -171,28 +177,21 @@
             label="Tata Cara"
             outlined
             standout="bg-yellow-3"
-            rows="3"
+            rows="1"
             type="textarea"
             class="col-12"
           />
+          <!-- <q-input
+            v-model="store.form.resiko"
+            label="Resiko Tindakan"
+            outlined
+            standout="bg-yellow-3"
+            rows="1"
+            type="textarea"
+            class="col-12"
+          /> -->
 
-          <div class="text-bold">
-            Pilih Resiko Tindakan
-          </div>
-          <div class="col-12">
-            <q-list separator bordered>
-              <q-item v-for="item in store.resikos" :key="item" tag="label" v-ripple>
-                <q-item-section avatar>
-                  <q-checkbox dense v-model="store.form.resiko" :val="item" color="teal" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ item }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-
-          <q-input
+          <!-- <q-input
             v-if="store.form.resiko.includes('Lain-lain')"
             v-model="store.form.resikoLain"
             label="Resiko Lain-lain"
@@ -201,8 +200,28 @@
             rows="3"
             type="textarea"
             class="col-12"
-          />
-          <q-input
+          /> -->
+          <div class="col-12 text-bold">
+            Komplikasi Sedasi
+          </div>
+          <div v-for="item in store.form.tindakanMedis" :key="item">
+            <div class="text-bold">
+              {{ store.komplikasiSedasis.find((x) => x.nama === item)?.nama ?? '-' }}
+            </div>
+            <div class="col-12">
+              <q-list separator bordered>
+                <q-item v-for="sub in store.komplikasiSedasis.find((x) => x.nama === item)?.details" :key="sub" tag="label" v-ripple>
+                  <q-item-section avatar>
+                    -
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ sub }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </div>
+          <!-- <q-input
             v-model="store.form.komplikasi"
             label="Komplikasi"
             outlined
@@ -210,7 +229,7 @@
             rows="3"
             type="textarea"
             class="col-12"
-          />
+          /> -->
           <div class="col-12 flex items-center">
             <div>Prognosis : </div>
             <q-checkbox class="q-ml-sm" size="md" v-model="store.form.prognosis" v-for="aa in store.prognosis" :key="aa" :label="aa" :val="aa" />
@@ -302,10 +321,6 @@ const store = useConcernOperasiInvasifRanapStore()
 const TtdWacom = defineAsyncComponent(() => {
   return import('src/components/~static/TtdWacomStu540.vue')
 })
-onMounted(() => {
-  // store.initReset(props?.pasien)
-  cekHubunganPasien()
-})
 
 const props = defineProps({
   pasien: {
@@ -317,7 +332,10 @@ const props = defineProps({
     default: null
   }
 })
-
+onMounted(() => {
+  store.initReset(props?.pasien)
+  cekHubunganPasien()
+})
 const myForm = ref(null)
 
 const cekHubunganPasien = () => {
