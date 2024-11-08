@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="col full-height scroll">
-          <preview-page ref="refPreview" :item="store.item" :pasien="pasien" />
+          <preview-page ref="refPreview" :item="store.item" :pasien="pasien" :coba="store.form.ttdDokter" />
           <div style="margin-bottom: 100px;" />
         </div>
       </div>
@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="col full-height scroll">
-            <ListPage :pasien="pasien" :menu="menu" @preview="(val) => store.item = val" />
+            <list-page :pasien="pasien" :menu="menu" @preview="(val) => store.item = val" />
           </div>
         </div>
       </template>

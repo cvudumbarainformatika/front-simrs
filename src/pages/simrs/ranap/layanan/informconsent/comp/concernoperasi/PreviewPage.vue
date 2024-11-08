@@ -257,7 +257,7 @@
                 </td>
 
                 <td class="text-right">
-                  {{ item?.ttdPetugas }}
+                  <img :src="item?.ttdPetugas" alt="ttd-petugas">
                 </td>
               </tr>
               <tr>
@@ -266,7 +266,7 @@
                 </td>
 
                 <td class="text-right">
-                  {{ item?.ttdYgMenyatakan }}
+                  <img :src="item?.ttdYangMenyatakan" alt="ttd-yg-menyatakan">
                 </td>
               </tr>
               <tr>
@@ -476,16 +476,20 @@
                 Tanda Tangan
               </td>
               <td class="text-center f-12">
-                {{ item?.ttdDokter }}
+                <img :src="`${item?.ttd_dokter_url}`" alt="ttd dokter" width="70">
+                <!-- {{ item?.ttdDokter }} -->
               </td>
               <td class="text-center f-12">
-                {{ item?.ttdSaksiRs }}
+                <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
+                <!-- {{ item?.ttdPetugas }} -->
               </td>
               <td class="text-center">
-                {{ item?.ttdSaksiPasien }}
+                <img :src="item?.ttd_saksi_pasien_url" alt="ttd-saksi-pasien">
+                <!-- {{ item?.ttdSaksiPasien }} -->
               </td>
               <td class="text-center">
-                {{ item?.ttdYgMenyatakan }}
+                <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
+                <!-- {{ item?.ttdYgMenyatakan }} -->
               </td>
             </tr>
           </tbody>
@@ -496,6 +500,7 @@
 </template>
 
 <script setup>
+// import { pathImg } from 'src/boot/axios'
 import html2pdf from 'html2pdf.js'
 
 defineProps({
@@ -505,6 +510,10 @@ defineProps({
   },
   pasien: {
     type: Object,
+    default: null
+  },
+  coba: {
+    type: String,
     default: null
   }
 })

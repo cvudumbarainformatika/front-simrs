@@ -51,6 +51,7 @@
         </div>
       </div>
     </div>
+    <!-- <input type="textarea" v-model="internalValue"> -->
     <!-- <div class="q-mt-lg">
       {{ sigObj }}
     </div>
@@ -112,29 +113,6 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  base64: {
-    type: Boolean,
-    default: true
-  },
-  textSign: {
-    type: Boolean,
-    default: false
-  },
-  ttdName: {
-    type: String,
-    default: 'Nama yg Ttd'
-  },
-  uuid: {
-    type: String,
-    default: '00000000-0000-0000-0000-000000000000'
-  }
-})
-
-defineEmits(['signature'])
-</script>
-
 <script>
 import { WacomgssSignatureSDK } from 'src/modules/wacomstu540/wgssSigCaptX.js'
 import SignerName from './wacomstu540/SignerName.vue'
@@ -155,6 +133,8 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     UserMessage
   },
+
+  expose: ['cImage'],
   data () {
     return {
       callback: null,
@@ -187,8 +167,40 @@ export default {
       TIMEOUT: 1500
     }
   },
+
+  props: {
+    value: {
+      type: String,
+      default: null
+    },
+    base64: {
+      type: Boolean,
+      default: true
+    },
+    textSign: {
+      type: Boolean,
+      default: false
+    },
+    ttdName: {
+      type: String,
+      default: 'Nama yg Ttd'
+    },
+    uuid: {
+      type: String,
+      default: '00000000-0000-0000-0000-000000000000'
+    }
+  },
+  computed: {
+    cImage: function () {
+      return this.image
+    },
+    cUuid: function () {
+      return this.uuid
+    }
+  },
   methods:
   {
+
     userMsg (msg) {
       this.messageText = this.messageText + '\n' + msg
       this.messageTrigger = !this.messageTrigger
@@ -419,6 +431,8 @@ export default {
             break
         }
       }
+
+      // console.log('onDynCaptCapture', outputFlags)
     },
     onRenderBitmap: function (sigObjV, bmpObj, status) {
       if (this.callbackStatusOK('Signature Render Bitmap', status)) {
@@ -676,6 +690,13 @@ export default {
   },
   mounted () {
     this.bodyonload()
+  },
+  watch: {
+    image: function (val) {
+      console.log('watch image', this.uuid)
+
+      this.$emit(`signature:${this.uuid}`, val)
+    }
   }
 }
 </script>

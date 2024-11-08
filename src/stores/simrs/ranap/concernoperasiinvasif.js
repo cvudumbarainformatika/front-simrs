@@ -24,8 +24,6 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       komplikasi: null,
       prognosis: [],
       alternatif: null,
-      ttdPetugas: null,
-      ttdPasien: null,
 
       hubunganDgPasien: 'Diri Sendiri',
       keluarga: null,
@@ -37,7 +35,9 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       telepon: null,
 
       ttdDokter: null,
-      ttdSaksiRs: null,
+      // ttdSaksiRs: null,
+      ttdPetugas: null,
+      // ttdPasien: null,
       ttdSaksiPasien: null,
       ttdYgMenyatakan: null,
       kdDokter: null,
@@ -90,8 +90,9 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
 
       console.log('save inform form', this.form)
 
+      // eslint-disable-next-line no-unused-vars
       const storeRanap = usePengunjungRanapStore()
-      storeRanap.injectDataPasien(pasien?.noreg, this.form, 'informconcern')
+      // storeRanap.injectDataPasien(pasien?.noreg, this.form, 'informconcern')
 
       try {
         const resp = await api.post('v1/simrs/ranap/layanan/informconcern/simpandata', this.form)

@@ -246,7 +246,14 @@
                   <div v-if="!store.form.ttdYgMenyatakan" class="absolute-center">
                     Ttd yg Menyatakan
                   </div>
-                  <TtdWacom uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'" />
+                  <TtdWacom
+                    ref="wacomRef1"
+                    uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'"
+                    @signature:ttd-yg-menyatakan="(val)=> {
+                      console.log('ttd yg menyatakan',val);
+
+                    }"
+                  />
                 </div>
               </div>
               <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
@@ -254,7 +261,13 @@
                   <div v-if="!store.form.ttdSaksiPasien" class="absolute-center">
                     Ttd Saksi Pasien
                   </div>
-                  <TtdWacom uuid="ttd-saksi-pasien" :ttd-name="store.form.saksiPasien ?? 'saksi pasien'" />
+                  <TtdWacom
+                    uuid="ttd-saksi-pasien" :ttd-name="store.form.saksiPasien ?? 'saksi pasien'"
+                    @signature:ttd-saksi-pasien="(val)=> {
+                      console.log('ttd-saksi-pasien',val);
+
+                    }"
+                  />
                 </div>
               </div>
               <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
@@ -262,7 +275,9 @@
                   <div v-if="!store.form.ttdDokter" class="absolute-center">
                     Ttd Dokter
                   </div>
-                  <TtdWacom uuid="ttd-dokter" :ttd-name="store.form.pelaksana ?? 'nama dokter'" />
+                  <TtdWacom
+                    uuid="ttd-dokter" :ttd-name="store.form.pelaksana ?? 'nama dokter'"
+                  />
                 </div>
               </div>
               <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
@@ -270,7 +285,9 @@
                   <div v-if="!store.form.ttdPetugas" class="absolute-center">
                     Ttd Saksi RS
                   </div>
-                  <TtdWacom uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'" />
+                  <TtdWacom
+                    ref="wacomRef" uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
+                  />
                 </div>
               </div>
             </div>
@@ -294,15 +311,18 @@
 </template>
 
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { notifErrVue } from 'src/modules/utils'
 import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
 
 const store = useConcernOperasiInvasifRanapStore()
 
 const TtdWacom = defineAsyncComponent(() => {
   return import('src/components/~static/TtdWacomStu540.vue')
 })
+
+const wacomRef = ref(null)
 onMounted(() => {
   store.initReset(props?.pasien)
   cekHubunganPasien()
@@ -320,6 +340,7 @@ const props = defineProps({
 })
 
 const myForm = ref(null)
+const wacomRef1 = ref(null)
 
 const cekHubunganPasien = () => {
   const pasien = props.pasien
@@ -342,23 +363,32 @@ const cekHubunganPasien = () => {
   }
 }
 
+// function onSubmit () {
+//   // console.log('onSubmit', store.form)
+//   myForm.value.validate().then(success => {
+//     if (success) {
+//       // yay, models are correct
+//       console.log('success')
+//       store.saveData(props?.pasien, props?.menu?.name)
+//     }
+//     else {
+//       // oh no, user has filled in
+//       // at least one invalid value
+//       console.log('failed')
+//       // formRef.value?.refInputKu.focus()
+//       // scrollToElement(formRef.value?.refInputKu.$el)
+//       notifErrVue('Mohon Lengkapi Data Terlebih Dahulu')
+//     }
+//   })
+// }
+
 function onSubmit () {
-  // console.log('onSubmit', store.form)
-  myForm.value.validate().then(success => {
-    if (success) {
-      // yay, models are correct
-      console.log('success')
-      store.saveData(props?.pasien, props?.menu?.name)
-    }
-    else {
-      // oh no, user has filled in
-      // at least one invalid value
-      console.log('failed')
-      // formRef.value?.refInputKu.focus()
-      // scrollToElement(formRef.value?.refInputKu.$el)
-      notifErrVue('Mohon Lengkapi Data Terlebih Dahulu')
-    }
-  })
+  store.saveData(props?.pasien, props?.menu?.name)
 }
+
+watch(() => wacomRef1.value, (newVal, oldVal) => {
+  console.log('wacomRef1 new', newVal?.cImage)
+  console.log('wacomRef1 old', oldVal?.cImage)
+}, { deep: true })
 
 </script>
