@@ -257,7 +257,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttdPetugas" alt="ttd-petugas">
+                  <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
                 </td>
               </tr>
               <tr>
@@ -280,7 +280,7 @@
       </div>
     </div>
 
-    <q-separator class="pemisah q-my-xl html2pdf__page-break" />
+    <q-separator class="pemisah q-mb-lg html2pdf__page-break" />
 
     <div class="page-2">
       <div class="section-1">
@@ -503,7 +503,7 @@
 // import { pathImg } from 'src/boot/axios'
 import html2pdf from 'html2pdf.js'
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object,
     default: null
@@ -529,7 +529,7 @@ const exportPdf = () => {
 
   const pdfConfig = {
     margin: 0,
-    filename: 'inform-consent.pdf',
+    filename: 'inform-consent-' + props?.item?.jenis + '.pdf',
     image: {
       type: 'jpeg',
       quality: 0.98

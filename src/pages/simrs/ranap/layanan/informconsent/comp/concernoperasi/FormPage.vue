@@ -250,7 +250,7 @@
                     uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'"
                     @signature:ttd-yg-menyatakan="(val)=> {
                       console.log('ttd yg menyatakan',val);
-
+                      store.form.ttdYgMenyatakan = val
                     }"
                   />
                 </div>
@@ -264,7 +264,7 @@
                     uuid="ttd-saksi-pasien" :ttd-name="store.form.saksiPasien ?? 'saksi pasien'"
                     @signature:ttd-saksi-pasien="(val)=> {
                       console.log('ttd-saksi-pasien',val);
-
+                      store.form.ttdSaksiPasien = val
                     }"
                   />
                 </div>
@@ -276,6 +276,10 @@
                   </div>
                   <TtdWacom
                     uuid="ttd-dokter" :ttd-name="store.form.pelaksana ?? 'nama dokter'"
+                    @signature:ttd-dokter="(val)=> {
+                      console.log('ttd-dokter',val);
+                      store.form.ttdDokter = val
+                    }"
                   />
                 </div>
               </div>
@@ -286,6 +290,10 @@
                   </div>
                   <TtdWacom
                     ref="wacomRef" uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
+                    @signature:ttd-saksi-rs="(val)=> {
+                      console.log('ttd-saksi-rs',val);
+                      store.form.ttdPetugas = val
+                    }"
                   />
                 </div>
               </div>
@@ -323,7 +331,7 @@ const TtdWacom = defineAsyncComponent(() => {
 
 const wacomRef = ref(null)
 onMounted(() => {
-  // store.initReset(props?.pasien)
+  store.initReset(props?.pasien)
   cekHubunganPasien()
 })
 

@@ -268,7 +268,7 @@
                 </td>
 
                 <td class="text-right">
-                  {{ item?.ttdPetugas }}
+                  <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
                 </td>
               </tr>
               <tr>
@@ -277,7 +277,7 @@
                 </td>
 
                 <td class="text-right">
-                  {{ item?.ttdYgMenyatakan }}
+                  <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
                 </td>
               </tr>
               <tr>
@@ -293,7 +293,7 @@
       </div>
     </div>
 
-    <q-separator class="pemisah q-my-xl html2pdf__page-break" />
+    <q-separator class="pemisah q-mb-lg html2pdf__page-break" />
 
     <div class="page-2">
       <!-- section 1 -->
@@ -492,16 +492,16 @@
                 Tanda Tangan
               </td>
               <td class="text-center f-12">
-                {{ item?.ttdDokter }}
+                <img :src="`${item?.ttd_dokter_url}`" alt="ttd dokter" width="70">
               </td>
               <td class="text-center f-12">
-                {{ item?.ttdSaksiRs }}
+                <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
               </td>
               <td class="text-center">
-                {{ item?.ttdSaksiPasien }}
+                <img :src="item?.ttd_saksi_pasien_url" alt="ttd-saksi-pasien">
               </td>
               <td class="text-center">
-                {{ item?.ttdYgMenyatakan }}
+                <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
               </td>
             </tr>
           </tbody>
@@ -518,7 +518,7 @@ import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/conce
 
 const store = useConcernOperasiInvasifRanapStore()
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object,
     default: null
@@ -544,7 +544,7 @@ const exportPdf = () => {
 
   const pdfConfig = {
     margin: 0,
-    filename: 'inform-consent.pdf',
+    filename: 'inform-consent-' + props?.item?.jenis + '.pdf',
     image: {
       type: 'jpeg',
       quality: 0.98
