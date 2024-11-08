@@ -93,6 +93,12 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       }
 
     ],
+    // =========================================================================================================== UNTUK COLONOSCOPY
+
+    pengertianColonoscopy: 'Tehnik pelayanan canggih untuk memeriksa saluran cerna bagian bawah secara visual dengan cara melihat langsung pada layar monitor',
+    tujuanColonoscopy: 'Mendeteksi kelainan pada saluran cerna bagian bawah mulai dari anus, rektum dan usus besar, mengambil sampel jaringan',
+    resikoColonoscopy: 'Mual, kembung sementara',
+    komplikasiColonoscopys: '- Perdarahan' + '\n' + '- Infeksi' + '\n' + '- Luka gores',
 
     // =========================================================================================================== UNTUK di depan
     item: null,
@@ -208,12 +214,26 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
         setuju: 'Iya'
       }
 
+      if (this.menuTab === 'OperasiInvasif') {
+        this.form.tatacara = null
+        this.form.tindakanMedis = null
+        this.form.tujuan = []
+        this.form.resiko = []
+        this.form.komplikasi = null
+      }
+
       if (this.menuTab === 'Sedasi') {
         this.form.tatacara = this.tatacaraSedasis
-        this.form.tindakanMedis = this.tindakanMedisSedasis
+        this.form.tindakanMedis = this.tindakanMedisSedasis.join(' | ')
         this.form.tujuan = this.tujuanSedasis
         this.form.resiko = this.resikoSedasis
         this.form.komplikasi = null
+      }
+      else if (this.menuTab === 'Colonoscopy') {
+        this.form.indikasi = this.pengertianColonoscopy
+        this.form.tujuanLain = this.tujuanColonoscopy
+        this.form.resikoLain = this.resikoColonoscopy
+        this.form.komplikasi = this.komplikasiColonoscopys
       }
       else {
         this.form.tatacara = null
