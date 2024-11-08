@@ -211,8 +211,8 @@ function saveOrder () {
 }
 onMounted(() => {
   listperawat.value = store.listperawat
-  formRef.value.resetValidation()
-  console.log('wewew', formRef.value.resetValidation())
+  // formRef.value.resetValidation()
+  // console.log('wewew', formRef.value.resetValidation())
 })
 
 </script>

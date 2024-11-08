@@ -5,10 +5,12 @@ import { usePengunjungIgdStore } from './pengunjung'
 
 export const useAmbulanStore = defineStore('ambulan-store', {
   state: () => ({
+    loadingOrder: false,
     loadingForm: false,
     loadingHistory: false,
     tujuanambulan: '',
     listperawat: '',
+    notas: [],
     form: {
       notaambulan: '',
       tujuan: '',
@@ -50,7 +52,9 @@ export const useAmbulanStore = defineStore('ambulan-store', {
         const resp = await api.post('v1/simrs/penunjang/ambulan/simpanreqambulan', formamb)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          const isi = resp.data
+          const isi = resp.data.data[0]
+          console.log('isi', isi)
+          this.setNotas(resp?.data?.nota)
           storePasien.injectDataPasien(pasien, isi, 'ambulan')
           notifSuccess(resp)
           this.initReset()
@@ -76,10 +80,13 @@ export const useAmbulanStore = defineStore('ambulan-store', {
     },
 
     setNotas (array) {
+      console.log('array', array)
       const arr = array.map(x => x.nota)
+      console.log('arrayx', arr)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
       this.form.notaambulan = this.notas[0]
+      console.log('nota', this.form.notaambulan)
     }
   }
 })

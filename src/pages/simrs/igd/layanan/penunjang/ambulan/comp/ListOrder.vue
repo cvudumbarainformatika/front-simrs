@@ -7,7 +7,7 @@
       <q-space />
       <div class="q-py-xs">
         <q-select
-          v-model="store.form.nota"
+          v-model="store.form.notaambulan"
           outlined
           standout="bg-yellow-3"
           bg-color="white"
@@ -120,8 +120,8 @@ const props = defineProps({
 const filterredTable = computed(() => {
   const val = store?.form?.notaambulan
   const arr = props?.pasien?.ambulan
-  console.log('val ', val)
-  console.log('pasien ambulan', arr)
+  // console.log('val ', val)
+  // console.log('pasien ambulan', arr)
   return arr?.length ? arr?.filter(x => x?.nota === val) : []
 })
 
