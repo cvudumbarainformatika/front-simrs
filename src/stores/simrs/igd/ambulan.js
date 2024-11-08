@@ -69,7 +69,6 @@ export const useAmbulanStore = defineStore('ambulan-store', {
     async getNota (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/ambulan/getnota', payload)
-      console.log('ambulan', resp)
       if (resp.status === 200) {
         this.setNotas(resp?.data)
         // const arr = resp.data.map(x => x.nota)
@@ -80,13 +79,10 @@ export const useAmbulanStore = defineStore('ambulan-store', {
     },
 
     setNotas (array) {
-      console.log('array', array)
       const arr = array.map(x => x.nota)
-      console.log('arrayx', arr)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
       this.form.notaambulan = this.notas[0]
-      console.log('nota', this.form.notaambulan)
     }
   }
 })
