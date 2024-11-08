@@ -52,6 +52,9 @@
                 store.initReset(pasien)
                 store.item = val
               }"
+              @delete="(val) => {
+                hapusItem(val?.id)
+              }"
             />
           </div>
         </div>
@@ -61,6 +64,7 @@
 </template>
 <script setup>
 // import html2pdf from 'html2pdf.js'
+import { useQuasar } from 'quasar'
 import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
 // eslint-disable-next-line no-unused-vars
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
@@ -101,6 +105,25 @@ const formComponent = computed(() => {
 const previewComponent = computed(() => {
   return asyncComponentPreviews[store.item?.jenis ?? 'OperasiInvasif']
 })
+
+const $q = useQuasar()
+
+function hapusItem (id) {
+  console.log('id', id)
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    store.deleteData(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 
 // eslint-disable-next-line no-unused-vars
 

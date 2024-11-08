@@ -139,7 +139,7 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
       }
     },
 
-    async hapusPermintaan (pasien, id) {
+    async deleteData (pasien, id) {
       this.loadingHapus = true
 
       if (!id) {
@@ -148,14 +148,14 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
 
       const payload = { noreg: pasien?.noreg, id }
       try {
-        const resp = await api.post('v1/simrs/ranap/layanan/konsultasi/hapusdata', payload)
+        const resp = await api.post('v1/simrs/ranap/layanan/informconcern/hapusdata', payload)
         this.loadingHapus = false
         // console.log(resp)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
           const storeRanap = usePengunjungRanapStore()
           // storePasien.hapusDataFisio(pasien, id)
-          storeRanap.hapusDataInjectan(pasien, id, 'konsultasi')
+          storeRanap.hapusDataInjectan(pasien, id, 'informconcern')
           notifSuccess(resp)
         }
       }
