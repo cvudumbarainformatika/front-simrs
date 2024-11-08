@@ -27,13 +27,14 @@
           <div class="col-3">
             <div class="text-center text-bold">
               PEMBERIAN EDUKASI
-              PEMBERITAHUAN INFORMASI  OPERASI/TINDAKAN INVASIF
+              PEMBERITAHUAN INFORMASI {{ menu?.title }}
             </div>
           </div>
         </div>
       </div>
       <!-- CONTENT -->
       <div class="ba-black">
+        <!-- SECTION 1 -->
         <div class="section-1 q-pa-md">
           <div class="flex q-py-xs">
             <div style="width: 40%;">
@@ -68,11 +69,13 @@
             </div>
           </div>
         </div>
+
+        <!-- SECTION 2 -->
         <div class="section-2">
-          <q-markup-table separator="cell" flat bordered wrap-cells>
+          <q-markup-table dense separator="cell" flat bordered wrap-cells>
             <thead>
               <tr>
-                <th class="text-left f-12" width="5%">
+                <th class="text-left f-12" width="3%">
                   NO
                 </th>
                 <th class="text-left f-12" width="10%">
@@ -81,7 +84,7 @@
                 <th class="text-left f-12">
                   ISI INFORMASI
                 </th>
-                <th class="text-right" width="10%">
+                <th class="text-right" width="20%">
                   TANDA (v)
                 </th>
               </tr>
@@ -130,10 +133,10 @@
                   Tindakan Kedokteran
                 </td>
                 <td class="text-left f-12">
-                  <div v-html="getNewLine(item?.tindakanMedis)" />
+                  {{ item?.tindakanMedis.join(' | ') }}
                 </td>
                 <td class="text-right">
-                  <q-icon v-if="item?.tindakanMedis" name="icon-mat-check" size="sm" />
+                  <q-icon v-if="item?.tindakanMedis.length > 0" name="icon-mat-check" size="sm" />
                 </td>
               </tr>
 
@@ -161,7 +164,7 @@
                 </td>
                 <td class="text-left f-12">
                   <div v-for="tj in item?.tujuan" :key="tj" class="flex">
-                    <div>-  </div>
+                    <div>*  </div>
                     <div class="q-ml-sm">
                       {{ tj==='Lain-lain'? item?.tujuanLain : (tj ?? '-') }}
                     </div>
@@ -195,12 +198,13 @@
                   Resiko
                 </td>
                 <td class="text-left f-12">
-                  <div v-for="tj in item?.resiko" :key="tj" class="flex">
+                  <!-- <div v-for="tj in item?.resiko" :key="tj" class="flex">
                     <div>-  </div>
                     <div class="q-ml-sm">
                       {{ tj==='Lain-lain'? item?.resikoLain : (tj ?? '-') }}
                     </div>
-                  </div>
+                  </div> -->
+                  {{ item?.resiko }}
                 </td>
                 <td class="text-right">
                   <q-icon v-if="item?.resiko?.length > 0" name="icon-mat-check" size="sm" />
@@ -215,10 +219,17 @@
                   Komplikasi
                 </td>
                 <td class="text-left f-12">
-                  <div v-html="getNewLine(item?.komplikasi)" />
+                  <div v-for="it in item?.tindakanMedis" :key="it">
+                    <div class="text-bold">
+                      {{ it }} :
+                    </div>
+                    <div v-for="tj in store?.komplikasiSedasis.find(x => x?.nama === it)?.details" :key="tj" class="flex">
+                      * {{ tj }}
+                    </div>
+                  </div>
                 </td>
                 <td class="text-right">
-                  <q-icon v-if="item?.komplikasi" name="icon-mat-check" size="sm" />
+                  <q-icon v-if="item?.tindakanMedis?.length > 0" name="icon-mat-check" size="sm" />
                 </td>
               </tr>
 
@@ -266,7 +277,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttdYangMenyatakan" alt="ttd-yg-menyatakan">
+                  <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
                 </td>
               </tr>
               <tr>
@@ -277,15 +288,18 @@
             </tbody>
           </q-markup-table>
         </div>
+
+        <!--  -->
       </div>
     </div>
 
     <q-separator class="pemisah q-mb-lg html2pdf__page-break" />
 
     <div class="page-2">
+      <!-- section 1 -->
       <div class="section-1">
         <div class="text-center f-14 text-bold q-mb-lg">
-          <span v-if="item?.setuju==='Iya'">PERSETUJUAN TINDAKAN KEDOKTERAN(Operasi / Tindakan Invasif)</span>
+          <span v-if="item?.setuju==='Iya'">PERSETUJUAN TINDAKAN KEDOKTERAN({{ menu?.title }})</span>
           <span v-else>PENOLAKAN TINDAKAN KEDOKTERAN (Operasi / Tindakan Invasif)</span>
         </div>
         <div>Saya yang bertanda tangan dibawah ini :</div>
@@ -347,24 +361,23 @@
 
       <div class="section-2 q-mt-lg">
         <div v-if="item?.setuju==='Iya'">
-          Dengan ini menyatakan sesungguhnya, bahwa saya telah menerima informasi yang
-          diberikan oleh dokter sebagaimana diatas dan telah memahaminya. Untuk itu
-          saya memeberikan <b>PERSETUJUAN</b> untuk dilakukan Tindakan KEDOKTERAN berupa :
+          Dengan ini menyatakan sesungguhnya,  bahwa saya telah menerima informasi yang diberikan oleh Dokter
+          sebagaimana diatas dan telah memahaminya untuk itu saya memberikan <b>PERSETUJUAN</b> untuk dilakukan Tindakan
+          PEMBIUSAN  tersebut terhadap  :
         </div>
 
         <div v-else>
-          Dengan ini menyatakan sesungguhnya, bahwa saya telah menerima informasi
-          yang diberikan oleh Dokter sebagaimana diatas dan telah memahaminya.
-          Untuk itu saya memberikan <b>PENOLAKAN / PEMBATALAN</b> untuk dilakukan Tindakan KEDOKTERAN  berupa :
+          Dengan ini menyatakan sesungguhnya, bahwa saya telah menerima informasi yang diberikan oleh dokter sebagaimana
+          di atas dan telah memahaminya. Untuk itu saya memberikan  <b>PENOLAKAN / PEMBATALAN</b> untuk dilakukan Tindakan PEMBIUSAN tersebut terhadap :
         </div>
 
-        <div v-html="getNewLine(item?.tindakanMedis)" />
+        <!-- <div v-html="getNewLine(item?.tindakanMedis)" />
 
         <div class="q-mt-lg">
           terhadap :
-        </div>
+        </div> -->
 
-        <div>
+        <div class="q-mt-lg">
           <div class="row q-mt-xs">
             <div class="col-4">
               Nama
@@ -432,12 +445,15 @@
         </div>
       </div>
 
-      <div class="section-3 q-mt-lg">
+      <div class="section-3 q-mt-xl">
+        <div class="text-right f-12 q-mb-lg">
+          Probolinggo, {{ humanDate(item?.tanggal) }}, pkl: {{ jamTnpDetik(item?.tanggal) }}
+        </div>
         <q-markup-table separator="cell" flat bordered wrap-cells>
           <thead>
             <tr>
               <th class="text-left f-12" width="20%">
-                Tgl/Pukul : {{ item?.tgl }}
+                <!-- Tgl/Pukul : {{ item?.tgl }} -->
               </th>
               <th class="text-center f-12" width="20%">
                 Dokter
@@ -477,19 +493,15 @@
               </td>
               <td class="text-center f-12">
                 <img :src="`${item?.ttd_dokter_url}`" alt="ttd dokter" width="70">
-                <!-- {{ item?.ttdDokter }} -->
               </td>
               <td class="text-center f-12">
                 <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
-                <!-- {{ item?.ttdPetugas }} -->
               </td>
               <td class="text-center">
                 <img :src="item?.ttd_saksi_pasien_url" alt="ttd-saksi-pasien">
-                <!-- {{ item?.ttdSaksiPasien }} -->
               </td>
               <td class="text-center">
                 <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
-                <!-- {{ item?.ttdYgMenyatakan }} -->
               </td>
             </tr>
           </tbody>
@@ -500,8 +512,11 @@
 </template>
 
 <script setup>
-// import { pathImg } from 'src/boot/axios'
 import html2pdf from 'html2pdf.js'
+import { humanDate, jamTnpDetik } from 'src/modules/formatter'
+import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
+
+const store = useConcernOperasiInvasifRanapStore()
 
 const props = defineProps({
   item: {
@@ -512,8 +527,8 @@ const props = defineProps({
     type: Object,
     default: null
   },
-  coba: {
-    type: String,
+  menu: {
+    type: Object,
     default: null
   }
 })

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { usePengunjungIgdStore } from './pengunjung'
 
 export const useAmbulanStore = defineStore('ambulan-store', {
   state: () => ({
@@ -9,6 +10,7 @@ export const useAmbulanStore = defineStore('ambulan-store', {
     tujuanambulan: '',
     listperawat: '',
     form: {
+      notaambulan: '',
       tujuan: '',
       keterangan: '',
       pelsupir: '',
@@ -43,15 +45,41 @@ export const useAmbulanStore = defineStore('ambulan-store', {
       formamb.kodesistembayar = pasien?.kodesistembayar
       formamb.koderuang = pasien?.kodepoli
       this.loadingSaveAmbulan = true
-      console.log('sasasa', formamb)
+
       try {
         const resp = await api.post('v1/simrs/penunjang/ambulan/simpanreqambulan', formamb)
-        console.log('sasasa', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          const isi = resp.data
+          storePasien.injectDataPasien(pasien, isi, 'ambulan')
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingForm = false
+        }
       }
       catch (error) {
         // console.log(error)
         this.loadingFormDiagnosa = false
       }
+    },
+    async getNota (pasien) {
+      const payload = { params: { noreg: pasien?.noreg } }
+      const resp = await api.get('v1/simrs/penunjang/ambulan/getnota', payload)
+      console.log('ambulan', resp)
+      if (resp.status === 200) {
+        this.setNotas(resp?.data)
+        // const arr = resp.data.map(x => x.nota)
+        // this.notalaborats = arr.length ? arr : []
+        // this.notalaborats.push('BARU')
+        // this.notalaborat = this.notalaborats[0]
+      }
+    },
+
+    setNotas (array) {
+      const arr = array.map(x => x.nota)
+      this.notas = arr.length ? arr : []
+      this.notas.push('BARU')
+      this.form.notaambulan = this.notas[0]
     }
   }
 })

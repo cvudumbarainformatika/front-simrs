@@ -22,7 +22,7 @@ export const useFisioIgd = defineStore('fisio-igd', {
   // },
   actions: {
 
-    async saveOrder(pasien) {
+    async saveOrder (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -45,12 +45,13 @@ export const useFisioIgd = defineStore('fisio-igd', {
           this.initReset()
         }
         this.loadingOrder = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingOrder = false
       }
     },
 
-    async getNota(pasien) {
+    async getNota (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/fisioterapi/getnota', payload)
       // console.log('nota fisio', resp.data)
@@ -59,14 +60,14 @@ export const useFisioIgd = defineStore('fisio-igd', {
       }
     },
 
-    setNotas(array) {
+    setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
       this.form.nota = this.notas[0]
     },
 
-    async hapusPermintaan(pasien, id) {
+    async hapusPermintaan (pasien, id) {
       this.loadingHapus = true
       const payload = { noreg: pasien?.noreg, id }
       try {
@@ -79,13 +80,14 @@ export const useFisioIgd = defineStore('fisio-igd', {
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingHapus = false
         // console.log(error)
       }
     },
 
-    initReset() {
+    initReset () {
       this.form = {
         noreg: '', // rs1
         nota: this.notas?.length ? this.notas[0] : '', // rs2

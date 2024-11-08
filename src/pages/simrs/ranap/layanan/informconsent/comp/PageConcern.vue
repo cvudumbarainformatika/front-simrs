@@ -1,10 +1,10 @@
 <template>
   <div class="fit">
-    <div v-if="store.item" class="full-height bg-white absolute-top z-top" style="width: 70%;">
+    <div v-if="store.item" class="full-height bg-white absolute-top z-top" style="width: 75%;">
       <div class="column full-height">
         <div class="col-auto bg-primary text-white">
           <div class="row justify-between q-pa-sm items-center">
-            <div>Preview Document</div>
+            <div>Preview Document {{ menu?.label }}</div>
             <div class="q-gutter-sm">
               <q-btn flat round icon="icon-fa-file-prescription-solid" size="sm" @click="refPreview.exportPdf()" />
               <q-btn flat round icon="icon-mat-close" size="sm" @click="store.item = null" />
@@ -12,7 +12,8 @@
           </div>
         </div>
         <div class="col full-height scroll">
-          <preview-page ref="refPreview" :item="store.item" :pasien="pasien" :coba="store.form.ttdDokter" />
+          <!-- <preview-page :item="store.item" :pasien="pasien" /> -->
+          <component ref="refPreview" :is="previewComponent" :pasien="pasien" :menu="menu" :item="store.item" />
           <div style="margin-bottom: 100px;" />
         </div>
       </div>
@@ -32,7 +33,7 @@
           <div>{{ menu?.desc }}</div>
 
           <q-card flat class="q-mt-md full-width">
-            <FormPage :pasien="pasien" :menu="menu" />
+            <component :is="formComponent" :pasien="pasien" :menu="menu" :key="menu" />
           </q-card>
         </div>
       </template>
@@ -45,7 +46,13 @@
             </div>
           </div>
           <div class="col full-height scroll">
-            <list-page :pasien="pasien" :menu="menu" @preview="(val) => store.item = val" />
+            <ListPage
+              :pasien="pasien" :menu="menu" @preview="(val) => {
+                store.menuTab = val.jenis
+                store.initReset(pasien)
+                store.item = val
+              }"
+            />
           </div>
         </div>
       </template>
@@ -56,24 +63,17 @@
 // import html2pdf from 'html2pdf.js'
 import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
 // eslint-disable-next-line no-unused-vars
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 
 const store = useConcernOperasiInvasifRanapStore()
 
-const FormPage = defineAsyncComponent(() => {
-  return import('./concernoperasi/FormPage.vue')
-})
 const ListPage = defineAsyncComponent(() => {
   return import('./concernoperasi/ListPage.vue')
 })
 
-const PreviewPage = defineAsyncComponent(() => {
-  return import('./concernoperasi/PreviewPage.vue')
-})
-
 const refPreview = ref(null)
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -84,7 +84,23 @@ defineProps({
   }
 })
 
-const splitterModel = ref(70)
+const splitterModel = ref(75)
+
+const asyncComponents = {
+  OperasiInvasif: defineAsyncComponent(() => import('./concernoperasi/FormPage.vue')),
+  Sedasi: defineAsyncComponent(() => import('./concernsedasi/FormComp.vue'))
+}
+const asyncComponentPreviews = {
+  OperasiInvasif: defineAsyncComponent(() => import('./concernoperasi/PreviewPage.vue')),
+  Sedasi: defineAsyncComponent(() => import('./concernsedasi/PreviewSedasi.vue'))
+}
+
+const formComponent = computed(() => {
+  return asyncComponents[props?.menu?.name]
+})
+const previewComponent = computed(() => {
+  return asyncComponentPreviews[store.item?.jenis ?? 'OperasiInvasif']
+})
 
 // eslint-disable-next-line no-unused-vars
 

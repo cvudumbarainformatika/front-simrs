@@ -9,17 +9,18 @@
           v-model="store.tab"
           no-caps
           inline-label
-          class="bg-primary text-white shadow-2"
+          class=" bg-grey-4 shadow-2 text-grey-8"
           align="left"
           dense
           active-color="yellow"
-          active-bg-color="dark"
+          active-bg-color="primary"
         >
           <q-tab
             v-for="(item, i) in store.tabs"
             :key="i"
             :name="item"
             :label="item"
+            style="border-top-left-radius: 100px;border-bottom-right-radius: 100px;width: 100%;"
           />
         </q-tabs>
       </div>
@@ -43,6 +44,18 @@
             class="full-height q-pa-none"
           >
             <TindakanPage :pasien="props.pasien" />
+          </q-tab-panel>
+          <q-tab-panel
+            name="Diagnosa Keperawatan"
+            class="full-height q-pa-none"
+          >
+            <DiagnosaKeperawatanPage :pasien="props.pasien" />
+          </q-tab-panel>
+          <q-tab-panel
+            name="Diagnosa Kebidanan"
+            class="full-height q-pa-none"
+          >
+            <DiagnosaKebidananPage :pasien="props.pasien" />
           </q-tab-panel>
           <!--
           <q-tab-panel
@@ -89,9 +102,10 @@ import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 // import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import DiagnosaPage from '../assesment/diagnosa/DiagnosaPage.vue'
 import TindakanPage from '../assesment/tindakan/TindakanPage.vue'
+import DiagnosaKeperawatanPage from './diagnosakeperawatan/DiagnosaKeperawatanPage.vue'
+import DiagnosaKebidananPage from './diagnosakebidanan/DiagnosaKebidananPage.vue'
 // import TindakanPage from './complayanan/TindakanPage.vue'
 // import IcdPage from './complayanan/IcdPage.vue'
-// import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
 // import DiagnosaKebidananPage from './complayanan/DiagnosaKebidananPage.vue'
 // import PraAnestesiaPage from './complayanan/PraAnestesiaPage.vue'
 // import LaporanTindakan from './complayanan/LaporanTindakan.vue'
