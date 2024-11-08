@@ -9,11 +9,12 @@
           v-model="store.tab"
           no-caps
           inline-label
-          class="bg-primary text-white"
+          rounded
+          class=" bg-grey-4 shadow-2 text-grey-8"
           align="left"
           dense
           active-color="yellow"
-          active-bg-color="dark"
+          active-bg-color="primary"
           @update:model-value="cekPanel"
         >
           <q-tab
@@ -21,6 +22,7 @@
             :key="i"
             :name="item.page"
             :label="item.name"
+            style="border-top-left-radius: 100px;border-bottom-right-radius: 100px;width: 100%;"
           />
         </q-tabs>
       </div>

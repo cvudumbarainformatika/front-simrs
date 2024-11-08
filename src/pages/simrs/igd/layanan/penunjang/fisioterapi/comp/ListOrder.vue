@@ -113,7 +113,7 @@ const filterredTable = computed(() => {
   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

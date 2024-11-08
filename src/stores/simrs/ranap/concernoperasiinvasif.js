@@ -69,7 +69,34 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
     }],
     loading: false,
 
-    item: null
+    // =========================================================================================================== UNTUK ANESTESI-SEDASI
+    tindakanMedisSedasis: ['Anestesi Umum', 'Anestesi Spinal', 'Anestesi Lokal', 'Sedasi sedang - dalam'],
+    tujuanSedasis: ['Agar daerah yang akan dioperasi terbius atau tidak terasa', 'Agar tidak gelisah saat dilakukan tindakan'],
+    tatacaraSedasis: 'Premedikasi, induksi anestesia / sedasi  recovery',
+    resikoSedasis: 'Kegagalan pembiusan / sedasi',
+    komplikasiSedasis: [
+      {
+        nama: 'Anestesi Umum',
+        details: ['Mual / Muntah / menggigil', 'Sakit tenggorokan', 'Sakit menelan', 'Alergi / hipersensitif terhadap obat', 'Tekanan darah menurun', 'Nadi menurun']
+      },
+      {
+        nama: 'Anestesi Spinal',
+        details: ['Mual / Muntah / menggigil', 'Kesulitan buang air kecil', 'Alergi / hipersensitif tetapi jarang', 'Gangguan pernafasan / nafas terasa berat', 'Tekanan darah menurun', 'Nadi menurun']
+      },
+      {
+        nama: 'Anestesi Lokal',
+        details: ['Alergi / hipersensitif terhadap obat', 'Infeksi']
+      },
+      {
+        nama: 'Sedasi sedang - dalam',
+        details: ['Tidur dalam, sulit dibangunkan', 'Sumbatan jalan nafas', 'Perlu bantuan nafas', 'Mual / muntah']
+      }
+
+    ],
+
+    // =========================================================================================================== UNTUK di depan
+    item: null,
+    menuTab: 'OperasiInvasif'
 
   }),
   // getters: {
@@ -147,11 +174,11 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
         penerimaEdukasi: null,
         diagnosis: [],
         dasarDiagnosis: null,
-        tindakanMedis: null,
+        // tindakanMedis: null,
         indikasi: null,
         tujuan: [],
         tujuanLain: null,
-        tatacara: null,
+        // tatacara: null,
         resiko: [],
         resikoLain: null,
         komplikasi: null,
@@ -181,12 +208,27 @@ export const useConcernOperasiInvasifRanapStore = defineStore('concern-operasi-i
         setuju: 'Iya'
       }
 
+      if (this.menuTab === 'Sedasi') {
+        this.form.tatacara = this.tatacaraSedasis
+        this.form.tindakanMedis = this.tindakanMedisSedasis
+        this.form.tujuan = this.tujuanSedasis
+        this.form.resiko = this.resikoSedasis
+        this.form.komplikasi = null
+      }
+      else {
+        this.form.tatacara = null
+        this.form.tindakanMedis = null
+        this.form.tujuan = []
+        this.form.resiko = []
+        this.form.komplikasi = null
+      }
+
       const pengunjung = usePengunjungRanapStore()
       this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
       this.perawats = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '2' || x?.kdgroupnakes === '3') ?? []
       this.nonNakes = pengunjung?.nonNakes
 
-      this.item = null
+      // this.item = null
 
       return new Promise((resolve, reject) => {
         resolve()

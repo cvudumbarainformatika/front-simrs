@@ -43,6 +43,7 @@ const props = defineProps({
 onMounted(() => {
   store.getTujuanAmbulan()
   store.getperawatpedamping()
+  store.getNota(props?.pasien)
 })
 
 </script>

@@ -176,7 +176,7 @@
         <div class="row no-wrap">
           <div class="col-auto">
             <q-btn
-              v-if="role===1"
+
               label="Cek Stok"
               dense
               no-caps

@@ -17,7 +17,7 @@
             </div> -->
             <div class="col full-height scroll">
               <q-tabs
-                v-model="innerTab"
+                v-model="store.menuTab"
                 vertical
                 class="text-dark bg-white shadow-1 bo"
                 active-color="orange-10"
@@ -25,6 +25,7 @@
                 no-caps
                 align="left"
                 style="justify-content: initial"
+                @update:model-value="(val)=> store.initReset(pasien)"
               >
                 <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" :icon="menu?.icon" :label="menu?.label" />
               </q-tabs>
@@ -42,7 +43,7 @@
             </div> -->
             <div class="col fit">
               <q-tab-panels
-                v-model="innerTab"
+                v-model="store.menuTab"
                 animated
                 swipeable
                 vertical
@@ -64,7 +65,30 @@
 
 <script setup>
 // eslint-disable-next-line no-unused-vars
+import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
+
+const menus = ref([
+  {
+    name: 'OperasiInvasif',
+    label: 'SPT Operasi Invasif',
+    title: 'OPERASI / TINDAKAN INVASIF',
+    desc: 'Surat Persetujuan Tindakan Operasi Invasif',
+    icon: 'icon-my-file_sign',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
+  },
+  {
+    name: 'Sedasi',
+    label: 'SP Anestesi Sedasi',
+    title: 'TINDAKAN ANESTESI/SEDASI',
+    desc: 'Surat Persetujuan Anestesi Sedasi',
+    icon: 'icon-fa-file-regular',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
+  }
+
+])
 
 defineProps({
   pasien: {
@@ -73,37 +97,20 @@ defineProps({
   }
 })
 
+const store = useConcernOperasiInvasifRanapStore()
+
 const splitterModel = ref(15)
 
-const innerTab = ref(null)
+// const innerTab = ref(menus.value[0].name)
 
 onMounted(() => {
-  innerTab.value = menus.value[0].name
+  // innerTab.value = menus.value[0].name
+  store.menuTab = menus.value[0].name
   Promise.all([
     // pengunjungRanap.getNakes(),
     // store.getRuangKonsulDokter()
     // store.initReset()
   ])
 })
-
-const menus = ref([
-  {
-    name: 'OperasiInvasif',
-    label: 'SPT Operasi Invasif',
-    desc: 'Surat Persetujuan Tindakan Operasi Invasif',
-    icon: 'icon-my-file_sign',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/FormConcernOperasiInvasif.vue')))
-  },
-  {
-    name: 'Sedasi',
-    label: 'SP Anestesi Sedasi',
-    desc: 'Surat Persetujuan Anestesi Sedasi',
-    icon: 'icon-fa-file-regular',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/FormConcernOperasiInvasif.vue')))
-  }
-
-])
 
 </script>

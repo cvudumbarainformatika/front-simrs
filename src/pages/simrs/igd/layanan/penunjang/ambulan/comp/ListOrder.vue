@@ -13,7 +13,7 @@
           bg-color="white"
           dense
           :options="store.notas"
-          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'BARU' : store.form.nota}`"
+          :display-value="`NOTA: ${store.form.notaambulan === null || store.form.notaambulan === '' || store.form.notaambulan === 'BARU' ? 'BARU' : store.form.notaambulan}`"
           style="min-width: 200px;"
         />
       </div>
@@ -43,19 +43,31 @@
                     lines="2"
                     class="f-12"
                   >
-                    <span class="">NOMOR</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
+                    <span class="">Tujuan Pasien</span> : <span class="text-weight-bold text-accent">{{ item?.tujuan?.rs2 }} </span>
                   </q-item-label>
-                  <!-- <q-item-label
-                    lines="2"
-                    class="f-12"
-                  >
-                    <span class=""> Tujuan : </span> <span class="text-weight-bold"> {{ item?.masterpenunjang?.rs2 }} </span>
-                  </q-item-label> -->
                   <q-item-label
                     lines="2"
                     class="f-12"
                   >
-                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs4 }} </em>
+                    <span class=""> Pelayanan Supir : </span> <span class="text-weight-bold"> {{ item?.rs12 }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class=""> Pelayanan Perawat : </span> <span class="text-weight-bold"> {{ item?.rs15 }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class=""> Nama Perawat : </span> <span class="text-weight-bold"> {{ item?.perawat?.rs2 }}, {{ item?.perawat2?.rs2 ? item?.perawat2?.rs2 : '-' }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs11 ? item?.rs11 : '-' }} </em>
                   </q-item-label>
                 </q-item-section>
 
@@ -93,11 +105,11 @@
 
 <script setup>
 // import { useQuasar } from 'quasar'
-import { useFisioIgd } from 'src/stores/simrs/igd/fisio'
+import { useAmbulanStore } from 'src/stores/simrs/igd/ambulan'
 import { computed } from 'vue'
 
 // const $q = useQuasar()
-const store = useFisioIgd()
+const store = useAmbulanStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -106,11 +118,11 @@ const props = defineProps({
 })
 
 const filterredTable = computed(() => {
-  const val = store?.form?.nota
-  const arr = props?.pasien?.fisio
-  console.log('pasien ', props?.pasien)
-  console.log('pasien fisio', arr)
-  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
+  const val = store?.form?.notaambulan
+  const arr = props?.pasien?.ambulan
+  console.log('val ', val)
+  console.log('pasien ambulan', arr)
+  return arr?.length ? arr?.filter(x => x?.nota === val) : []
 })
 
 // function hapusItem(id) {
