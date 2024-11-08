@@ -1,63 +1,21 @@
 <template>
-  <q-page>
-    <ListDataLra />
-
-    <!-- <div class="ttd-kanan">
-      <div class="q-py-xs">
-        Probolinggo, tanggal
+  <div class="container q-pa-sm">
+    <q-card class="items-center q-pa-sm full-width">
+      <div class="row">
+        <FormLapOperasional />
       </div>
-      <div class="text-bold">
-        Direktur UOBK RSUD Dokter Mohamad Saleh
+    </q-card>
+  </div>
+  <div class="container q-px-sm">
+    <q-card class="items-center full-width">
+      <div class="row">
+        <listData />
       </div>
-      <div class="text-bold">
-        Kota Probolinggo
-      </div>
-      <div style="padding-bottom: 40px" />
-      <div class="underline text-bold q-py-xs">
-        {{ pegawai.pegawais[1]?.nama }}
-        <div class="garis-bawah" style="text-decoration-line: underline;" />
-      </div>
-      <div>
-        NIP. {{ pegawai.pegawais[1]?.nip }}
-      </div>
-    </div> -->
-  </q-page>
+    </q-card>
+  </div>
 </template>
 <script setup>
-import { useLaporanBkuPengeluaranStore } from 'src/stores/siasik/laporan/bku/bkupengeluaran'
-import ListDataLra from './inpage/ListDataLRA.vue'
-// eslint-disable-next-line no-unused-vars
-import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
-import { onMounted } from 'vue'
-// const store = useLaporanLraLaprealisasianggaranStore()
-const pegawai = useLaporanBkuPengeluaranStore()
-onMounted(() => {
-  pegawai.getDataTable()
-})
+import FormLapOperasional from './inpage/FormGetdata.vue'
+import listData from './inpage/ListdataLrajurnal.vue'
+
 </script>
-<style lang="scss" scoped>
-
-.kop{
-  border-bottom: 1px solid grey;
-  width: fit-content;
-}
-.logo_kanan{
-  right: 5%;
-  position: relative;
-}
-
-.ttd-kanan{
-  position: relative;
-  top: 50px;
-  text-align: center;
-  justify-content: center;
-  width: 60%;
-  height: 100px;
-  left: 40%;
-}
-
-.underline {
-  text-decoration-line: underline;
-
-}
-</style>

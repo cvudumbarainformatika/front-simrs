@@ -17,7 +17,8 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       levelberapa: '',
-      rekenings: ''
+      rekenings: '',
+      uraian: ''
 
     },
     display: {
@@ -86,6 +87,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           if (resp.status === 200) {
             this.alllevel = []
             this.alllevel = resp.data
+
             this.loading = false
 
             resolve(resp.data)

@@ -26,7 +26,7 @@
         @click="ambilData()"
       />
     </div>
-    <!-- <div class="q-pa-sm">
+    <div class="q-pa-sm">
       <app-btn
         label="Posting"
         color="warning"
@@ -35,7 +35,7 @@
         :loading="store.loading"
         @click="store.posting()"
       />
-    </div> -->
+    </div>
   </div>
 
   <!-- <dialog-jurnal

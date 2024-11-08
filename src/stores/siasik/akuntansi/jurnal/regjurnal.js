@@ -182,7 +182,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             kegiatan: arrs.filter((x) => x.koderek50 === es)[0]?.kegiatanblud,
             kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bast,
             uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bast,
-            debit: parseFloat(arrs.filter((x) => x.koderek50 === es)[0]?.nominalpembayaran),
+            debit: parseFloat(arrs.filter((x) => x.koderek50 === es)?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)),
             kredit: 0
           }
           beban.push(el)
@@ -202,7 +202,7 @@ export const registerJurnal = defineStore('register_jurnal', {
             kode: arrs.filter((x) => x.koderek50 === es)[0]?.kode_bastx,
             uraian: arrs.filter((x) => x.koderek50 === es)[0]?.uraian_bastx,
             debit: 0,
-            kredit: parseFloat(arrs.filter((x) => x.koderek50 === es)[0]?.nominalpembayaran)
+            kredit: parseFloat(arrs.filter((x) => x.koderek50 === es)?.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0))
           }
           utangstp.push(el)
         }

@@ -1,33 +1,45 @@
 <template>
-  <div class="print-hide row middle q-pt-md q-px-md q-gutter-md">
-    <app-input-date-human
-      :model="store.params.tgl"
-      label="dari tangal"
-      outlined
-      :disable="store.loading"
-      :loading="store.loading"
-      @db-model="tglDari"
-      @set-display="setDari"
-    />
-    <app-input-date-human
-      :model="store.params.tglx"
-      label="sampai tangal"
-      outlined
-      :disable="store.loading"
-      :loading="store.loading"
-      @db-model="tglSampai"
-      @set-display="setSampai"
-    />
-    <app-autocomplete
-      v-model="berdasar"
-      label="Berdasarkan"
-      autocomplete="nama"
-      option-value="value"
-      option-label="nama"
-      outlined
-      :source="store.level"
-    />
-    <div>
+  <div class="row full-width">
+    <div class="q-pa-sm" style="width:25%">
+      <app-autocomplete
+        v-model="berdasar"
+        label="Pilih Jenis LRA"
+        autocomplete="nama"
+        option-value="value"
+        option-label="nama"
+        outlined
+        :source="store.level"
+        @update:model-value="(val)=>{
+          store.reqs.levelberapa = parseInt(val)
+        }"
+      />
+    </div>
+    <div class="q-pa-sm" style="width:25%">
+      <app-input-date
+        :model="store.reqs.tgl"
+        label="dari tangal"
+        outlined
+        :disable="store.loading"
+        :loading="store.loading"
+        @db-model="tglDari"
+        @set-display="setDari"
+        @set-model="val=>store.reqs.tgl=val"
+      />
+    </div>
+    <div class="q-pa-sm" style="width:25%">
+      <app-input-date
+        :model="store.reqs.tglx"
+        label="sampai tangal"
+        outlined
+        :disable="store.loading"
+        :loading="store.loading"
+        @db-model="tglSampai"
+        @set-display="setSampai"
+        @set-model="val=>store.reqs.tglx=val"
+      />
+    </div>
+
+    <div class="q-pa-sm">
       <app-btn
         label="Ambil Data"
         :disable="store.loading"
@@ -35,32 +47,60 @@
         @click="ambilData()"
       />
     </div>
-    <div>
+    <div class="q-pa-sm">
       <q-btn
-        ref="refPrint"
-        v-print="printObj"
-        unelevated
-        color="dark"
+        icon="icon-mat-print"
+        color="orange"
         round
         size="sm"
-        icon="icon-mat-print"
+        :disable="store.loading"
+        :loading="store.loading"
+        @click="cetakData()"
       >
-        <q-tooltip
-          class="primary"
-          :offset="[10, 10]"
-        >
-          Print
+        <q-tooltip class="bg-orange" :offset="[10, 10]">
+          Cetak
         </q-tooltip>
       </q-btn>
     </div>
+    <div class="q-pa-sm">
+      <!-- <download-excel
+        class="btn"
+        :fields="store.fields"
+        :fetch="store.getDataBukubesar"
+        :before-generate="store.startDownload"
+        :before-finish="store.finishDownload"
+        :name="'Buku Besar ' + store.reqs.tahun +'.xls'"
+      > -->
+      <q-btn
+        icon="icon-mat-download"
+        color="green"
+        round
+        size="sm"
+        push
+        :disable="store.loading"
+        :loading="store.loading"
+        @click="store.exportExcel= !store.exportExcel"
+      >
+        <q-tooltip class="bg-green" :offset="[10, 10]">
+          Export to Excel
+        </q-tooltip>
+      </q-btn>
+      <!-- </download-excel> -->
+    </div>
   </div>
+  <cetak-lra
+    v-model="store.dialogCetak"
+    :printlra="printlra"
+  />
 </template>
 <script setup>
-import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
-import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useLRAjurnalStore } from 'src/stores/siasik/laporan/lra/lrajurnal.'
+import { ref, defineAsyncComponent, watchEffect } from 'vue'
 
-const store = useLaporanLraLaprealisasianggaranStore()
-
+const CetakLra = defineAsyncComponent(() => import('../printLRA/PrintDataLra.vue'))
+const store = useLRAjurnalStore()
+const $q = useQuasar()
 // Model berdasarkan ref agar tidak updte
 const berdasar = ref('')
 
@@ -77,11 +117,12 @@ function setSampai (val) {
   store.display.sampai = val
 }
 function ambilData () {
-  // store.hitungharidalamBulan();
-  store.reqlevels = berdasar.value
-  store.getDataRealisasi().then(() => {
-    store.emptyForm()
-  })
+  store.getDataLap()
+  // store.hasillevel()
+}
+const printlra = ref(null)
+function cetakData () {
+  store.dialogCetak = true
 }
 
 // const jenisData = (val) => {
@@ -98,21 +139,37 @@ function ambilData () {
 //     return store.kodejenis
 //   }
 // }
-const printed = ref(false)
-const printObj = {
-  id: 'printMe',
-  popTitle: 'Laporan Realisasi Anggaran',
-  beforeOpenCallback (vue) {
-    printed.value = true
-    console.log('wait...')
-  },
-  openCallback (vue) {
-    console.log('opened')
-  },
-  closeCallback (vue) {
-    printed.value = false
-    console.log('closePrint')
-  }
+function exportToExcel (tableId, filename) {
+  // const el = document.getElementById(tableId)
+  // const filenames = filename ? filename + '.xls' : 'KartuStokFarmasi.xls'
+  // const columns = store.items
+  // const content = [columns.map(col => wrapCsvValue(col.label))].concat(
+  //   rows.map(row => columns.map(col => wrapCsvValue(
+  //     typeof col.field === 'function'
+  //       ? col.field(row)
+  //       : row[col.field === void 0 ? col.name : col.field],
+  //     col.format,
+  //     row
+  //   )).join(','))
+  // ).join('\r\n')
+
+  // const status = exportFile(
+  //   'table-export.csv',
+  //   content,
+  //   'text/csv'
+  // )
+  // console.log('mulai export', el?.parentElement)
+  $q.notify({
+    message: 'Masih dibuatkan ... harap tunggu',
+    color: 'negative',
+    icon: 'icon-mat-warning'
+  })
 }
 
+watchEffect(() => {
+  if (store.exportExcel) {
+    // console.log('store.exportExcel', store.exportExcel)
+    exportToExcel('tableItem', 'KartuStokFarmasi')
+  }
+})
 </script>

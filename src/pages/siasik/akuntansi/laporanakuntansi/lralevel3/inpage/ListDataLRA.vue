@@ -1,6 +1,5 @@
 <template>
   <div class="justify-content-center">
-    <formGetdata />
     <div class="q-pa-md full-width">
       <template v-if="store.reqlevels === '1' && !store.loading">
         <q-table
@@ -327,7 +326,6 @@
 import { formattanpaRp } from 'src/modules/formatter'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
 import { onMounted, ref } from 'vue'
-import formGetdata from './FormGetdata.vue'
 const store = useLaporanLraLaprealisasianggaranStore()
 
 onMounted(() => {
