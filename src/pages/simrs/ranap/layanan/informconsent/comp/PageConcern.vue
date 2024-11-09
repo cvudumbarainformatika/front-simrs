@@ -13,7 +13,7 @@
         </div>
         <div class="col full-height scroll">
           <!-- <preview-page :item="store.item" :pasien="pasien" /> -->
-          <component ref="refPreview" :is="previewComponent" :pasien="pasien" :menu="menu" :item="store.item" />
+          <component ref="refPreview" :is="previewComponent" :pasien="pasien" :menu="menu" :item="store.item" :key="store.item.id" />
           <div style="margin-bottom: 100px;" />
         </div>
       </div>
@@ -45,14 +45,23 @@
               List Doc
             </div>
           </div>
-          <div class="col full-height scroll">
-            <ListPage
-              :pasien="pasien" :menu="menu" @preview="(val) => {
-                store.menuTab = val.jenis
-                store.initReset(pasien)
-                store.item = val
-              }"
-            />
+          <div class="col full-height">
+            <div class="full-height scroll" v-if="pasien?.informconcern?.length > 0">
+              <ListPage
+
+                :pasien="pasien" :menu="menu" @preview="(val) => {
+                  store.menuTab = val.jenis
+                  store.initReset(pasien)
+                  store.item = val
+                }"
+                @delete="(val) => {
+                  hapusItem(val?.id)
+                }"
+              />
+            </div>
+            <div v-else class="column full-height flex-center">
+              <div>No Data</div>
+            </div>
           </div>
         </div>
       </template>
@@ -61,6 +70,7 @@
 </template>
 <script setup>
 // import html2pdf from 'html2pdf.js'
+import { useQuasar } from 'quasar'
 import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
 // eslint-disable-next-line no-unused-vars
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
@@ -88,11 +98,13 @@ const splitterModel = ref(75)
 
 const asyncComponents = {
   OperasiInvasif: defineAsyncComponent(() => import('./concernoperasi/FormPage.vue')),
-  Sedasi: defineAsyncComponent(() => import('./concernsedasi/FormComp.vue'))
+  Sedasi: defineAsyncComponent(() => import('./concernsedasi/FormComp.vue')),
+  Colonoscopy: defineAsyncComponent(() => import('./colonoscopy/FormColonoscopy.vue'))
 }
 const asyncComponentPreviews = {
   OperasiInvasif: defineAsyncComponent(() => import('./concernoperasi/PreviewPage.vue')),
-  Sedasi: defineAsyncComponent(() => import('./concernsedasi/PreviewSedasi.vue'))
+  Sedasi: defineAsyncComponent(() => import('./concernsedasi/PreviewSedasi.vue')),
+  Colonoscopy: defineAsyncComponent(() => import('./colonoscopy/PreviewColonoscopy.vue'))
 }
 
 const formComponent = computed(() => {
@@ -101,6 +113,25 @@ const formComponent = computed(() => {
 const previewComponent = computed(() => {
   return asyncComponentPreviews[store.item?.jenis ?? 'OperasiInvasif']
 })
+
+const $q = useQuasar()
+
+function hapusItem (id) {
+  console.log('id', id)
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    store.deleteData(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 
 // eslint-disable-next-line no-unused-vars
 

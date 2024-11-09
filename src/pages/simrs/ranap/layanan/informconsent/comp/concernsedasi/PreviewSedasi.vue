@@ -268,7 +268,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
+                  <img :src="item?.ttd_petugas" alt="ttd-petugas" width="70">
                 </td>
               </tr>
               <tr>
@@ -277,7 +277,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
+                  <img :src="item?.ttd_yg_menyatakan" alt="ttd-yg-menyatakan" width="70">
                 </td>
               </tr>
               <tr>
@@ -492,16 +492,16 @@
                 Tanda Tangan
               </td>
               <td class="text-center f-12">
-                <img :src="`${item?.ttd_dokter_url}`" alt="ttd dokter" width="70">
+                <img :src="item?.ttd_dokter" class="ttd-dokter" alt="ttd dokter" width="70">
               </td>
               <td class="text-center f-12">
-                <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
+                <img :src="item?.ttd_petugas" class="ttd-petugas" alt="ttd-petugas" width="70">
               </td>
               <td class="text-center">
-                <img :src="item?.ttd_saksi_pasien_url" alt="ttd-saksi-pasien">
+                <img :src="item?.ttd_saksi_pasien" alt="ttd-saksi-pasien" width="70">
               </td>
               <td class="text-center">
-                <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
+                <img :src="item?.ttd_yg_menyatakan" alt="ttd-yg-menyatakan" width="70">
               </td>
             </tr>
           </tbody>
@@ -513,8 +513,11 @@
 
 <script setup>
 import html2pdf from 'html2pdf.js'
+import { pathImg } from 'src/boot/axios'
 import { humanDate, jamTnpDetik } from 'src/modules/formatter'
+import { imageToBase64 } from 'src/modules/imgBase64'
 import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
+import { onMounted } from 'vue'
 
 const store = useConcernOperasiInvasifRanapStore()
 
@@ -533,11 +536,57 @@ const props = defineProps({
   }
 })
 
-function getNewLine (text) {
-  // console.log('text', text)
+onMounted(() => {
+  initImage(props.item)
+})
 
+function initImage (item) {
+  const ttdPetugas = pathImg + item?.ttdPetugas
+  const ttdDokter = pathImg + item?.ttdDokter
+  const ttdSaksiPasien = pathImg + item?.ttdSaksiPasien
+  const ttdYgMenyatakan = pathImg + item?.ttdYgMenyatakan
+
+  Promise.all([
+    imageToBase64(ttdPetugas, (base64Image) => {
+      // document.getElementsByClassName('ttd-petugas')[0].src = base64Image
+      // document.getElementsByClassName('ttd-petugas')[1].src = base64Image
+      item.ttd_petugas = base64Image
+    }),
+    imageToBase64(ttdDokter, (base64Image) => {
+      // document.getElementsByClassName('ttd-dokter')[0].src = base64Image
+      item.ttd_dokter = base64Image
+    }),
+    imageToBase64(ttdSaksiPasien, (base64Image) => {
+      // document.getElementsByClassName('ttd-saksi-pasien')[0].src = base64Image
+      item.ttd_saksi_pasien = base64Image
+    }),
+    imageToBase64(ttdYgMenyatakan, (base64Image) => {
+      // document.getElementsByClassName('ttd-yg-menyatakan')[0].src = base64Image
+      // document.getElementsByClassName('ttd-yg-menyatakan')[1].src = base64Image
+      item.ttd_yg_menyatakan = base64Image
+    })
+  ])
+}
+
+function getNewLine (text) {
   return text?.replace(/\n/g, '<br/>')
 }
+
+// function imageToBase64 (url, callback) {
+//   fetch(url)
+//     .then((response) => response.blob())
+//     .then((blob) => {
+//       const reader = new FileReader()
+//       reader.readAsDataURL(blob)
+//       reader.onloadend = () => {
+//         const base64String = reader.result
+//         callback(base64String)
+//       }
+//     })
+//     .catch((error) => {
+//       console.log(error)
+//     })
+// }
 
 const exportPdf = () => {
   const concern = document.getElementById('pdfDoc')

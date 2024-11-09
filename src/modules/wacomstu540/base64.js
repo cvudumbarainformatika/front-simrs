@@ -1,4 +1,5 @@
-﻿/*
+﻿/* eslint-disable no-var */
+/*
 Copyright (c) 2008 Fred Palmer fred.palmer_at_gmail.com
 
 Permission is hereby granted, free of charge, to any person
@@ -89,6 +90,7 @@ var Base64 =
       }
       else {
         enumerator.moveNext()
+        // eslint-disable-next-line no-redeclare
         var charCode2 = enumerator.current
 
         enumerator.moveNext()
