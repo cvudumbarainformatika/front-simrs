@@ -717,23 +717,6 @@ export const registerJurnal = defineStore('register_jurnal', {
       const dataspmup = []
       for (let i = 0; i < this.spmup.length; i++) {
         const arr = this.spmup
-
-        const kasblud = []
-        for (let k = 0; k < arr.length; k++) {
-          const er = arr[i]
-          const el = {
-            tanggal: er.tglSpm,
-            notrans: er.noSpm,
-            keterangan: er.uraianPekerjaan,
-            kegiatan: 'Uang Persediaan Panjar',
-            kode: '1.1.01.04.01.0001',
-            uraian: 'Kas di BLUD',
-            debit: 0,
-            kredit: parseFloat(er.jumlahspp)
-          }
-          kasblud.push(el)
-          console.log('UP', kasblud)
-        }
         const kasbend = []
         for (let k = 0; k < arr.length; k++) {
           const er = arr[i]
@@ -749,6 +732,23 @@ export const registerJurnal = defineStore('register_jurnal', {
           }
           kasbend.push(el)
         }
+        const kasblud = []
+        for (let k = 0; k < arr.length; k++) {
+          const er = arr[i]
+          const el = {
+            tanggal: er.tglSpm,
+            notrans: er.noSpm,
+            keterangan: er.uraianPekerjaan,
+            kegiatan: 'Uang Persediaan Panjar',
+            kode: '1.1.01.04.01.0001',
+            uraian: 'Kas di BLUD',
+            debit: 0,
+            kredit: parseFloat(er.jumlahspp)
+          }
+          kasblud.push(el)
+          // console.log('UP', kasblud)
+        }
+
         const obj = {
           tanggal: arr[i].tglSpm,
           notrans: arr[i].noSpm,
@@ -763,7 +763,7 @@ export const registerJurnal = defineStore('register_jurnal', {
           k_pjk1: null
         }
         dataspmup.push(obj)
-        dataserahterima.push(...kasblud, ...kasbend)
+        dataserahterima.push(...kasbend, ...kasblud)
         // console.log('SPM UP', dataspmup)
       }
 

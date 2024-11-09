@@ -1,5 +1,6 @@
 <template>
   <div id="pdfDoc" class="q-pa-lg bg-white f-12">
+    <!-- page 1 -->
     <div class="page-1">
       <!-- KOP SURAT -->
       <div class="col-grow ba-black">
@@ -257,7 +258,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
+                  <img :src="item?.ttd_petugas" alt="ttd-petugas" width="70">
                 </td>
               </tr>
               <tr>
@@ -266,7 +267,7 @@
                 </td>
 
                 <td class="text-right">
-                  <img :src="item?.ttdYangMenyatakan" alt="ttd-yg-menyatakan">
+                  <img :src="item?.ttd_yg_menyatakan" alt="ttd-yg-menyatakan" width="70">
                 </td>
               </tr>
               <tr>
@@ -281,7 +282,7 @@
     </div>
 
     <q-separator class="pemisah q-mb-lg html2pdf__page-break" />
-
+    <!-- Page 2 -->
     <div class="page-2">
       <div class="section-1">
         <div class="text-center f-14 text-bold q-mb-lg">
@@ -476,24 +477,449 @@
                 Tanda Tangan
               </td>
               <td class="text-center f-12">
-                <img :src="`${item?.ttd_dokter_url}`" alt="ttd dokter" width="70">
-                <!-- {{ item?.ttdDokter }} -->
+                <img :src="item?.ttd_dokter" alt="ttd dokter" width="70">
               </td>
               <td class="text-center f-12">
-                <img :src="item?.ttd_petugas_url" alt="ttd-petugas">
-                <!-- {{ item?.ttdPetugas }} -->
+                <img :src="item?.ttd_petugas" alt="ttd-petugas" width="70">
               </td>
               <td class="text-center">
-                <img :src="item?.ttd_saksi_pasien_url" alt="ttd-saksi-pasien">
-                <!-- {{ item?.ttdSaksiPasien }} -->
+                <img :src="item?.ttd_saksi_pasien" alt="ttd-saksi-pasien" width="70">
               </td>
               <td class="text-center">
-                <img :src="item?.ttd_yg_menyatakan_url" alt="ttd-yg-menyatakan">
-                <!-- {{ item?.ttdYgMenyatakan }} -->
+                <img :src="item?.ttd_yg_menyatakan" alt="ttd-yg-menyatakan" width="70">
               </td>
             </tr>
           </tbody>
         </q-markup-table>
+      </div>
+    </div>
+
+    <q-separator class="pemisah q-mb-lg html2pdf__page-break" />
+
+    <!-- Page 3 -->
+    <div class="page-3">
+      <!-- KOP SURAT -->
+      <div class="col-grow ba-black">
+        <div class="row items-center">
+          <div class="col-9 br-black">
+            <div class="row items-center q-pa-sm">
+              <div class="col-auto">
+                <img
+                  src="~assets/images/logo-kota-grey.png"
+                  width="60"
+                >
+              </div>
+              <div class="col flex-wrap q-px-md">
+                <div class="text-center">
+                  <div class="text-weight-bold f-12">
+                    PEMERINTAH KOTA PROBOLINGGO
+                  </div>
+                  <div class="text-weight-bold f-10">
+                    DINAS KESEHATAN, PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA
+                  </div>
+                  <div class="text-weight-bold f-14">
+                    UOBK RSUD DOKTER MOHAMAD SALEH
+                  </div>
+                  <div class="f-10">
+                    <div>Jl. Mayjend Panjaitan No.65 Telp: (0335)433119 Fax.(0335)432702</div>
+                    <div>email: rsudprob@probolinggokota.go.id</div>
+                    <div>PROBOLINGGO – 67219</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="text-center text-bold">
+              PERSETUJUAN
+              TINDAKAN KEDOKTERAN
+            </div>
+            <div class="text-center text-bold">
+              OPERASI / TINDAKAN INVASIF
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- section-1 -->
+      <div class="ba-black f-12 q-mt-xs">
+        <div class="q-pa-sm">
+          Saya , Dokter Pelaksana tindakan menyatakan bahwa telah menerangkan hal dibawah ini secara benar dan jelas dan
+          sudah memberi kesempatan pada pasien / keluarga untuk bertanya dan berdiskusi.
+        </div>
+
+        <div class="section-2">
+          <q-markup-table dense separator="cell" flat bordered wrap-cells>
+            <thead>
+              <tr>
+                <th colspan="2" class="text-left f-12" width="30%">
+                  JENIS INFORMASI
+                </th>
+                <th class="text-left f-12">
+                  ISI INFORMASI
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left f-12 f-12">
+                  1
+                </td>
+                <td class="text-left f-12 f-12">
+                  Diagnosis
+                </td>
+                <td class="text-left f-12 f-12">
+                  <div class="flex">
+                    <div v-for="diag in item?.diagnosis" :key="diag" class="flex">
+                      <div class="">
+                        {{ pasien?.diagnosamedis?.find(x => x?.rs3 === diag)?.masterdiagnosa?.rs4 ?? '-' }}
+                      </div>
+                      <div class="q-mr-xs">
+                        ,
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div v-for="diag in item?.diagnosis" :key="diag" class="flex">
+                    <div>- {{ diag }} </div>
+                    <div class="q-ml-sm">
+                      {{ pasien?.diagnosamedis?.find(x => x?.rs3 === diag)?.masterdiagnosa?.rs4 ?? '-' }}
+                    </div>
+                  </div> -->
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  2
+                </td>
+                <td class="text-left f-12">
+                  Dasar Diagnosis
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.dasarDiagnosis)" />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  3
+                </td>
+                <td class="text-left f-12">
+                  Tindakan Kedokteran
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.tindakanMedis)" />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  4
+                </td>
+                <td class="text-left f-12">
+                  Indikasi
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.indikasi)" />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  5
+                </td>
+                <td class="text-left f-12">
+                  Tujuan
+                </td>
+                <td class="text-left f-12">
+                  <div class="flex">
+                    <div v-for="tj in item?.tujuan" :key="tj" class="flex">
+                      <div class="">
+                        {{ tj==='Lain-lain'? item?.tujuanLain : (tj ?? '-') }}
+                      </div>
+                      <div>, </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  6
+                </td>
+                <td class="text-left f-12">
+                  Tata Cara
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.tatacara)" />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  7
+                </td>
+                <td class="text-left f-12">
+                  Resiko
+                </td>
+                <td class="text-left f-12">
+                  <div class="flex">
+                    <div v-for="tj in item?.resiko" :key="tj" class="flex">
+                      <div class="">
+                        {{ tj==='Lain-lain'? item?.tujuanLain : (tj ?? '-') }}
+                      </div>
+                      <div>, </div>
+                    </div>
+                  </div>
+                  <!-- <div v-for="tj in item?.resiko" :key="tj" class="flex">
+                    <div>-  </div>
+                    <div class="q-ml-sm">
+                      {{ tj==='Lain-lain'? item?.resikoLain : (tj ?? '-') }}
+                    </div>
+                  </div> -->
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  8
+                </td>
+                <td class="text-left f-12">
+                  Komplikasi
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.komplikasi)" />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  9
+                </td>
+                <td class="text-left f-12">
+                  Prognosis
+                </td>
+                <td class="text-left f-12">
+                  {{ item?.prognosis?.join(', ') }}
+                </td>
+              </tr>
+
+              <tr>
+                <td class="text-left f-12">
+                  10
+                </td>
+                <td class="text-left f-12">
+                  Alternatif Tindakan
+                </td>
+                <td class="text-left f-12">
+                  <div v-html="getNewLine(item?.alternatif)" />
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+
+          <div style="padding:10px;">
+            Catatan Khusus :
+          </div>
+          <div style="padding: 10px;" />
+        </div>
+      </div>
+
+      <div class="section-3 ba-black">
+        <!-- section-3 -->
+        <div class="q-pa-sm">
+          <div>Saya yang bertanda tangan dibawah ini :</div>
+
+          <div>
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                Nama
+              </div>
+              <div class="col-8">
+                <div class="flex justify-between">
+                  <div>: {{ item?.nama }} <span class="q-ml-lg">({{ item?.lp === 'Perempuan' ? 'P' : 'L' }})*</span></div>
+                  <div class="self-end">
+                    Tanggal Lahir : {{ item?.tglLahir }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                No KTP / SIM / PASPOR
+              </div>
+              <div class="col-8">
+                <div class="flex">
+                  : {{ item?.noKtp }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                Alamat
+              </div>
+              <div class="col-8">
+                <div class="row">
+                  <div class="col-auto q-mr-xs">
+                    :
+                  </div>
+                  <div class="col full-width">
+                    {{ item?.alamat }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                Hubungan Dengan Pasien
+              </div>
+              <div class="col-8">
+                <div class="flex q-gutter-sm">
+                  <!-- : {{ item?.hubunganDgPasien }} <span v-if="item?.hubunganDgPasien === 'Keluarga'"> {{ item?.keluarga }}</span> -->
+                  <div v-for="n in store.hubunganDgPasiens" :key="n">
+                    <div class="flex">
+                      <div class="ba-black relative-position" style="width: 15px; height: 15px;">
+                        <q-icon v-if="n === item?.hubunganDgPasien" name="icon-mat-check" class="absolute-center" size="sm" />
+                      </div> <div class="q-ml-sm">
+                        {{ n }} <span v-if="n==='Keluarga'">..................................</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-mt-lg">
+            Dengan ini menyatakan sesungguhnya, bahwa saya telah menerima informasi yang diberikan oleh dokter sebagaimana
+            diatas dan telah memahaminya. Untuk itu saya memeberikan <b>PERSETUJUAN</b> untuk dilakukan Tindakan KEDOKTERAN
+            tersebut terhadap :
+          </div>
+
+          <div class="q-mt-lg">
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                Nama
+              </div>
+              <div class="col-8">
+                <div class="flex justify-between">
+                  <div>: {{ pasien?.nama }} <span class="q-ml-lg">({{ pasien?.kelamin === 'Perempuan' ? 'P' : 'L' }})*</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                No KTP / SIM / PASPOR
+              </div>
+              <div class="col-8">
+                <div class="flex">
+                  : {{ pasien?.nktp }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                Alamat
+              </div>
+              <div class="col-8">
+                <div class="row">
+                  <div class="col-auto q-mr-xs">
+                    :
+                  </div>
+                  <div class="col full-width">
+                    {{ pasien?.alamat }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row q-mt-xs">
+              <div class="col-4">
+                RM
+              </div>
+              <div class="col-8">
+                <div class="flex">
+                  : {{ pasien?.norm }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-mt-lg q-pa-sm">
+          Saya memahami perlunya dan manfaat tindakan tersebut termasuk risiko dan komplikasi yang akan timbul. Saya juga
+          menyadri bahwa ilmu kedokteran bukanlah ilmu pasti, maka keberhasikan tindakan kedokteran bukanlah keniscayaan,
+          melainkan tergantung kepada ijin Tuhan Yang Maha Esa.
+        </div>
+
+        <!-- end section-3 -->
+
+        <div class="section-3 q-mt-lg">
+          <div class="text-right f-12 q-mb-lg q-mr-sm">
+            Probolinggo, {{ humanDate(item?.tanggal) }}, pkl: {{ jamTnpDetik(item?.tanggal) }}
+          </div>
+          <q-markup-table dense separator="cell" flat bordered wrap-cells>
+            <thead>
+              <tr>
+                <th class="text-left f-12" width="20%" />
+                <th class="text-center f-12" width="20%">
+                  Dokter
+                </th>
+                <th class="text-center f-12" width="20%">
+                  Saksi RS
+                </th>
+                <th class="text-center" width="20%">
+                  Saksi Pasien
+                </th>
+                <th class="text-center" width="20%">
+                  Yang Menyatakan
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left f-12">
+                  Nama Jelas
+                </td>
+                <td class="text-center f-12">
+                  {{ item?.pelaksana }}
+                </td>
+                <td class="text-center f-12">
+                  {{ item?.pengedukasi }}
+                </td>
+                <td class="text-center">
+                  {{ item?.saksiPasien }}
+                </td>
+                <td class="text-center">
+                  {{ item?.nama }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-left f-12">
+                  Tanda Tangan
+                </td>
+                <td class="text-center f-12">
+                  <img :src="item?.ttd_dokter" alt="ttd dokter" width="70">
+                </td>
+                <td class="text-center f-12">
+                  <img :src="item?.ttd_petugas" alt="ttd-petugas" width="70">
+                </td>
+                <td class="text-center">
+                  <img :src="item?.ttd_saksi_pasien" alt="ttd-saksi-pasien" width="70">
+                </td>
+                <td class="text-center">
+                  <img :src="item?.ttd_yg_menyatakan" alt="ttd-yg-menyatakan" width="70">
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </div>
       </div>
     </div>
   </div>
@@ -502,6 +928,12 @@
 <script setup>
 // import { pathImg } from 'src/boot/axios'
 import html2pdf from 'html2pdf.js'
+import { pathImg } from 'src/boot/axios'
+import { humanDate, jamTnpDetik } from 'src/modules/formatter'
+import { imageToBase64 } from 'src/modules/imgBase64'
+import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
+import { onMounted, ref } from 'vue'
+const store = useConcernOperasiInvasifRanapStore()
 
 const props = defineProps({
   item: {
@@ -517,6 +949,47 @@ const props = defineProps({
     default: null
   }
 })
+
+onMounted(() => {
+  hubDgPas()
+  initImage(props.item)
+})
+
+function initImage (item) {
+  const ttdPetugas = pathImg + item?.ttdPetugas
+  const ttdDokter = pathImg + item?.ttdDokter
+  const ttdSaksiPasien = pathImg + item?.ttdSaksiPasien
+  const ttdYgMenyatakan = pathImg + item?.ttdYgMenyatakan
+
+  Promise.all([
+    imageToBase64(ttdPetugas, (base64Image) => {
+      // document.getElementsByClassName('ttd-petugas')[0].src = base64Image
+      // document.getElementsByClassName('ttd-petugas')[1].src = base64Image
+      item.ttd_petugas = base64Image
+    }),
+    imageToBase64(ttdDokter, (base64Image) => {
+      // document.getElementsByClassName('ttd-dokter')[0].src = base64Image
+      item.ttd_dokter = base64Image
+    }),
+    imageToBase64(ttdSaksiPasien, (base64Image) => {
+      // document.getElementsByClassName('ttd-saksi-pasien')[0].src = base64Image
+      item.ttd_saksi_pasien = base64Image
+    }),
+    imageToBase64(ttdYgMenyatakan, (base64Image) => {
+      // document.getElementsByClassName('ttd-yg-menyatakan')[0].src = base64Image
+      // document.getElementsByClassName('ttd-yg-menyatakan')[1].src = base64Image
+      item.ttd_yg_menyatakan = base64Image
+    })
+  ])
+}
+
+const modP = ref([])
+
+function hubDgPas () {
+  const a = []
+  a.push(props.item?.hubunganDgPasien)
+  modP.value = a
+}
 
 function getNewLine (text) {
   // console.log('text', text)

@@ -24,10 +24,10 @@
                 active-bg-color="indigo-1"
                 no-caps
                 align="left"
-                style="justify-content: initial"
+                style="justify-content: left"
                 @update:model-value="(val)=> store.initReset(pasien)"
               >
-                <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" :icon="menu?.icon" :label="menu?.label" />
+                <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" :label="menu?.label" />
               </q-tabs>
             </div>
           </div>
@@ -86,6 +86,15 @@ const menus = ref([
     icon: 'icon-fa-file-regular',
     nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
+  },
+  {
+    name: 'Colonoscopy',
+    label: 'SPT Colonoscopy',
+    title: 'TINDAKAN COLONOSCOPY',
+    desc: 'Surat Persetujuan Tindakan Colonoscopy',
+    icon: 'icon-fa-file-regular',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
   }
 
 ])
@@ -106,6 +115,7 @@ const splitterModel = ref(15)
 onMounted(() => {
   // innerTab.value = menus.value[0].name
   store.menuTab = menus.value[0].name
+  store.item = null
   Promise.all([
     // pengunjungRanap.getNakes(),
     // store.getRuangKonsulDokter()

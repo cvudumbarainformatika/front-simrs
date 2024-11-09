@@ -78,7 +78,7 @@ export default function useLayanan (pasien) {
     },
     {
       name: 'inform-consent-page',
-      label: 'Inform Concern',
+      label: 'Informed Consent',
       icon: 'icon-mat-app_registration',
       nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./informconsent/IndexPage.vue')))

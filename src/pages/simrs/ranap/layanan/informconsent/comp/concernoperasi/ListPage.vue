@@ -2,14 +2,20 @@
   <div class="q-pa-md">
     <q-card v-for="item in pasien?.informconcern" :key="item" class="q-mb-md">
       <q-card-section>
-        <div class="text-h6">
-          Inform Concern
+        <div class="text-subtitle">
+          INFORMED CONSENT
         </div>
-        <div class="text-bold">
+        <div class="text-bold f-14">
           {{ item?.jenis }}
         </div>
-        <div class="text-right ">
-          <q-btn flat icon="icon-mat-visibility" padding="xs" round color="primary" @click="emits('preview', item)" />
+        <q-separator class="q-my-sm" />
+        <div class="flex items-center justify-between">
+          <div>
+            <q-btn flat icon="icon-mat-delete" padding="xs" size="sm" round color="negative" @click="emits('delete', item)" />
+          </div>
+          <div>
+            <q-btn flat icon="icon-fa-file-regular" padding="xs" round color="primary" @click="emits('preview', item)" />
+          </div>
         </div>
       </q-card-section>
     </q-card>
