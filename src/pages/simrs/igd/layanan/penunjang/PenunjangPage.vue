@@ -75,6 +75,7 @@ const comp = [
   { nama: 'Fisioterapi', page: defineAsyncComponent(() => import('./fisioterapi/PageFisio.vue')) },
   { nama: 'Jenazah', page: defineAsyncComponent(() => import('./jenazah/PageJenazah.vue')) },
   { nama: 'Ambulan', page: defineAsyncComponent(() => import('./ambulan/PageAmbulan.vue')) },
+  { nama: 'BankDarah', page: defineAsyncComponent(() => import('./bankdarah/PageBankDarah.vue')) },
   { nama: 'PenunjangLain', page: defineAsyncComponent(() => import('./penunjanglain/PagePenunjangLain.vue')) }
 ]
 

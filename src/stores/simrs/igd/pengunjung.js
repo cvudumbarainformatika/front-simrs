@@ -171,7 +171,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].penunjanglain = resp?.data?.penunjanglain
             findPasien[0].ambulan = resp?.data?.ambulan
             findPasien[0].radiologi = resp?.data?.radiologi
-            // findPasien[0].sharing = resp?.data?.sharing
+            findPasien[0].bankdarah = resp?.data?.bankdarah
             // findPasien[0].taskid = resp?.data?.taskid
             findPasien[0].tindakan = resp?.data?.tindakan
             // BARU
@@ -308,6 +308,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataAmbulan (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.ambulan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
     hapusDataOk (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
@@ -369,6 +377,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].diagnosakebidanan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataBankdarah (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.bankdarah
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

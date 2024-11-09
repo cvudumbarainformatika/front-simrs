@@ -7,13 +7,13 @@
       <q-space />
       <div class="q-py-xs">
         <q-select
-          v-model="store.form.notaambulan"
+          v-model="store.form.nota"
           outlined
           standout="bg-yellow-3"
           bg-color="white"
           dense
           :options="store.notas"
-          :display-value="`NOTA: ${store.form.notaambulan === null || store.form.notaambulan === '' || store.form.notaambulan === 'BARU' ? 'BARU' : store.form.notaambulan}`"
+          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'BARU' : store.form.nota}`"
           style="min-width: 200px;"
         />
       </div>
@@ -23,7 +23,7 @@
         v-if="filterredTable.length === 0"
         class="column full-height flex-center text-white"
       >
-        Belum Ada Permintaan Ambulan
+        Belum Ada Permintaan Kantong Darah
       </div>
       <q-scroll-area
         v-else
@@ -43,31 +43,43 @@
                     lines="2"
                     class="f-12"
                   >
-                    <span class="">Tujuan Pasien</span> : <span class="text-weight-bold text-accent">{{ item?.tujuan?.rs2 }} </span>
+                    <span class="">Jenis Darah</span> : <span class="text-weight-bold text-accent">{{ item?.rs4 }} </span>
                   </q-item-label>
                   <q-item-label
                     lines="2"
                     class="f-12"
                   >
-                    <span class=""> Pelayanan Supir : </span> <span class="text-weight-bold"> {{ item?.rs12 }} </span>
+                    <span class=""> Golongan Darah : </span> <span class="text-weight-bold"> {{ item?.rs5 }} </span>
                   </q-item-label>
                   <q-item-label
                     lines="2"
                     class="f-12"
                   >
-                    <span class=""> Pelayanan Perawat : </span> <span class="text-weight-bold"> {{ item?.rs15 }} </span>
+                    <span class=""> Rhesus : </span> <span class="text-weight-bold"> {{ item?.rs15 }} </span>
                   </q-item-label>
                   <q-item-label
                     lines="2"
                     class="f-12"
                   >
-                    <span class=""> Nama Perawat : </span> <span class="text-weight-bold"> {{ item?.perawat?.rs2 }}, {{ item?.perawat2?.rs2 ? item?.perawat2?.rs2 : '-' }} </span>
+                    <span class=""> Jumlah Bag : </span> <span class="text-weight-bold"> {{ item?.rs6 }} </span>
                   </q-item-label>
                   <q-item-label
                     lines="2"
                     class="f-12"
                   >
-                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs11 ? item?.rs11 : '-' }} </em>
+                    <span class=""> Sifat Permintaan : </span> <span class="text-weight-bold"> {{ item?.rs7 }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class=""> Transfusi Ke : </span> <span class="text-weight-bold"> {{ item?.rs13 }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class=""> Reaksi : </span> <span class="text-weight-bold"> {{ item?.rs9 }}</span> <span v-if="item?.rs19 !== null"> ({{ item?.rs19 }})</span>
                   </q-item-label>
                 </q-item-section>
 
@@ -105,11 +117,11 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { useAmbulanStore } from 'src/stores/simrs/igd/ambulan'
+import { useBankDarahStore } from 'src/stores/simrs/igd/bankdarah'
 import { computed } from 'vue'
 
 const $q = useQuasar()
-const store = useAmbulanStore()
+const store = useBankDarahStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -118,11 +130,11 @@ const props = defineProps({
 })
 
 const filterredTable = computed(() => {
-  const val = store?.form?.notaambulan
-  const arr = props?.pasien?.ambulan
+  const val = store?.form?.nota
+  const arr = props?.pasien?.bankdarah
   // console.log('val ', val)
-  // console.log('pasien ambulan', arr)
-  return arr?.length ? arr?.filter(x => x?.nota === val) : []
+  console.log('pasien bdrs', arr)
+  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 })
 
 function hapusItem (id) {

@@ -170,7 +170,7 @@ const props = defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const options = ref([])
+const options = ref([store.listperawat])
 const listperawat = ref([])
 const pelsupir = ref(['Rujukan', 'Jenazah', 'Emergency'])
 const pelperawat = ref(['Rujukan', 'Emergency', 'Privat'])
@@ -184,23 +184,27 @@ function filterFn (val, update, abort) {
     abort()
     return
   }
-
   update(() => {
     const needle = val.toLowerCase()
-    // const arr = store.listDiagnosa
-    const arr = store.listperawat
-    const filter = ['rs2']
-    // console.log('sasax', arr)
-    const multiFilter = (data = [], filterKeys = [], value = '') =>
-      data?.filter((item) => filterKeys.some(
-        (key) =>
-          item[key]?.toString()?.toLowerCase()?.includes(value?.toLowerCase()) &&
-            item[key]
-      )
-      )
-    const filteredData = multiFilter(arr, filter, needle)
-    options.value = filteredData
+    options.value = store.listperawat.filter(
+      (v) => v.rs2.toLowerCase().indexOf(needle) > -1 || v.rs1.toLowerCase().indexOf(needle) > -1
+    )
   })
+
+  // update(() => {
+  //   const needle = val.toLowerCase()
+  //   const arr = store.listperawat
+  //   const filter = ['rs2']
+  //   const multiFilter = (data = [], filterKeys = [], value = '') =>
+  //     data?.filter((item) => filterKeys.some(
+  //       (key) =>
+  //         item[key]?.toString()?.toLowerCase()?.includes(value?.toLowerCase()) &&
+  //           item[key]
+  //     )
+  //     )
+  //   const filteredData = multiFilter(arr, filter, needle)
+  //   options.value = filteredData
+  // })
 }
 
 function saveOrder () {

@@ -15,6 +15,7 @@ export const usePenunjangIgd = defineStore('penunjang-igd', {
       { name: 'Rehab Medik', page: 'Fisioterapi' },
       { name: 'Perawatan Jenazah', page: 'Jenazah' },
       { name: 'Ambulan', page: 'Ambulan' },
+      { name: 'Bank Darah', page: 'BankDarah' },
       { name: 'Penunjang Lain', page: 'PenunjangLain' }
     ],
     // laborat
