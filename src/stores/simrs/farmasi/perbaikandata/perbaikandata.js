@@ -30,12 +30,16 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
       { nama: 'Depo Rawat Jalan', kode: 'Gd-05010101' },
       { nama: 'Depo IGD', kode: 'Gd-02010104' }
     ],
-    /// detail seections
+    /// detail seections gudang
     openMutasi: false,
     loadingMutasi: false,
     detailMutasis: [],
-
-    loadingFixMutasi: false
+    loadingFixMutasi: false,
+    /// detail seections depo
+    openResep: false,
+    loadingResep: false,
+    detailReseps: [],
+    loadingFixResep: false
   }),
   actions: {
     setParams (key, val) {
@@ -54,7 +58,7 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
       }
 
       const resp = await api.post('/v1/simrs/farmasinew/stok/fr-perbaikan-data-depo', params)
-      // console.log(resp)
+      console.log(resp?.data)
       if (resp.status === 200) {
         const data = resp.data?.kdobat
         data.forEach(item => {
@@ -94,6 +98,25 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
       }
       this.loadingMutasi = false
     },
+    async getDetailResep (kode) {
+      this.loadingResep = true
+      this.items = []
+      const params = {
+        ...this.params
+      }
+
+      params.kdobat = kode
+      const resp = await api.post('/v1/simrs/farmasinew/stok/fr-data-resep', params)
+      console.log('resp', resp?.data)
+
+      if (resp.status === 200) {
+        this.detailReseps = resp?.data?.data ?? []
+        this.loadingResep = false
+      }
+      else {
+        this.loadingResep = false
+      }
+    },
     ambilUlangData (data) {
       const params = {
         ...this.params
@@ -124,6 +147,29 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
         this.ambilUlangData(kode)
       }).catch(() => {
         this.loadingFixMutasi = false
+      })
+    },
+    autoFixReseps (kode) {
+      this.loadingFixResep = true
+      this.items = []
+      const params = {
+        ...this.params
+      }
+
+      params.kdobat = kode.obat
+      params.tipe = kode.tipe
+      params.perbaiki = 'ya'
+      // params.perbaiki = 'tidak'
+      console.log('auto fix resep', kode, params)
+
+      this.getData(params).then(resp => {
+        console.log('resp auto fix', resp)
+
+        this.loadingFixResep = false
+        this.getDetailResep(kode)
+        this.ambilUlangData(kode)
+      }).catch(() => {
+        this.loadingFixResep = false
       })
     },
     getData (data) {

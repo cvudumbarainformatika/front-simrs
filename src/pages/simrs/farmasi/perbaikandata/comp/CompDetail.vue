@@ -295,15 +295,26 @@
             <q-btn
               no-caps
               dense
-              label="Autofix Resep"
+              :label="store.params.kdruang==='Gd-03010101'?'Autofix Mutasi ke Ruangan':'Autofix Resep'"
               color="orange"
-              :loading="store.loadingFixOpname"
-              :disable="store.loadingFixOpname"
-              @click="autoFixResep()"
+              :loading="store.loadingFixResep"
+              :disable="store.loadingFixResep || store.loadingResep"
+              @click="autoFixResep('default')"
+            />
+          </div>
+          <div v-if="!mutSaja.includes(store.params.kdruang)" class="col-2">
+            <q-btn
+              no-caps
+              dense
+              label="List Transaksi"
+              color="primary"
+              :loading="store.loadingResep"
+              :disable="store.loadingResep || store.loadingFixResep"
+              @click="listResep()"
             />
           </div>
         </div>
-        <!-- mutasi saja, gudang, depo FS -->
+        <!-- mutasi saja, gudangS -->
         <div v-if="mutSaja.includes(store.params.kdruang)" class="row q-py-sm" style="border-bottom: 1px solid #ccc;">
           <div class="col-auto per-tiga">
             <div class="text-weight-bold">
@@ -446,7 +457,145 @@
           </div>
         </div>
         <div v-if="!mutSaja.includes(store.params.kdruang)" class="row q-py-sm" style="border-bottom: 1px solid #ccc;">
-          Ada resep
+          <div class="col-auto per-tiga">
+            <div class="text-weight-bold">
+              Transaksi Kurang
+            </div>
+            <div class="row bg-dark text-white">
+              <div class="col-auto" style="width: 7%;">
+                No
+              </div>
+              <div class="col-6" style="width: 45%;">
+                Nomor Penerimaaan
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Masuk
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Keluar
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Diff
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Op
+              </div>
+            </div>
+            <div v-for="(mut,i) in data?.data?.data?.penLeb" :key="i">
+              <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                <div class="col-auto" style="width: 7%;">
+                  {{ i+1 }}
+                </div>
+                <div class="col-auto" style="width: 45%;">
+                  {{ mut?.noper }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.maSuk }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.keLuar }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.sts }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.stOpnya }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto per-tiga">
+            <div class="text-weight-bold">
+              Transaksi Lebih
+            </div>
+            <div class="row bg-dark text-white">
+              <div class="col-auto" style="width: 7%;">
+                No
+              </div>
+              <div class="col-6" style="width: 45%;">
+                Nomor Penerimaaan
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Masuk
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Keluar
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Diff
+              </div><div class="col-auto" style="width: calc(48% / 4)">
+                Op
+              </div>
+            </div>
+            <div v-for="(mut,i) in data?.data?.data?.penKur" :key="i">
+              <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                <div class="col-auto" style="width: 7%;">
+                  {{ i+1 }}
+                </div>
+                <div class="col-auto" style="width: 45%;">
+                  {{ mut?.noper }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.maSuk }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.keLuar }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.sts }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.stOpnya }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto per-tiga">
+            <div class="text-weight-bold">
+              Transaksi Pas
+            </div>
+            <div class="row bg-dark text-white">
+              <div class="col-auto" style="width: 7%;">
+                No
+              </div>
+              <div class="col-6" style="width: 45%;">
+                Nomor Penerimaaan
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Masuk
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Keluar
+              </div>
+              <div class="col-auto" style="width: calc(48% / 4)">
+                Diff
+              </div><div class="col-auto" style="width: calc(48% / 4)">
+                Op
+              </div>
+            </div>
+            <div v-for="(mut,i) in data?.data?.data?.penPas" :key="i">
+              <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                <div class="col-auto" style="width: 7%;">
+                  {{ i+1 }}
+                </div>
+                <div class="col-auto" style="width: 45%;">
+                  {{ mut?.noper }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.maSuk }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.keLuar }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.sts }}
+                </div>
+                <div class="col-auto" style="width: calc(48% / 4)">
+                  {{ mut?.stOpnya }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </q-card-section>
     </q-card>
@@ -457,7 +606,7 @@ import { dateFull } from 'src/modules/formatter'
 import { usePerbaikanDataFarmasiStore } from 'src/stores/simrs/farmasi/perbaikandata/perbaikandata'
 import { ref } from 'vue'
 const store = usePerbaikanDataFarmasiStore()
-const emits = defineEmits(['close', 'fixMutasi'])
+const emits = defineEmits(['close', 'fixMutasi', 'fixResep'])
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   data: { type: Object, default: () => {} }
@@ -552,7 +701,7 @@ function autoFix () {
 /**
  * transaction section
  */
-const mutSaja = ref(['Gd-05010100', 'Gd-03010100', 'Gd-03010101'])
+const mutSaja = ref(['Gd-05010100', 'Gd-03010100'])
 function listMutasi () {
   store.openMutasi = true
   store.getDetailMutasi(props.data.kd_obat)
@@ -562,7 +711,12 @@ function autofixMutasi () {
 
   emits('fixMutasi', props.data?.kd_obat)
 }
-function autoFixResep () {
+function listResep () {
+  store.openResep = true
+  store.getDetailResep(props.data.kd_obat)
+}
+function autoFixResep (val) {
+  emits('fixResep', { obat: props.data?.kd_obat, tipe: val })
   // editTransaction.value = false
 }
 

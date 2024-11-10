@@ -17,7 +17,7 @@
           </q-tooltip>
         </q-btn>
       </q-bar>
-      <q-card-section class="q-mb-lg">
+      <q-card-section class="">
         <div class="row items-center">
           <div class="col-2 text-weight-bold">
             Nompr Penerimaan Lebih Transaksi
@@ -44,7 +44,7 @@
               </div>
             </div>
 
-            <div v-for="(ku,i) in kur" :key="i">
+            <div v-for="(ku,i) in item?.data?.data?.penKur" :key="i">
               <div class="row items-center " :class="i%2==0?'bg-grey-2':'bg-grey-4'">
                 <div class="col-auto" style="width: 5%;">
                   {{ i+1 }}

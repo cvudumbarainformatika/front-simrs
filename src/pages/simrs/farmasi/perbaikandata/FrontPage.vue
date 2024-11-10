@@ -169,6 +169,9 @@
       @fix-mutasi="(val)=>{
         if(val) store.autoFixMutasi(val)
       }"
+      @fix-resep="(val)=>{
+        if(val) store.autoFixReseps(val)
+      }"
     />
     <DetailMutasi
       v-model="store.openMutasi"
@@ -182,6 +185,18 @@
         if(val) store.autoFixMutasi(val)
       }"
     />
+    <DetailResep
+      v-model="store.openResep"
+      :data="store.detailReseps"
+      :item="data"
+      :loading="store.loadingResep"
+      :loading-fix-mutasi="store.loadingFixResep"
+      @close="store.openResep=false"
+      @fix-resep="(val)=>{
+        console.log('val', val)
+        if(val) store.autoFixReseps(val)
+      }"
+    />
   </div>
 </template>
 <script setup>
@@ -192,6 +207,7 @@ const store = usePerbaikanDataFarmasiStore()
 
 const DetailCom = defineAsyncComponent(() => import('./comp/CompDetail.vue'))
 const DetailMutasi = defineAsyncComponent(() => import('./comp/CompListMutasi.vue'))
+const DetailResep = defineAsyncComponent(() => import('./comp/CompListResep.vue'))
 
 const isOpen = ref(false)
 const data = ref({})
