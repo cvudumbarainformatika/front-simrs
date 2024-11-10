@@ -8,6 +8,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     tab: 'Diagnosa Medik',
     tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan', 'Diagnosa Kebidanan'],
     items: [],
+    ruangranaps: [],
     loading: false,
     loadingSaveGantiDpjp: false,
     pasiens: [],
@@ -387,6 +388,13 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         const data = findPasien[0]?.bankdarah
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    async getruangranap () {
+      const resp = await api.get('v1/simrs/master/kamar')
+      if (resp.status === 200) {
+        this.ruangranaps = resp?.data
+        console.log('kanmar', this.ruangranaps)
       }
     }
   }

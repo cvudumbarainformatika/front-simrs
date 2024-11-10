@@ -7,12 +7,11 @@
         square
         class="col-6 full-height"
       >
-        <FormAnamnesisKebidanan
+        <FormPlann
           :key="props.pasien"
           :pasien="props.pasien"
-          :triage="props.triage"
+          :ruangranap="props.ruangranap"
           tooltip="History Pasien (Shift + H)"
-          @open-history="seamless = !seamless"
         />
       </q-card>
       <q-card
@@ -21,7 +20,7 @@
         square
         class="col-6 full-height"
       >
-        <ListAnamnesisKebidanan
+        <ListPlann
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
@@ -30,16 +29,22 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import FormAnamnesisKebidanan from './comanamnesis/FormAnamnesisKebidanan.vue'
-import ListAnamnesisKebidanan from './comanamnesis/ListAnamnesisKebidanan.vue'
+import FormPlann from './com/FormPlann.vue'
+import ListPlann from './com/ListPlann.vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+
+// const store = useAnamnesis()
+const seamless = ref(false)
+// const text = ref('')
 
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
   },
-  triage: {
+  ruangranap: {
     type: Object,
     default: null
   },
@@ -47,5 +52,27 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
+
 })
+
+onMounted(() => {
+  // console.log(text.value)
+  document.addEventListener('keypress', handleKeypress, false)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keypress', handleKeypress, true)
+})
+
+const handleKeypress = (evt) => {
+  if (evt.key === 'H' && evt.shiftKey) {
+    seamless.value = !seamless.value
+  }
+}
+
+// const clickslideRight = () => {
+//   // console.log('ok')
+//   seamless.value = !seamless.value
+// }
+
 </script>

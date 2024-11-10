@@ -80,6 +80,7 @@
                   :key="pasien"
                   :pasien="pasien"
                   :loadingaja="loadingaja"
+                  :ruangranap="store.ruangranaps"
                   depo="igd"
                 />
               </template>
@@ -95,7 +96,7 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
 const store = usePengunjungIgdStore()
@@ -133,7 +134,7 @@ const menus = ref([
   {
     name: 'TriagePage',
     label: 'Triage',
-    icon: 'icon-mat-medical_information',
+    icon: 'icon-fa-warehouse-solid',
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/triage/TriagePage.vue')))
   },
   {
@@ -153,6 +154,12 @@ const menus = ref([
     label: 'Penunjang',
     icon: 'icon-my-local_hospital',
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/penunjang/PenunjangPage.vue')))
+  },
+  {
+    name: 'plann-page',
+    label: 'Plan',
+    icon: 'icon-mat-next_plan',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/plann/PlannPage.vue')))
   },
   {
     name: 'e-resep-page',
@@ -180,6 +187,10 @@ function getIcare () {
     }
   })
 }
+
+onMounted(() => {
+  store.getruangranap()
+})
 
 watchEffect(() => {
   // console.log('watch effect', store.loadingTerima)
