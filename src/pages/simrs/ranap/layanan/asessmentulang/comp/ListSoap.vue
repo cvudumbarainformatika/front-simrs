@@ -8,7 +8,7 @@
         <q-expansion-item>
           <template #header>
             <q-item-section avatar>
-              <q-avatar color="primary" text-color="white">
+              <q-avatar :color="item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal')" text-color="white">
                 {{ item?.nakes==='2'? 'Ns' : (item?.nakes==='1'? 'Dr' : 'Bd') }}
               </q-avatar>
             </q-item-section>

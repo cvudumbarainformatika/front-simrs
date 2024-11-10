@@ -89,6 +89,13 @@ export default function useLayanan (pasien) {
       icon: 'icon-mat-cloud_upload',
       nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./upload/IndexPage.vue')))
+    },
+    {
+      name: 'catatan-dan-dokumen',
+      label: 'Catatan / Dokumen',
+      icon: 'icon-my-file_sign',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./dokumen/IndexPage.vue')))
     }
 
   ])

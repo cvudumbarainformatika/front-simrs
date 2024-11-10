@@ -12,6 +12,7 @@ const imageToBase64 = (url, callback) => {
     })
     .catch((error) => {
       console.log(error)
+      callback(null)
     })
 }
 

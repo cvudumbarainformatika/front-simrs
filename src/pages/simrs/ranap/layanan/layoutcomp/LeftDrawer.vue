@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area :style="`height: calc(100% - ${tinggiDetailPas * 2}px); margin-top: ${tinggiDetailPas}px; border-right: 1px solid #ddd`">
+  <q-scroll-area :style="`height: calc(100% - ${tinggiDetailPas}px); margin-top: ${tinggiDetailPas}px; border-right: 1px solid #ddd`">
     <q-separator />
     <list-menu
       :menus="menus"

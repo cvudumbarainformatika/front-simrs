@@ -17,7 +17,7 @@
             </div> -->
             <div class="col full-height scroll">
               <q-tabs
-                v-model="store.menuTab"
+                v-model="innerTab"
                 vertical
                 class="text-dark bg-white shadow-1 bo"
                 active-color="orange-10"
@@ -25,7 +25,6 @@
                 no-caps
                 align="left"
                 inline-label
-                @update:model-value="(val)=> store.initReset(pasien)"
               >
                 <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" :label="menu?.label" style="justify-content: left; border-bottom: 1px solid #e0e0e0; padding-left: 10px;" />
               </q-tabs>
@@ -43,7 +42,7 @@
             </div> -->
             <div class="col fit">
               <q-tab-panels
-                v-model="store.menuTab"
+                v-model="innerTab"
                 animated
                 swipeable
                 vertical
@@ -65,57 +64,35 @@
 
 <script setup>
 // eslint-disable-next-line no-unused-vars
-import { useConcernOperasiInvasifRanapStore } from 'src/stores/simrs/ranap/concernoperasiinvasif'
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 
 const menus = ref([
   {
-    name: 'OperasiInvasif',
-    label: 'SPT Operasi Invasif',
-    title: 'OPERASI / TINDAKAN INVASIF',
-    desc: 'Surat Persetujuan Tindakan Operasi Invasif',
+    name: 'cppt-page',
+    label: 'CPPT & EWS',
+    title: 'CPPT PASIEN',
+    desc: 'Catatan Perkembangan Pasien Terintegrasi',
     icon: 'icon-my-file_sign',
     nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
-  },
-  {
-    name: 'Sedasi',
-    label: 'SP Anestesi Sedasi',
-    title: 'TINDAKAN ANESTESI/SEDASI',
-    desc: 'Surat Persetujuan Anestesi Sedasi',
-    icon: 'icon-fa-file-regular',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
-  },
-  {
-    name: 'Colonoscopy',
-    label: 'SPT Colonoscopy',
-    title: 'TINDAKAN COLONOSCOPY',
-    desc: 'Surat Persetujuan Tindakan Colonoscopy',
-    icon: 'icon-fa-file-regular',
-    nakes: ['1', '2', '3'],
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/PageConcern.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('./cppt/IndexPage.vue')))
   }
 
 ])
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
 
-const store = useConcernOperasiInvasifRanapStore()
-
 const splitterModel = ref(15)
 
-// const innerTab = ref(menus.value[0].name)
+const innerTab = ref(menus.value[0].name)
 
 onMounted(() => {
-  // innerTab.value = menus.value[0].name
-  store.menuTab = menus.value[0].name
-  store.item = null
+  console.log('pasien', props?.pasien)
+  innerTab.value = menus.value[0].name
   Promise.all([
     // pengunjungRanap.getNakes(),
     // store.getRuangKonsulDokter()

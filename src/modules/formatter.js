@@ -106,6 +106,9 @@ const dateFullFormat = (val) => {
 const dateHalfFormat = (val) => {
   return date.formatDate(val, 'DD MM YYYY')
 }
+const dateCppt = (val) => {
+  return val ? date.formatDate(val, 'DD/MM/YYYY') : null
+}
 const dateFull = (val) => {
   return date.formatDate(val, 'DD MMM YYYY HH:mm:ss')
 }
@@ -154,7 +157,7 @@ const olahUang = (val) => {
 
 export {
   dateFull,
-  dateHalfFormat,
+  dateHalfFormat, dateCppt,
   dateDbFormat,
   humanDate,
   diffDate, calcDate, tglJamFormat, formatJam, dateOnly, jamTnpDetik,

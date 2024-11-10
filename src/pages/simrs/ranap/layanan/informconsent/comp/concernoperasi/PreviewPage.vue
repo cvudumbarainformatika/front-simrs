@@ -965,20 +965,20 @@ function initImage (item) {
     imageToBase64(ttdPetugas, (base64Image) => {
       // document.getElementsByClassName('ttd-petugas')[0].src = base64Image
       // document.getElementsByClassName('ttd-petugas')[1].src = base64Image
-      item.ttd_petugas = base64Image
+      item.ttd_petugas = base64Image ?? ''
     }),
     imageToBase64(ttdDokter, (base64Image) => {
       // document.getElementsByClassName('ttd-dokter')[0].src = base64Image
-      item.ttd_dokter = base64Image
+      item.ttd_dokter = base64Image ?? ''
     }),
     imageToBase64(ttdSaksiPasien, (base64Image) => {
       // document.getElementsByClassName('ttd-saksi-pasien')[0].src = base64Image
-      item.ttd_saksi_pasien = base64Image
+      item.ttd_saksi_pasien = base64Image ?? ''
     }),
     imageToBase64(ttdYgMenyatakan, (base64Image) => {
       // document.getElementsByClassName('ttd-yg-menyatakan')[0].src = base64Image
       // document.getElementsByClassName('ttd-yg-menyatakan')[1].src = base64Image
-      item.ttd_yg_menyatakan = base64Image
+      item.ttd_yg_menyatakan = base64Image ?? ''
     })
   ])
 }
