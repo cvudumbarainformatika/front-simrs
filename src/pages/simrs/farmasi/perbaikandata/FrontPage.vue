@@ -44,9 +44,14 @@
             <div class="row items-center justify-center">
               <div class="col-2 text-right">
                 <q-btn
+
+                  :disable="(store.loading || store.loadingFix) "
                   dense flat icon="icon-mat-chevron_left"
                   @click="()=>{
-                    if(store.params.page>1) store.params.page--
+                    if(store.params.page>1) {
+                      store.params.page--
+                      if(store.params?.kdruang) store.getLists()
+                    }
 
                   }"
                 />
@@ -56,9 +61,13 @@
               </div>
               <div class="col-2">
                 <q-btn
+                  :disable="(store.loading || store.loadingFix) "
                   dense flat icon="icon-mat-chevron_right"
                   @click="()=>{
-                    if(store.params.page<(store.meta.total / store.params.per_page + 1))store.params.page++
+                    if(store.params.page<(store.meta.total / store.params.per_page + 1)) {
+                      store.params.page++
+                      if(store.params?.kdruang) store.getLists()
+                    }
                   }"
                 />
               </div>
@@ -73,13 +82,13 @@
           </q-tooltip>
         </q-btn>
       </div>
-      <div class="col-2 q-mr-sm q-my-sm">
+      <!-- <div class="col-2 q-mr-sm q-my-sm">
         <q-btn label="Ambil Data dan Perbaiki" dense no-caps color="negative" @click="store.getListsFix()" :loading="store.loadingFix" :disable="(store.loadingFix || store.loading) || !store.params?.kdruang">
           <q-tooltip v-if="!store.params?.kdruang" content-class="bg-white text-primary">
             Gudang / Depo Belum Dipilih
           </q-tooltip>
         </q-btn>
-      </div>
+      </div> -->
     </div>
     <div v-if="store.loadingFix || store.loading" class="q-pa-sm bg-white" style="height: 300px">
       <app-loading />
@@ -155,7 +164,39 @@
         </div>
       </div>
     </div>
-    <DetailCom v-model="isOpen" :data="data" @close="isOpen=false" />
+    <DetailCom
+      v-model="isOpen" :data="data" @close="isOpen=false"
+      @fix-mutasi="(val)=>{
+        if(val) store.autoFixMutasi(val)
+      }"
+      @fix-resep="(val)=>{
+        if(val) store.autoFixReseps(val)
+      }"
+    />
+    <DetailMutasi
+      v-model="store.openMutasi"
+      :data="store.detailMutasis"
+      :item="data"
+      :loading="store.loadingMutasi"
+      :loading-fix-mutasi="store.loadingFixMutasi"
+      @close="store.openMutasi=false"
+      @fix-mutasi="(val)=>{
+        console.log('val', val)
+        if(val) store.autoFixMutasi(val)
+      }"
+    />
+    <DetailResep
+      v-model="store.openResep"
+      :data="store.detailReseps"
+      :item="data"
+      :loading="store.loadingResep"
+      :loading-fix-mutasi="store.loadingFixResep"
+      @close="store.openResep=false"
+      @fix-resep="(val)=>{
+        console.log('val', val)
+        if(val) store.autoFixReseps(val)
+      }"
+    />
   </div>
 </template>
 <script setup>
@@ -165,6 +206,9 @@ import { defineAsyncComponent, ref } from 'vue'
 const store = usePerbaikanDataFarmasiStore()
 
 const DetailCom = defineAsyncComponent(() => import('./comp/CompDetail.vue'))
+const DetailMutasi = defineAsyncComponent(() => import('./comp/CompListMutasi.vue'))
+const DetailResep = defineAsyncComponent(() => import('./comp/CompListResep.vue'))
+
 const isOpen = ref(false)
 const data = ref({})
 
