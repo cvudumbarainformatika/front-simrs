@@ -39,6 +39,7 @@
                 <q-option-group
                   v-model="store.form.panel"
                   inline
+                  @update:model-value="kosongkanpanel"
                   :options="[
                     { label: 'Rawat Inap', value: 'Rawat Inap' },
                     { label: 'Rujuk Ke Rumah Sakit Lain', value: 'Rujuk Ke Rumah Sakit Lain' },
@@ -60,6 +61,8 @@
                           standout="bg-yellow-3"
                           transition-show="flip-up"
                           transition-hide="flip-down"
+                          @update:model-value="resetklutidak"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                         />
                       </div>
                       <div class="col-6" v-if="store.form.operasi === 'Ya'">
@@ -72,6 +75,7 @@
                           outlined
                           transition-show="flip-up"
                           transition-hide="flip-down"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                         />
                       </div>
                       <div class="col-6" v-if="store.form.operasi === 'Ya'">
@@ -82,6 +86,7 @@
                           standout="bg-yellow-3"
                           label="Tanggal Operasi"
                           @set-model="val=>store.form.tgloperasi=val"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                         >
                           <template #append>
                             <q-icon name="event" class="cursor-pointer">
@@ -96,7 +101,7 @@
                           </template>
                         </app-input-date>
                       </div>
-                      <div class="col-6" v-if="store.form.operasi === 'Ya'">
+                      <div class="col-6">
                         <q-select
                           v-model="store.form.ruangtujuan"
                           label="Ruang Tujuan"
@@ -110,10 +115,17 @@
                           emit-value
                           transition-show="flip-up"
                           transition-hide="flip-down"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                         />
                       </div>
-                      <div class="col-12" v-if="store.form.operasi === 'Ya'">
-                        <q-input v-model="store.form.keterangan" outlined standout="bg-yellow-3" label="Keterangan" />
+                      <div class="col-12">
+                        <q-input
+                          v-model="store.form.keterangan"
+                          outlined
+                          standout="bg-yellow-3"
+                          label="Keterangan"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                        />
                       </div>
                     </div>
                   </q-tab-panel>
@@ -187,7 +199,7 @@
                           </template>
                         </app-input-date>
                       </div>
-                      <div class="col-6">
+                      <div class="col-2">
                         <q-select
                           v-model="store.form.typefaskes"
                           label="Type Faskes"
@@ -200,21 +212,108 @@
                           transition-hide="flip-down"
                         />
                       </div>
-                      <div class="col-6">
+                      <div class="col-10">
                         <q-select
-                          v-model="store.form.dirujuk"
-                          label="Dirujuk"
-                          :options="optiontypefaskes"
+                          v-model="store.form.dirujukkers"
+                          label="di rujuk Ke"
                           dense
-                          standout="bg-yellow-3"
                           outlined
-                          emit-value
-                          transition-show="flip-up"
-                          transition-hide="flip-down"
+                          standout="bg-yellow-3"
+                          use-input
+                          input-debounce="800"
+                          map-options
+                          :options="optionsFaskes2"
+                          option-value="kode"
+                          option-label="nama"
+                          hide-bottom-space
+                          clearable
+                          @filter="onFilterTest"
                         />
                       </div>
-                      <div class="col-12" v-if="store.form.operasi === 'Ya'">
-                        <q-input v-model="store.form.keterangan" outlined standout="bg-yellow-3" label="Keterangan" />
+                      <div class="-4">
+                        <q-select
+                          v-model="store.form.polirujukan"
+                          label="Poli Rujukan"
+                          dense
+                          outlined
+                          standout="bg-yellow-3"
+                          use-input
+                          input-debounce="800"
+                          :options="optionsPoli"
+                          option-value="kode"
+                          option-label="nama"
+                          map-options
+                          hide-bottom-space
+                          @filter="filterPoli"
+                        />
+                      </div>
+                      <div class="col-8">
+                        <q-input v-model="store.form.keteranganrujuk" dense outlined standout="bg-yellow-3" label="Keterangan" />
+                      </div>
+                    </div>
+                  </q-tab-panel>
+                  <q-tab-panel name="Pulang">
+                    <div class="row q-col-gutter-sm">
+                      <div class="col-6">
+                        <q-select
+                          v-model="store.form.atasdasar"
+                          label="Atas Dasar"
+                          :options="optionpulangs"
+                          dense
+                          outlined
+                          standout="bg-yellow-3"
+                          transition-show="flip-up"
+                          transition-hide="flip-down"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                        />
+                      </div>
+                      <div class="col-3" v-if="store.form.atasdasar === 'Meninggal'">
+                        <app-input-date
+                          :model="store.form.tglmeninggal"
+                          mask="date"
+                          outlined
+                          standout="bg-yellow-3"
+                          label="Tanggal Meninggal"
+                          @set-model="val=>store.form.tglmeninggal=val"
+                          :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                        >
+                          <template #append>
+                            <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                <q-date v-model="date">
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                </q-date>
+                              </q-popup-proxy>
+                            </q-icon>
+                          </template>
+                        </app-input-date>
+                      </div>
+                      <div class="col-3" v-if="store.form.atasdasar === 'Meninggal'">
+                        <app-input-date
+                          :model="store.form.jammeninggal"
+                          :type-date="false"
+                          outlined
+                          standout="bg-yellow-3"
+                          label="Jam Meninggal"
+                          @set-model="val=>store.form.jammeninggal=val"
+                        >
+                          <template #append>
+                            <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                <q-date v-model="date">
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                </q-date>
+                              </q-popup-proxy>
+                            </q-icon>
+                          </template>
+                        </app-input-date>
+                      </div>
+                      <div class="col-12" v-if="store.form.atasdasar === 'Meninggal'">
+                        <q-input v-model="store.form.keteranganrujuk" dense outlined standout="bg-yellow-3" label="Alasan Meninggal" />
                       </div>
                     </div>
                   </q-tab-panel>
@@ -243,16 +342,68 @@
   </div>
 </template>
 <script setup>
+import { api } from 'src/boot/axios'
 import { usePlannStore } from 'src/stores/simrs/igd/plann'
 import { ref } from 'vue'
 
 const store = usePlannStore()
-
+const formRef = ref()
 const optionoperasi = ref(['Ya', 'Tidak'])
-const optionjenisoperasi = ref(['Ya', 'Tidak'])
+const optionjenisoperasi = ref(['Eleftif', 'Cito'])
 const atasdasar = ref(['Tempat Penuh', 'Permintaan Pasien', 'Penanganan Lebih Lanjut'])
 const optionjenispelayanan = ref(['Rawat Inap', 'Rawat Jalan'])
 const optiontypefaskes = ref(['Penuh', 'Partial'])
+const optionsFaskes2 = ref([])
+const optionsPoli = ref([])
+const optionpulangs = ref(['Sembuh', 'Paksa', 'Meninggal'])
+
+// function updateModelPpk (val) {
+//   store.formRsLain.ppkdirujuk = val.kode
+//   store.formRsLain.ppkdirujukx = val.nama
+//   store.formRsLain.namappkdirujuk = val.nama
+//   // console.log('poli ', val)
+// }
+
+const onFilterTest = async (val, update, abort) => {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+  const params = {
+    params: {
+      namafaskes: val,
+      jnsfaskes: 2
+    }
+  }
+  const response = await api.get('v1/simrs/pelayanan/faskes', params)
+  const code = response?.data?.metadata?.code
+  console.log('faskes')
+  if (code === '200') {
+    update(() => {
+      optionsFaskes2.value = response?.data?.result?.faskes
+    })
+  }
+}
+
+const filterPoli = async (val, update, abort) => {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+  const params = {
+    params: {
+      namapoli: val
+    }
+  }
+  const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
+  // console.log(response)
+  const code = response?.data?.metadata?.code
+  if (code === '200') {
+    update(() => {
+      optionsPoli.value = response?.data?.result?.poli
+    })
+  }
+}
 
 const props = defineProps({
   pasien: {
@@ -274,7 +425,57 @@ const props = defineProps({
 })
 
 function onSubmit () {
-  console.log('ssas')
+  store.savePlan(props.pasien).then(() => {
+    formRef.value.resetValidation()
+  })
+}
+
+function resetklutidak (val) {
+  if (val === 'Tidak') {
+    store.form.jenisoperasi = ''
+    store.form.tgloperasi = ''
+  }
+}
+
+function kosongkanpanel (val) {
+  if (val === 'Rujuk Ke Rumah Sakit Lain') {
+    kosongkantabrawatinap()
+    kosongkanpulang()
+  }
+  else if (val === 'Pulang') {
+    kosongkantabrawatinap()
+    kosongkanrujukanRSlain()
+  }
+  else if (val === 'Rawat Inap') {
+    kosongkanrujukanRSlain()
+    kosongkanpulang()
+  }
+}
+
+function kosongkantabrawatinap () {
+  store.form.operasi = ''
+  store.form.jenisoperasi = ''
+  store.form.tgloperasi = ''
+  store.form.ruangtujuan = ''
+  store.form.keterangan = ''
+}
+
+function kosongkanrujukanRSlain () {
+  store.form.atasdasar = ''
+  store.form.jenispelayanan = ''
+  store.form.tglrujukan = ''
+  store.form.tglrencanakunjungan = ''
+  store.form.typefaskes = ''
+  store.form.dirujukkers = ''
+  store.form.polirujukan = ''
+  store.form.keteranganrujuk = ''
+}
+
+function kosongkanpulang () {
+  store.form.atasdasar = ''
+  store.form.tglmeninggal = ''
+  store.form.jammeninggal = ''
+  store.form.keteranganrujuk = ''
 }
 
 store.formattanggal()
