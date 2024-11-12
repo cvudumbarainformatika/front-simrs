@@ -18,64 +18,66 @@
             Saya yang bertanda tangan dibawah ini :
           </div>
           <table style="width: 100%;">
-            <tr>
-              <td width="20%">
-                Nama
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>  {{ pasien?.nama? pasien?.name:defaultForm }}</td>
-            </tr>
-            <tr>
-              <td width="20%">
-                Jenis Kelamin
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>  {{ pasien?.kelamin ? pasien?.kelamin:defaultForm }}</td>
-            </tr>
-            <tr>
-              <td width="20%">
-                Tanggal Lahir
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>  {{ pasien?.tgllahir? humanDate(pasien?.tgllahir):defaultForm }}</td>
-            </tr>
-            <tr>
-              <td width="20%">
-                Alamat
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>  {{ pasien?.alamat? pasien?.alamat:defaultForm }}</td>
-            </tr>
-            <tr>
-              <td width="20%">
-                No Telp / Hp
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>  {{ pasien?.nohp? pasien?.nohp:defaultForm }}</td>
-            </tr>
-            <tr>
-              <td width="20%">
-                Hubungan dg Pasien
-              </td>
-              <td width="1%">
-                :
-              </td>
-              <td>
-                {{ pasien?.generalcons?.hubunganpasien ?
-                  pasien?.generalcons?.hubunganpasien: store.form.hubunganpasien
-                }}
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td width="20%">
+                  Nama
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>  {{ pasien?.nama? pasien?.name:defaultForm }}</td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  Jenis Kelamin
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>  {{ pasien?.kelamin ? pasien?.kelamin:defaultForm }}</td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  Tanggal Lahir
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>  {{ pasien?.tgllahir? humanDate(pasien?.tgllahir):defaultForm }}</td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  Alamat
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>  {{ pasien?.alamat? pasien?.alamat:defaultForm }}</td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  No Telp / Hp
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>  {{ pasien?.nohp? pasien?.nohp:defaultForm }}</td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  Hubungan dg Pasien
+                </td>
+                <td width="1%">
+                  :
+                </td>
+                <td>
+                  {{ pasien?.generalcons?.hubunganpasien ?
+                    pasien?.generalcons?.hubunganpasien: store.form.hubunganpasien
+                  }}
+                </td>
+              </tr>
+            </tbody>
           </table>
           <!-- <div class="column q-col-gutter-xs">
             <div class="row no-wrap">
