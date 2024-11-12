@@ -92,9 +92,9 @@
             <!-- {{ data?.data?.data?.saldoAwalRinci }} -->
           </div>
         </div>
-        <!-- Opnmae -->
+        <!-- Opname -->
         <div class="row q-py-sm items-center" style="border-bottom: 1px solid #ccc;">
-          <div class="col-2 text-weight-bold f-16" :class="data?.opnameJml&&data?.opnameTrx?'text-green':'text-negative'">
+          <div class="col-1 text-weight-bold f-16" :class="data?.opnameJml&&data?.opnameTrx?'text-green':'text-negative'">
             Opname :
           </div>
           <div class="col-2">
@@ -116,8 +116,19 @@
               :disable="store.loadingFixOpname"
               @click="simpanOpname()"
             />
+            <q-btn
+              v-if="editOpname"
+              class="q-ml-sm"
+              no-caps
+              dense
+              label="Batal"
+              color="dark"
+              :loading="store.loadingFixOpname"
+              :disable="store.loadingFixOpname"
+              @click="editOpname=false"
+            />
           </div>
-          <div v-if="editOpname" class="col-8">
+          <div v-if="editOpname" class="col-9">
             <div class="row bg-dark text-white">
               <div class="col-1">
                 Opname
@@ -239,8 +250,28 @@
                 Nobatch
               </div>
             </div>
+            <div v-if="store.loadingFixHarga || store.loadingGetData" class="row justify-center">
+              <div class="col-12 text-center">
+                <q-spinner-cube
+                  color="primary"
+                  size="3em"
+                />
+                <div>Harap Tunggu ...</div>
+              </div>
+            </div>
             <div v-for="(perbaikan,i) in data?.data?.data?.cekOpname.penerimaan" :key="i">
-              <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+              <div
+                v-if="!store.loadingFixHarga && !store.loadingGetData"
+                class="row items-center "
+                :class="(i%2==0?'bg-grey-2':'bg-grey-4') + ' ' + (mutSaja.includes(store.params.kdruang)?'':'cursor-pointer bisa-hover')"
+                @click="()=>{
+                  if(perbaikan?.koreksi) return notifErrVue('Data Penerimaan Koreksi, tidak bisa di edit')
+                  if(!mutSaja.includes(store.params.kdruang)){
+                    store.openHarga=true
+                    store.getPerbaikanHarga(perbaikan)
+                  }
+                }"
+              >
                 <div class="col-auto" style="width: 5%;">
                   {{ i+1 }}.
                 </div>
@@ -251,7 +282,7 @@
                   {{ perbaikan?.harga_netto_kecil }}
                 </div>
                 <div class="col-4">
-                  {{ perbaikan?.nopenerimaan }}
+                  {{ perbaikan?.nopenerimaan }} <span v-if="perbaikan?.koreksi" class="f-10 text-italic">( koreksi )</span>
                 </div>
                 <div class="col-3">
                   {{ dateFull( perbaikan?.tglpenerimaan) }}
@@ -490,16 +521,16 @@
                   {{ mut?.noper }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.maSuk }}
+                  {{ formatDouble(parseFloat(mut?.maSuk),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.keLuar }}
+                  {{ formatDouble(parseFloat(mut?.keLuar),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.sts }}
+                  {{ formatDouble(parseFloat(mut?.sts),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.stOpnya }}
+                  {{ formatDouble(parseFloat(mut?.stOpnya),2) }}
                 </div>
               </div>
             </div>
@@ -536,16 +567,16 @@
                   {{ mut?.noper }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.maSuk }}
+                  {{ formatDouble(parseFloat(mut?.maSuk),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.keLuar }}
+                  {{ formatDouble(parseFloat((mut?.keLuar)),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.sts }}
+                  {{ formatDouble(parseFloat(mut?.sts),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.stOpnya }}
+                  {{ formatDouble(parseFloat(mut?.stOpnya),2) }}
                 </div>
               </div>
             </div>
@@ -582,16 +613,16 @@
                   {{ mut?.noper }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.maSuk }}
+                  {{ formatDouble(parseFloat(mut?.maSuk),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.keLuar }}
+                  {{ formatDouble(parseFloat(mut?.keLuar),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.sts }}
+                  {{ formatDouble(parseFloat(mut?.sts),2) }}
                 </div>
                 <div class="col-auto" style="width: calc(48% / 4)">
-                  {{ mut?.stOpnya }}
+                  {{ formatDouble(parseFloat(mut?.stOpnya),2) }}
                 </div>
               </div>
             </div>
@@ -602,7 +633,8 @@
   </q-dialog>
 </template>
 <script setup>
-import { dateFull } from 'src/modules/formatter'
+import { dateFull, formatDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { usePerbaikanDataFarmasiStore } from 'src/stores/simrs/farmasi/perbaikandata/perbaikandata'
 import { ref } from 'vue'
 const store = usePerbaikanDataFarmasiStore()
@@ -624,38 +656,39 @@ function simpanOpname () {
 function autoFix () {
   const cekOpname = props?.data?.data?.data?.cekOpname
   const salAw = props.data?.data?.data?.saldoAwalRinci
-  const jmlPenerimaan = cekOpname?.penerimaan.reduce((prev, curr) => prev + parseFloat(curr.jml_terima_k), 0)
-  const jmlSalAwal = salAw.reduce((prev, curr) => prev + parseFloat(curr.total), 0)
-  const sisaSaldoAwal = cekOpname?.jmlOp - jmlPenerimaan
-  console.log('autofix', jmlPenerimaan, sisaSaldoAwal, jmlSalAwal, props?.data?.data?.data?.cekOpname, salAw)
-
-  let opname = sisaSaldoAwal > 0 ? jmlPenerimaan : cekOpname?.jmlOp
-  // nol kan semua opname
-
+  const dataToProceess = []
+  cekOpname.penerimaan.forEach((item) => {
+    dataToProceess.push({
+      harga_netto_kecil: item?.harga_netto_kecil,
+      jml_terima_k: item?.jml_terima_k,
+      no_batch: item?.no_batch,
+      nopenerimaan: item?.nopenerimaan,
+      tglpenerimaan: item?.tglpenerimaan,
+      tgl_exp: item?.tgl_exp,
+      kd_obat: item?.kd_obat
+    })
+  })
+  salAw.forEach((item) => {
+    dataToProceess.push({
+      harga_netto_kecil: item?.harga,
+      jml_terima_k: item?.total,
+      no_batch: item?.nobatch,
+      nopenerimaan: item?.nopenerimaan,
+      tglpenerimaan: item?.tglpenerimaan,
+      tgl_exp: item?.tglexp,
+      kd_obat: item?.kdobat
+    })
+  })
+  dataToProceess.sort((a, b) => new Date(b.tglpenerimaan) - new Date(a.tglpenerimaan))
+  let opname = cekOpname?.jmlOp
   cekOpname.opname.forEach((item) => {
     item.jumlah = 0
   })
-  let indexTambahan = 0
-  const jumsalAw = sisaSaldoAwal
-  if (sisaSaldoAwal > 0) {
-    salAw?.forEach((item, i) => {
-      if (jumsalAw > 0) {
-        const jumlah = jumsalAw > item?.total ? item?.total : jumsalAw
-        cekOpname.opname[i].nopenerimaan = item?.nopenerimaan
-        cekOpname.opname[i].jumlah = jumlah
-        cekOpname.opname[i].tglexp = item?.tglexp
-        cekOpname.opname[i].nobatch = item?.nobatch
-        cekOpname.opname[i].tglpenerimaan = item?.tglpenerimaan
-        cekOpname.opname[i].harga = item?.harga
-        indexTambahan = i + 1
-      }
-    })
-  }
   const tglopname = cekOpname?.opname[0]?.tglopname
   const kdobat = cekOpname?.opname[0]?.kdobat
   const kdruang = store.params.kdruang
-  cekOpname?.penerimaan?.forEach((item, i) => {
-    const index = sisaSaldoAwal > 0 ? i + indexTambahan : i
+  dataToProceess?.forEach((item, i) => {
+    const index = i
     if (opname > 0) {
       const jumlah = opname > item?.jml_terima_k ? item?.jml_terima_k : opname
       if (cekOpname.opname[index] !== undefined) {
@@ -693,6 +726,76 @@ function autoFix () {
     }
     console.log('item', item, cekOpname?.opname[index], opname)
   })
+  console.log('autofix', dataToProceess, salAw)
+  // const jmlPenerimaan = cekOpname?.penerimaan.reduce((prev, curr) => prev + parseFloat(curr.jml_terima_k), 0)
+  // const jmlSalAwal = salAw.reduce((prev, curr) => prev + parseFloat(curr.total), 0)
+  // const sisaSaldoAwal = cekOpname?.jmlOp - jmlPenerimaan
+  // console.log('autofix', jmlPenerimaan, sisaSaldoAwal, jmlSalAwal, props?.data?.data?.data?.cekOpname, salAw)
+
+  // let opname = sisaSaldoAwal > 0 ? jmlPenerimaan : cekOpname?.jmlOp
+  // // nol kan semua opname
+
+  // cekOpname.opname.forEach((item) => {
+  //   item.jumlah = 0
+  // })
+  // let indexTambahan = 0
+  // const jumsalAw = sisaSaldoAwal
+  // if (sisaSaldoAwal > 0) {
+  //   salAw?.forEach((item, i) => {
+  //     if (jumsalAw > 0) {
+  //       const jumlah = jumsalAw > item?.total ? item?.total : jumsalAw
+  //       cekOpname.opname[i].nopenerimaan = item?.nopenerimaan
+  //       cekOpname.opname[i].jumlah = jumlah
+  //       cekOpname.opname[i].tglexp = item?.tglexp
+  //       cekOpname.opname[i].nobatch = item?.nobatch
+  //       cekOpname.opname[i].tglpenerimaan = item?.tglpenerimaan
+  //       cekOpname.opname[i].harga = item?.harga
+  //       indexTambahan = i + 1
+  //     }
+  //   })
+  // }
+  // const tglopname = cekOpname?.opname[0]?.tglopname
+  // const kdobat = cekOpname?.opname[0]?.kdobat
+  // const kdruang = store.params.kdruang
+  // cekOpname?.penerimaan?.forEach((item, i) => {
+  //   const index = sisaSaldoAwal > 0 ? i + indexTambahan : i
+  //   if (opname > 0) {
+  //     const jumlah = opname > item?.jml_terima_k ? item?.jml_terima_k : opname
+  //     if (cekOpname.opname[index] !== undefined) {
+  //       cekOpname.opname[index].nopenerimaan = item?.nopenerimaan
+  //       cekOpname.opname[index].jumlah = jumlah
+  //       cekOpname.opname[index].tglexp = item?.tgl_exp
+  //       cekOpname.opname[index].nobatch = item?.no_batch
+  //       cekOpname.opname[index].tglpenerimaan = item?.tglpenerimaan
+  //       cekOpname.opname[index].harga = item?.harga_netto_kecil
+  //       console.log('if', cekOpname.opname[index])
+  //     }
+  //     else {
+  //       const cari = store.items.find(x => x.kdobat === item?.kdobat)
+  //       if (cari?.data?.data?.cekOpname?.opname) {
+  //         const temp = {
+  //           id: null,
+  //           nopenerimaan: item?.nopenerimaan,
+  //           jumlah,
+  //           tglexp: item?.tgl_exp,
+  //           nobatch: item?.no_batch,
+  //           tglpenerimaan: item?.tglpenerimaan,
+  //           tglopname,
+  //           kdobat,
+  //           kdruang,
+  //           harga: item?.harga_netto_kecil
+  //         }
+  //         cari.data.data.cekOpname.opname.push(temp)
+  //       }
+  //       // console.log('else', cari?.data?.data?.cekOpname)
+
+  //       // props.data.data.data.cekOpname.opname.push(temp)
+  //     }
+
+  //     opname = opname - jumlah
+  //   }
+  //   console.log('item', item, cekOpname?.opname[index], opname)
+  // })
 }
 /**
  * opname section end
@@ -743,5 +846,9 @@ function hide () {
 .per-dua{
   width: 49%;
   margin-left: 5px;
+}
+
+.bisa-hover:hover{
+  background-color: #81e6db !important;
 }
 </style>

@@ -7,7 +7,7 @@
             <span>EWS</span> - Early Warning Score
           </div>
           <div class="kanan">
-            <q-btn dense size="sm" flat icon="icon-mat-close" @click="$emit('close')" />
+            <q-btn dense size="sm" flat icon="icon-mat-close" @click="emits('close')" />
           </div>
         </div>
       </div>
@@ -58,6 +58,8 @@ const props = defineProps({
     default: null
   }
 })
+
+const emits = defineEmits(['close'])
 
 const { data } = useCppt(props?.pasien)
 

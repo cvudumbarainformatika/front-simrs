@@ -11,7 +11,9 @@
               <q-form ref="myForm" class="" @submit="onSubmit">
                 <FormComp :pasien="pasien" :kasus="kasus" />
                 <q-separator class="q-my-md" />
-                <q-btn label="Simpan" type="submit" color="primary" />
+                <div class="flex justify-end">
+                  <q-btn label="Simpan" type="submit" color="primary" />
+                </div>
 
                 <div style="margin-bottom: 100px;" />
               </q-form>

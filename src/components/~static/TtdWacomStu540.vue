@@ -1,41 +1,5 @@
 <template>
   <div>
-    <!-- <canvas
-      v-show="imgTtd === null"
-      id="signatureCanvas"
-      ref="canvasRef"
-      width="320"
-      height="200"
-      style="border:4px solid rgb(122, 122, 122)"
-    /> -->
-    <!-- <div v-show=" imgTtd !==null">
-      <q-img
-        v-if="SIGNATUREIMAGE !== null"
-        :key="SIGNATUREIMAGE"
-        :src="SIGNATUREIMAGE"
-        style="border:4px solid rgb(122, 122, 122)"
-      />
-      <q-img
-        v-else
-        :key="imgTtd"
-        :src="getImage()"
-        style="border:4px solid rgb(122, 122, 122)"
-      />
-    </div> -->
-    <!-- <div id="signatureImage" class="signature-image">
-      ttd
-    </div>
-    <q-btn
-      icon="icon-mat-add"
-      size="sm"
-      round
-      flat
-      color="white"
-      class="bg-primary"
-      @click="capture"
-    >
-      <q-tooltip>Tanda Tangan</q-tooltip>
-    </q-btn> -->
     <div :id="uuid" class="boxed relative-position" style="height:35mm;width:60mm;" @click="displaySignatureDetails" title="Click a signature to display its details" />
     <div style="width:60mm;">
       <div class="row">
@@ -51,88 +15,29 @@
         </div>
       </div>
     </div>
-    <!-- <input type="textarea" v-model="internalValue"> -->
-    <!-- <div class="q-mt-lg">
-      {{ sigObj }}
-    </div>
-    <div class="q-mt-lg">
-      {{ image }}
-    </div> -->
-
-    <!-- <table>
-      <tr>
-        <td rowspan="3">
-          <div id="imageBox" class="boxed" style="height:35mm;width:60mm; border:1px solid #d3d3d3;" @click="displaySignatureDetails" title="Click a signature to display its details" />
-        </td>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" value="Capture" style="height:10mm;width:35mm" @click="capture"
-            title="Starts signature capture"
-          >
-        </td>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" value="Verify" style="height:10mm;width:35mm" @click="verifySignedData"
-            title="Checks the signature hash"
-          >
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" value="Clear" style="height:10mm;width:35mm" @click="clearSignature"
-            title="Clears the signature"
-          >
-        </td>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" value="License Info" style="height:10mm;width:35mm" @click="aboutBox"
-            title="Displays the Help About box"
-          >
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" id="Restore" value="Restore" disabled style="height:10mm;width:35mm" @click="setSignatureText"
-            title="Restores the signature from the SigText data. To use this function please tick <Output SigText to form>"
-          >
-        </td>
-        <td style="padding: 10px 20px;">
-          <input
-            type="button" value="Signature Details" style="height:10mm;width:35mm" @click="displaySignatureDetails"
-            title="Displays the signature details"
-          >
-        </td>
-      </tr>
-    </table> -->
-    <!-- <SignerName ref="signatory" /> -->
-    <!-- <SigOptions @show-sig-text="enableRestoreButton" /> -->
-    <!-- <SigText :trigger-prop="sigTrigger" :sig-text="sigText" /> -->
-    <!-- <UserMessage :message-prop="messageTrigger" :message-text="messageText" /> -->
   </div>
 </template>
 
 <script>
 import { WacomgssSignatureSDK } from 'src/modules/wacomstu540/wgssSigCaptX.js'
-import SignerName from './wacomstu540/SignerName.vue'
-import SigOptions from './wacomstu540/SigOptions.vue'
-import SigText from './wacomstu540/SigText.vue'
-import UserMessage from './wacomstu540/UserMessage.vue'
+// import SignerName from './wacomstu540/SignerName.vue'
+// import SigOptions from './wacomstu540/SigOptions.vue'
+// import SigText from './wacomstu540/SigText.vue'
+// import UserMessage from './wacomstu540/UserMessage.vue'
 
 export default {
   // state
-  components:
-  {
-    // eslint-disable-next-line vue/no-unused-components
-    SignerName,
-    // eslint-disable-next-line vue/no-unused-components
-    SigOptions,
-    // eslint-disable-next-line vue/no-unused-components
-    SigText,
-    // eslint-disable-next-line vue/no-unused-components
-    UserMessage
-  },
+  // components:
+  // {
+  //   // eslint-disable-next-line vue/no-unused-components
+  //   SignerName,
+  //   // eslint-disable-next-line vue/no-unused-components
+  //   SigOptions,
+  //   // eslint-disable-next-line vue/no-unused-components
+  //   SigText,
+  //   // eslint-disable-next-line vue/no-unused-components
+  //   UserMessage
+  // },
 
   expose: ['cImage'],
   data () {

@@ -149,6 +149,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.edukasi = data?.edukasi ?? []
         datax.dokumenluar = data?.dokumenluar ?? []
         datax.informconcern = data?.informconcern ?? []
+        datax.dischargeplanning = data?.dischargeplanning ?? []
       }
     },
     getRuangan () {

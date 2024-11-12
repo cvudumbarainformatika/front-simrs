@@ -39,7 +39,19 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
     openResep: false,
     loadingResep: false,
     detailReseps: [],
-    loadingFixResep: false
+    loadingFixResep: false,
+
+    // Perbaikan Harga
+    openHarga: false,
+    loadingHarga: false,
+    detailHargas: {},
+    loadingFixHarga: false,
+
+    // Pecah Nomor
+    loadingPecah: false,
+
+    // ganti Nomor
+    loadingGanti: false
   }),
   actions: {
     setParams (key, val) {
@@ -122,7 +134,6 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
         ...this.params
       }
       params.kdobat = data
-
       params.perbaiki = 'tidak'
       console.log('data', params, data)
       this.getData(params).then(resp => {
@@ -223,7 +234,90 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
             this.loadingFixOpname = false
           })
       })
+    },
+    getPerbaikanHarga (payload) {
+      console.log('get perbaikan harga', payload)
+      const form = {
+        kdobat: payload.kd_obat,
+        kdruang: this.params.kdruang,
+        no_permintaan: payload.no_permintaan,
+        nopenerimaan: payload.nopenerimaan
+      }
+      this.loadingHarga = true
+      return new Promise(resolve => {
+        api.post('/v1/simrs/farmasinew/stok/fr-get-perbaikan-harga', form)
+          .then(resp => {
+            this.loadingHarga = false
+            console.log('resp harga', resp?.data)
+            this.detailHargas = resp?.data?.data
+            this.detailHargas.id = null
+            this.detailHargas.reference = []
+            if (this.detailHargas?.awal?.length) {
+              this.detailHargas?.awal?.forEach(f => {
+                this.detailHargas.reference.push(f)
+              })
+            }
+            if (this.detailHargas?.penerimaan?.length) {
+              this.detailHargas?.penerimaan?.forEach(f => {
+                f.tglpenerimaan = f.header.tglpenerimaan
+                this.detailHargas.reference.push(f)
+              })
+            }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingHarga = false
+          })
+      })
+    },
+    simpanPerbaikanHarga (item) {
+      console.log('simpan perbaikan harga', item)
+      this.loadingFixHarga = true
+      return new Promise(resolve => {
+        api.post('/v1/simrs/farmasinew/stok/fr-simpan-perbaikan-harga', item)
+          .then(resp => {
+            this.loadingFixHarga = false
+            this.ambilUlangData(item.kd_obat)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingFixHarga = false
+          })
+      })
+    },
+    simpanPecahNomor (item) {
+      console.log('simpan pecah nomor', item)
+      this.loadingPecah = true
+      return new Promise(resolve => {
+        api.post('/v1/simrs/farmasinew/stok/fr-simpan-pecah-nomor', item)
+          .then(resp => {
+            this.loadingPecah = false
+            this.getDetailResep(item.kdobat)
+            this.getDetailMutasi(item.kdobat)
+            this.ambilUlangData(item.kdobat)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingPecah = false
+          })
+      })
+    },
+    gantiNomor (item) {
+      console.log('ganti nomor', item)
+      this.loadingGanti = true
+      return new Promise(resolve => {
+        api.post('/v1/simrs/farmasinew/stok/fr-ganti-nomor', item)
+          .then(resp => {
+            this.loadingGanti = false
+            this.getDetailResep(item.kdobat)
+            this.getDetailMutasi(item.kdobat)
+            this.ambilUlangData(item.kdobat)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingGanti = false
+          })
+      })
     }
-
   }
 })

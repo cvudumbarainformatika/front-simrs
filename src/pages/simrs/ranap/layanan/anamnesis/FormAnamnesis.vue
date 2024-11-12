@@ -9,7 +9,7 @@
       standout="bg-yellow-3"
       label="Keluhan Utama"
       :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
-      :lazy-rules="true"
+      lazy-rules="ondemand"
       hide-bottom-space
       :style="`${ulang ? 'width:100%' : 'width:50%'}`"
     />
