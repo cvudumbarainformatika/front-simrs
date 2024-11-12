@@ -23,12 +23,12 @@
           <div class="col-2 text-weight-bold">
             Nompr Penerimaan Lebih Transaksi
           </div>
-          <div class="col-8">
+          <div class="col-10">
             <div class="row items-center bg-dark text-white">
               <div class="col-auto" style="width: 5%;">
                 No
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 Nopenerimaan
               </div>
               <div class="col-1">
@@ -38,12 +38,12 @@
                 Keluar
               </div>
               <div class="col-1">
-                Diff
+                Lebih
               </div>
               <div class="col-1">
                 Opname
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 Rinc Keluar
               </div>
             </div>
@@ -53,22 +53,22 @@
                 <div class="col-auto" style="width: 5%;">
                   {{ i+1 }}
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                   {{ ku?.noper }}
                 </div>
                 <div class="col-1">
-                  {{ ku?.maSuk }}
+                  {{ formatDouble(parseFloat(ku?.maSuk),2) }}
                 </div>
                 <div class="col-1">
-                  {{ ku?.keLuar }}
+                  {{ formatDouble(parseFloat(ku?.keLuar),2) }}
                 </div>
                 <div class="col-1">
-                  {{ ku?.sts }}
+                  {{ formatDouble(parseFloat(ku?.sts<0?-ku?.sts:ku?.sts),2) }}
                 </div>
                 <div class="col-1">
-                  {{ ku?.stOpnya }}
+                  {{ formatDouble(parseFloat(ku?.stOpnya),2) }}
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                   <div class="row">
                     Mutasi : {{ ku?.keluarnya?.mutKel }}
                   </div>
@@ -101,8 +101,83 @@
       </q-card-section>
       <q-card-section class="q-mb-lg">
         <q-scroll-area
-          :style="`height: ${he-250}px; max-height: 80vh;`"
+          :style="`height: ${he-300}px; max-height: 80vh;`"
         >
+          <div v-if="eksekusi" class="q-mb-md">
+            <div class="row items-center">
+              <div class="col-2">
+                <div class="row items-center">
+                  <div class="col-9">
+                    Jumlah transaksi ditemukan
+                  </div>
+                  <div class="col-1">
+                    :  {{ eksekusi?.count }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-10">
+                <div v-for="ret in eksekusi?.retResep" :key="ret">
+                  <div class="row items-center">
+                    <div class="col-2">
+                      <div class="row items-center">
+                        <div class="col-8">
+                          Target Jumlah:
+                        </div>
+                        <div class="col-4 text-weight-bold text-primary" style="overflow-wrap: break-word;">
+                          {{ formatDouble(parseFloat(ret?.targetJumlah),2) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="row items-center">
+                        <div class="col-8">
+                          Jumlah Ditemukan:
+                        </div>
+                        <div class="col-4 text-weight-bold text-negative" style="overflow-wrap: break-word;">
+                          {{ formatDouble(parseFloat(ret?.accJumlah),2) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="row items center">
+                        <div class="col-4">
+                          Target Nomor Penerimaan
+                        </div>
+                        <div class="col-8">
+                          <div v-for="tar in ret?.targets" :key="tar">
+                            <div class="row">
+                              {{ tar?.noper }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="row items center">
+                        <div class="col-4">
+                          Target Ditemukan
+                        </div>
+                        <div v-if="ret?.dataBolehDiganti?.length" class="col-8">
+                          <q-scroll-area style="height: 100px;">
+                            <div v-for="tar in ret?.dataBolehDiganti" :key="tar">
+                              <div class="row">
+                                <div class="col-8">
+                                  {{ tar?.noresep }}
+                                </div>
+                                <div class="col-4">
+                                  {{ tar?.jumlah }}
+                                </div>
+                              </div>
+                            </div>
+                          </q-scroll-area>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div v-if="loading" style="height: 300px;">
             <app-loading />
           </div>
@@ -152,7 +227,18 @@
                 </div>
               </div>
               <div v-for="(da,i) in data?.mutasiruangan" :key="i">
-                <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                <div
+                  class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'+ ' ' + (nokur.includes(da?.nopenerimaan)?'cursor-pointer bisa-hover':'')"
+                  @click="()=>{
+                    if(nokur.includes(da?.nopenerimaan)){
+                      console.log(nokur.includes(da?.nopenerimaan), da);
+                      bukaPecah=true
+                      dataResep=da
+                      kdobat=da?.kd_obat
+                      tipeResep='mutasi'
+                    }
+                  }"
+                >
                   <div class="col-auto" style="width: 5%;">
                     {{ i+1 }}
                   </div>
@@ -243,7 +329,19 @@
                   </div>
                 </div>
                 <div v-for="(da,i) in data?.resep" :key="i">
-                  <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                  <div
+                    class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'+ ' ' + (nokur.includes(da?.nopenerimaan)?'cursor-pointer bisa-hover':'')"
+                    @click="()=>{
+                      if(nokur.includes(da?.nopenerimaan)){
+                        console.log(nokur.includes(da?.nopenerimaan), da);
+                        bukaPecah=true
+                        dataResep=da
+                        kdobat=da?.kdobat
+                        tipeResep='resep'
+                      }
+
+                    }"
+                  >
                     <div class="col-auto" style="width: 5%;">
                       {{ i+1 }}
                     </div>
@@ -280,7 +378,7 @@
                     <q-btn
                       dense
                       no-caps
-                      label="Fix Resep Keluar"
+                      label="Fix Resep Keluar Racikan"
                       color="orange"
                       :loading="loadingFixMutasi"
                       @click="fixMutasi('racikan')"
@@ -335,7 +433,18 @@
                   </div>
                 </div>
                 <div v-for="(da,i) in data?.resepracikan" :key="i">
-                  <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                  <div
+                    class="row items-center" :class="(i%2==0?'bg-grey-2':'bg-grey-4') + ' ' + (nokur.includes(da?.nopenerimaan)?'cursor-pointer bisa-hover':'')"
+                    @click="()=>{
+                      if(nokur.includes(da?.nopenerimaan)){
+                        console.log(nokur.includes(da?.nopenerimaan), da);
+                        bukaPecah=true
+                        dataResep=da
+                        kdobat=da?.kdobat
+                        tipeResep='racikan'
+                      }
+                    }"
+                  >
                     <div class="col-auto" style="width: 5%;">
                       {{ i+1 }}
                     </div>
@@ -362,7 +471,7 @@
               </div>
             </div>
             <!-- mutasi antar -->
-            <div v-if="data?.mutasi?.length">
+            <div v-if="data?.mutasi?.length" class="q-mb-md">
               <div class="row items-center ">
                 <div class="col-6 text-weight-bold f-14 ">
                   Mutasi Antar Depo
@@ -427,7 +536,18 @@
                   </div>
                 </div>
                 <div v-for="(da,i) in data?.mutasi" :key="i">
-                  <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
+                  <div
+                    class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'+ ' ' + (nokur.includes(da?.nopenerimaan)?'cursor-pointer bisa-hover':'')"
+                    @click="()=>{
+                      if(nokur.includes(da?.nopenerimaan)){
+                        console.log(nokur.includes(da?.nopenerimaan), da);
+                        bukaPecah=true
+                        dataResep=da
+                        kdobat=da?.kd_obat
+                        tipeResep='mutasi'
+                      }
+                    }"
+                  >
                     <div class="col-auto" style="width: 5%;">
                       {{ i+1 }}
                     </div>
@@ -464,7 +584,7 @@
                     <q-btn
                       dense
                       no-caps
-                      label="Fix Resep Keluar"
+                      label="Fix Retur"
                       color="orange"
                       :loading="loadingFixMutasi"
                       @click="fixMutasi('retur')"
@@ -548,12 +668,32 @@
           </div>
         </q-scroll-area>
       </q-card-section>
+      <PecahNomor
+        v-model="bukaPecah"
+        :data="dataResep"
+        :tipe="tipeResep"
+        :kdobat="kdobat"
+        :eksekusi="eksekusi"
+        :kur="item?.data?.data?.penKur"
+        @close="()=>{
+          bukaPecah=false
+          dataResep={}
+          tipeResep=''
+          kdobat=''
+        }"
+        @simpan="(val)=>{
+          emits('simpanPecah',val)
+        }"
+        @ganti="(val)=>{
+          emits('ganti',val)
+        }"
+      />
     </q-card>
   </q-dialog>
 </template>
 <script setup>
-import { dateFull } from 'src/modules/formatter'
-import { computed, ref } from 'vue'
+import { dateFull, formatDouble } from 'src/modules/formatter'
+import { computed, defineAsyncComponent, ref } from 'vue'
 
 const props = defineProps({
   item: { type: Object, default: () => {} },
@@ -564,19 +704,25 @@ const props = defineProps({
 })
 const refListRes = ref(null)
 const he = ref()
-const emits = defineEmits(['close', 'fixResep'])
-// eslint-disable-next-line no-unused-vars
+const emits = defineEmits(['close', 'fixResep', 'simpanPecah', 'ganti'])
+
+const PecahNomor = defineAsyncComponent(() => import('./CompPecahNomor.vue'))
+const bukaPecah = ref(false)
+const dataResep = ref({})
+const tipeResep = ref('')
+const kdobat = ref('')
+
 const showResep = ref(false)
-// eslint-disable-next-line no-unused-vars
 const showRacikan = ref(false)
 const showMutasiAntar = ref(false)
-// eslint-disable-next-line no-unused-vars
 const showRetur = ref(false)
+
 const kur = ref([])
-const nokur = computed(() => kur.value.map((v) => v?.noper))
+const nokur = computed(() => props.item?.data?.data?.penKur.map((v) => v?.noper))
+const eksekusi = computed(() => props.item?.data?.data?.eksekusi)
 function cekNoper (val) {
   if (nokur.value.includes(val)) {
-    return 'bg-negative text-white'
+    return 'bg-negative text-white cursor-pointer'
   }
   // console.log('noper', nokur.includes(val), val)
 }
@@ -590,6 +736,16 @@ function show () {
   he.value = refListRes.value?.$el?.clientHeight
   console.log('kur', refListRes.value?.$el?.clientHeight, props.item?.data?.data?.penKur)
 }
-function hide () {}
+function hide () {
+  showResep.value = false
+  showRacikan.value = false
+  showMutasiAntar.value = false
+  showRetur.value = false
+}
 
 </script>
+<style lang="scss" scoped>
+.bisa-hover:hover{
+  background-color: #81e6db !important;
+}
+</style>

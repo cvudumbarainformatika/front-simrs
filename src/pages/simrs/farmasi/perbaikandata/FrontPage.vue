@@ -15,6 +15,10 @@
               option-value="kode"
               outlined
               :source="store.gudangs"
+              @on-select="(val)=>{
+                store.setParams('kdruang', val)
+                store.getLists()
+              }"
             />
           </div>
         </div>
@@ -96,7 +100,7 @@
     <div v-if="!(store.loadingFix || store.loading) && !store.items?.length" class="q-pa-sm bg-white" style="height: 300px">
       <app-no-data />
     </div>
-    <div v-if="store.items?.length" class="q-pa-sm">
+    <div v-if="store.items?.length && !(store.loadingFix || store.loading)" class="q-pa-sm">
       <div class="row bg-dark text-white text-weight-bold items-center">
         <div class="col-auto" style="width: 2%;">
           No
@@ -139,16 +143,16 @@
             {{ item?.nama_obat }}
           </div>
           <div class="col-1 text-right">
-            {{ item?.data?.data?.masuk }}
+            {{ formatDouble(parseFloat(item?.data?.data?.masuk),2) }}
           </div>
           <div class="col-1 text-right">
-            {{ item?.data?.data?.keluar }}
+            {{ formatDouble(parseFloat(item?.data?.data?.keluar),2) }}
           </div>
           <div class="col-1 text-right" :class="parseFloat(item?.data?.data?.sisa).toFixed(2)!==parseFloat(item?.data?.data?.tts).toFixed(2)?'bg-negative':''">
-            {{ item?.data?.data?.sisa }}
+            {{ formatDouble(parseFloat(item?.data?.data?.sisa),2) }}
           </div>
           <div class="col-1 text-right" :class="parseFloat(item?.data?.data?.sisa).toFixed(2)!==parseFloat(item?.data?.data?.tts).toFixed(2)?'bg-negative':''">
-            {{ item?.data?.data?.tts }}
+            {{ formatDouble(parseFloat(item?.data?.data?.tts),2) }}
           </div>
           <div class="col-1 text-right" :class="parseFloat(item?.data?.data?.sisa).toFixed(2)!==parseFloat(item?.data?.data?.tts).toFixed(2)?'bg-negative':''" />
           <div class="col-1 text-center" :class="parseFloat(item?.data?.data?.sisa).toFixed(2)!==parseFloat(item?.data?.data?.tts).toFixed(2)?'bg-negative':''">
@@ -165,7 +169,10 @@
       </div>
     </div>
     <DetailCom
-      v-model="isOpen" :data="data" @close="isOpen=false"
+      v-model="isOpen" :data="data" @close="()=>{
+        if(store.items.length<=0) setPilihan(store.params.pilihan)
+        isOpen=false
+      }"
       @fix-mutasi="(val)=>{
         if(val) store.autoFixMutasi(val)
       }"
@@ -178,11 +185,20 @@
       :data="store.detailMutasis"
       :item="data"
       :loading="store.loadingMutasi"
-      :loading-fix-mutasi="store.loadingFixMutasi"
-      @close="store.openMutasi=false"
+      :loading-fix-mutasi="store.loadingFixMutasi || store.loadingPecah || store.loadingGanti"
+      @close="()=>{
+        if(store.items.length<=0) setPilihan(store.params.pilihan)
+        store.openMutasi=false
+      }"
       @fix-mutasi="(val)=>{
         console.log('val', val)
         if(val) store.autoFixMutasi(val)
+      }"
+      @simpan-pecah="(val)=>{
+        store.simpanPecahNomor(val)
+      }"
+      @ganti="(val)=>{
+        store.gantiNomor(val)
       }"
     />
     <DetailResep
@@ -190,16 +206,26 @@
       :data="store.detailReseps"
       :item="data"
       :loading="store.loadingResep"
-      :loading-fix-mutasi="store.loadingFixResep"
+      :loading-fix-mutasi="store.loadingFixResep || store.loadingPecah || store.loadingGanti"
       @close="store.openResep=false"
       @fix-resep="(val)=>{
         console.log('val', val)
         if(val) store.autoFixReseps(val)
       }"
+      @simpan-pecah="(val)=>{
+        store.simpanPecahNomor(val)
+      }"
+      @ganti="(val)=>{
+        store.gantiNomor(val)
+      }"
+    />
+    <PerbaikanHarga
+      v-model="store.openHarga"
     />
   </div>
 </template>
 <script setup>
+import { formatDouble } from 'src/modules/formatter'
 import { usePerbaikanDataFarmasiStore } from 'src/stores/simrs/farmasi/perbaikandata/perbaikandata'
 import { defineAsyncComponent, ref } from 'vue'
 
@@ -208,6 +234,7 @@ const store = usePerbaikanDataFarmasiStore()
 const DetailCom = defineAsyncComponent(() => import('./comp/CompDetail.vue'))
 const DetailMutasi = defineAsyncComponent(() => import('./comp/CompListMutasi.vue'))
 const DetailResep = defineAsyncComponent(() => import('./comp/CompListResep.vue'))
+const PerbaikanHarga = defineAsyncComponent(() => import('./comp/CompPerbaikanHarga.vue'))
 
 const isOpen = ref(false)
 const data = ref({})
