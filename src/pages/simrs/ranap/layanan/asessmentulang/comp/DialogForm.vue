@@ -38,22 +38,24 @@
             >
               <span class="text-primary q-ml-sm">Inputan Sebelumnya</span>
             </q-btn>
-            <q-btn
+
+            <!-- <q-btn
               rounded
               outline
               color="primary"
               icon="icon-mat-dvr"
             >
               <span class="text-primary q-ml-sm">Hasil Laboratorium</span>
-            </q-btn>
-            <q-btn
+            </q-btn> -->
+
+            <!-- <q-btn
               rounded
               outline
               color="primary"
               icon="icon-my-human-hand-bones-svgrepo-com"
             >
               <span class="text-primary q-ml-sm">Hasil Radiologi</span>
-            </q-btn>
+            </q-btn> -->
           </div>
         </q-card-section>
       </div>

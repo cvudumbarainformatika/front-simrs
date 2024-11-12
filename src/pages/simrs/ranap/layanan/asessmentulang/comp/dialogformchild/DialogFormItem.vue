@@ -22,6 +22,9 @@
           <FormPemeriksaanUmum :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang class="q-mb-sm" />
           <FormPenilaian :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
         </q-card-section>
+        <q-card-section v-if="settings.formOpen === 'diagnosaKeperawatan'" class="col full-height scroll">
+          <FormDiagnosaKeperawatan :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
+        </q-card-section>
         <q-separator />
         <q-card-actions align="right" class="col-auto q-pb-md z-top bg-grey-3">
           <q-btn
@@ -48,6 +51,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue
 const FormAnamnesis = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/anamnesis/FormAnamnesis.vue'))
 const FormPemeriksaanUmum = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/pemeriksaanUmum/FormPemeriksaanUmum.vue'))
 const FormPenilaian = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/penilaian/FormComp.vue'))
+const FormDiagnosaKeperawatan = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/diagnosaDanTindakan/diagnosakeperawatan/comp/FormDiagnosaKeperawatan.vue'))
 
 defineProps({
   settings: {

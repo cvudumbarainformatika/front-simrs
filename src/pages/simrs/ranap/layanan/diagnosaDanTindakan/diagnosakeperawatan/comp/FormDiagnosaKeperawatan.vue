@@ -26,7 +26,7 @@
                 :rules="[val => !!val || 'Harap cari Diagnosa dahulu']"
                 lazy-rules="ondemand"
                 hide-bottom-space
-                @click="modalOpen = true"
+                @click="store.modalOpen = true"
                 @update:model-value="lihatDiagnosa"
               />
             </div>
@@ -205,6 +205,7 @@
         </div>
       </div>
       <div
+        v-if="!ulang"
         class="text-right absolute-bottom full-width bg-yellow-2 q-pa-sm"
       >
         <q-btn
@@ -220,9 +221,9 @@
     <!-- modal diagnosa -->
     <modal-diagnosa-keperawatan
       :key="props?.pasien"
-      v-model="modalOpen"
+      v-model="store.modalOpen"
       :masters="store.diagnosas"
-      @ok="modalOpen=false"
+      @ok="store.modalOpen=false"
     />
   </q-form>
 </template>
@@ -231,7 +232,7 @@
 
 import ModalDiagnosaKeperawatan from 'src/pages/simrs/poli/tindakan/comptindakan/pagemenu/complayanan/ModalDiagnosaKeperawatan.vue'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
 const props = defineProps({
   pasien: {
@@ -245,12 +246,16 @@ const props = defineProps({
   nakes: {
     type: String,
     default: null
+  },
+  ulang: {
+    type: Boolean,
+    default: false
   }
 })
 
 const store = useDiagnosaKeperawatan()
 
-const modalOpen = ref()
+// const modalOpen = ref()
 // const group = ref([])
 
 // function onSubmit() {
@@ -268,6 +273,9 @@ function lihatDiagnosa () {
 
 function simpan () {
   // console.log('simpan')
+  if (props.ulang) {
+    store.tataForm(props?.pasien, 'ranap')
+  }
   store.simpanDiagnosadanIntervensi(props?.pasien, 'ranap')
 }
 </script>

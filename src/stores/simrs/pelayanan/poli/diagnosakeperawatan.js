@@ -19,6 +19,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
     //   namadiagnosa: ''
     // }
   }),
+  modalOpen: false,
   // getters: {
   //   doubleCount: (state) => state.counter * 2
   // },
@@ -47,6 +48,27 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
     async simpanDiagnosadanIntervensi (pasien, cat) {
       this.loadingSave = true
 
+      // console.log('diagnosa saved ', form)
+      const form = this.tataForm(pasien, cat)
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
+        // console.log('simpan', resp)
+        if (resp.status === 200) {
+          this.injectToKunjunganPasien(pasien, resp.data.result, cat)
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingSave = false
+        }
+        this.loadingSave = false
+      }
+      catch (error) {
+        // console.log(error)
+        notifErr(error)
+      }
+    },
+
+    tataForm (pasien, cat) {
       let intv = []
       if (this.selectIntervensis.length) {
         intv = this.selectIntervensis.map(x => {
@@ -75,24 +97,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
       const form = {
         diagnosa: thumb
       }
-
-      // console.log('diagnosa saved ', form)
-
-      try {
-        const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
-        // console.log('simpan', resp)
-        if (resp.status === 200) {
-          this.injectToKunjunganPasien(pasien, resp.data.result, cat)
-          notifSuccess(resp)
-          this.initReset()
-          this.loadingSave = false
-        }
-        this.loadingSave = false
-      }
-      catch (error) {
-        // console.log(error)
-        notifErr(error)
-      }
+      return form
     },
 
     injectToKunjunganPasien (pasien, data, cat) {
