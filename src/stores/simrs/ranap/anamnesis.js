@@ -1145,6 +1145,10 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
         if (resp.status === 200) {
           notifSuccess(resp)
           const result = resp?.data?.result
+          // pengunjung.injectDataPasien(pasien?.noreg, result, 'anamnesis')
+          pengunjung.deleteInjectanNull2(pasien?.noreg, 'anamnesis')
+          pengunjung.injectDataArray(pasien?.noreg, result, 'anamnesis')
+
           if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
         }
         this.loadingSave = false

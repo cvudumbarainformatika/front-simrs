@@ -18,7 +18,7 @@
           input-class="ellipsis"
           fill-input
           :rules="[val => !!val || 'Harap diisi']"
-          :lazy-rules="true"
+          lazy-rules="ondemand"
           hide-bottom-space
         />
         <app-input-simrs

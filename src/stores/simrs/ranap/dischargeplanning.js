@@ -23,7 +23,7 @@ export const useDischargePlanningRanapStore = defineStore('discharge-planning-ra
 
     bayiglBersamas: ['-', 'OT Kandung', 'Keluraga'],
     TrasportasiYgDigunakans: ['Kendaraan Pribadi (mobil, beroda dua dll)', 'Kendaraan Umum', 'Mobil Ambulance'],
-    // prognosis: ['Sanam', 'Bonam', 'Malam', 'Dubia Ad Sanam', 'Dubia Ad Malam'],
+    prognosis: [],
 
     dokters: [],
     perawats: [],

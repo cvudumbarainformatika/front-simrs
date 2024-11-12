@@ -11,7 +11,9 @@
               <q-form ref="myForm" class="">
                 <FormPemeriksaanUmum ref="formRef" :pasien="pasien" :kasus="kasus" />
                 <q-separator class="q-my-md" />
-                <q-btn label="Simpan" type="button" color="primary" @click="validate" />
+                <div class="flex justify-end">
+                  <q-btn label="Simpan" type="button" color="primary" @click="validate" />
+                </div>
               </q-form>
             </q-card-section>
           </q-card>

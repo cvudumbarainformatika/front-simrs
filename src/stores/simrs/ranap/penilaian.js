@@ -443,6 +443,10 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
         if (resp.status === 200) {
           notifSuccess(resp)
           const result = resp?.data?.result
+
+          pengunjung.deleteInjectanNull2(pasien?.noreg, 'penilaian')
+          pengunjung.injectDataArray(pasien?.noreg, result, 'penilaian')
+
           if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
         }
         this.loadingSave = false
