@@ -33,9 +33,9 @@ export const usePlannStore = defineStore('plann-store', {
         const resp = await api.post('v1/simrs/planing/igd/simpanranap', formamb)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          const isi = resp.data.data
+          const isi = resp.data.result[0]
           this.setNotas(resp?.data?.nota)
-          storePasien.injectDataPasien(pasien, isi, 'plann')
+          storePasien.injectDataPasien(pasien, isi, 'planheder')
           notifSuccess(resp)
           this.initReset()
           this.loadingSavePlann = false
@@ -91,6 +91,14 @@ export const usePlannStore = defineStore('plann-store', {
         this.form.tglmeninggal = date.formatDate(sekarang, 'YYYY-MM-DD')
         this.form.jammeninggal = date.formatDate(sekarang, 'H:m')
       }
+    },
+    initReset () {
+      this.form.panel = ''
+      this.form.operasi = ''
+      this.form.jenisoperasi = ''
+      this.form.tgloperasi = ''
+      this.form.ruangtujuan = ''
+      this.form.keterangan = ''
     }
   }
 })

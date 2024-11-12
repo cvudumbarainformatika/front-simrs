@@ -35,7 +35,7 @@
           <q-card-section class="col full-height scroll">
             <div class="row q-col-gutter-sm">
               <div class="col-12">
-                <span class="text-bold">Assesmen Nyeri</span>
+                <span class="text-bold">Plann</span>
                 <q-option-group
                   v-model="store.form.panel"
                   inline
@@ -256,7 +256,7 @@
                     <div class="row q-col-gutter-sm">
                       <div class="col-6">
                         <q-select
-                          v-model="store.form.atasdasar"
+                          v-model="store.form.atasdasarpulang"
                           label="Atas Dasar"
                           :options="optionpulangs"
                           dense
@@ -267,7 +267,7 @@
                           :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                         />
                       </div>
-                      <div class="col-3" v-if="store.form.atasdasar === 'Meninggal'">
+                      <div class="col-3" v-if="store.form.atasdasarpulang === 'Meninggal'">
                         <app-input-date
                           :model="store.form.tglmeninggal"
                           mask="date"
@@ -290,7 +290,7 @@
                           </template>
                         </app-input-date>
                       </div>
-                      <div class="col-3" v-if="store.form.atasdasar === 'Meninggal'">
+                      <div class="col-3" v-if="store.form.atasdasarpulang === 'Meninggal'">
                         <app-input-date
                           :model="store.form.jammeninggal"
                           :type-date="false"
@@ -312,8 +312,8 @@
                           </template>
                         </app-input-date>
                       </div>
-                      <div class="col-12" v-if="store.form.atasdasar === 'Meninggal'">
-                        <q-input v-model="store.form.keteranganrujuk" dense outlined standout="bg-yellow-3" label="Alasan Meninggal" />
+                      <div class="col-12" v-if="store.form.atasdasarpulang === 'Meninggal'">
+                        <q-input v-model="store.form.alasanmeninggal" dense outlined standout="bg-yellow-3" label="Alasan Meninggal" />
                       </div>
                     </div>
                   </q-tab-panel>
@@ -330,7 +330,7 @@
                     tooltip="Simpan Data"
                     type="submit"
                     tip
-                    :loading="store.loadingForm"
+                    :loading="store.loadingSavePlann"
                   />
                 </div>
               </div>
@@ -377,7 +377,7 @@ const onFilterTest = async (val, update, abort) => {
   }
   const response = await api.get('v1/simrs/pelayanan/faskes', params)
   const code = response?.data?.metadata?.code
-  console.log('faskes')
+
   if (code === '200') {
     update(() => {
       optionsFaskes2.value = response?.data?.result?.faskes
@@ -435,6 +435,9 @@ function resetklutidak (val) {
     store.form.jenisoperasi = ''
     store.form.tgloperasi = ''
   }
+  else {
+    store.formattanggal()
+  }
 }
 
 function kosongkanpanel (val) {
@@ -472,7 +475,7 @@ function kosongkanrujukanRSlain () {
 }
 
 function kosongkanpulang () {
-  store.form.atasdasar = ''
+  store.form.atasdasarpulang = ''
   store.form.tglmeninggal = ''
   store.form.jammeninggal = ''
   store.form.keteranganrujuk = ''
