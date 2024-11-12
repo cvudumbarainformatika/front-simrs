@@ -268,7 +268,7 @@ const kdobat = ref('')
 
 const emits = defineEmits(['close', 'fixMutasi', 'simpanPecah', 'ganti'])
 const kur = ref([])
-const nokur = computed(() => kur.value.map((v) => v?.noper))
+const nokur = computed(() => props.item?.data?.data?.penKur.map((v) => v?.noper))
 const eksekusi = computed(() => props.item?.data?.data?.eksekusi)
 function cekNoper (val) {
   if (nokur.value.includes(val)) {
@@ -285,7 +285,12 @@ function show () {
   // nokur = kur.value.map((v) => v?.noper)
   console.log('kur', kur.value)
 }
-function hide () {}
+function hide () {
+  bukaPecah.value = false
+  dataResep.value = {}
+  tipeResep.value = ''
+  kdobat.value = ''
+}
 
 </script>
 

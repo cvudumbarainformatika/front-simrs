@@ -741,6 +741,11 @@ function hide () {
   showRacikan.value = false
   showMutasiAntar.value = false
   showRetur.value = false
+
+  bukaPecah.value = false
+  dataResep.value = {}
+  tipeResep.value = ''
+  kdobat.value = ''
 }
 
 </script>
