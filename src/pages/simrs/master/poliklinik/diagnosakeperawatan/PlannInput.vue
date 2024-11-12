@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm text-weight-bold">
-    Observasi
+    Plann
     <span class="q-ml-sm cursor-pointer text-primary text-weight-light">
       Tambah Data
       <q-popup-edit
@@ -16,7 +16,7 @@
           autofocus
           dense
           :model-value="scope.value"
-          hint="Tambah Observasi"
+          hint="Tambah Plann"
           :rules="[
             val => scope.validate(val) || 'Harap diisi'
           ]"
@@ -28,14 +28,14 @@
   <q-separator />
   <div class="q-pa-sm">
     <div
-      v-if="!observasis?.length"
+      v-if="!plann?.length"
       class="text-center"
     >
-      <em>Data Observasi Belum Ada</em>
+      <em>Data Plann Belum Ada</em>
     </div>
     <div v-else>
       <div
-        v-for="(row, i) in observasis"
+        v-for="(row, i) in plann"
         :key="row.id"
         class="row"
         style="border-bottom: 1px rgb(226, 224, 224) solid;"
@@ -62,7 +62,7 @@
                 autofocus
                 dense
                 :model-value="scope.value"
-                hint="Edit Observasi"
+                hint="Edit Plann"
                 :rules="[
                   val => scope.validate(val) || 'Harap diisi'
                 ]"
@@ -93,8 +93,8 @@ import { computed, ref } from 'vue'
 
 const store = useMasterDiagnosaKeperawatan()
 
-const observasis = computed(() => {
-  const arr = store?.diagnosa?.intervensis?.filter(x => x?.group === 'observasi' && x?.mdiagnosakeperawatan_kode === store?.diagnosa?.kode)
+const plann = computed(() => {
+  const arr = store?.diagnosa?.intervensis?.filter(x => x?.group === 'plann' && x?.mdiagnosakeperawatan_kode === store?.diagnosa?.kode)
   return arr
 })
 
@@ -105,11 +105,11 @@ const intervensi = ref('')
 function setScope (scope) {
   scope.set()
   // console.log(scope)
-  store.saveIntervensi('observasi', null)
+  store.saveIntervensi('plann', null)
 }
 function editIntervensi (scope, row) {
   scope.set()
-  store.saveIntervensi('observasi', row)
+  store.saveIntervensi('plann', row)
 }
 
 function deleteInt (id) {

@@ -22,7 +22,7 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async saveData() {
+    async saveData () {
       this.loadingsave = true
       this.editedForm = false
       try {
@@ -35,17 +35,19 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
             this.items?.splice(0, 0, resp.data.result)
           }
           this.resetForm()
-        } else if (resp.status === 201) {
+        }
+        else if (resp.status === 201) {
           this.errorsForm = resp?.data?.message
         }
         this.loadingsave = false
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingsave = false
       }
     },
 
-    async getData() {
+    async getData () {
       this.loadingList = true
       const resp = await api.get('v1/simrs/master/diagnosakeperawatan/getall')
       console.log('master diagnosa', resp)
@@ -55,13 +57,13 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
       this.loadingList = false
     },
 
-    editForm(val) {
+    editForm (val) {
       this.isIntervensi = false
       this.editedForm = true
       this.form = val
     },
 
-    async deleteItem(id) {
+    async deleteItem (id) {
       const payload = { id }
       try {
         const resp = await api.post('v1/simrs/master/diagnosakeperawatan/delete', payload)
@@ -74,11 +76,12 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
             if (pos >= 0) { this.items.splice(pos, 1) }
           }
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
       }
     },
-    resetForm() {
+    resetForm () {
       this.form = null
       return new Promise((resolve, reject) => {
         this.form = {
@@ -90,16 +93,16 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
       })
     },
 
-    setIntervensi(row) {
+    setIntervensi (row) {
       this.diagnosa = row
       this.isIntervensi = true
     },
-    setDiagnosa() {
+    setDiagnosa () {
       this.editedForm = false
       this.isIntervensi = false
     },
 
-    async saveIntervensi(group, row) {
+    async saveIntervensi (group, row) {
       const form = {
         group,
         nama: row?.nama ?? this.intervensi,
@@ -123,12 +126,13 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
           }
           this.intervensi = ''
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
       }
     },
 
-    async deleteIntervensi(id) {
+    async deleteIntervensi (id) {
       const payload = { id }
       try {
         const resp = await api.post('v1/simrs/master/diagnosakeperawatan/deleteintervensi', payload)
@@ -141,7 +145,8 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
             if (pos >= 0) { this.diagnosa?.intervensis.splice(pos, 1) }
           }
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
       }
     }

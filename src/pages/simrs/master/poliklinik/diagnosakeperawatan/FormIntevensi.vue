@@ -14,6 +14,7 @@
       </div>
     </div>
     <q-separator />
+    <PlannInput />
     <ObservasiInput />
     <TerapeutikInput />
     <EdukasiInput />
@@ -23,10 +24,12 @@
 </template>
 
 <script setup>
+import PlannInput from './PlannInput.vue'
 import ObservasiInput from './ObservasiInput.vue'
 import TerapeutikInput from './TerapeutikInput.vue'
 import EdukasiInput from './EdukasiInput.vue'
 import KolaborasiInput from './KolaborasiInput.vue'
+
 defineProps({
   diagnosa: {
     type: Object,

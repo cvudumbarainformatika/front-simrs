@@ -119,9 +119,9 @@ function namaPetugas (item) {
               class="f-12 text-italic text-accent"
             >
               <span class="">oleh</span> : <b>Pel1 </b>
-              (<span v-for="(pel, i) in setPelaksana(item)?.pelaksanaSatu" :key="i" class="">{{ namaPetugas(pel) }}, </span>)
+              (<span v-for="(pel, x) in setPelaksana(item)?.pelaksanaSatu" :key="x" class="">{{ namaPetugas(pel) }}, </span>)
               <span class=""> / </span>  <b>Pel2 </b>
-              (<span v-for="(pel, i) in setPelaksana(item)?.pelaksanaDua" :key="i" class="">{{ namaPetugas(pel) }}, </span>)
+              (<span v-for="(pel, y) in setPelaksana(item)?.pelaksanaDua" :key="y" class="">{{ namaPetugas(pel) }}, </span>)
             </q-item-label>
           </q-item-section>
 

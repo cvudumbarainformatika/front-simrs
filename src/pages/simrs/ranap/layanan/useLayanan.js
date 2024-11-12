@@ -84,6 +84,13 @@ export default function useLayanan (pasien) {
       comp: shallowRef(defineAsyncComponent(() => import('./informconsent/IndexPage.vue')))
     },
     {
+      name: 'discharge-planning-page',
+      label: 'Discharge Planning',
+      icon: 'icon-mat-send_time_extension',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./dischargeplanning/IndexPage.vue')))
+    },
+    {
       name: 'upload-page',
       label: 'Upload Dokumen Luar',
       icon: 'icon-mat-cloud_upload',

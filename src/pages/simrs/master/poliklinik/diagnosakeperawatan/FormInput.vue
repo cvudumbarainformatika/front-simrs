@@ -46,14 +46,14 @@ import { ref } from 'vue'
 
 const store = useMasterDiagnosaKeperawatan()
 const formRef = ref()
-function getErrorField(val) {
+function getErrorField (val) {
   if (store.errorsForm !== null) {
     return !!store.errorsForm[val].length
   }
   return false
 }
 
-function simpan() {
+function simpan () {
   store.saveData().then(() => {
     formRef.value.resetValidation()
   })

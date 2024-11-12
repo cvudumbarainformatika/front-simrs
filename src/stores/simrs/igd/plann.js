@@ -10,18 +10,18 @@ export const usePlannStore = defineStore('plann-store', {
     loadingOrder: false,
     loadingForm: false,
     loadingHistory: false,
-    loadingSaveBankDarah: false,
+    loadingSavePlann: false,
     notas: [],
     form: {
       panel: 'Rawat Inap'
     }
   }),
   actions: {
-    async saveOrderDarah (pasien) {
+    async savePlan (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
-      this.loadingSaveBankDarah = true
+      this.loadingSavePlann = true
       const formamb = this.form
       formamb.noreg = pasien?.noreg
       formamb.norm = pasien?.norm
@@ -30,20 +30,20 @@ export const usePlannStore = defineStore('plann-store', {
       formamb.koderuang = pasien?.kodepoli
 
       try {
-        const resp = await api.post('v1/simrs/penunjang/bankdarah/simpanbankdarah', formamb)
+        const resp = await api.post('v1/simrs/planing/igd/simpanranap', formamb)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           const isi = resp.data.data
           this.setNotas(resp?.data?.nota)
-          storePasien.injectDataPasien(pasien, isi, 'bankdarah')
+          storePasien.injectDataPasien(pasien, isi, 'plann')
           notifSuccess(resp)
           this.initReset()
-          this.loadingSaveBankDarah = false
+          this.loadingSavePlann = false
         }
       }
       catch (error) {
         // console.log(error)
-        this.loadingSaveBankDarah = false
+        this.loadingSavePlann = false
       }
     },
     async getNota (pasien) {
@@ -88,6 +88,8 @@ export const usePlannStore = defineStore('plann-store', {
         this.form.tgloperasi = date.formatDate(sekarang, 'YYYY-MM-DD')
         this.form.tglrujukan = date.formatDate(sekarang, 'YYYY-MM-DD')
         this.form.tglrencanakunjungan = date.formatDate(sekarang, 'YYYY-MM-DD')
+        this.form.tglmeninggal = date.formatDate(sekarang, 'YYYY-MM-DD')
+        this.form.jammeninggal = date.formatDate(sekarang, 'H:m')
       }
     }
   }
