@@ -754,6 +754,10 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         if (resp.status === 200) {
           notifSuccess(resp)
           const result = resp?.data?.result
+
+          // pengunjung.deleteInjectanNull2(pasien?.noreg, 'pemeriksaan')
+          pengunjung.injectDataArray(pasien?.noreg, result, 'pemeriksaan')
+
           if (result.length) this.PISAH_DATA_RANAP_IGD(result, pasien)
         }
         this.loadingSave = false
