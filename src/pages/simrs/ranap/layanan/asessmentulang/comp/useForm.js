@@ -1,5 +1,6 @@
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
+import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
 import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
@@ -10,6 +11,7 @@ export default function useForm (pasien) {
   const storeAnamnesis = useAnamnesisRanapStore()
   const storePemeriksaanUmum = usePemeriksaanUmumRanapStore()
   const storePenilaian = usePenilaianRanapStore()
+  const storeDiagnosaKeperawatan = useDiagnosaKeperawatan()
 
   const store = useAsessmentUlangRanapStore()
 
@@ -215,6 +217,7 @@ export default function useForm (pasien) {
     storeAnamnesis,
     storePemeriksaanUmum,
     storePenilaian,
+    storeDiagnosaKeperawatan,
 
     editFormAnamnesis,
     updateToServerAnamnesis,

@@ -1,6 +1,6 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup>
-import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, reactive, ref, watch } from 'vue'
 import useForm from './useForm.js'
 import { notifCenterVue, notifErrVue, notifSuccess, notifSuccessVue } from 'src/modules/utils.js'
 
@@ -42,7 +42,7 @@ const SET = reactive({
 // eslint-disable-next-line no-unused-vars
 const {
   storeAnamnesis, storePenilaian, storePemeriksaanUmum,
-  settings, store
+  settings, storeDiagnosaKeperawatan, store
 } = useForm(props.pasien)
 
 onMounted(() => {
@@ -87,6 +87,17 @@ const validate = () => {
   })
 }
 
+watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
+  console.log('val', val)
+
+  if (val) {
+    const text = val.map(x => '- ' + x?.kode + ' - ' + x.nama).join('\n')
+
+    console.log('val', text)
+    store.form.asessment = val.length ? text : null
+  }
+})
+
 </script>
 
 <template>
@@ -112,28 +123,29 @@ const validate = () => {
           <q-card-section class="col full-height scroll">
             <div class="column q-mb-sm">
               <div><b>Keluhan Utama : </b></div>
-              <div class="q-ml-sm">
+              <div class="q-mt-sm">
                 <!-- <q-input v-model="storeAnamnesis.form.keluhanUtama" type="textarea" class="full-width" /> -->
                 <q-input
                   ref="refInputKeluhanUtama"
                   v-model="storeAnamnesis.form.keluhanUtama"
                   outlined
-                  autogrow
+                  type="textarea"
                   stack-label
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                   :lazy-rules="true"
+                  rows="5"
                   hide-bottom-space
                 />
               </div>
             </div>
-            <div class="column q-mb-sm">
+            <!-- <div class="column q-mb-sm">
               <div><b>Nyeri :</b></div>
               <ItemNyeri :item="storeAnamnesis?.form?.keluhannyeri" v-if="kasus?.gruping === '4.1'" />
               <ItemNyeri :item="storeAnamnesis?.formKebidanan?.keluhannyeri" v-if="kasus?.gruping === '4.2'" />
               <ItemNyeri :item="storeAnamnesis?.formNeoNatal?.keluhannyeri" v-if="kasus?.gruping === '4.3'" />
               <ItemNyeri :item="storeAnamnesis?.formPediatrik?.keluhannyeri" v-if="kasus?.gruping === '4.4'" />
-            </div>
+            </div> -->
           </q-card-section>
         </q-card>
       </div>
@@ -166,35 +178,44 @@ const validate = () => {
               <div><b>RR : </b> <span>{{ storePemeriksaanUmum?.form?.pernapasan }} (x/mnt)</span></div>
               <div><b>SpO2 : </b> <span>{{ storePemeriksaanUmum?.form?.spo }} (%)</span></div>
               <div><b>Suhu : </b> <span>{{ storePemeriksaanUmum?.form?.suhu }} (C)</span></div>
-              <div><b>T/k : </b> <span>{{ storePemeriksaanUmum?.form?.tkKesadaranKet }}</span></div>
+              <div><b>T/k : </b> <span>{{ storePemeriksaanUmum?.form?.tkKesadaran }}</span></div>
 
               <q-separator class="q-my-xs" />
               <!-- Penilaian -->
               <div>
-                <div v-if="storePenilaian?.nortons?.grupings?.includes(jnsKasusKep)">
+                <!-- <div v-if="storePenilaian?.nortons?.grupings?.includes(jnsKasusKep)">
                   <div v-for="(val, key) in storePenilaian?.formNorton" :key="key">
                     {{ storePenilaian?.nortons?.form.find(x => x.kode === key)?.label ?? '' }} {{ val?.label }}
                   </div>
-                </div>
-                <q-separator class="q-my-xs" />
+                </div> -->
+                <!-- <q-separator class="q-my-xs" /> -->
                 <div v-if="storePenilaian?.humptys?.grupings?.includes(jnsKasusKep) && (storePenilaian.usia < 18)">
                   <div class="column">
-                    <b>Resiko Jatuh : </b>
+                    <b>Skor Humpty Dumpty : </b>
                     <div> - {{ storePenilaian?.formHumpty?.skorHumpty?.label }} ({{ storePenilaian?.formHumpty?.skorHumpty?.skor }})</div>
                   </div>
                 </div>
                 <div v-if="storePenilaian?.morses?.grupings?.includes(jnsKasusKep) && (storePenilaian.usia >= 18 && storePenilaian.usia < 60)">
                   <div class="column">
-                    <b>Resiko Jatuh : </b>
+                    <b>Skor Morse Fall : </b>
                     <div> - {{ storePenilaian?.formMorse?.skorMorse?.label }} ({{ storePenilaian?.formMorse?.skorMorse?.skor }})</div>
                   </div>
                 </div>
                 <div v-if="storePenilaian?.ontarios?.grupings?.includes(jnsKasusKep) && (storePenilaian.usia >= 60)">
                   <div class="column">
-                    <b>Resiko Jatuh : </b>
+                    <b>Skor Ontario : </b>
                     <div> - {{ storePenilaian?.formOntario?.skorOntario?.label }} ({{ storePenilaian?.formOntario?.skorOntario?.skor }})</div>
                   </div>
                 </div>
+              </div>
+
+              <q-separator class="q-my-xs" />
+              <div class="column q-mb-sm">
+                <div><b>Skor Nyeri : </b> </div>
+                <ItemNyeri :item="storeAnamnesis?.form?.keluhannyeri" v-if="kasus?.gruping === '4.1'" />
+                <ItemNyeri :item="storeAnamnesis?.formKebidanan?.keluhannyeri" v-if="kasus?.gruping === '4.2'" />
+                <ItemNyeri :item="storeAnamnesis?.formNeoNatal?.keluhannyeri" v-if="kasus?.gruping === '4.3'" />
+                <ItemNyeri :item="storeAnamnesis?.formPediatrik?.keluhannyeri" v-if="kasus?.gruping === '4.4'" />
               </div>
             </div>
           </q-card-section>
@@ -205,24 +226,39 @@ const validate = () => {
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
-            <div class="f-20">
-              Assessment
+            <div class="flex justify-between items-center">
+              <div class="f-20">
+                Assessment
+              </div>
+              <div class="q-mt-sm">
+                <q-btn
+                  bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                    // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
+                    // settings.isChildForm = true
+                    if (nakes === '2') {
+                      storeDiagnosaKeperawatan.modalOpen = true
+                    }
+                  }"
+                />
+              </div>
             </div>
           </q-card-section>
 
           <q-separator inset />
 
           <q-card-section class="col full-height scroll">
+            <!-- {{ storeDiagnosaKeperawatan.selectDiagnosa }} -->
             <q-input
               ref="refInputAsessment"
               v-model="store.form.asessment"
               outlined
-              autogrow
               stack-label
+              type="textarea"
               standout="bg-yellow-3"
               label="Asessment"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
               :lazy-rules="true"
+              rows="5"
               hide-bottom-space
             />
           </q-card-section>
