@@ -28,13 +28,11 @@ export const usePlannStore = defineStore('plann-store', {
       formamb.kodedokter = pasien?.kodedokter
       formamb.kodesistembayar = pasien?.kodesistembayar
       formamb.koderuang = pasien?.kodepoli
-
       try {
         const resp = await api.post('v1/simrs/planing/igd/simpanranap', formamb)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           const isi = resp.data.result[0]
-          this.setNotas(resp?.data?.nota)
           storePasien.injectDataPasien(pasien, isi, 'planheder')
           notifSuccess(resp)
           this.initReset()
@@ -93,7 +91,7 @@ export const usePlannStore = defineStore('plann-store', {
       }
     },
     initReset () {
-      this.form.panel = ''
+      this.form.panel = 'Rawat Inap'
       this.form.operasi = ''
       this.form.jenisoperasi = ''
       this.form.tgloperasi = ''

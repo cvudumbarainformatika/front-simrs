@@ -59,9 +59,26 @@
                   <span class="">Plann </span> : <span class="text-weight-bold">{{ item.rs4 }}</span>
                 </q-item-label>
                 <div v-if="item?.rs4 === 'Rawat Inap'">
-                  <q-item-label>Atas Dasar : <span>asdasasd</span></q-item-label>
+                  <q-item-label>Operasi : <span class="text-weight-bold">{{ item?.planranap?.operasi }}</span></q-item-label>
+                  <q-item-label>Jenis Operasi : <span class="text-weight-bold">{{ item?.planranap?.jenisoperasi }}</span></q-item-label>
+                  <q-item-label>Tanggal Operasi : <span class="text-weight-bold">{{ item?.planranap?.tgloperasi }}</span></q-item-label>
+                  <q-item-label>Ruang Tujuan : <span class="text-weight-bold">{{ item?.planranap?.ruangranap?.rs2 }}</span></q-item-label>
                 </div>
-                <q-item-label>Operasi</q-item-label>
+                <div v-if="item?.rs4 === 'Rujuk Ke Rumah Sakit'">
+                  <q-item-label>Alasan Dirujuk : <span class="text-weight-bold">{{ item?.planrujukan?.atas_dasar }}</span></q-item-label>
+                  <q-item-label>Jenis Pelayanan : <span class="text-weight-bold">{{ item?.planrujukan?.jenis_pelayanan }}</span></q-item-label>
+                  <q-item-label>Tanggal Rujukan : <span class="text-weight-bold">{{ item?.planrujukan?.tgl_rujukan }}</span></q-item-label>
+                  <q-item-label>Tanggal Rencana Kunjungan : <span class="text-weight-bold">{{ item?.planrujukan?.tgl_rencana_kunjungan }}</span></q-item-label>
+                  <q-item-label>Type  Faskes : <span class="text-weight-bold">{{ item?.planrujukan?.type_faskes }}</span></q-item-label>
+                  <q-item-label>Dirujuk Ke : <span class="text-weight-bold">{{ item?.planrujukan?.di_rujuk_ke }} ({{ item?.planrujukan?.koders }})</span></q-item-label>
+                  <q-item-label>Poli : <span class="text-weight-bold">{{ item?.planrujukan?.poli_rujukan }} ({{ item?.planrujukan?.kodepoli }})</span></q-item-label>
+                  <q-item-label>Keterangan : <span class="text-weight-bold">{{ item?.planrujukan?.keterangan ?? '-' }}</span></q-item-label>
+                </div>
+                <div v-if="item?.rs4 === 'Pulang'">
+                  <q-item-label>Alasan Pulang : <span class="text-weight-bold">{{ item?.planpulang?.atas_dasar }}</span></q-item-label>
+                  <q-item-label>Tanggal Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.tgl_meninggal }} {{ item?.planpulang?.jam_meninggal }}</span></q-item-label>
+                  <q-item-label>Alasan Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.atas_dasar }}</span></q-item-label>
+                </div>
               </q-item-section>
             </q-item>
           </transition-group>

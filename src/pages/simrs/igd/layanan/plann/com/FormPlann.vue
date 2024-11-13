@@ -228,6 +228,7 @@
                           hide-bottom-space
                           clearable
                           @filter="onFilterTest"
+                          @update:model-value="(val) => carinama(val)"
                         />
                       </div>
                       <div class="-4">
@@ -245,6 +246,7 @@
                           map-options
                           hide-bottom-space
                           @filter="filterPoli"
+                          @update:model-value="(val) => caripoli(val)"
                         />
                       </div>
                       <div class="col-8">
@@ -347,7 +349,7 @@ import { usePlannStore } from 'src/stores/simrs/igd/plann'
 import { ref } from 'vue'
 
 const store = usePlannStore()
-const formRef = ref()
+const refForm = ref()
 const optionoperasi = ref(['Ya', 'Tidak'])
 const optionjenisoperasi = ref(['Eleftif', 'Cito'])
 const atasdasar = ref(['Tempat Penuh', 'Permintaan Pasien', 'Penanganan Lebih Lanjut'])
@@ -426,7 +428,8 @@ const props = defineProps({
 
 function onSubmit () {
   store.savePlan(props.pasien).then(() => {
-    formRef.value.resetValidation()
+    console.log('s')
+    refForm.value.resetValidation()
   })
 }
 
@@ -479,6 +482,16 @@ function kosongkanpulang () {
   store.form.tglmeninggal = ''
   store.form.jammeninggal = ''
   store.form.keteranganrujuk = ''
+}
+
+function carinama (val) {
+  store.form.koders = val?.kode
+  store.form.dirujukkers = val?.nama
+}
+
+function caripoli (val) {
+  store.form.kodepoli = val?.kode
+  store.form.polirujukan = val?.nama
 }
 
 store.formattanggal()
