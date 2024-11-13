@@ -1,7 +1,12 @@
 <template>
   <q-card>
     <q-card-section>
-      <div>Perbaikan Mutasi {{ props.data }}</div>
+      <div class="text-h6">
+        Perbaikan Mutasi (Depo)
+      </div>
+      <div v-for="item in props.data?.mutasi" :key="item">
+        {{ item }}
+      </div>
     </q-card-section>
     <q-card-actions align="right">
       <q-btn flat label="Close" @click="emits('close')" />
@@ -13,8 +18,8 @@
 <script setup>
 const props = defineProps({
   data: {
-    type: String,
-    default: ''
+    type: Object,
+    default: () => {}
   }
 })
 const emits = defineEmits(['close', 'simpan'])

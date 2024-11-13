@@ -2,9 +2,9 @@
   <q-card>
     <q-card-section>
       <div class="text-h6">
-        Perbaikan Retur (Depo)
+        Perbaikan Mutasi Keluar (Depo Floor Stok)
       </div>
-      <div v-for="item in props.data?.data?.retur" :key="item">
+      <div v-for="item in props.data?.data?.mutasikeluar" :key="item">
         {{ item }}
       </div>
     </q-card-section>

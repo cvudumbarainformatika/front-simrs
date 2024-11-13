@@ -2,7 +2,10 @@
   <q-card>
     <q-card-section>
       <div class="text-h6">
-        Perbaikan Resep Racikan {{ props.data }}
+        Perbaikan Resep Racikan (Depo)
+      </div>
+      <div v-for="item in props.data?.data?.racikan" :key="item">
+        {{ item }}
       </div>
     </q-card-section>
     <q-card-actions align="right">
@@ -15,8 +18,8 @@
 <script setup>
 const props = defineProps({
   data: {
-    type: String,
-    default: ''
+    type: Object,
+    default: () => {}
   }
 })
 const emits = defineEmits(['close', 'simpan'])
