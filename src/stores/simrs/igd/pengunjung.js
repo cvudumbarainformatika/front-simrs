@@ -175,6 +175,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].bankdarah = resp?.data?.bankdarah
             findPasien[0].planheder = resp?.data?.planheder
             findPasien[0].tindakan = resp?.data?.tindakan
+            findPasien[0].laboratold = resp?.data?.laboratold
             // BARU
             // findPasien[0].laporantindakan = resp?.data?.laporantindakan
             // findPasien[0].psikiatri = resp?.data?.psikiatri

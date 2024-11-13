@@ -122,6 +122,19 @@ export const useLaboratIgd = defineStore('laborat-igd', {
         // this.notalaborat = this.notalaborats[0]
       }
     },
+
+    async getNotaold (pasien) {
+      const payload = { params: { noreg: pasien?.noreg } }
+      const resp = await api.get('v1/simrs/penunjang/laborat/getnotaold', payload)
+      console.log('notalaborat', resp)
+      if (resp.status === 200) {
+        this.setNotas(resp?.data)
+        // const arr = resp.data.map(x => x.nota)
+        // this.notalaborats = arr.length ? arr : []
+        // this.notalaborats.push('BARU')
+        // this.notalaborat = this.notalaborats[0]
+      }
+    },
     setCariLabNull () {
       this.caripemeriksaanlab = null
     },
@@ -177,7 +190,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           const isi = resp?.data?.result
-          storePasien.injectDataPasien(pasien, isi, 'laborats')
+          storePasien.injectDataPasien(pasien, isi, 'laboratold')
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
           this.loadingSaveLab = false
@@ -300,6 +313,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
       }
     },
     setNotas (array) {
+      console.log('sasa', array)
       const arr = array.map(x => x.nota)
       this.notalaborats = arr.length ? arr : []
       // this.notalaborats.push('LIHAT SEMUA')

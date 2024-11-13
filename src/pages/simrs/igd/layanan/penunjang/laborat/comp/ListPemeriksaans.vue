@@ -23,7 +23,7 @@
       {{ pasien?.laborats }} -->
       <!-- jika belum ada pemeriksaan -->
       <div
-        v-if="fillterTable(pasien?.laborats) === 0"
+        v-if="fillterTable(pasien?.laboratold) === 0"
         class="column full-height flex-center text-white"
       >
         Belum Ada Permintaan Order ke Laborat
@@ -38,7 +38,7 @@
         >
           <transition-group>
             <template
-              v-for="(item, i) in fillterTable(pasien?.laborats)"
+              v-for="(item, i) in fillterTable(pasien?.laboratold)"
               :key="i"
             >
               <q-expansion-item
@@ -52,7 +52,7 @@
                       lines="2"
                       class="f-12"
                     >
-                      <span class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      <span class="text-weight-bold text-accent">{{ item }} </span>
                     </q-item-label>
                     <q-item-label
                       lines="2"
@@ -188,12 +188,12 @@ const props = defineProps({
 //   return filtered
 //   // return arr
 // })
-
+console.log('pasien', props.pasien)
 function fillterTable (val) {
-  console.log('asd', val)
   if (val) {
     const s = store.notalaborat
-    const res = val?.filter(x => x.nota === s)
+    const res = val?.filter(x => x.rs2 === s)
+    console.log('asd', res)
     const hasil = res?.length ? mapping(res[0].details) : []
     console.log('filterre ', hasil)
     return hasil
