@@ -78,8 +78,8 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
             item.opnameJml = item?.data?.data?.cekOpname?.jmlSesuai
             item.opnameTrx = item?.data?.data?.cekOpname?.noperSesuai
             item.trxSesuai = !!(item?.data?.data?.eksekusi?.gaKtm === false || item?.data?.data?.eksekusi?.gaKtm?.length === 0)
-            item.trxLebih = item?.data?.data?.penKur.length === 0
-            item.trxKurang = item?.data?.data?.penLeb.length === 0
+            item.trxLebih = item?.data?.data?.penKur?.length === 0
+            item.trxKurang = item?.data?.data?.penLeb?.length === 0
             // console.log('item', item)
           }
         })
@@ -195,16 +195,16 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
             item.opnameJml = item?.data?.data?.cekOpname?.jmlSesuai
             item.opnameTrx = item?.data?.data?.cekOpname?.noperSesuai
             item.trxSesuai = !!(item?.data?.data?.eksekusi?.gaKtm === false || item?.data?.data?.eksekusi?.gaKtm?.length === 0)
-            item.trxLebih = item?.data?.data?.penKur.length === 0
-            item.trxKurang = item?.data?.data?.penLeb.length === 0
+            item.trxLebih = item?.data?.data?.penKur?.length === 0
+            item.trxKurang = item?.data?.data?.penLeb?.length === 0
           }
           if (sem) {
             sem.data.data = resp?.data
             sem.opnameJml = sem?.data?.data?.cekOpname?.jmlSesuai
             sem.opnameTrx = sem?.data?.data?.cekOpname?.noperSesuai
             sem.trxSesuai = !!(sem?.data?.data?.eksekusi?.gaKtm === false || sem?.data?.data?.eksekusi?.gaKtm?.length === 0)
-            sem.trxLebih = sem?.data?.data?.penKur.length === 0
-            sem.trxKurang = sem?.data?.data?.penLeb.length === 0
+            sem.trxLebih = sem?.data?.data?.penKur?.length === 0
+            sem.trxKurang = sem?.data?.data?.penLeb?.length === 0
           }
           console.log('resp get data', resp?.data, item)
           resolve(resp?.data)
@@ -218,7 +218,7 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
     perbaikanDataOpname (kode) {
       const item = this.items.find(f => f.kd_obat === kode)
       const opname = item?.data?.data?.cekOpname?.opname
-      if (opname.length <= 0) return notifErrVue('Data opname kosong')
+      if (opname?.length <= 0) return notifErrVue('Data opname kosong')
       const payload = opname
       console.log('resp opname', payload)
       this.loadingFixOpname = true

@@ -170,7 +170,7 @@
     </div>
     <DetailCom
       v-model="isOpen" :data="data" @close="()=>{
-        if(store.items.length<=0) setPilihan(store.params.pilihan)
+        if(store.items?.length<=0) setPilihan(store.params.pilihan)
         isOpen=false
       }"
       @fix-mutasi="(val)=>{
@@ -187,7 +187,7 @@
       :loading="store.loadingMutasi"
       :loading-fix-mutasi="store.loadingFixMutasi || store.loadingPecah || store.loadingGanti"
       @close="()=>{
-        if(store.items.length<=0) setPilihan(store.params.pilihan)
+        if(store.items?.length<=0) setPilihan(store.params.pilihan)
         store.openMutasi=false
       }"
       @fix-mutasi="(val)=>{

@@ -25,10 +25,10 @@
         <div v-if="store.loadingHarga" style="min-height: 500px;">
           <app-loading />
         </div>
-        <div v-if="!store.loadingHarga && !Object.keys(store.detailHargas).length" style="min-height: 500px;">
+        <div v-if="!store.loadingHarga && !Object.keys(store.detailHargas)?.length" style="min-height: 500px;">
           <app-no-data />
         </div>
-        <div v-if="!store.loadingHarga && Object.keys(store.detailHargas).length">
+        <div v-if="!store.loadingHarga && Object.keys(store.detailHargas)?.length">
           <div v-if="store.detailHargas?.reference?.length" class="q-mb-md">
             <div class="q-my-sm text-weight-bold f-14">
               Data Referensi

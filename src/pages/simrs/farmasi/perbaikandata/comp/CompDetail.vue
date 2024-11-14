@@ -148,10 +148,10 @@
                 {{ data?.data?.data?.tts }}
               </div>
               <div class="col-2">
-                {{ data?.data?.data?.cekOpname?.opname.reduce((total, item) => total + parseFloat(item.jumlah), 0) }}
+                {{ data?.data?.data?.cekOpname?.opname?.reduce((total, item) => total + parseFloat(item.jumlah), 0) }}
               </div>
               <div class="col-2">
-                {{ parseFloat(data?.data?.data?.tts) - data?.data?.data?.cekOpname?.opname.reduce((total, item) => total + parseFloat(item.jumlah), 0) }}
+                {{ parseFloat(data?.data?.data?.tts) - data?.data?.data?.cekOpname?.opname?.reduce((total, item) => total + parseFloat(item.jumlah), 0) }}
               </div>
               <div class="col-2">
                 <q-btn
@@ -193,7 +193,7 @@
                 Nobatch
               </div>
             </div>
-            <div v-for="(opnm,i) in data?.data?.data?.cekOpname.opname" :key="i">
+            <div v-for="(opnm,i) in data?.data?.data?.cekOpname?.opname" :key="i">
               <div class="row items-center" :class="i%2==0?'bg-grey-2':'bg-grey-4'">
                 <div class="col-auto" style="width: 5%;">
                   {{ i+1 }}.
@@ -259,7 +259,7 @@
                 <div>Harap Tunggu ...</div>
               </div>
             </div>
-            <div v-for="(perbaikan,i) in data?.data?.data?.cekOpname.penerimaan" :key="i">
+            <div v-for="(perbaikan,i) in data?.data?.data?.cekOpname?.penerimaan" :key="i">
               <div
                 v-if="!store.loadingFixHarga && !store.loadingGetData"
                 class="row items-center "
