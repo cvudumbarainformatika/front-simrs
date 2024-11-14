@@ -435,7 +435,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRsLain.noreg = pasien?.noreg
       this.formRsLain.planing = 'Rumah Sakit Lain'
       this.formRsLain.kodesistembayar = pasien?.kodesistembayar
-      console.log('this.formRsLain', this.formRsLain)
+      console.log('this.formRsLain', this.formRsLain, diag)
 
       this.loadingSave = true
       const url = this.editRsLain ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
