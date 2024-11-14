@@ -28,13 +28,22 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
     ],
     pagupendapatans: [],
     datapendapatans: [],
+    datapendpsblm: [],
+    pagubelanjas: [],
     databelanjas: [],
-    dataqitem: [],
+    belanjasblm: [],
+    pagusilpa: [],
+    silpasblm: [],
+    silpaskg: [],
 
     hasilpendapatan: [],
-    hasilqitem: []
+    hasilbelanja: [],
+    hasilsilpa: []
   }),
   actions: {
+    setParameter (key, val) {
+      this.reqs[key] = val
+    },
     getDataLap () {
       this.loading = true
       const params = { params: this.reqs }
@@ -42,10 +51,16 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         api.get('v1/laporan/lra/getlra', params).then((resp) => {
           console.log('data LRA', resp.data)
           if (resp.status === 200) {
-            this.dataqitem = resp.data.qitem
             this.pagupendapatans = resp.data.pagupendapatan
             this.datapendapatans = resp.data.pendapatan
+            this.datapendpsblm = resp.data.pendapatansblm
+            this.pagubelanjas = resp.data.pagu
             this.databelanjas = resp.data.belanja
+            this.belanjasblm = resp.data.belanjasblm
+            this.pagusilpa = resp.data.pagusilpa
+            this.silpasblm = resp.data.silpasblm
+            this.silpaskg = resp.data.silpaskg
+
             this.mapData()
 
             this.loading = false
@@ -55,14 +70,9 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       })
     },
     mapData () {
+      const pendsblm = this.datapendpsblm
       const pendapatan = this.datapendapatans
       const pagupendapatan = this.pagupendapatans
-
-      const realsebelumnya = this.datapendapatans?.filter((x) => {
-        const tgl = new Date(x?.tanggal).getTime()
-        return tgl < new Date(this.reqs.tgl).getTime()
-      }).map((x) => x)
-      console.log('subtotal', realsebelumnya)
       const kode6 = []
       const kode5 = []
       const kode4 = []
@@ -70,45 +80,72 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       const kode2 = []
       const kode1 = []
       for (let i = 0; i < pendapatan.length; i++) {
-        const el = pendapatan[i]
+        const el = pendapatan[i] ?? 0
+        const sblm = pendsblm[i] ?? 0
+
         const pagup = pagupendapatan[i]
-        const nilaip = el?.penyesuaian.map(x => parseFloat(x.totalpenyesuaian))
-        // console.log('nilaip', nilaip)
+        const nilaip = el?.penyesuaian?.length ? el?.penyesuaian?.map(x => parseFloat(x?.totalpenyesuaian)) : 0
+        const nilaipseblm = sblm?.penyesuaian?.length ? sblm?.penyesuaian?.map(x => parseFloat(x?.totalpenyesuaian)) : 0
+
         const obj6 = {
           kode: el?.kode6,
           uraian: el?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         const obj5 = {
           kode: el?.kode5,
           uraian: el?.lvl5?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         const obj4 = {
           kode: el?.kode4,
           uraian: el?.lvl4?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         const obj3 = {
           kode: el?.kode3,
           uraian: el?.lvl3?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         const obj2 = {
           kode: el?.kode2,
           uraian: el?.lvl2?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         const obj1 = {
           kode: el?.kode1,
           uraian: el?.lvl1?.uraian,
-          nilai: parseFloat(el?.subtotal) + parseFloat(nilaip),
-          pagupend: parseFloat(pagup?.pagupendapatan)
+          nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
+          pagupend: parseFloat(pagup?.pagupendapatan),
+          nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
+          persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
         kode6.push(obj1, obj2, obj3, obj4, obj5, obj6)
         kode5.push(obj1, obj2, obj3, obj4, obj5)
@@ -116,149 +153,273 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         kode3.push(obj1, obj2, obj3)
         kode2.push(obj1, obj2)
         kode1.push(obj1)
-      } console.log('kode6', kode6)
+      } console.log('PENDAPATAN', kode6)
 
-      const qitem = this.dataqitem
-      const qitem6 = []
-      const qitem5 = []
-      const qitem4 = []
-      const qitem3 = []
-      const qitem2 = []
-      const qitem1 = []
+      const belanja = this.pagubelanjas
+      const nilaiskg = this.databelanjas
+      const nilaisblm = this.belanjasblm
+      console.log('belanja', belanja)
+      const belanja6 = []
+      const belanja5 = []
+      const belanja4 = []
+      const belanja3 = []
+      const belanja2 = []
+      const belanja1 = []
 
-      for (let i = 0; i < qitem.length; i++) {
-        const el = qitem[i]
+      const fil6 = belanja.map((x) => x.kode6)
+      const unik6 = fil6.length ? [...new Set(fil6)] : []
+      for (let i = 0; i < unik6.length; i++) {
+        const el = unik6[i]
         const obj6 = {
-          kode: el?.kode6,
-          uraian: el?.uraian50,
-          nilai: parseFloat(el?.subtotal)
+          kode: belanja.filter((x) => x.kode6 === el)[0].kode6,
+          uraian: belanja.filter((x) => x.kode6 === el)[0].uraian,
+          pagu: belanja.filter((x) => x.kode6 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode6 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode6 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode6 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode6 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode6 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode6 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode6 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode6 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode6 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode6 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem6.push(obj6)
+        belanja6.push(obj6)
       }
 
-      const fil5 = qitem.map((x) => x.kode5)
+      const fil5 = belanja.map((x) => x.kode5)
       const unik5 = fil5.length ? [...new Set(fil5)] : []
       for (let i = 0; i < unik5.length; i++) {
         const el = unik5[i]
         const obj = {
-          kode: qitem.filter((x) => x.kode5 === el)[0].kode5,
-          uraian: qitem.filter((x) => x.kode5 === el).map((x) => x.lvl5)[0]?.uraian,
-          nilai: qitem.filter((x) => x.kode5 === el)?.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
+          kode: belanja.filter((x) => x.kode5 === el)[0].kode5,
+          uraian: belanja.filter((x) => x.kode5 === el).map((x) => x.lvl5)[0]?.uraian,
+          pagu: belanja.filter((x) => x.kode5 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode5 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode5 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode5 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode5 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode5 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode5 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode5 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode5 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode5 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode5 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem5.push(obj)
+        belanja5.push(obj)
       }
 
-      const fil4 = qitem.map((x) => x.kode4)
+      const fil4 = belanja.map((x) => x.kode4)
       const unik4 = fil4.length ? [...new Set(fil4)] : []
       for (let i = 0; i < unik4.length; i++) {
         const el = unik4[i]
         const obj = {
-          kode: qitem.filter((x) => x.kode4 === el)[0].kode4,
-          uraian: qitem.filter((x) => x.kode4 === el).map((x) => x.lvl4)[0]?.uraian,
-          nilai: qitem.filter((x) => x.kode4 === el)?.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
+          kode: belanja.filter((x) => x.kode4 === el)[0].kode4,
+          uraian: belanja.filter((x) => x.kode4 === el).map((x) => x.lvl4)[0]?.uraian,
+          pagu: belanja.filter((x) => x.kode4 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode4 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode4 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode4 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode4 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode4 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode4 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode4 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode4 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode4 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode4 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem4.push(obj)
+        belanja4.push(obj)
       }
 
-      const fil3 = qitem.map((x) => x.kode3)
+      const fil3 = belanja.map((x) => x.kode3)
       const unik3 = fil3.length ? [...new Set(fil3)] : []
       for (let i = 0; i < unik3.length; i++) {
         const el = unik3[i]
         const obj = {
-          kode: qitem.filter((x) => x.kode3 === el)[0].kode3,
-          uraian: qitem.filter((x) => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
-          nilai: qitem.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
+          kode: belanja.filter((x) => x.kode3 === el)[0].kode3,
+          uraian: belanja.filter((x) => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
+          pagu: belanja.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode3 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode3 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem3.push(obj)
+        belanja3.push(obj)
       }
 
-      const fil2 = qitem.map((x) => x.kode2)
+      const fil2 = belanja.map((x) => x.kode2)
       const unik2 = fil2.length ? [...new Set(fil2)] : []
       for (let i = 0; i < unik2.length; i++) {
         const el = unik2[i]
         const obj = {
-          kode: qitem.filter((x) => x.kode2 === el)[0].kode2,
-          uraian: qitem.filter((x) => x.kode2 === el).map((x) => x.lvl2)[0]?.uraian,
-          nilai: qitem.filter((x) => x.kode2 === el)?.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
+          kode: belanja.filter((x) => x.kode2 === el)[0].kode2,
+          uraian: belanja.filter((x) => x.kode2 === el).map((x) => x.lvl2)[0]?.uraian,
+          pagu: belanja.filter((x) => x.kode2 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode2 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode2 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode2 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode2 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode2 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode2 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode2 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode2 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode2 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode2 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem2.push(obj)
+        belanja2.push(obj)
       }
 
-      const fil1 = qitem.map((x) => x.kode1)
+      const fil1 = belanja.map((x) => x.kode1)
       const unik1 = fil1.length ? [...new Set(fil1)] : []
       for (let i = 0; i < unik1.length; i++) {
         const el = unik1[i]
         const obj = {
-          kode: qitem.filter((x) => x.kode1 === el)[0].kode1,
-          uraian: qitem.filter((x) => x.kode1 === el).map((x) => x.lvl1)[0]?.uraian,
-          nilai: qitem.filter((x) => x.kode1 === el)?.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
+          kode: belanja.filter((x) => x.kode1 === el)[0].kode1,
+          uraian: belanja.filter((x) => x.kode1 === el).map((x) => x.lvl1)[0]?.uraian,
+          pagu: belanja.filter((x) => x.kode1 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaiskg: nilaiskg.filter((x) => x.kode1 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0),
+          nilaisblm: nilaisblm.filter((x) => x.kode1 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          nilaisemua: nilaiskg.filter((x) => x.kode1 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode1 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+          selisih: belanja.filter((x) => x.kode1 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) - (nilaiskg.filter((x) => x.kode1 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode1 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)),
+          persen: ((nilaiskg.filter((x) => x.kode1 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode1 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode1 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
         }
-        qitem1.push(obj)
+        belanja1.push(obj)
       }
 
-      qitem6.push(...qitem1, ...qitem2, ...qitem3, ...qitem4, ...qitem5)
-      const sortqitem6 = (qitem6) =>
-        qitem6.sort(({ kode: a }, { kode: b }) =>
+      belanja6.push(...belanja1, ...belanja2, ...belanja3, ...belanja4, ...belanja5)
+      const sortbelanja6 = (belanja6) =>
+        belanja6.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
-      const level6 = sortqitem6(qitem6)
-      console.log('level6', level6)
+      const level6 = sortbelanja6(belanja6)
 
-      qitem5.push(...qitem1, ...qitem2, ...qitem3, ...qitem4)
-      const sortqitem5 = (qitem5) =>
-        qitem5.sort(({ kode: a }, { kode: b }) =>
+      belanja5.push(...belanja1, ...belanja2, ...belanja3, ...belanja4)
+      const sortbelanja5 = (belanja5) =>
+        belanja5.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
-      const level5 = sortqitem5(qitem5)
-      console.log('level5', level5)
+      const level5 = sortbelanja5(belanja5)
 
-      qitem4.push(...qitem1, ...qitem2, ...qitem3)
-      const sortqitem4 = (qitem4) =>
-        qitem4.sort(({ kode: a }, { kode: b }) =>
+      belanja4.push(...belanja1, ...belanja2, ...belanja3)
+      const sortbelanja4 = (belanja4) =>
+        belanja4.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
-      const level4 = sortqitem4(qitem4)
-      console.log('level4', level4)
+      const level4 = sortbelanja4(belanja4)
 
-      qitem3.push(...qitem1, ...qitem2)
-      const sortqitem3 = (qitem3) =>
-        qitem3.sort(({ kode: a }, { kode: b }) =>
+      belanja3.push(...belanja1, ...belanja2)
+      const sortbelanja3 = (belanja3) =>
+        belanja3.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
-      const level3 = sortqitem3(qitem3)
-      console.log('level3', level3)
+      const level3 = sortbelanja3(belanja3)
 
-      qitem2.push(...qitem1)
-      const sortqitem2 = (qitem2) =>
-        qitem2.sort(({ kode: a }, { kode: b }) =>
+      belanja2.push(...belanja1)
+      const sortbelanja2 = (belanja2) =>
+        belanja2.sort(({ kode: a }, { kode: b }) =>
           a < b ? -1 : a > b ? 1 : 0
         )
-      const level2 = sortqitem2(qitem2)
-      console.log('level2', level2)
+      const level2 = sortbelanja2(belanja2)
+
+      const sortbelanja1 = (belanja1) =>
+        belanja1.sort(({ kode: a }, { kode: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const level1 = sortbelanja1(belanja1)
+
+      const pagusilpas = this.pagusilpa
+      const silpasblms = this.silpasblm
+      const silpaskgs = this.silpaskg
+      const silpa6 = []
+      const silpa5 = []
+      const silpa4 = []
+      const silpa3 = []
+      const silpa2 = []
+      const silpa1 = []
+      for (let i = 0; i < pagusilpas.length; i++) {
+        const el = pagusilpas[i]
+        const sblm = silpasblms[i] ?? 0
+        const skg = silpaskgs[i] ?? 0
+
+        const obj6 = {
+          kode: el?.kode6,
+          uraian: el?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        const obj5 = {
+          kode: el?.kode5,
+          uraian: el?.lvl5?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        const obj4 = {
+          kode: el?.kode4,
+          uraian: el?.lvl4?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        const obj3 = {
+          kode: el?.kode3,
+          uraian: el?.lvl3?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        const obj2 = {
+          kode: el?.kode2,
+          uraian: el?.lvl2?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        const obj1 = {
+          kode: el?.kode1,
+          uraian: el?.lvl1?.uraian,
+          pagu: parseFloat(el?.pagu),
+          nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
+          nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
+          nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
+        }
+        silpa6.push(obj1, obj2, obj3, obj4, obj5, obj6)
+        silpa5.push(obj1, obj2, obj3, obj4, obj5)
+        silpa4.push(obj1, obj2, obj3, obj4)
+        silpa3.push(obj1, obj2, obj3)
+        silpa2.push(obj1, obj2)
+        silpa1.push(obj1)
+      } console.log('SILPA', silpa6)
 
       if (this.reqs.levelberapa === 6) {
         this.hasilpendapatan = kode6
-        this.hasilqitem = qitem6
+        this.hasilbelanja = level6
+        this.hasilsilpa = silpa6
       }
       else if (this.reqs.levelberapa === 5) {
         this.hasilpendapatan = kode5
-        this.hasilqitem = qitem5
+        this.hasilbelanja = level5
+        this.hasilsilpa = silpa5
       }
       else if (this.reqs.levelberapa === 4) {
         this.hasilpendapatan = kode4
-        this.hasilqitem = qitem4
+        this.hasilbelanja = level4
+        this.hasilsilpa = silpa4
       }
       else if (this.reqs.levelberapa === 3) {
         this.hasilpendapatan = kode3
-        this.hasilqitem = qitem3
+        this.hasilbelanja = level3
+        this.hasilsilpa = silpa3
       }
       else if (this.reqs.levelberapa === 2) {
         this.hasilpendapatan = kode2
-        this.hasilqitem = qitem2
+        this.hasilbelanja = level2
+        this.hasilsilpa = silpa2
       }
       else {
         this.hasilpendapatan = kode1
-        this.hasilqitem = qitem1
+        this.hasilbelanja = level1
+        this.hasilsilpa = silpa1
       }
     }
   }

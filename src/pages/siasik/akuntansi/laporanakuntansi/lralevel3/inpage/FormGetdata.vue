@@ -9,8 +9,11 @@
         option-label="nama"
         outlined
         :source="store.level"
+        :key="ambilData"
         @update:model-value="(val)=>{
-          store.reqs.levelberapa = parseInt(val)
+          refData = parseInt(val)
+          store.reqs.levelberapa = refData
+          console.log('ref', store.reqs.levelberapa)
         }"
       />
     </div>
@@ -103,6 +106,7 @@ const store = useLRAjurnalStore()
 const $q = useQuasar()
 // Model berdasarkan ref agar tidak updte
 const berdasar = ref('')
+const refData = ref('')
 
 function tglDari (val) {
   store.setParameter('tgl', val)

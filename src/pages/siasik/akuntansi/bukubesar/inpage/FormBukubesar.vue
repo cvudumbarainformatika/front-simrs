@@ -55,7 +55,23 @@
         @set-model="val=>store.reqs.tgl=val"
       />
     </div>
-    <div class="q-pa-sm" style="width:50%">
+    <div class="q-pa-sm" style="width:25%">
+      <app-autocomplete
+        v-model="jenisapa"
+        label="Pilih Jenis Buku Besar"
+        autocomplete="nama"
+        option-value="value"
+        option-label="nama"
+        outlined
+        :disable="store.loading"
+        :loading="store.loading"
+        :source="store.jenis"
+        @update:model-value="(val)=>{
+          store.reqs.jenisbukubesar = parseInt(val)
+        }"
+      />
+    </div>
+    <div class="q-pa-sm" style="width:25%">
       <app-autocomplete
         v-model="berdasar"
         label="Pilih Jenis Akun"
@@ -65,7 +81,26 @@
         outlined
         :disable="store.loading"
         :loading="store.loading"
+        v-if="store.reqs.jenisbukubesar < 2"
         :source="store.level"
+        @update:model-value="(val)=>{
+          store.reqs.levelberapa = parseInt(val)
+          const arrBaru = store.alllevel?.filter(x=> x?.kodeall3?.length === parseInt(val))
+          store.optionrekening = arrBaru
+          console.log('arrBaru', store.optionrekening)
+        }"
+      />
+      <app-autocomplete
+        v-model="berdasar"
+        label="Pilih Jenis Akun"
+        autocomplete="nama"
+        option-value="value"
+        option-label="nama"
+        outlined
+        :disable="store.loading"
+        :loading="store.loading"
+        v-if="store.reqs.jenisbukubesar === 2"
+        :source="store.levelrinci"
         @update:model-value="(val)=>{
           store.reqs.levelberapa = parseInt(val)
           const arrBaru = store.alllevel?.filter(x=> x?.kodeall3?.length === parseInt(val))
@@ -89,11 +124,10 @@
         map-options
         input-debounce="0"
         :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : ''"
-        :disable="store.loading || !store.optionrekening.length"
+        :disable="store.loading || !store.optionrekening.length && store.reqs.jenisbukubesar === 1"
         :loading="store.loading"
         :options="store.optionrekening"
         :key="berdasar"
-        @set-row="store.setPerPage"
         @filter="filterFn"
         @clear="store.setFormRekening('kode', null)"
         @update:model-value="(val)=>{
@@ -192,6 +226,7 @@ const CetakBukubesar = defineAsyncComponent(() => import('../printbukubesar/Prin
 const $q = useQuasar()
 const store = useBukubesarStore()
 const berdasar = ref('')
+const jenisapa = ref('')
 const options = ref([])
 // const inpRek = ref(null)
 // const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])

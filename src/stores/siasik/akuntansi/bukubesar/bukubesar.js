@@ -17,6 +17,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       levelberapa: '',
+      jenisbukubesar: '',
       rekenings: '',
       uraian: ''
 
@@ -31,8 +32,20 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       kode: null
     },
     reqlevels: null,
+    jenis: [
+      { nama: 'Rekap Buku Besar', value: '1' },
+      { nama: 'Rincian Buku Besar', value: '2' }
+    ],
     level: [
       { nama: 'Akun', value: '0' },
+      { nama: 'Kelompok', value: '3' },
+      { nama: 'Jenis', value: '6' },
+      { nama: 'Objek', value: '9' },
+      { nama: 'Rincian Objek', value: '12' },
+      { nama: 'SubRincian Objek', value: '17' }
+    ],
+    levelrinci: [
+      { nama: 'Akun', value: '1' },
       { nama: 'Kelompok', value: '3' },
       { nama: 'Jenis', value: '6' },
       { nama: 'Objek', value: '9' },
@@ -45,9 +58,10 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
     jurnalotoms: [],
     jurnalmanuals: [],
     alljurnal: [],
+    allbukubesar: [],
     saldoawal: [],
 
-    // HASIL MAPING //
+    // HASIL MAPING GELONDONGAN//
     hasilmapsLevel6: [],
     hasilmapsLevel5: [],
     hasilmapsLevel1: [],
@@ -56,6 +70,15 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
     hasilSal1: [],
     // REKENING //
     alllevel: [],
+
+    // HASIL MAPING RINCIAN PER LEVEL //
+    hasilRinci6: [],
+    hasilRinci5: [],
+    hasilRinci4: [],
+    hasilRinci3: [],
+    hasilRincibb3: [],
+    hasilRinci2: [],
+    hasilRinci1: [],
 
     // DATA SALDOSEBELUMNYA
     salotom: [],
@@ -153,7 +176,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
             this.hasilmapsLevel1 = []
             this.NilaiSebelumnya()
             this.mapBukubesar()
-
+            this.mapRincianBukubesar()
             this.loading = false
             resolve(resp)
           }
@@ -504,8 +527,8 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
 
       // JURNAL//
       const kode6 = []
-      for (let z = 0; z < arr.length; z++) {
-        const el = arr[z]
+      for (let z = 0; z < this.alljurnal.length; z++) {
+        const el = this.alljurnal[z]
         const obj = {
           tanggal: el?.tanggal,
           notrans: el?.notrans,
@@ -582,19 +605,19 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
         const arrs = this.alljurnal
         const filters = arrs.filter((x) => x.notrans === el).map((x) => x)
         // console.log('kkkk', filters)
-        const unikkode = filters.map((x) => x.kode6)
+        const unikkode = filters.map((x) => x.kode3)
         const setunik = unikkode.length ? [...new Set(unikkode)] : []
         const unikarr = []
         for (let a = 0; a < setunik.length; a++) {
           const el = setunik[a]
           const er = filters
           const obj = {
-            tanggal: er?.filter((x) => x.kode6 === el)[0].tanggal,
-            kodereqs: er?.filter((x) => x.kode6 === el)[0]?.kode3,
-            kode: er?.filter((x) => x.kode6 === el)[0]?.kode4,
-            uraian: er?.filter((x) => x.kode6 === el).map((x) => x.lvl4)[0]?.uraian,
-            debit: er?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
-            kredit: er?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+            tanggal: er?.filter((x) => x.kode3 === el)[0].tanggal,
+            kodereqs: er?.filter((x) => x.kode3 === el)[0]?.kode3,
+            kode: er?.filter((x) => x.kode3 === el)[0]?.kode4,
+            uraian: er?.filter((x) => x.kode3 === el).map((x) => x.lvl4)[0]?.uraian,
+            debit: er?.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+            kredit: er?.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
           }
           unikarr.push(obj)
         }
@@ -720,6 +743,384 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       const arrJurnal1 = sortByDate1(setakhir1)
       this.hasilmapsLevel1 = arrJurnal1
       console.log('HASIL LVL 1', this.hasilmapsLevel1)
+    },
+    mapRincianBukubesar () {
+      const saldosebelum = []
+      const arrsaldoawal = this.saldoawal
+      const salotom = this.salotom
+      const salmanual = this.salmanual
+      const salsebelum = this.salsebelum
+      saldosebelum.push(...arrsaldoawal, ...salsebelum, ...salotom, ...salmanual)
+
+      const saldo6sebelumnya = []
+      const saldounik6 = saldosebelum.map((x) => x.kode6)
+      const setunik6 = saldounik6.length ? [...new Set(saldounik6)] : []
+      for (let q = 0; q < setunik6.length; q++) {
+        const el = setunik6[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode6 === el)[0]?.tanggal,
+          kode1: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode1,
+          kode2: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode2,
+          kode3: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode3,
+          kode4: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode4,
+          kode5: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode5,
+          kode6: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode6,
+          uraian: saldosebelum.filter((x) => x.kode6 === el)[0]?.uraian,
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: saldosebelum?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo6sebelumnya.push(obj)
+      }
+
+      const saldo5sebelumnya = []
+      const saldounik5 = saldosebelum.map((x) => x.kode6)
+      const setunik5 = saldounik5.length ? [...new Set(saldounik5)] : []
+      for (let q = 0; q < setunik5.length; q++) {
+        const el = setunik5[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode6 === el)[0]?.tanggal,
+          kode1: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode1,
+          kode2: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode2,
+          kode3: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode3,
+          kode4: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode4,
+          kode5: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode5,
+          kode6: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode6,
+          uraian: saldosebelum?.filter(x => x.kode6 === el).map((x) => x.lvl6)[0]?.uraian,
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: saldosebelum?.filter((x) => x.kode6 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo5sebelumnya.push(obj)
+      }
+
+      const saldo4sebelumnya = []
+      const saldounik4 = saldosebelum.map((x) => x.kode5)
+      const setunik4 = saldounik4.length ? [...new Set(saldounik4)] : []
+      for (let q = 0; q < setunik4.length; q++) {
+        const el = setunik4[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode5 === el)[0]?.tanggal,
+          kode1: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode1,
+          kode2: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode2,
+          kode3: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode3,
+          kode4: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode4,
+          kode5: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode5,
+          kode6: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode6,
+          uraian: saldosebelum?.filter(x => x.kode5 === el).map((x) => x.lvl5)[0]?.uraian,
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode5 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: saldosebelum?.filter((x) => x.kode5 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo4sebelumnya.push(obj)
+      }
+
+      const saldo3sebelumnya = []
+      const saldounik3 = saldosebelum.map((x) => x.kode4)
+      const setunik3 = saldounik3.length ? [...new Set(saldounik3)] : []
+      for (let q = 0; q < setunik3.length; q++) {
+        const el = setunik3[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode4 === el)[0]?.tanggal ?? '',
+          kode1: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode1 ?? '',
+          kode2: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode2 ?? '',
+          kode3: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode3 ?? '',
+          kode4: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode4 ?? '',
+          kode5: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode5 ?? '',
+          kode6: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode6 ?? '',
+          uraian: saldosebelum?.filter(x => x.kode4 === el).map((x) => x.lvl4)[0]?.uraian ?? '',
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode4 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0) ?? 0,
+          kredit: saldosebelum?.filter((x) => x.kode4 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0) ?? 0
+        }
+        saldo3sebelumnya.push(obj)
+      }
+
+      const saldo2sebelumnya = []
+      const saldounik2 = saldosebelum.map((x) => x.kode3)
+      const setunik2 = saldounik2.length ? [...new Set(saldounik2)] : []
+      for (let q = 0; q < setunik2.length; q++) {
+        const el = setunik2[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode3 === el)[0]?.tanggal,
+          kode1: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode1,
+          kode2: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode2,
+          kode3: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode3,
+          kode4: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode4,
+          kode5: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode5,
+          kode6: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode6,
+          uraian: saldosebelum?.filter(x => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: saldosebelum?.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo2sebelumnya.push(obj)
+      }
+      const saldo1sebelumnya = []
+      const saldounik1 = saldosebelum.map((x) => x.kode2)
+      const setunik1 = saldounik1.length ? [...new Set(saldounik1)] : []
+      for (let q = 0; q < setunik1.length; q++) {
+        const el = setunik1[q] ?? 0
+        const obj = {
+          tanggal: saldosebelum.filter((x) => x.kode2 === el)[0]?.tanggal,
+          kode1: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode1,
+          kode2: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode2,
+          kode3: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode3,
+          kode4: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode4,
+          kode5: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode5,
+          kode6: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode6,
+          uraian: saldosebelum?.filter(x => x.kode2 === el).map((x) => x.lvl2)[0]?.uraian,
+          notrans: '',
+          kegiatan: 'SALDO AWAL PERIODE',
+          keterangan: '',
+          debit: saldosebelum?.filter((x) => x.kode2 === el)?.map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: saldosebelum?.filter((x) => x.kode2 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
+        }
+        saldo1sebelumnya.push(obj)
+      }
+      const arr6 = []
+      const arr5 = []
+      const arr4 = []
+      const arr3 = []
+      const arr2 = []
+      const arr1 = []
+      const arrotom = this.jurnalotoms
+      const arrmanual = this.jurnalmanuals
+      arr6.push(...saldo6sebelumnya, ...arrotom, ...arrmanual)
+      arr5.push(...saldo5sebelumnya, ...arrotom, ...arrmanual)
+      arr4.push(...saldo4sebelumnya, ...arrotom, ...arrmanual)
+      arr3.push(...saldo3sebelumnya, ...arrotom, ...arrmanual)
+      arr2.push(...saldo2sebelumnya, ...arrotom, ...arrmanual)
+      arr1.push(...saldo1sebelumnya, ...arrotom, ...arrmanual)
+
+      console.log('arrrray3', arr3)
+
+      const arrjurnal = []
+      arrjurnal.push(...arrotom, ...arrmanual)
+      const kode6 = []
+      for (let z = 0; z < this.allbukubesar.length; z++) {
+        const el = this.allbukubesar[z]
+        const obj = {
+          tanggal: el?.tanggal,
+          notrans: el?.notrans,
+          kodereqs: el?.kode6,
+          kode: el?.kode6,
+          kegiatan: el?.kegiatan,
+          keterangan: el?.keterangan,
+          debit: parseFloat(el?.debit),
+          kredit: parseFloat(el?.kredit)
+        }
+        kode6.push(obj)
+      }
+
+      const filter6 = kode6.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate6 = (filter6) =>
+        filter6.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku6 = sortByDate6(filter6)
+      this.hasilRinci6 = this.hasilMapssaldo(arrBuku6)
+      console.log('BUKU BESAR KODE6', this.hasilRinci6)
+
+      const kode5 = []
+      const fil5 = arr5.map((x) => x.kode6)
+      const unik5 = fil5.length ? [...new Set(fil5)] : []
+      for (let z = 0; z < unik5.length; z++) {
+        const el = unik5[z]
+        const obj = {
+          kodereqs: arr5?.filter(x => x.kode6 === el)[0]?.kode5,
+          kode: arr5?.filter(x => x.kode6 === el)[0]?.kode6,
+          uraian: arr5?.filter(x => x.kode6 === el).map((x) => x.lvl6)[0]?.uraian,
+          debit: arrjurnal?.filter(x => x.kode6 === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrjurnal?.filter(x => x.kode6 === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          rinci: arr5?.filter(x => x.kode6 === el).map((x) => {
+            return {
+              tanggal: x.tanggal,
+              notrans: x.notrans,
+              kegiatan: x?.kegiatan,
+              keterangan: x?.keterangan,
+              debit: parseFloat(x?.debit),
+              kredit: parseFloat(x?.kredit)
+            }
+          })
+        }
+        kode5.push(obj)
+      }
+      const filter5 = kode5.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate5 = (filter5) =>
+        filter5.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku5 = sortByDate5(filter5)
+      for (let a = 0; a < arrBuku5.length; a++) {
+        const el = arrBuku5[a]
+        const sumrinci = el.rinci
+        this.hasilMapssaldo(sumrinci)
+      }
+      this.hasilRinci5 = this.hasilMapssaldo(arrBuku5)
+      console.log('BUKU BESAR KODE5', this.hasilRinci5)
+
+      const kode4 = []
+      const fil4 = arr4.map((x) => x.kode5)
+      const unik4 = fil4.length ? [...new Set(fil4)] : []
+      for (let z = 0; z < unik4.length; z++) {
+        const el = unik4[z]
+        const obj = {
+          kodereqs: arr4?.filter(x => x.kode5 === el)[0]?.kode4,
+          kode: arr4?.filter(x => x.kode5 === el)[0]?.kode5,
+          uraian: arr4?.filter(x => x.kode5 === el).map((x) => x.lvl5)[0]?.uraian,
+          debit: arrjurnal?.filter(x => x.kode5 === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrjurnal?.filter(x => x.kode5 === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          rinci: arr4?.filter(x => x.kode5 === el).map((x) => {
+            return {
+              tanggal: x.tanggal,
+              notrans: x.notrans,
+              kegiatan: x?.kegiatan,
+              keterangan: x?.keterangan,
+              debit: parseFloat(x?.debit),
+              kredit: parseFloat(x?.kredit)
+            }
+          })
+        }
+        kode4.push(obj)
+      }
+      const filter4 = kode4.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate4 = (filter4) =>
+        filter4.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku4 = sortByDate4(filter4)
+      for (let a = 0; a < arrBuku4.length; a++) {
+        const el = arrBuku4[a]
+        const sumrinci = el.rinci
+        this.hasilMapssaldo(sumrinci)
+      }
+      this.hasilRinci4 = this.hasilMapssaldo(arrBuku4)
+      console.log('BUKU BESAR KODE4', this.hasilRinci4)
+
+      const kode3 = []
+      const fil3 = arr3.map((x) => x.kode4)
+      const unik3 = fil3.length ? [...new Set(fil3)] : []
+      for (let z = 0; z < unik3.length; z++) {
+        const el = unik3[z]
+        const obj = {
+          kodereqs: arr3?.filter(x => x.kode4 === el)[0]?.kode3,
+          kode: arr3?.filter(x => x.kode4 === el)[0]?.kode4,
+          uraian: arr3?.filter(x => x.kode4 === el).map((x) => x.lvl4)[0]?.uraian ?? arr3?.filter(x => x.kode4 === el)[0]?.uraian,
+          debit: arrjurnal?.filter(x => x.kode4 === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrjurnal?.filter(x => x.kode4 === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          rinci: arr3?.filter(x => x.kode4 === el).map((x) => {
+            return {
+              tanggal: x.tanggal,
+              notrans: x.notrans,
+              kegiatan: x?.kegiatan,
+              keterangan: x?.keterangan,
+              debit: parseFloat(x?.debit),
+              kredit: parseFloat(x?.kredit)
+            }
+          })
+        }
+        kode3.push(obj)
+      }
+      const filter3 = kode3.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate3 = (filter3) =>
+        filter3.sort(({ kode: a }, { kode: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku3 = sortByDate3(filter3)
+      for (let a = 0; a < arrBuku3.length; a++) {
+        const el = arrBuku3[a]
+        const sumrinci = el.rinci
+        this.hasilMapssaldo(sumrinci)
+      }
+      this.hasilRinci3 = this.hasilMapssaldo(arrBuku3)
+      console.log('BUKU BESAR KODE3', this.hasilRinci3)
+
+      const kode2 = []
+      const fil2 = arr2.map((x) => x.kode3)
+      const unik2 = fil2.length ? [...new Set(fil2)] : []
+      for (let z = 0; z < unik2.length; z++) {
+        const el = unik2[z]
+        const obj = {
+          kodereqs: arr2?.filter(x => x.kode3 === el)[0]?.kode2,
+          kode: arr2?.filter(x => x.kode3 === el)[0]?.kode3,
+          uraian: arr2?.filter(x => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
+          debit: arrjurnal?.filter(x => x.kode3 === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrjurnal?.filter(x => x.kode3 === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          rinci: arr2?.filter(x => x.kode3 === el).map((x) => {
+            return {
+              tanggal: x.tanggal,
+              notrans: x.notrans,
+              kegiatan: x?.kegiatan,
+              keterangan: x?.keterangan,
+              debit: parseFloat(x?.debit),
+              kredit: parseFloat(x?.kredit)
+            }
+          })
+        }
+        kode2.push(obj)
+      }
+      const filter2 = kode2.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate2 = (filter2) =>
+        filter2.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku2 = sortByDate2(filter2)
+      for (let a = 0; a < arrBuku2.length; a++) {
+        const el = arrBuku2[a]
+        const sumrinci = el.rinci
+        this.hasilMapssaldo(sumrinci)
+      }
+      this.hasilRinci2 = this.hasilMapssaldo(arrBuku2)
+      console.log('BUKU BESAR KODE2', this.hasilRinci2)
+
+      const kode1 = []
+      const fil1 = arr1.map((x) => x.kode2)
+      const unik1 = fil1.length ? [...new Set(fil1)] : []
+      for (let z = 0; z < unik1.length; z++) {
+        const el = unik1[z]
+        const obj = {
+          kodereqs: arr1?.filter(x => x.kode2 === el)[0]?.kode1,
+          kode: arr1?.filter(x => x.kode2 === el)[0]?.kode2,
+          uraian: arr1?.filter(x => x.kode2 === el).map((x) => x.lvl2)[0]?.uraian,
+          debit: arrjurnal?.filter(x => x.kode2 === el).map((x) => parseFloat(x.debit)).reduce((a, b) => a + b, 0),
+          kredit: arrjurnal?.filter(x => x.kode2 === el).map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0),
+          rinci: arr1?.filter(x => x.kode2 === el).map((x) => {
+            return {
+              tanggal: x.tanggal,
+              notrans: x.notrans,
+              kegiatan: x?.kegiatan,
+              keterangan: x?.keterangan,
+              debit: parseFloat(x?.debit),
+              kredit: parseFloat(x?.kredit)
+            }
+          })
+        }
+        kode1.push(obj)
+      }
+      const filter1 = kode1.filter(x => x.kodereqs === this.reqs.rekenings)
+      const sortByDate1 = (filter1) =>
+        filter1.sort(({ tanggal: a }, { tanggal: b }) =>
+          a < b ? -1 : a > b ? 1 : 0
+        )
+      const arrBuku1 = sortByDate1(filter1)
+      for (let a = 0; a < arrBuku1.length; a++) {
+        const el = arrBuku1[a]
+        const sumrinci = el.rinci
+        this.hasilMapssaldo(sumrinci)
+      }
+      this.hasilRinci1 = this.hasilMapssaldo(arrBuku1)
+      console.log('BUKU BESAR KODE1', this.hasilRinci1)
     },
     hasilMapssaldo (arr) {
       let total = 0
