@@ -9,7 +9,7 @@
               <div class="kiri">
                 <div>Resiko Jatuh</div>
                 <div class="text-bold f-16">
-                  RESIKO TINGGI
+                  {{ lihatResikoJatuh }}
                 </div>
               </div>
               <div class="absolute-center" style="right: 0; left: auto;">
@@ -75,12 +75,12 @@
                 PPA
               </div>
             </th>
-            <th class="text-center" width="50%">
+            <th class="text-center" width="40%">
               <div class="text-bold">
                 SOAP
               </div>
             </th>
-            <th class="text-left" width="20%">
+            <th class="text-left" width="30%">
               <div class="text-bold">
                 Instruksi PPA
               </div>
@@ -129,14 +129,18 @@
                       </div>
                     </q-item-section>
                     <q-item-section class="q-pa-xs">
-                      <q-item-label class="f-12 text-bold">
-                        TTV
-                      </q-item-label>
-                      <q-item-label class="">
-                        - Skor Nyeri : 0
-                      </q-item-label>
-                      <q-item-label class="">
-                        - Jatuh : 0
+                      <q-item-label class="f-12">
+                        <div>N : {{ awal?.pemeriksaan?.nadi }}  x/mnt</div>
+                        <div>Sis: {{ awal?.pemeriksaan?.sistole }} mmHg</div>
+                        <div>Dia: {{ awal?.pemeriksaan?.diastole }} mmHg</div>
+                        <div>RR: {{ awal?.pemeriksaan?.pernapasan }} x/mnt</div>
+                        <div>SpO2: {{ awal?.pemeriksaan?.spo }} %</div>
+                        <div>Suhu: {{ awal?.pemeriksaan?.suhu }} C</div>
+                        <div>T/k: {{ awal?.pemeriksaan?.tkKesadaran }} </div>
+                        <div>BB: {{ awal?.pemeriksaan?.bb }} Kg</div>
+                        <div>TB: {{ awal?.pemeriksaan?.tb }} Cm</div>
+                        <div>Nyeri:  {{ awal?.anamnesis?.keluhannyeri?.skor }}</div>
+                        <div>Jatuh: {{ lihatSkorJatuh(awal?.penilaian) }}</div>
                       </q-item-label>
                     </q-item-section>
                   </q-item>
@@ -173,7 +177,8 @@
                       <q-item-label class="">
                         <div v-if="awal?.nakes === '2'">
                           <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
-                            <div v-for="(int, m) in item?.intervensi" :key="m">
+                            <!-- {{ item }} -->
+                            <div v-for="(int, m) in item?.intervensi?.filter(i => i?.group === 'plann')" :key="m">
                               - {{ int?.masterintervensi?.nama }}
                             </div>
                           </div>
@@ -187,8 +192,18 @@
                 </q-list>
               </td>
               <td class="text-left" style="vertical-align:top">
-                ni Nanti Plann di diagnosa keperawatan,
-                plann dokter ?
+                <q-item-label class="">
+                  <div v-if="awal?.nakes === '2'">
+                    <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
+                      <div v-for="(int, m) in item?.intervensi?.filter(i => i?.group !== 'plann')" :key="m">
+                        - <span class="f-12">{{ int?.masterintervensi?.nama }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else-if="awal?.nakes === '1'">
+                    --
+                  </div>
+                </q-item-label>
               </td>
               <td class="text-center">
                 <div style="width:60px">
@@ -210,9 +225,8 @@
           </template>
 
           <!-- lanjut -->
-
-          <!-- <template v-for="(cppt, index) in data?.cppt" :key="index">
-            <tr>
+          <template v-for="(row, index) in listFilterredByDate" :key="index">
+            <tr v-for="(cppt, i) in data?.cppt?.filter(x => dateCppt(x?.tgl) === row)" :key="i">
               <td class="text-left f-12 q-py-xs" style="vertical-align:top">
                 <div>{{ dateCppt(cppt?.tgl) }}</div>
                 <div>{{ jamTnpDetik(cppt?.tgl) }}</div>
@@ -254,8 +268,8 @@
                         <div>T/k: {{ cppt?.pemeriksaan?.tkKesadaran }} </div>
                         <div>BB: {{ cppt?.pemeriksaan?.bb }} Kg</div>
                         <div>TB: {{ cppt?.pemeriksaan?.tb }} Cm</div>
-                        <div>Nyeri:</div>
-                        <div>Jatuh:</div>
+                        <div>Nyeri:  {{ cppt?.anamnesis?.keluhannyeri?.skor }}</div>
+                        <div>Jatuh: {{ lihatSkorJatuh(cppt?.penilaian) }}</div>
                       </q-item-label>
                     </q-item-section>
                   </q-item>
@@ -267,7 +281,7 @@
                     </q-item-section>
                     <q-item-section class="q-pa-xs">
                       <q-item-label class="">
-                        {{ cppt?.asessment ?? '-' }}
+                        <span v-html="getNewLine(cppt?.asessment ?? '-')" />
                       </q-item-label>
                     </q-item-section>
                   </q-item>
@@ -279,97 +293,14 @@
                     </q-item-section>
                     <q-item-section class="q-pa-xs">
                       <q-item-label class="">
-                        {{ cppt?.plann ?? '-' }}
+                        <span v-html="getNewLine(cppt?.plann ?? '-')" />
                       </q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>
               </td>
-              <td class="text-left f-12">
-                {{ cppt?.intstruksi ?? '-' }}
-              </td>
-              <td class="text-center f-12">
-                {{ cariRowspan(dateCppt(cppt?.tgl)) }}
-              </td>
-            </tr>
-          </template> -->
-
-          <template v-for="(row, index) in data?.cppt" :key="index">
-            <tr v-for="(cppt, i) in data?.cppt?.filter(x => dateCppt(x?.tgl) === dateCppt(row?.tgl))" :key="i">
-              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
-                <div>{{ dateCppt(cppt?.tgl) }}</div>
-                <div>{{ jamTnpDetik(cppt?.tgl) }}</div>
-              </td>
-              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
-                <div class="text-bold">
-                  [{{ jenisPPA(cppt?.nakes) }}]
-                </div>
-                <div>{{ cppt?.petugas?.nama ?? '-' }}</div>
-              </td>
-              <td class="text-left f-12" style="vertical-align:top">
-                <q-list dense separator :padding="false">
-                  <q-item :padding="false">
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        S
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label lines="5" class="f-12">
-                        {{ cppt?.anamnesis?.keluhanUtama }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        O
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="f-12">
-                        <div>N : {{ cppt?.pemeriksaan?.nadi }}  x/mnt</div>
-                        <div>Sis: {{ cppt?.pemeriksaan?.sistole }} mmHg</div>
-                        <div>Dia: {{ cppt?.pemeriksaan?.diastole }} mmHg</div>
-                        <div>RR: {{ cppt?.pemeriksaan?.pernapasan }} x/mnt</div>
-                        <div>SpO2: {{ cppt?.pemeriksaan?.spo }} %</div>
-                        <div>Suhu: {{ cppt?.pemeriksaan?.suhu }} C</div>
-                        <div>T/k: {{ cppt?.pemeriksaan?.tkKesadaran }} </div>
-                        <div>BB: {{ cppt?.pemeriksaan?.bb }} Kg</div>
-                        <div>TB: {{ cppt?.pemeriksaan?.tb }} Cm</div>
-                        <div>Nyeri:</div>
-                        <div>Jatuh:</div>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        A
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="">
-                        {{ cppt?.asessment ?? '-' }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        P
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="">
-                        {{ cppt?.plann ?? '-' }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </td>
-              <td class="text-left f-12">
-                {{ cppt?.intstruksi ?? '-' }}
+              <td class="text-left f-12" style="vertical-align: top;">
+                <span v-html="getNewLine(cppt?.instruksi ?? '-')" />
               </td>
               <td v-if="i === 0" :rowspan="cariRowspan(dateCppt(cppt?.tgl))" class="text-center f-12">
                 <vue-qrcode
@@ -395,7 +326,8 @@
 </template>
 
 <script setup>
-import { dateCppt, jamTnpDetik } from 'src/modules/formatter'
+// eslint-disable-next-line no-unused-vars
+import { dateCppt, getNewLine, jamTnpDetik } from 'src/modules/formatter'
 import useCppt from './useCppt'
 import { computed } from 'vue'
 
@@ -414,6 +346,60 @@ const emits = defineEmits(['openEws'])
 
 const { data } = useCppt(props?.pasien)
 
+const listFilterredByDate = computed(() => {
+  const arr = data?.cppt
+  const target = arr.length ? arr?.map(x => dateCppt(x?.tgl)) : []
+  const uniq = target.length ? [...new Set(target)] : []
+  return uniq
+})
+
+const lihatResikoJatuh = computed(() => {
+  console.log('computed', data)
+  let resikoJatuh = '-'
+  let val = data?.awal?.find(x => x?.nakes === '2')?.penilaian
+  if (data?.cppt?.length) {
+    val = data?.cppt[data?.cppt?.length - 1]?.penilaian
+  }
+  else {
+    val = data?.awal?.find(x => x?.nakes === '2')?.penilaian
+  }
+
+  if (val?.humpty_dumpty) {
+    resikoJatuh = val?.humpty_dumpty?.skorHumpty?.label ?? '-'
+  }
+  else if (val?.morse_fall) {
+    resikoJatuh = val?.morse_fall?.skorMorse?.label ?? '-'
+  }
+  else if (val?.ontario) {
+    resikoJatuh = val?.ontario?.skorOntario?.label ?? '-'
+  }
+  return resikoJatuh
+})
+
+// const setTingkatKesadaran = computed(() => {
+//   let result = ''
+//   if (val === 3) {
+//     result = 'Coma' // 371632003
+//   }
+//   else if (val > 3 && val <= 6) {
+//     result = 'Stupor' // 89458003
+//   }
+//   else if (val > 6 && val <= 9) {
+//     result = 'Somnolen' // 79519003
+//   }
+//   else if (val > 9 && val <= 11) {
+//     result = 'Delirium' // 2776000
+//   }
+//   else if (val > 11 && val <= 13) {
+//     result = 'Apatis' // 20602000 Apathetic
+//   }
+//   else if (val > 13 && val <= 15) {
+//     result = 'Compos Mentis'
+//   }
+
+//   return result
+// })
+
 const jenisPPA = (val) => {
   if (val === '1') {
     return 'Dokter'
@@ -429,10 +415,27 @@ const jenisPPA = (val) => {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const cariRowspan = (val) => {
   const dataBytgl = data?.cppt?.filter(x => dateCppt(x?.tgl) === val)?.length
-  console.log('cari rowspan', dataBytgl)
+  // console.log('cari rowspan', dataBytgl)
   return dataBytgl
+}
+
+const lihatSkorJatuh = (val) => {
+  // console.log(val)
+  let skor = 0
+  if (val?.humpty_dumpty) {
+    skor = val?.humpty_dumpty?.skorHumpty?.skor ?? 0
+  }
+  else if (val?.morse_fall) {
+    skor = val?.morse_fall?.skorMorse?.skor ?? 0
+  }
+  else if (val?.ontario) {
+    skor = val?.ontario?.skorOntario?.skor ?? 0
+  }
+
+  return skor
 }
 
 const qrUrl = computed(() => {

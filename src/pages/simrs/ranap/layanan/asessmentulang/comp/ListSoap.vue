@@ -137,11 +137,17 @@
                       <div class="f-20">
                         Asessment
                       </div>
-                      <!-- <q-btn
+                      <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
-                          editFormPemeriksaan(item)
+                          if (nakes==='2') {
+                            store.initDiagnosaKeperawatan(item)
+                            editFormAsessment(item)
+                          } else if (nakes==='3') {
+                            store.initDiagnosaKebidanan(item)
+                            editFormAsessment(item, 'asessmentKebidanan')
+                          }
                         }"
-                      /> -->
+                      />
                     </q-card-section>
 
                     <q-separator inset />
@@ -184,11 +190,17 @@
                       <div class="f-20">
                         Plan
                       </div>
-                      <!-- <q-btn
+                      <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
-                          editFormPemeriksaan(item)
+                          if (nakes==='2') {
+                            store.initDiagnosaKeperawatan(item)
+                            editFormPlan(item)
+                          } else if (nakes==='3') {
+                            store.initDiagnosaKebidanan(item)
+                            editFormPlan(item, 'diagnosaKebidanan')
+                          }
                         }"
-                      /> -->
+                      />
                     </q-card-section>
 
                     <q-separator inset />
@@ -226,10 +238,22 @@
                 <!-- ooo -->
                 <div class="col-12">
                   <q-card flat bordered class="col-12">
-                    <q-card-section>
+                    <q-card-section class="col-auto flex justify-between items-center">
                       <div class="text-h6">
                         Instruksi PPA
                       </div>
+                      <q-btn
+                        v-if="nakes==='2' || nakes==='3'"
+                        dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                          if (nakes==='2') {
+                            store.initDiagnosaKeperawatan(item)
+                            editFormIntervensi(item)
+                          } else if (nakes==='3') {
+                            store.initDiagnosaKebidanan(item)
+                            editFormIntervensi(item, 'diagnosaKebidanan')
+                          }
+                        }"
+                      />
                     </q-card-section>
 
                     <q-separator inset />
@@ -243,7 +267,7 @@
                             v-model="item.instruksi"
                             :cover="false"
                             :offset="[0, 10]"
-
+                            class="full-width"
                             v-slot="scope"
                             @save="(val,initial)=> {
                               // console.log('initial', initial); // before
@@ -253,6 +277,7 @@
                           >
                             <q-input
                               type="textarea"
+                              rows="5"
                               v-model="scope.value"
                               autofocus
                               :error="isErrInput"
@@ -284,7 +309,28 @@
           updateToServerAnamnesis(props.kasus)
         } else if(settings.formOpen === 'pemeriksaan') {
           updateToServerPemeriksaan(props.kasus)
+        } else if(settings.formOpen === 'asessment' || settings.formOpen === 'asessmentKebidanan') {
+          updateToServerAsessment(props.nakes)
+        } else if(settings.formOpen === 'diagnosaKeperawatan' && settings.categoryIntervensi === 'plann') {
+          updateToServerPlan(props.nakes)
+        }else if(settings.formOpen === 'diagnosaKeperawatan' && settings.categoryIntervensi === 'intervensi') {
+          updateToServerPlan(props.nakes)
+        } else if(settings.formOpen === 'diagnosaKebidanan' && settings.categoryIntervensi === 'plann') {
+          updateToServerPlan(props.nakes)
+        } else if(settings.formOpen === 'diagnosaKebidanan' && settings.categoryIntervensi === 'intervensi') {
+          updateToServerPlan(props.nakes)
         }
+
+      }"
+    />
+
+    <!-- dialog diagnosa keperawatan -->
+    <modal-diagnosa-keperawatan
+      :key="props?.pasien"
+      v-model="storeDiagnosaKeperawatan.modalOpen"
+      :masters="storeDiagnosaKeperawatan.diagnosas"
+      @ok="()=> {
+        console.log('storeDiagnosaKeperawatan', storeDiagnosaKeperawatan.selectDiagnosa);
 
       }"
     />
@@ -298,6 +344,7 @@ import useForm from './useForm'
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
 const DialogFormItem = defineAsyncComponent(() => import('./dialogformchild/DialogFormItem.vue'))
+const ModalDiagnosaKeperawatan = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/complayanan/ModalDiagnosaKeperawatan.vue'))
 
 const props = defineProps({
   pasien: { type: Object, default: () => null },
@@ -308,7 +355,20 @@ const props = defineProps({
 })
 
 // eslint-disable-next-line no-unused-vars
-const { settings, editFormAnamnesis, editFormPemeriksaan, updateToServerAnamnesis, updateToServerPemeriksaan, updateAsPlanInst, store, storePenilaian } = useForm(props?.pasien)
+const {
+  settings,
+  editFormAnamnesis,
+  editFormPemeriksaan,
+  editFormAsessment,
+  editFormPlan,
+  editFormIntervensi,
+  updateToServerAnamnesis,
+  updateToServerPemeriksaan,
+  updateToServerAsessment,
+  updateToServerPlan,
+  updateAsPlanInst,
+  store, storePenilaian, storeDiagnosaKeperawatan
+} = useForm(props?.pasien)
 
 const items = computed(() => {
   return store.items

@@ -13,14 +13,17 @@
         <div class="q-ml-md">
           <div class="absolute-top-right q-pa-sm">
             <div class="text-h6">
-              {{ item?.id }}
+              {{ item?.user?.id }}
             </div>
+          </div>
+          <div class="flex flex-nowrap">
+            <strong class="q-mr-md">Nik : </strong> {{ item.nik }}
           </div>
           <div class="flex flex-nowrap">
             <strong>Nip : </strong> {{ item.nip }}
           </div>
           <div class="ellipsis">
-            <strong>Nip : </strong> {{ item.nama }}
+            <strong>Nama : </strong> {{ item.nama }}
           </div>
           <div class="ellipsis">
             <strong>Ruangan : </strong> {{ item.ruangan? item.ruangan.namaruang: '-' }}

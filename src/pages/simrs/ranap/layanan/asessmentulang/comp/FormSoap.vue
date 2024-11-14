@@ -10,6 +10,8 @@ import { notifCenterVue, notifErrVue, notifSuccess, notifSuccessVue } from 'src/
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
 const DialogFormItem = defineAsyncComponent(() => import('./dialogformchild/DialogFormItem.vue'))
+const ModalDiagnosaKeperawatan = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/complayanan/ModalDiagnosaKeperawatan.vue'))
+const ModalDiagnosaKebidanan = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/complayanan/compDiagnosaKebidanan/ModalDiagnosaKebidanan.vue'))
 // const FormComp = import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/penilaian/FormComp.vue')
 
 // eslint-disable-next-line no-unused-vars
@@ -42,7 +44,7 @@ const SET = reactive({
 // eslint-disable-next-line no-unused-vars
 const {
   storeAnamnesis, storePenilaian, storePemeriksaanUmum,
-  settings, storeDiagnosaKeperawatan, store
+  settings, storeDiagnosaKeperawatan, storeDiagnosaKebidanan, store
 } = useForm(props.pasien)
 
 onMounted(() => {
@@ -88,15 +90,86 @@ const validate = () => {
 }
 
 watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
-  console.log('val', val)
-
   if (val) {
-    const text = val.map(x => '- ' + x?.kode + ' - ' + x.nama).join('\n')
+    const text = val?.map(x => '- ' + x.nama)?.join('\n')
 
     console.log('val', text)
     store.form.asessment = val.length ? text : null
   }
 })
+watch(() => storeDiagnosaKebidanan.selectDiagnosa, (val) => {
+  // console.log('watch diagnosa kebidanan', val)
+  if (val) {
+    const text = val?.map(x => '- ' + x.nama)?.join('\n')
+    store.form.asessment = val.length ? text : null
+  }
+})
+
+watch(() => storeDiagnosaKeperawatan.selectIntervensis, (val) => {
+  console.log('val', val)
+
+  if (val) {
+    storeDiagnosaKeperawatan.selectIntervensis = val
+    const form = storeDiagnosaKeperawatan.tataForm(props.pasien, 'ranap')
+    const justDetails = form?.diagnosa?.length ? form?.diagnosa?.map(x => x?.details)?.flat() : []
+    const cariIntPlann = []
+    const cariInt = []
+
+    for (let i = 0; i < justDetails.length; i++) {
+      const kddiag = justDetails[i]?.diagnosakeperawatan_kode
+      const kdInt = justDetails[i]?.intervensi_id
+      const diag = storeDiagnosaKeperawatan.selectDiagnosa.find(x => x?.kode === kddiag)?.intervensis ?? []
+      const intPlann = diag.length ? diag.find(x => x?.id === parseInt(kdInt)) : null
+      cariIntPlann.push(intPlann)
+    }
+    if (settings.categoryIntervensi === 'plann') {
+      const plann = cariIntPlann?.filter(x => x?.group === 'plann')?.map(x => '- ' + x?.nama).join('\n')
+      store.form.plann = cariIntPlann.length ? plann : null
+    }
+    else {
+      const intX = cariIntPlann?.filter(x => x?.group !== 'plann')?.map(x => '- ' + x?.nama).join('\n')
+      store.form.instruksi = cariIntPlann?.length ? intX : null
+    }
+  }
+})
+
+watch(() => storeDiagnosaKebidanan.selectIntervensis, (val) => {
+  // console.log('val watch intervensi kebidanan', val)
+
+  if (val) {
+    storeDiagnosaKebidanan.selectIntervensis = val
+    const form = storeDiagnosaKebidanan.tataForm(props.pasien, 'ranap')
+    // console.log('form', form)
+
+    const justDetails = form?.diagnosa?.length ? form?.diagnosa?.map(x => x?.details)?.flat() : []
+    const cariIntPlann = []
+    const cariInt = []
+
+    for (let i = 0; i < justDetails.length; i++) {
+      const kddiag = justDetails[i]?.diagnosakebidanan_kode
+      const kdInt = justDetails[i]?.intervensi_id
+      const diag = storeDiagnosaKebidanan.selectDiagnosa.find(x => x?.kode === kddiag)?.intervensis ?? []
+      const intPlann = diag.length ? diag.find(x => x?.id === parseInt(kdInt)) : null
+      cariIntPlann.push(intPlann)
+    }
+    if (settings.categoryIntervensi === 'plann') {
+      const plann = cariIntPlann?.filter(x => x?.group === 'plann')?.map(x => '- ' + x?.nama).join('\n')
+      store.form.plann = cariIntPlann.length ? plann : null
+      console.log('val watch intervensi kebidanan', plann)
+    }
+    else {
+      const intX = cariIntPlann?.filter(x => x?.group !== 'plann')?.map(x => '- ' + x?.nama).join('\n')
+      store.form.instruksi = cariIntPlann?.length ? intX : null
+    }
+  }
+})
+
+watch(() => props.pasien?.diagnosamedis, (val) => {
+  console.log('watch diagnosamedis', val)
+  if (val) {
+    store.initDiagnosaMedisToText(val)
+  }
+}, { deep: true })
 
 </script>
 
@@ -230,14 +303,24 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
               <div class="f-20">
                 Assessment
               </div>
-              <div class="q-mt-sm">
+              <div class="">
                 <q-btn
                   bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
-                    // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
-                    // settings.isChildForm = true
                     if (nakes === '2') {
+                      settings.formOpen = 'asessment'
                       storeDiagnosaKeperawatan.modalOpen = true
+                      console.log('perawat');
+
                     }
+                    else if (nakes === '1') {
+                      settings.formOpen = 'asessmentMedis'
+                      settings.isChildForm = true
+                    } else if (nakes === '3') {
+                      settings.formOpen = 'asessmentKebidanan'
+                      storeDiagnosaKebidanan.modalOpen = true
+                    }
+                    // console.log('settings.formOpen', settings.formOpen, nakes);
+
                   }"
                 />
               </div>
@@ -269,8 +352,26 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
-            <div class="f-20">
-              Plan
+            <div class="flex justify-between items-center">
+              <div class="f-20">
+                Plan
+              </div>
+              <div class="">
+                <q-btn
+                  v-if="nakes !== '1'"
+                  bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                    // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
+                    settings.isChildForm = true
+                    if (nakes === '2') {
+                      settings.formOpen = 'diagnosaKeperawatan'
+                      settings.categoryIntervensi = 'plann'
+                    } else if (nakes === '3') {
+                      settings.formOpen = 'diagnosaKebidanan'
+                      settings.categoryIntervensi = 'plann'
+                    }
+                  }"
+                />
+              </div>
             </div>
           </q-card-section>
 
@@ -281,7 +382,8 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
               ref="refInputPlann"
               v-model="store.form.plann"
               outlined
-              autogrow
+              type="textarea"
+              rows="5"
               stack-label
               standout="bg-yellow-3"
               label="Plann"
@@ -297,8 +399,26 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
       <div class="col-8">
         <q-card flat bordered class="col-12">
           <q-card-section>
-            <div class="text-h6">
-              Instruksi PPA
+            <div class="flex justify-between items-center">
+              <div class="f-20">
+                Instruksi PPA
+              </div>
+              <div class="">
+                <q-btn
+                  v-if="nakes !== '1'"
+                  bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                    // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
+                    settings.isChildForm = true
+                    if (nakes === '2') {
+                      settings.formOpen = 'diagnosaKeperawatan'
+                      settings.categoryIntervensi = null
+                    } else if (nakes === '3') {
+                      settings.formOpen = 'diagnosaKebidanan'
+                      settings.categoryIntervensi = null
+                    }
+                  }"
+                />
+              </div>
             </div>
           </q-card-section>
 
@@ -333,7 +453,17 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
     <div class="fixed-bottom full-width">
       <!-- <div class="col-12"> -->
       <q-card flat bordered class="q-pa-sm">
-        <q-card-actions align="right" class="q-py-md">
+        <q-card-actions class="q-py-md row justify-between">
+          <q-btn
+            rounded
+            outline
+            color="orange"
+            icon="icon-mat-arrow_back"
+            v-close-popup
+          >
+            <span class="text-orange-9 q-ml-sm">Kembali </span>
+          </q-btn>
+
           <q-btn :loading="store.loadingSave" :disabled="store.loadingSave" size="md" outline rounded color="primary" @click="validate">
             <div class="q-px-lg">
               Simpan Catatan Pasien
@@ -348,9 +478,25 @@ watch(() => storeDiagnosaKeperawatan.selectDiagnosa, (val) => {
     <DialogFormItem
       v-model="settings.isChildForm" :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :settings="settings"
       @on-click="()=> {
-        console.log('ok');
+        // console.log('ok');
         settings.isChildForm = false
       }"
+    />
+
+    <!-- dialog diagnosa keperawatan -->
+    <modal-diagnosa-keperawatan
+      :key="props?.pasien"
+      v-model="storeDiagnosaKeperawatan.modalOpen"
+      :masters="storeDiagnosaKeperawatan.diagnosas"
+      @ok="storeDiagnosaKeperawatan.modalOpen=false"
+    />
+
+    <!-- modal diagnosa -->
+    <modal-diagnosa-kebidanan
+      :key="props?.pasien"
+      v-model="storeDiagnosaKebidanan.modalOpen"
+      :masters="storeDiagnosaKebidanan.diagnosas"
+      @ok="storeDiagnosaKebidanan.modalOpen=false"
     />
   </q-form>
 </template>

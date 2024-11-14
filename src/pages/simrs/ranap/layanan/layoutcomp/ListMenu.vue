@@ -11,6 +11,7 @@
       :active="menu===item"
       active-class="bg-primary text-white"
       @click="emits('menuClick',item)"
+      :class="{'bg-negative text-white': item?.name==='page-pulang'}"
     >
       <q-item-section avatar>
         <q-icon

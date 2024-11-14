@@ -5,6 +5,8 @@ import { useAnamnesisRanapStore } from './anamnesis'
 import { usePengunjungRanapStore } from './pengunjung'
 import { usePemeriksaanUmumRanapStore } from './pemeriksaanumum'
 import { usePenilaianRanapStore } from './penilaian'
+import { useDiagnosaKeperawatan } from '../pelayanan/poli/diagnosakeperawatan'
+import { useDiagnosaKebidananStore } from '../pelayanan/poli/diagnosakebidanan'
 
 export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-store', {
   state: () => ({
@@ -45,7 +47,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       this.items = cppt ?? []
     },
 
-    getPreviousForm (pasien) {
+    getPreviousForm (pasien, nakes) {
       const dataAwal = {
         anamnesis: pasien?.anamnesis.length ? pasien.anamnesis[0] : null,
         pemeriksaan: pasien?.pemeriksaan.length ? pasien.pemeriksaan[0] : null,
@@ -70,9 +72,91 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         storePenilaian.initReset(pasien, dataSebelumnya?.penilaian)
       }
       this.previousData = dataSebelumnya
+
+      // untuk diagnosa keperawatan
+      if (nakes === '2') {
+        this.initDiagnosaKeperawatan(dataSebelumnya)
+        this.form.asessment = dataSebelumnya?.asessment
+        this.form.plann = dataSebelumnya?.plann
+        this.form.instruksi = dataSebelumnya?.instruksi
+      }
+      else if (nakes === '1') {
+        this.initDiagnosaMedisToText(pasien?.diagnosamedis)
+        this.form.plann = null
+        this.form.instruksi = null
+      }
+
       // if (cekTerbaru) dataSebelumnya = cekTerbaru
       console.log('data terbaru', dataSebelumnya)
       console.log('pasien', pasien)
+    },
+
+    initDiagnosaMedisToText (diag) {
+      const diagnosa = diag?.length ? diag?.filter(x => x?.rs13 !== 'POL014') : []
+      const text = diagnosa.length ? diagnosa.map(x => '* ' + x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4).join('\n') : null
+      // console.log('diagnosa', diagnosa)
+
+      this.form.asessment = text
+    },
+
+    initDiagnosaKeperawatan (dataSebelumnya) {
+      const storeDiagnosaKeperawatan = useDiagnosaKeperawatan()
+      const diagnosKep = dataSebelumnya?.asessment?.replace(/\n/g, '')
+      // console.log('data sebelumnya', diagnosKep)
+      const masterDiagnosaKep = storeDiagnosaKeperawatan.diagnosas
+      const splitAssessment = diagnosKep?.split('- ')
+      const cariDiagnosaKep = masterDiagnosaKep.filter(row => splitAssessment?.some(value => value?.includes(row?.nama)))
+      if (cariDiagnosaKep.length) storeDiagnosaKeperawatan.selectDiagnosa = cariDiagnosaKep
+
+      // cari intervensi
+      const intervensiKep = dataSebelumnya?.instruksi?.replace(/\n/g, '')
+      let splitIntervensi = intervensiKep?.split('- ')
+
+      const plannKep = dataSebelumnya?.plann?.replace(/\n/g, '')
+      const splitIPlann = plannKep?.split('- ')
+
+      splitIntervensi = splitIntervensi?.concat(splitIPlann)
+      const masterIntervensiKep = cariDiagnosaKep.length ? cariDiagnosaKep.map(x => x?.intervensis)?.flat() : []
+      // const masterPlannKep = cariDiagnosaKep.length ? cariDiagnosaKep.map(x => x?.intervensis)?.flat() : []
+
+      const cariIntervensiKep = masterIntervensiKep.filter(row => splitIntervensi?.some(value => value?.includes(row?.nama)))
+
+      // const splitIntervensi = intervensiKep?.split('- ')
+      const intervensis = cariIntervensiKep.length ? cariIntervensiKep.map(x => x?.id + '||' + x?.mdiagnosakeperawatan_kode) : []
+
+      // console.log('splitIntervensi', splitIntervensi)
+      console.log('cariIntervensiKep', intervensis)
+      if (cariIntervensiKep.length) storeDiagnosaKeperawatan.selectIntervensis = intervensis
+    },
+
+    initDiagnosaKebidanan (dataSebelumnya) {
+      const storeDiagnosaKebidanan = useDiagnosaKebidananStore()
+      const diagnosKep = dataSebelumnya?.asessment?.replace(/\n/g, '')
+      // console.log('data sebelumnya', diagnosKep)
+      const masterDiagnosaKep = storeDiagnosaKebidanan.diagnosas
+      const splitAssessment = diagnosKep?.split('- ')
+      const cariDiagnosaKep = masterDiagnosaKep.filter(row => splitAssessment?.some(value => value?.includes(row?.nama)))
+      if (cariDiagnosaKep.length) storeDiagnosaKebidanan.selectDiagnosa = cariDiagnosaKep
+
+      // cari intervensi
+      const intervensiKep = dataSebelumnya?.instruksi?.replace(/\n/g, '')
+      let splitIntervensi = intervensiKep?.split('- ')
+
+      const plannKep = dataSebelumnya?.plann?.replace(/\n/g, '')
+      const splitIPlann = plannKep?.split('- ')
+
+      splitIntervensi = splitIntervensi?.concat(splitIPlann)
+      const masterIntervensiKep = cariDiagnosaKep.length ? cariDiagnosaKep.map(x => x?.intervensis)?.flat() : []
+      // const masterPlannKep = cariDiagnosaKep.length ? cariDiagnosaKep.map(x => x?.intervensis)?.flat() : []
+
+      const cariIntervensiKep = masterIntervensiKep.filter(row => splitIntervensi?.some(value => value?.includes(row?.nama)))
+
+      // const splitIntervensi = intervensiKep?.split('- ')
+      const intervensis = cariIntervensiKep.length ? cariIntervensiKep.map(x => x?.id + '||' + x?.mdiagnosakeperawatan_kode) : []
+
+      // console.log('splitIntervensi', splitIntervensi)
+      console.log('cariIntervensiKep', intervensis)
+      if (cariIntervensiKep.length) storeDiagnosaKebidanan.selectIntervensis = intervensis
     },
 
     // editForm (item) {

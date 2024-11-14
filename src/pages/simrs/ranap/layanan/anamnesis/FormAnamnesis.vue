@@ -69,7 +69,7 @@
       style="width:50%"
     />
 
-    <div v-if="nakes==='2'" class="col-12">
+    <div v-if="nakes==='2' || nakes==='3'" class="col-12">
       <!-- RIWAYAT ALERGI -->
       <q-card v-if="!ulang" flat bordered class="q-mb-sm">
         <q-card-section>
@@ -1409,7 +1409,7 @@ const auth = useAplikasiStore()
 const gruping = computed(() => {
   const nakes = auth?.user?.pegawai?.kdgroupnakes
   const dokter = nakes === '1'
-  const perawat = nakes === '2'
+  const perawat = nakes === '2' || nakes === '3'
 
   let gruping = null
   if (dokter) gruping = props?.kasus?.medis

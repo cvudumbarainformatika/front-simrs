@@ -12,13 +12,14 @@ export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', 
     selectDiagnosa: [],
     selectIntervensis: [],
     diagnosa: '',
-    loadingSave: false
+    loadingSave: false,
     // form: {
     //   norm: '',
     //   noreg: '',
     //   kddiagnosa: '',
     //   namadiagnosa: ''
     // }
+    modalOpen: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -92,6 +93,38 @@ export const useDiagnosaKebidananStore = defineStore('diagnosa-kebidanan-poli', 
         // console.log(error)
         notifErr(error)
       }
+    },
+
+    tataForm (pasien, cat) {
+      let intv = []
+      if (this.selectIntervensis.length) {
+        intv = this.selectIntervensis.map(x => {
+          return {
+            intervensi_id: x?.split('||')[0],
+            diagnosakebidanan_kode: x?.split('||')[1]
+          }
+        })
+      }
+      const thumb = []
+      if (this.selectDiagnosa.length) {
+        for (let i = 0; i < this.selectDiagnosa.length; i++) {
+          const el = this.selectDiagnosa[i]
+          const frm = {
+            norm: pasien?.norm,
+            noreg: pasien?.noreg,
+            kode: el?.kode,
+            nama: el?.nama,
+            details: intv.filter(x => x.diagnosakebidanan_kode === el?.kode) ?? []
+          }
+
+          thumb.push(frm)
+        }
+      }
+
+      const form = {
+        diagnosa: thumb
+      }
+      return form
     },
 
     async deleteDiagnosa (pasien, id) {

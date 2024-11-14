@@ -1,5 +1,6 @@
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
+import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagnosakebidanan'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import { useAsessmentUlangRanapStore } from 'src/stores/simrs/ranap/asessmentulang'
@@ -12,6 +13,7 @@ export default function useForm (pasien) {
   const storePemeriksaanUmum = usePemeriksaanUmumRanapStore()
   const storePenilaian = usePenilaianRanapStore()
   const storeDiagnosaKeperawatan = useDiagnosaKeperawatan()
+  const storeDiagnosaKebidanan = useDiagnosaKebidananStore()
 
   const store = useAsessmentUlangRanapStore()
 
@@ -19,6 +21,7 @@ export default function useForm (pasien) {
     isForm: false,
     isChildForm: false,
     formOpen: null,
+    categoryIntervensi: null,
     isEdit: false,
     isLoadingSave: false
   })
@@ -38,6 +41,42 @@ export default function useForm (pasien) {
     settings.isEdit = true
     editable.item = item
   }
+
+  const editFormPemeriksaan = (item) => {
+    console.log('edit', item)
+    const storePemeriksaan = usePemeriksaanUmumRanapStore()
+    storePemeriksaan.initReset(item.pemeriksaan)
+    settings.formOpen = 'pemeriksaan'
+    settings.isChildForm = true
+    settings.isEdit = true
+    editable.item = item
+  }
+
+  const editFormAsessment = (item, jns) => {
+    settings.formOpen = jns || 'asessment'
+    settings.categoryIntervensi = null
+    settings.isChildForm = true
+    settings.isEdit = true
+    editable.item = item
+    // console.log('editable.item', editable.item)
+  }
+  const editFormPlan = (item, jns) => {
+    settings.formOpen = jns || 'diagnosaKeperawatan'
+    settings.categoryIntervensi = 'plann'
+    settings.isChildForm = true
+    settings.isEdit = true
+    editable.item = item
+    // console.log('editable.item', editable.item)
+  }
+  const editFormIntervensi = (item, jns) => {
+    settings.formOpen = jns || 'diagnosaKeperawatan'
+    settings.categoryIntervensi = 'intervensi'
+    settings.isChildForm = true
+    settings.isEdit = true
+    editable.item = item
+    // console.log('editable.item', editable.item)
+  }
+
   const updateToServerAnamnesis = (jnsKasus) => {
     settings.isLoadingSave = true
     const storeAnamnesis = useAnamnesisRanapStore()
@@ -91,14 +130,77 @@ export default function useForm (pasien) {
     })
   }
 
-  const editFormPemeriksaan = (item) => {
-    console.log('edit', item)
-    const storePemeriksaan = usePemeriksaanUmumRanapStore()
-    storePemeriksaan.initReset(item.pemeriksaan)
-    settings.formOpen = 'pemeriksaan'
-    settings.isChildForm = true
-    settings.isEdit = true
-    editable.item = item
+  const updateToServerAsessment = (nakes) => {
+    if (nakes === '2') {
+      const val = storeDiagnosaKeperawatan.selectDiagnosa
+      const text = val?.map(x => '- ' + x.nama).join('\n')
+      editable.item.asessment = val.length ? text : null
+      updateAsPlanInst(editable.item, text, null, 'asessment')
+    }
+    if (nakes === '3') {
+      const val = storeDiagnosaKebidanan.selectDiagnosa
+      const text = val?.map(x => '- ' + x.nama).join('\n')
+      editable.item.asessment = val.length ? text : null
+      updateAsPlanInst(editable.item, text, null, 'asessment')
+    }
+  }
+  const updateToServerPlan = (nakes) => {
+    if (nakes === '2') {
+      // storeDiagnosaKeperawatan.selectIntervensis = val
+      const form = storeDiagnosaKeperawatan.tataForm(pasien, 'ranap')
+      const justDetails = form?.diagnosa?.length ? form?.diagnosa?.map(x => x?.details)?.flat() : []
+      const cariIntPlann = []
+      // const cariInt = []
+
+      for (let i = 0; i < justDetails.length; i++) {
+        const kddiag = justDetails[i]?.diagnosakeperawatan_kode
+        const kdInt = justDetails[i]?.intervensi_id
+        const diag = storeDiagnosaKeperawatan.selectDiagnosa.find(x => x?.kode === kddiag)?.intervensis ?? []
+        const intPlann = diag.length ? diag.find(x => x?.id === parseInt(kdInt)) : null
+        cariIntPlann.push(intPlann)
+      }
+      if (settings.categoryIntervensi === 'plann') {
+        const plann = cariIntPlann?.filter(x => x?.group === 'plann')?.map(x => '- ' + x?.nama).join('\n')
+        // store.form.plann = cariIntPlann.length ? plann : null
+        editable.item.plann = cariIntPlann.length ? plann : null
+        updateAsPlanInst(editable.item, plann, null, 'plann')
+      }
+      else {
+        const intX = cariIntPlann?.filter(x => x?.group !== 'plann')?.map(x => '- ' + x?.nama).join('\n')
+        store.form.instruksi = cariIntPlann?.length ? intX : null
+        editable.item.instruksi = cariIntPlann.length ? intX : null
+        updateAsPlanInst(editable.item, intX, null, 'instruksi')
+      }
+      // editable.item.asessment = val.length ? text : null
+    }
+    else if (nakes === '3') {
+      // storeDiagnosaKeperawatan.selectIntervensis = val
+      const form = storeDiagnosaKebidanan.tataForm(pasien, 'ranap')
+      const justDetails = form?.diagnosa?.length ? form?.diagnosa?.map(x => x?.details)?.flat() : []
+      const cariIntPlann = []
+      // const cariInt = []
+
+      for (let i = 0; i < justDetails.length; i++) {
+        const kddiag = justDetails[i]?.diagnosakebidanan_kode
+        const kdInt = justDetails[i]?.intervensi_id
+        const diag = storeDiagnosaKebidanan.selectDiagnosa.find(x => x?.kode === kddiag)?.intervensis ?? []
+        const intPlann = diag.length ? diag.find(x => x?.id === parseInt(kdInt)) : null
+        cariIntPlann.push(intPlann)
+      }
+      if (settings.categoryIntervensi === 'plann') {
+        const plann = cariIntPlann?.filter(x => x?.group === 'plann')?.map(x => '- ' + x?.nama).join('\n')
+        // store.form.plann = cariIntPlann.length ? plann : null
+        editable.item.plann = cariIntPlann.length ? plann : null
+        updateAsPlanInst(editable.item, plann, null, 'plann')
+      }
+      else {
+        const intX = cariIntPlann?.filter(x => x?.group !== 'plann')?.map(x => '- ' + x?.nama).join('\n')
+        store.form.instruksi = cariIntPlann?.length ? intX : null
+        editable.item.instruksi = cariIntPlann.length ? intX : null
+        updateAsPlanInst(editable.item, intX, null, 'instruksi')
+      }
+      // editable.item.asessment = val.length ? text : null
+    }
   }
 
   const updateToServerPemeriksaan = (jnsKasus) => {
@@ -188,6 +290,7 @@ export default function useForm (pasien) {
     }
     console.log('updateAsPlanInst', payload)
     console.log('target', target)
+    settings.isChildForm = false
 
     return new Promise((resolve, reject) => {
       api.post('v1/simrs/ranap/layanan/cppt/updateasplaninst', payload)
@@ -218,13 +321,19 @@ export default function useForm (pasien) {
     storePemeriksaanUmum,
     storePenilaian,
     storeDiagnosaKeperawatan,
+    storeDiagnosaKebidanan,
 
+    editFormPlan,
     editFormAnamnesis,
+    editFormAsessment,
+    editFormIntervensi,
     updateToServerAnamnesis,
 
     editFormPemeriksaan,
     updateToServerPemeriksaan,
 
+    updateToServerAsessment,
+    updateToServerPlan,
     updateAsPlanInst
   }
 }

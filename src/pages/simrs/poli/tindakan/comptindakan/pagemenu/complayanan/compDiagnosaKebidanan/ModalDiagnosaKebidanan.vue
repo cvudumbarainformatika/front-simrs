@@ -115,16 +115,16 @@ const filterred = computed(() => {
   return target
 })
 
-function clearCheck() {
+function clearCheck () {
   // diagnosas.value = []
 }
 
-function submit() {
+function submit () {
   pilihDiagnosa()
   emits('ok')
 }
 
-function pilihDiagnosa() {
+function pilihDiagnosa () {
   const val = store.selectDiagnosa
   const arr = val.length ? val.map(x => x.kode) : []
   const implode = arr.length ? arr.join('||') : ''
