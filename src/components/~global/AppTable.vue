@@ -436,7 +436,7 @@
     </div>
     <!-- Pagination -->
     <AppPaginationTable
-      v-if="items.length > 0 && adaPaginasi"
+      v-if="(items.length > 0 || (!items.length && forcePaginasi)) && adaPaginasi"
       class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
@@ -481,6 +481,7 @@ const props = defineProps({
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
   adaPaginasi: { type: Boolean, default: true },
+  forcePaginasi: { type: Boolean, default: false },
   textSize: { type: Number, default: 12 },
   stickyHeader: { type: Boolean, default: false }
 })

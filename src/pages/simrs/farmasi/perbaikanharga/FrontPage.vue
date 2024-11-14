@@ -14,6 +14,7 @@
         :default-btn="false"
         :ada-tambah="false"
         :ada-filter="false"
+        force-paginasi
         @goto="store.setPage"
         @set-row="store.setPerPage"
         @refresh="store.refreshTable"
@@ -21,7 +22,7 @@
         @set-order="store.setOder"
       >
         <template #header-left-after-search>
-          <div class=" q-ml-sm" style="width: 250px">
+          <div class=" q-ml-sm" style="width: 200px">
             <app-autocomplete-new
               v-model="store.params.kdruang"
               label="Pilih Gudang / Depo"
@@ -40,8 +41,14 @@
           <div class="q-ml-sm" style="width: 100px">
             <app-input v-model="store.params.tahun" label="Tahun" outlined />
           </div>
-          <div class="q-ml-sm" style="width: 75px">
+          <div class="q-ml-sm" style="width: 60px">
             <app-input v-model="store.params.bulan" label="Bulan" outlined />
+          </div>
+          <div class="q-ml-sm" style="width: 60px">
+            <app-input v-model="store.params.page" label="Halaman" outlined />
+          </div>
+          <div class="q-ml-sm" style="width: 410px">
+            <q-option-group v-model="store.params.pilihan" :options="pilihanBermasalahs" type="radio" inline @update:model-value="setPilihan" />
           </div>
         </template>
         <template #col-kd_obat>
@@ -70,6 +77,11 @@
         </template>
         <template #col-retur>
           Retur
+        </template>
+        <template #cell-nama_obat="{ row }">
+          <div style="max-width: 250px; white-space: normal !important;">
+            {{ row?.nama_obat }}
+          </div>
         </template>
         <template #cell-stok="{ row }">
           <div class="text-right">
@@ -144,10 +156,23 @@
 <script setup>
 import { formatDouble } from 'src/modules/formatter'
 import { usePerbaikanHargaFarmasiStore } from 'src/stores/simrs/farmasi/perbaikanharga/perbaikanharga'
-import { defineAsyncComponent, onMounted, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, shallowRef, ref } from 'vue'
 
 const store = usePerbaikanHargaFarmasiStore()
 const DetailPage = shallowRef(defineAsyncComponent(() => import('./DetailPage.vue')))
+
+const pilihanBermasalahs = ref([
+  { value: 'semua', label: 'Semua' },
+  { value: 'bermasalah', label: 'Bermasalah' },
+  { value: 'tidak', label: 'Tidak Bermasalah' }
+])
+function setPilihan (val) {
+  // console.log('val', val)
+
+  if (val === 'semua') store.items = store.semuas
+  else if (val === 'bermasalah') store.items = store.semuas.filter(fi => fi.beda?.includes(true))
+  else if (val === 'tidak') store.items = store.semuas.filter(fi => !fi.beda?.includes(true))
+}
 onMounted(() => {
   store.getData()
 })
