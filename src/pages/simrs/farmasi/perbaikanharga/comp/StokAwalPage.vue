@@ -10,6 +10,9 @@
           Nopenerimaan
         </div>
         <div class="col-2">
+          Tgl Penerimaan
+        </div>
+        <div class="col-2">
           Jumlah
         </div>
         <div class="col-2">
@@ -29,6 +32,9 @@
         <div class="row items-center" :class="i%2===0? 'bg-grey-2':'bg-grey-4'">
           <div class="col-2">
             {{ item?.nopenerimaan }}
+          </div>
+          <div class="col-2">
+            {{ item?.tglpenerimaan }}
           </div>
           <div class="col-2">
             {{ item?.jumlah }}

@@ -9,18 +9,24 @@
           Nopenerimaan
         </div>
         <div class="col-2">
+          Tgl Penerimaan
+        </div>
+        <div class="col-1">
           Harga
         </div>
-        <div class="col-2">
+        <div class="col-1">
           Nobatch
         </div>
         <div class="col-2">
           Penerimaan / Awal
         </div>
         <div class="col-2">
+          Tgl Penerimaan
+        </div>
+        <div class="col-1">
           Harga
         </div>
-        <div class="col-2">
+        <div class="col-1">
           Nobatch
         </div>
       </div>
@@ -34,12 +40,12 @@
         <div v-else>
           <div
             class="row items-center"
-            :class="i%2===0? (parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-2':'bg-negative text-white cursor-pointer'):(parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-4':'bg-negative text-white cursor-pointer')"
+            :class="i%2===0? (parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga) && dateDbFormat(item?.tglpenerimaan) === (dateDbFormat(cekHarga(item)?.header?.tglpenerimaan??cekHarga(item)?.tglpenerimaan))?'bg-grey-2':'bg-negative text-white cursor-pointer'):(parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga) && dateDbFormat(item?.tglpenerimaan) === (dateDbFormat(cekHarga(item)?.header?.tglpenerimaan??cekHarga(item)?.tglpenerimaan))?'bg-grey-4':'bg-negative text-white cursor-pointer')"
             @click="()=>{
-              if (parseFloat(item?.harga) !== parseFloat(cekHarga(item)?.harga)) {
+              if (!(parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga) && dateDbFormat(item?.tglpenerimaan) === (dateDbFormat(cekHarga(item)?.header?.tglpenerimaan??cekHarga(item)?.tglpenerimaan)))) {
                 $q.dialog({
                   title: 'Konfirmasi',
-                  message: 'Apakah anda ingin merubah harga?',
+                  message: 'Apakah anda ingin merubah data?',
                   cancel: {
                     color: 'negative',
                     label: 'Tidak',
@@ -62,18 +68,24 @@
               {{ item?.nopenerimaan }}
             </div>
             <div class="col-2">
+              {{ item?.tglpenerimaan }}
+            </div>
+            <div class="col-1">
               {{ item?.harga }}
             </div>
-            <div class="col-2">
+            <div class="col-1">
               {{ item?.nobatch }}
             </div>
             <div class="col-2">
               {{ cekHarga(item)?.nopenerimaan }}
             </div>
             <div class="col-2">
+              {{ cekHarga(item)?.header?.tglpenerimaan??cekHarga(item)?.tglpenerimaan }}
+            </div>
+            <div class="col-1">
               {{ cekHarga(item)?.harga }}
             </div>
-            <div class="col-2">
+            <div class="col-1">
               {{ cekHarga(item)?.nobatch }}
             </div>
           </div>
@@ -84,6 +96,7 @@
 </template>
 
 <script setup>
+import { dateDbFormat } from 'src/modules/formatter'
 
 const props = defineProps({
   data: {

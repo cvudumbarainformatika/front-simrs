@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { dateDbFormat } from 'src/modules/formatter'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmasi', {
@@ -98,12 +99,14 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === item.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
               if (trm.harga !== st.harga) bedaStok = true
+              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.header?.tglpenerimaan ?? trm?.tglpenerimaan))) bedaMutasi = true
             }
           })
           mutasi?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
               if (trm?.harga !== st.harga) bedaMutasi = true
+              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.header?.tglpenerimaan ?? trm?.tglpenerimaan))) bedaMutasi = true
             }
           })
           mutasikeluar?.forEach(st => {
