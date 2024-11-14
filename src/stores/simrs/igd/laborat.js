@@ -313,8 +313,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
       }
     },
     setNotas (array) {
-      console.log('sasa', array)
-      const arr = array.map(x => x.rs2)
+      const arr = array.map(x => x.nota)
       this.notalaborats = arr.length ? arr : []
       // this.notalaborats.push('LIHAT SEMUA')
       this.notalaborats.push('BARU')
