@@ -23,10 +23,15 @@
       {{ pasien?.laborats }} -->
       <!-- jika belum ada pemeriksaan -->
       <div
-        v-if="fillterTable(pasien?.laboratold) === 0"
+        v-if="fillterTable(pasien?.laboratold)?.length === 0"
         class="column full-height flex-center text-white"
       >
-        Belum Ada Permintaan Order ke Laborat
+        <div v-if="!loading">
+          Belum Ada Permintaan Order ke Laborat
+        </div>
+        <div v-else class="absolute-top fit">
+          <app-loader bg-color="transparent" />
+        </div>
       </div>
       <q-scroll-area
         v-else
@@ -52,45 +57,43 @@
                       lines="2"
                       class="f-12"
                     >
-                      <span class="text-weight-bold text-accent">{{ item }} </span>
+                      <span v-if="!loading" class="text-weight-bold text-accent">{{ item?.name }} </span>
+                      <div v-else>
+                        <q-skeleton type="text" />
+                        <q-skeleton type="text" width="50%" />
+                      </div>
                     </q-item-label>
                     <q-item-label
                       lines="2"
                       class="f-12"
                     >
                       <span
+                        v-if="!loading"
                         class="text-weight-bold"
                         :class="item?.value.length === 1 ? 'text-orange' : 'text-primary'"
                       >{{ item?.value.length === 1 ? 'NON-PAKET' : 'PAKET' }}</span>
+                      <div v-else>
+                        <q-skeleton type="text" height="30px" width="20%" />
+                      </div>
                     </q-item-label>
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-12"
-                    >
-                      <span class=""> {{ item?.details[0]?.pemeriksaanlab?.rs21 !== ''? item?.details[0]?.pemeriksaanlab?.rs21: item?.details[0]?.pemeriksaanlab?.rs2 }} </span>
-                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section
                     side
                     top
                   >
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-10"
-                    >
-                      <span class="text-primary">{{ dateFullFormat(item?.tgl_order) }} </span>
-                    </q-item-label> -->
-
                     <q-item-label>
                       <q-badge
+                        v-if="!loading"
                         outline
                         color="primary"
                         :label="`Rp. ${formatRp(parseInt(item?.value[0]?.aslix.rs6) + parseInt(item?.value[0]?.aslix.rs13))}`"
                       />
+                      <q-skeleton v-else type="text" height="30px" width="80px" />
                     </q-item-label>
                     <q-item-label>
                       <div class="row q-my-xs">
                         <q-btn
+                          v-if="!loading"
                           flat
                           round
                           size="sm"
@@ -99,6 +102,7 @@
                           class="z-top"
                           @click="hapusItem(item)"
                         />
+                        <q-skeleton v-else type="text" height="30px" width="15px" />
                       </div>
                     </q-item-label>
                   </q-item-section>
@@ -167,6 +171,7 @@
 import { useQuasar } from 'quasar'
 import { formatRp } from 'src/modules/formatter'
 import { useLaboratIgd } from 'src/stores/simrs/igd/laborat'
+// import { computed } from 'vue'
 
 const store = useLaboratIgd()
 const $q = useQuasar()
@@ -175,27 +180,28 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
 // const filterredTable = computed(() => {
 //   const val = store.notalaborat
-//   const arr = props.pasien?.laborats
-//   // if (val === 'LIHAT SEMUA') {
-//   //   return mapping(arr)
-//   // }
-//   const filtered = arr.filter(x => x.rs2 === val)
-//   return filtered
+//   const arr = props.pasien?.laboratold
+//   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 //   // return arr
 // })
-console.log('pasien', props.pasien)
+
 function fillterTable (val) {
+  // console.log('val', val)
   if (val) {
     const s = store.notalaborat
     const res = val?.filter(x => x.rs2 === s)
-    console.log('asd', res)
-    const hasil = res?.length ? mapping(res[0].details) : []
-    console.log('filterre ', hasil)
+    // console.log('asd', res)
+    const hasil = res?.length ? mapping(val) : []
+    // console.log('filterre ', hasil)
     return hasil
   }
   return []

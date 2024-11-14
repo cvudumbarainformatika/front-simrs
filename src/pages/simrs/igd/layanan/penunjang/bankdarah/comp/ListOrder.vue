@@ -133,7 +133,7 @@ const filterredTable = computed(() => {
   const val = store?.form?.nota
   const arr = props?.pasien?.bankdarah
   // console.log('val ', val)
-  console.log('pasien bdrs', arr)
+  // console.log('pasien bdrs', arr)
   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 })
 

@@ -76,24 +76,11 @@
                         <q-skeleton type="text" height="30px" width="20%" />
                       </div>
                     </q-item-label>
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-12"
-                    >
-                      <span class=""> {{ item?.details[0]?.pemeriksaanlab?.rs21 !== ''? item?.details[0]?.pemeriksaanlab?.rs21: item?.details[0]?.pemeriksaanlab?.rs2 }} </span>
-                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section
                     side
                     top
                   >
-                    <!-- <q-item-label
-                      lines="2"
-                      class="f-10"
-                    >
-                      <span class="text-primary">{{ dateFullFormat(item?.tgl_order) }} </span>
-                    </q-item-label> -->
-
                     <q-item-label>
                       <q-badge
                         v-if="!loading"
