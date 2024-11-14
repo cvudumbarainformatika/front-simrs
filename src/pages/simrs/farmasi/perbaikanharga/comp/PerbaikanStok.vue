@@ -24,40 +24,57 @@
           Nobatch
         </div>
       </div>
+      <div v-if="props.data?.data?.stok?.length === 0">
+        <app-no-data />
+      </div>
       <div v-for="(item,i) in props.data?.data?.stok" :key="item">
-        <div
-          class="row items-center"
-          :class="i%2===0? (parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-2':'bg-negative text-white cursor-pointer'):(parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-4':'bg-negative text-white cursor-pointer')"
-          @click="()=>{
-            if (parseFloat(item?.harga) !== parseFloat(cekHarga(item)?.harga)) {
-              $q.dialog({
-                title: 'Konfirmasi',
-                message: 'Apakah anda ingin merubah harga?',
-                cancel: true,
-                persistent: true
-              }).onOk(() => {
-                emits('ubahharga',{item,penerimaan:cekHarga(item),tipe:'stok',id:item?.id})
-              })
-            }
-          }"
-        >
-          <div class="col-2">
-            {{ item?.nopenerimaan }}
-          </div>
-          <div class="col-2">
-            {{ item?.harga }}
-          </div>
-          <div class="col-2">
-            {{ item?.nobatch }}
-          </div>
-          <div class="col-2">
-            {{ cekHarga(item)?.nopenerimaan }}
-          </div>
-          <div class="col-2">
-            {{ cekHarga(item)?.harga }}
-          </div>
-          <div class="col-2">
-            {{ cekHarga(item)?.nobatch }}
+        <div v-if="item?.loading" class="row items-center justify-center bg-dark text-white">
+          Mohon tunggu sebentar ...
+        </div>
+        <div v-else>
+          <div
+            class="row items-center"
+            :class="i%2===0? (parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-2':'bg-negative text-white cursor-pointer'):(parseFloat(item?.harga) === parseFloat(cekHarga(item)?.harga)?'bg-grey-4':'bg-negative text-white cursor-pointer')"
+            @click="()=>{
+              if (parseFloat(item?.harga) !== parseFloat(cekHarga(item)?.harga)) {
+                $q.dialog({
+                  title: 'Konfirmasi',
+                  message: 'Apakah anda ingin merubah harga?',
+                  cancel: {
+                    color: 'negative',
+                    label: 'Tidak',
+                    'no-caps': true
+                  },
+                  ok: {
+                    color: 'primary',
+                    label: 'Ubah',
+                    'no-caps': true
+                  },
+                  persistent: true
+                }).onOk(() => {
+                  emits('ubahharga',{item,penerimaan:cekHarga(item),harga:cekHarga(item)?.harga,tipe:'stok',id:item?.id})
+                })
+              }
+            }"
+          >
+            <div class="col-2">
+              {{ item?.nopenerimaan }}
+            </div>
+            <div class="col-2">
+              {{ item?.harga }}
+            </div>
+            <div class="col-2">
+              {{ item?.nobatch }}
+            </div>
+            <div class="col-2">
+              {{ cekHarga(item)?.nopenerimaan }}
+            </div>
+            <div class="col-2">
+              {{ cekHarga(item)?.harga }}
+            </div>
+            <div class="col-2">
+              {{ cekHarga(item)?.nobatch }}
+            </div>
           </div>
         </div>
       </div>
@@ -66,6 +83,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps({
   data: {
     type: Object,

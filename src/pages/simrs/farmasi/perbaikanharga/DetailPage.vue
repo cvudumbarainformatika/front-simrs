@@ -39,7 +39,7 @@
         align="left"
         class=" bg-transparent text-grey-8"
         active-color="white"
-        active-bg-color="primary"
+        :active-bg-color="menu?.reference ? 'dark' : 'primary'"
       >
         <q-tab v-for="tb in tabs" :key="tb.name" :ripple="true" :name="tb?.name" content-class="tab-classes">
           <template #default>
@@ -61,8 +61,8 @@
               :is="menu?.comp"
               :data="store.data"
               @ubahharga="(val) => {
-                console.log('ubahharga',val);
-
+                // console.log('ubahharga',val);
+                store.simpanPerbaikanHarga(val)
               }"
             />
           </q-scroll-area>
@@ -77,51 +77,61 @@ import { ref, defineAsyncComponent, computed, shallowRef } from 'vue'
 
 const emits = defineEmits(['close'])
 const store = usePerbaikanHargaFarmasiStore()
+
 const tab = ref('stok')
 const tabs = ref([
   {
     label: 'Stok',
     name: 'stok',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanStok.vue')))
   },
   {
     label: 'Stok Opname',
     name: 'stokopname',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanStokOpname.vue')))
   },
   {
     label: 'Mutasi Masuk',
     name: 'mutasi',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanMutasi.vue')))
   },
   {
     label: 'Resep',
     name: 'resep',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanResep.vue')))
   },
   {
     label: 'Resep Racikan',
     name: 'resepracikan',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanResepRacikan.vue')))
   },
   {
     label: 'Retur Penjualan',
     name: 'retur',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanRetur.vue')))
   },
   {
     label: 'Mutasi Keluar',
     name: 'mutasikeluar',
+    reference: false,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PerbaikanMutasiKeluar.vue')))
   },
   {
     label: 'Penerimaan',
     name: 'penerimaan',
+    reference: true,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/PenerimaanPage.vue')))
   },
   {
     label: 'Saldo Awal Mei',
     name: 'awal',
+    reference: true,
     comp: shallowRef(defineAsyncComponent(() => import('./comp/StokAwalPage.vue')))
   }
 ])
@@ -140,11 +150,11 @@ function show () {
   const mid = refMiddle.value.clientHeight ?? 0
   const tab = refTabs.value.clientHeight ?? 36
   he.value = page - bar - mid - tab - 50
-  console.log('page', page, refPage.value.clientHeight)
-  console.log('bar', bar, refBar.value.clientHeight)
-  console.log('mid', mid, refMiddle.value.clientHeight)
-  console.log('tab', tab, refTabs.value.clientHeight)
-  console.log('he', he.value)
+  // console.log('page', page, refPage.value.clientHeight)
+  // console.log('bar', bar, refBar.value.clientHeight)
+  // console.log('mid', mid, refMiddle.value.clientHeight)
+  // console.log('tab', tab, refTabs.value.clientHeight)
+  // console.log('he', he.value)
 }
 </script>
 

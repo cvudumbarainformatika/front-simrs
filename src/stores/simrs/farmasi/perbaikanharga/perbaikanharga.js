@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmasi', {
   state: () => ({
@@ -8,17 +8,19 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
     loadingSimpan: false,
     isOpen: false,
     items: [],
+    semuas: [],
     meta: {},
     data: [],
     columns: ['kd_obat', 'nama_obat', 'stok', 'opname', 'mutasi', 'resep', 'racikan', 'retur', 'mutasi_keluar', 'status', 'act'],
     colunmHide: [],
     params: {
-      kdruang: 'Gd-03010101',
-      q: 'masker',
+      kdruang: '',
+      q: '',
       page: 1,
-      per_page: 10,
+      per_page: 100,
       tahun: '2024',
-      bulan: '06'
+      bulan: '06',
+      pilihan: 'semua'
     },
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', kode: 'Gd-05010100' },
@@ -44,7 +46,6 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
       this.getData()
     },
     refreshTable () {
-      this.setParams('page', 1)
       this.getData()
     },
     setSearch (payload) {
@@ -55,8 +56,8 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
     metaniData (data) {
       console.log('data', data)
 
-      if (this.items?.length) {
-        this.items?.forEach(item => {
+      if (this.semuas?.length) {
+        this.semuas?.forEach(item => {
           const penerimaan = data?.penerimaan?.filter(a => a.kdobat === item.kd_obat) ?? []
           const awal = data?.awal?.filter(a => a.kdobat === item.kd_obat) ?? []
           const stok = data?.stok?.filter(a => a.kdobat === item.kd_obat) ?? []
@@ -146,50 +147,163 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
 
           ]
         })
+        if (this.params.pilihan === 'semua') {
+          this.items = this.semuas
+        }
+        else if (this.params.pilihan === 'bermasalah') {
+          this.items = this.semuas.filter(fi => fi.beda?.includes(true))
+        }
+        else if (this.params.pilihan === 'tidak') {
+          this.items = this.semuas.filter(fi => !fi.beda?.includes(true))
+        }
       }
     },
-    async getData () {
+    metaniSatuData (data) {
+      const kode = data?.kode[0]
+      const item = this.semuas.find(f => f.kd_obat === kode)
+      console.log('data', data, item, kode)
+      if (item) {
+        const penerimaan = data?.penerimaan?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const awal = data?.awal?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const stok = data?.stok?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const mutasi = data?.mutasi?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const mutasikeluar = data?.mutasikeluar?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const opname = data?.opname?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const racikan = data?.racikan?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const resep = data?.resep?.filter(a => a.kdobat === item.kd_obat) ?? []
+        const retur = data?.retur?.filter(a => a.kdobat === item.kd_obat) ?? []
+        item.data = {
+          stok,
+          mutasi,
+          mutasikeluar,
+          opname,
+          racikan,
+          resep,
+          retur,
+          penerimaan,
+          awal
+        }
+
+        item.stok = stok?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.mutasi = mutasi?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.mutasi_keluar = mutasikeluar?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.opname = opname?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.racikan = racikan?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.resep = resep?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+        item.retur = retur?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
+
+        let bedaStok = false
+        let bedaMutasi = false
+        let bedaMutasikeluar = false
+        let bedaOpname = false
+        let bedaRracikan = false
+        let bedaResep = false
+        let bedaRetur = false
+        stok?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === item.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm.harga !== st.harga) bedaStok = true
+          }
+        })
+        mutasi?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaMutasi = true
+          }
+        })
+        mutasikeluar?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaMutasikeluar = true
+          }
+        })
+        opname?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaOpname = true
+          }
+        })
+        racikan?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaRracikan = true
+          }
+        })
+        resep?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaResep = true
+          }
+        })
+        retur?.forEach(st => {
+          const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
+          if (trm) {
+            if (trm?.harga !== st.harga) bedaRetur = true
+          }
+        })
+        item.beda = [
+          bedaStok,
+          bedaMutasi,
+          bedaMutasikeluar,
+          bedaOpname,
+          bedaRracikan,
+          bedaResep,
+          bedaRetur
+
+        ]
+
+        const item2 = this.items.find(f => f.kd_obat === item.kd_obat)
+        console.log('item2', item2)
+      }
+    },
+    getData (val) {
+      const param = val || this.params
       this.loading = true
-      try {
-        const resp = await api.post('/v1/simrs/farmasinew/cekdata/get-obat', this.params)
-        console.log('resp', resp?.data)
-        this.items = resp.data?.data?.data ?? resp?.data
-        this.meta = resp.data?.data?.meta ?? resp?.data
-        this.metaniData(resp?.data?.data)
-        // this.data = resp?.data?.data
-      }
-      catch (err) {
-        notifErrVue(err, 'Gagal mengambil data perbaikan harga')
-      }
-      finally {
-        this.loading = false
-      }
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/farmasinew/cekdata/get-obat', param)
+          .then(resp => {
+            this.loading = false
+            if (parseInt(this.params.per_page) === 1) this.metaniSatuData(resp?.data?.data)
+            else {
+              this.items = resp.data?.data?.data ?? resp?.data
+              this.semuas = resp.data?.data?.data ?? resp?.data
+              this.meta = resp.data?.data?.meta ?? resp?.data
+              this.metaniData(resp?.data?.data)
+            }
+            // console.log('resp', resp?.data)
+            resolve(resp)
+          // this.data = resp?.data?.data
+          }).catch(err => {
+            this.loading = false
+            reject(err)
+          })
+      })
     },
-    async getDataDetail (payload) {
-      this.loading = true
-      try {
-        const resp = await api.post('/v1/simrs/farmasinew/stok/fr-get-perbaikan-harga-detail', payload)
-        this.dataDetail = resp.data.data
-      }
-      catch (err) {
-        notifErrVue(err, 'Gagal mengambil data perbaikan harga detail')
-      }
-      finally {
-        this.loading = false
-      }
-    },
+
     async simpanPerbaikanHarga (item) {
+      const param = this.params
       this.loading = true
+      item.item.loading = true
       try {
-        const resp = await api.post('/v1/simrs/farmasinew/stok/fr-simpan-perbaikan-harga', item)
-        console.log('resp', resp)
-        notifErrVue('success', 'Berhasil menyimpan perbaikan harga')
-        this.getData(this.params)
+        const resp = await api.post('/v1/simrs/farmasinew/cekdata/simpan-perbaikan-harga-dua', item)
+        console.log('resp simpan', resp)
+        notifSuccess(resp)
+        const perPage = this.params.per_page
+        const page = this.params.page
+        this.params.page = 1
+        this.params.per_page = 1
+        this.params.q = item?.item?.kdobat
+        this.getData(param).then(() => {
+          this.params.per_page = perPage
+          this.params.page = page
+          this.params.q = ''
+        })
       }
       catch (err) {
         notifErrVue(err, 'Gagal menyimpan perbaikan harga')
       }
       finally {
+        item.item.loading = false
         this.loading = false
       }
     }

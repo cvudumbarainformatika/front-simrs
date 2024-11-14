@@ -22,6 +22,9 @@
           Exp
         </div>
       </div>
+      <div v-if="props.data?.data?.awal?.length === 0">
+        <app-no-data />
+      </div>
       <div v-for="(item,i) in props.data?.data?.awal" :key="item">
         <div class="row items-center" :class="i%2===0? 'bg-grey-2':'bg-grey-4'">
           <div class="col-2">

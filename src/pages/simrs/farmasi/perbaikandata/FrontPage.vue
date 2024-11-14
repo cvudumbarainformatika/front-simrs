@@ -244,11 +244,11 @@ function openDetail (item) {
   data.value = item
   console.log('item', item, isOpen.value)
 }
-const pilihanBermasalahs = [
+const pilihanBermasalahs = ref([
   { value: 'semua', label: 'Semua' },
   { value: 'bermasalah', label: 'Bermasalah' },
   { value: 'tidak', label: 'Tidak Bermasalah' }
-]
+])
 function setPilihan (val) {
   // console.log('val', val)
 
