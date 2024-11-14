@@ -2,12 +2,14 @@
 import { usePermintaanLuarLaboratTable } from 'src/stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/transaksi_laborat'
 
+import { WSHOST } from 'src/boot/axios'
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
 // import axios from 'axios'
 // import { api } from 'src/boot/axios'
 
-const host = '192.168.150.111'
+// const host = '192.168.150.111'
+const host = WSHOST
 const port = 6003
 
 window.Pusher = Pusher
