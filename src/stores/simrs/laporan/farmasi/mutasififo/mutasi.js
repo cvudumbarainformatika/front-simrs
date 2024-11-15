@@ -183,6 +183,37 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
             else masuk.push(per)
           })
+          if (it?.penyesuaian?.length) {
+            it?.penyesuaian.forEach(p => {
+              const index = masuk.findIndex(f => f.nopenerimaan === p.nopenerimaan)
+              if (index >= 0) {
+                console.log('penye', masuk[index], p)
+
+                const jumM = masuk[index].jumlah + p.jumlah
+                const subM = masuk[index].sub + p.sub
+
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
+              else {
+                const index2 = masuk.findIndex(f => parseFloat(f.harga) === parseFloat(p.harga))
+                if (index2 >= 0) {
+                  console.log('else 1', masuk[index2], p)
+
+                  const jumEl = masuk[index2].jumlah + p.jumlah
+                  const subEl = masuk[index2].sub + p.sub
+
+                  masuk[index2].jumlah = jumEl
+                  masuk[index2].sub = subEl
+                }
+                else {
+                  console.log('else 2')
+                }
+              }
+            })
+            console.log('masuk', masuk)
+            // console.log('penyesuaian', it?.penyesuaian, akhir)
+          }
           // console.log('masuk', masuk)
 
           resep?.forEach(res => {
@@ -585,6 +616,32 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               ket: 'Retur Penjualan'
             })
           }
+          if (it?.penyesuaian?.length) {
+            it?.penyesuaian.forEach(p => {
+              const index = masuk.findIndex(f => f.nopenerimaan === p.nopenerimaan)
+              if (index >= 0) {
+                // console.log('penye', masuk[index], p)
+
+                const jumM = masuk[index].jumlah + p.jumlah
+                const subM = masuk[index].sub + p.sub
+
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
+              else {
+                const index2 = masuk.findIndex(f => f.harga === p.harga)
+                // console.log('else'[masuk[index2]], p)
+
+                const jumEl = masuk[index2].jumlah + p.jumlah
+                const subEl = masuk[index2].sub + p.sub
+
+                masuk[index2].jumlah = jumEl
+                masuk[index2].sub = subEl
+              }
+              // console.log('masuk', masuk[indexMAsuk])
+            })
+            // console.log('penyesuaian', it?.penyesuaian, akhir)
+          }
           if (it?.resepkeluar?.length) {
             const raw = {
               tgl: it?.resepkeluar[0]?.tgl,
@@ -644,32 +701,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         }
 
         const akhir = masuk.filter(f => f.jumlah !== 0)
-        if (it?.penyesuaian?.length) {
-          it?.penyesuaian.forEach(p => {
-            const index = akhir.findIndex(f => f.nopenerimaan === p.nopenerimaan)
-            if (index >= 0) {
-              // console.log('penye', akhir[index], p)
-
-              const jumM = akhir[index].jumlah + p.jumlah
-              const subM = akhir[index].sub + p.sub
-
-              akhir[index].jumlah = jumM
-              akhir[index].sub = subM
-            }
-            else {
-              const index2 = akhir.findIndex(f => f.harga === p.harga)
-              // console.log('else'[akhir[index2]], p)
-
-              const jumEl = akhir[index2].jumlah + p.jumlah
-              const subEl = akhir[index2].sub + p.sub
-
-              akhir[index2].jumlah = jumEl
-              akhir[index2].sub = subEl
-            }
-            // console.log('masuk', masuk[indexMAsuk])
-          })
-          // console.log('penyesuaian', it?.penyesuaian, akhir)
-        }
         it.akhir = akhir.filter(f => f.jumlah !== 0)
         it.akhir.forEach(s => {
           s.tgl = this.params.tahun + '-' + this.params.bulan + '-31 23:59:50'
