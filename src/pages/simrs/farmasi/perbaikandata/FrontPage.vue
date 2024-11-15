@@ -61,7 +61,8 @@
                 />
               </div>
               <div class="col-2 text-center">
-                {{ store.params.page }}
+                <!-- {{ store.params.page }} -->
+                <app-input v-model="store.params.page" label="" outlined />
               </div>
               <div class="col-2">
                 <q-btn

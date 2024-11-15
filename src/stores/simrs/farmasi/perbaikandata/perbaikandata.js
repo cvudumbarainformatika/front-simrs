@@ -220,6 +220,7 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
       const opname = item?.data?.data?.cekOpname?.opname
       if (opname?.length <= 0) return notifErrVue('Data opname kosong')
       const payload = opname
+      if (!payload) return notifErrVue('Data opname kosong gagal ditemukan, di list obat silahkan cek di halaman depan')
       console.log('resp opname', payload)
       this.loadingFixOpname = true
       return new Promise(resolve => {
