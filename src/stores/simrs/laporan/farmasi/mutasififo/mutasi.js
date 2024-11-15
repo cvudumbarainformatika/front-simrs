@@ -643,7 +643,34 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           }
         }
 
-        it.akhir = masuk.filter(f => f.jumlah !== 0)
+        const akhir = masuk.filter(f => f.jumlah !== 0)
+        if (it?.penyesuaian?.length) {
+          it?.penyesuaian.forEach(p => {
+            const index = akhir.findIndex(f => f.nopenerimaan === p.nopenerimaan)
+            if (index >= 0) {
+              // console.log('penye', akhir[index], p)
+
+              const jumM = akhir[index].jumlah + p.jumlah
+              const subM = akhir[index].sub + p.sub
+
+              akhir[index].jumlah = jumM
+              akhir[index].sub = subM
+            }
+            else {
+              const index2 = akhir.findIndex(f => f.harga === p.harga)
+              // console.log('else'[akhir[index2]], p)
+
+              const jumEl = akhir[index2].jumlah + p.jumlah
+              const subEl = akhir[index2].sub + p.sub
+
+              akhir[index2].jumlah = jumEl
+              akhir[index2].sub = subEl
+            }
+            // console.log('masuk', masuk[indexMAsuk])
+          })
+          // console.log('penyesuaian', it?.penyesuaian, akhir)
+        }
+        it.akhir = akhir.filter(f => f.jumlah !== 0)
         it.akhir.forEach(s => {
           s.tgl = this.params.tahun + '-' + this.params.bulan + '-31 23:59:50'
           const temp = {

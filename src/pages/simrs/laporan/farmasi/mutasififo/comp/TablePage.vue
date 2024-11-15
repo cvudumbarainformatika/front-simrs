@@ -326,8 +326,13 @@
                 </div>
               </td>
               <td>
-                <div class="text-right q-mr-xs" :class="data?.subtotal || store.params.jenis !== 'detail'?'text-weight-bold':''">
-                  {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub ?? data?.subtotal?.sub),2)) }}
+                <div class="text-right q-mr-xs row" :class="data?.subtotal || store.params.jenis !== 'detail'?'text-weight-bold':''">
+                  <div :class="item?.penyesuaian?.length?'col-11':'col-12'">
+                    {{ cekNan(formatDouble(parseFloat(data?.akhir?.sub ?? data?.subtotal?.sub),2)) }}
+                  </div>
+                  <div v-if="item?.penyesuaian?.length && data?.subtotal" class="print-hide col-1 text-right">
+                    *
+                  </div>
                 </div>
               </td>
             </tr>
