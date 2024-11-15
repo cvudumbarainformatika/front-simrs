@@ -735,30 +735,30 @@ defineEmits([
 ])
 
 let prevVal = ''
-function editApp(val, i, key) {
+function editApp (val, i, key) {
   prevVal = val[key]
   // console.log('app edit', val, i, key)
 }
-function afterEditApp(val, i, key) {
+function afterEditApp (val, i, key) {
   if (val[key] !== prevVal) {
     val.save = true
   }
   // console.log('app after edit', val, i, key)
 }
-function editMenu(val, i, key) {
+function editMenu (val, i, key) {
   prevVal = val[key]
   console.log('Menu edit', val, i, key)
 }
-function afterEditMenu(val, i, key) {
+function afterEditMenu (val, i, key) {
   if (val[key] !== prevVal) {
     val.save = true
   }
 }
-function editSubMenu(val, key) {
+function editSubMenu (val, key) {
   prevVal = val[key]
   // console.log('Menu edit', val, i, key)
 }
-function afterEditSubMenu(val, key) {
+function afterEditSubMenu (val, key) {
   if (val[key] !== prevVal) {
     val.save = true
   }

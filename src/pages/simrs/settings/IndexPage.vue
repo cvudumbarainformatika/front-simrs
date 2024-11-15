@@ -181,6 +181,8 @@ const edited = ref(null)
 const indexApp = ref(null)
 
 onMounted(() => {
+  console.log('store', store.pegawai)
+
   h.value = main.value.$el.offsetHeight - 35
   hScroll.value = h.value - (72 + 70)
 

@@ -774,7 +774,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       const jns = auth?.user?.pegawai?.kdgroupnakes
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
-      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes === jns && x?.awal === '1') ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.awal === '1') ?? []
       const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nakes !== '1' && x?.awal === '1') ?? []
 
       this.items.igd = igd

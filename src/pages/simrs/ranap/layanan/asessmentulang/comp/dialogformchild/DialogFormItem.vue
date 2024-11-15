@@ -1,6 +1,11 @@
 <template>
   <q-dialog persistent @hide="emits('onHide')">
-    <q-card style="min-width: 40vw; min-height: 80vh; max-height: 80vh" class="column full-height">
+    <q-card
+      :style="`min-width: ${settings.formOpen === 'asessmentMedis' ? '95vw' : '40vw'};
+        min-height: ${settings.formOpen === 'asessmentMedis' ? '95vh' : '80vh'};
+        max-height: ${settings.formOpen === 'asessmentMedis' ? '95vh' : '80vh'}`"
+      class="column full-height"
+    >
       <q-bar class="col-auto">
         <q-icon name="icon-mat-edit_document" />
         <div class="f-12">
@@ -22,8 +27,23 @@
           <FormPemeriksaanUmum :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang class="q-mb-sm" />
           <FormPenilaian :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
         </q-card-section>
+        <q-card-section v-if="settings.formOpen === 'asessment'" class="col full-height scroll" :key="nakes">
+          <DiagnosaKeperawatan :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
+        </q-card-section>
+        <q-card-section v-if="settings.formOpen === 'asessmentKebidanan'" class="col full-height scroll" :key="nakes">
+          <DiagnosaKebidanan :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
+        </q-card-section>
+        <q-card-section v-if="settings.formOpen === 'asessmentMedis'" class="col full-height scroll" :key="nakes">
+          <FormDiagnosaMedis :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
+        </q-card-section>
+
         <q-card-section v-if="settings.formOpen === 'diagnosaKeperawatan'" class="col full-height scroll">
-          <FormDiagnosaKeperawatan :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang />
+          <FormDiagnosaKeperawatan v-if="settings.categoryIntervensi === 'plann'" :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang :category-intervensi="`${settings.categoryIntervensi}`" />
+          <FormDiagnosaKeperawatan v-else :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang :category-intervensi="`${settings.categoryIntervensi}`" />
+        </q-card-section>
+        <q-card-section v-if="settings.formOpen === 'diagnosaKebidanan'" class="col full-height scroll">
+          <FormDiagnosaKebidanan v-if="settings.categoryIntervensi === 'plann'" :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang :category-intervensi="`${settings.categoryIntervensi}`" />
+          <FormDiagnosaKebidanan v-else :pasien="pasien" :kasus="kasus" :nakes="nakes" ulang :category-intervensi="`${settings.categoryIntervensi}`" />
         </q-card-section>
         <q-separator />
         <q-card-actions align="right" class="col-auto q-pb-md z-top bg-grey-3">
@@ -52,6 +72,10 @@ const FormAnamnesis = defineAsyncComponent(() => import('src/pages/simrs/ranap/l
 const FormPemeriksaanUmum = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/pemeriksaanUmum/FormPemeriksaanUmum.vue'))
 const FormPenilaian = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/pemeriksaan/comp/penilaian/FormComp.vue'))
 const FormDiagnosaKeperawatan = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/diagnosaDanTindakan/diagnosakeperawatan/comp/FormDiagnosaKeperawatan.vue'))
+const FormDiagnosaKebidanan = defineAsyncComponent(() => import('src/pages/simrs/poli/tindakan/comptindakan/pagemenu/complayanan/compDiagnosaKebidanan/FormDiagnosaKebidanan.vue'))
+const DiagnosaKeperawatan = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/asessmentulang/comp/dialogformchild/DiagnosaKeperawatan.vue'))
+const DiagnosaKebidanan = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/asessmentulang/comp/dialogformchild/DiagnosaKebidanan.vue'))
+const FormDiagnosaMedis = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/diagnosaDanTindakan/diagnosamedik/DiagnosaPage.vue'))
 
 defineProps({
   settings: {

@@ -210,11 +210,11 @@ onMounted(() => {
   store.getData()
 })
 
-function lihatDiagnosa() {
+function lihatDiagnosa () {
   console.log('lihat', store.selectDiagnosa)
 }
 
-function simpan() {
+function simpan () {
   console.log('simpan', store.simpanDiagnosadanIntervensi(props?.pasien))
 }
 </script>

@@ -133,6 +133,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.diagnosakebidanan = data?.diagnosakebidanan ?? []
         datax.cppt = data?.cppt ?? []
         datax.laborats = data?.laborats ?? []
+        datax.hasilradiologi = data?.hasilradiologi ?? []
         datax.radiologi = data?.radiologi ?? []
         datax.fisio = data?.fisio ?? []
         datax.operasi = data?.operasi ?? []
@@ -150,6 +151,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.dokumenluar = data?.dokumenluar ?? []
         datax.informconcern = data?.informconcern ?? []
         datax.dischargeplanning = data?.dischargeplanning ?? []
+        datax.statuscovid = data?.statuscovid ?? []
 
         // data sementara
         datax.diagnosaKeperawatanUlangSementara = []

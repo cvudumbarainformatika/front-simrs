@@ -826,7 +826,9 @@ const props = defineProps({
 const gruping = computed(() => {
   const nakes = auth?.user?.pegawai?.kdgroupnakes
   const dokter = nakes === '1' || nakes === 1
-  const perawat = nakes === '2' || nakes === 2
+  const perawat = nakes === '2' || nakes === '3'
+
+  console.log('nakes', nakes, dokter, perawat)
 
   let gruping = null
   if (dokter) gruping = props?.kasus?.medis

@@ -103,6 +103,13 @@ export default function useLayanan (pasien) {
       icon: 'icon-my-file_sign',
       nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./dokumen/IndexPage.vue')))
+    },
+    {
+      name: 'page-pulang',
+      label: 'Pulang / Pulangkan',
+      icon: 'icon-eva-home',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./pulang/IndexPage.vue')))
     }
 
   ])

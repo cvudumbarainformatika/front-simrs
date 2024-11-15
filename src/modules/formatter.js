@@ -155,6 +155,10 @@ const olahUang = (val) => {
   }
 }
 
+const getNewLine = (text) => {
+  return text?.replace(/\n/g, '<br/>')
+}
+
 export {
   dateFull,
   dateHalfFormat, dateCppt,
@@ -173,5 +177,6 @@ export {
   formatDouble,
   dayName,
   formattanpaRp,
-  formatDoubleKoma
+  formatDoubleKoma,
+  getNewLine
 }

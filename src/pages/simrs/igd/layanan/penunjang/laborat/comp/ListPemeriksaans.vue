@@ -23,8 +23,8 @@
       {{ pasien?.laborats }} -->
       <!-- jika belum ada pemeriksaan -->
       <div
-        v-if="fillterTable(pasien?.laboratold)?.length === 0"
-        class="column full-height flex-center text-white"
+        v-if="fillterTable(pasien?.laborats)?.length === 0"
+        class="column full-height flex-center text-white relative-position"
       >
         <div v-if="!loading">
           Belum Ada Permintaan Order ke Laborat
@@ -43,7 +43,7 @@
         >
           <transition-group>
             <template
-              v-for="(item, i) in fillterTable(pasien?.laboratold)"
+              v-for="(item, i) in fillterTable(pasien?.laborats)"
               :key="i"
             >
               <q-expansion-item
@@ -171,6 +171,7 @@
 import { useQuasar } from 'quasar'
 import { formatRp } from 'src/modules/formatter'
 import { useLaboratIgd } from 'src/stores/simrs/igd/laborat'
+// import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 // import { computed } from 'vue'
 
 const store = useLaboratIgd()
@@ -189,18 +190,20 @@ const props = defineProps({
 
 // const filterredTable = computed(() => {
 //   const val = store.notalaborat
-//   const arr = props.pasien?.laboratold
-//   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
+//   const arr = props.pasien?.laborats
+//   // if (val === 'LIHAT SEMUA') {
+//   //   return mapping(arr)
+//   // }
+//   const filtered = arr.filter(x => x.rs2 === val)
+//   return filtered
 //   // return arr
 // })
 
 function fillterTable (val) {
-  // console.log('val', val)
   if (val) {
     const s = store.notalaborat
-    const res = val?.filter(x => x.rs2 === s)
-    // console.log('asd', res)
-    const hasil = res?.length ? mapping(val) : []
+    const res = val?.filter(x => x.nota === s)
+    const hasil = res?.length ? mapping(res[0].details) : []
     // console.log('filterre ', hasil)
     return hasil
   }

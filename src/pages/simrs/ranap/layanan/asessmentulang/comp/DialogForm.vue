@@ -4,6 +4,7 @@
     :maximized="true"
     transition-show="slide-up"
     transition-hide="slide-down"
+    @show="onShow"
   >
     <q-card class="bg-grey-4 column fit">
       <div class="bg-primary text-white col-auto">
@@ -29,15 +30,15 @@
             >
               <span class="text-orange-9 q-ml-sm">Kembali </span>
             </q-btn>
-            <q-btn
+            <!-- <q-btn
               rounded
               outline
               color="primary"
               icon="icon-mat-edit_document"
-              @click="store.getPreviousForm(pasien)"
+              @click="store.getPreviousForm(pasien, nakes)"
             >
               <span class="text-primary q-ml-sm">Inputan Sebelumnya</span>
-            </q-btn>
+            </q-btn> -->
 
             <!-- <q-btn
               rounded
@@ -91,4 +92,12 @@ const props = defineProps({
 const emits = defineEmits(['exit'])
 
 const { store } = useForm(props?.pasien)
+
+// onMounted(() => {
+//   store.getPreviousForm(props?.pasien)
+// })
+
+const onShow = () => {
+  store.getPreviousForm(props?.pasien, props?.nakes)
+}
 </script>

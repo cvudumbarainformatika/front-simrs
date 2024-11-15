@@ -49,12 +49,14 @@ import { usePermintaanAmbulanStore } from 'src/stores/simrs/ranap/ambulance'
 import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
 import { usePermintaanOksigenStore } from 'src/stores/simrs/ranap/oksigen'
 import { useHaisRanapStore } from 'src/stores/simrs/ranap/hais'
+import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagnosakebidanan'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
 const penilaian = usePenilaianRanapStore()
 const diagnosa = useDiagnosaStore()
 const diagnosakeperawatan = useDiagnosaKeperawatan()
+const diagnosakebidanan = useDiagnosaKebidananStore()
 const tindakan = useTindakanRanapStore()
 const lab = useLaboratPoli()
 const radiologi = useRadiologiPoli()
@@ -70,6 +72,7 @@ onMounted(() => {
     penilaian.getMaster(),
     diagnosa.getDiagnosaDropdown(),
     diagnosakeperawatan.getData(),
+    diagnosakebidanan.getData(),
     tindakan.getTindakanDropdown(),
     tindakan.getAllPetugas(),
 
