@@ -691,38 +691,39 @@ function autoFix () {
     const index = i
     if (opname > 0) {
       const jumlah = opname > item?.jml_terima_k ? item?.jml_terima_k : opname
-      if (cekOpname.opname[index] !== undefined) {
-        cekOpname.opname[index].nopenerimaan = item?.nopenerimaan
-        cekOpname.opname[index].jumlah = jumlah
-        cekOpname.opname[index].tglexp = item?.tgl_exp
-        cekOpname.opname[index].nobatch = item?.no_batch
-        cekOpname.opname[index].tglpenerimaan = item?.tglpenerimaan
-        cekOpname.opname[index].harga = item?.harga_netto_kecil
-        console.log('if', cekOpname.opname[index])
-      }
-      else {
-        const cari = store.items.find(x => x.kdobat === item?.kdobat)
-        if (cari?.data?.data?.cekOpname?.opname) {
-          const temp = {
-            id: null,
-            nopenerimaan: item?.nopenerimaan,
-            jumlah,
-            tglexp: item?.tgl_exp,
-            nobatch: item?.no_batch,
-            tglpenerimaan: item?.tglpenerimaan,
-            tglopname,
-            kdobat,
-            kdruang,
-            harga: item?.harga_netto_kecil
-          }
-          cari.data.data.cekOpname.opname.push(temp)
+      if (jumlah > 0) {
+        if (cekOpname.opname[index] !== undefined) {
+          cekOpname.opname[index].nopenerimaan = item?.nopenerimaan
+          cekOpname.opname[index].jumlah = jumlah
+          cekOpname.opname[index].tglexp = item?.tgl_exp
+          cekOpname.opname[index].nobatch = item?.no_batch
+          cekOpname.opname[index].tglpenerimaan = item?.tglpenerimaan
+          cekOpname.opname[index].harga = item?.harga_netto_kecil
+        // console.log('if', cekOpname.opname[index])
         }
-        // console.log('else', cari?.data?.data?.cekOpname)
+        else {
+          const cari = store.items.find(x => x.kdobat === item?.kdobat)
+          if (cari?.data?.data?.cekOpname?.opname) {
+            const temp = {
+              id: null,
+              nopenerimaan: item?.nopenerimaan,
+              jumlah,
+              tglexp: item?.tgl_exp,
+              nobatch: item?.no_batch,
+              tglpenerimaan: item?.tglpenerimaan,
+              tglopname,
+              kdobat,
+              kdruang,
+              harga: item?.harga_netto_kecil
+            }
+            cari.data.data.cekOpname.opname.push(temp)
+          }
+          // console.log('else', cari?.data?.data?.cekOpname)
 
         // props.data.data.data.cekOpname.opname.push(temp)
+        }
+        opname = opname - jumlah
       }
-
-      opname = opname - jumlah
     }
     console.log('item', item, cekOpname?.opname[index], opname)
   })
