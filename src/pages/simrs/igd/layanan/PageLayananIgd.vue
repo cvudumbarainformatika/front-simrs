@@ -144,6 +144,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/anamnesis/AnamnesisPage.vue')))
   },
   {
+    name: 'PemeriksaanFisikPage',
+    label: 'Pemeriksaan Umum & Fisik',
+    icon: 'icon-my-stethoscope',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/pemeriksaanfisik/PemeriksaanfisikPage.vue')))
+  },
+  {
     name: 'AssesmentPage',
     label: 'Assesment',
     icon: 'icon-mat-analytics',
