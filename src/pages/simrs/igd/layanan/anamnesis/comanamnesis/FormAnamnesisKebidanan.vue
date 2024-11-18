@@ -172,18 +172,29 @@
                 <div class="col-12">
                   <q-separator class="q-my-xs" />
                   <div class="row items-center q-col-gutter-sm">
-                    <div class="col-2">
-                      Kondisi Khusus :
+                    <div class="col-10">
+                      Kondisi Khusus (Penyakit DM/Kemoterapi/haemodialisa/geriatri/imunitas menurun/lain-lain):
                     </div>
-                    <div class="col-8">
-                      <q-input
+                    <div class="col-2">
+                      <q-select
+                        v-model="store.form.kondisikhusus"
+                        transition-show="flip-up"
+                        transition-hide="flip-down"
+                        option-label="label"
+                        option-value="optionKondisiKhusus.value"
+                        dense
+                        outlined
+                        :options="optionKondisiKhusus"
+                        @update:model-value="lihatPerubahan"
+                      />
+                      <!-- <q-input
                         v-model="store.form.kondisikhusus"
                         outlined
                         dense
                         standout="bg-yellow-3"
                         label="Kondisi Khusus"
                         stack-label
-                        @update:model-value="lihatPerubahan"
+                        @update:model-value="lihatPerubahan" -->
                       />
                     </div>
                     <div class="col-12">
@@ -1132,6 +1143,13 @@ const store = useAnamneseKebidananStore()
 const storeHistoryPernikahan = useHistoryPernikahanStore()
 const storeHistorykehamilan = useHistoryKehamilanStore()
 // const panel = ref(['nrt'])
+
+const optionKondisiKhusus = ref(
+  [
+    { label: 'Tidak', value: 0 },
+    { label: 'Ya', value: 2 }
+  ]
+)
 
 const refForm = ref()
 const $q = useQuasar()

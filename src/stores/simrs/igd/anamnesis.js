@@ -13,6 +13,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       { name: 'Anamnesis Kebidanan', page: 'AnamnesisKebidanan' },
       { name: 'Penilaian Kajian Resiko Jatuh', page: 'PenilaianKajianResikoJatuh' }
     ],
+    pilihnyerihilang: [],
     form: {
       keluhanutama: '',
       riwayatpenyakit: '',
@@ -69,7 +70,7 @@ export const useAnamnesis = defineStore('anamnesis', {
   actions: {
 
     hitungNilaiSkor () {
-      const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
+      const skorKondKhusus = this.form.kondisikhusus.value
       const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
       this.form.skor = skor
     },

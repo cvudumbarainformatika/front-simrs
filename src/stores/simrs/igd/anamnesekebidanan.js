@@ -70,7 +70,7 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       this.form[key] = val
     },
     hitungNilaiSkor () {
-      const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
+      const skorKondKhusus = this.form.kondisikhusus.value
       const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
       this.form.skor = skor
     },

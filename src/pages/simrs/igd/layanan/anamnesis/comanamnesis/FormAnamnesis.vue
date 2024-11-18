@@ -169,11 +169,22 @@
               <div class="col-12">
                 <q-separator class="q-my-xs" />
                 <div class="row items-center q-col-gutter-sm">
-                  <div class="col-2">
-                    Kondisi Khusus :
+                  <div class="col-10">
+                    Kondisi Khusus (Penyakit DM/Kemoterapi/haemodialisa/geriatri/imunitas menurun/lain-lain)
                   </div>
-                  <div class="col-8">
-                    <q-input
+                  <div class="col-2">
+                    <q-select
+                      v-model="store.form.kondisikhusus"
+                      transition-show="flip-up"
+                      transition-hide="flip-down"
+                      option-label="label"
+                      option-value="optionKondisiKhusus.value"
+                      dense
+                      outlined
+                      :options="optionKondisiKhusus"
+                      @update:model-value="lihatPerubahan"
+                    />
+                    <!-- <q-input
                       v-model="store.form.kondisikhusus"
                       outlined
                       dense
@@ -181,7 +192,16 @@
                       label="Kondisi Khusus"
                       stack-label
                       @update:model-value="lihatPerubahan"
-                    />
+                    /> -->
+                    <!-- <q-select
+                      v-model="store.form.kondisikhusus"
+                      :option-label="label"
+                      :option-value="value"
+                      dense
+                      outlined
+                      :options="optionKondisiKhusus"
+                      @update:model-value="lihatPerubahan"
+                    /> -->
                   </div>
                   <div class="col-12">
                     <q-separator class="q-my-xs" />
@@ -378,10 +398,19 @@
               </div>
               <div class="col-6 text-bold">
                 Nyeri Hilang
-                <q-input label="Sebutkan" v-model="store.form.sebutkannyerihilang" v-if="store.form.nyerihilang === 'Lainnya'" />
               </div>
               <div class="col-6">
-                <q-select dense outlined v-model="store.form.nyerihilang" :options="nyerihilang" />
+                <!-- <q-select dense outlined v-model="store.form.nyerihilang" :options="nyerihilang" /> -->
+                <q-checkbox
+                  v-for="(al, i) in nyerihilang"
+                  :key="i"
+                  v-model="store.pilihnyerihilang"
+                  :val="al"
+                  :label="al"
+                  color="primary"
+                  @update:model-value="updateNyerihilang"
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkannyerihilang" v-if="store.pilihnyerihilang.includes('Lainnya')" />
+                <q-input label="Sebutkan" v-model="store.form.sebutkannyerihilang" v-if="store.form.nyerihilang === 'Lainnya'" />
               </div>
               <div class="col-12 text-bold">
                 Status Fungsional
@@ -678,6 +707,13 @@ const nyerihilang = ref([
   'Minum Obat', 'Istirahat', 'Mendengarkan Musik', 'Berubah Posisi Tidur', 'Lainnya'
 ])
 
+const optionKondisiKhusus = ref(
+  [
+    { label: 'Tidak', value: 0 },
+    { label: 'Ya', value: 2 }
+  ]
+)
+
 const props = defineProps({
   pasien: {
     type: Object,
@@ -920,6 +956,10 @@ function resetnips () {
   store.form.keadaanrangsangan = ''
   store.form.scroenips = 0
   store.form.ketscorenips = ''
+}
+
+function updateNyerihilang (val) {
+  store.setForm('nyerihilang', val.join(', '))
 }
 
 store.form.metode = 'nrt'
