@@ -15,7 +15,7 @@
       />
     </div>
     <div class="q-pa-sm" style="width:25%">
-      <app-input-date
+      <app-input-date-human
         :model="store.reqs.tgl"
         label="dari tangal"
         outlined
@@ -23,11 +23,10 @@
         :loading="store.loading"
         @db-model="tglDari"
         @set-display="setDari"
-        @set-model="val=>store.reqs.tgl=val"
       />
     </div>
     <div class="q-pa-sm" style="width:25%">
-      <app-input-date
+      <app-input-date-human
         :model="store.reqs.tglx"
         label="sampai tangal"
         outlined
@@ -35,7 +34,6 @@
         :loading="store.loading"
         @db-model="tglSampai"
         @set-display="setSampai"
-        @set-model="val=>store.reqs.tglx=val"
       />
     </div>
 

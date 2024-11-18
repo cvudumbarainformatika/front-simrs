@@ -56,7 +56,12 @@
             <div class="col-auto">
               <div class="row q-col-gutter-md full-width">
                 <div class="items-center full-width">
-                  <listData />
+                  <template v-if="store.reqs.jenisbukubesar === 1">
+                    <listDataRekap />
+                  </template>
+                  <template v-else>
+                    <listDataRinci />
+                  </template>
                 </div>
               </div>
             </div>
@@ -124,7 +129,8 @@
 import { useBukubesarStore } from 'src/stores/siasik/akuntansi/bukubesar/bukubesar'
 import { onMounted, ref } from 'vue'
 
-import listData from '../inpage/ListDataBukubesar.vue'
+import listDataRekap from '../inpage/ListDataRekapBukubesar.vue'
+import listDataRinci from '../inpage/ListDataRinciBukubesar.vue'
 const store = useBukubesarStore()
 onMounted(() => {
   store.getTtd()

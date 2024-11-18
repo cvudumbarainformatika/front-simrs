@@ -32,7 +32,7 @@
       </q-input>
     </div>
     <div class="q-pa-sm" style="width:25%">
-      <app-input-date
+      <app-input-date-human
         :model="store.reqs.tgl"
         label="dari tangal"
         outlined
@@ -40,11 +40,10 @@
         :loading="store.loading"
         @db-model="tglDari"
         @set-display="setDari"
-        @set-model="val=>store.reqs.tgl=val"
       />
     </div>
     <div class="q-pa-sm" style="width:25%">
-      <app-input-date
+      <app-input-date-human
         :model="store.reqs.tglx"
         label="sampai tangal"
         outlined
@@ -52,7 +51,6 @@
         :loading="store.loading"
         @db-model="tglSampai"
         @set-display="setSampai"
-        @set-model="val=>store.reqs.tgl=val"
       />
     </div>
     <div class="q-pa-sm" style="width:25%">
@@ -67,13 +65,22 @@
         :loading="store.loading"
         :source="store.jenis"
         @update:model-value="(val)=>{
+          store.hasilmapsLevel1 = ''
+          store.hasilmapsLevel5 = ''
+          store.hasilmapsLevel6 = ''
+          store.hasilRinci6 = ''
+          store.hasilRinci5 = ''
+          store.hasilRinci4 = ''
+          store.hasilRinci3 = ''
+          store.hasilRinci2 = ''
+          store.hasilRinci1 = ''
           store.reqs.jenisbukubesar = parseInt(val)
         }"
       />
     </div>
     <div class="q-pa-sm" style="width:25%">
       <app-autocomplete
-        v-model="berdasar"
+        v-model="berdasarrekap"
         label="Pilih Jenis Akun"
         autocomplete="nama"
         option-value="value"
@@ -91,7 +98,7 @@
         }"
       />
       <app-autocomplete
-        v-model="berdasar"
+        v-model="berdasarrinci"
         label="Pilih Jenis Akun"
         autocomplete="nama"
         option-value="value"
@@ -127,7 +134,6 @@
         :disable="store.loading || !store.optionrekening.length && store.reqs.jenisbukubesar === 1"
         :loading="store.loading"
         :options="store.optionrekening"
-        :key="berdasar"
         @filter="filterFn"
         @clear="store.setFormRekening('kode', null)"
         @update:model-value="(val)=>{
@@ -225,7 +231,8 @@ const CetakBukubesar = defineAsyncComponent(() => import('../printbukubesar/Prin
 // eslint-disable-next-line no-unused-vars
 const $q = useQuasar()
 const store = useBukubesarStore()
-const berdasar = ref('')
+const berdasarrekap = ref('')
+const berdasarrinci = ref('')
 const jenisapa = ref('')
 const options = ref([])
 // const inpRek = ref(null)

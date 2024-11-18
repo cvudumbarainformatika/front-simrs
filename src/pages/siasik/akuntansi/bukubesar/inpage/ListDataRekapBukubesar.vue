@@ -1,5 +1,5 @@
 <template>
-  <template v-if="store.hasilmapsLevel1.length > 0 && store.reqs.levelberapa === 0 && store.reqs.jenisbukubesar === 1">
+  <template v-if="store.hasilmapsLevel1.length > 0 && store.reqs.levelberapa === 0">
     <q-card-section class="full-width">
       <div class="row">
         <div class="full-width">
@@ -53,7 +53,7 @@
       </div>
     </q-card-section>
   </template>
-  <template v-else-if="store.hasilmapsLevel5.length > 0 && !store.hasilmapsLevel6.length && store.reqs.jenisbukubesar === 1">
+  <template v-else-if="store.hasilmapsLevel5.length > 0 && !store.hasilmapsLevel6.length">
     <q-card-section class="full-width">
       <div class="row">
         <div class="full-width">
@@ -107,7 +107,7 @@
       </div>
     </q-card-section>
   </template>
-  <template v-else-if="store.hasilmapsLevel6.length && store.reqs.jenisbukubesar === 1">
+  <template v-else-if="store.hasilmapsLevel6.length">
     <q-card-section class="full-width">
       <div class="row">
         <div class="full-width">
@@ -163,143 +163,6 @@
                 </td>
                 <td class="text-right">
                   {{ formattanpaRp(Saldolevel6()) }}
-                </td>
-              </tr>
-            </tbody>
-          </q-markup-table>
-        </div>
-      </div>
-    </q-card-section>
-  </template>
-  <template v-else-if="store.hasilRinci2.length > 0 && store.reqs.jenisbukubesar === 2">
-    <q-card-section class="full-width" v-for="it in store.hasilRinci2" :key="it">
-      <div class="row">
-        <div class="full-width">
-          <q-markup-table
-            flat-bordered
-            wrap-cells
-            :separator="separator"
-          >
-            <thead>
-              <tr class="bg-dark text-white max-width">
-                <th>TANGGAL</th>
-                <th>NO. BUKTI</th>
-                <th style="width: 40%;">
-                  URAIAN
-                </th>
-                <th>DEBIT (Rp.)</th>
-                <th>KREDIT (Rp.)</th>
-                <th>SALDO (Rp.)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td colspan="2" class="text-weight-bold">
-                KODE REKENING : {{ it.kode }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.uraian }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.debit }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.kredit }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.total }}
-              </td>
-              <tr v-for="rinci in it.rinci" :key="rinci">
-                <td> {{ rinci.tanggal }} </td>
-                <td> {{ rinci.notrans }} </td>
-                <template v-if="!rinci.keterangan">
-                  <td>{{ rinci.kegiatan }} </td>
-                </template>
-                <template v-else-if="!rinci.kegiatan">
-                  <td>{{ rinci.keterangan }} </td>
-                </template>
-                <template v-else>
-                  <td>{{ rinci.keterangan }} > {{ rinci.kegiatan }} </td>
-                </template>
-                <td> {{ rinci.debit }} </td>
-                <td> {{ rinci.kredit }} </td>
-                <td> {{ rinci.total }} </td>
-              </tr>
-              <tr class="text-weight-bold">
-                <td colspan="3" class="text-center">
-                  JUMLAH
-                </td>
-                <td class="text-right">
-                  {{ formattanpaRp(Debitlevel6()) }}
-                </td>
-                <td class="text-right">
-                  {{ formattanpaRp(Kreditlevel6()) }}
-                </td>
-                <td class="text-right">
-                  {{ formattanpaRp(Saldolevel6()) }}
-                </td>
-              </tr>
-            </tbody>
-          </q-markup-table>
-        </div>
-      </div>
-    </q-card-section>
-  </template>
-  <template v-else-if="store.hasilRinci5.length > 0 && store.reqs.jenisbukubesar === 2">
-    <q-card-section class="full-width" v-for="it in store.hasilRinci3" :key="it">
-      <div class="row">
-        <div class="full-width">
-          <q-markup-table
-            flat-bordered
-            wrap-cells
-            :separator="separator"
-          >
-            <thead>
-              <tr class="bg-dark text-white max-width">
-                <th>TANGGAL</th>
-                <th>NO. BUKTI</th>
-                <th style="width: 40%;">
-                  URAIAN
-                </th>
-                <th>DEBIT (Rp.)</th>
-                <th>KREDIT (Rp.)</th>
-                <th>SALDO (Rp.)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td colspan="2" class="text-weight-bold">
-                KODE REKENING : {{ it.kode }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.uraian }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.debit }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.kredit }}
-              </td>
-              <td class="text-weight-bold">
-                {{ it.total }}
-              </td>
-              <tr v-for="rinci in it.rinci" :key="rinci">
-                <td> {{ rinci.tanggal }} </td>
-                <td> {{ rinci.notrans }} </td>
-                <template v-if="!rinci.keterangan">
-                  <td>{{ rinci.kegiatan }} </td>
-                </template>
-                <template v-else-if="!rinci.kegiatan">
-                  <td>{{ rinci.keterangan }} </td>
-                </template>
-                <template v-else>
-                  <td>{{ rinci.keterangan }} > {{ rinci.kegiatan }} </td>
-                </template>
-                <td> {{ rinci.debit }} </td>
-                <td> {{ rinci.kredit }} </td>
-                <td> {{ rinci.total }} </td>
-              </tr>
-              <tr class="text-weight-bold">
-                <td colspan="3" class="text-center">
-                  JUMLAH
                 </td>
               </tr>
             </tbody>
