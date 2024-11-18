@@ -194,8 +194,8 @@
                         standout="bg-yellow-3"
                         label="Kondisi Khusus"
                         stack-label
-                        @update:model-value="lihatPerubahan" -->
-                      />
+                        @update:model-value="lihatPerubahan"
+                      />-->
                     </div>
                     <div class="col-12">
                       <q-separator class="q-my-xs" />

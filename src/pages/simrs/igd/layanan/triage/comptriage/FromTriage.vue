@@ -554,7 +554,6 @@ const optionhamil = ref([
 ])
 
 function flagstatus (val) {
-  console.log('asasasa', props.pasien.kelamin)
   resetscore()
   if (props.pasien.kelamin === 'Laki-laki') {
     store.form.pasienhamil = 0
@@ -590,6 +589,7 @@ function resetscore () {
 function hidenall () {
   // store.setForm('doa', val.join(', '))
   if (store.form.doa.length > 0) {
+    console.log('doa', store.form.doa.length)
     store.hiddenall = 'MATI'
     tutupall()
   }
@@ -602,11 +602,15 @@ function hidenall () {
 }
 
 function tutupall () {
-  clearhamil()
-  kuis1()
+  if (store.hiddenall === 'MATI') {
+    console.log('doa', store.form.doa.length)
+    clearhamil()
+    kuis1()
+  }
 }
 
 function clearhamil () {
+  console.log('clear', store.form.doa.length)
   // delete store.form.haid
   // delete store.form.gravida
   // delete store.form.partus
@@ -625,6 +629,7 @@ function clearhamil () {
 }
 
 function kuis1 () {
+  console.log('kuis', store.form.doa.length)
   // delete store.form.pasienhamil
   // delete store.form.jalannafas
   // delete store.form.pernapasan
