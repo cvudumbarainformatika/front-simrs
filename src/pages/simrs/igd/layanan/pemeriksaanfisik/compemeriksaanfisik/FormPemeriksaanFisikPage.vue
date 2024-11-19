@@ -131,7 +131,7 @@
                 <q-input type="textarea" v-model="store.form.anatomineurologis" label="Status Neurologis" outlined clearable />
               </div>
               <div class="col-3 q-pa-md">
-                <q-input type="textarea" v-model="store.form.anatomigenital" label="Kaki Genital" outlined clearable />
+                <q-input type="textarea" v-model="store.form.anatomigenital" label="Genital" outlined clearable />
               </div>
             </div>
             <q-separator class="q-my-md" />
