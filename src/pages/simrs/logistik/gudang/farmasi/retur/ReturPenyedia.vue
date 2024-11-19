@@ -72,7 +72,7 @@ const barStyle = ref({
   opacity: 0.2
 })
 
-function gantiHalaman(val) {
+function gantiHalaman (val) {
   if (menu.value.name !== val) {
     const anu = menus.value.find(a => a.name === val)
     if (anu) menu.value = anu
@@ -82,18 +82,22 @@ function gantiHalaman(val) {
 const title = computed(() => {
   if (menu.value.name === 'bast') {
     return 'HALAMAN RETUR'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'LIST RETUR'
-  } else {
+  }
+  else {
     return 'RETUR'
   }
 })
 const subtitle = computed(() => {
   if (menu.value.name === 'bast') {
     return 'Retur Penerimaan'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'List Retur Penerimaan'
-  } else {
+  }
+  else {
     return 'Retur Penerimaan'
   }
 })

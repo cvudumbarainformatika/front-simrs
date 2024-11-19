@@ -6,7 +6,6 @@ const depo = {
     { path: '', name: 'depo', redirect: '/depo/dashboard' },
     {
       path: '/depo/farmasi/dashboard',
-      name: 'depo.farmasi.dashboard',
       component: () => import('pages/simrs/logistik/depo/IndexPage.vue')
     },
     {

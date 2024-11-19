@@ -88,77 +88,82 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
           item.resep = resep?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
           item.retur = retur?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
 
-          let bedaStok = false
-          let bedaMutasi = false
-          let bedaMutasikeluar = false
-          let bedaOpname = false
-          let bedaRracikan = false
-          let bedaResep = false
-          let bedaRetur = false
           stok?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === item.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm.harga !== st.harga) bedaStok = true
-              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.header?.tglpenerimaan ?? trm?.tglpenerimaan))) bedaMutasi = true
+              if (trm.harga !== st.harga) st.beda = true
+              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.tglpenerimaan ?? trm?.tglpenerimaan))) st.beda = true // ini belum tentu ada header
             }
           })
           mutasi?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaMutasi = true
-              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.header?.tglpenerimaan ?? trm?.tglpenerimaan))) bedaMutasi = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
+              if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.tglpenerimaan ?? trm?.tglpenerimaan))) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
           mutasikeluar?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaMutasikeluar = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
           opname?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaOpname = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
           racikan?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaRracikan = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
           resep?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaResep = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
           retur?.forEach(st => {
             const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
             if (trm) {
-              if (trm?.harga !== st.harga) bedaRetur = true
+              if (trm?.harga !== st.harga) {
+                st.beda = true
+                item.beda = true
+              }
             }
           })
-          item.beda = [
-            bedaStok,
-            bedaMutasi,
-            bedaMutasikeluar,
-            bedaOpname,
-            bedaRracikan,
-            bedaResep,
-            bedaRetur
-
-          ]
         })
         if (this.params.pilihan === 'semua') {
           this.items = this.semuas
         }
         else if (this.params.pilihan === 'bermasalah') {
-          this.items = this.semuas.filter(fi => fi.beda?.includes(true))
+          this.items = this.semuas.filter(fi => fi.beda === true)
         }
         else if (this.params.pilihan === 'tidak') {
-          this.items = this.semuas.filter(fi => !fi.beda?.includes(true))
+          this.items = this.semuas.filter(fi => !fi.beda === true)
         }
+        console.log('items', this.items)
       }
     },
     metaniSatuData (data) {
@@ -195,65 +200,71 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
         item.resep = resep?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
         item.retur = retur?.reduce((a, b) => a + parseFloat(b.jumlah), 0) ?? 0
 
-        let bedaStok = false
-        let bedaMutasi = false
-        let bedaMutasikeluar = false
-        let bedaOpname = false
-        let bedaRracikan = false
-        let bedaResep = false
-        let bedaRetur = false
         stok?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === item.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm.harga !== st.harga) bedaStok = true
+            if (trm.harga !== st.harga) st.beda = true
+            if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.tglpenerimaan ?? trm?.tglpenerimaan))) st.beda = true // ini belum tentu ada header
           }
         })
         mutasi?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaMutasi = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
+            if (dateDbFormat(st?.tglpenerimaan) !== (dateDbFormat(trm?.tglpenerimaan ?? trm?.tglpenerimaan))) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
         mutasikeluar?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaMutasikeluar = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
         opname?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaOpname = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
         racikan?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaRracikan = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
         resep?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaResep = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
         retur?.forEach(st => {
           const trm = st?.nopenerimaan?.includes('awal') ? (awal?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan)) : (penerimaan?.find(a => a.kdobat === st.kdobat && a.nopenerimaan === st.nopenerimaan))
           if (trm) {
-            if (trm?.harga !== st.harga) bedaRetur = true
+            if (trm?.harga !== st.harga) {
+              st.beda = true
+              item.beda = true
+            }
           }
         })
-        item.beda = [
-          bedaStok,
-          bedaMutasi,
-          bedaMutasikeluar,
-          bedaOpname,
-          bedaRracikan,
-          bedaResep,
-          bedaRetur
-
-        ]
 
         const item2 = this.items.find(f => f.kd_obat === item.kd_obat)
         console.log('item2', item2)
@@ -271,7 +282,7 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
               this.items = resp.data?.data?.data ?? resp?.data
               this.semuas = resp.data?.data?.data ?? resp?.data
               this.meta = resp.data?.data?.meta ?? resp?.data
-              this.metaniData(resp?.data?.data)
+              if (this.params?.kdruang) this.metaniData(resp?.data?.data)
             }
             // console.log('resp', resp?.data)
             resolve(resp)
@@ -290,6 +301,34 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
       try {
         const resp = await api.post('/v1/simrs/farmasinew/cekdata/simpan-perbaikan-harga-dua', item)
         console.log('resp simpan', resp)
+        notifSuccess(resp)
+        const perPage = this.params.per_page
+        const page = this.params.page
+        this.params.page = 1
+        this.params.per_page = 1
+        this.params.q = item?.item?.kdobat
+        this.getData(param).then(() => {
+          this.params.per_page = perPage
+          this.params.page = page
+          this.params.q = ''
+        })
+      }
+      catch (err) {
+        notifErrVue(err, 'Gagal menyimpan perbaikan harga')
+      }
+      finally {
+        item.item.loading = false
+        this.loading = false
+      }
+    },
+    async simpanPerbaikanHargaArray (item) {
+      console.log(' simpan array', item)
+      const param = this.params
+      this.loading = true
+      item.item.loading = true
+      try {
+        const resp = await api.post('/v1/simrs/farmasinew/cekdata/simpan-perbaikan-harga-array', item)
+        console.log('resp simpan array', resp)
         notifSuccess(resp)
         const perPage = this.params.per_page
         const page = this.params.page

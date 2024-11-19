@@ -84,57 +84,100 @@
           </div>
         </template>
         <template #cell-stok="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.stok?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.stok),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-opname="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.opname?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.opname),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-mutasi="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.mutasi?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.mutasi),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-mutasi_keluar="{ row }">
-          <div class="text-right">
-            {{ formatDouble(parseFloat(row?.mutasi_keluar),2) }}
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.mutasikeluar?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.mutasi_keluar),2)"
+                no-caps
+                dense
+                :color="row?.data?.mutasikeluar?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  store.simpanPerbaikanHargaArray({item:row?.data?.mutasikeluar,type:'mutasi'})
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.mutasi_keluar),2) }}
+            </div>
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-resep="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.resep?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.resep),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-racikan="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.racikan?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.racikan),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-retur="{ row }">
-          <div class="text-right">
+          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.retur?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.retur),2) }}
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
         <template #cell-status="{ row }">
-          <q-chip
-            size="sm"
-            dense
-            :color="row?.beda?.filter(a=>a===true)?.length>0?'negative':'primary'"
-            text-color="white"
-          >
-            <div v-if="row?.beda?.filter(a=>a===true)?.length>0">
-              Beda
-            </div>
-            <div v-else>
-              sama
-            </div>
-          </q-chip>
+          <div v-if="store.params.kdruang">
+            <q-chip
+              size="sm"
+              dense
+              :color="row?.beda === true?'negative':'primary'"
+              text-color="white"
+            >
+              <div v-if="row?.beda === true">
+                Beda
+              </div>
+              <div v-else>
+                sama
+              </div>
+            </q-chip>
+          </div>
+          <div v-else>
+            -
+          </div>
         </template>
         <template #cell-act="{ row }">
-          <div>
+          <div v-if="store.params.kdruang">
             <q-btn
               no-caps
               dense
@@ -146,6 +189,9 @@
             >
               Buka
             </q-btn>
+          </div>
+          <div v-else>
+            -
           </div>
         </template>
       </app-table>
@@ -170,8 +216,9 @@ function setPilihan (val) {
   // console.log('val', val)
 
   if (val === 'semua') store.items = store.semuas
-  else if (val === 'bermasalah') store.items = store.semuas.filter(fi => fi.beda?.includes(true))
-  else if (val === 'tidak') store.items = store.semuas.filter(fi => !fi.beda?.includes(true))
+  else if (val === 'bermasalah') store.items = store.semuas.filter(fi => fi.beda === true)
+  else if (val === 'tidak') store.items = store.semuas.filter(fi => !fi.beda === true)
+  console.log('item', store.items)
 }
 onMounted(() => {
   store.getData()

@@ -525,7 +525,7 @@
           <div
             class="col-auto rinci"
           >
-            Nili Retur
+            Nilai Retur
           </div>
         </div>
         <div

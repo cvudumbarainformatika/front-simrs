@@ -362,7 +362,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
 
       // console.log('arr gabung', gbng3)
       // console.log('arr ontario 2', skor2)
-      console.log('arr', arr)
+      // console.log('arr', arr)
 
       const elim = ['transfertk', 'mobilitas']
       // const skor1 = arr.filter((l) => (elim.every(y => !l.toLowerCase().includes(y.toLowerCase())))).map(key => this.formOntario[key]).reduce((a, b) => a + b?.skor, 0)

@@ -1,9 +1,16 @@
+import { useAnatommyRanapStore } from 'src/stores/simrs/ranap/anatomy'
 import { reactive, ref } from 'vue'
 
-export default function useSvg () {
+export default function useSvg (pasien) {
+  const store = useAnatommyRanapStore()
+
   const svgEl = ref(null)
 
   const point = ref(null)
+
+  const masters = reactive({
+    anatomys: store.anatomys
+  })
 
   const targetEl = reactive({
     id: null,
@@ -64,19 +71,11 @@ export default function useSvg () {
     // eslint-disable-next-line no-unused-vars
 
     _svg.addEventListener('wheel', viewPortOnMouseWheel)
-    // console.dir('svg', _svg)
 
-    // _svg.addEventListener('mouseover', viewPortOnonMouseClick)
-    // _svg.addEventListener('wheel', viewPortOnMouseWheel)
-
-    // const pathSvg = _svg.querySelectorAll('path')
     const gSvg = _svg.children
-
-    // console.log('gSvg', gSvg)
-
     for (let i = 0; i < gSvg.length; i++) {
       const group = gSvg[i]
-      // console.log('g', g)
+      console.log('group', group)
       if (group.tagName === 'g') {
         // console.log('g', g)
         const gChildren = group.children
@@ -96,12 +95,13 @@ export default function useSvg () {
           else {
             if (el.tagName === 'path' || el.tagName === 'ellipse') {
               const path = el
+
               path.style.pointerEvents = 'auto'
               path.style.fill = 'rgba(71, 71, 71, 0)'
               path.style.stroke = 'rgba(71, 71, 71, 0)'
-              path.classList.add('hovered')
-              // console.log('path', path)
-              el.addEventListener('mouseover', onMouseOver)
+              // path.classList.add('hovered')
+              console.log('path', path)
+              path.addEventListener('mouseover', onMouseOver)
               el.addEventListener('mouseleave', onMouseLeave)
               el.addEventListener('click', onMouseClick)
               // el.addEventListener('mousewheel', onMouseWheel)
@@ -114,38 +114,15 @@ export default function useSvg () {
           }
         }
       }
-
-      // else if (g.tagName === 'path') {
-      //   console.log('el', g)
-      //   g.style.fill = 'transparent'
-      // }
     }
-    // for (let n = 0; n < g.length; n++) {
-    //   const el = g[n]
-    //   if (el.nodeName === 'g') {
-    //     for (let x = 0; x < el.childNodes.length; x++) {
-    //       const path = el.childNodes[x]
-    //       // console.log('path', path)
-    //       path.classList.add('main')
-    //     }
-    //   }
-    // }
-
-    // for (let i = 0; i < pathSvg?.length; i++) {
-    //   const el = pathSvg[i]
-    //   // console.log('_initSVG', el)
-    //   // el.classList.add('ho')
-    //   el.addEventListener('mouseover', onMouseOver)
-    //   // el.addEventListener('mouseleave', onMouseLeave)
-    //   // el.addEventListener('click', onMouseClick)
-    //   // el.addEventListener('wheel', onMouseWheel)
-    // }
   }
 
   // eslint-disable-next-line no-unused-vars
   const onMouseOver = (e) => {
     e.preventDefault()
-    const targetId = document.getElementById(e.target.id)
+    const targetId = document.getElementById(e?.target?.id)
+    console.log('targetId', targetId)
+
     if (targetId) {
       // console.log('onMouseOver', targetId)
       targetId.style.fill = 'rgba(71, 71, 71, 0.3)'
@@ -275,6 +252,7 @@ export default function useSvg () {
     getSvgEl,
     _initSVG,
     svgEl,
-    targetEl
+    targetEl,
+    masters
   }
 }
