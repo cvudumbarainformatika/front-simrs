@@ -398,6 +398,43 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         this.ruangranaps = resp?.data
         console.log('kanmar', this.ruangranaps)
       }
+    },
+    async setLayananSelesai (pasien) {
+      this.loadingTerima = true
+      // '' : 'Belum Terlayanani'
+      // '1': 'Terlayani'
+      // '2': 'Sudah diterima'
+      // '3': Batal
+      if (!pasien?.anamnesis.length) {
+        this.loadingTerima = false
+        return this.notifikasiError('Maaf, Anamnesis Harap Diisi Dahulu...')
+      }
+      if (!pasien?.diagnosa?.length) {
+        this.loadingTerima = false
+        return this.notifikasiError('Maaf, Diagnosa Harap Diisi Dahulu...')
+      }
+      // if (!pasien?.planning?.length) {
+      //   return this.notifikasiError('Maaf, Planing Harap Diisi Dahulu...')
+      // }
+      const form = {
+        noreg: pasien?.noreg
+      }
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/igd/flagfinish', form)
+        // console.log('rsp ', form, resp)
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x === pasien)
+          if (findPasien.length) {
+            findPasien[0].status = '1'
+          }
+          this.loadingTerima = false
+        }
+      }
+      catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        // this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
     }
   }
 })

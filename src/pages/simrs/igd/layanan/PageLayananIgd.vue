@@ -25,6 +25,7 @@
             :loading-save-dpjp="store.loadingSaveGantiDpjp"
             @toggle-left-drawer="()=> drawer = !drawer"
             @gantidpjp="(val)=>store.gantiDpjp(val, pasien)"
+            @layanan-selesai="store.setLayananSelesai(pasien)"
           />
         </q-header>
 

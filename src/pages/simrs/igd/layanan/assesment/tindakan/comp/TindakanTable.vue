@@ -190,7 +190,7 @@ const filterredTable = computed(() => {
   return arr?.filter(x => x.rs2 === val)
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -207,12 +207,12 @@ function hapusItem(id) {
   })
 }
 
-function bukaUploadan(id) {
+function bukaUploadan (id) {
   idTindakan.value = id
   modalUpload.value = !modalUpload.value
 }
 
-function lihatDokumen(item) {
+function lihatDokumen (item) {
   dokumen.value = null
   dokumen.value = item
   drawerRight.value = !drawerRight.value
@@ -239,16 +239,17 @@ function lihatDokumen(item) {
 //   })
 // }
 
-function setPelaksana(item) {
+function setPelaksana (item) {
   const nota = item?.rs2
-  const notaDariSimrsBaru = nota.includes('RJ')
+  const notaDariSimrsBaru = nota.includes('IG')
 
   // INI JIKA DARI SIMRS LAma
   // console.log('pelaksana', item)
   let pelaksana = null
   if (!notaDariSimrsBaru) {
     pelaksana = item?.pelaksanalamasimrs?.nama
-  } else {
+  }
+  else {
     // INI DARI SIMRS BARU
     pelaksana = item?.pegawai?.nama
   }
