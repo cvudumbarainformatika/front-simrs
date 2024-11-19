@@ -464,7 +464,7 @@ import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
 
 const store = useListReturPenyediaStore()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight

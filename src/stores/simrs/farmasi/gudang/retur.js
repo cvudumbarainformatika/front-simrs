@@ -21,18 +21,18 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     dataReturs: []
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    resetForm(key, val) {
+    resetForm (key, val) {
       const gudang = this.form.kd_ruang
       this.form = {}
       this.setForm('kd_ruang', gudang)
     },
-    perusahaanSelected(val) {
+    perusahaanSelected (val) {
       if (this.dataReturs.length) {
         Dialog.create({
           title: 'Konfirmasi',
@@ -58,12 +58,13 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         }).onCancel(() => {
           this.setForm('kdpbf', this.params.kdpbf)
         })
-      } else {
+      }
+      else {
         this.setParams('kdpbf', val)
         this.getObat()
       }
     },
-    obatSelected(val) {
+    obatSelected (val) {
       this.setForm('satuan_k', null)
       this.setForm('kd_obat', val)
       this.setParams('kd_obat', val)
@@ -74,10 +75,10 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
       }
       this.getDataMauRet()
     },
-    getInitialData() {
+    getInitialData () {
       this.getPerusahan()
     },
-    async getPerusahan() {
+    async getPerusahan () {
       this.perusahaans = []
       this.loadingPerusahaan = true
       const param = { params: this.params }
@@ -88,7 +89,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         })
         .catch(() => { this.loadingPerusahaan = false })
     },
-    async getObat() {
+    async getObat () {
       if (!this.params.kdpbf) return
       this.obats = []
       this.dataMauReturs = []
@@ -103,7 +104,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         })
         .catch(() => { this.loadingObat = false })
     },
-    async getDataMauRet() {
+    async getDataMauRet () {
       this.dataMauReturs = []
       this.dataRusaks = []
       this.loadingDataMauRet = true
@@ -123,7 +124,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         })
         .catch(() => { this.loadingDataMauRet = false })
     },
-    simpanRetur(item) {
+    simpanRetur (item) {
       console.log('sebelum simpan', item)
       this.loading = true
       item.loading = true

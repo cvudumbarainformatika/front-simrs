@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100vw;">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -160,6 +160,11 @@
           </div>
         </div>
       </template>
+      <template #cell-penyedia="{ row }">
+        <div class="box2">
+          {{ row.penyedia }}
+        </div>
+      </template>
       <template #cell-info="{ row }">
         <div
           v-if="row.perusahaan"
@@ -280,7 +285,7 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="!row?.no_npd">
+        <div v-if="!row?.no_npd && !row?.tgl_pembayaran">
           <q-btn
             round
             flat
@@ -288,7 +293,9 @@
             icon="icon-mat-delete_sweep"
             color="negative"
             @click="hapus(row)"
-          />
+          >
+            <q-tooltip>Batal BAST</q-tooltip>
+          </q-btn>
         </div>
       </template>
       <template #expand="{ row }">
