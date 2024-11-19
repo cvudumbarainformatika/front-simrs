@@ -459,7 +459,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         rs10: 'TAK',
         rs11: 'TAK',
         rs12: 'TAK',
-        es13: 'TAK'
+        rs13: 'TAK'
       }
 
       // if (data) this.setForm('form', data, ['edukasi'], null)
@@ -473,15 +473,15 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       }
 
       // ini sementara
-      this.form.rs5 = data?.rs5 ?? 'TAK'
-      this.form.rs6 = data?.rs6 ?? 'TAK'
-      this.form.rs7 = data?.rs7 ?? 'TAK'
-      this.form.rs8 = data?.rs8 ?? 'TAK'
-      this.form.rs9 = data?.rs9 ?? 'TAK'
-      this.form.rs10 = data?.rs10 ?? 'TAK'
-      this.form.rs11 = data?.rs11 ?? 'TAK'
-      this.form.rs12 = data?.rs12 ?? 'TAK'
-      this.form.es13 = data?.rs13 ?? 'TAK'
+      // this.form.rs5 = data?.rs5 ?? 'TAK'
+      // this.form.rs6 = data?.rs6 ?? 'TAK'
+      // this.form.rs7 = data?.rs7 ?? 'TAK'
+      // this.form.rs8 = data?.rs8 ?? 'TAK'
+      // this.form.rs9 = data?.rs9 ?? 'TAK'
+      // this.form.rs10 = data?.rs10 ?? 'TAK'
+      // this.form.rs11 = data?.rs11 ?? 'TAK'
+      // this.form.rs12 = data?.rs12 ?? 'TAK'
+      // this.form.es13 = data?.rs13 ?? 'TAK'
 
       if (data?.edukasi) this.setAnotherForm(this.frmEdukasis, data, 'edukasi', 'form')
 
