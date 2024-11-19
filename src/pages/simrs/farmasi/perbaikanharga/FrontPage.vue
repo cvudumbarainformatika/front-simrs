@@ -148,7 +148,7 @@
                 :disable="row.loadingOpname"
                 :color="row?.data?.opname?.filter(f=>f.beda===true)?.length>0?'negative':''"
                 @click="()=>{
-                  const item=row?.data?.stok?.filter(f=>f.beda===true)
+                  const item=row?.data?.opname?.filter(f=>f.beda===true)
                   if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
                   item?.forEach(fo=>{
                     let pen=null
