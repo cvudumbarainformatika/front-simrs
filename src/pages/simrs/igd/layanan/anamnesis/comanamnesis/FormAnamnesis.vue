@@ -738,7 +738,7 @@ function historyOpen () {
 function lihatPerubahan (val, x) {
   if (x === 1) {
     store.form.kondisikhusus = val?.label
-    store.form.skor = val?.value
+    store.form.skorkondisikhusus = val?.value
   }
   store.hitungNilaiSkor()
 }

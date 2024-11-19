@@ -21,6 +21,7 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       skreeninggizi: 0,
       asupanmakan: 0,
       kondisikhusus: '',
+      skorkondisikhusus: 0,
       skor: 0,
 
       asupanmakanberkurang: 0,
@@ -70,7 +71,7 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       this.form[key] = val
     },
     hitungNilaiSkor () {
-      const skorKondKhusus = this.form.skor
+      const skorKondKhusus = this.form.skorkondisikhusus
       const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
       this.form.skor = skor
     },
