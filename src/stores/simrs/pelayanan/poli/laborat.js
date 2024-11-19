@@ -46,11 +46,13 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       // cairan_fiksasi: 0, // ml
       // volume_cairan_fiksasi: 0, // ml
       // petugas: ''
+      kodedokter: null,
       details: []
     },
     loadingSaveLab: false,
     loading: false,
-    pemeriksaanslab: []
+    pemeriksaanslab: [],
+    dokters: []
   }),
   actions: {
     // =============================================================================================================================================LABORAT
@@ -124,8 +126,10 @@ export const useLaboratPoli = defineStore('laborat-poli', {
             const isi = data[i]
             this.kirimKePasienKunjunganRanap(pasien, isi, 'laborats')
           }
-        // const storePasien = usePengunjungRanapStore()
-        // storePasien.injectDataArray(pasien?.noreg, data, 'laborats')
+          // const storePasien = usePengunjungRanapStore()
+          // storePasien.injectDataArray(pasien?.noreg, data, 'laborats')
+          const pengunjung = usePengunjungRanapStore()
+          this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
         }
         this.loading = false
       }
@@ -235,7 +239,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
-      this.form.kodedokter = pasien?.kodedokter
+      this.form.kodedokter = isRanap ? this.form.kodedokter : pasien?.kodedokter
       this.form.unit_pengirim = isRanap ? pasien?.kdgroup_ruangan : pasien?.kodepoli
       // const arr = []
 
@@ -359,10 +363,14 @@ export const useLaboratPoli = defineStore('laborat-poli', {
     // =============================================================================================================================================LABORAT
 
     initReset () {
+      // console.log('init reset laborat')
+
       this.caripemeriksaanlab = null
-      // this.permintaanLaborats = ''
-      // this.form.prioritas_pemeriksaan = 'Tidak'
+      this.permintaanLaborats = ''
+      this.form.kodedokter = null
+
       this.form.details = []
+
       return new Promise((resolve, reject) => {
         resolve()
       })

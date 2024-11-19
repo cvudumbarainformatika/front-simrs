@@ -1,5 +1,6 @@
 <script setup>
 import { usePermintaanOperasiRanapStore } from 'src/stores/simrs/ranap/operasi'
+import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const BaseLayout = defineAsyncComponent(() => import('src/pages/simrs/ranap/layanan/components/BaseLayout.vue'))
@@ -24,6 +25,8 @@ const props = defineProps({
 const store = usePermintaanOperasiRanapStore()
 
 onMounted(() => {
+  const storeRanap = usePengunjungRanapStore()
+  store.dokters = storeRanap?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
   Promise.all([
     store.getNota(props?.pasien),
     store.getData(props?.pasien)

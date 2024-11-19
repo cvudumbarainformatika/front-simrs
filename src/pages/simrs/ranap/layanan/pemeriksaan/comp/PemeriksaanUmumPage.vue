@@ -5,7 +5,7 @@
         <div class=" full-height" :class="full ? 'col-12' : 'col-8'">
           <q-card flat bordered class="column fit" style="overflow: hidden;">
             <div class="col-auto">
-              <BarComp title="Form Pemeriksaan Umum & Fisik (Keperawatan)" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
+              <BarComp title="Form Pemeriksaan Umum & Fisik" bg-color="bg-primary" text-color="text-white" @full="full = !full" />
             </div>
             <q-card-section class="col full-height scroll">
               <q-form ref="myForm" class="">

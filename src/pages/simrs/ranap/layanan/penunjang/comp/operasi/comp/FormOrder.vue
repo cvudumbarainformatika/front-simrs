@@ -2,13 +2,32 @@
   <q-card class="fit q-pa-md">
     <q-form ref="formRef" @submit="onSubmit">
       <q-card-section>
-        <div class="text-h6">
+        <div class="q-gutter-xs">
           <q-input
             outlined v-model="store.form.permintaan" label="Permintaan Operasi"
             type="textarea" rows="5"
             standout="bg-yellow-3"
             :rules="[val => !!val || 'Harap diisi']"
           />
+
+          <!-- <div v-if="unit==='ranap'" class="col-12"> -->
+          <app-autocomplete-new
+            ref="refPerawat"
+            :model="store.form.kodedokter"
+            label="Dokter yg meminta"
+            autocomplete="nama"
+            option-value="kdpegsimrs"
+            option-label="nama"
+            outlined
+            :source="store.dokters"
+            @on-select="(val)=> {
+              store.form.kodedokter = val
+              const ceck = store.dokters.find(item => item.kdpegsimrs === val) ?? null
+              // store.form.perawatyanmeminta = ceck?.nama
+
+            }"
+          />
+          <!-- </div> -->
         </div>
       </q-card-section>
 

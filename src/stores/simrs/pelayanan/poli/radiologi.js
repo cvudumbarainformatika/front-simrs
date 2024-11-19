@@ -24,9 +24,11 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       catatanpermintaan: '',
       metodepenyampaianhasil: 'Penyerahan langsung (digital/cetak foto)',
       statusalergipasien: 'Tidak',
-      statuskehamilan: 'Tidak'
+      statuskehamilan: 'Tidak',
+      kodedokter: null
     },
-    loadingSave: false
+    loadingSave: false,
+    dokters: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -56,7 +58,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       this.loadingSave = true
       this.form.keterangan = this.form.diagnosakerja + ' ' + this.form.catatanpermintaan
       this.form.noreg = pasien?.noreg
-      this.form.kodedokter = pasien?.kodedokter
+      this.form.kodedokter = isRanap ? this.form.kodedokter : pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.kodepoli = pasien?.kodepoli
       this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
