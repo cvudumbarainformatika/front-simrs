@@ -45,6 +45,24 @@
             standout="bg-yellow-3"
           />
         </div>
+        <div v-if="unit==='ranap'" class="col-12">
+          <app-autocomplete-new
+            ref="refPerawat"
+            :model="store.form.kodedokter"
+            label="Dokter"
+            autocomplete="nama"
+            option-value="kdpegsimrs"
+            option-label="nama"
+            outlined
+            :source="store.dokters"
+            @on-select="(val)=> {
+              store.form.kodedokter = val
+              const ceck = store.dokters.find(item => item.kdpegsimrs === val) ?? null
+              // store.form.perawatyanmeminta = ceck?.nama
+
+            }"
+          />
+        </div>
         <div class="col-12">
           <q-separator class="q-my-sm" />
         </div>
@@ -148,6 +166,7 @@ onMounted(() => {
   options.value = store.masterlaborat
 
   // cariRef.value.focus()
+  // console.log(formRef.value)
 })
 
 function saveOrderLaborat () {
@@ -156,6 +175,9 @@ function saveOrderLaborat () {
   const isRanap = props?.unit === 'ranap'
   store.saveOrderLaboratBaru(props.pasien, isRanap).then(() => {
     // console.log(formRef.value)
+    // store.permintaanLaborats = []
+    // store.kodedokter = null
+    // store.initReset()
     formRef.value.resetValidation()
   })
 }

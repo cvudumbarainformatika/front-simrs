@@ -36,7 +36,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
     form: {}
   }),
   actions: {
-    setOptionsSimptom() {
+    setOptionsSimptom () {
       this.optionSimptom = this.masterSimptom.map(x => {
         return {
           label: x,
@@ -45,7 +45,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
       })
     },
 
-    setPsiko() {
+    setPsiko () {
       return new Promise((resolve, reject) => {
         if (this.psikotes !== null || this.psikotes !== '') {
           this.form.psikotespendukung.push(this.psikotes)
@@ -53,7 +53,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
         resolve()
       })
     },
-    initForm() {
+    initForm () {
       this.form.urutankelahiran = null
       this.form.tanggalpemeriksaan = dateDbFormat(new Date())
       this.form.penampilanumum = null
@@ -77,7 +77,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
       this.form.intervensiPsikologi = null
     },
 
-    saveData(pasien) {
+    saveData (pasien) {
       this.loadingSave = true
 
       this.form.noreg = pasien?.noreg
@@ -107,7 +107,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
       })
     },
 
-    deleteData(pasien, id) {
+    deleteData (pasien, id) {
       const payload = { id }
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/psikiatripoli/deletedata', payload)

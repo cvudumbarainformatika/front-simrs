@@ -14,9 +14,11 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
       kodepoli: '', // rs10
       kodepenunjang: '', // rs13
       keterangan: '', // rs7
-      kodesistembayar: ''
+      kodesistembayar: '',
+      kodedokter: null
     },
-    loadingOrder: false
+    loadingOrder: false,
+    dokters: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -38,7 +40,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
       this.form.noreg = pasien?.noreg
       this.form.kodepoli = pasien?.kodepoli
       this.form.koderuang = !isRanap ? null : pasien?.kdgroup_ruangan
-      this.form.kodedokter = pasien?.kodedokter
+      this.form.kodedokter = isRanap ? this.form.kodedokter : pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA' || this.form.nota === '' || this.form.nota === null) ? '' : this.form.nota
       try {

@@ -16,7 +16,8 @@ export const usePermintaanOperasiRanapStore = defineStore('permintaan-operasi-ra
       kodedokter: ''
     },
     loadingOrder: false,
-    loadingHapus: false
+    loadingHapus: false,
+    dokters: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -45,7 +46,6 @@ export const usePermintaanOperasiRanapStore = defineStore('permintaan-operasi-ra
       this.loadingOrder = true
       this.form.noreg = pasien?.noreg
       this.form.kodepoli = pasien?.kodepoli
-      this.form.kodedokter = pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
       this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA') ? null : this.form.nota

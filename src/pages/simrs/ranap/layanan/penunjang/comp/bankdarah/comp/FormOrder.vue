@@ -83,13 +83,13 @@
             />
           </div>
           <div class="col-3">
-            Pengirim
+            Dokter yg Meminta
           </div>
           <div class="col-9">
             <app-autocomplete-new
               ref="refPengirim"
               :model="store.form.pengirim"
-              label="Pengirim"
+              label="Dokter"
               autocomplete="nama"
               option-value="kdpegsimrs"
               option-label="nama"
@@ -99,7 +99,7 @@
             />
           </div>
           <div class="col-3">
-            Perawat yg Meminta
+            Pengirim
           </div>
           <div class="col-9">
             <app-autocomplete-new

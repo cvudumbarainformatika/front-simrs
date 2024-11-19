@@ -11,6 +11,9 @@
               <div>NOTA : <b>{{ item?.rs2 }}</b></div>
               <div><b>Permintaan :</b> <em>{{ item?.rs4 }}</em></div>
               <div class="">
+                <div>permintaan <em>{{ store.dokters?.find(x=> x.kdpegsimrs === item?.rs8)?.nama }}</em></div>
+              </div>
+              <div class="">
                 <div>by : <em>{{ item?.petugas?.nama }}</em></div>
               </div>
             </div>

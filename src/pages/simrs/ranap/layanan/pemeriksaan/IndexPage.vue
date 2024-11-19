@@ -75,14 +75,14 @@ const tabsxx = [
     icon: 'icon-mat-description',
     nakes: ['2', '3'],
     comp: defineAsyncComponent(() => import('./comp/PenilaianPage.vue'))
-  },
-  {
-    label: 'Anatomi',
-    name: 'fisik',
-    icon: 'icon-my-human-back-svgrepo-com',
-    nakes: ['1', '2', '3'],
-    comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
   }
+  // {
+  //   label: 'Anatomi',
+  //   name: 'fisik',
+  //   icon: 'icon-my-human-back-svgrepo-com',
+  //   nakes: ['1', '2', '3'],
+  //   comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
+  // }
 ]
 
 const menu = computed(() => {

@@ -5,7 +5,7 @@
       <div :class="`${full ? 'col-12' : 'col-8'} full-height`">
         <div class="fit bg-white column">
           <div class="col-auto">
-            <BarComp title="ANAMNESSE KEPERAWATAN" bg-color="bg-primary" text-color="text-white" :fullpage="full" @full="full = !full" />
+            <BarComp title="ANAMNESSE" bg-color="bg-primary" text-color="text-white" :fullpage="full" @full="full = !full" />
             <q-separator />
           </div>
           <div class="col full-height scroll">

@@ -109,18 +109,19 @@
             Yg Meminta
           </div>
           <div class="col-9">
+            <!-- INI DOKTER -->
             <app-autocomplete-new
               ref="refPerawat"
               :model="store.form.kodeperawat"
-              label="Perawat"
+              label="Dokter"
               autocomplete="nama"
               option-value="kdpegsimrs"
               option-label="nama"
               outlined
-              :source="store.perawats"
+              :source="store.dokters"
               @on-select="(val)=> {
                 store.form.kodeperawat = val
-                const ceck = store.perawats.find(item => item.kdpegsimrs === val) ?? null
+                const ceck = store.dokters.find(item => item.kdpegsimrs === val) ?? null
                 store.form.perawatyanmeminta = ceck?.nama
 
               }"
