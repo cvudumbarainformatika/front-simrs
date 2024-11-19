@@ -72,13 +72,13 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
 
       try {
         const resp = await api.post('v1/simrs/ranap/layanan/pulang/simpandata', this.form)
-        console.log('save permintaan dp', resp.data)
+        console.log('save pulang', resp.data)
         if (resp.status === 200) {
           // const storePasien = usePengunjungPoliStore()
           const storeRanap = usePengunjungRanapStore()
-          const isi = resp?.data?.result
+          const isi = '3'
           // storePasien.injectDataPasien(pasien, isi, 'fisio')
-          storeRanap.injectDataPasien(pasien?.noreg, isi, 'haidischargeplannings')
+          storeRanap.injectDataPasien(pasien?.noreg, isi, 'status')
           notifSuccess(resp)
           this.loadingOrder = false
           this.initReset()
@@ -123,6 +123,8 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
         diagnosaPenyebabMeninggal: null,
         tindakLanjut: null
       }
+      this.search1 = null
+      this.search2 = null
 
       const pengunjung = usePengunjungRanapStore()
       this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []

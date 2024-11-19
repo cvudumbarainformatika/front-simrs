@@ -302,7 +302,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       if (findPasien.length) {
         const data = findPasien[0]
         // data[kode] = val
-        if (kode === 'kd_jeniskasus') {
+        if (kode === 'kd_jeniskasus' || kode === 'status') {
           data[kode] = val
         }
         else {

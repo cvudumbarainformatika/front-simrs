@@ -60,6 +60,10 @@
           hide-bottom-space
           :rules="[ val => val && val.length > 0 || 'harap diisi']"
           style="width: 40%;"
+          @update:model-value="(val)=>{
+            console.log('val',val);
+
+          }"
         />
       </div>
     </div>
@@ -125,10 +129,11 @@
           :options="options"
           label="Cari Diagnosa (ICD)"
           @filter="filterFn"
+
+          :rules="[ val => val && val.length > 0 || 'harap diisi']"
           @update:model-value="(val)=>{
             // console.log('val', val);
             store.form.diagnosaAkhir = val
-
           }"
         >
           <template #no-option>
@@ -163,10 +168,11 @@
           :options="options2"
           label="Cari Diagnosa (ICD)"
           @filter="filterFn2"
+
+          :rules="[ val => val && val.length > 0 || 'harap diisi']"
           @update:model-value="(val)=>{
             // console.log('val', val);
             store.form.diagnosaPenyebabMeninggal = val
-
           }"
         >
           <template #no-option>
@@ -196,11 +202,10 @@
 
     <div class="row q-mt-sm flex justify-center">
       <q-btn
-        v-if="pasien?.status !== '2' && pasien?.status !=='3'" :loading="store.loadingOrder" :disable="store.loadingOrder" label="PULANGKAN PASIEN" type="submit" color="negative"
+        v-if="pasien?.status !== '2' && pasien?.status !=='3'" :loading="store.loadingOrder" :disable="store.loadingOrder"
+        label="PULANGKAN PASIEN" type="submit" color="negative"
         size="lg"
       />
-
-      <!-- {{ options }} -->
     </div>
   </q-form>
 </template>
@@ -288,6 +293,7 @@ function filterFn2 (val, update, abort) {
 }
 
 const onSubmit = () => {
-  console.log('simpan', props.pasien)
+  // console.log('simpan', props.pasien)
+  store.simpandata(props?.pasien)
 }
 </script>
