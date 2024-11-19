@@ -124,7 +124,34 @@
         </q-btn>
       </div>
     </q-toolbar-title>
-
+    <div v-if="pasien?.dokter !== '' ">
+      <q-btn
+        v-if="pasien?.flagpelayanan==='' || pasien?.flagpelayanan==='2'"
+        label="selesaikan layanan"
+        color="negative"
+        class="q-mr-lg q-px-lg"
+        dense
+        :loading="loadingFinish"
+        :disable="loadingFinish"
+        @click="selesaikanLayanan"
+      />
+      <q-btn
+        v-else-if="pasien?.status==='3'"
+        label="LAYANAN TELAH BATAL"
+        color="negative"
+        class="q-mr-lg q-px-lg"
+        dense
+      />
+      <q-btn
+        v-else
+        label="SUDAH DILAYANI"
+        color="white"
+        class="q-mr-lg q-px-lg"
+        dense
+        outline
+        disable
+      />
+    </div>
     <q-btn
       v-close-popup
       dense
@@ -231,8 +258,8 @@ async function filterOptions (val, update) {
   )
 }
 
-// function selesaikanLayanan() {
-//   // console.log('ok')
-//   emits('layananSelesai')
-// }
+function selesaikanLayanan () {
+  // console.log('ok')
+  emits('layananSelesai')
+}
 </script>

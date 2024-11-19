@@ -29,23 +29,14 @@ export const usePemeriksaanfisikStore = defineStore('pemeriksaan-fisik-store', {
       this.form.norm = pasien ? pasien.norm : ''
       this.form.noreg = pasien ? pasien.noreg : ''
 
-      this.hitungNilaiSkor()
-
-      // console.log(this.form)
-
       try {
-        const resp = await api.post('v1/simrs/igd/anamnesis/simpananamnesis', this.form)
+        const resp = await api.post('v1/simrs/igd/pemeriksaanfisik/simpanpemeriksaanfisik', this.form)
         if (resp.status === 200) {
-          // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungIgdStore()
-
-          if (resp.data.result === 1) {
-            this.form.rs4 = this.form.keluhanutama
-          }
           const isi = resp.data.result[0]
-          storePasien.injectDataPasien(pasien, isi, 'anamnesis')
+          storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisikpsikologidll')
           notifSuccess(resp)
-          this.initReset()
+          // this.initReset()
           this.loadingForm = false
         }
 
@@ -55,6 +46,24 @@ export const usePemeriksaanfisikStore = defineStore('pemeriksaan-fisik-store', {
         // console.log('anamnesis err', error)
         this.loadingForm = false
         notifErr(error)
+      }
+    },
+    async deleteData (pasien, id, noreg) {
+      this.loadingForm = true
+      const payload = { id, noreg }
+      try {
+        const resp = await api.post('v1/simrs/igd/pemeriksaanfisik/hapuspemeriksaanfisik', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          storePasien.hapusDataAnamnesis(pasien, id)
+          notifSuccess(resp)
+          this.loadingForm = false
+        }
+      }
+      catch (error) {
+        notifErr(error)
+        this.loadingForm = false
       }
     }
   }

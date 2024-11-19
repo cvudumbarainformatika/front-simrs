@@ -73,7 +73,7 @@
               </div>
               <div class="col-6" v-if="store.form.kepercayaan === 'Ya'">
                 <q-input
-                  v-model="store.form.sebutkanstatuspsikologis"
+                  v-model="store.form.sebutkankepercayaan"
                   label="Sebutkan" dense
                 />
               </div>
@@ -141,7 +141,7 @@
             >
               <app-btn
                 color="primary"
-                label="Simpan Anamnesis"
+                label="Simpan"
                 tooltip="Simpan Data"
                 type="submit"
                 tip
