@@ -168,7 +168,7 @@
                 - Tangan : {{ data?.pemeriksaan_igd[0]?.rs10 }}<br>
                 - Kaki : {{ data?.pemeriksaan_igd[0]?.rs11 }}<br>
                 - Status Neurologis : {{ data?.pemeriksaan_igd[0]?.rs12 }}<br>
-                - Bagian Leher : {{ data?.pemeriksaan_igd[0]?.rs13 }}<br>
+                - Genital : {{ data?.pemeriksaan_igd[0]?.rs13 }}<br>
                 <br>
 
                 - Sax : {{ data?.pemeriksaan_igd[0]?.sax }} Celcius | - Srec : {{ data?.pemeriksaan_igd[0]?.srec }} Celcius <br>
@@ -382,7 +382,7 @@
             </div>
             <div class="kanan text-center">
               <div><b>Probolinggo, {{ pasien?.tanggalkeluar }}</b></div>
-              <div><b>Dokter Penanggung Jawab Peayanan</b></div>
+              <div><b>Dokter Penanggung Jawab Pelayanan</b></div>
               <div class="column flex-center">
                 <div style="width: 100px;">
                   <vue-qrcode

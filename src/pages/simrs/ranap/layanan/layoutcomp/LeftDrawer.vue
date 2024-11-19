@@ -4,6 +4,7 @@
     <list-menu
       :menus="menus"
       :menu="menu"
+      :pasien="pasien"
       @menu-click="(val)=> emits('clickMenu', val)"
     />
   </q-scroll-area>

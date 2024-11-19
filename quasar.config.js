@@ -12,7 +12,7 @@ const { configure } = require('quasar/wrappers')
 const { mergeConfig } = require('vite') // baru untuk docker
 
 module.exports = configure(function (ctx) {
-  // console.log('module', ctx)
+  console.log('module', ctx)
   return {
     eslint: {
       fix: true,

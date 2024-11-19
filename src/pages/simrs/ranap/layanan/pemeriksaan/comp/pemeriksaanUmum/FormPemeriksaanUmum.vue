@@ -317,6 +317,105 @@
       </q-card-section>
     </q-card>
 
+    <!-- anatomy sementara -->
+    <q-card v-if="!ulang" flat bordered class="col-12">
+      <q-card-section class="q-pa-sm bg-grey-4">
+        <strong>Pemeriksaan Fisik (Anatomy)</strong>
+      </q-card-section>
+      <q-card-section class="row q-pa-sm q-col-gutter-xs">
+        <q-input
+          v-model="store.form.rs5"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="KEPALA"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs6"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="LEHER"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs7"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="DADA"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs8"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="PUNGGUNG"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs9"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="PERUT"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs10"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="TANGAN"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs11"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="KAKI"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs12"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="NEUROLOGIS"
+          hide-bottom-space
+          style="width:50%"
+        />
+        <q-input
+          v-model="store.form.rs13"
+          outlined
+          autogrow
+          stack-label
+          standout="bg-yellow-3"
+          label="GENITAL"
+          hide-bottom-space
+          style="width:50%"
+        />
+      </q-card-section>
+    </q-card>
+
     <!-- end 4.1 -->
     <!-- start 4.2 -->
     <q-card v-if="gruping==='4.2' && !ulang" flat bordered class="col-12">
@@ -853,6 +952,8 @@ defineExpose({
 const store = usePemeriksaanUmumRanapStore()
 
 onMounted(() => {
+  console.log('moun', store.form)
+
   // store.initReset()
 })
 </script>

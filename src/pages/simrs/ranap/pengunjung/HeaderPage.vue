@@ -111,8 +111,9 @@ function adaInput (val) {
 }
 onMounted(() => {
   Promise.all([
+    // store.initReset(),
     store.getJenisKasus(),
-    store.getRuangan().then(() => store.getData())
+    store.getRuangan().then(() => store.initReset())
   ])
 })
 </script>

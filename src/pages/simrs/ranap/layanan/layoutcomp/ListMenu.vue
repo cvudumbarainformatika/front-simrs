@@ -11,7 +11,7 @@
       :active="menu===item"
       active-class="bg-primary text-white"
       @click="emits('menuClick',item)"
-      :class="{'bg-negative text-white': item?.name==='page-pulang'}"
+      :class="{'bg-negative text-white': item?.name==='page-pulang' && pasien?.status !=='3'}"
     >
       <q-item-section avatar>
         <q-icon
@@ -32,6 +32,10 @@ defineProps({
     default: () => []
   },
   menu: {
+    type: Object,
+    default: null
+  },
+  pasien: {
     type: Object,
     default: null
   }
