@@ -31,7 +31,7 @@
                 </q-avatar>
 
                 <div class="f12 q-mt-md q-mb-xs">
-                  {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
+                  {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
                 </div>
               </div>
               <q-separator
