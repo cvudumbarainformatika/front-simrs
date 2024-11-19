@@ -76,6 +76,9 @@
                 <q-item-label>
                   <span class="">Riwayat Pekerjaan Yang Berhubungan Dengan Zat Berbahaya</span> : <span class="text-weight-bold">{{ item?.riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya }}</span>
                 </q-item-label>
+                <q-item-label>
+                  <span class="">Riwayat Penyakit Keluarga</span> : <span class="text-weight-bold">{{ item?.riwayatpenyakitkeluarga }}</span>
+                </q-item-label>
                 <!-- <q-separator class="q-my-md" /> -->
                 <q-item-label>
                   <span class="text-weight-bold">Skreening Gizi</span>
