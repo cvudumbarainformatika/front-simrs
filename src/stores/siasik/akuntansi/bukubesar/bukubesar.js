@@ -756,7 +756,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       for (let q = 0; q < setunik6.length; q++) {
         const el = setunik6[q] ?? 0
         const obj = {
-          tanggal: saldosebelum.filter((x) => x.kode6 === el)[0]?.tanggal,
+          tanggal: '',
           kode1: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode1,
           kode2: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode2,
           kode3: saldosebelum.filter((x) => x.kode6 === el)[0]?.kode3,
@@ -779,7 +779,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       for (let q = 0; q < setunik5.length; q++) {
         const el = setunik5[q] ?? 0
         const obj = {
-          tanggal: saldosebelum.filter((x) => x.kode5 === el)[0]?.tanggal,
+          tanggal: '',
           kode1: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode1,
           kode2: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode2,
           kode3: saldosebelum.filter((x) => x.kode5 === el)[0]?.kode3,
@@ -802,7 +802,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       for (let q = 0; q < setunik4.length; q++) {
         const el = setunik4[q] ?? 0
         const obj = {
-          tanggal: saldosebelum.filter((x) => x.kode4 === el)[0]?.tanggal,
+          tanggal: '',
           kode1: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode1,
           kode2: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode2,
           kode3: saldosebelum.filter((x) => x.kode4 === el)[0]?.kode3,
@@ -825,7 +825,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       for (let q = 0; q < setunik3.length; q++) {
         const el = setunik3[q] ?? 0
         const obj = {
-          tanggal: saldosebelum.filter((x) => x.kode3 === el)[0]?.tanggal ?? '',
+          tanggal: '',
           kode1: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode1 ?? '',
           kode2: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode2 ?? '',
           kode3: saldosebelum.filter((x) => x.kode3 === el)[0]?.kode3 ?? '',
@@ -848,7 +848,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       for (let q = 0; q < setunik2.length; q++) {
         const el = setunik2[q] ?? 0
         const obj = {
-          tanggal: saldosebelum.filter((x) => x.kode2 === el)[0]?.tanggal,
+          tanggal: '',
           kode1: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode1,
           kode2: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode2,
           kode3: saldosebelum.filter((x) => x.kode2 === el)[0]?.kode3,
@@ -885,7 +885,7 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
           kredit: saldosebelum?.filter((x) => x.kode1 === el)?.map((x) => parseFloat(x.kredit)).reduce((a, b) => a + b, 0)
         }
         saldo1sebelumnya.push(obj)
-      } console.log('salllll', saldo1sebelumnya)
+      }
       const saldonol = []
       const obj = {
         tanggal: '',
@@ -1130,14 +1130,14 @@ export const useBukubesarStore = defineStore('Buku_besarakuntansi', {
       if (arr.length) {
         for (let i = 0; i < arr.length; i++) {
           if (i === 0) {
-            total = arr[0]?.debit - arr[0]?.kredit
+            total = parseFloat(arr[0]?.debit) - parseFloat(arr[0]?.kredit)
             arr[0].total = total.toFixed(2)
           }
           else {
             const hinggaKeIndex = i + 1
             const arrBaru = arr.slice(1, hinggaKeIndex)
-            const awal = arr[0]?.debit - arr[0]?.kredit
-            const obj = arrBaru.map((x) => x.debit - x.kredit)
+            const awal = parseFloat(arr[0]?.debit) - parseFloat(arr[0]?.kredit)
+            const obj = arrBaru.map((x) => parseFloat(x.debit) - parseFloat(x.kredit))
             const skrg = obj?.reduce((a, b) => a + b, 0)
             arr[i].total = (awal + skrg).toFixed(2)
           }

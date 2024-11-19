@@ -1,113 +1,139 @@
 <template>
   <q-dialog persistent backdrop-filter="blur(4px)">
-    <q-card style="min-width:80vw; max-width: 80vw;">
-      <q-bar class="bg-black text-white">
-        <div>Cetak LAPORAN REALISASI ANGGARAN</div>
-        <q-space />
+    <q-card style="min-width:80vw; max-width: 180vw; height: 600px">
+      <q-layout view="lHh Lpr lFf" container class="shadow-2 rounded-borders">
+        <q-header elevated>
+          <q-bar class="bg-black text-white">
+            <div>Cetak LAPORAN REALISASI ANGGARAN</div>
+            <q-space />
 
-        <q-btn dense flat icon="icon-mat-close" v-close-popup>
-          <q-tooltip>Close</q-tooltip>
-        </q-btn>
-      </q-bar>
-
-      <div id="printMe" class="f-12 row justify-center q-pt-md q-pb-md">
-        <div class="row">
-          <div class="col-1 q-pl-md">
-            <q-img
-              src="~assets/images/Pemkot.svg"
-              style="height: 2.6cm; width: 2cm"
-            />
-          </div>
-          <div class="col-10">
-            <div class="row justify-center text-h6">
-              PEMERINTAH KOTA PROBOLINGGO
-            </div>
-            <div class="row justify-center text-h7 text-weight-bold">
-              DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
-            </div>
-            <div class="row justify-center text-h5 text-weight-bold">
-              UOBK RSUD DOKTER MOHAMAD SALEH
-            </div>
-            <div class="row justify-center text-h8">
-              Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335)
-              432702
-            </div>
-            <div class="row justify-center text-h8 text-weight-bold">
-              PROBOLINGGO 67219
-            </div>
-          </div>
-          <div class="col-1 logo_kanan">
-            <q-img
-              src="~assets/logos/logo-rsud.png"
-              style="height: 2.6cm; width: 2.6cm"
-            />
-          </div>
-
-          <div class="col-12 q-pt-md">
-            <div class="row justify-center text-weight-bold q-py-xs">
-              LAPORAN REALISASI ANGGARAN
-            </div>
-            <div class="row justify-center text-weight-bold q-py-xs">
-              Periode {{ store.display.dari + ' - ' + store.display.sampai }}
-            </div>
-          </div>
-          <q-separator style="margin-top: -10px;" />
-          <q-card-section class="q-pa-sm full-width">
-            <div class="col-auto">
-              <div class="row q-col-gutter-md full-width">
-                <div class="items-center full-width">
-                  <listData />
+            <q-btn dense flat icon="icon-mat-close" v-close-popup>
+              <q-tooltip>Close</q-tooltip>
+            </q-btn>
+          </q-bar>
+        </q-header>
+        <q-page-container>
+          <div id="printMe" class="f-12 row justify-center q-pt-md q-pb-md">
+            <div class="row">
+              <div class="col-1 q-pl-md">
+                <q-img
+                  src="~assets/images/Pemkot.svg"
+                  style="height: 2.6cm; width: 2cm"
+                />
+              </div>
+              <div class="col-10">
+                <div class="row justify-center text-h6">
+                  PEMERINTAH KOTA PROBOLINGGO
                 </div>
+                <div class="row justify-center text-h7 text-weight-bold">
+                  DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+                </div>
+                <div class="row justify-center text-h5 text-weight-bold">
+                  UOBK RSUD DOKTER MOHAMAD SALEH
+                </div>
+                <div class="row justify-center text-h8">
+                  Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335)
+                  432702
+                </div>
+                <div class="row justify-center text-h8 text-weight-bold">
+                  PROBOLINGGO 67219
+                </div>
+              </div>
+              <div class="col-1 logo_kanan">
+                <q-img
+                  src="~assets/logos/logo-rsud.png"
+                  style="height: 2.6cm; width: 2.6cm"
+                />
+              </div>
+
+              <div class="col-12 q-pt-md">
+                <div class="row justify-center text-weight-bold q-py-xs">
+                  LAPORAN REALISASI ANGGARAN
+                </div>
+                <div class="row justify-center text-weight-bold q-py-xs">
+                  Periode {{ store.display.dari + ' - ' + store.display.sampai }}
+                </div>
+              </div>
+
+              <q-separator style="margin-top: -10px;" />
+
+              <q-card-section class="q-pa-sm full-width">
+                <div class="col-auto">
+                  <div class="row q-col-gutter-md full-width">
+                    <div class="items-center full-width">
+                      <listData />
+                    </div>
+                  </div>
+                </div>
+              </q-card-section>
+
+              <div class="row q-pa-xl full-width justify-end">
+                <div class="q-py-xs text-center" v-for="it in tt.ttd" :key="it">
+                  Probolinggo {{ store.display.sekarang }}
+                  <div class="text-bold">
+                    Pengguna Anggaran
+                  </div>
+                  <div style="padding-bottom: 40px" />
+                  <div class="underline text-bold q-py-xs">
+                    {{ it.nama }}
+                    <div class="garis-bawah" style="text-decoration-line: underline;" />
+                  </div>
+                  <div>
+                    {{ it.nip }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="ttd-kiri">
+            <div class="invisible">
+              .
+            </div>
+            <div class="text-bold q-py-xs q-pt-sm">
+              Pejabat Teknis Kegiatan
+            </div>
+            <div style="padding-bottom: 40px" />
+            <div class="underline text-bold q-py-xs">
+              NAMA
+              <div class="garis-bawah" style="text-decoration-line: underline;" />
+            </div>
+            <div>
+              NIP
+            </div>
+          </div> -->
+            </div>
+          </div>
+        </q-page-container>
+
+        <q-footer elevated>
+          <q-card-section class="q-pa-none bg-primary text-white">
+            <div class="q-pa-md row justify-end items-end">
+              <div class="items-end">
+                <q-btn
+                  v-print="printObj"
+                  unelevated
+                  color="dark"
+                  round
+                  size="sm"
+                  icon="icon-mat-print"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
           </q-card-section>
-
-          <div class="row q-pa-xl full-width justify-end">
-            <div class="q-py-xs text-center" v-for="it in tt.ttd" :key="it">
-              Probolinggo {{ store.display.sekarang }}
-              <div class="text-bold">
-                Pengguna Anggaran
-              </div>
-              <div style="padding-bottom: 40px" />
-              <div class="underline text-bold q-py-xs">
-                {{ it.nama }}
-                <div class="garis-bawah" style="text-decoration-line: underline;" />
-              </div>
-              <div>
-                {{ it.nip }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <q-card-section class="q-pa-none bg-primary text-white">
-        <div class="q-pa-md row justify-end items-end">
-          <div class="items-end">
-            <q-btn
-              v-print="printObj"
-              unelevated
-              color="dark"
-              round
-              size="sm"
-              icon="icon-mat-print"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
-              >
-                Print
-              </q-tooltip>
-            </q-btn>
-          </div>
-        </div>
-      </q-card-section>
+        </q-footer>
+      </q-layout>
     </q-card>
   </q-dialog>
 </template>
 <script setup>
 import { useBukubesarStore } from 'src/stores/siasik/akuntansi/bukubesar/bukubesar'
 import { onMounted, ref } from 'vue'
-import listData from '../inpage/ListDataLRA.vue'
+import listData from '../inpage/ListdataLrajurnal.vue'
 import { useLRAjurnalStore } from 'src/stores/siasik/laporan/lra/lrajurnal.'
 
 const tt = useBukubesarStore()

@@ -51,6 +51,15 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         api.get('v1/laporan/lra/getlra', params).then((resp) => {
           console.log('data LRA', resp.data)
           if (resp.status === 200) {
+            this.pagupendapatans = []
+            this.datapendapatans = []
+            this.datapendpsblm = []
+            this.pagubelanjas = []
+            this.databelanjas = []
+            this.belanjasblm = []
+            this.pagusilpa = []
+            this.silpasblm = []
+            this.silpaskg = []
             this.pagupendapatans = resp.data.pagupendapatan
             this.datapendapatans = resp.data.pendapatan
             this.datapendpsblm = resp.data.pendapatansblm

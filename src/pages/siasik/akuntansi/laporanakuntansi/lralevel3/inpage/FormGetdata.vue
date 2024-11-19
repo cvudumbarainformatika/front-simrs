@@ -2,7 +2,7 @@
   <div class="row full-width">
     <div class="q-pa-sm" style="width:25%">
       <app-autocomplete
-        v-model="berdasar"
+        v-model="refData"
         label="Pilih Jenis LRA"
         autocomplete="nama"
         option-value="value"
@@ -11,8 +11,8 @@
         :source="store.level"
         :key="ambilData"
         @update:model-value="(val)=>{
-          refData = parseInt(val)
-          store.reqs.levelberapa = refData
+          const valx = parseInt(val)
+          store.reqs.levelberapa = valx
           console.log('ref', store.reqs.levelberapa)
         }"
       />
@@ -103,7 +103,7 @@ const CetakLra = defineAsyncComponent(() => import('../printLRA/PrintDataLra.vue
 const store = useLRAjurnalStore()
 const $q = useQuasar()
 // Model berdasarkan ref agar tidak updte
-const berdasar = ref('')
+// const berdasar = ref('')
 const refData = ref('')
 
 function tglDari (val) {
@@ -120,7 +120,6 @@ function setSampai (val) {
 }
 function ambilData () {
   store.getDataLap()
-  // store.hasillevel()
 }
 const printlra = ref(null)
 function cetakData () {

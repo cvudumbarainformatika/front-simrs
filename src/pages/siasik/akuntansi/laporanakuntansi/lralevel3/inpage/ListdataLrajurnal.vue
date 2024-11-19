@@ -948,15 +948,17 @@
   <template v-else>
     <div class="row q-pa-md full-width text-subtitle1 flex-center">
       <q-icon class="q-pr-sm" size="sm" name="icon-mat-warning" />
-      BELUM ADA DATA
+      BELUM ADA DATA, SILAHKAN PILIH PARAMETER!!
     </div>
   </template>
 </template>
 <script setup>
 import { formattanpaRp } from 'src/modules/formatter'
 import { useLRAjurnalStore } from 'src/stores/siasik/laporan/lra/lrajurnal.'
+import { ref } from 'vue'
 // import { onUnmounted } from 'vue'
 
+const separator = ref('cell')
 const store = useLRAjurnalStore()
 // onUnmounted(() => {
 //   store.getDataLap()

@@ -65,15 +65,18 @@
         :loading="store.loading"
         :source="store.jenis"
         @update:model-value="(val)=>{
-          store.hasilmapsLevel1 = ''
-          store.hasilmapsLevel5 = ''
-          store.hasilmapsLevel6 = ''
-          store.hasilRinci6 = ''
-          store.hasilRinci5 = ''
-          store.hasilRinci4 = ''
-          store.hasilRinci3 = ''
-          store.hasilRinci2 = ''
-          store.hasilRinci1 = ''
+          store.hasilmapsLevel1 = []
+          store.hasilmapsLevel5 = []
+          store.hasilmapsLevel6 = []
+          store.hasilRinci6 = []
+          store.hasilRinci5 = []
+          store.hasilRinci4 = []
+          store.hasilRinci3 = []
+          store.hasilRinci2 = []
+          store.hasilRinci1 = []
+          berdasarrekap = ''
+          berdasarrinci = ''
+          store.form.kode = ''
           store.reqs.jenisbukubesar = parseInt(val)
         }"
       />
