@@ -38,7 +38,7 @@ export default function useLayanan (pasien) {
       name: 'Penunjang',
       label: 'Penunjang',
       icon: 'icon-mat-post_add',
-      nakes: ['1'],
+      nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./penunjang/IndexPage.vue')))
     },
     {

@@ -86,11 +86,11 @@ onMounted(() => {
   store.getMaster()
 })
 
-function onSubmit() {
+function onSubmit () {
   store.saveData(props?.pasien)
 }
 
-function hapusItem(item) {
+function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({
     title: 'Peringatan',
