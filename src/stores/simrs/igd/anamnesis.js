@@ -70,7 +70,7 @@ export const useAnamnesis = defineStore('anamnesis', {
   actions: {
 
     hitungNilaiSkor () {
-      const skorKondKhusus = this.form.kondisikhusus.value
+      const skorKondKhusus = this.form.skor
       const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
       this.form.skor = skor
     },

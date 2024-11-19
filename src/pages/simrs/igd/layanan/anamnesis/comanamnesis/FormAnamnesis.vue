@@ -182,7 +182,7 @@
                       dense
                       outlined
                       :options="optionKondisiKhusus"
-                      @update:model-value="lihatPerubahan"
+                      @update:model-value="(val) => lihatPerubahan(val, 1)"
                     />
                     <!-- <q-input
                       v-model="store.form.kondisikhusus"
@@ -735,7 +735,11 @@ function historyOpen () {
   // store.getHistory(props.pasien?.norm)
 }
 
-function lihatPerubahan () {
+function lihatPerubahan (val, x) {
+  if (x === 1) {
+    store.form.kondisikhusus = val?.label
+    store.form.skor = val?.value
+  }
   store.hitungNilaiSkor()
 }
 

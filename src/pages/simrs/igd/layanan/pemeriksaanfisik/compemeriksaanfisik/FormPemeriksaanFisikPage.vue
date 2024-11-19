@@ -97,10 +97,10 @@
                 - Diameter (mm)
               </div>
               <div class="col-6">
-                <q-input type="number" v-model="store.form.diamterkiri" label="Diameter Kiri" dense outlined />
+                <q-input mask="##.#" v-model="store.form.diamterkiri" label="Diameter Kiri" dense outlined />
               </div>
               <div class="col-6">
-                <q-input type="number" v-model="store.form.diamterkanan" label="Diameter Kanan" dense outlined />
+                <q-input mask="##.#" v-model="store.form.diamterkanan" label="Diameter Kanan" dense outlined />
               </div>
               <div class="col-12 text-bold">
                 <q-separator class="q-my-xs " />
