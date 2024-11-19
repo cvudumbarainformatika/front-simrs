@@ -19,7 +19,7 @@
             </q-avatar>
             <div class="column f-12">
               <div>
-                DPJP | {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
+                DPJP | {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
               </div>
             </div>
           </div>
