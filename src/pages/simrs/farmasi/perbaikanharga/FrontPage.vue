@@ -84,24 +84,156 @@
           </div>
         </template>
         <template #cell-stok="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.stok?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.stok?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.stok),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.stok?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.stok),2)"
+                no-caps
+                dense
+                :loading="row.loadingStok"
+                :disable="row.loadingStok"
+                :color="row?.data?.stok?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.stok?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                      if(fo.tglpenerimaan !== pen.tglpenerimaan) fo.tglpenerimaan=pen.tglpenerimaan
+                      if(fo.nobatch !== pen.nobatch) fo.nobatch=pen.nobatch
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'stok',
+                    loading:'Stok'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.stok),2) }}
+            </div>
           </div>
           <div v-else>
             -
           </div>
         </template>
         <template #cell-opname="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.opname?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.opname?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.opname),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.opname?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.opname),2)"
+                no-caps
+                dense
+                :loading="row.loadingOpname"
+                :disable="row.loadingOpname"
+                :color="row?.data?.opname?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.stok?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                      if(fo.tglpenerimaan !== pen.tglpenerimaan) fo.tglpenerimaan=pen.tglpenerimaan
+                      if(fo.nobatch !== pen.nobatch) fo.nobatch=pen.nobatch
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'opname',
+                    loading:'Opname'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.opname),2) }}
+            </div>
           </div>
           <div v-else>
             -
           </div>
         </template>
         <template #cell-mutasi="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.mutasi?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.mutasi?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.mutasi),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.mutasi?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.mutasi),2)"
+                no-caps
+                dense
+                :loading="row.loadingMutasi"
+                :disable="row.loadingMutasi"
+                :color="row?.data?.mutasi?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.mutasi?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                      if(fo.tglpenerimaan !== pen.tglpenerimaan && !!pen.tglpenerimaan) fo.tglpenerimaan=pen.tglpenerimaan
+                      if(fo.nobatch !== pen.nobatch && pen.nobatch) fo.nobatch=pen.nobatch
+                      if(fo.tglexp !== pen.tglexp && pen.tglexp) fo.tglexp=pen.tglexp
+                    }
+                    // console.log('pen',pen);
+
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'mutasi',
+                    loading:'Mutasi'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.mutasi),2) }}
+            </div>
           </div>
           <div v-else>
             -
@@ -114,9 +246,33 @@
                 :label="formatDouble(parseFloat(row?.mutasi_keluar),2)"
                 no-caps
                 dense
+                :loading="row.loadingMutasiKeluar"
+                :disable="row.loadingMutasiKeluar"
                 :color="row?.data?.mutasikeluar?.filter(f=>f.beda===true)?.length>0?'negative':''"
                 @click="()=>{
-                  store.simpanPerbaikanHargaArray({item:row?.data?.mutasikeluar,type:'mutasi'})
+                  const item=row?.data?.mutasikeluar?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                      if(fo.tglpenerimaan !== pen.tglpenerimaan && !!pen.tglpenerimaan) fo.tglpenerimaan=pen.tglpenerimaan
+                      if(fo.nobatch !== pen.nobatch && pen.nobatch) fo.nobatch=pen.nobatch
+                      if(fo.tglexp !== pen.tglexp && pen.tglexp) fo.tglexp=pen.tglexp
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'mutasi',
+                    loading:'MutasiKeluar'
+                  })
                 }"
               >
                 <q-tooltip>
@@ -133,24 +289,147 @@
           </div>
         </template>
         <template #cell-resep="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.resep?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.resep?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.resep),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.resep?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.resep),2)"
+                no-caps
+                dense
+                :loading="row.loadingResep"
+                :disable="row.loadingResep"
+                :color="row?.data?.resep?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.resep?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'resep',
+                    loading:'Resep'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.resep),2) }}
+            </div>
           </div>
           <div v-else>
             -
           </div>
         </template>
         <template #cell-racikan="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.racikan?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.racikan?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.racikan),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.racikan?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.racikan),2)"
+                no-caps
+                dense
+                :loading="row.loadingRacikan"
+                :disable="row.loadingRacikan"
+                :color="row?.data?.racikan?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.racikan?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'racikan',
+                    loading:'Racikan'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.racikan),2) }}
+            </div>
           </div>
           <div v-else>
             -
           </div>
         </template>
         <template #cell-retur="{ row }">
-          <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.retur?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
+          <!-- <div v-if="store.params.kdruang" class="text-right" :class="row?.data?.retur?.filter(f=>f.beda===true)?.length>0?'text-negative':''">
             {{ formatDouble(parseFloat(row?.retur),2) }}
+          </div> -->
+          <div v-if="store.params.kdruang" class="text-right">
+            <div v-if="row?.data?.retur?.filter(f=>f.beda===true)?.length>0">
+              <q-btn
+                :label="formatDouble(parseFloat(row?.retur),2)"
+                no-caps
+                dense
+                :loading="row.loadingRetur"
+                :disable="row.loadingRetur"
+                :color="row?.data?.retur?.filter(f=>f.beda===true)?.length>0?'negative':''"
+                @click="()=>{
+                  const item=row?.data?.retur?.filter(f=>f.beda===true)
+                  if(item?.length===0) return notifErrVue('data salah tidak terdeteksi')
+                  item?.forEach(fo=>{
+                    let pen=null
+                    if(fo?.nopenerimaan?.includes('awal')){
+                      pen=row?.data?.awal?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }else{
+                      pen=row?.data?.penerimaan?.find(p=>p?.nopenerimaan===fo?.nopenerimaan)
+                    }
+                    if(pen){
+                      fo.harga=pen.harga
+                    }
+                  })
+                  store.simpanPerbaikanHargaArray({
+                    row:row,
+                    item:item,
+                    kd_obat:row?.kd_obat,
+                    tipe:'retur',
+                    loading:'Retur'
+                  })
+                }"
+              >
+                <q-tooltip>
+                  Auto Fix
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              {{ formatDouble(parseFloat(row?.retur),2) }}
+            </div>
           </div>
           <div v-else>
             -
@@ -201,6 +480,7 @@
 </template>
 <script setup>
 import { formatDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { usePerbaikanHargaFarmasiStore } from 'src/stores/simrs/farmasi/perbaikanharga/perbaikanharga'
 import { defineAsyncComponent, onMounted, shallowRef, ref } from 'vue'
 

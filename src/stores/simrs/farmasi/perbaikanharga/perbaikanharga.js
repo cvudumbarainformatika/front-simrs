@@ -59,6 +59,7 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
 
       if (this.semuas?.length) {
         this.semuas?.forEach(item => {
+          item.beda = false
           const penerimaan = data?.penerimaan?.filter(a => a.kdobat === item.kd_obat) ?? []
           const awal = data?.awal?.filter(a => a.kdobat === item.kd_obat) ?? []
           const stok = data?.stok?.filter(a => a.kdobat === item.kd_obat) ?? []
@@ -171,6 +172,7 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
       const item = this.semuas.find(f => f.kd_obat === kode)
       console.log('data', data, item, kode)
       if (item) {
+        item.beda = false
         const penerimaan = data?.penerimaan?.filter(a => a.kdobat === item.kd_obat) ?? []
         const awal = data?.awal?.filter(a => a.kdobat === item.kd_obat) ?? []
         const stok = data?.stok?.filter(a => a.kdobat === item.kd_obat) ?? []
@@ -324,8 +326,8 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
     async simpanPerbaikanHargaArray (item) {
       console.log(' simpan array', item)
       const param = this.params
-      this.loading = true
-      item.item.loading = true
+      // this.loading = true
+      item.row['loading' + item.loading] = true
       try {
         const resp = await api.post('/v1/simrs/farmasinew/cekdata/simpan-perbaikan-harga-array', item)
         console.log('resp simpan array', resp)
@@ -334,7 +336,7 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
         const page = this.params.page
         this.params.page = 1
         this.params.per_page = 1
-        this.params.q = item?.item?.kdobat
+        this.params.q = item?.kd_obat
         this.getData(param).then(() => {
           this.params.per_page = perPage
           this.params.page = page
@@ -345,8 +347,8 @@ export const usePerbaikanHargaFarmasiStore = defineStore('perbaikan_harga_farmas
         notifErrVue(err, 'Gagal menyimpan perbaikan harga')
       }
       finally {
-        item.item.loading = false
-        this.loading = false
+        item.row['loading' + item.loading] = false
+        // this.loading = false
       }
     }
   }
