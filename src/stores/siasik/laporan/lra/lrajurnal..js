@@ -11,6 +11,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
+      jenislra: '',
       levelberapa: ''
     },
     display: {
@@ -18,6 +19,10 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       sampai: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
+    jenis: [
+      { nama: 'PP71', value: '1' },
+      { nama: 'PSAP 13', value: '2' }
+    ],
     level: [
       { nama: 'Akun', value: '1' },
       { nama: 'Kelompok', value: '2' },
