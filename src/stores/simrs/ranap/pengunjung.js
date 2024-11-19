@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
   state: () => ({
@@ -14,12 +15,12 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
       per_page: 100,
-      koderuangan: ['SEMUA']
+      koderuangan: null
     },
     periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini'],
     periode: 'Hari Ini',
-    ruangans: ['SEMUA'],
-    ruangan: 'SEMUA',
+    ruangans: [],
+    ruangan: null,
     statuses: ['Belum Pulang', 'Pulang'],
     statusx: 'Belum Pulang',
     jeniskasus: [],
@@ -31,10 +32,12 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     nakes: null,
     nonNakes: null,
 
+    berhakAkses: true,
+
     loadingSaveGantiDpjp: false
   }),
 
-  persist: true,
+  // persist: true,
 
   actions: {
     async getData () {
@@ -163,9 +166,46 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
           .then(resp => {
             // console.log('ruangan ranap', resp)
             if (resp.status === 200) {
-              this.ruangans = resp.data
-              this.ruangans.push('SEMUA')
-              this.params.koderuangan = this.ruangans.map(x => x.groups)
+              const ruangs = resp.data
+              this.ruangans = []
+              // this.ruangans.push('SEMUA')
+
+              // this.ruangan = this.ruangans.map(x => x.groups)
+
+              // cari auth perawat
+              const auth = useAplikasiStore()
+              const user = auth?.user
+              const nakes = auth?.user?.pegawai?.kdgroupnakes
+              const ruanganPerawat = user?.pegawai?.ruangan?.kdmapping
+
+              const kodenakes = ['1', '2', '3', '4', '5']
+
+              // console.log('auth', kodenakes.filter(x => x?.includes(nakes)), user)
+              if (user?.username !== 'sa') {
+                console.log('bukan sa')
+                if (kodenakes.filter(x => x?.includes(nakes))?.length === 0) {
+                  console.log('bukan perawat')
+                  this.berhakAkses = false
+                  this.ruangans = []
+                }
+                else {
+                  this.berhakAkses = true
+                  // cari ruangan
+                  if (nakes === '2') {
+                    this.ruangans = ruangs?.filter(x => x.groups === ruanganPerawat)
+                    console.log('ini nakes', this.ruangans)
+                  }
+                  else {
+                    this.ruangans = ruangs
+                  }
+                }
+              }
+              else {
+                this.berhakAkses = true
+                this.ruangans = ruangs
+              }
+              // console.log('akhir', this.ruangans)
+              // this.params.koderuangan = this.aksesRuangan()
             }
             resolve(resp)
           }).catch(err => {
@@ -175,16 +215,50 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       })
     },
 
-    gantiRuangan () {
-      // console.log('gnt ruangan', this.ruangan)
-      if (this.ruangan === 'SEMUA') {
-        this.params.koderuangan = this.ruangans.map(x => x.groups)
-        this.getData()
+    aksesRuangan () {
+      let ruang = null
+      if (this.ruangans.length > 0) {
+        if (this.ruangans.length === 1) {
+          ruang = this.ruangans[0]?.groups
+        }
+        else if (this.ruangans?.length > 1) {
+          this.ruangans.unshift('SEMUA')
+          ruang = this.ruangans[0]
+        }
       }
       else {
-        this.params.koderuangan = [this.ruangan]
-        this.getData()
+        ruang = null
       }
+
+      return ruang
+    },
+
+    gantiRuangan () {
+      // console.log('gnt ruangan', this.ruangan)
+      // if (this.ruangan === 'SEMUA') {
+      //   this.params.koderuangan = this.ruangans.map(x => x.groups)
+      //   this.getData()
+      // }
+      // else {
+      //   this.params.koderuangan = [this.ruangan ?? '']
+      //   this.getData()
+      // }
+      this.params.page = 1
+      this.params.koderuangan = this.ruangan
+      this.getData()
+    },
+
+    initReset () {
+      this.ruangan = this.aksesRuangan()
+      this.params.page = 1
+      this.params.koderuangan = this.ruangan
+      this.params.q = ''
+      this.params.status = 'Belum Pulang'
+      this.params.to = dateDbFormat(new Date())
+      this.params.from = dateDbFormat(new Date())
+      this.params.per_page = 100
+
+      this.getData()
     },
     gantiPeriode (val) {
       if (val === 'Hari Ini') {

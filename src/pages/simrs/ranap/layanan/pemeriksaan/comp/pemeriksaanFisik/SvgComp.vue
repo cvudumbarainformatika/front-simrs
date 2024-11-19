@@ -3,10 +3,10 @@
     <div ref="workspace" id="workspace-svg" class="relative-position bg-white" :style="`height: ${props?.workspace?.height ?? height}px; width: ${props?.workspace?.width ?? 'auto'}px`">
       <svg ref="refSvg" viewBox="0 0 3168 2448" id="anatomys" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
         <g id="Mapper--Anatomy--v1" style="" transform="matrix(1, 0, 0, 1, -8.653406, 0.849664)">
-          <g class="mapelm" id="HierarchicalLayers" style="opacity: 1;">
+          <g class="mapelm" id="HierarchicalLayers">
             <g id="HG-mdpid113">
               <g id="HG-mdpid114">
-                <g id="HMAP-mdpid9-_-DLAT:R">
+                <g id="HMAP-mdpid9-_-DLAT:R" style="fill: black;">
                   <path d="M497.24,977.82c5.68,29.7-10.75,56.51-13.06,85.44-2.51,48.11-61.15,42.97-80.96,9.15-59.51-45.37-80.5-78.69-98.1-151.99-26.86-88.44,78.49-178.05,153.1-108.31,35.02,38.63,37.23,119.68,39.03,165.71Z" id="16-R." />
                   <path d="M497.24,977.82c5.68,29.7-10.75,56.51-13.06,85.44-2.51,48.11-61.15,42.97-80.96,9.15-59.51-45.37-80.5-78.69-98.1-151.99-26.86-88.44,78.49-178.05,153.1-108.31,35.02,38.63,37.23,119.68,39.03,165.71Z" id="17-R." />
                   <path d="M479.04,984.21s0,0-.01,0c.02.04.03.09.05.13-.45.17-.91.34-1.26.49-5.07-11.71-16.27-12.06-19.64-17.4-1.2-3.45,2.45-5.04,5.35-15.02,3.25-8.16,1.82-14.15.44-20.82-9.33,4.25-14.99,6.8-19.64,9.52-20.23,22.22,8.01,64.05,34.78,66.1,2.77-8.31,2.97-12.77-.06-23.01Z" id="40-R." />
@@ -10404,7 +10404,7 @@ onMounted(() => {
   // _initSVG(refSvg.value)
 
   // console.log('masters', masters.anatomys)
-  setTimeout(() => checkChildren(refSvg.value), 2000)
+  checkChildren(refSvg.value)
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -10429,19 +10429,6 @@ const _initSVG = (_svg) => {
 
 // eslint-disable-next-line no-unused-vars
 const checkChildren = (el) => {
-  // const child1 = el.children
-  // for (let i = 0; i < child1.length; i++) {
-  //   const g1 = child1[i].children
-  //   // console.log('g1', g1)
-  //   for (let i = 0; i < g1.length; i++) {
-  //     const g2 = g1[i].children
-  //     // console.log('g2', g2)
-  //     for (let i = 0; i < g2.length; i++) {
-  //       const g3 = g2[i]
-  //       console.log('g3', g3)
-  //     }
-  //   }
-  // }
   const g = document.getElementById('HierarchicalLayers')?.children
   // const hierarchiEl = []
   for (let i = 0; i < g?.length; i++) {
@@ -10455,14 +10442,7 @@ const checkChildren = (el) => {
       for (let n = 0; n < g2.children.length; n++) {
         const el = g2.children[n]
         el.setAttribute('pointer-events', 'bounding-box')
-        el.style.opacity = 0
         el.addEventListener('mouseover', onMouseOver)
-        // if (el.tagName === 'g') {
-        //   console.log('g3', el)
-        // }
-        // else {
-        //   console.log('path', el)
-        // }
       }
       // }
     }
@@ -10475,37 +10455,38 @@ const checkChildren = (el) => {
 function onMouseOver (e) {
   // e.preventDefault()
   // e.stopPropagation()
-  // console.log('el mouseover', e?.target)
+  console.log('el mouseover')
   const targetId = document.getElementById(e?.target?.id)
   console.log('targetId', targetId)
 
-  if (targetId) {
-    targetId.style.fill = 'rgba(71, 71, 71, 0.8)'
-    targetId.style.opacity = 1
-    targetId.style.stroke = 'rgba(71, 71, 71, 1)'
-    targetId.style.strokeWidth = 1
-  }
+  // if (targetId) {
+  //   targetId.style.opacity = 1
+  //   targetId.style.fill = 'rgba(71, 71, 71, 0.8)'
+  //   targetId.style.stroke = 'rgba(71, 71, 71, 1)'
+  //   targetId.style.strokeWidth = 1
+  // }
   // else {
   //   targetId.classList.remove('hovered')
   // }
 }
 function onMouseLeave (e) {
   // e.preventDefault()
-  // e.stopPropagation()
-  // console.log('el mouseover', e?.target)
   const targetId = document.getElementById(e?.target?.id)
-  console.log('targetId', targetId)
+  // e.stopPropagation()
+  console.log('el mouseleave', targetId)
+  // console.log('targetId', targetId)
 
-  if (targetId) {
-    targetId.style.fill = 'rgba(71, 71, 71, 0)'
-    targetId.style.opacity = 0
-    targetId.style.stroke = 'rgba(71, 71, 71, 0)'
-    targetId.style.strokeWidth = 0
-  }
+  // if (targetId) {
+  //   targetId.style.fill = 'white'
+  //   targetId.style.opacity = 0
+  //   targetId.style.stroke = 'rgba(71, 71, 71, 0)'
+  //   targetId.style.strokeWidth = 0
+  // }
 }
 
 onUnmounted(() => {
-  window.removeEventListener('mouseover')
+  window.removeEventListener('mouseover', onMouseOver)
+  window.removeEventListener('mouseleave', onMouseLeave)
 })
 </script>
 
