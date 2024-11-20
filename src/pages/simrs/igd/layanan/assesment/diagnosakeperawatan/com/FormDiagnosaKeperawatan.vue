@@ -157,6 +157,37 @@
               size="sm"
             />
           </div>
+          <div
+            v-if="item.intervensis?.filter(x=>x.group === 'plann').length"
+            class="q-mb-sm"
+          >
+            <q-separator class="q-my-xs" />
+            <div class="">
+              <q-chip
+                outline
+                color="pink"
+                text-color="white"
+                dense
+                size="sm"
+              >
+                Plann
+              </q-chip>
+            </div>
+            <q-option-group
+              v-model="store.selectIntervensis"
+              :options="item.intervensis?.filter(x=>x.group === 'plann').map(x=>{
+                return {
+                  label:x?.nama,
+                  value:x?.id + '||' + item.kode
+                }
+              })"
+              color="primary"
+              inline
+              dense
+              type="checkbox"
+              size="sm"
+            />
+          </div>
         </div>
 
         <q-separator class="q-my-lg" />
