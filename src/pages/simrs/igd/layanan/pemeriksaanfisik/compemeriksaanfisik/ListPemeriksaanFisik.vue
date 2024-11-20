@@ -59,37 +59,43 @@
                 </q-item-label>
                 <q-item-label>
                   <div class="row">
-                    <div class="col-5">
+                    <div class="col-3">
                       - Nadi : <span class="text-bold">{{ triage?.nadi ?? '-' }} x/mnt</span>
                     </div>
-                    <div class="col-5">
+                    <div class="col-3">
                       - Suhu : <span class="text-bold">{{ triage?.suhu ?? '-' }}° C </span>
                     </div>
-                    <div class="col-5">
-                      - Pernapasan : <span class="text-bold">{{ triage?.pernapasanx ?? '-' }} x/mnt </span>
-                    </div>
-                    <div class="col-5">
-                      - SPo2 : <span class="text-bold">{{ triage?.spo2 ?? '-' }} % </span>
-                    </div>
-                    <div class="col-5">
-                      - Sistole/Diastole : <span class="text-bold">{{ triage?.sistole ?? '-' }}/{{ triage?.diastole ?? '-' }} mmHg </span>
-                    </div>
-                    <div class="col-5">
-                      - Eye : <span class="text-bold">{{ triage?.eye ?? '-' }} </span>
-                    </div>
-                    <div class="col-5">
-                      - Verbal : <span class="text-bold">{{ triage?.verbal ?? '-' }} </span>
-                    </div>
-                    <div class="col-5">
+                    <div class="col-3">
                       - Kesadaran : <span class="text-bold">{{ triage?.kesadaran ?? '-' }} </span>
                     </div>
-                    <div class="col-5">
+                  </div>
+                  <div class="row">
+                    <div class="col-3">
+                      - Pernapasan : <span class="text-bold">{{ triage?.pernapasanx ?? '-' }} x/mnt </span>
+                    </div>
+                    <div class="col-3">
+                      - SPo2 : <span class="text-bold">{{ triage?.spo2 ?? '-' }} % </span>
+                    </div>
+                    <div class="col-3">
+                      - Sistole/Diastole : <span class="text-bold">{{ triage?.sistole ?? '-' }}/{{ triage?.diastole ?? '-' }} mmHg </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3">
+                      - Eye : <span class="text-bold">{{ triage?.eye ?? '-' }} </span>
+                    </div>
+                    <div class="col-3">
+                      - Verbal : <span class="text-bold">{{ triage?.verbal ?? '-' }} </span>
+                    </div>
+                    <div class="col-3">
                       - Motorik : <span class="text-bold">{{ triage?.motorik ?? '-' }} </span>
                     </div>
-                    <div class="col-5">
+                  </div>
+                  <div class="row">
+                    <div class="col-3">
                       - BB : <span class="text-bold">{{ triage?.bb ?? '-' }} Kg</span>
                     </div>
-                    <div class="col-5">
+                    <div class="col-3">
                       - TB : <span class="text-bold">{{ triage?.tb ?? '-' }} Cm</span>
                     </div>
                   </div>
