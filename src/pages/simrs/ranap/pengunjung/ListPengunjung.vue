@@ -11,19 +11,37 @@
           v-ripple
           clickable
         >
-          <q-item-section avatar>
+          <q-item-section avatar top>
             <app-avatar-pasien
               :pasien="item"
-              width="50px"
+              width="80px"
             />
           </q-item-section>
 
-          <q-item-section class="q-col-gutter-xs">
+          <q-item-section class="q-col-gutter-xs relative-position">
             <div><b>{{ item?.nama }}</b></div>
             <div>Norm|Reg : <span class="text-primary">{{ item?.norm }}</span> | <span class="text-orange">{{ item.noreg }}</span></div>
             <div>Usia : {{ item?.usia }} | <em class="text-grey">{{ item.kelamin }}</em></div>
             <div class="f-10">
               {{ item?.alamat }}
+            </div>
+            <div v-if="item?.groups !=='2'">
+              <q-badge outline class="q-mt-sm q-px-sm" dense :color="!item?.sep ? 'red' : 'primary'">
+                <div class="f-12">
+                  {{ !item?.sep ? 'SEP RANAP BELUM TERBIT' : 'SEP RANAP : ' + item?.sep }}
+                </div>
+              </q-badge>
+            </div>
+            <div v-else>
+              <q-badge outline class="q-mt-sm q-px-sm" dense color="teal">
+                <div class="f-12">
+                  PASIEN UMUM
+                </div>
+              </q-badge>
+            </div>
+
+            <div class="absolute-bottom-right q-pa-sm">
+              {{ (item?.status === '2' || item?.status === '3') ? 'Pulang' : 'Belum Pulang' }}
             </div>
           </q-item-section>
           <q-item-section class="q-col-gutter-xs">
@@ -37,6 +55,13 @@
                 v-if="item.status===''"
                 class="text-teal"
               >{{ rangeDate(item?.tglmasuk) }}</b>
+            </div>
+            <div v-if="item?.dititipkanke !== null">
+              <q-badge outline class="q-mt-sm q-px-sm" dense color="primary">
+                <div class="f-12">
+                  dititipkan ke {{ item?.dititipkanke }}
+                </div>
+              </q-badge>
             </div>
           </q-item-section>
           <q-item-section side>

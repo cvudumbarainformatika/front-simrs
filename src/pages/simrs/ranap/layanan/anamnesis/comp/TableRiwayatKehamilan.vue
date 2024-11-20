@@ -28,7 +28,13 @@
         <td>{{ item?.bbl }}</td>
         <td>{{ item?.riwayatKehamilan }}</td>
         <td class="text-right">
-          <q-btn flat size="xs" icon="icon-mat-delete" round color="negative" @click="deleteData(item?.id)">
+          <q-btn
+            flat size="xs" icon="icon-mat-delete" round color="negative" @click="()=> {
+              // console.log(item?.id);
+              deleteData(item?.id)
+
+            }"
+          >
             <q-tooltip>Hapus Data</q-tooltip>
           </q-btn>
         </td>
@@ -38,7 +44,7 @@
       <tr>
         <td colspan="7">
           <div class="flex flex-center">
-            Belum ada riwayat obsetri
+            Belum ada riwayat Kehamilan
           </div>
         </td>
       </tr>
@@ -56,6 +62,7 @@ defineProps({
 
 const emits = defineEmits(['delete'])
 
+// eslint-disable-next-line no-unused-vars
 const deleteData = (id) => {
   emits('delete', id)
 }

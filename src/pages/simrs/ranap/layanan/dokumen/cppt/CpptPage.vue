@@ -75,12 +75,12 @@
                 PPA
               </div>
             </th>
-            <th class="text-center" width="40%">
+            <th class="text-center" width="30%">
               <div class="text-bold">
                 SOAP
               </div>
             </th>
-            <th class="text-left" width="30%">
+            <th class="text-left" width="40%">
               <div class="text-bold">
                 Instruksi PPA
               </div>
@@ -177,9 +177,11 @@
                       <q-item-label class="">
                         <div v-if="awal?.nakes === '2'">
                           <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
-                            <!-- {{ item }} -->
-                            <div v-for="(int, m) in item?.intervensi?.filter(i => i?.group === 'plann')" :key="m">
-                              - {{ int?.masterintervensi?.nama }}
+                            <!-- {{ item?.intervensi[0].masterintervensi }} -->
+                            <div v-for="(int, m) in item?.intervensi" :key="m">
+                              <div v-if="int?.masterintervensi?.group === 'plann'">
+                                - {{ int?.masterintervensi?.nama }}
+                              </div>
                             </div>
                           </div>
                         </div>

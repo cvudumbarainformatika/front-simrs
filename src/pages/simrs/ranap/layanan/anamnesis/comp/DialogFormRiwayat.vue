@@ -8,7 +8,7 @@
         </div>
       </q-card-section>
 
-      <q-form @submit="store.saveRiwayatObsetri(pasien)">
+      <q-form @submit="store.saveRiwayatKehamilan(pasien)">
         <q-separator />
 
         <q-card-section style="width:400px; max-height: 50vh" class="scroll">

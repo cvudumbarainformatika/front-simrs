@@ -14,10 +14,16 @@
       class="my-flex-1"
       style="overflow: hidden;"
     >
-      <q-scroll-area style="height: calc(100% - 1px);">
-        <list-loading v-if="store.loading" />
-        <list-pengunjung v-else />
+      <q-scroll-area v-if="store?.pasiens?.length && !store.loading" style="height: calc(100% - 1px);">
+        <!-- <list-loading v-if="store.loading" /> -->
+        <list-pengunjung />
       </q-scroll-area>
+      <q-scroll-area v-else-if="store?.loading" style="height: calc(100% - 1px);">
+        <list-loading />
+      </q-scroll-area>
+      <div v-else class="column full-height flex-center">
+        <div>Data Kunjungan Belum ada</div>
+      </div>
       <div class="absolute-bottom bg-primary text-white z-top">
         <footer-page
           v-if="store.pasiens.length"
