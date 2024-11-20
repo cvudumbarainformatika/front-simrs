@@ -147,9 +147,11 @@ const filterred = computed(() => {
   let arr = props?.masters
   if (group.value === 'paket') {
     arr = arr?.filter(x => x.value?.length > 1)
-  } else if (group.value === 'non-paket') {
+  }
+  else if (group.value === 'non-paket') {
     arr = arr?.filter(x => x.value?.length < 2)
-  } else {
+  }
+  else {
     arr = props?.masters
   }
 
@@ -164,12 +166,12 @@ const filterred = computed(() => {
   return target
 })
 
-function submitPemeriksaans() {
+function submitPemeriksaans () {
   // console.log(pemeriksaans.value)
   emits('ok', pemeriksaans.value)
 }
 
-function clearCheck() {
+function clearCheck () {
   pemeriksaans.value = []
 }
 

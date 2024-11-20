@@ -60,7 +60,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
         if (resp.status === 200) {
           const arr = resp.data
           const arr2 = arr.length > 0
-            ? arr.map(x =>
+            ? arr.filter(x => x.hidden === '').map(x =>
               ({
                 gruper: x.gruper !== '' ? x.gruper : x.pemeriksaan,
                 pemeriksaan: x.pemeriksaan,

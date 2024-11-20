@@ -221,7 +221,7 @@ onMounted(() => {
 //   }
 // }
 
-function saveOrderLaborat() {
+function saveOrderLaborat () {
   // INI diganti function baru
   store.saveOrderLaboratBaru(props.pasien).then(() => {
     formRef.value.resetValidation()
@@ -229,8 +229,8 @@ function saveOrderLaborat() {
   })
 }
 
-function pilihPemeriksaans(val) {
-  // console.log(val)
+function pilihPemeriksaans (val) {
+  console.log('as', val)
   modalOpen.value = false
   const arr = val.length ? val.map(x => x.name) : []
   const implode = arr.length ? arr.join('||') : ''
