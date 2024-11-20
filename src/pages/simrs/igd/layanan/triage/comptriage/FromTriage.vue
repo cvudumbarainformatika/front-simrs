@@ -445,7 +445,7 @@
                   ref="refbb"
                   v-model="store.form.bb"
                   label="BB/Kg"
-                  type="number"
+                  mask="##.#"
                   outlined
                   standout="bg-yellow-3"
                   dense
@@ -1204,7 +1204,7 @@ function scoresuhu () {
       store.form.scoresuhu = 3
     }
   }
-  else if (umur > 17) {
+  else if (umur >= 17) {
     if (store.form.suhu >= 1 && store.form.suhu < 35) {
       store.form.scoresuhu = 3
     }
@@ -1220,6 +1220,9 @@ function scoresuhu () {
     else if (store.form.suhu >= 39.1) {
       store.form.scoresuhu = 2
     }
+  }
+  else if (umur < 17) {
+    store.form.scoresuhu = 0
   }
 }
 

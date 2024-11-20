@@ -267,6 +267,7 @@
                           transition-show="flip-up"
                           transition-hide="flip-down"
                           :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                          @update:model-value="(val) => cekpulang(val)"
                         />
                       </div>
                       <div class="col-3" v-if="store.form.atasdasarpulang === 'Meninggal'">
@@ -344,6 +345,7 @@
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePlannStore } from 'src/stores/simrs/igd/plann'
 import { ref } from 'vue'
@@ -492,6 +494,19 @@ function carinama (val) {
 function caripoli (val) {
   store.form.kodepoli = val?.kode
   store.form.polirujukan = val?.nama
+}
+
+function cekpulang (val) {
+  if (val === 'Meninggal') {
+    const sekarang = Date.now()
+    store.form.tglmeninggal = date.formatDate(sekarang, 'YYYY-MM-DD')
+    store.form.jammeninggal = date.formatDate(sekarang, 'H:m')
+  }
+  else {
+    store.form.tglmeninggal = ''
+    store.form.jammeninggal = ''
+    store.form.keteranganrujuk = ''
+  }
 }
 
 store.formattanggal()

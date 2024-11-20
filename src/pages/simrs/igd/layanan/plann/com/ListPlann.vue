@@ -76,8 +76,12 @@
                 </div>
                 <div v-if="item?.rs4 === 'Pulang'">
                   <q-item-label>Alasan Pulang : <span class="text-weight-bold">{{ item?.planpulang?.atas_dasar }}</span></q-item-label>
-                  <q-item-label>Tanggal Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.tgl_meninggal }} {{ item?.planpulang?.jam_meninggal }}</span></q-item-label>
-                  <q-item-label>Alasan Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.atas_dasar }}</span></q-item-label>
+                  <q-item-label v-if="item?.planpulang?.atas_dasar === 'Meninggal'">
+                    Tanggal Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.tgl_meninggal }} {{ item?.planpulang?.jam_meninggal }}</span>
+                  </q-item-label>
+                  <q-item-label v-if="item?.planpulang?.atas_dasar === 'Meninggal'">
+                    Alasan Meninggal : <span class="text-weight-bold">{{ item?.planpulang?.atas_dasar }}</span>
+                  </q-item-label>
                 </div>
               </q-item-section>
             </q-item>

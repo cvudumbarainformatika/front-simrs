@@ -303,10 +303,10 @@
                     <div class="row">
                       <div class="col-6">
                         <q-item-label avatar>
-                          <span>BB : <span class="text-weight-bold">{{ item?.bb ?? '-' }} </span></span>
+                          <span>BB : <span class="text-weight-bold">{{ item?.bb ?? '-' }} Kg</span></span>
                         </q-item-label>
                         <q-item-label avatar>
-                          <span>TB : <span class="text-weight-bold">{{ item?.tb ?? '-' }} </span></span>
+                          <span>TB : <span class="text-weight-bold">{{ item?.tb ?? '-' }} Cm</span></span>
                         </q-item-label>
                       </div>
                       <div class="col-6">
