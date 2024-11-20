@@ -144,7 +144,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
 
     async getTindakan (pasien) {
       try {
-        const resp = await api.get('v1/simrs/ranap/layanan/tindakan/listtindakanranap', { params: { noreg: pasien?.noreg } })
+        const resp = await api.get('v1/simrs/ranap/layanan/tindakan/listtindakanranap', { params: { noreg: pasien?.noreg, kodepoli: pasien?.kodepoli } })
         // console.log('tindakan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungRanapStore()
@@ -211,25 +211,27 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notaTindakans = arr.length ? arr : []
-      this.notaTindakans.unshift('SEMUA')
       this.notaTindakans.push('BARU')
+      this.notaTindakans.push('SEMUA')
       this.notaTindakan = this.notaTindakans[0]
     },
 
     async getNota (pasien) {
       const params = {
         params: {
-          noreg: pasien?.noreg
+          noreg: pasien?.noreg,
+          kodepoli: pasien?.kodepoli
         }
       }
 
-      const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
+      const resp = await api.get('v1/simrs/pelayanan/notatindakanranap', params)
       // console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
         this.notaTindakans = arr.length ? arr : []
-        this.notaTindakans.unshift('SEMUA')
+        // this.notaTindakans.unshift('SEMUA')
         this.notaTindakans.push('BARU')
+        this.notaTindakans.push('SEMUA')
         this.notaTindakan = this.notaTindakans[0]
       }
     },

@@ -108,13 +108,13 @@ const tabsxx = [
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/operasi/IndexPage.vue'))
   },
-  {
-    label: 'Operasi IRD',
-    name: 'operasiIrd',
-    icon: 'icon-mat-bedroom_parent',
-    nakes: ['1', '2', '3'],
-    comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
-  },
+  // {
+  //   label: 'Operasi IRD',
+  //   name: 'operasiIrd',
+  //   icon: 'icon-mat-bedroom_parent',
+  //   nakes: ['1', '2', '3'],
+  //   comp: defineAsyncComponent(() => import('./comp/operasiIrd/IndexPage.vue'))
+  // },
   {
     label: 'Bank Darah',
     name: 'bankDarah',
@@ -150,13 +150,13 @@ const tabsxx = [
     nakes: ['1', '2', '3'],
     comp: defineAsyncComponent(() => import('./comp/perawatanJenazah/IndexPage.vue'))
   },
-  {
-    label: 'Oksigen',
-    name: 'oksigen',
-    icon: 'icon-mat-published_with_changes',
-    nakes: ['1', '2', '3'],
-    comp: defineAsyncComponent(() => import('./comp/oksigen/IndexPage.vue'))
-  },
+  // {
+  //   label: 'Oksigen',
+  //   name: 'oksigen',
+  //   icon: 'icon-mat-published_with_changes',
+  //   nakes: ['1', '2', '3'],
+  //   comp: defineAsyncComponent(() => import('./comp/oksigen/IndexPage.vue'))
+  // },
   {
     label: 'Penunjang Lainnya',
     name: 'penunjangLainnya',
