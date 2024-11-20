@@ -661,7 +661,7 @@
                   </div>
                   <q-btn dense outline color="primary" icon="icon-mat-add" label="Tambah Riwayat Kehamilan" class="q-px-sm" @click="store.openDialogFormRiwayat = true" />
                 </div>
-                <TableRiwayatKehamilan :items="store.riwayatKehamilans" @delete="store.deleteRiwayatKehamilan()" />
+                <TableRiwayatKehamilan :items="store.riwayatKehamilans" @delete="(id)=> store.deleteRiwayatKehamilan(pasien, id)" />
               </div>
             </div>
             <div class="text-bold q-mt-sm">

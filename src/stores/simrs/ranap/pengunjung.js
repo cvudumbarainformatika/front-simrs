@@ -191,7 +191,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
                 else {
                   this.berhakAkses = true
                   // cari ruangan
-                  if (nakes === '2') {
+                  if (nakes === '2' || nakes === '3') {
                     this.ruangans = ruangs?.filter(x => x.groups === ruanganPerawat)
                     console.log('ini nakes', this.ruangans)
                   }
