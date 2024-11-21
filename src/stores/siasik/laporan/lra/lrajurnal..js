@@ -31,6 +31,14 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       { nama: 'Rincian Objek', value: '5' },
       { nama: 'SubRincian Objek', value: '6' }
     ],
+    barjas: [
+      { kode: '5.1.01', uraian: 'Belanja Pegawai' },
+      { kode: '5.1.02', uraian: 'Belanja Barang dan Jasa' },
+      { kode: '5.1.03', uraian: 'Belanja Bunga' },
+      { kode: '5.1.04', uraian: 'Belanja Subsidi' },
+      { kode: '5.1.05', uraian: 'Belanja Hibah' },
+      { kode: '5.1.06', uraian: 'Belanja Bantuan Sosial' }
+    ],
     pagupendapatans: [],
     datapendapatans: [],
     datapendpsblm: [],
@@ -41,9 +49,18 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
     silpasblm: [],
     silpaskg: [],
 
+    psappagubarjas: [],
+    psappagumodal: [],
+    psaprealisasibarjas: [],
+    psaprealisasimodal: [],
+
     hasilpendapatan: [],
     hasilbelanja: [],
-    hasilsilpa: []
+    hasilsilpa: [],
+    psappendapatan: [],
+    psapbarjas: [],
+    psapmodal: [],
+    psapsilpa: []
   }),
   actions: {
     setParameter (key, val) {
@@ -56,15 +73,21 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         api.get('v1/laporan/lra/getlra', params).then((resp) => {
           console.log('data LRA', resp.data)
           if (resp.status === 200) {
-            this.pagupendapatans = []
-            this.datapendapatans = []
-            this.datapendpsblm = []
-            this.pagubelanjas = []
-            this.databelanjas = []
-            this.belanjasblm = []
-            this.pagusilpa = []
-            this.silpasblm = []
-            this.silpaskg = []
+            // this.pagupendapatans = []
+            // this.datapendapatans = []
+            // this.datapendpsblm = []
+            // this.pagubelanjas = []
+            // this.databelanjas = []
+            // this.belanjasblm = []
+            // this.pagusilpa = []
+            // this.silpasblm = []
+            // this.silpaskg = []
+            this.hasilbelanja = []
+            this.hasilpendapatan = []
+            this.hasilsilpa = []
+            this.psappendapatan = []
+            this.psapbelanja = []
+            this.psapsilpa = []
             this.pagupendapatans = resp.data.pagupendapatan
             this.datapendapatans = resp.data.pendapatan
             this.datapendpsblm = resp.data.pendapatansblm
@@ -74,6 +97,11 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
             this.pagusilpa = resp.data.pagusilpa
             this.silpasblm = resp.data.silpasblm
             this.silpaskg = resp.data.silpaskg
+
+            this.psappagubarjas = resp.data.psappagubarjas
+            this.psappagumodal = resp.data.psappagumodal
+            this.psaprealisasibarjas = resp.data.psaprealisasibarjas
+            this.psaprealisasimodal = resp.data.psaprealisasimodal
 
             this.mapData()
 
@@ -332,6 +360,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       const silpa3 = []
       const silpa2 = []
       const silpa1 = []
+      const psapsilpa = []
       for (let i = 0; i < pagusilpas.length; i++) {
         const el = pagusilpas[i]
         const sblm = silpasblms[i] ?? 0
@@ -403,7 +432,75 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         silpa3.push(obj1, obj2, obj3)
         silpa2.push(obj1, obj2)
         silpa1.push(obj1)
+        psapsilpa.push(obj3)
       } console.log('SILPA', silpa6)
+
+      const psapbarjas = []
+      const a = this.psappagubarjas
+      const b = this.psaprealisasibarjas
+      const databarjas = a.concat(b)
+      // const filkode = this.barjas?.map((x) => x.kode)
+      // const filbarjas = belanja.filter(x => filkode.includes(x.kode3)).map((x) => x.kode3)
+      const filbarjas = databarjas.map((x) => x.kode)
+      // console.log('xklxxlx', filbarjas)
+      const unikbarjas = filbarjas.length ? [...new Set(filbarjas)] : []
+      for (let i = 0; i < unikbarjas.length; i++) {
+        const el = unikbarjas[i]
+        // const obj = {
+        //   kode: belanja.filter((x) => x.kode3 === el)[0].kode3,
+        //   uraian: belanja.filter((x) => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
+        //   pagu: belanja.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+        //   nilaisemua: nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+        //   persen: ((nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode3 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
+        // }
+        const obj = {
+          kode: databarjas.filter((x) => x.kode === el)[0].kode,
+          uraian: databarjas.filter((x) => x.kode === el).map((x) => x.kode3)[0]?.uraian,
+          pagu: a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaisemua: b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
+          persen: isNaN(((b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
+            ? 0
+            : (((b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
+        }
+        psapbarjas.push(obj)
+      }
+      const barjaslain = {
+        kode: '5.1.03, 5.1.04, 5.1.05, 5.1.06',
+        uraian: 'Belanja Lain-lain',
+        pagu: parseFloat(0),
+        nilaisemua: parseFloat(0),
+        persen: parseFloat(0)
+      }
+      psapbarjas.push(barjaslain)
+
+      const psapmodal = []
+      const c = this.psappagumodal
+      const d = this.psaprealisasimodal
+      const datamodal = c.concat(d)
+      const filmodal = datamodal.map((x) => x.kode)
+      console.log('xklxxlx', datamodal)
+      const unikmodal = filmodal.length ? [...new Set(filmodal)] : []
+      for (let i = 0; i < unikmodal.length; i++) {
+        const el = unikmodal[i]
+        // const obj = {
+        //   kode: belanja.filter((x) => x.kode3 === el)[0].kode3,
+        //   uraian: belanja.filter((x) => x.kode3 === el).map((x) => x.lvl3)[0]?.uraian,
+        //   pagu: belanja.filter((x) => x.kode3 === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+        //   nilaisemua: nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0),
+        //   persen: ((nilaiskg.filter((x) => x.kode3 === el).map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0) + nilaisblm.filter((x) => x.kode3 === el).map((x) => parseFloat(x.nilaisebelumnya)).reduce((a, b) => a + b, 0)) / belanja.filter((x) => x.kode3 === el).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) * 100).toFixed(2)
+        // }
+        const obj = {
+          kode: datamodal.filter((x) => x.kode === el)[0].kode,
+          uraian: datamodal.filter((x) => x.kode === el).map((x) => x.kode3)[0]?.uraian,
+          pagu: c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
+          nilaisemua: d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
+          persen: isNaN(((d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
+            ? 0
+            : (((d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
+        }
+        psapmodal.push(obj)
+      }
+      // console.log('psapxxxxx', psapmodal)
 
       if (this.reqs.levelberapa === 6) {
         this.hasilpendapatan = kode6
@@ -430,11 +527,27 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         this.hasilbelanja = level2
         this.hasilsilpa = silpa2
       }
-      else {
+      else if (this.reqs.levelberapa === 1) {
         this.hasilpendapatan = kode1
         this.hasilbelanja = level1
         this.hasilsilpa = silpa1
       }
+      else if (this.reqs.jenislra === 2) {
+        this.psappendapatan = kode3
+        this.psapbarjas = psapbarjas
+        this.psapmodal = psapmodal
+        this.psapsilpa = psapsilpa
+        console.log('paspbelanja', this.psapbarjas)
+        console.log('psapmodal', this.psapmodal)
+        console.log('psapsilpa', this.psapsilpa)
+      }
+
+      // const totalbarjas = {
+      //   totalpagu: this.psapbarjas.map((x) => x.pagu).reduce((a, b) => a + b, 0),
+      //   totalnilaisemua: this.psapbarjas.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0),
+      //   totalpersen: ((this.psapbarjas.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0) / this.psapbarjas.map((x) => x.pagu).reduce((a, b) => a + b, 0)) * 100).toFixed(2)
+      // }
+      // this.totalbarjas.push(totalbarjas)
     }
   }
 })
