@@ -41,7 +41,12 @@
                       </div>
                       <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
+                            notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
+                            return
+                          }
                           editFormAnamnesis(item)
+                          // console.log('auth', auth?.user?.pegawai?.kdpegsimrs, item?.user)
                         }"
                       />
                     </q-card-section>
@@ -77,6 +82,10 @@
                       </div>
                       <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user) {
+                            notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
+                            return
+                          }
                           editFormPemeriksaan(item)
                         }"
                       />
@@ -100,12 +109,12 @@
                         <q-separator class="q-my-xs" />
                         <!-- Penilaian -->
                         <div>
-                          <div v-if="item?.penilaian?.norton">
+                          <!-- <div v-if="item?.penilaian?.norton">
                             <div v-for="(val, key) in item?.penilaian?.norton" :key="key" class="flex">
                               {{ storePenilaian?.nortons?.form?.find(x=>x?.kode === key)?.label ?? '-' }}  {{ val?.label }}
                             </div>
-                          </div>
-                          <q-separator class="q-my-xs" />
+                          </div> -->
+                          <!-- <q-separator class="q-my-xs" /> -->
                           <div v-if="item?.penilaian?.humpty_dumpty">
                             <div class="column">
                               <b>Resiko Jatuh : </b>
@@ -138,6 +147,7 @@
                         Asessment
                       </div>
                       <q-btn
+
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                           if (nakes==='2') {
                             store.initDiagnosaKeperawatan(item)
@@ -341,6 +351,7 @@
 import { dateFullFormat, jamTnpDetik } from 'src/modules/formatter'
 import { computed, defineAsyncComponent, ref } from 'vue'
 import useForm from './useForm'
+import { notifBottomVue } from 'src/modules/utils'
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
 const DialogFormItem = defineAsyncComponent(() => import('./dialogformchild/DialogFormItem.vue'))
@@ -356,7 +367,8 @@ const props = defineProps({
 
 // eslint-disable-next-line no-unused-vars
 const {
-  settings,
+  settings, auth,
+  // eslint-disable-next-line no-unused-vars
   editFormAnamnesis,
   editFormPemeriksaan,
   editFormAsessment,
@@ -367,6 +379,7 @@ const {
   updateToServerAsessment,
   updateToServerPlan,
   updateAsPlanInst,
+  // eslint-disable-next-line no-unused-vars
   store, storePenilaian, storeDiagnosaKeperawatan
 } = useForm(props?.pasien)
 

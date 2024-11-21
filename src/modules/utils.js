@@ -321,6 +321,23 @@ const notifCenterVue = (msg) => {
     ]
   })
 }
+const notifBottomVue = (msg) => {
+  Notify.create({
+    message: msg,
+    icon: 'icon-eva-message-circle-outline',
+    position: 'bottom',
+    color: 'dark',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'yellow',
+        handler: () => {
+          /* console.log('wooow') */
+        }
+      }
+    ]
+  })
+}
 
 const daysInMonth = (month, year) => {
   return new Date(year, month, 0).getDate()
@@ -522,6 +539,7 @@ function terbilangRupiah (nilai) {
 export {
   daysInMonth,
   notifCenterVue,
+  notifBottomVue,
   notifSuccess,
   uniqueId,
   notifErr,

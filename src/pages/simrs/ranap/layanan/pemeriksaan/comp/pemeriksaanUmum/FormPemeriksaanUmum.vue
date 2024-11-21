@@ -93,7 +93,7 @@
         />
         <div v-if="gruping==='4.4' || gruping==='5.4'" class="col-12 row q-col-gutter-xs">
           <app-input-simrs
-            label="Lila (cm)" class="col-2" v-model="store.formPediatrik.lila" :valid="{ number: true }" :lazy-rules="true"
+            label="Lika (cm)" class="col-2" v-model="store.formPediatrik.lila" :valid="{ number: true }" :lazy-rules="true"
             @update:model-value="(val)=>{
               const _removedZeros = val.replace(/^0+/, '')
               if (val > 1) store.formPediatrik.lila=_removedZeros
@@ -116,7 +116,7 @@
             }"
           />
           <app-input-simrs
-            label="Ling. Leng. atas (cm)" class="col-3" v-model="store.formPediatrik.lilengtas" :valid="{ number: true }" :lazy-rules="true"
+            label="Lila" class="col-3" v-model="store.formPediatrik.lilengtas" :valid="{ number: true }" :lazy-rules="true"
             @update:model-value="(val)=>{
               const _removedZeros = val.replace(/^0+/, '')
               if (val > 1) store.formPediatrik.lilengtas=_removedZeros
