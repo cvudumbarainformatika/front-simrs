@@ -165,6 +165,11 @@ const masters = {
           path: '/master/poliklinik/diagnosakebidanan',
           name: 'master.poliklinik.diagnosakebidanan',
           component: () => import('pages/simrs/master/poliklinik/diagnosakebidanan/IndexPage.vue')
+        },
+        {
+          path: '/master/poliklinik/diagnosagizi',
+          name: 'master.poliklinik.diagnosagizi',
+          component: () => import('pages/simrs/master/poliklinik/diagnosagizi/IndexPage.vue')
         }
       ]
     },

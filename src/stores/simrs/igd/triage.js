@@ -60,7 +60,7 @@ export const useTriageIgd = defineStore('triageigd', {
     },
     async saveData (pasien, hasilsecondsurve) {
       // console.log('noreg', pasien.noreg)
-      this.loadingForm = true
+      this.loadingaja = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
 
@@ -75,10 +75,10 @@ export const useTriageIgd = defineStore('triageigd', {
           this.initReset()
           this.loadingForm = false
         }
-        this.loadingForm = false
+        this.loadingaja = false
       }
       catch (error) {
-        this.loadingForm = false
+        this.loadingaja = false
         notifErr(error)
       }
     },
@@ -131,7 +131,54 @@ export const useTriageIgd = defineStore('triageigd', {
           console.log(err)
           // this.loading = false
         })
+    },
+    editForm (val) {
+      this.form.doak = val?.doa
+      this.form.pasienhamil = parseInt(val?.flaghamil)
+      this.form.haid = val?.haid
+      this.form.gravida = val?.gravida
+      this.form.partus = val?.partus
+      this.form.abortus = val?.abortus
+      this.form.nyeri = val?.nyeri
+      this.form.lochea = val?.lochea
+      this.form.proteinurin = val?.proteinurin
+      this.form.scorenyeri = val?.scorenyeri
+      this.form.scorelochea = val?.scorelochea
+      this.form.scoreproteinurin = val?.scoreproteinurin
+      this.form.jalannafas = val?.jalannafas
+      this.form.pernapasan = val?.pernapasan
+      this.form.sirkulasi = val?.sirkulasi
+      this.form.disability = val?.disability
+      this.form.nadi = val?.nadi
+      this.form.pernapasanx = val?.pernapasanx
+      this.form.sistole = val?.sistole
+      this.form.diastole = val?.diastole
+      this.form.suhu = val?.suhu
+      this.form.spo2 = val?.spo2
+      this.form.scorenadi = val?.scorenadi
+      this.form.scorepernapasanx = val?.scorepernapasanx
+      this.form.scoresistole = val?.scoresistole
+      this.form.id = val?.id
+      this.form.scorediastole = val?.scorediastole
+      this.form.scoresuhu = val?.scoresuhu
+      this.form.scorespo2 = val?.scorespo2
+      this.form.kesadaran = val?.kesadaran
+      this.form.eye = val?.eye
+      this.form.verbal = val?.verbal
+      this.form.motorik = val?.motorik
+      this.form.scorekesadaran = val?.scorekesadaran
+
+      this.form.bb = val?.bb
+      this.form.tinggibadan = val?.tb
+      this.form.gangguanperilaku = val?.gangguanperilaku
+      if (val?.falsetriage === 'Tidak') {
+        this.form.falsetriage = false
+      }
+      else {
+        this.form.falsetriage = true
+      }
     }
+
   }
 
 })

@@ -1,5 +1,6 @@
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagnosakebidanan'
 import { useDiagnosaKeperawatan } from 'src/stores/simrs/pelayanan/poli/diagnosakeperawatan'
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
@@ -14,6 +15,8 @@ export default function useForm (pasien) {
   const storePenilaian = usePenilaianRanapStore()
   const storeDiagnosaKeperawatan = useDiagnosaKeperawatan()
   const storeDiagnosaKebidanan = useDiagnosaKebidananStore()
+
+  const auth = useAplikasiStore()
 
   const store = useAsessmentUlangRanapStore()
 
@@ -35,7 +38,7 @@ export default function useForm (pasien) {
   const editFormAnamnesis = (item) => {
     console.log('edit', item)
     const storeAnamnesis = useAnamnesisRanapStore()
-    storeAnamnesis.initReset(item.anamnesis)
+    storeAnamnesis.initReset(item?.anamnesis)
     settings.formOpen = 'anamnesis'
     settings.isChildForm = true
     settings.isEdit = true
@@ -83,19 +86,22 @@ export default function useForm (pasien) {
 
     const kasusKep = jnsKasus?.gruping
     let formDefault = storeAnamnesis.form
-    if (kasusKep === '4.1') {
-      formDefault = storeAnamnesis.form
-    }
-    if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
-      formDefault.skreeninggizi = null
-      formDefault.keluhannyeri = null
-    }
+    // if (kasusKep === '4.1') {
+    formDefault = storeAnamnesis.form
+    // }
+    // if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
+    //   formDefault.skreeninggizi = null
+    //   formDefault.keluhannyeri = null
+    // }
     // eslint-disable-next-line no-unused-vars
     const payload = {
 
       id: storeAnamnesis.form.id,
       id_cppt: editable.item?.id,
       form: formDefault,
+      noreg: editable?.item?.noreg,
+      norm: editable?.item?.norm,
+      kdruang: pasien?.kdruangan,
       formKebidanan: kasusKep === '4.2' ? storeAnamnesis.formKebidanan : null, // ini storeAnamnesis.formKebidanan,
       formNeoNatal: kasusKep === '4.3' ? storeAnamnesis.formNeoNatal : null,
       formPediatrik: kasusKep === '4.4' ? storeAnamnesis.formPediatrik : null // ini storeAnamnesis.formPediatrik
@@ -209,13 +215,13 @@ export default function useForm (pasien) {
 
     const kasusKep = jnsKasus?.gruping
     let formDefault = storePemeriksaan.form
-    if (kasusKep === '4.1') {
-      formDefault = storePemeriksaan.form
-    }
-    if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
-      formDefault.skreeninggizi = null
-      formDefault.keluhannyeri = null
-    }
+    // if (kasusKep === '4.1') {
+    formDefault = storePemeriksaan.form
+    // }
+    // if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
+    //   formDefault.skreeninggizi = null
+    //   formDefault.keluhannyeri = null
+    // }
 
     const storePenilaian = usePenilaianRanapStore()
     const penilaian = {
@@ -235,16 +241,19 @@ export default function useForm (pasien) {
       id: editable?.item?.rs253_id,
       id_cppt: editable.item?.id,
       form: formDefault,
-      // formKebidanan: kasusKep === '4.2' ? storePemeriksaan.formKebidanan : null, // ini storePemeriksaan.formKebidanan,
-      // formNeoNatal: kasusKep === '4.3' ? storePemeriksaan.formNeoNatal : null,
-      // formPediatrik: kasusKep === '4.4' ? storePemeriksaan.formPediatrik : null // ini storePemeriksaan.formPediatrik
-      formKebidanan: null,
-      formNeoNatal: null,
-      formPediatrik: null,
+      formKebidanan: kasusKep === '4.2' ? storePemeriksaan.formKebidanan : null, // ini storePemeriksaan.formKebidanan,
+      formNeonatal: kasusKep === '4.3' ? storePemeriksaan.formNeonatal : null,
+      formPediatrik: kasusKep === '4.4' ? storePemeriksaan.formPediatrik : null, // ini storePemeriksaan.formPediatrik
+      // formKebidanan: null,
+      // formNeoNatal: null,
+      // formPediatrik: null,
+      noreg: pasien?.noreg,
+      norm: pasien?.norm,
+      kdruang: pasien?.kdruangan,
       penilaian
     }
 
-    // console.log('payload', payload)
+    console.log('payload objective pemeriksaan', payload)
     // console.log('item', editable.item)
 
     return new Promise((resolve, reject) => {
@@ -322,6 +331,8 @@ export default function useForm (pasien) {
     storePenilaian,
     storeDiagnosaKeperawatan,
     storeDiagnosaKebidanan,
+
+    auth, // storeAplikasi
 
     editFormPlan,
     editFormAnamnesis,

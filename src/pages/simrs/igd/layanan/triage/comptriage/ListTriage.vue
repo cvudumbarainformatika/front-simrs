@@ -313,6 +313,9 @@
                         <q-item-label avatar>
                           <span>Gangguan Perilaku : <span class="text-weight-bold">{{ item?.gangguanperilaku ?? '-' }} </span></span>
                         </q-item-label>
+                        <q-item-label avatar>
+                          <span>False Triage : <span class="text-weight-bold">{{ item?.falsetriage === '0' ? 'Tidak' : 'Iya' }}</span></span>
+                        </q-item-label>
                       </div>
                     </div>
                   </div>
@@ -323,13 +326,13 @@
                 side
               >
                 <div class="q-gutter-sm">
-                  <!-- <q-btn
+                  <q-btn
                     flat
                     round
                     size="sm"
                     icon="icon-mat-edit"
                     @click="store.editForm(item)"
-                  /> -->
+                  />
                   <q-btn
                     flat
                     round
@@ -411,7 +414,6 @@ function hapusItem (id) {
 }
 
 function primarysurvex (val) {
-  console.log(val)
   if (val === '0' || val === 0) {
     return '-'
   }

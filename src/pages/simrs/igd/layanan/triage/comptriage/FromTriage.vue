@@ -1492,7 +1492,6 @@ function updateSelection (val) {
 }
 
 function updateSelectionxx (val) {
-  // console.log('sasasasas', val)
   store.setForm('falsetriage', val)
 }
 
