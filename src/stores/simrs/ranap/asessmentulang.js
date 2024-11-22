@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+// eslint-disable-next-line no-unused-vars
 import { api } from 'src/boot/axios'
 import { useAnamnesisRanapStore } from './anamnesis'
 // eslint-disable-next-line no-unused-vars
@@ -172,9 +173,9 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       const storeAnamnesis = useAnamnesisRanapStore()
       storeAnamnesis.form.id = null
       let formDefault = storeAnamnesis.form
-      if (kasusKep === '4.1') {
-        formDefault = storeAnamnesis.form
-      }
+      // if (kasusKep === '4.1') {
+      formDefault = storeAnamnesis.form
+      // }
       if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
         formDefault.skreeninggizi = null
         formDefault.keluhannyeri = null
@@ -186,17 +187,17 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         kdruang: pasien?.kdruangan,
         id: null,
         form: formDefault,
-        formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
-        formNeoNatal: kasusKep === '4.3' ? this.formNeoNatal : null,
-        formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
+        formKebidanan: kasusKep === '4.2' ? storeAnamnesis.formKebidanan : null, // ini storeAnamnesis.formKebidanan,
+        formNeoNatal: kasusKep === '4.3' ? storeAnamnesis.formNeoNatal : null,
+        formPediatrik: kasusKep === '4.4' ? storeAnamnesis.formPediatrik : null // ini storeAnamnesis.formPediatrik
       }
 
       const storePemeriksaan = usePemeriksaanUmumRanapStore()
       storePemeriksaan.form.id = null
       let frm = storePemeriksaan.form
-      if (kasusKep === '4.1') {
-        frm = storePemeriksaan.form
-      }
+      // if (kasusKep === '4.1') {
+      frm = storePemeriksaan.form
+      // }
       if (kasusKep === '4.2' || kasusKep === '4.3' || kasusKep === '4.4') {
         frm.skreeninggizi = null
         frm.keluhannyeri = null
@@ -208,9 +209,12 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         kdruang: pasien?.kdruangan,
         id: null,
         form: frm,
-        formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
-        formNeonatal: kasusKep === '4.3' ? this.formNeonatal : null,
-        formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
+        // formKebidanan: kasusKep === '4.2' ? this.formKebidanan : null, // ini this.formKebidanan,
+        // formNeonatal: kasusKep === '4.3' ? this.formNeonatal : null,
+        // formPediatrik: kasusKep === '4.4' ? this.formPediatrik : null // ini this.formPediatrik
+        formKebidanan: kasusKep === '4.2' ? storePemeriksaan.formKebidanan : null, // ini storePemeriksaan.formKebidanan,
+        formNeonatal: kasusKep === '4.3' ? storePemeriksaan.formNeonatal : null,
+        formPediatrik: kasusKep === '4.4' ? storePemeriksaan.formPediatrik : null // ini storePemeriksaan.formPediatrik
       }
 
       const storePenilaian = usePenilaianRanapStore()
@@ -238,7 +242,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         form: this.form
       }
 
-      console.log('form', payload)
+      // console.log('form', payload)
       // console.log('form pemeriksaan', pemeriksaan)
 
       return new Promise((resolve, reject) => {
@@ -263,6 +267,21 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
           .catch((err) => {
             this.loadingSave = false
             console.log(err)
+            reject(err)
+          })
+      })
+    },
+
+    async deleteData (pasien, id) {
+      const payload = { id }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/ranap/layanan/cppt/deletecppt', payload)
+          .then((resp) => {
+            const storeRanap = usePengunjungRanapStore()
+            storeRanap.hapusDataInjectan(pasien, id, 'cppt')
+            resolve(resp)
+          })
+          .catch((err) => {
             reject(err)
           })
       })

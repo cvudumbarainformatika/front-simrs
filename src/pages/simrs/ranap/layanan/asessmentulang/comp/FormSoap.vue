@@ -447,8 +447,9 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
           </q-card-section>
         </q-card>
       </div> -->
-      <div style="margin-bottom: 350px;" />
     </div>
+
+    <div style="margin-bottom: 150px;" />
 
     <div class="fixed-bottom full-width">
       <!-- <div class="col-12"> -->

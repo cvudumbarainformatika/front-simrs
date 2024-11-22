@@ -20,11 +20,30 @@
             </q-item-section>
 
             <q-item-section side>
-              <div class="text-grey-8">
-                <span class="text-weight-bold">Tgl</span> <em class="text-weight-medium"> {{ dateFullFormat(item?.tgl) }}</em>
-              </div>
-              <div class="text-grey-8">
-                <span class="text-weight-bold">Jam</span> <em class="text-weight-medium"> {{ jamTnpDetik(item?.tgl) }}</em>
+              <div class="flex q-gutter-lg items-center">
+                <div
+                  v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user && auth?.user?.pegawai?.kdpegsimrs === 'sa'"
+                >
+                  <q-btn round flat size="sm" icon="icon-mat-delete" color="negative" @click="deleteItem(item)">
+                    <q-tooltip> Hapus </q-tooltip>
+                  </q-btn>
+                </div>
+                <div>
+                  <div class="text-grey-8">
+                    <span class="text-weight-bold">Tgl</span> <em class="text-weight-medium"> {{ dateFullFormat(item?.tgl) }}</em>
+                  </div>
+                  <div class="text-grey-8 q-mt-xs">
+                    <q-badge class="q-px-sm q-py-xs" outline color="primary">
+                      <div class="flex q-gutter-sm">
+                        <div class="">
+                          Jam
+                        </div> <div>:</div> <div class="text-weight-bold">
+                          {{ jamTnpDetik(item?.tgl) }}
+                        </div>
+                      </div>
+                    </q-badge>
+                  </div>
+                </div>
               </div>
             </q-item-section>
           </template>
@@ -82,7 +101,7 @@
                       </div>
                       <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
-                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user) {
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
                             notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
                             return
                           }
@@ -352,6 +371,7 @@ import { dateFullFormat, jamTnpDetik } from 'src/modules/formatter'
 import { computed, defineAsyncComponent, ref } from 'vue'
 import useForm from './useForm'
 import { notifBottomVue } from 'src/modules/utils'
+import { useQuasar } from 'quasar'
 
 const ItemNyeri = defineAsyncComponent(() => import('./itemlist/ItemNyeri.vue'))
 const DialogFormItem = defineAsyncComponent(() => import('./dialogformchild/DialogFormItem.vue'))
@@ -384,7 +404,12 @@ const {
 } = useForm(props?.pasien)
 
 const items = computed(() => {
-  return store.items
+  // function aturCppt (pasien) {
+  //   const cppt = pasien?.cppt
+  //   data.cppt = cppt?.sort((a, b) => a?.id - b?.id) ?? []
+  // }
+  const cppt = store.items
+  return cppt?.sort((a, b) => b?.id - a?.id)
 })
 
 function getNewLine (text) {
@@ -406,4 +431,25 @@ const validInput = (val) => {
   errMsg.value = ''
   return true
 }
+
+const $q = useQuasar()
+
+const deleteItem = (item) => {
+  console.log('delete', item)
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    store.deleteData(props.pasien, item?.id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
 </script>
