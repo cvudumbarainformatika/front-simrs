@@ -33,9 +33,18 @@
           glossy
           push
           color="green"
-          label="LIST BARANG RUSAK"
+          label="LIST"
           size="md"
           @click="emits('ganti','list')"
+        />
+        <q-btn
+          :outline="path !== 'kartu'"
+          glossy
+          push
+          color="primary"
+          label="KARTU STOK"
+          size="md"
+          @click="emits('ganti','kartu')"
         />
       </q-btn-group>
     </div>

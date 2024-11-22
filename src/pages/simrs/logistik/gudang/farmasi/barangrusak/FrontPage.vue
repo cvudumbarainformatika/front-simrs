@@ -50,6 +50,21 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comp/FormPage.vue')))
   },
   {
+    name: 'kartu',
+    label: 'Kartu',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/KartuStokPage.vue')))
+  },
+  {
+    name: 'hapus',
+    label: 'Hapus',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/HapusPage.vue')))
+  },
+  {
+    name: 'musnah',
+    label: 'Musnah',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/MusnahPage.vue')))
+  },
+  {
     name: 'list',
     label: 'List Bast',
     comp: shallowRef(defineAsyncComponent(() => import('./comp/ListPage.vue')))
@@ -86,6 +101,15 @@ const title = computed(() => {
   else if (menu.value.name === 'list') {
     return 'LIST BARANG RUSAK'
   }
+  else if (menu.value.name === 'musnah') {
+    return 'HALAMAN PEMUSNAHAN BARANG RUSAK'
+  }
+  else if (menu.value.name === 'hapus') {
+    return 'HALAMAN PENGHAPUSAN BARANG RUSAK'
+  }
+  else if (menu.value.name === 'kartu') {
+    return 'HALAMAN KARTU STOK BARANG RUSAK'
+  }
   else {
     return 'BARANG RUSAK'
   }
@@ -96,6 +120,15 @@ const subtitle = computed(() => {
   }
   else if (menu.value.name === 'list') {
     return 'List Barang Rusak'
+  }
+  else if (menu.value.name === 'musnah') {
+    return 'Form Pemusnahan Barang Rusak'
+  }
+  else if (menu.value.name === 'hapus') {
+    return 'Form Pengh Barang Rusak'
+  }
+  else if (menu.value.name === 'kartu') {
+    return 'Kartu Stok Barang Rusak'
   }
   else {
     return 'Barang Rusak'
