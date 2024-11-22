@@ -19,10 +19,11 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       kddiagnosa: '',
       diagnosa: '',
       keterangan: '',
-      kasus: '',
-      tipediagnosa: '',
+      kasus: 'Lama',
+      // tipediagnosa: '',
       dtd: '',
-      jeniskasus: ''
+      jeniskasus: '',
+      tipediagnosa: 'Awal'
     },
     // tindakan
     searchtindakan: '',
@@ -56,7 +57,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
   actions: {
 
     async getDiagnosaDropdown () {
-      const resp = await api.get('v1/simrs/pelayanan/listdiagnosa')
+      const resp = await api.get('v1/simrs/igd/diagnosa/listdiagnosa')
       if (resp.status === 200) {
         this.listDiagnosa = resp.data
       }
@@ -66,12 +67,6 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       // console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
-      }
-    },
-    async jeniskasus () {
-      const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
-      if (resp.status === 200) {
-        this.listjeniskasus = resp.data
       }
     },
 
@@ -164,7 +159,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
 
       this.loadingFormDiagnosa = true
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpandiagnosa', form)
+        const resp = await api.post('v1/simrs/igd/diagnosa/simpandiagnosa', form)
         // console.log(resp)
         if (resp.status === 200) {
           // console.log('simpan diagnosa', resp)
@@ -204,8 +199,8 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
     },
 
     async deleteDiagnosa (pasien, id) {
-      const payload = { id }
-      const resp = await api.post('v1/simrs/pelayanan/hapusdiagnosa', payload)
+      const payload = { id, noreg: pasien.noreg }
+      const resp = await api.post('v1/simrs/igd/diagnosa/hapusdiagnosa', payload)
       if (resp.status === 200) {
         const storePasien = usePengunjungIgdStore()
         const storeIna = useInacbgPoli()
@@ -223,7 +218,8 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
         keterangan: val.rs6,
         dtd: val.rs9,
         kasus: val.rs7,
-        tipediagnosa: val.rs4
+        tipediagnosa: val.rs4,
+        jeniskasus: val?.rs11
       }
       // console.log('form', this.form)
       // console.log('xxx', val)
@@ -386,8 +382,9 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           kddiagnosa: '',
           diagnosa: '',
           keterangan: '',
-          // kasus: '',
-          tipediagnosa: '',
+          kasus: 'Lama',
+          tipediagnosa: 'Awal',
+          jeniskasus: '',
           dtd: ''
         }
         // tindakan

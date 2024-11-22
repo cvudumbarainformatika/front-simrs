@@ -112,7 +112,7 @@ import { ref } from 'vue'
 const storeHistorykehamilan = useHistoryKehamilanStore()
 const refForm = ref()
 
-const optionjenispersalinan = ref(['Pervaginam', 'Pervaginam Dengan Tindakan', 'Section Caesarea(SC)'])
+const optionjenispersalinan = ref(['Abortus', 'Pervaginam', 'Pervaginam Dengan Tindakan', 'Section Caesarea(SC)'])
 const optionPenolong = ref(['Dokter', 'Perawat', 'Bidan', 'Dukun'])
 const optionJenisKelamin = ref(['Laki-laki', 'Perempuan'])
 

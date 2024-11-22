@@ -39,6 +39,15 @@
                     <em class="">ICD Kode</em> : <span class="text-weight-bold">{{ item.rs3 }}</span>
                   </q-item-label>
                   <q-item-label
+                    lines="2"
+                    class="f-12"
+                    v-if="item?.rs11 !== ''"
+                  >
+                    <em class="">Jenis Khasus</em> : <q-badge color="cyan">
+                      {{ item.rs11 }}
+                    </q-badge>
+                  </q-item-label>
+                  <q-item-label
                     lines="3"
                   >
                     <em class="">diagnosa</em> : <span class="text-weight-bold">{{ item.masterdiagnosa?.rs4 }}</span>
@@ -109,11 +118,11 @@
 </template>
 
 <script setup>
-import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { useQuasar } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
+import { useDiagnosaDokter } from 'src/stores/simrs/igd/diagnosadokter'
 
-const store = useLayananPoli()
+const store = useDiagnosaDokter()
 const $q = useQuasar()
 const props = defineProps({
   pasien: {
@@ -122,7 +131,7 @@ const props = defineProps({
   }
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',

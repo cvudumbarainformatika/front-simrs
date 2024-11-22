@@ -11,6 +11,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     ruangranaps: [],
     loading: false,
     loadingSaveGantiDpjp: false,
+    listkhasusdiagnosa: [],
     pasiens: [],
     meta: null,
     loadingIcare: false,
@@ -392,6 +393,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataDiagnosa (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].diagnosa
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
     async getruangranap () {
       const resp = await api.get('v1/simrs/master/kamar')
       if (resp.status === 200) {
@@ -434,6 +443,12 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         console.log(error)
         this.loadingTerima = false
         // this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+    async getTipeDiagnosa () {
+      const resp = await api.get('v1/simrs/master/listtipekhasus')
+      if (resp.status === 200) {
+        this.listkhasusdiagnosa = resp.data
       }
     }
   }
