@@ -159,7 +159,7 @@ const props = defineProps({
 
 const rhesus = ref(['+', '-'])
 const jenisdarah = ref(['Darah biasa (Whole Blood)', 'Sel darah merah yang dipadatkan (Packed Red Cell)', 'Plasma', 'Trombosit', 'Fresh Frozen Plasma'])
-const golda = ref(['A', 'B', 'AB', 'o'])
+const golda = ref(['-', 'A', 'B', 'AB', 'o'])
 const sifatpermintaan = ref(['Biasa', 'Cito', 'Persiapan Operasi'])
 const reaksi = ref(['Tidak Ada Reaksi', 'Demam', 'Mengigil', 'Urtikaria/Kemerahan', 'Peningkatan Tekanan Darah', 'Penurunan Tekanan Darah', 'Palpitasi', 'Dispnea', 'Urine Gelap/Kemerahan', 'Pendarahan /DIC', 'Lainnya'])
 
