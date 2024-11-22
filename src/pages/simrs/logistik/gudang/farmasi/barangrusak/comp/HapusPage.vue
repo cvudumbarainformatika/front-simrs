@@ -1,0 +1,3 @@
+<template>
+  Halaman Penghapusan
+</template>

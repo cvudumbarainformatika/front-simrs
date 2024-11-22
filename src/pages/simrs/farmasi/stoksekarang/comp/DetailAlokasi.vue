@@ -266,7 +266,7 @@
           </div>
           <q-separator class="q-my-sm" />
         </div>
-        <div v-if="!store.mutasis?.length && !store.reseps?.length && !store.operasis.length">
+        <div v-if="!store.mutasis?.length && !store.reseps?.length && !store.operasis?.length">
           <app-no-data />
         </div>
       </q-card-section>
