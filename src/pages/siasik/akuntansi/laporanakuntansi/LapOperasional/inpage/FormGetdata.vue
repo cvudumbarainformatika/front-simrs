@@ -10,7 +10,9 @@
         outlined
         :source="store.level"
         @update:model-value="(val)=>{
-          store.reqs.levelberapa = parseInt(val)
+          const aa = parseInt(val)
+          store.reqs.levelberapa = aa
+          console.log('lvl', store.reqs.levelberapa)
         }"
       />
     </div>

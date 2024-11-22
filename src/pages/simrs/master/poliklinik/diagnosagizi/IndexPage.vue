@@ -25,14 +25,14 @@
 </template>
 
 <script setup>
-import { useMasterDiagnosaKebidanan } from 'src/stores/simrs/master/poliklinik/diagnosakebidanan'
+import { useMasterDiagnosaGiziStore } from 'src/stores/simrs/master/poliklinik/diagnosagizi'
 import { onMounted } from 'vue'
 import FormDiagnosa from './FormDiagnosa.vue'
 import FormIntevensi from './FormIntervensi.vue'
 import ListDiagnosa from './ListDiagnosa.vue'
 import { useQuasar } from 'quasar'
 
-const store = useMasterDiagnosaKebidanan()
+const store = useMasterDiagnosaGiziStore()
 
 const $q = useQuasar()
 

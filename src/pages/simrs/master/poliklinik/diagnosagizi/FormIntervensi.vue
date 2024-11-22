@@ -154,10 +154,10 @@
 </template>
 
 <script setup>
-import { useMasterDiagnosaKebidanan } from 'src/stores/simrs/master/poliklinik/diagnosakebidanan'
+import { useMasterDiagnosaGiziStore } from 'src/stores/simrs/master/poliklinik/diagnosagizi.js'
 import { ref } from 'vue'
 
-const store = useMasterDiagnosaKebidanan()
+const store = useMasterDiagnosaGiziStore()
 const groupIntervernsi = ref(null)
 
 function addingGroupIntervensi (evt) {
@@ -174,6 +174,6 @@ function setScope (scope, group, row) {
 
 function filterredIntervensis (by) {
   const arr = store?.diagnosa?.intervensis
-  return arr?.length ? arr?.filter(x => x.group === by) : []
+  return arr.length ? arr.filter(x => x.group === by) : []
 }
 </script>
