@@ -429,7 +429,8 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               ref="refInputInstruksi"
               v-model="store.form.instruksi"
               outlined
-              autogrow
+              type="textarea"
+              rows="5"
               stack-label
               standout="bg-yellow-3"
               label="Instruksi"

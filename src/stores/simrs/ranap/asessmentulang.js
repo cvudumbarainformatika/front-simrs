@@ -239,7 +239,10 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         norm: pasien?.norm,
         kdruang: pasien?.kdruangan,
         id: null,
-        form: this.form
+        form: this.form,
+        kdgroup_ruangan: pasien?.kdgroup_ruangan,
+        kelas_ruangan: pasien?.kelas_ruangan,
+        kodesistembayar: pasien?.kodesistembayar
       }
 
       // console.log('form', payload)
