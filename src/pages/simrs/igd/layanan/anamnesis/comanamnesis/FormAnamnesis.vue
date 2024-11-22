@@ -409,7 +409,7 @@
                   :label="al"
                   color="primary"
                   @update:model-value="updateNyerihilang"
-                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkannyerihilang" v-if="store.pilihnyerihilang.includes('Lainnya')" />
+                /> <q-input label="Sebutkan" dense v-model="store.form.sebutkannyerihilang" v-if="store?.pilihnyerihilang?.includes('Lainnya')" />
               </div>
               <div class="col-12 text-bold">
                 Status Fungsional
@@ -589,7 +589,7 @@ const store = useAnamnesis()
 const emits = defineEmits(['openHistory'])
 
 const refForm = ref()
-
+console.log('sa', store.form)
 // const metode = ref('nrt')
 
 const optionSkreening = ref([

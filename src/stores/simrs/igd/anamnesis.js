@@ -120,6 +120,7 @@ export const useAnamnesis = defineStore('anamnesis', {
     },
 
     editForm (val) {
+      console.log('sasasa', this.form, val)
       this.form = {
         id: val?.id,
         keluhanutama: val?.rs4,
@@ -157,36 +158,36 @@ export const useAnamnesis = defineStore('anamnesis', {
         kaki: val?.anamnesenips?.kaki,
         keadaanrangsangan: val?.anamnesenips?.keadaan_rangsangan,
         scroenips: val?.anamnesenips?.skor,
-        ketscorenips: val?.anamnesenips?.ket_skor,
+        ketscorenips: val?.anamnesenips?.ket_skor
 
-        // tambahan
-        lokasinyeri: val?.anamnesetambahan[0]?.lokasi_nyeri,
-        durasinyeri: val?.anamnesetambahan[0]?.durasi_nyeri,
-        penyebabnyeri: val?.anamnesetambahan[0]?.durasi_nyeri,
-        frekwensinyeri: val?.anamnesetambahan[0]?.penyebab_nyeri,
-        nyerihilang: val?.anamnesetambahan[0]?.nyeri_hilang,
-        sebutkannyerihilang: val?.anamnesetambahan[0]?.sebutkannyerihilang,
-        aktivitasmobilitas: val?.anamnesetambahan[0]?.aktifitas_mobilitas,
-        sebutkanperlubanuan: val?.anamnesetambahan[0]?.sebutkanperlubanuan,
-        aktivitasAlatBnatujalan: val?.anamnesetambahan[0]?.alat_bantu_jalan,
-        sebutkanalatbantujalan: val?.anamnesetambahan[0]?.sebutkanalatbantujalan,
-        kebutuhankomunikasidanedukasi: val?.anamnesetambahan[0]?.bicara,
-        sebutkankomunaksilainnya: val?.anamnesetambahan[0]?.sebutkankomunaksilainnya,
-        penerjemah: val?.anamnesetambahan[0]?.penerjemah,
-        sebutkanpenerjemah: val?.anamnesetambahan[0]?.sebutkanpenerjemah,
-        bahasaisyarat: val?.anamnesetambahan[0]?.bahasa_isyarat,
-        hamabatan: val?.anamnesetambahan[0]?.hambatan,
-        sebutkanhambatan: val?.anamnesetambahan[0]?.sebutkanhambatan,
-        riwayatdemam: val?.anamnesetambahan[0]?.riwayat_demam,
-        berkeringat: val?.anamnesetambahan[0]?.berkeringat_malam_hari,
-        riwayatbepergian: val?.anamnesetambahan[0]?.riwayat_bepergian,
-        obatjangkapanjang: val?.anamnesetambahan[0]?.riwayat_pemakaian_obat,
-        bbturun: val?.anamnesetambahan[0]?.riwayat_bb_turun
       }
+      // tambahan
+      if (val?.anamnesetambahan[0]?.lokasi_nyeri !== null) this.form.lokasinyeri = val?.anamnesetambahan[0]?.lokasi_nyeri
+      if (val?.anamnesetambahan[0]?.durasi_nyeri !== null) this.form.durasinyeri = val?.anamnesetambahan[0]?.durasi_nyeri
+      if (val?.anamnesetambahan[0]?.durasi_nyeri !== null) this.form.penyebabnyeri = val?.anamnesetambahan[0]?.durasi_nyeri
+      if (val?.anamnesetambahan[0]?.penyebab_nyeri !== null) this.form.frekwensinyeri = val?.anamnesetambahan[0]?.penyebab_nyeri
+      if (val?.anamnesetambahan[0]?.nyeri_hilang !== null) this.form.nyerihilang = val?.anamnesetambahan[0]?.nyeri_hilang
+      if (val?.anamnesetambahan[0]?.sebutkannyerihilang !== null) this.form.sebutkannyerihilang = val?.anamnesetambahan[0]?.sebutkannyerihilang
+      if (val?.anamnesetambahan[0]?.aktifitas_mobilitas !== null) this.form.aktivitasmobilitas = val?.anamnesetambahan[0]?.aktifitas_mobilitas
+      if (val?.anamnesetambahan[0]?.sebutkanperlubanuan !== null) this.form.sebutkanperlubanuan = val?.anamnesetambahan[0]?.sebutkanperlubanuan
+      if (val?.anamnesetambahan[0]?.alat_bantu_jalan !== null) this.form.aktivitasAlatBnatujalan = val?.anamnesetambahan[0]?.alat_bantu_jalan
+      if (val?.anamnesetambahan[0]?.sebutkanalatbantujalan !== null) this.form.sebutkanalatbantujalan = val?.anamnesetambahan[0]?.sebutkanalatbantujalan
+      if (val?.anamnesetambahan[0]?.bicara !== null) this.form.kebutuhankomunikasidanedukasi = val?.anamnesetambahan[0]?.bicara
+      if (val?.anamnesetambahan[0]?.sebutkankomunaksilainnya !== null) this.form.sebutkankomunaksilainnya = val?.anamnesetambahan[0]?.sebutkankomunaksilainnya
+      if (val?.anamnesetambahan[0]?.penerjemah !== null) this.form.penerjemah = val?.anamnesetambahan[0]?.penerjemah
+      if (val?.anamnesetambahan[0]?.sebutkanpenerjemah !== null) this.form.sebutkanpenerjemah = val?.anamnesetambahan[0]?.sebutkanpenerjemah
+      if (val?.anamnesetambahan[0]?.bahasa_isyarat !== null) this.form.bahasaisyarat = val?.anamnesetambahan[0]?.bahasa_isyarat
+      if (val?.anamnesetambahan[0]?.hambatan !== null) this.form.hamabatan = val?.anamnesetambahan[0]?.hambatan
+      if (val?.anamnesetambahan[0]?.sebutkanhambatan !== null) this.form.sebutkanhambatan = val?.anamnesetambahan[0]?.sebutkanhambatan
+      if (val?.anamnesetambahan[0]?.riwayat_demam !== null) this.form.riwayatdemam = val?.anamnesetambahan[0]?.riwayat_demam
+      if (val?.anamnesetambahan[0]?.berkeringat_malam_hari !== null) this.form.berkeringat = val?.anamnesetambahan[0]?.berkeringat_malam_hari
+      if (val?.anamnesetambahan[0]?.riwayat_bepergian !== null) this.form.riwayatbepergian = val?.anamnesetambahan[0]?.riwayat_bepergian
+      if (val?.anamnesetambahan[0]?.riwayat_pemakaian_obat !== null) this.form.obatjangkapanjang = val?.anamnesetambahan[0]?.riwayat_pemakaian_obat
+      if (val?.anamnesetambahan[0]?.riwayat_bb_turun !== null) this.form.bbturun = val?.anamnesetambahan[0]?.riwayat_bb_turun
       const kommatext = val?.riwayatalergi?.split(', ')
-      this.selection = kommatext
+      this.selection = kommatext?.length ? kommatext : []
       const kommatextx = val?.anamnesetambahan[0]?.nyeri_hilang?.split(', ')
-      this.pilihnyerihilang = kommatextx
+      this.pilihnyerihilang = kommatextx?.length ? kommatextx : []
     },
     copyForm (val) {
       this.form = {
