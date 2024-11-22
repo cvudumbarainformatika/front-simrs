@@ -337,8 +337,11 @@ export const useLaboratIgd = defineStore('laborat-igd', {
 
     initReset () {
       this.caripemeriksaanlab = null
-      // this.permintaanLaborats = ''
-      // this.form.prioritas_pemeriksaan = 'Tidak'
+      this.permintaanLaborats = ''
+      this.form.diagnosa_masalah = ''
+      this.form.catatan_permintaan = ''
+      this.form.puasa_pasien = 'Tidak'
+      this.form.prioritas_pemeriksaan = 'Tidak'
       this.form.details = []
       return new Promise((resolve, reject) => {
         resolve()

@@ -101,7 +101,7 @@
                 </div>
                 <q-separator class="q-my-sm" />
                 <q-checkbox
-                  v-for="(al, i) in store.alergis"
+                  v-for="(al, i) in alergis"
                   :key="i"
                   v-model="store.selection"
                   :val="al"
@@ -410,14 +410,12 @@
                   color="primary"
                   @update:model-value="updateNyerihilang"
                 /> <q-input label="Sebutkan" dense v-model="store.form.sebutkannyerihilang" v-if="store.pilihnyerihilang.includes('Lainnya')" />
-                <q-input label="Sebutkan" v-model="store.form.sebutkannyerihilang" v-if="store.form.nyerihilang === 'Lainnya'" />
               </div>
               <div class="col-12 text-bold">
                 Status Fungsional
               </div>
               <div class="col-6">
                 - Aktivitas Dan Mobilitas
-                <q-input label="Sebutkan" v-model="store.form.sebutkanperlubanuan" v-if="store.form.aktivitasmobilitas === 'Perlu Bantuan'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -426,11 +424,11 @@
                   color="primary"
                   inline
                   dense
-                />
+                  @update:model-value="clearsebutkanperlubanuan"
+                /><q-input label="Sebutkan" dense v-model="store.form.sebutkanperlubanuan" v-if="store.form.aktivitasmobilitas === 'Perlu Bantuan'" />
               </div>
               <div class="col-6">
                 - Alat Bantu Jalan
-                <q-input label="Sebutkan" v-model="store.form.sebutkanalatbantujalan" v-if="store.form.aktivitasAlatBnatujalan === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -439,14 +437,14 @@
                   color="primary"
                   inline
                   dense
-                />
+                  @update:model-value="clearsebutkanalatbantujalan"
+                /><q-input label="Sebutkan" dense v-model="store.form.sebutkanalatbantujalan" v-if="store.form.aktivitasAlatBnatujalan === 'Ya'" />
               </div>
               <div class="col-12 text-bold">
                 Kebutuhan Komunikasi dan Edukasi
               </div>
               <div class="col-6">
                 - Bicara
-                <q-input v-model="store.form.sebutkankomunaksilainnya" label="Sebutkan" v-if="store.form.kebutuhankomunikasidanedukasi === 'Lainnya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -455,11 +453,11 @@
                   color="primary"
                   inline
                   dense
-                />
+                  @update:model-value="clearsebutkankomunaksilainnya"
+                /><q-input v-model="store.form.sebutkankomunaksilainnya" dense label="Sebutkan" v-if="store.form.kebutuhankomunikasidanedukasi === 'Lainnya'" />
               </div>
               <div class="col-6">
                 - Dibutuhkan Penerjemah
-                <q-input v-model="store.form.sebutkanpenerjemah" label="Sebutkan" v-if="store.form.penerjemah === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -468,7 +466,8 @@
                   color="primary"
                   inline
                   dense
-                />
+                  @update:model-value="clearsebutkanpenerjemah"
+                /><q-input v-model="store.form.sebutkanpenerjemah" dense label="Sebutkan" v-if="store.form.penerjemah === 'Ya'" />
               </div>
               <div class="col-6">
                 - Bahasa Isyarat
@@ -484,7 +483,6 @@
               </div>
               <div class="col-6">
                 - Hambatan
-                <q-input v-model="store.form.sebutkanhambatan" label="Sebutkan" v-if="store.form.hamabatan === 'Ya'" />
               </div>
               <div class="col-6">
                 <q-option-group
@@ -493,7 +491,8 @@
                   color="primary"
                   inline
                   dense
-                />
+                  @update:model-value="clearsebutkanhambatan"
+                /><q-input v-model="store.form.sebutkanhambatan" dense label="Sebutkan" v-if="store.form.hamabatan === 'Ya'" />
               </div>
               <div class="col-12 text-bold">
                 Batuk
@@ -693,6 +692,8 @@ const lengan = ref([
   'Santai',
   'Flexi/Extensi'
 ])
+
+const alergis = ref(['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'])
 
 const kaki = ref([
   'Santai',
@@ -964,6 +965,25 @@ function resetnips () {
 
 function updateNyerihilang (val) {
   store.setForm('nyerihilang', val.join(', '))
+}
+function clearsebutkanperlubanuan () {
+  store.form.sebutkanperlubanuan = ''
+}
+
+function clearsebutkanalatbantujalan () {
+  store.form.sebutkanalatbantujalan = ''
+}
+
+function clearsebutkankomunaksilainnya () {
+  store.form.sebutkankomunaksilainnya = ''
+}
+
+function clearsebutkanpenerjemah () {
+  store.form.sebutkanpenerjemah = ''
+}
+
+function clearsebutkanhambatan () {
+  store.form.sebutkanhambatan = ''
 }
 
 store.form.metode = 'nrt'

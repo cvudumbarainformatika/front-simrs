@@ -21,31 +21,40 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatalergi: '',
       keteranganalergi: '',
       riwayatpengobatan: '',
-      riwayatbepergian: '',
+      riwayatbepergian: 'Tidak',
       // baru
       riwayatpekerjaan: '',
       riwayatpenyakitkeluarga: '',
       skreeninggizi: 0,
       asupanmakan: 0,
-      kondisikhusus: '',
+      kondisikhusus: 'Tidak',
       skorkondisikhusus: 0,
       skor: 0,
 
       // baru skornyeri
       skornyeri: 0,
       keteranganscorenyeri: 'tidak ada nyeri',
-      riwayatdemam: '',
-      berkeringat: '',
+      riwayatdemam: 'Tidak',
+      berkeringat: 'Tidak',
       daerahwabah: '',
-      obatjangkapanjang: '',
-      bbturun: '',
+      obatjangkapanjang: 'Tidak',
+      bbturun: 'Tidak',
 
       scroebps: 0,
       ketscorebps: '',
 
       scroenips: 0,
       ketscorenips: '',
-      metode: 'nrt'
+      metode: 'nrt',
+
+      penerjemah: 'Tidak',
+      bahasaisyarat: 'Tidak',
+      hamabatan: 'Tidak',
+      kebutuhankomunikasidanedukasi: 'Normal',
+      aktivitasmobilitas: 'Mandiri',
+      aktivitasAlatBnatujalan: 'Tidak',
+      selection: []
+
     },
     // nilai bps
     nilaiekspresiwajah: 0,
@@ -112,26 +121,72 @@ export const useAnamnesis = defineStore('anamnesis', {
 
     editForm (val) {
       this.form = {
-        id: val.id,
-        keluhanutama: val.rs4,
-        riwayatpenyakit: val.riwayatpenyakit,
-        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
-        riwayatalergi: val.riwayatalergi,
-        keteranganalergi: val.keteranganalergi,
-        riwayatpengobatan: val.riwayatpengobatan,
+        id: val?.id,
+        keluhanutama: val?.rs4,
+        riwayatpenyakit: val?.riwayatpenyakit,
+        riwayatpenyakitsekarang: val?.riwayatpenyakitsekarang,
+        selection: val?.riwayatalergi,
+        keteranganalergi: val?.keteranganalergi,
+        riwayatpengobatan: val?.riwayatpengobatan,
+        riwayatpekerjaan: val?.riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya,
         // baru
-        riwayatpenyakitkeluarga: val.riwayatpenyakitkeluarga,
-        skreeninggizi: val.skreeninggizi,
-        asupanmakan: val.asupanmakan,
-        kondisikhusus: val.kondisikhusus,
-        skor: val.skor,
+        riwayatpenyakitkeluarga: val?.riwayatpenyakitkeluarga,
+        skreeninggizi: val?.skreeninggizi,
+        asupanmakan: val?.asupanmakan,
+        kondisikhusus: val?.kondisikhusus,
+        skor: val?.skor,
+        keterangan_skor: val?.keterangan_skor,
+
+        metode: val?.anamnesebps ? 'bps' : (val?.anamnesenips ? 'nips' : 'nrt'),
+        // baru lagi metode scalanyeri
         skornyeri: isNaN(parseInt(val?.scorenyeri)) ? 0 : parseInt(val?.scorenyeri),
-        keteranganscorenyeri: val?.keteranganscorenyeri
+        keteranganscorenyeri: val?.keteranganscorenyeri,
+
+        // baru lagi metode bps
+        ekspresiwajah: val?.anamnesebps?.ekspresi_wajah,
+        gerakantangan: val?.anamnesebps?.gerakan_tangan,
+        kepatuhanventilasimekanik: val?.anamnesebps?.kepatuhan_ventilasi_mekanik,
+        scroebps: val?.anamnesebps?.skor,
+        ketscorebps: val?.anamnesebps?.keterangan_skor,
+
+        // baru lagi metode nips
+        ekspresiwajahnips: val?.anamnesenips?.ekspresi_wajah,
+        menangis: val?.anamnesenips?.menangis,
+        polanafas: val?.anamnesenips?.ekspresi_wajah,
+        lengan: val?.anamnesenips?.lengan,
+        kaki: val?.anamnesenips?.kaki,
+        keadaanrangsangan: val?.anamnesenips?.keadaan_rangsangan,
+        scroenips: val?.anamnesenips?.skor,
+        ketscorenips: val?.anamnesenips?.ket_skor,
+
+        // tambahan
+        lokasinyeri: val?.anamnesetambahan[0]?.lokasi_nyeri,
+        durasinyeri: val?.anamnesetambahan[0]?.durasi_nyeri,
+        penyebabnyeri: val?.anamnesetambahan[0]?.durasi_nyeri,
+        frekwensinyeri: val?.anamnesetambahan[0]?.penyebab_nyeri,
+        nyerihilang: val?.anamnesetambahan[0]?.nyeri_hilang,
+        sebutkannyerihilang: val?.anamnesetambahan[0]?.sebutkannyerihilang,
+        aktivitasmobilitas: val?.anamnesetambahan[0]?.aktifitas_mobilitas,
+        sebutkanperlubanuan: val?.anamnesetambahan[0]?.sebutkanperlubanuan,
+        aktivitasAlatBnatujalan: val?.anamnesetambahan[0]?.alat_bantu_jalan,
+        sebutkanalatbantujalan: val?.anamnesetambahan[0]?.sebutkanalatbantujalan,
+        kebutuhankomunikasidanedukasi: val?.anamnesetambahan[0]?.bicara,
+        sebutkankomunaksilainnya: val?.anamnesetambahan[0]?.sebutkankomunaksilainnya,
+        penerjemah: val?.anamnesetambahan[0]?.penerjemah,
+        sebutkanpenerjemah: val?.anamnesetambahan[0]?.sebutkanpenerjemah,
+        bahasaisyarat: val?.anamnesetambahan[0]?.bahasa_isyarat,
+        hamabatan: val?.anamnesetambahan[0]?.hambatan,
+        sebutkanhambatan: val?.anamnesetambahan[0]?.sebutkanhambatan,
+        riwayatdemam: val?.anamnesetambahan[0]?.riwayat_demam,
+        berkeringat: val?.anamnesetambahan[0]?.berkeringat_malam_hari,
+        riwayatbepergian: val?.anamnesetambahan[0]?.riwayat_bepergian,
+        obatjangkapanjang: val?.anamnesetambahan[0]?.riwayat_pemakaian_obat,
+        bbturun: val?.anamnesetambahan[0]?.riwayat_bb_turun
       }
       const kommatext = val?.riwayatalergi?.split(', ')
       this.selection = kommatext
-      // console.log('form', this.form)
-      // console.log('xxx', val)
+      const kommatextx = val?.anamnesetambahan[0]?.nyeri_hilang?.split(', ')
+      this.pilihnyerihilang = kommatextx
     },
     copyForm (val) {
       this.form = {
@@ -258,7 +313,7 @@ export const useAnamnesis = defineStore('anamnesis', {
           keluhanutama: '',
           riwayatpenyakit: '',
           riwayatpenyakitsekarang: '',
-          riwayatalergi: '',
+          selection: [],
           keteranganalergi: '',
           riwayatpengobatan: '',
           // baru
@@ -269,10 +324,26 @@ export const useAnamnesis = defineStore('anamnesis', {
           kondisikhusus: '',
           skor: 0,
 
+          skorkondisikhusus: 0,
+          riwayatbepergian: 'Tidak',
+
           // baru skornyeri
           skornyeri: 0,
           keteranganskornyeri: 'tidak ada nyeri',
-          metode: 'nrt'
+          metode: 'nrt',
+          nyerihilang: '',
+          aktivitasmobilitas: 'Mandiri',
+          aktivitasAlatBnatujalan: 'Tidak',
+          kebutuhankomunikasidanedukasi: 'Normal',
+          penerjemah: 'Tidak',
+          bahasaisyarat: 'Tidak',
+          hamabatan: 'Tidak',
+          riwayatdemam: 'Tidak',
+          berkeringat: 'Tidak',
+          obatjangkapanjang: 'Tidak',
+          bbturun: 'Tidak',
+          pilihnyerihilang: []
+
         }
         this.selection = []
 

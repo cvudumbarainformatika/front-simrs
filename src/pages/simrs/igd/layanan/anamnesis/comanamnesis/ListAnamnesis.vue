@@ -163,7 +163,7 @@
                   <q-item-label>- Penyebab Nyeri : {{ item?.anamnesetambahan[0]?.penyebab_nyeri ?? '-' }}</q-item-label>
                   <q-item-label>- Frekwensi Nyeri : {{ item?.anamnesetambahan[0]?.frekwensi_nyeri ?? '-' }}</q-item-label>
                   <q-item-label>
-                    - Nyeri Nyeri : {{ item?.anamnesetambahan[0]?.nyeri_hilang ?? '-' }}
+                    - Nyeri Hilang : {{ item?.anamnesetambahan[0]?.nyeri_hilang ?? '-' }}
                     <span v-if="item?.anamnesetambahan[0]?.sebutkannyerihilang !== null">
                       ( {{ item?.anamnesetambahan[0]?.sebutkannyerihilang }} )
                     </span>
@@ -212,7 +212,7 @@
                     </span>
                   </q-item-label>
                 </div>
-                <div>
+                <!-- <div>
                   <q-item-label>
                     <span class="text-weight-bold"><q-badge outline color="red">Kebutuhan Komunikasi dan Edukasi</q-badge></span>
                   </q-item-label>
@@ -237,7 +237,8 @@
                       ( {{ item?.anamnesetambahan[0]?.sebutkanhambatan }} )
                     </span>
                   </q-item-label>
-                </div><div>
+                </div> -->
+                <div>
                   <q-item-label>
                     <span class="text-weight-bold"><q-badge outline color="red">Batuk</q-badge></span>
                   </q-item-label>
@@ -306,7 +307,7 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.pasien?.anamnesis
-  console.log('hahaha', arr)
+  // console.log('hahaha', arr)
   return arr?.sort((a, b) => { return b.id - a.id })
 })
 

@@ -396,7 +396,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const resp = await api.get('v1/simrs/master/kamar')
       if (resp.status === 200) {
         this.ruangranaps = resp?.data
-        console.log('kanmar', this.ruangranaps)
+        // console.log('kanmar', this.ruangranaps)
       }
     },
     async setLayananSelesai (pasien) {

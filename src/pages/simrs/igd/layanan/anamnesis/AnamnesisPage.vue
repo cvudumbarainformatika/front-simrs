@@ -90,5 +90,6 @@ onMounted(() => {
   storepenilaian.masterpenilaian()
   storepenilaian.usia = props.pasien.usia
   storeTriage.getDataTriage(props.pasien.noreg)
+  store.initReset()
 })
 </script>
