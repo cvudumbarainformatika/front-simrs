@@ -22,7 +22,7 @@
             <q-item-section side>
               <div class="flex q-gutter-lg items-center">
                 <div
-                  v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user && auth?.user?.pegawai?.kdpegsimrs === 'sa'"
+                  v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user || auth?.user?.pegawai?.kdpegsimrs === 'sa'"
                 >
                   <q-btn round flat size="sm" icon="icon-mat-delete" color="negative" @click="deleteItem(item)">
                     <q-tooltip> Hapus </q-tooltip>
@@ -168,6 +168,12 @@
                       <q-btn
 
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
+                            notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
+                            return
+                          }
+
                           if (nakes==='2') {
                             store.initDiagnosaKeperawatan(item)
                             editFormAsessment(item)
@@ -186,6 +192,8 @@
                         <div>
                           <span v-html="getNewLine(item?.asessment ?? 'Belum Terisi')" />
                           <q-popup-edit
+                            fit
+                            v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user || auth?.user?.pegawai?.kdpegsimrs === 'sa'"
                             buttons
                             v-model="item.asessment"
                             :cover="false"
@@ -221,6 +229,12 @@
                       </div>
                       <q-btn
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
+                            notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
+                            return
+                          }
+
                           if (nakes==='2') {
                             store.initDiagnosaKeperawatan(item)
                             editFormPlan(item)
@@ -239,6 +253,8 @@
                         <div>
                           <span v-html="getNewLine(item?.plann ?? 'Belum Terisi')" />
                           <q-popup-edit
+                            v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user || auth?.user?.pegawai?.kdpegsimrs === 'sa'"
+                            fit
                             buttons
                             v-model="item.plann"
                             :cover="false"
@@ -274,6 +290,12 @@
                       <q-btn
                         v-if="nakes==='2' || nakes==='3'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
+
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
+                            notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
+                            return
+                          }
+
                           if (nakes==='2') {
                             store.initDiagnosaKeperawatan(item)
                             editFormIntervensi(item)
@@ -292,6 +314,8 @@
                         <div>
                           <span v-html="getNewLine(item?.instruksi ?? 'Belum Terisi')" />
                           <q-popup-edit
+                            v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user || auth?.user?.pegawai?.kdpegsimrs === 'sa'"
+                            fit
                             buttons
                             v-model="item.instruksi"
                             :cover="false"
