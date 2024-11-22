@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Dialog } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
@@ -12,7 +12,12 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     params: {
       per_page: 10
     },
-    form: {},
+    form: {
+      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tanggalRusak: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tgl_retur: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tgl_rusak: date.formatDate(Date.now(), 'YYYY-MM-DD')
+    },
     kondisis: ['Rusak', 'Kadalwarsa'],
     perusahaans: [],
     obats: [],
@@ -49,15 +54,17 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
             'no-caps': true,
             color: 'dark'
           }
-        }).onOk(() => {
-          this.dataReturs = []
-          this.form = {}
-          this.setParams('kdpbf', val)
-          this.setForm('kdpbf', val)
-          this.getObat()
-        }).onCancel(() => {
-          this.setForm('kdpbf', this.params.kdpbf)
         })
+          .onOk(() => {
+            this.dataReturs = []
+            this.form = {}
+            this.setParams('kdpbf', val)
+            this.setForm('kdpbf', val)
+            this.getObat()
+          })
+          .onCancel(() => {
+            this.setForm('kdpbf', this.params.kdpbf)
+          })
       }
       else {
         this.setParams('kdpbf', val)
@@ -114,6 +121,14 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
           this.loadingDataMauRet = false
           this.dataRusaks = resp?.data?.rusak
           this.dataMauReturs = resp?.data?.penerimaan
+          this.dataStokSekarang = resp?.data?.stok
+          if (this.dataStokSekarang.length > 0) {
+            this.dataStokSekarang.forEach(da => {
+              da.no_batch = da.nobatch
+              da.tgl_exp = da.tglexp
+              da.harga_neto = da?.harga ?? 0
+            })
+          }
           if (this.dataMauReturs.length > 0) {
             this.dataMauReturs.forEach(da => {
               da.stok = da.stokterima.map(s => parseFloat(s.jumlah)).reduce((a, b) => a + b, 0)

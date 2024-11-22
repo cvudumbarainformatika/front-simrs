@@ -42,6 +42,7 @@
                 option-value="kd_obat"
                 outlined
                 valid
+                clearable
                 :loading="store.loadingObat"
                 :source="store.obats"
                 @on-select="store.obatSelected"
@@ -171,7 +172,7 @@
             </div>
           </div>
           <!-- tgl Kwitansi Pembayaran -->
-          <div class="row q-col-gutter-sm items-center q-mb-sm">
+          <!-- <div class="row q-col-gutter-sm items-center q-mb-sm">
             <div class="col-3">
               Tanggal Kwitansi Pembayaran
             </div>
@@ -186,9 +187,9 @@
                 @db-model="setTanggalKwi"
               />
             </div>
-          </div>
+          </div> -->
           <!-- No Kwitansi Pembayaran -->
-          <div class="row q-col-gutter-sm items-center q-mb-sm">
+          <!-- <div class="row q-col-gutter-sm items-center q-mb-sm">
             <div class="col-3">
               Nomor Kwitansi Pembayaran
             </div>
@@ -201,7 +202,7 @@
                 outlined
               />
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -486,6 +487,162 @@
         </div>
       </div>
     </div>
+    <!-- Daftar Stok Sekarang-->
+
+    <div v-if="!store?.loadingDataMauRet">
+      <div class="row bg-grey q-pa-sm text-white f-14 q-mb-sm">
+        Stok Sekarang
+      </div>
+      <div v-if="!store?.dataStokSekarang?.length">
+        <app-no-data-small />
+      </div>
+      <!-- <div> -->
+      <div v-if="store?.dataStokSekarang?.length">
+        <div class="row bg-dark text-white q-pa-xs q-mb-sm">
+          <div
+            class="col-auto"
+            style="width:5%"
+          >
+            No
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Kondisi Barang
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Nomor Penerimaan
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Nomor Batch
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Tanggal Penerimaan
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Tanggal Kadalwarsa
+          </div>
+          <div
+            class="col-auto anak text-right"
+          >
+            Jumlah Diterima
+          </div>
+          <div
+            class="col-auto anak text-right"
+          >
+            Sisa Stok
+          </div>
+
+          <div
+            class="col-auto anak text-right"
+          >
+            Jumlah Retur
+          </div>
+          <div
+            class="col-auto text-right"
+            style="width:5%"
+          >
+            #
+          </div>
+        </div>
+        <div
+          v-for="(item,i) in store?.dataStokSekarang"
+          :key="i"
+        >
+          <div class="row items-center q-col-gutter-sm q-mb-sm">
+            <div
+              class="col-auto"
+              style="width:5%"
+            >
+              {{ i+1 }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              <app-autocomplete
+                ref="refKondisi"
+                v-model="item.kondisi_barang"
+                label="Kondisi Barang"
+                outlined
+                :source="store.kondisis"
+              />
+            </div>
+            <div
+              class="col-auto anak"
+            >
+              {{ item?.nopenerimaan }}
+            </div>
+            <div
+              class="col-auto anak"
+            >
+              {{ item?.no_batch }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              {{ humanDate(item?.tglpenerimaan) }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              {{ humanDate(item?.tgl_exp) }}
+            </div>
+            <div
+              class="col-auto anak text-right"
+            >
+              {{ item?.jumlah }}
+            </div>
+            <div
+              class="col-auto anak text-right"
+            >
+              {{ item?.jumlah }}
+            </div>
+
+            <div
+              class="col-auto anak text-right"
+            >
+              <app-input
+                ref="refJumlah"
+                v-model="item.jumlah_retur"
+                outlined
+                label="Jumlah Dikembalikan"
+                @update:model-value="updateJum($event,item,'jumlah_retur')"
+                @keyup.enter="simpan(i, item)"
+              />
+            </div>
+            <div
+              class="col-auto text-right"
+              style="width:5%"
+            >
+              <q-btn
+                class="q-mr-md"
+                flat
+                icon="icon-mat-save"
+                color="primary"
+                round
+                :loading="store.loading && item.loading"
+                @click="simpan(i, item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Simpan Obat
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Daftar barang Dikembalikan -->
     <div v-if="!store?.loadingDataMauRet">
       <div class="bg-grey q-pa-sm text-white f-14 q-mb-md">
@@ -610,13 +767,13 @@ function setTanggalFakDisp (val) {
   store.setForm('tanggalFak', val)
   console.log('form ', store.form)
 }
-function setTanggalKwi (val) {
-  store.setForm('tgl_kwitansi_pembayaran', date.formatDate(val, 'YYYY-MM-DD'))
-}
-function setTanggalKwiDisp (val) {
-  store.setForm('tanggalKwi', val)
-  console.log('form ', store.form)
-}
+// function setTanggalKwi (val) {
+//   store.setForm('tgl_kwitansi_pembayaran', date.formatDate(val, 'YYYY-MM-DD'))
+// }
+// function setTanggalKwiDisp (val) {
+//   store.setForm('tanggalKwi', val)
+//   console.log('form ', store.form)
+// }
 
 function updateJum (evt, det, key) {
   const inc = evt.includes('.')
@@ -643,8 +800,8 @@ const refTaRetur = ref(null)
 const refNoFakRet = ref(null)
 const refTaFakRetur = ref(null)
 const refTaRusak = ref(null)
-const refTaKwiRetur = ref(null)
-const refNoKwiRet = ref(null)
+// const refTaKwiRetur = ref(null)
+// const refNoKwiRet = ref(null)
 const refJumlah = ref(null)
 // autocol
 const refObat = ref(null)
@@ -657,18 +814,18 @@ function validasi (index, dibayar) {
   const taRusak = refTaRusak.value.$refs.refInputDate.validate()
   // const TaFakRetur = refTaFakRetur.value.$refs.refInputDate.validate()
   // const noFakRet = refNoFakRet.value.$refs.refInput.validate()
-  let taKwiRetur = false
-  let noKwiRet = false
-  if (!dibayar) {
-    refTaKwiRetur.value.$refs.refInputDate.resetValidation()
-    refNoKwiRet.value.$refs.refInput.resetValidation()
-    taKwiRetur = true
-    noKwiRet = true
-  }
-  else {
-    taKwiRetur = refTaKwiRetur.value.$refs.refInputDate.validate()
-    noKwiRet = refNoKwiRet.value.$refs.refInput.validate()
-  }
+  // let taKwiRetur = false
+  // let noKwiRet = false
+  // if (!dibayar) {
+  //   refTaKwiRetur.value.$refs.refInputDate.resetValidation()
+  //   refNoKwiRet.value.$refs.refInput.resetValidation()
+  //   taKwiRetur = true
+  //   noKwiRet = true
+  // }
+  // else {
+  //   taKwiRetur = refTaKwiRetur.value.$refs.refInputDate.validate()
+  //   noKwiRet = refNoKwiRet.value.$refs.refInput.validate()
+  // }
 
   const obat = refObat.value.$refs.refAuto.validate()
   const opsi = refOpsiRetur.value.$refs.refAuto.validate()
@@ -681,8 +838,8 @@ function validasi (index, dibayar) {
     // noFakRet &&
     // TaFakRetur &&
       taRusak &&
-      taKwiRetur &&
-      noKwiRet &&
+      // taKwiRetur &&
+      // noKwiRet &&
       jumlah &&
       obat &&
       opsi &&
@@ -736,6 +893,7 @@ onUnmounted(() => {
   store.dataMauReturs = []
   store.dataReturs = []
   store.dataRusaks = []
+  store.dataStokSekarang = []
 })
 </script>
 <style lang="scss" scoped>
