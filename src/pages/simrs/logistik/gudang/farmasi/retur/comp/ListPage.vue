@@ -121,6 +121,28 @@
         >
           <q-btn
             flat
+            icon="icon-mat-edit"
+            dense
+            size="sm"
+            color="primary"
+            :loading="row.loadingEdit"
+            :disable="row.loadingEdit"
+            @click="()=>{
+              row.expand = !row.expand
+              row.highlight = !row.highlight
+              headerOpen=true
+              dataHeader=row
+            }"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Edit Faktur retur
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
             icon="icon-mat-delete"
             dense
             size="sm"
@@ -155,23 +177,6 @@
         </div>
         <div v-if="row.kunci">
           <div class="row items-center">
-            <div>
-              <q-btn
-                round
-                icon="icon-mat-print"
-                dense
-                color="dark"
-                size="sm"
-                @click="toPrint(row)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Print
-                </q-tooltip>
-              </q-btn>
-            </div>
             <q-btn
               flat
               icon="icon-mat-lock"
@@ -187,6 +192,23 @@
               </q-tooltip>
             </q-btn>
           </div>
+        </div>
+        <div>
+          <q-btn
+            round
+            icon="icon-mat-print"
+            dense
+            color="dark"
+            size="sm"
+            @click="toPrint(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Print
+            </q-tooltip>
+          </q-btn>
         </div>
       </template>
       <template #expand="{ row }">
@@ -456,14 +478,28 @@
       </div>
     </template>
   </app-print-surat>
+  <editHeader
+    v-model="headerOpen" :data="dataHeader"
+    @simpan="(val)=>{
+      console.log('simpan', val);
+      store.simpanEditFaktur(val,dataHeader)
+      headerOpen=false
+    }"
+  />
 </template>
 <script setup>
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
+import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 const store = useListReturPenyediaStore()
 
+/** edit header section */
+const headerOpen = ref(false)
+const editHeader = shallowRef(defineAsyncComponent(() => import('./EditHeaderComp.vue')))
+const dataHeader = ref({})
+/** edit header section end */
 function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand

@@ -23,31 +23,31 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
     dataToPrint: {}
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.param[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('q', payload)
       this.setParam('page', 1)
       this.getList()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.getList()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.getList()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.getList()
     },
-    getInitialData() {
+    getInitialData () {
       this.getList()
     },
-    getList() {
+    getList () {
       this.loading = true
       const param = { params: this.param }
       return new Promise(resolve => {
@@ -63,7 +63,7 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
           .catch(() => { this.loading = false })
       })
     },
-    kunci(item) {
+    kunci (item) {
       item.loadingKunci = true
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/retur/kunci', item)
@@ -78,7 +78,7 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
           })
       })
     },
-    async deleteHeader(val) {
+    async deleteHeader (val) {
       val.loading = true
       val.expand = !val.expand
       val.highlight = !val.highlight
@@ -98,7 +98,7 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
           val.loading = false
         })
     },
-    async deleteRinci(val) {
+    async deleteRinci (val) {
       val.loading = true
       const kirim = {
         no_retur: val.no_retur,
@@ -117,7 +117,8 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
             if (this.items[item].rinci.length > 1) {
               const index = this.items[item].rinci.findIndex(ri => ri.kd_obat === val.kd_obat && ri.nopenerimaan === val.nopenerimaan)
               if (index >= 0) this.items[item].rinci.splice(index, 1)
-            } else {
+            }
+            else {
               this.items.splice(item, 1)
             }
           }
@@ -126,6 +127,23 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
         .catch(() => {
           val.loading = false
         })
+    },
+    simpanEditFaktur (payload, item) {
+      item.loadingEdit = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/retur/simpan-edit_faktur', payload)
+          .then(resp => {
+            console.log('simpan edit', resp)
+            delete item.loadingEdit
+            item.no_faktur_retur_pbf = resp?.data?.data?.no_faktur_retur_pbf
+            item.tgl_faktur_retur_pbf = resp?.data?.data?.tgl_faktur_retur_pbf
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingEdit
+          })
+      })
     }
   }
 })
