@@ -144,6 +144,26 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
             delete item.loadingEdit
           })
       })
+    },
+    simpanEditRinci (payload, item) {
+      item.loadingEdit = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/retur/simpan-edit-rinci', payload)
+          .then(resp => {
+            console.log('simpan edit', resp)
+            delete item.loadingEdit
+            item.harga_net = resp?.data?.data?.harga_net
+            item.no_batch = resp?.data?.data?.no_batch
+            item.nopenerimaan = resp?.data?.data?.nopenerimaan
+            item.subtotal = resp?.data?.data?.subtotal
+            item.tgl_exp = resp?.data?.data?.tgl_exp
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingEdit
+          })
+      })
     }
   }
 })

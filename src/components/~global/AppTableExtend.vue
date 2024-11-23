@@ -426,11 +426,22 @@
             </td>
           </tr>
           <tr v-if="item.expand">
-            <td :colspan="isChecked && rowNo ?filterColumn.length + 2:(isChecked || rowNo ? filterColumn.length + 1 : filterColumn.length )">
+            <td :colspan="isChecked && rowNo && !defaultBtn ? filterColumn.length + 3:((isChecked || rowNo || !defaultBtn) ? filterColumn.length + 2 : filterColumn.length )">
               <slot
                 name="expand"
                 :row="item"
               />
+            </td>
+          </tr>
+          <tr v-if="item.expand">
+            <td>
+              {{ isChecked && rowNo && !defaultBtn }}
+            </td>
+            <td>
+              {{ (isChecked || rowNo || !defaultBtn) }}
+            </td>
+            <td>
+              {{ filterColumn.length }}
             </td>
           </tr>
         </template>

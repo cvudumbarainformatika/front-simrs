@@ -216,7 +216,7 @@
           <app-no-data-small />
         </div>
         <div v-if="row.rinci.length">
-          <div class="row bg-dark text-white q-pa-xs q-mb-sm">
+          <div class="row bg-dark text-white q-pa-xs q-mb-sm" style="width: 100%;">
             <div
               class="col-auto"
               style="width:5%"
@@ -238,6 +238,11 @@
               class="col-auto anak"
             >
               Nomor Penerimaan
+            </div>
+            <div
+              class="col-auto anak"
+            >
+              Nomor Batch
             </div>
             <div
               class="col-auto anak"
@@ -267,7 +272,7 @@
             :key="n"
             class=" "
           >
-            <div class="row items-center q-col-gutter-sm q-mb-sm">
+            <div class="row items-center q-col-gutter-sm q-mb-sm" style="width: 100%;">
               <div
                 class="col-auto"
                 style="width:5%"
@@ -293,12 +298,33 @@
               <div
                 class="col-auto anak"
               >
-                {{ trm?.nopenerimaan }}
+                <div class="row">
+                  {{ trm?.nopenerimaan }}
+                </div>
+                <div v-if="trm?.nopenerimaan!==trm?.nopenerimaan_default" class="row text-italic f-10">
+                  Nomor Penerimaan default : <span class="text-weight-bold">{{ trm?.nopenerimaan_default }}
+                  </span>
+                </div>
               </div>
               <div
                 class="col-auto anak"
               >
-                {{ dateFullFormat(trm?.tgl_exp) }}
+                <div class="row">
+                  {{ trm?.no_batch }}
+                </div>
+                <div v-if="trm?.no_batch!==trm?.no_batch_default" class="row text-italic f-10">
+                  Nomor Batch default : <span class="text-weight-bold">{{ trm?.no_batch_default }}</span>
+                </div>
+              </div>
+              <div
+                class="col-auto anak"
+              >
+                <div class="row">
+                  {{ dateFullFormat(trm?.tgl_exp) }}
+                </div>
+                <div v-if="trm?.tgl_exp!==trm?.tgl_exp_default" class="row text-italic f-10">
+                  Nomor penerimaan default : <span class="text-weight-bold">{{ dateFullFormat(trm?.tgl_exp_default) }}</span>
+                </div>
               </div>
 
               <div
@@ -309,12 +335,38 @@
               <div
                 class="col-auto anak text-right"
               >
-                {{ formatRpDouble(trm?.subtotal,2) }}
+                <div class="row justify-end">
+                  {{ formatRpDouble(trm?.subtotal,2) }}
+                </div>
+                <div v-if="trm?.subtotal!==trm?.subtotal_default" class="row text-italic f-10 justify-end">
+                  Subtotal default : <span class="text-weight-bold">{{ trm?.subtotal_default }}</span>
+                </div>
               </div>
               <div
                 class="col-auto text-right"
                 style="width:5%"
               >
+                <q-btn
+                  v-if="!row.kunci"
+                  flat
+                  icon="icon-mat-edit"
+                  dense
+                  size="sm"
+                  color="primary"
+                  :loading="trm.loadingEdit"
+                  :disable="trm.loadingEdit"
+                  @click="()=>{
+                    rinciOpen=true
+                    dataRinci=trm
+                  }"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Edit Penerimaan
+                  </q-tooltip>
+                </q-btn>
                 <q-btn
                   v-if="!row.kunci"
                   flat
@@ -486,6 +538,14 @@
       headerOpen=false
     }"
   />
+  <editRinci
+    v-model="rinciOpen" :data="dataRinci"
+    @simpan="(val)=>{
+      console.log('simpan', val);
+      store.simpanEditRinci(val,dataRinci)
+      rinciOpen=false
+    }"
+  />
 </template>
 <script setup>
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
@@ -500,6 +560,12 @@ const headerOpen = ref(false)
 const editHeader = shallowRef(defineAsyncComponent(() => import('./EditHeaderComp.vue')))
 const dataHeader = ref({})
 /** edit header section end */
+/** edit rinci section */
+const rinciOpen = ref(false)
+const editRinci = shallowRef(defineAsyncComponent(() => import('./EditRinciComp.vue')))
+const dataRinci = ref({})
+/** edit rinci section end */
+// eslint-disable-next-line no-unused-vars
 function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
@@ -512,6 +578,7 @@ function onClick (val) {
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
+// eslint-disable-next-line no-unused-vars
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -519,6 +586,7 @@ function kunci (val) {
     if (!val.kunci) val.kunci = '1'
   })
 }
+// eslint-disable-next-line no-unused-vars
 function info (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -533,7 +601,7 @@ store.getInitialData()
 }
 .anak{
   white-space: normal !important;
-  width:calc(90% / 6);
+  width:calc(90% / 7);
   overflow-wrap: break-word;
 }
 .box {
