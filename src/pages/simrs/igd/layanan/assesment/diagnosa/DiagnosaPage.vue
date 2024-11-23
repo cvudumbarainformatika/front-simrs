@@ -10,6 +10,7 @@
         <FormDiagnosa
           ref="refForm"
           :pasien="props.pasien"
+          :tipekhasusdiagnosa="props.tipekhasusdiagnosa"
           @save-pemeriksaan="savePemeriksaan"
         />
       </q-card>
@@ -39,11 +40,15 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  tipekhasusdiagnosa: {
+    type: Array,
+    default: () => []
   }
 })
 
 const refForm = ref()
-function savePemeriksaan() {
+function savePemeriksaan () {
   store.simpanDiagnosa(props.pasien).then(() => {
     // console.log(refForm.value)
     // refForm.value.resetValidation()

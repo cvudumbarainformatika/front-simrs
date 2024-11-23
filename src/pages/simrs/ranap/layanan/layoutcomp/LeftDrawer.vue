@@ -20,7 +20,7 @@
     class="absolute-top bg-dark text-white"
     :style=" `height: ${tinggiDetailPas}px`"
   >
-    <div class="absolute-top-right">
+    <!-- <div class="absolute-top-right">
       <div class="q-pa-sm">
         <q-btn
           outline
@@ -29,8 +29,8 @@
           label="id"
         />
       </div>
-    </div>
-    <div class="absolute-top">
+    </div> -->
+    <div class="absolute-top-right">
       <div class="q-pa-sm">
         <q-badge
           outline
@@ -49,9 +49,9 @@
         <div class="text-weight-bold f-12 q-mt-sm">
           {{ pasien ? pasien.nama : '-' }}
         </div>
-        <!-- <div class="text-weight-bold">
-          {{ pasien ? pasien.norm : '-' }}
-        </div> -->
+        <div class="text-weight-bold">
+          TELP. {{ pasien ? pasien.nohp : '-' }}
+        </div>
         <div class="text-teal">
           {{ pasien ? pasien.noreg : '-' }} || {{ pasien?.norm??'-' }}
         </div>

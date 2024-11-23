@@ -20,6 +20,7 @@
 
           <q-item-section class="q-col-gutter-xs relative-position">
             <div><b>{{ item?.nama }}</b></div>
+            <div><b>NIK : {{ item?.nktp }}</b></div>
             <div>Norm|Reg : <span class="text-primary">{{ item?.norm }}</span> | <span class="text-orange">{{ item.noreg }}</span></div>
             <div>Usia : {{ item?.usia }} | <em class="text-grey">{{ item.kelamin }}</em></div>
             <div class="f-10">

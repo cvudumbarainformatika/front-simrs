@@ -16,7 +16,7 @@ export const useAnamnesis = defineStore('anamnesis', {
     pilihnyerihilang: [],
     form: {
       keluhanutama: '',
-      riwayatpenyakit: '',
+      riwayatpenyakit: 'Tidak Ada',
       riwayatpenyakitsekarang: '',
       riwayatalergi: '',
       keteranganalergi: '',
@@ -24,7 +24,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatbepergian: 'Tidak',
       // baru
       riwayatpekerjaan: '',
-      riwayatpenyakitkeluarga: '',
+      riwayatpenyakitkeluarga: 'Tidak Ada',
       skreeninggizi: 0,
       asupanmakan: 0,
       kondisikhusus: 'Tidak',
@@ -312,14 +312,14 @@ export const useAnamnesis = defineStore('anamnesis', {
       return new Promise((resolve, reject) => {
         this.form = {
           keluhanutama: '',
-          riwayatpenyakit: '',
+          riwayatpenyakit: 'Tidak Ada',
           riwayatpenyakitsekarang: '',
           selection: [],
           keteranganalergi: '',
-          riwayatpengobatan: '',
+          riwayatpengobatan: 'Tidak Ada',
           // baru
-          riwayatpekerjaan: '',
-          riwayatpenyakitkeluarga: '',
+          riwayatpekerjaan: 'Tidak Ada',
+          riwayatpenyakitkeluarga: 'Tidak Ada',
           skreeninggizi: 0,
           asupanmakan: 0,
           kondisikhusus: '',

@@ -14,7 +14,7 @@ export default function useRightPanel (pasien) {
   const $q = useQuasar()
 
   const settings = reactive({
-    splitMin: 50,
+    splitMin: 70,
     hoverred: false
   })
 

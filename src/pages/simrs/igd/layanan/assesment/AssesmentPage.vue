@@ -37,7 +37,7 @@
             name="Diagnosa Medik"
             class="full-height q-pa-none"
           >
-            <DiagnosaPage :pasien="props.pasien" />
+            <DiagnosaPage :pasien="props.pasien" :tipekhasusdiagnosa="store.listkhasusdiagnosa" />
           </q-tab-panel>
           <q-tab-panel
             name="Tindakan Medik"
@@ -127,6 +127,7 @@ onMounted(() => {
   // console.log('tabs', store.tabs)
   // store.getNota(props.pasien)
   storetindakan.getNota(props.pasien)
+  store.getTipeDiagnosa()
 })
 
 </script>

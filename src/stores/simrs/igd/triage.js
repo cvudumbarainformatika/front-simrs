@@ -60,7 +60,7 @@ export const useTriageIgd = defineStore('triageigd', {
     },
     async saveData (pasien, hasilsecondsurve) {
       // console.log('noreg', pasien.noreg)
-      this.loadingaja = true
+      this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
 
@@ -75,10 +75,10 @@ export const useTriageIgd = defineStore('triageigd', {
           this.initReset()
           this.loadingForm = false
         }
-        this.loadingaja = false
+        this.loadingForm = false
       }
       catch (error) {
-        this.loadingaja = false
+        this.loadingForm = false
         notifErr(error)
       }
     },
@@ -171,7 +171,8 @@ export const useTriageIgd = defineStore('triageigd', {
       this.form.bb = val?.bb
       this.form.tinggibadan = val?.tb
       this.form.gangguanperilaku = val?.gangguanperilaku
-      if (val?.falsetriage === 'Tidak') {
+      console.log('sasasa', val?.falsetriage)
+      if (val?.falsetriage === '0') {
         this.form.falsetriage = false
       }
       else {
