@@ -491,7 +491,7 @@
 
     <div v-if="!store?.loadingDataMauRet">
       <div class="row bg-grey q-pa-sm text-white f-14 q-mb-sm">
-        Stok Sekarang
+        Penerimaan Awal
       </div>
       <div v-if="!store?.dataStokSekarang?.length">
         <app-no-data-small />
