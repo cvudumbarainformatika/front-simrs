@@ -55,16 +55,6 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comp/KartuStokPage.vue')))
   },
   {
-    name: 'hapus',
-    label: 'Hapus',
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/HapusPage.vue')))
-  },
-  {
-    name: 'musnah',
-    label: 'Musnah',
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/MusnahPage.vue')))
-  },
-  {
     name: 'list',
     label: 'List Bast',
     comp: shallowRef(defineAsyncComponent(() => import('./comp/ListPage.vue')))

@@ -116,10 +116,22 @@
           style="white-space: normal !important;"
         >
           <div class="q-mr-xs">
-            Dimusnahkan
+            Musnah
           </div>
           <div class="text-weight-bold">
             {{ dateFullFormat(row.tgl_pemusnahan) }}
+          </div>
+        </div>
+        <div
+          v-if="row.tgl_penghapusan"
+          class="row no-wrap justify-between items-center q-mb-xs"
+          style="white-space: normal !important;"
+        >
+          <div class="q-mr-xs">
+            Hapus
+          </div>
+          <div class="text-weight-bold">
+            {{ dateFullFormat(row.tgl_penghapusan) }}
           </div>
         </div>
       </template>
@@ -127,9 +139,15 @@
         {{ row?.pihakketiga?.nama ?? 'Penyedia Tidak Ditemukan' }}
       </template>
       <template #cell-jumlah="{ row }">
-        <div class="row justify-end items-end q-col-gutter-sm">
+        <div class="row q-my-sm justify-end items-end q-col-gutter-sm">
           {{ row?.jumlah }}
           <div class="text-italic f-10">
+            ({{ row?.masterobat?.satuan_k }})
+          </div>
+        </div>
+        <div class="row q-my-sm text-italic justify-end items-end q-col-gutter-sm">
+          dimusnahkan : {{ row?.jumlah_dimusnahkan }}
+          <div class=" f-10">
             ({{ row?.masterobat?.satuan_k }})
           </div>
         </div>
@@ -145,59 +163,109 @@
         </div>
       </template>
       <template #left-acttion="{ row }">
-        <div
-          v-if="!row.kunci"
-          class="row items-center"
-        >
-          <q-btn
-            flat
-            icon="icon-mat-delete"
-            dense
-            size="sm"
-            color="negative"
-            :loading="row.loading"
-            :disable="row.loading"
-            @click="store.deleteHeader(row)"
+        <div class="row no-wrap">
+          <div
+            v-if="!row.kunci"
+            class="row items-center"
           >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+            <q-btn
+              flat
+              icon="icon-mat-delete"
+              dense
+              size="sm"
+              color="negative"
+              :loading="row.loading"
+              :disable="row.loading"
+              @click="store.deleteHeader(row)"
             >
-              Hapus
-            </q-tooltip>
-          </q-btn>
-          <q-btn
-            flat
-            icon="icon-mat-lock_open"
-            dense
-            color="green"
-            :loading="row.loadingKunci"
-            :disable="row.loadingKunci"
-            @click="kunci(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Hapus
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              flat
+              icon="icon-mat-lock_open"
+              dense
+              color="green"
+              :loading="row.loadingKunci"
+              :disable="row.loadingKunci"
+              @click="kunci(row)"
             >
-              Kunci Retur dan Kurangi Stok
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.kunci">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-            @click="info(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Kunci Retur dan Kurangi Stok
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.kunci">
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="negative"
+              @click="info(row)"
             >
-              Retur sudah di kunci
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Retur sudah di kunci
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div>
+            <q-btn
+              v-if="!row.tgl_retur && !row?.tgl_penghapusan && !row?.tgl_pemusnahan"
+              flat
+              icon="icon-mat-edit"
+              dense
+              color="primary"
+              :loading="row?.loading"
+              :disable="row?.loading"
+              @click="()=>{
+                openPemusnahan = true
+                dataPemusnahan = row
+                console.log('click', row);
+
+              }"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Buka Form Pemusnahan
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div>
+            <q-btn
+              v-if="!row.tgl_retur && !row?.tgl_penghapusan && row?.tgl_pemusnahan"
+              flat
+              icon="icon-mat-edit"
+              dense
+              color="primary"
+              :loading="row?.loading"
+              :disable="row?.loading"
+              @click="()=>{
+                openPenghapusan = true
+                dataPenghapusan = row
+                console.log('click', row);
+
+              }"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Buka Form Penghapusan
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
       <!-- <template #expand="{ row }">
@@ -328,20 +396,47 @@
       </template> -->
     </app-table-extend>
   </div>
+  <pegePemusnahan
+    v-model="openPemusnahan" :data="dataPemusnahan" @simpan="(val)=>{
+      console.log('simpan', val);
+      openPemusnahan=false
+      store.simpanPemusnahan(dataPemusnahan,val)
+    }"
+  />
+  <pegePenghapusan
+    v-model="openPenghapusan" :data="dataPenghapusan" @simpan="(val)=>{
+      console.log('simpan', val);
+      openPenghapusan=false
+      store.simpanPenghapusan(dataPenghapusan,val)
+    }"
+  />
 </template>
 <script setup>
 // eslint-disable-next-line no-unused-vars
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 import { useListBarangRusakStore } from 'src/stores/simrs/farmasi/barangrusak/list'
+import { defineAsyncComponent, ref, shallowRef } from 'vue'
 
 const store = useListBarangRusakStore()
-// click
-// function onClick (val) {
-//   console.log('click', val)
-//   val.item.expand = !val.item.expand
-//   val.item.highlight = !val.item.highlight
-// }
+/**
+ * section pemusnahan
+ */
+const pegePemusnahan = shallowRef(defineAsyncComponent(() => import('./MusnahPage.vue')))
+const openPemusnahan = ref(false)
+const dataPemusnahan = ref({})
+/**
+ * section pemusnahan End
+ */
+/**
+ * section Penghapusan
+ */
+const pegePenghapusan = shallowRef(defineAsyncComponent(() => import('./HapusPage.vue')))
+const openPenghapusan = ref(false)
+const dataPenghapusan = ref({})
+/**
+ * section Penghapusan End
+ */
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListBarangRusakStore = defineStore('list_barang_rusak', {
   state: () => ({
@@ -23,31 +24,31 @@ export const useListBarangRusakStore = defineStore('list_barang_rusak', {
     columnHide: []
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.param[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('q', payload)
       this.setParam('page', 1)
       this.getList()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.getList()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.getList()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.getList()
     },
-    getInitialData() {
+    getInitialData () {
       this.getList()
     },
-    getList() {
+    getList () {
       this.loading = true
       const param = { params: this.param }
       return new Promise(resolve => {
@@ -61,6 +62,39 @@ export const useListBarangRusakStore = defineStore('list_barang_rusak', {
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    simpanPemusnahan (item, payload) {
+      item.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/barangrusak/pemusnahan', payload)
+          .then(resp => {
+            console.log('simpan pemusnahan', resp)
+            delete item.loading
+            item.jumlah_dimusnahkan = resp?.data?.data?.jumlah_dimusnahkan
+            item.tgl_pemusnahan = resp?.data?.data?.tgl_pemusnahan
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loading
+          })
+      })
+    },
+    simpanPenghapusan (item, payload) {
+      item.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/barangrusak/penghapusan', payload)
+          .then(resp => {
+            console.log('simpan penghapusan', resp)
+            delete item.loading
+            item.tgl_penghapusan = resp?.data?.data?.tgl_penghapusan
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loading
+          })
       })
     }
   }
