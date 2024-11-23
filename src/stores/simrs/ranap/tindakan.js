@@ -173,6 +173,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       form.noreg = pasien.noreg
       form.norm = pasien.norm
       form.kdpoli = pasien?.kodepoli
+      form.kdgroup_ruangan = pasien?.kdgroup_ruangan
       form.kodedokter = pasien?.kddokter
       form.kdsistembayar = pasien?.kodesistembayar
       form.pelaksanaSatu = pelaksanaSatu
