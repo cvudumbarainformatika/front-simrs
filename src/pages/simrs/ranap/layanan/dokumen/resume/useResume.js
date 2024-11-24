@@ -1,3 +1,5 @@
+import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
+import { usePasienPulangRanapStore } from 'src/stores/simrs/ranap/pulang'
 import { computed, onMounted, reactive } from 'vue'
 
 export default function useResume (pasien) {
@@ -61,7 +63,7 @@ export default function useResume (pasien) {
     let xx = []
     const pemeriksaan = pasien?.pemeriksaan
     if (pemeriksaan?.length > 0) {
-      xx = pemeriksaan?.filter(el => el?.kdruang !== 'POL014') ?? []
+      xx = pemeriksaan?.filter(el => el?.kdruang !== 'POL014' && el?.awal === '1') ?? []
     }
 
     data.pemeriksaan = xx
@@ -87,10 +89,22 @@ export default function useResume (pasien) {
           name: x?.masterdiagnosa?.rs3,
           ruang: x?.rs13
         }
-      })?.filter(y => y.ruang !== 'POL014')
+      })
       diag = det
     }
     data.diagnosis = diag
+  }
+
+  function cariResep (pasien) {
+    let resep = []
+    const headx = pasien?.newapotekrajal
+    if (headx?.length) {
+      const det = headx?.map(x => x.permintaanresep)?.flat()
+      resep = det
+    }
+    const f = resep.length ? resep?.map(x => x.mobat?.nama_obat) : []
+    data.resep = Array.from(new Set(f))
+    // console.log('resep', f)
   }
 
   onMounted(() => {
@@ -100,9 +114,223 @@ export default function useResume (pasien) {
     cariPemeriksaan(pasien)
     cariLaborats(pasien)
     cariDiagnosis(pasien)
+    cariResep(pasien)
+  })
+
+  const resume = computed(() => {
+    console.log('resume', data)
+    const diag = useDiagnosaStore()
+    const diagnosa = diag.listDiagnosa
+
+    const prog = usePasienPulangRanapStore()
+    const prognosis = prog.prognosis
+    const res = [
+      {
+        title: 'ALASAN PASIEN DIRAWAT IGD',
+        type: '1', // 1 = html, 2 = belum
+        isian: data.anamnesis_igd.length ? data.anamnesis_igd[0]?.keluhanUtama : ''
+      },
+      {
+        title: 'ANAMNESE AWAL IGD',
+        type: '1',
+        isian: data.anamnesis_igd.length
+          ? `  <div> - Riwayat Penyakit Sekarang : ${data?.anamnesis_igd[0]?.riwayatpenyakitsekarang} </div>
+                  <div> - Riwayat Penyakit Dahulu : ${data?.anamnesis_igd[0]?.riwayatpenyakit} </div>
+                  <div> - Riwayat Pengobatan : ${data?.anamnesis_igd[0]?.riwayatpengobatan} </div>
+                  <div> - Riwayat Penyakit Keluarga : ${data?.anamnesis_igd[0]?.riwayatpenyakitkeluarga} </div>
+                  <div> - Riwayat Pekerjaan Yang Berhubungan Dengan Zat Berbahaya : ${data?.anamnesis_igd[0]?.riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya} </div>
+                  <div> - Riwayat Alergi : ${data?.anamnesis_igd[0]?.riwayatalergi ?? '-'} </div>
+                  <div> - Keterangan Alergi  : ${data?.anamnesis_igd[0]?.keteranganalergi} </div>`
+          : ''
+      },
+      {
+        title: 'PEMERIKSAAN FISIK IGD',
+        type: '1',
+        isian: data?.pemeriksaan_igd.length
+          ? ` <div> - Bagian Kepala : ${data?.pemeriksaan_igd[0]?.rs5 ?? ''} . </div>
+              <div> - Bagian Leher : ${data?.pemeriksaan_igd[0]?.rs6 ?? ''}.</div>
+              <div> - Bagian Dada : ${data?.pemeriksaan_igd[0]?.rs7 ?? ''}</div>
+              <div> - Bagian Punggung : ${data?.pemeriksaan_igd[0]?.rs8 ?? ''}</div>
+              <div> - Bagian Perut : ${data?.pemeriksaan_igd[0]?.rs9 ?? ''}</div>
+              <div> - Tangan : ${data?.pemeriksaan_igd[0]?.rs10 ?? ''}</div>
+              <div> - Kaki : ${data?.pemeriksaan_igd[0]?.rs11 ?? ''}</div>
+              <div> - Status Neurologis : ${data?.pemeriksaan_igd[0]?.rs12 ?? ''}</div>
+              <div> - Genital : ${data?.pemeriksaan_igd[0]?.rs13 ?? ''}</div>
+              <div> - Sax : ${data?.pemeriksaan_igd[0]?.sax ? data?.pemeriksaan_igd[0]?.sax + ' Celcius' : ''} | - Srec : ${data?.pemeriksaan_igd[0]?.srec ? data?.pemeriksaan_igd[0]?.srec + ' Celcius' : ''}</div>
+              <div> - Pernapasan  : ${data?.pemeriksaan_igd[0]?.pernapasanigd}  /mnt | - Nadi : ${data?.pemeriksaan_igd[0]?.nadiigd}  x/mnt </div>
+              <div> - Tensi  : ${data?.pemeriksaan_igd[0]?.tensiigd}  mmHg | - BB : ${data?.pemeriksaan_igd[0]?.beratbadan}  Kg </div>
+              <div> - Tinggi Badan  : ${data?.pemeriksaan_igd[0]?.tinggibadan}  Cm </div>
+              `
+          : ''
+      },
+      {
+        title: 'ANAMNESE RAWAT INAP',
+        type: '1',
+        isian: data?.anamnesis.length
+          ? ` 
+            <div> - Keluhan Utama : ${data?.anamnesis[0]?.keluhanUtama} </div>
+            <div> - Riwayat Penyakit Sekarang : ${data?.anamnesis[0]?.riwayatpenyakitsekarang} </div>
+            <div> - Riwayat Penyakit Dahulu : ${data?.anamnesis[0]?.riwayatpenyakit} </div>
+            <div> - Riwayat Pengobatan : ${data?.anamnesis[0]?.riwayatpengobatan} </div>
+            <div> - Riwayat Penyakit Keluarga : ${data?.anamnesis[0]?.riwayatpenyakitkeluarga} </div>
+            <div> - Riwayat Pekerjaan Yang Berhubungan Dengan Zat Berbahaya : ${data?.anamnesis[0].riwayat_pekerjaan_yang_berhubungan_dengan_zat_berbahaya} </div>
+          `
+          : ''
+      },
+      {
+        title: 'PEMERIKSAAN FISIK RAWAT INAP',
+        type: '1',
+        isian: data?.pemeriksaan?.length
+          ? ` 
+            <div> - Keadaan Umum : ${data?.pemeriksaan[0]?.keadaanUmum ?? ''} </div>
+            <div> - Tingkat Kesadaran : ${data?.pemeriksaan[0]?.tkKesadaran} </div>
+            <div> - Berat Badan : ${data?.pemeriksaan[0]?.bb} </div>
+            <div> - Tinggi Badan : ${data?.pemeriksaan[0]?.tb} </div>
+            <div> - Suhu Tubuh : ${data?.pemeriksaan[0]?.suhu} </div>
+            <div> - Pernapasan : ${data?.pemeriksaan[0].pernapasan} </div>
+            <div> - SPo2 :  ${data?.pemeriksaan[0].spo} </div>
+            <div> - Nadi  : ${data?.anamnesis[0]?.nadi} </div>
+            <div> - Sistole  : ${data?.anamnesis[0]?.sistole} </div>
+          `
+          : ''
+      },
+      { // 6
+        title: 'PEMERIKSAAN PENUNJANG',
+        type: 'penunjang',
+        isian: [
+          {
+            name: 'lab',
+            label: 'LABORAT',
+            data: data?.laborats.length
+              ? data?.laborats.map(lab => {
+                const tampil = (lab?.rs27 !== null && lab?.rs27 !== 'N' && lab?.rs21 !== '')
+                if (tampil) {
+                  // return {
+                  //   nama: lab?.pemeriksaanlab?.rs2,
+                  //   hasil: lab?.rs21 + ' (' + lab?.rs27 + ')'
+                  // }
+                  return `${lab?.pemeriksaanlab?.rs2} : ${lab?.rs21} <b>(${lab?.rs27})</b>,  &nbsp;`
+                }
+                return null
+              })
+              : []
+          },
+          {
+            name: 'rad',
+            label: 'RADIOLOGI',
+            data: pasien?.hasilradiologi?.length
+              ? pasien?.hasilradiologi?.map(rad => {
+                return `${rad?.rs3},  &nbsp;`
+              })
+              : []
+          }
+        ]
+
+      },
+      { // 7
+        title: 'DIAGNOSIS',
+        type: 'penunjang',
+        isian: [
+          {
+            name: 'diag1',
+            label: 'DIAGNOSIS DPJP',
+            data: data?.memodiagnosa
+              ? [`${data?.memodiagnosa},  &nbsp;`]
+              : []
+          },
+          {
+            name: 'diag2',
+            label: 'DIAGNOSIS Utama',
+            data: data?.diagnosis?.length ? data?.diagnosis?.filter(x => x.tipe === 'Primer').map(rad => `${rad?.name},  &nbsp;`) : []
+          },
+          {
+            name: 'diag3',
+            label: 'DIAGNOSIS Sekunder',
+            data: data?.diagnosis?.length ? data?.diagnosis?.filter(x => x.tipe === 'Sekunder').map(rad => `${rad?.name},  &nbsp;`) : []
+          }
+        ]
+
+      },
+      { // 8
+        title: 'PENGOBATAN',
+        type: '1Array', // 1 = html, 2 = belum
+        isian: data.resep?.length ? data?.resep?.map(resep => `${resep},  &nbsp;`) : []
+      },
+      { // 9
+        title: 'TINDAKAN',
+        type: 'penunjang',
+        isian: [
+          {
+            name: 'operatif',
+            label: 'OPERATIF',
+            data: pasien?.procedure?.length
+              ? pasien?.procedure?.filter(x => x?.jenisicd === 'Operatif').map(x => {
+                return `${x?.prosedur} (${x?.kd_prosedur}) | ,  &nbsp;`
+              })
+              : []
+          },
+          {
+            name: 'nonoperatif',
+            label: 'NON OPERATIF',
+            data: pasien?.procedure?.length
+              ? pasien?.procedure?.filter(x => x?.jenisicd === 'Non Operatif').map(x => {
+                return `${x?.prosedur} (${x?.kd_prosedur}) | ,  &nbsp;`
+              })
+              : []
+          },
+          {
+            name: 'ket',
+            label: 'Keterangan',
+            data: pasien?.keterangantindakan?.length
+              ? pasien?.keterangantindakan?.map(x => {
+                return `${x?.keterangan} | ,  &nbsp;`
+              })
+              : []
+          }
+
+        ]
+
+      },
+      { // 10
+        title: 'KEADAAN WAKTU KRS',
+        type: '1', // 1 = html, 2 = belum
+        isian: pasien?.dischargeplanning.length
+          ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
+          : ''
+      },
+      { // 11
+        title: 'PROGNOSIS',
+        type: '1', // 1 = html, 2 = belum
+        isian: (pasien?.prognosis !== '' && pasien?.prognosis !== null)
+          ? `${prognosis?.find(x => x?.rs1 === pasien?.prognosis)?.rs2 ?? ''} `
+          : ''
+      },
+      { // 12
+        title: 'SEBAB KEMATIAN',
+        type: '1', // 1 = html, 2 = belum
+        isian: (pasien?.sebabkematian !== '' && pasien?.sebabkematian !== null)
+          ? `${diagnosa?.find(x => x?.kode === pasien?.sebabkematian)?.keterangan ?? ''} } `
+          : null
+      },
+      { // 13
+        title: 'TINDAK LANJUT',
+        type: '1', // 1 = html, 2 = belum
+        isian: (pasien?.tindaklanjut !== '' && pasien?.tindaklanjut !== null)
+          ? `${pasien?.tindaklanjut} `
+          : ''
+      }
+
+    ]
+
+    if (pasien?.prognosis !== '9') { // MALAM / Meninggal
+      return res?.filter(x => x?.title !== 'SEBAB KEMATIAN')
+    }
+    else {
+      return res
+    }
   })
 
   return {
-    data, usiaTh
+    data, usiaTh, resume
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <div id="pdfDoc" class="q-pa-md bg-white">
+  <div id="pdfDoc" class="bg-white print-page">
     <div class="page-1">
       <!-- KOP SURAT -->
       <div class="col-grow">
         <div class="row items-center">
           <div class="col-12">
-            <div class="row q-pa-sm">
+            <div class="row">
               <div class="col-auto">
                 <img
                   src="~assets/images/logo-kota-grey.png"
@@ -113,9 +113,42 @@
           </table>
 
           <hr>
-          <!-- 1 -->
+          <template v-for="(res, i) in resume" :key="i">
+            <div class="row q-col-gutter-x-sm contentx">
+              <div class="col-auto">
+                <div class="flex q-gutter-md">
+                  <div>{{ i + 1 }} . </div><div>{{ res?.title }}</div> <div>:</div>
+                </div>
+              </div>
+              <div v-if="res?.type==='1'" class="col full-width flex wrap">
+                <div v-html="res?.isian" />
+              </div>
+              <div v-else-if="res?.type==='1Array'" class="col full-width flex wrap">
+                <template v-for="(isi, j) in res?.isian" :key="j">
+                  <span v-html="isi" />
+                </template>
+              </div>
+              <div v-else-if="res?.type==='penunjang'" class="col full-width">
+                <div v-for="(item, n) in res?.isian" :key="n" class="column full-width">
+                  <div class="row q-col-gutter-x-sm">
+                    <div class="col-auto">
+                      - {{ item?.label }} :
+                    </div>
+                    <div v-if="item?.data?.length" class="col full-width">
+                      <template v-for="(pen, m) in item?.data" :key="m">
+                        <!-- <span v-if="pen">{{ pen?.nama }} : <b>{{ pen?.hasil }}</b>, &nbsp; </span> -->
+                        <span v-if="pen" v-html="pen" />
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+          </template>
 
-          <div class="row q-col-gutter-x-md">
+          <!-- 1 -->
+          <!-- <div class="row q-col-gutter-x-sm">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>1 . </div><div>ALASAN PASIEN DIRAWAT IGD</div> <div>:</div>
@@ -124,14 +157,14 @@
             <div class="col full-width">
               <div v-if="data?.anamnesis_igd?.length">
                 <div v-for="(ku, n) in data?.anamnesis_igd" :key="n">
-                  {{ ku }},
+                  {{ ku?.keluhanUtama }},
                 </div>
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 2 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>2 . </div><div>ANAMNESE AWAL IGD</div> <div>:</div>
@@ -149,10 +182,9 @@
               </div>
             </div>
           </div>
-
-          <hr>
+          <hr> -->
           <!-- 3 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>3 . </div><div>PEMERIKSAAN FISIK IGD</div> <div>:</div>
@@ -178,10 +210,10 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
 
           <!-- 4 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>4 . </div><div>ANAMNESE RAWAT INAP</div> <div>:</div>
@@ -202,9 +234,9 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 5 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>5 . </div><div>PEMERIKSAAN FISIK RAWAT INAP</div> <div>:</div>
@@ -224,9 +256,9 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 6 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>6 . </div><div>PEMERIKSAAN PENUNJANG</div> <div>:</div>
@@ -255,10 +287,10 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
 
           <!-- 7 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>7 . </div><div>DIAGNOSIS</div> <div>:</div>
@@ -291,17 +323,11 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div v-if="data?.anamnesis_igd?.length">
-                <div v-for="(ku, n) in data?.anamnesis_igd" :key="n">
-                  {{ ku }},
-                </div>
-              </div> -->
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 8 -->
-          <div class="row q-col-gutter-x-md">
+          <!-- <div class="row q-col-gutter-x-md">
             <div class="col-auto">
               <div class="flex q-gutter-lg">
                 <div>8 . </div><div>PENGOBATAN</div> <div>:</div>
@@ -313,9 +339,9 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 9 -->
-          <div class="">
+          <!-- <div class="">
             <div class="">
               <div class="flex q-gutter-lg">
                 <div>9 . </div><div>TINDAKAN</div> <div>:</div>
@@ -329,9 +355,9 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 10 -->
-          <div class="">
+          <!-- <div class="">
             <div class="">
               <div class="flex q-gutter-lg">
                 <div>10 . </div><div>KEADAAN WAKTU KRS </div> <div>:</div>
@@ -344,34 +370,34 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 11 -->
-          <div class="">
+          <!-- <div class="">
             <div class="">
               <div class="flex q-gutter-lg">
                 <div>11 . </div><div>PROGNOSIS </div> <div>:  <span> -</span></div>
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 12 -->
-          <div class="">
+          <!-- <div class="">
             <div class="">
               <div class="flex q-gutter-lg">
                 <div>12 . </div><div>SEBAB MENINGGAL </div> <div>:  <span> -</span></div>
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
           <!-- 13 -->
-          <div class="">
+          <!-- <div class="">
             <div class="">
               <div class="flex q-gutter-lg">
                 <div>13 . </div><div>TINDAK LANJUT</div> <div>:  <span> -</span></div>
               </div>
             </div>
           </div>
-          <hr>
+          <hr> -->
 
           <div class="row q-pa-xl justify-between items-center">
             <div class="kiri text-center">
@@ -417,6 +443,8 @@
 import { computed } from 'vue'
 import useResume from './useResume'
 import html2pdf from 'html2pdf.js'
+// eslint-disable-next-line no-unused-vars
+import { getNewLine } from 'src/modules/formatter'
 
 const props = defineProps({
   pasien: {
@@ -429,7 +457,7 @@ const props = defineProps({
   }
 })
 
-const { data, usiaTh } = useResume(props?.pasien)
+const { usiaTh, resume } = useResume(props?.pasien)
 // console.log('resume', data)
 
 const qrUrl = computed(() => {
@@ -477,6 +505,72 @@ table, tr, td {
 td {
 
   text-align: left;
+}
+
+.print-page {
+  // width: 100%;
+  // height: 100%;
+  background-color: #ffffff;
+  padding: 20px !important;
+}
+
+@media print {
+  .print-page{
+    padding: 0px;
+  }
+
+  @page {
+    // size: 8.5in 9in;
+    size: A4;
+    // margin-top: 4in !important;
+    margin-left: 4in !important;
+    margin-right: 4in !important;
+
+    // page-break-inside: auto;
+    @bottom-right {
+      content: counter(page) " of " counter(pages);
+    }
+    @top-right {
+      content: "Page " counter(pageNumber);
+    }
+  }
+
+  .contentx {
+    page-break-after: auto;
+    // break-after: page;
+  }
+  // hr {
+  //   page-break-before: auto;
+  //   page-break-after: auto;
+  // }
+
+  // /* Menargetkan semua halaman bernomor genap */
+  @page :left {
+    margin-top: 4in !important;
+    margin-bottom: 4in !important;
+  }
+  @page :right {
+    margin-top: 4in !important;
+    margin-bottom: 4in !important;
+  }
+  // /* Menargetkan semua halaman bernomor ganjil */
+  // @page :right {
+  //   size: 11in;
+  //   margin-top: 4in;
+  // }
+
+  /* Targets all selectors with `page: wide;` set */
+  // @page wide {
+  //   size: a4 landscape;
+  // }
+
+  // @page {
+  //   /* margin box at top right showing page number */
+  //   @top-right {
+  //     content: "Page " counter(pageNumber);
+  //   }
+  // }
+
 }
 
 </style>

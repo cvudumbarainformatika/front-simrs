@@ -206,10 +206,10 @@ const documents = ref([
     value: 'Sekolah'
   }
 ])
-function setSelesai(val) {
+function setSelesai (val) {
   selesai.value = val
 }
-function setMulai(val) {
+function setMulai (val) {
   mulai.value = val
 }
 const printObj = {

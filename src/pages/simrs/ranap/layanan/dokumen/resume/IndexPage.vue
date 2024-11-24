@@ -3,11 +3,14 @@
     <div class="col-auto ">
       <div class="q-pa-md flex justify-between bg-teal text-white items-center">
         <div>{{ menu?.label }}</div>
-        <q-btn icon="icon-mat-print" flat dense size="md" @click="refResume?.exportPdf()" />
+        <q-btn
+          icon="icon-mat-print" flat dense size="md"
+          v-print="printObj"
+        />
       </div>
     </div>
     <div class="col full-height q-pa-md scroll">
-      <ResumePage ref="refResume" :pasien="pasien" :menu="menu" />
+      <ResumePage id="resume" ref="refResume" :pasien="pasien" :menu="menu" />
     </div>
   </div>
 </template>
@@ -18,6 +21,12 @@ import { defineAsyncComponent, ref } from 'vue'
 const ResumePage = defineAsyncComponent(() => import('./ResumePage.vue'))
 
 const refResume = ref()
+
+const printObj = {
+  id: 'resume',
+  popTitle: 'Resume Medis'
+
+}
 
 defineProps({
   pasien: {

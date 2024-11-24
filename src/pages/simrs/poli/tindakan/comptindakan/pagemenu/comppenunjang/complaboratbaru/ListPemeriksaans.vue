@@ -152,7 +152,7 @@
                             {{ row?.aslix?.pemeriksaanlab?.nilainormal }}
                           </td>
                           <td class="text-right">
-                            ---
+                            {{ row?.aslix?.rs21 }} {{ row?.aslix?.rs27 }}
                           </td>
                         </tr>
                       </tbody>
@@ -204,7 +204,7 @@ function fillterTable (val) {
     const s = store.notalaborat
     const res = val?.filter(x => x.nota === s)
     const hasil = res?.length ? mapping(res[0].details) : []
-    // console.log('filterre ', hasil)
+    console.log('filterre ', hasil)
     return hasil
   }
   return []
