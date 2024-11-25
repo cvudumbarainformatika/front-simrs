@@ -217,6 +217,28 @@
                 Retur sudah di kunci
               </q-tooltip>
             </q-btn>
+            <q-btn
+              v-if="!row.tgl_retur && !row?.tgl_penghapusan && !row?.tgl_pemusnahan"
+              flat
+              icon="icon-mat-edit"
+              dense
+              color="orange"
+              :loading="row?.loadingTrm"
+              :disable="row?.loadingTrm"
+              @click="()=>{
+                openPenerimaan = true
+                dataPenerimaan = row
+                console.log('click', row);
+
+              }"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Buka Form Edit Penerimaan
+              </q-tooltip>
+            </q-btn>
           </div>
           <div>
             <q-btn
@@ -410,6 +432,13 @@
       store.simpanPenghapusan(dataPenghapusan,val)
     }"
   />
+  <pegePenerimaan
+    v-model="openPenerimaan" :data="dataPenerimaan" @simpan="(val)=>{
+      console.log('simpan pen', val);
+      openPenerimaan=false
+      store.simpanPenerimaan(dataPenerimaan,val)
+    }"
+  />
 </template>
 <script setup>
 // eslint-disable-next-line no-unused-vars
@@ -436,6 +465,15 @@ const openPenghapusan = ref(false)
 const dataPenghapusan = ref({})
 /**
  * section Penghapusan End
+ */
+/**
+ * section Penerimaan
+ */
+const pegePenerimaan = shallowRef(defineAsyncComponent(() => import('./EditNomor.vue')))
+const openPenerimaan = ref(false)
+const dataPenerimaan = ref({})
+/**
+ * section Penerimaan End
  */
 function kunci (val) {
   val.expand = !val.expand
