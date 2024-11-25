@@ -222,7 +222,7 @@
               flat
               icon="icon-mat-edit"
               dense
-              color="orange"
+              color="deep-orange"
               :loading="row?.loadingTrm"
               :disable="row?.loadingTrm"
               @click="()=>{
