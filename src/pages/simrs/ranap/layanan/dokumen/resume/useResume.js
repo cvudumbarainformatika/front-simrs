@@ -1,5 +1,6 @@
 import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
-import { usePasienPulangRanapStore } from 'src/stores/simrs/ranap/pulang'
+import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
+// import { usePasienPulangRanapStore } from 'src/stores/simrs/ranap/pulang'
 import { computed, onMounted, reactive } from 'vue'
 
 export default function useResume (pasien) {
@@ -10,7 +11,8 @@ export default function useResume (pasien) {
     anamnesis: [],
     pemeriksaan: [],
     laborats: [],
-    diagnosis: []
+    diagnosis: [],
+    cppt: []
   })
 
   const usiaTh = computed(() => {
@@ -80,13 +82,14 @@ export default function useResume (pasien) {
   }
   function cariDiagnosis (pasien) {
     let diag = []
-    const headx = pasien?.diagnosamedis
+    const headx = pasien?.diagnosamedis?.length ? pasien?.diagnosamedis?.filter(x => x?.kdruang !== 'POL014') : []
     if (headx?.length) {
       const det = headx?.map(x => {
         return {
           tipe: x?.rs4,
           kode: x?.rs3,
-          name: x?.masterdiagnosa?.rs3,
+          nama: x?.masterdiagnosa?.rs3,
+          name: x?.masterdiagnosa?.rs4,
           ruang: x?.rs13
         }
       })
@@ -106,6 +109,12 @@ export default function useResume (pasien) {
     data.resep = Array.from(new Set(f))
     // console.log('resep', f)
   }
+  function cariCppt (pasien) {
+    const cpptPerawat = pasien?.cppt?.filter(x => x?.nakes === '2') ?? []
+    const sorting = cpptPerawat?.sort((a, b) => a?.id - b?.id) ?? []
+    data.cppt = sorting
+    // console.log('data cppt', data.cppt)
+  }
 
   onMounted(() => {
     cariAnamnesisIgd(pasien)
@@ -115,14 +124,14 @@ export default function useResume (pasien) {
     cariLaborats(pasien)
     cariDiagnosis(pasien)
     cariResep(pasien)
+    cariCppt(pasien)
   })
 
   const resume = computed(() => {
-    console.log('resume', data)
     const diag = useDiagnosaStore()
     const diagnosa = diag.listDiagnosa
 
-    const prog = usePasienPulangRanapStore()
+    const prog = useDischargePlanningRanapStore()
     const prognosis = prog.prognosis
     const res = [
       {
@@ -163,7 +172,7 @@ export default function useResume (pasien) {
               `
           : ''
       },
-      {
+      { // 4
         title: 'ANAMNESE RAWAT INAP',
         type: '1',
         isian: data?.anamnesis.length
@@ -177,7 +186,7 @@ export default function useResume (pasien) {
           `
           : ''
       },
-      {
+      { // 5
         title: 'PEMERIKSAAN FISIK RAWAT INAP',
         type: '1',
         isian: data?.pemeriksaan?.length
@@ -189,8 +198,19 @@ export default function useResume (pasien) {
             <div> - Suhu Tubuh : ${data?.pemeriksaan[0]?.suhu} </div>
             <div> - Pernapasan : ${data?.pemeriksaan[0].pernapasan} </div>
             <div> - SPo2 :  ${data?.pemeriksaan[0].spo} </div>
-            <div> - Nadi  : ${data?.anamnesis[0]?.nadi} </div>
-            <div> - Sistole  : ${data?.anamnesis[0]?.sistole} </div>
+            <div> - Nadi  : ${data?.pemeriksaan[0]?.nadi ?? ''} </div>
+            <div> - Sistole  : ${data?.pemeriksaan[0]?.sistole} </div>
+            <div> - Diastole  : ${data?.pemeriksaan[0]?.diastole} </div>
+
+            <div> - Bagian Kepala : ${data?.pemeriksaan[0]?.rs5 ?? ''} . </div>
+            <div> - Bagian Leher : ${data?.pemeriksaan[0]?.rs6 ?? ''}.</div>
+            <div> - Bagian Dada : ${data?.pemeriksaan[0]?.rs7 ?? ''}</div>
+            <div> - Bagian Punggung : ${data?.pemeriksaan[0]?.rs8 ?? ''}</div>
+            <div> - Bagian Perut : ${data?.pemeriksaan[0]?.rs9 ?? ''}</div>
+            <div> - Tangan : ${data?.pemeriksaan[0]?.rs10 ?? ''}</div>
+            <div> - Kaki : ${data?.pemeriksaan[0]?.rs11 ?? ''}</div>
+            <div> - Status Neurologis : ${data?.pemeriksaan[0]?.rs12 ?? ''}</div>
+            <div> - Genital : ${data?.pemeriksaan[0]?.rs13 ?? ''}</div>
           `
           : ''
       },
@@ -234,13 +254,13 @@ export default function useResume (pasien) {
           {
             name: 'diag1',
             label: 'DIAGNOSIS DPJP',
-            data: data?.memodiagnosa
-              ? [`${data?.memodiagnosa},  &nbsp;`]
+            data: pasien?.memodiagnosa
+              ? [`${pasien?.memodiagnosa ?? '-'},  &nbsp;`]
               : []
           },
           {
             name: 'diag2',
-            label: 'DIAGNOSIS Utama',
+            label: 'DIAGNOSIS Primer',
             data: data?.diagnosis?.length ? data?.diagnosis?.filter(x => x.tipe === 'Primer').map(rad => `${rad?.name},  &nbsp;`) : []
           },
           {
@@ -294,14 +314,26 @@ export default function useResume (pasien) {
       { // 10
         title: 'KEADAAN WAKTU KRS',
         type: '1', // 1 = html, 2 = belum
-        isian: pasien?.dischargeplanning.length
-          ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
+        // isian: pasien?.dischargeplanning.length
+        //   ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
+        //   : ''
+        isian: data?.cppt?.length
+          ? `
+            <div>- Subyektif : ${data?.cppt[data?.cppt.length - 1]?.anamnesis?.keluhanUtama ?? '-'}</div>
+            <div>- Ojektif : Nadi : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.nadi ?? '-'} |
+            RR : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.pernapasan ?? '-'} |
+            Sis/Dias : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.sistole ?? '-'} / ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.diastole ?? '-'} |
+            Spo2 : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.spo ?? '-'} |
+            Suhu : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.suhu ?? '-'} 
+            </div>
+            <div>- Instruksi : ${data?.cppt[data?.cppt.length - 1]?.instruksi ?? '-'}</div>
+          `
           : ''
       },
       { // 11
         title: 'PROGNOSIS',
         type: '1', // 1 = html, 2 = belum
-        isian: (pasien?.prognosis !== '' && pasien?.prognosis !== null)
+        isian: (pasien?.prognosis !== '' || pasien?.prognosis !== null)
           ? `${prognosis?.find(x => x?.rs1 === pasien?.prognosis)?.rs2 ?? ''} `
           : ''
       },
@@ -315,13 +347,19 @@ export default function useResume (pasien) {
       { // 13
         title: 'TINDAK LANJUT',
         type: '1', // 1 = html, 2 = belum
-        isian: (pasien?.tindaklanjut !== '' && pasien?.tindaklanjut !== null)
-          ? `${pasien?.tindaklanjut} `
+        // isian: (pasien?.tindaklanjut !== '' && pasien?.tindaklanjut !== null)
+        //   ? `${pasien?.tindaklanjut} `
+        //   : ''
+        isian: pasien?.dischargeplanning.length
+          // ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
+          ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4}`
           : ''
       }
 
     ]
 
+    console.log('resume', res)
+    // console.log('prognosis', prognosis)
     if (pasien?.prognosis !== '9') { // MALAM / Meninggal
       return res?.filter(x => x?.title !== 'SEBAB KEMATIAN')
     }

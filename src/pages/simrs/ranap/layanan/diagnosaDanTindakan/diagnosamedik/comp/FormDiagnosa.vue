@@ -7,13 +7,13 @@
       </div> -->
       <q-btn
         color="primary"
-        class="q-pa-none"
+        class="q-pa-none full-width"
         flat
         dense
       >
         MEMO : {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
         <q-menu
-          style="width: 400px;"
+          fit
         >
           <div class="q-pa-sm">
             <q-form @submit="gantiMemo">
@@ -22,8 +22,10 @@
                 label="Masukkan Memo Dokter untuk diagnosa"
                 outlined
                 standout="bg-yellow-3"
-                dense
+                type="textarea"
+                row="5"
                 :rules="[val => !!val || 'Harap diisi']"
+                :autofocus="true"
               />
             </q-form>
           </div>
@@ -62,7 +64,6 @@
           :options="optionsDiagutama"
           inline
           dense
-          :disable="pasien?.diagnosamedis?.length > 0"
           @update:model-value="diagnosaUtamaDiubah"
         />
       <!-- <q-radio
@@ -206,8 +207,8 @@ const optionsKasus = ref([
   { label: 'Tidak', value: 'Lama', color: 'negative' }
 ])
 const optionsDiagutama = ref([
-  { label: 'Iya', value: 'Primer', color: 'primary' },
-  { label: 'Tidak', value: 'Sekunder', color: 'negative' }
+  { label: 'Primer', value: 'Primer', color: 'primary' },
+  { label: 'Sekunder', value: 'Sekunder', color: 'negative' }
 ])
 
 function onSubmit () {
@@ -295,7 +296,7 @@ function ganti (val) {
   // // console.log(arr)
   // listDiagnosa.value = arr
 
-  const arr2 = props.pasien?.diagnosamedis
+  // const arr2 = props.pasien?.diagnosamedis
 
   // if (val === 'Baru' && arr2.length === 0) {
   //   listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
@@ -312,7 +313,7 @@ function ganti (val) {
   //   listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
   // }
   // listDiagnosa.value = arr.length ? arr : []
-  arr2.length ? store.setFormDianosa('tipediagnosa', 'Sekunder') : store.setFormDianosa('tipediagnosa', 'Primer')
+  // arr2.length ? store.setFormDianosa('tipediagnosa', 'Sekunder') : store.setFormDianosa('tipediagnosa', 'Primer')
 
   // console.log('diag', arr)
 }
@@ -342,9 +343,9 @@ function gantiMemo () {
   pengunjung.gantiMemo(form, props.pasien)
 }
 
-watch(() => props.pasien?.diagnosamedis, (obj) => {
-  console.log('watch pilihan kasus', obj)
-  ganti(store.formdiagnosa.kasus)
-}, { deep: true })
+// watch(() => props.pasien?.diagnosamedis, (obj) => {
+//   console.log('watch pilihan kasus', obj)
+//   ganti(store.formdiagnosa.kasus)
+// }, { deep: true })
 
 </script>

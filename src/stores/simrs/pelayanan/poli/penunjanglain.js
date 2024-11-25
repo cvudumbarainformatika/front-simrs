@@ -76,7 +76,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
     setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
-      this.notas.unshift('SEMUA')
+      // this.notas.unshift('SEMUA')
       this.notas.push('BARU')
       this.form.nota = this.notas[0]
     },

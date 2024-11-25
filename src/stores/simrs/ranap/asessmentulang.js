@@ -23,7 +23,10 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       radiologi: null,
       terapi: null,
       plann: null,
-      instruksi: null
+      instruksi: null,
+      // tambahan
+      o_sambung: null,
+      s_sambung: null
     }
 
   }),
@@ -86,10 +89,18 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         this.form.plann = null
         this.form.instruksi = null
       }
+      else {
+        this.form.asessment = null
+        this.form.plann = null
+        this.form.instruksi = null
+      }
+
+      this.form.o_sambung = dataSebelumnya?.o_sambung
+      this.form.s_sambung = null
 
       // if (cekTerbaru) dataSebelumnya = cekTerbaru
-      console.log('data terbaru', dataSebelumnya)
-      console.log('pasien', pasien)
+      // console.log('data terbaru', dataSebelumnya)
+      // console.log('pasien', pasien)
     },
 
     initDiagnosaMedisToText (diag) {
@@ -126,7 +137,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       const intervensis = cariIntervensiKep.length ? cariIntervensiKep.map(x => x?.id + '||' + x?.mdiagnosakeperawatan_kode) : []
 
       // console.log('splitIntervensi', splitIntervensi)
-      console.log('cariIntervensiKep', intervensis)
+      // console.log('cariIntervensiKep', intervensis)
       if (cariIntervensiKep.length) storeDiagnosaKeperawatan.selectIntervensis = intervensis
     },
 
@@ -156,7 +167,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       const intervensis = cariIntervensiKep.length ? cariIntervensiKep.map(x => x?.id + '||' + x?.mdiagnosakeperawatan_kode) : []
 
       // console.log('splitIntervensi', splitIntervensi)
-      console.log('cariIntervensiKep', intervensis)
+      // console.log('cariIntervensiKep', intervensis)
       if (cariIntervensiKep.length) storeDiagnosaKebidanan.selectIntervensis = intervensis
     },
 
@@ -251,7 +262,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/layanan/cppt/savecppt', payload)
           .then((resp) => {
-            console.log('data cppt', resp)
+            // console.log('data cppt', resp)
             if (resp.status === 200) {
               this.items = resp.data?.result
               this.form.asessment = null

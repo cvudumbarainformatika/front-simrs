@@ -240,8 +240,8 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
           kddiagnosa: '',
           diagnosa: '',
           keterangan: '',
-          kasus: 'Baru',
-          tipediagnosa: pasien?.diagnosamedis?.length ? 'Sekunder' : 'Primer',
+          kasus: 'Lama',
+          tipediagnosa: 'Primer',
           dtd: ''
         }
 

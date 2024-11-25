@@ -21,6 +21,7 @@ export default function useForm (pasien) {
   const store = useAsessmentUlangRanapStore()
 
   const settings = reactive({
+    ppaTambahan: ['4', '5', '6'],
     isForm: false,
     isChildForm: false,
     formOpen: null,
@@ -250,6 +251,7 @@ export default function useForm (pasien) {
       noreg: pasien?.noreg,
       norm: pasien?.norm,
       kdruang: pasien?.kdruangan,
+      o_sambung: store.form.o_sambung,
       penilaian
     }
 
@@ -297,14 +299,40 @@ export default function useForm (pasien) {
         instruksi: target?.instruksi
       }
     }
-    console.log('updateAsPlanInst', payload)
-    console.log('target', target)
+    // console.log('updateAsPlanInst', payload)
+    // console.log('target', target)
     settings.isChildForm = false
 
     return new Promise((resolve, reject) => {
       api.post('v1/simrs/ranap/layanan/cppt/updateasplaninst', payload)
         .then(resp => {
           console.log('resp update', resp)
+          resolve(resp)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+  const updateOsambung = (item, val, kode) => {
+    const target = store.items.find(x => x?.id === item.id)
+
+    let payload = null
+    if (target) {
+      target[kode] = val
+      payload = {
+        id: item?.id,
+        o_sambung: target?.o_sambung
+      }
+    }
+    // console.log('updateOsambung', payload)
+    // console.log('target', target)
+    settings.isChildForm = false
+
+    return new Promise((resolve, reject) => {
+      api.post('v1/simrs/ranap/layanan/cppt/updateosambung', payload)
+        .then(resp => {
+          // console.log('resp update', resp)
           resolve(resp)
         })
         .catch(err => {
@@ -345,6 +373,7 @@ export default function useForm (pasien) {
 
     updateToServerAsessment,
     updateToServerPlan,
-    updateAsPlanInst
+    updateAsPlanInst,
+    updateOsambung
   }
 }

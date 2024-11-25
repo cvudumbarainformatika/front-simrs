@@ -35,10 +35,12 @@ onMounted(() => {
 })
 
 const filterArrayTindakan = (arr, pasien) => {
-  let val = arr
-  if (pasien?.kodepoli === 'POL041') val = arr
-  else val = arr?.filter(x => x.kdpoli?.includes(pasien?.kdgroup_ruangan))
+  const val = arr?.filter(x => x.kdpoli?.includes(pasien?.kdgroup_ruangan))
+  // let val = arr
+  // if (pasien?.kodepoli === 'POL041') val = arr
+  // else val = arr?.filter(x => x.kdpoli?.includes(pasien?.kdgroup_ruangan))
   // console.log('onMounted formTindakan', val)
+  // return val
   return val
 }
 
@@ -73,7 +75,8 @@ function filterFn (val, update, abort) {
 
   update(() => {
     const needle = val.toLowerCase()
-    const arr = props.pasien.kodepoli === 'POL041' ? store.listTindakan : store.listTindakan?.filter(x => x?.kdpoli?.includes(props.pasien?.kdgroup_ruangan))
+    // const arr = props.pasien.kodepoli === 'POL041' ? store.listTindakan : store.listTindakan?.filter(x => x?.kdpoli?.includes(props.pasien?.kdgroup_ruangan))
+    const arr = store.listTindakan?.filter(x => x?.kdpoli?.includes(props.pasien?.kdgroup_ruangan))
     // console.log('arr', arr)
     const filter = ['kdtindakan', 'tindakan', 'icd9']
     const multiFilter = (data = [], filterKeys = [], value = '') =>

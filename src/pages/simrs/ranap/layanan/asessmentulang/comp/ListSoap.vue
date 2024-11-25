@@ -153,6 +153,22 @@
                             </div>
                           </div>
                         </div>
+                        <q-input
+                          ref="refInputOsambung"
+                          v-model="item.o_sambung"
+                          outlined
+                          type="textarea"
+                          stack-label
+                          standout="bg-yellow-3"
+                          :lazy-rules="true"
+                          rows="5"
+                          hide-bottom-space
+                          @blur="(val) => {
+                            // console.log('val', val?.target?.value);
+                            const valuex = val?.target?.value
+                            updateOsambung(item,valuex,'o_sambung')
+                          }"
+                        />
                       </div>
                     </q-card-section>
                   </q-card>
@@ -423,6 +439,7 @@ const {
   updateToServerAsessment,
   updateToServerPlan,
   updateAsPlanInst,
+  updateOsambung,
   // eslint-disable-next-line no-unused-vars
   store, storePenilaian, storeDiagnosaKeperawatan
 } = useForm(props?.pasien)

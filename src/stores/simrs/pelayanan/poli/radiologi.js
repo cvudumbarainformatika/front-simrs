@@ -9,7 +9,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
   state: () => ({
     namaPemeriksaans: [],
     jenisPemeriksaans: [],
-    notas: ['SEMUA'],
+    notas: [],
     form: {
       noreg: '', // rs1
       nota: '', // rs2
@@ -113,7 +113,6 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
     setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
-      this.notas.unshift('SEMUA')
       this.notas.push('BARU')
       this.form.nota = this.notas[0]
     },
@@ -139,7 +138,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
     initReset () {
       this.form = {
         noreg: '', // rs1
-        nota: this.notas.length ? this.notas[0] : 'SEMUA', // rs2
+        nota: this.notas.length ? this.notas[0] : 'BARU', // rs2
         // rs3:'', //tgl
         permintaan: '', // rs4
         keterangan: '', // rs7

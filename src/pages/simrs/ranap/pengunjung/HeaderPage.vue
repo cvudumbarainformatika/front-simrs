@@ -22,7 +22,7 @@
             </q-input>
           </div>
 
-          <div class="col-auto">
+          <!-- <div class="col-auto">
             <q-select
               v-model="store.periode"
               dense
@@ -37,7 +37,7 @@
               style="min-width: 150px;"
               @update:model-value="store.gantiPeriode"
             />
-          </div>
+          </div> -->
 
           <div class="col-auto">
             <q-select

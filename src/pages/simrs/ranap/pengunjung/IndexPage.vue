@@ -57,6 +57,7 @@ import { usePermintaanOksigenStore } from 'src/stores/simrs/ranap/oksigen'
 import { useHaisRanapStore } from 'src/stores/simrs/ranap/hais'
 import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagnosakebidanan'
 import { useAnatommyRanapStore } from 'src/stores/simrs/ranap/anatomy'
+import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -74,6 +75,7 @@ const penunjanglain = usePenunjangLainPoliStore()
 const oksigen = usePermintaanOksigenStore()
 const hais = useHaisRanapStore()
 const anatomy = useAnatommyRanapStore()
+const dischargePlanning = useDischargePlanningRanapStore()
 
 onMounted(() => {
   Promise.all([
@@ -97,6 +99,7 @@ onMounted(() => {
 
     penunjanglain.getPenunjangLain(),
     anatomy.getmasteranatomys(),
+    dischargePlanning.getmasterprognosis(),
 
     store.getNakes(),
     store.getNonNakes()

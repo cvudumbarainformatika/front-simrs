@@ -174,7 +174,7 @@ const props = defineProps({
 
 onMounted(() => {
   Promise.all([
-    store.getmasterprognosis(),
+    // store.getmasterprognosis(),
     store.initReset()
   ])
 })

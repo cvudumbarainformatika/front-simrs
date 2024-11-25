@@ -272,6 +272,7 @@
                         <div>TB: {{ cppt?.pemeriksaan?.tb }} Cm</div>
                         <div>Nyeri:  {{ cppt?.anamnesis?.keluhannyeri?.skor }}</div>
                         <div>Jatuh: {{ lihatSkorJatuh(cppt?.penilaian) }}</div>
+                        <div v-html="getNewLine(cppt?.o_sambung)" />
                       </q-item-label>
                     </q-item-section>
                   </q-item>

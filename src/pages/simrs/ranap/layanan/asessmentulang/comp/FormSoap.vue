@@ -174,7 +174,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
 </script>
 
 <template>
-  <q-form ref="myForm" class="fit scroll">
+  <q-form ref="myForm" class="fit q-pa-md scroll">
     <div class="row q-col-gutter-md ">
       <!-- subjective -->
       <div class="col-3">
@@ -206,6 +206,18 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                   stack-label
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  :lazy-rules="true"
+                  rows="5"
+                  hide-bottom-space
+                />
+                <q-input
+                  v-if="settings?.ppaTambahan?.includes(nakes)"
+                  ref="refSsambung"
+                  v-model="store.form.s_sambung"
+                  outlined
+                  type="textarea"
+                  stack-label
+                  standout="bg-yellow-3"
                   :lazy-rules="true"
                   rows="5"
                   hide-bottom-space
@@ -290,6 +302,19 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                 <ItemNyeri :item="storeAnamnesis?.formNeoNatal?.keluhannyeri" v-if="kasus?.gruping === '4.3'" />
                 <ItemNyeri :item="storeAnamnesis?.formPediatrik?.keluhannyeri" v-if="kasus?.gruping === '4.4'" />
               </div>
+
+              <!-- free text tambahan objective-->
+              <q-input
+                ref="refInputOsambung"
+                v-model="store.form.o_sambung"
+                outlined
+                type="textarea"
+                stack-label
+                standout="bg-yellow-3"
+                :lazy-rules="true"
+                rows="5"
+                hide-bottom-space
+              />
             </div>
           </q-card-section>
         </q-card>
