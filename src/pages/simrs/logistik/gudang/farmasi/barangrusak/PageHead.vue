@@ -37,7 +37,7 @@
           size="md"
           @click="emits('ganti','list')"
         />
-        <q-btn
+        <!-- <q-btn
           :outline="path !== 'kartu'"
           glossy
           push
@@ -45,7 +45,7 @@
           label="KARTU STOK"
           size="md"
           @click="emits('ganti','kartu')"
-        />
+        /> -->
       </q-btn-group>
     </div>
   </div>

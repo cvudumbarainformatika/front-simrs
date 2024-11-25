@@ -49,11 +49,11 @@ const menus = ref([
     label: 'Bast',
     comp: shallowRef(defineAsyncComponent(() => import('./comp/FormPage.vue')))
   },
-  {
-    name: 'kartu',
-    label: 'Kartu',
-    comp: shallowRef(defineAsyncComponent(() => import('./comp/KartuStokPage.vue')))
-  },
+  // {
+  //   name: 'kartu',
+  //   label: 'Kartu',
+  //   comp: shallowRef(defineAsyncComponent(() => import('./comp/KartuStokPage.vue')))
+  // },
   {
     name: 'list',
     label: 'List Bast',
