@@ -21,6 +21,7 @@
                     option-label="nama_obat"
                     option-value="kd_obat"
                     outlined
+                    clearable
                     :rules="[val=>(val !== null && val !== '') || 'Harap diisi']"
                     :loading="store.loadingObat"
                     :source="store.obats"

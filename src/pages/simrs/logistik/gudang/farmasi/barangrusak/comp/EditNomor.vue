@@ -31,7 +31,7 @@
         </div>
         <div class="row q-my-sm">
           <div class="col-8">
-            <app-input v-model="nopenerimaan" class="col-12" label="Nomor Penerimaan" outlined dense valid />
+            <app-input v-model="nopenerimaan" class="col-12" label="Tanggal faktur retur" outlined dense valid />
           </div>
           <div class="col-4 text-right">
             {{ data?.nopenerimaan_default }}
@@ -39,10 +39,28 @@
         </div>
         <div class="row q-my-sm">
           <div class="col-8">
-            <app-input v-model="nobatch" class="col-12" label="Nomor Batch" outlined dense valid />
+            <app-input v-model="nobatch" class="col-12" label="Nomor faktur retur" outlined dense valid />
           </div>
           <div class="col-4 text-right">
             {{ data?.nobatch_default }}
+          </div>
+        </div>
+        <div class="row q-my-sm">
+          <div class="col-8">
+            <app-input-date :model="tglexp" class="col-12" label="Tanggal Expired" outlined dense valid @set-model="(val)=>{tglexp = val}" />
+          </div>
+
+          <div class="col-4 text-right">
+            {{ data?.tglexp_default }}
+          </div>
+        </div>
+        <div class="row q-my-sm">
+          <div class="col-8">
+            <app-input v-model="harga" class="col-12" label="Harga" outlined dense valid />
+          </div>
+
+          <div class="col-4 text-right">
+            {{ data?.harga_net_default }}
           </div>
         </div>
       </q-card-section>
@@ -55,6 +73,8 @@
               id:data?.id,
               nobatch:nobatch,
               nopenerimaan:nopenerimaan,
+              tglexp:tglexp,
+              harga:harga,
             }
           )"
         />
@@ -73,13 +93,19 @@ const props = defineProps({
 
 const nobatch = ref(null)
 const nopenerimaan = ref(null)
+const tglexp = ref(null)
+const harga = ref(null)
 function show () {
   console.log('data', props.data)
   nobatch.value = props.data?.nobatch
   nopenerimaan.value = props.data?.nopenerimaan
+  tglexp.value = props.data?.tglexp
+  harga.value = props.data?.harga_net
 }
 function hide () {
   nobatch.value = null
   nopenerimaan.value = null
+  tglexp.value = null
+  harga.value = 0
 }
 </script>
