@@ -31,7 +31,7 @@
         </div>
         <div class="row q-my-sm">
           <div class="col-8">
-            <app-input v-model="nopenerimaan" class="col-12" label="Tanggal faktur retur" outlined dense valid />
+            <app-input v-model="nopenerimaan" class="col-12" label="Nomor Penerimaan" outlined dense valid />
           </div>
           <div class="col-4 text-right">
             {{ data?.nopenerimaan_default }}
@@ -39,7 +39,7 @@
         </div>
         <div class="row q-my-sm">
           <div class="col-8">
-            <app-input v-model="nobatch" class="col-12" label="Nomor faktur retur" outlined dense valid />
+            <app-input v-model="nobatch" class="col-12" label="Nomor Batch" outlined dense valid />
           </div>
           <div class="col-4 text-right">
             {{ data?.nobatch_default }}
