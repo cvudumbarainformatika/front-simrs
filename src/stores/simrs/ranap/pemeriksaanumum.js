@@ -28,7 +28,10 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       pernapasan: 0,
       spo: 0,
       tkKesadaran: 0,
-      tkKesadaranKet: 'Sadar Baik/Alert',
+      tkKesadaranKet: 'Compos Mentis',
+      kesadarane: 0,
+      kesadaranv: 0,
+      kesadaranm: 0,
 
       sosial: null,
       spiritual: null,
@@ -294,12 +297,18 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
 
     keadaanUmums: ['Baik', 'Sedang', 'Lemah'],
     optionsTingkatkesadaran: [
-      { value: 0, label: 'Sadar Baik/Alert' }, // 248234008
-      { value: 1, label: 'Berespon denga kata-kata / Voice' }, // 300202002
-      { value: 2, label: 'Hanya berespons jika dirangsang nyeri / Pain' }, // 450847001
-      { value: 3, label: 'Pasien tidak sadar / Unresponsive' }, // 422768004
-      { value: 4, label: 'Gelisah atau bingung' }, // 130987000
-      { value: 5, label: 'Acute Confusional States' } // 2776000
+      // { value: 0, label: 'Sadar Baik/Alert' }, // 248234008
+      // { value: 1, label: 'Berespon denga kata-kata / Voice' }, // 300202002
+      // { value: 2, label: 'Hanya berespons jika dirangsang nyeri / Pain' }, // 450847001
+      // { value: 3, label: 'Pasien tidak sadar / Unresponsive' }, // 422768004
+      // { value: 4, label: 'Gelisah atau bingung' }, // 130987000
+      // { value: 5, label: 'Acute Confusional States' } // 2776000
+      { value: 0, label: 'Compos Mentis' }, // 248234008
+      { value: 1, label: 'Apatis' }, // 300202002
+      { value: 2, label: 'Sopor' }, // 450847001
+      { value: 3, label: 'Delirium' }, // 422768004
+      { value: 4, label: 'Coma' }, // 130987000
+      { value: 5, label: 'Samnolen' } // 2776000
     ],
     statusPsikologis: [
       { value: 'Tidak ada kelainan', label: 'Tidak ada kelainan' },

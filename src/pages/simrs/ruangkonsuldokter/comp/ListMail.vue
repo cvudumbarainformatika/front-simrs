@@ -39,7 +39,8 @@
           </q-item-section>
           <q-item-section v-if="item?.kdruang !== 'POL014'">
             <q-item-label lines="1">
-              Pasien -- {{ item?.kunjunganranap?.nama ?? '-' }} ({{ item?.kunjunganranap?.rs2 ?? '-' }}), {{ item?.kunjunganranap?.ruangan ?? '-' }}
+              <!-- Pasien -- {{ item?.kunjunganranap?.nama ?? '-' }} ({{ item?.kunjunganranap?.rs2 ?? '-' }}), {{ item?.kunjunganranap?.ruangan ?? '-' }} -->
+              Pasien {{ aturPasien(item) }}
             </q-item-label>
             <q-item-label lines="1">
               Diagnosa -- {{ item?.kunjunganranap?.diagnosamedis[0]?.masterdiagnosa?.rs4 ?? 'Belum Ada Diagnosa' }}
@@ -47,7 +48,7 @@
           </q-item-section>
           <!-- <q-item-section>
             <q-item-label lines="1">
-              -- {{ item?.jawaban ?'Sudah Ada Jawaban': 'Belum Ada Jawaban' }}
+              {{ item }}
             </q-item-label>
           </q-item-section> -->
           <q-item-section side>
@@ -74,5 +75,16 @@ defineProps({
 const emits = defineEmits(['details', 'refresh'])
 
 const current = ref(1)
+
+const aturPasien = (item) => {
+  // return item?.kunjunganranap?.nama ?? '-'
+  console.log('pasien', item)
+  if (item?.kdruang !== 'POL014') {
+    return `${item?.kunjunganranap?.nama ?? '-'} (${item?.kunjunganranap?.rs2 ?? '-'}, ${item?.kunjunganranap?.ruangan ?? '-'}) `
+  }
+  else {
+    return `${item?.kunjunganigd?.nama ?? '-'} (${item?.kunjunganigd?.rs2 ?? '-'}, ${item?.kunjunganigd?.ruangan ?? '-'}) `
+  }
+}
 
 </script>

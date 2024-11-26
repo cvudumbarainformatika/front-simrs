@@ -14,6 +14,7 @@
               <div><b>u/p :</b> <em>{{ item?.rs7 }}</em></div>
               <div><em>Qty :</em> <b>{{ item?.rs6 }}</b> <em>Transfusi Ke -</em> <b>{{ item?.rs13 }}</b></div>
               <div><em>Reaksi :</em> <b>{{ store?.reaksis?.find(x => x?.value === item?.rs9)?.label }}</b> </div>
+              <div><em>Keterangan :</em> <b>{{ item?.ket ?? '-' }}</b> </div>
               <div class="">
                 <!-- <div>by : <em>{{ item?.petugas?.nama }}</em></div> -->
               </div>
@@ -23,6 +24,9 @@
                 <div class="column ">
                   <div class="self-end q-mb-sm">
                     <q-btn icon="icon-mat-delete" outline color="negative" round size="sm" @click="hapusItem(item?.id)" />
+                  </div>
+                  <div class="self-end q-mb-sm">
+                    <q-btn icon="icon-mat-print" outline color="dark" round size="sm" @click="printItem(item)" />
                   </div>
                   <div class="f-10 text-grey-8">
                     <div>{{ item?.rs3 }}</div>
@@ -42,13 +46,16 @@
         Sedang memuat ...
       </div>
     </div>
+
+    <!-- Dialog Print -->
+    <dialog-cetak v-model="openDialogCetak" :item="itemx" :pasien="pasien" :dokters="store?.dokters" :perawats="store?.perawats" />
   </div>
 </template>
 
 <script setup>
 import { useQuasar } from 'quasar'
 import { usePermintaanBankDarahStore } from 'src/stores/simrs/ranap/bankdarah.js'
-import { computed } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 
 const props = defineProps({
   items: {
@@ -65,6 +72,9 @@ const props = defineProps({
   }
 })
 const store = usePermintaanBankDarahStore()
+const DialogCetak = defineAsyncComponent(() => import('./DialogCetak.vue'))
+const openDialogCetak = ref(false)
+const itemx = ref(null)
 
 const filterredTable = computed(() => {
   const val = store?.form?.nota
@@ -73,6 +83,12 @@ const filterredTable = computed(() => {
   // console.log('pasien fisio', arr)
   return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
+
+const printItem = (item) => {
+  console.log(item)
+  itemx.value = item
+  openDialogCetak.value = true
+}
 
 const $q = useQuasar()
 function hapusItem (id) {

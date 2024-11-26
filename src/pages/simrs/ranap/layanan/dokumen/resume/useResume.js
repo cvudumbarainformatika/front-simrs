@@ -319,14 +319,14 @@ export default function useResume (pasien) {
         //   : ''
         isian: data?.cppt?.length
           ? `
-            <div>- Subyektif : ${data?.cppt[data?.cppt.length - 1]?.anamnesis?.keluhanUtama ?? '-'}</div>
-            <div>- Ojektif : Nadi : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.nadi ?? '-'} |
+            <div> - ${data?.cppt[data?.cppt.length - 1]?.anamnesis?.keluhanUtama ?? '-'}</div>
+            <div> - Nadi : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.nadi ?? '-'} |
             RR : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.pernapasan ?? '-'} |
             Sis/Dias : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.sistole ?? '-'} / ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.diastole ?? '-'} |
             Spo2 : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.spo ?? '-'} |
             Suhu : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.suhu ?? '-'} 
             </div>
-            <div>- Instruksi : ${data?.cppt[data?.cppt.length - 1]?.instruksi ?? '-'}</div>
+            <div> - ${data?.cppt[data?.cppt.length - 1]?.instruksi ?? '-'}</div>
           `
           : ''
       },
@@ -347,13 +347,13 @@ export default function useResume (pasien) {
       { // 13
         title: 'TINDAK LANJUT',
         type: '1', // 1 = html, 2 = belum
-        // isian: (pasien?.tindaklanjut !== '' && pasien?.tindaklanjut !== null)
-        //   ? `${pasien?.tindaklanjut} `
-        //   : ''
-        isian: pasien?.dischargeplanning.length
-          // ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
-          ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4}`
+        isian: (pasien?.tindaklanjut !== '' && pasien?.tindaklanjut !== null)
+          ? `${pasien?.tindaklanjut} `
           : ''
+        // isian: pasien?.dischargeplanning.length
+        //   // ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4} - ${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs5}`
+        //   ? `${pasien?.dischargeplanning[pasien?.dischargeplanning.length - 1]?.rs4}`
+        //   : ''
       }
 
     ]

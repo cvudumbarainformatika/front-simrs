@@ -15,7 +15,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       rhesus: '',
       sifatpermintaan: 'Biasa',
       jumlah: 1,
-      // keterangan: '',
+      keterangan: '',
       transfusike: 0,
       reaksi: '',
       pengirim: '',
@@ -99,7 +99,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       this.form.nota = (this.form.nota === 'BARU' || this.form.nota === 'SEMUA' || this.form.nota === '' || this.form.nota === null) ? null : this.form.nota
       // this.form.isRanap = isRanap
 
-      console.log(this.form)
+      // console.log(this.form)
 
       try {
         const resp = await api.post('v1/simrs/penunjang/bankdarah/simpanpermintaan', this.form)
@@ -170,6 +170,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
         rhesus: '',
         sifatpermintaan: 'Biasa',
         jumlah: 1,
+        keterangan: '',
         transfusike: 0,
         reaksi: '',
         pengirim: '',

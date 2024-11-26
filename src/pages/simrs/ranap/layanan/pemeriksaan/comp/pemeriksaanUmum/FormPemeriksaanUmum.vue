@@ -37,15 +37,7 @@
             // cekEws('tb', _removedZeros)
           }"
         />
-        <app-input-simrs
-          label="N (x/mnt)" class="col-2" v-model="store.form.nadi" :valid="{ number: true }" :lazy-rules="true"
-          @update:model-value="(val)=>{
-            const _removedZeros = val.replace(/^0+/, '')
-            if (val > 1) store.form.nadi=_removedZeros
 
-            cekEws()
-          }"
-        />
         <app-input-simrs
           label="Sis (mmHg)" class="col-2" v-model="store.form.sistole" :valid="{ number: true }" :lazy-rules="true"
           @update:model-value="(val)=>{
@@ -60,6 +52,15 @@
           @update:model-value="(val)=>{
             const _removedZeros = val.replace(/^0+/, '')
             if (val > 1) store.form.diastole=_removedZeros
+
+            cekEws()
+          }"
+        />
+        <app-input-simrs
+          label="N (x/mnt)" class="col-2" v-model="store.form.nadi" :valid="{ number: true }" :lazy-rules="true"
+          @update:model-value="(val)=>{
+            const _removedZeros = val.replace(/^0+/, '')
+            if (val > 1) store.form.nadi=_removedZeros
 
             cekEws()
           }"
@@ -168,9 +169,46 @@
           input-class="ellipsis"
           fill-input
           hide-bottom-space
-          class="col-8"
+          class="col-4"
           @update:model-value="cekEws()"
         />
+        <!-- <div class="col-8 row q-col-gutter-lg">
+          <q-slider
+            v-model="store.form.kesadarane"
+            marker-labels
+            label-always
+            switch-label-side
+            :label-value="'E ' + store.form.kesadarane"
+            :min="0"
+            :max="4"
+            class="col-4"
+            @update:model-value="sumKesadaran"
+          />
+          <q-slider
+            v-model="store.form.kesadaranv"
+            marker-labels
+            :label-value="'V ' + store.form.kesadaranv"
+            label-always
+            switch-label-side
+            :min="0"
+            :max="5"
+            class="col-4"
+            color="green"
+            @update:model-value="sumKesadaran"
+          />
+          <q-slider
+            v-model="store.form.kesadaranm"
+            marker-labels
+            label-always
+            :label-value="'M ' + store.form.kesadaranm"
+            switch-label-side
+            :min="0"
+            :max="6"
+            class="col-4"
+            color="orange"
+            @update:model-value="sumKesadaran"
+          />
+        </div> -->
       </q-card-section>
       <div class="absolute q-pa-md" style="right: 0; bottom:0">
         <q-card flat bordered>

@@ -12,7 +12,7 @@
         dense
       >
         MEMO : {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
-        <q-menu
+        <!-- <q-menu
           fit
         >
           <div class="q-pa-sm">
@@ -29,7 +29,27 @@
               />
             </q-form>
           </div>
-        </q-menu>
+        </q-menu> -->
+        <q-popup-edit
+          fit
+          buttons
+          v-model="memoDokter"
+          :cover="false"
+          :offset="[0, 10]"
+          v-slot="scope"
+          :validate="validInput"
+          @hide="validInput"
+          @save="(val)=> {
+            gantiMemo(val)
+          }"
+        >
+          <q-input
+            type="textarea"
+            v-model="scope.value"
+            autofocus
+            @keyup.enter.stop
+          />
+        </q-popup-edit>
       </q-btn>
     </div>
     <q-separator style="margin-top:-10px" />
@@ -195,6 +215,7 @@ const props = defineProps({
 
 const formRef = ref(null)
 const store = useDiagnosaStore()
+// eslint-disable-next-line no-unused-vars
 const pengunjung = usePengunjungRanapStore()
 const emits = defineEmits(['savePemeriksaan'])
 
@@ -210,6 +231,19 @@ const optionsDiagutama = ref([
   { label: 'Primer', value: 'Primer', color: 'primary' },
   { label: 'Sekunder', value: 'Sekunder', color: 'negative' }
 ])
+
+const isErrInput = ref(false)
+const errMsg = ref('')
+const validInput = (val) => {
+  if (val?.trim().length === 0) {
+    isErrInput.value = true
+    errMsg.value = 'Tidak boleh kosong'
+    return false
+  }
+  isErrInput.value = false
+  errMsg.value = ''
+  return true
+}
 
 function onSubmit () {
   if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
@@ -333,14 +367,15 @@ function diagnosaUtamaDiubah (val) {
   }
 }
 
-function gantiMemo () {
+function gantiMemo (val) {
   // console.log('okkk')
   const form = {
-    memo: memoDokter.value,
+    memo: val,
     noreg: props.pasien?.noreg
   }
+  console.log('form', form)
 
-  pengunjung.gantiMemo(form, props.pasien)
+  // pengunjung.gantiMemo(form, props.pasien)
 }
 
 // watch(() => props.pasien?.diagnosamedis, (obj) => {

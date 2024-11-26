@@ -45,15 +45,22 @@
               <app-input-simrs
                 v-model="store.form.jumlah"
                 label="Jumlah"
-                style="width: 30%;"
+                style="width: 20%;"
                 :valid="{ required: true, number: true }"
               />
-              <!-- <app-input-simrs
-                v-model="store.form.keterangan"
-                label="Ket"
-                style="width: 30%;"
-              /> -->
               <div>Bag</div>
+            </div>
+          </div>
+          <div class="col-3">
+            Keterangan
+          </div>
+          <div class="col-9">
+            <div class="flex items-center q-gutter-sm">
+              <app-input-simrs
+                v-model="store.form.keterangan"
+                label="Keterangan"
+                style="width: 80%;"
+              />
             </div>
           </div>
           <div class="col-3">

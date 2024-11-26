@@ -202,8 +202,10 @@
 
     <div class="row q-mt-sm flex justify-center">
       <q-btn
-        v-if="pasien?.status !== '2' && pasien?.status !=='3'" :loading="store.loadingOrder" :disable="store.loadingOrder"
-        label="PULANGKAN PASIEN" type="submit" color="negative"
+        :loading="store.loadingOrder" :disable="store.loadingOrder"
+        :label="(pasien?.status === '2' || pasien?.status ==='3') ? 'EDIT INPUTAN' : 'PULANG / PULANGKAN PASIEN'"
+        type="submit"
+        :color="(pasien?.status === '2' || pasien?.status ==='3') ? 'primary' : 'negative'"
         size="lg"
       />
     </div>
