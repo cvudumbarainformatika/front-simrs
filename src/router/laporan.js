@@ -207,6 +207,11 @@ const laporan = {
       // name: 'laporan.farmasi.mutasi-fifo',
       component: () => import('pages/simrs/laporan/farmasi/mutasififo/IndexPage.vue')
     },
+    {
+      path: '/laporan/farmasi/barang-rusak',
+      // name: 'laporan.farmasi.barang-rusak',
+      component: () => import('pages/simrs/laporan/farmasi/barangrusak/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',
