@@ -11,7 +11,7 @@
         </div>
         <div class="kanan text-right text-bold">
           <div>{{ item?.kunjunganranap?.nama }}</div>
-          <div>{{ item?.kunjunganranap?.rs2 }}</div>
+          <div>{{ item?.kunjunganranap?.rs2 }} || <span v-if="item?.kdruang === 'POL014'">{{ item?.kunjunganigd?.ruangan ?? '-' }}</span><span v-if="item?.kdruang !== 'POL014'">{{ item?.kunjunganranap?.ruangan ?? '-' }}</span></div>
         </div>
       </div>
     </div>
