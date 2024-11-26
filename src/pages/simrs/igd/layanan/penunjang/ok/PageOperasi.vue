@@ -1,36 +1,28 @@
 <template>
-  <div class="full-height full-width">
-    <div class="row full-height">
-      <q-card
-        flat
-        bordered
-        square
-        class="col-6 full-height"
-      >
+  <div
+    class="full-height q-pa-sm"
+  >
+    <div class="row q-col-gutter-x-xs full-height">
+      <div class="col-6 full-height">
         <FormOrder
           :key="props.pasien"
           :pasien="props.pasien"
         />
-      </q-card>
-      <q-card
-        flat
-        bordered
-        square
-        class="col-6 full-height"
-      >
+      </div>
+      <div class="col-6 full-height">
         <ListOrder :pasien="props.pasien" />
-      </q-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useOperasiPoli } from 'src/stores/simrs/pelayanan/poli/operasi'
 import FormOrder from './comp/FormOrder.vue'
 import ListOrder from './comp/ListOrder.vue'
 import { onMounted } from 'vue'
+import { useOperasiIgd } from 'src/stores/simrs/igd/operasi'
 
-const store = useOperasiPoli()
+const store = useOperasiIgd()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -38,6 +30,9 @@ const props = defineProps({
   }
 })
 
-onMounted(() => store.getNota(props?.pasien))
+onMounted(() => {
+  store.initReset()
+  store.getNota(props?.pasien)
+})
 
 </script>
