@@ -68,21 +68,21 @@ const tabsxx = [
     label: 'Diagnosa Medis',
     name: 'diagnosaMedik',
     icon: 'icon-mat-health_and_safety',
-    nakes: ['1', '2', '3'],
+    nakes: ['1'],
     comp: defineAsyncComponent(() => import('./diagnosamedik/DiagnosaPage.vue'))
   },
   {
     label: 'Diagnosa Keperawatan',
     name: 'diagnosaKeperawatan',
     icon: 'icon-mat-health_and_safety',
-    nakes: ['1', '2', '3'],
+    nakes: ['2', '3'],
     comp: defineAsyncComponent(() => import('./diagnosakeperawatan/DiagnosaKeperawatanPage.vue'))
   },
   {
     label: 'Diagnosa Kebidanan',
     name: 'diagnosaKebidanan',
     icon: 'icon-mat-health_and_safety',
-    nakes: ['1', '2', '3'],
+    nakes: ['2', '3'],
     comp: defineAsyncComponent(() => import('./diagnosakebidanan/IndexPage.vue'))
   },
   {
@@ -93,7 +93,7 @@ const tabsxx = [
     comp: defineAsyncComponent(() => import('./tindakan/TindakanPage.vue'))
   },
   {
-    label: 'Target',
+    label: 'Planning',
     name: 'target',
     icon: 'icon-mat-assignment_return',
     nakes: ['1'],
