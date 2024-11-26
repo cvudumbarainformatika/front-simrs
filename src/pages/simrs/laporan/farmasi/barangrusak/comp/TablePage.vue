@@ -137,14 +137,14 @@
             </td>
             <td style="white-space: normal; max-width: 100px;">
               <div class="row justify-end ">
-                {{ item?.harga_net }}
+                {{ formatDouble(item?.harga_net,2) }}
               </div>
               <div v-if="item?.harga_net_default!==item?.harga_net" class="row justify-between print-hide text-italic f-10">
                 <div class="col-auto">
                   default :
                 </div>
                 <div class="col-auto text-right">
-                  {{ item?.harga_net_default }}
+                  {{ formatDouble(item?.harga_net_default,2) }}
                 </div>
               </div>
             </td>
@@ -163,14 +163,14 @@
             </td>
             <td style="white-space: normal; max-width: 100px;">
               <div class="row justify-end ">
-                {{ parseFloat(item?.harga_net??0) * parseFloat(item?.jumlah??0) }}
+                {{ formatDouble(parseFloat(item?.harga_net??0) * parseFloat(item?.jumlah??0),2) }}
               </div>
               <div v-if="item?.harga_net_default!==item?.harga_net" class="row justify-between print-hide text-italic f-10">
                 <div class="col-auto">
                   default :
                 </div>
                 <div class="col-auto text-right">
-                  {{ parseFloat(item?.harga_net_default) * parseFloat(item?.jumlah??0) }}
+                  {{ formatDouble(parseFloat(item?.harga_net_default) * parseFloat(item?.jumlah??0),2) }}
                 </div>
               </div>
             </td>
@@ -182,7 +182,7 @@
 </template>
 
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useLaporanBarangRusakStore } from 'src/stores/simrs/laporan/farmasi/barangrusak/barangrusak'
 
 // eslint-disable-next-line no-unused-vars
