@@ -362,7 +362,7 @@ function ganti (val) {
   // arr2.length ? store.setFormDianosa('tipediagnosa', 'Awal') : store.setFormDianosa('tipediagnosa', 'Primer')
 }
 
-const tipediagnosa = ref(['Awal', 'Primer'])
+const tipediagnosa = ref(['Awal', 'Primer', 'Sekunder'])
 
 // function diagnosaUtamaDiubah (val) {
 //   console.log(props.pasien)
