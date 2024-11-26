@@ -8,120 +8,189 @@
     />
     <q-toolbar-title class="f-14">
       <div class="row items-center q-gutter-md">
-        <q-btn
-          color="primary"
-          class="q-pl-xs"
-          flat
-        >
-          <div class="row items-center no-wrap q-gutter-sm text-white">
-            <q-avatar size="30px">
-              <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
-            </q-avatar>
-            <div class="column f-12">
-              <div>
-                DPJP | {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
+        <div class="col-3">
+          <q-btn
+            color="primary"
+            class="q-pl-xs"
+            flat
+          >
+            <div class="row items-center no-wrap q-gutter-sm text-white">
+              <q-avatar size="30px">
+                <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
+              </q-avatar>
+              <div class="column f-12">
+                <div>
+                  DPJP | {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
+                </div>
               </div>
             </div>
-          </div>
-          <q-menu style="max-width: 460px;">
-            <div class="row no-wrap q-pa-md">
-              <div class="column items-center">
-                <q-avatar size="72px">
-                  <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
-                </q-avatar>
+            <q-menu style="max-width: 460px;">
+              <div class="row no-wrap q-pa-md">
+                <div class="column items-center">
+                  <q-avatar size="72px">
+                    <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
+                  </q-avatar>
 
-                <div class="f12 q-mt-md q-mb-xs">
-                  {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
-                </div>
-              </div>
-              <q-separator
-                vertical
-                inset
-                class="q-mx-lg"
-              />
-              <div class="column">
-                <div class="f-14 text-weight-bold ">
-                  Ganti DPJP ?
-                </div>
-                <q-separator class="q-my-sm" />
-                <q-form @submit="gantiDpjp">
-                  <q-select
-                    v-model="search"
-                    dense
-                    outlined
-                    standout="bg-yellow-3"
-                    label="Cari Dpjp"
-                    use-input
-                    clearable
-                    option-value="kddpjp"
-                    option-label="nama"
-                    :options="options"
-                    behavior="menu"
-                    hide-dropdown-icon
-                    @filter="filterOptions"
-                    @update:model-value="(val)=> updateKodeDpjp(val)"
-                  >
-                    <!-- @update:model-value="(val)=>$emit('updated', val)" -->
-                    <template #prepend>
-                      <q-icon name="icon-mat-search" />
-                    </template>
-                    <template #no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                    <template #option="scope">
-                      <q-item v-bind="scope.itemProps">
-                        <q-item-section avatar>
-                          <q-avatar size="60px">
-                            <img :src="getImage(scope?.opt?.kelamin,scope.opt)">
-                          </q-avatar>
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>{{ scope.opt.nama }}</q-item-label>
-                          <q-item-label caption>
-                            <strong>Nip : </strong> {{ scope.opt.nip }}
-                          </q-item-label>
-                          <q-item-label caption>
-                            <strong>KODE DPJP : </strong> {{ scope?.opt?.kddpjp??'-' }}
-                          </q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                  <q-input
-                    v-model="kodedpjp"
-                    label="KODE DPJP (Automatis)"
-                    outlined
-                    standout="bg-yellow-3"
-                    dense
-                    class="q-my-sm"
-                    :rules="[
-                      val => ((!!val && pasien?.groups!=='2') || ( pasien?.groups==='2' && !!kdpegsimrs && (!val||!!val) ))|| 'HARAP Hubungi bidang YANMED ...',
-
-                    ]"
-                    readonly
-                  />
-                  <!-- val => ( pasien?.groups==='2' && !!kdpegsimrs && !val ) || 'Tidak Boleh kosong', -->
-                  <q-separator class="q-my-sm" />
-                  <div class="text-right">
-                    <q-btn
-                      color="primary"
-                      label="Simpan"
-                      push
-                      size="sm"
-                      type="submit"
-                      :loading="loadingSaveDpjp"
-                      :disable="loadingSaveDpjp"
-                    />
+                  <div class="f12 q-mt-md q-mb-xs">
+                    {{ pasien?.kodedokter === null || pasien?.kodedokter==='' ? '----': pasien?.dokter }}
                   </div>
-                </q-form>
+                </div>
+                <q-separator
+                  vertical
+                  inset
+                  class="q-mx-lg"
+                />
+                <div class="column">
+                  <div class="f-14 text-weight-bold ">
+                    Ganti DPJP ?
+                  </div>
+                  <q-separator class="q-my-sm" />
+                  <q-form @submit="gantiDpjp">
+                    <q-select
+                      v-model="search"
+                      dense
+                      outlined
+                      standout="bg-yellow-3"
+                      label="Cari Dpjp"
+                      use-input
+                      clearable
+                      option-value="kddpjp"
+                      option-label="nama"
+                      :options="options"
+                      behavior="menu"
+                      hide-dropdown-icon
+                      @filter="filterOptions"
+                      @update:model-value="(val)=> updateKodeDpjp(val)"
+                    >
+                      <!-- @update:model-value="(val)=>$emit('updated', val)" -->
+                      <template #prepend>
+                        <q-icon name="icon-mat-search" />
+                      </template>
+                      <template #no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                      <template #option="scope">
+                        <q-item v-bind="scope.itemProps">
+                          <q-item-section avatar>
+                            <q-avatar size="60px">
+                              <img :src="getImage(scope?.opt?.kelamin,scope.opt)">
+                            </q-avatar>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>{{ scope.opt.nama }}</q-item-label>
+                            <q-item-label caption>
+                              <strong>Nip : </strong> {{ scope.opt.nip }}
+                            </q-item-label>
+                            <q-item-label caption>
+                              <strong>KODE DPJP : </strong> {{ scope?.opt?.kddpjp??'-' }}
+                            </q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                    <q-input
+                      v-model="kodedpjp"
+                      label="KODE DPJP (Automatis)"
+                      outlined
+                      standout="bg-yellow-3"
+                      dense
+                      class="q-my-sm"
+                      :rules="[
+                        val => ((!!val && pasien?.groups!=='2') || ( pasien?.groups==='2' && !!kdpegsimrs && (!val||!!val) ))|| 'HARAP Hubungi bidang YANMED ...',
+
+                      ]"
+                      readonly
+                    />
+                    <!-- val => ( pasien?.groups==='2' && !!kdpegsimrs && !val ) || 'Tidak Boleh kosong', -->
+                    <q-separator class="q-my-sm" />
+                    <div class="text-right">
+                      <q-btn
+                        color="primary"
+                        label="Simpan"
+                        push
+                        size="sm"
+                        type="submit"
+                        :loading="loadingSaveDpjp"
+                        :disable="loadingSaveDpjp"
+                      />
+                    </div>
+                  </q-form>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
+        <q-separator vertical color="orange" class="q-ml-sm q-mr-sm" />
+        <div class="col-3">
+          <q-btn
+            color="primary"
+            class="q-pl-xs"
+            flat
+          >
+            <div class="row items-center no-wrap q-gutter-sm text-white">
+              <div class="column f-12">
+                <div>
+                  Sistem Bayar | {{ pasien?.sistembayar }}
+                </div>
               </div>
             </div>
-          </q-menu>
-        </q-btn>
+            <q-menu style="max-width: 460px;">
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
+                  <div class="f-14 text-weight-bold ">
+                    Ganti Sistem Bayar ?
+                  </div>
+                  <q-separator class="q-my-sm" />
+                  <q-form @submit="gantiSistemBayar">
+                    <q-select
+                      v-model="search"
+                      dense
+                      outlined
+                      style="width: 200px;"
+                      standout="bg-yellow-3"
+                      label="Cari Sistem Bayar"
+                      clearable
+                      option-value="kode"
+                      option-label="groupsistembayar"
+                      :options="storePengunjung.sistembayar"
+                      @update:model-value="(val)=> caririnci(val)"
+                    >
+                      <!-- @update:model-value="(val)=>$emit('updated', val)" -->
+                    </q-select>
+                    <q-select
+                      v-model="search"
+                      dense
+                      outlined
+                      style="width: 200px;"
+                      standout="bg-yellow-3"
+                      label="Cari Sistem Bayar"
+                      clearable
+                      option-value="kode"
+                      option-label="groupsistembayar"
+                      :options="storePengunjung.sistembayar"
+                    />
+                    <q-separator class="q-my-sm" />
+                    <div class="text-right">
+                      <q-btn
+                        color="primary"
+                        label="Simpan"
+                        push
+                        size="sm"
+                        type="submit"
+                        :loading="loadingSaveDpjp"
+                        :disable="loadingSaveDpjp"
+                      />
+                    </div>
+                  </q-form>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
       </div>
     </q-toolbar-title>
     <div v-if="pasien?.dokter !== '' ">
@@ -170,8 +239,10 @@
 import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 
 const store = usePermintaanEResepStore()
+const storePengunjung = usePengunjungIgdStore()
 
 const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'layananSelesai'])
 
@@ -198,6 +269,11 @@ function updateKodeDpjp (val) {
   // console.log(props?.pasien?.groups)
   kodedpjp.value = val?.kddpjp ?? ''
   kdpegsimrs.value = val?.kdpegsimrs
+}
+
+function caririnci (val) {
+  const allsistembayar = store.sistembayarrinci
+  console.log('sasasasasa', allsistembayar)
 }
 
 function gantiDpjp () {

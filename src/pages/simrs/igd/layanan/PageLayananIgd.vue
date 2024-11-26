@@ -204,6 +204,8 @@ function getIcare () {
 
 onMounted(() => {
   store.getruangranap()
+  store.getsistembayar()
+  store.getsistembayarrinci()
 })
 
 watchEffect(() => {

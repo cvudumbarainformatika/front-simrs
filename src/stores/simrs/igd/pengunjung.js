@@ -33,7 +33,9 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini', 'Tahun Ini'],
     periode: 'Hari Ini',
     pageLayanan: false,
-    nakes: null
+    nakes: null,
+    sistembayar: [],
+    sistembayarrinci: []
   }),
   actions: {
     setParams (key, val) {
@@ -418,6 +420,20 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const resp = await api.get('v1/simrs/master/kamar')
       if (resp.status === 200) {
         this.ruangranaps = resp?.data
+        // console.log('kanmar', this.ruangranaps)
+      }
+    },
+    async getsistembayar () {
+      const resp = await api.get('v1/simrs/master/sistembayar')
+      if (resp.status === 200) {
+        this.sistembayar = resp?.data
+        // console.log('kanmar', this.ruangranaps)
+      }
+    },
+    async getsistembayarrinci () {
+      const resp = await api.get('v1/simrs/master/allsistembayar')
+      if (resp.status === 200) {
+        this.sistembayarrinci = resp?.data
         // console.log('kanmar', this.ruangranaps)
       }
     },
