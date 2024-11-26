@@ -205,18 +205,18 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      console.log('a', pasien)
-      console.log('b', val)
-      console.log('kode', this.items)
+      // console.log('a', pasien)
+      // console.log('b', val)
+      // console.log('kode', this.items)
       const findPasien = this.items.filter(x => x === pasien)
-      console.log('findPasien', findPasien)
+      // console.log('findPasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
-        console.log('data', data)
+        // console.log('data', data)
         const target = data[kode]?.find(x => x.id === val.id)
-        console.log('itarget', target)
-        console.log('inject kode pasien', kode)
-        console.log('inject isi pasien', val)
+        // console.log('itarget', target)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
 
         if (target) {
           Object.assign(target, val)
@@ -466,7 +466,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     },
     async getNakes () {
       const resp = await api.get('/v1/simrs/master/pegawai/listnakes')
-      console.log('nakes', resp)
+      // console.log('nakes', resp)
 
       if (resp.status === 200) {
         this.nakes = resp.data

@@ -52,7 +52,7 @@ export const useKonsulIgdStore = defineStore('konsul-igd-store', {
         if (resp.status === 200) {
           // storeIgd.deleteInjectanNull2(pasien?.noreg, 'konsultasi')
           const isi = resp?.data?.result[0]
-          console.log('isi', isi)
+          // console.log('isi', isi)
           storeIgd.injectDataPasien(pasien, isi, 'konsultasi')
           notifSuccess(resp)
           this.loadingOrder = false
@@ -100,7 +100,7 @@ export const useKonsulIgdStore = defineStore('konsul-igd-store', {
       }
 
       const pengunjung = usePengunjungIgdStore()
-      console.log('aaaaa', pengunjung)
+      // console.log('aaaaa', pengunjung)
       this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
       this.perawats = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '2' || x?.kdgroupnakes === '3') ?? []
 
