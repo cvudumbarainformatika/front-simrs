@@ -32,7 +32,8 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     notaTindakan: 'BARU',
     periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini', 'Tahun Ini'],
     periode: 'Hari Ini',
-    pageLayanan: false
+    pageLayanan: false,
+    nakes: null
   }),
   actions: {
     setParams (key, val) {
@@ -178,6 +179,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].tindakan = resp?.data?.tindakan
             findPasien[0].laboratold = resp?.data?.laboratold
             findPasien[0].pemeriksaanfisikpsikologidll = resp?.data?.pemeriksaanfisikpsikologidll
+            findPasien[0].konsultasi = resp?.data?.konsuldokterspesialis
             // BARU
             // findPasien[0].laporantindakan = resp?.data?.laporantindakan
             // findPasien[0].psikiatri = resp?.data?.psikiatri
@@ -203,17 +205,18 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.pageLayanan = !this.pageLayanan
     },
     injectDataPasien (pasien, val, kode, arr) {
-      // console.log('a', pasien)
-      // console.log('b', val)
-      // console.log('kode', kode)
+      console.log('a', pasien)
+      console.log('b', val)
+      console.log('kode', this.items)
       const findPasien = this.items.filter(x => x === pasien)
-
+      console.log('findPasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
+        console.log('data', data)
         const target = data[kode]?.find(x => x.id === val.id)
-        // console.log('itarget', target)
-        // console.log('inject kode pasien', kode)
-        // console.log('inject isi pasien', val)
+        console.log('itarget', target)
+        console.log('inject kode pasien', kode)
+        console.log('inject isi pasien', val)
 
         if (target) {
           Object.assign(target, val)
@@ -232,6 +235,16 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           else {
             data[kode]?.splice(0, 0, val)
           }
+        }
+      }
+    },
+    deleteInjectanNull2 (noreg, kode) {
+      const findPasien = this.pasiens.filter(x => x.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => !('id' in x))
+        if (target) {
+          data[kode]?.splice(target, 1)
         }
       }
     },
@@ -449,6 +462,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const resp = await api.get('v1/simrs/master/listtipekhasus')
       if (resp.status === 200) {
         this.listkhasusdiagnosa = resp.data
+      }
+    },
+    async getNakes () {
+      const resp = await api.get('/v1/simrs/master/pegawai/listnakes')
+      console.log('nakes', resp)
+
+      if (resp.status === 200) {
+        this.nakes = resp.data
       }
     }
   }

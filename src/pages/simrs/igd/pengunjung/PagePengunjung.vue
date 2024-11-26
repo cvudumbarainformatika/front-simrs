@@ -82,5 +82,6 @@ onMounted(() => {
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
   store.getData()
+  store.getNakes()
 })
 </script>

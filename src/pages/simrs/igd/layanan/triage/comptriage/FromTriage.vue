@@ -545,7 +545,7 @@ const gangguanperilaku = ref(['Tidak Terganggu', 'Tidak Membahayakan', 'Ada Gang
 
 const eye = ref([1, 2, 3, 4])
 const verbal = ref([1, 2, 3, 4, 5])
-const motorik = ref([1, 2, 3, 4, 6])
+const motorik = ref([1, 2, 3, 4, 5, 6])
 const refpernapasan = ref(false)
 
 const optionhamil = ref([
