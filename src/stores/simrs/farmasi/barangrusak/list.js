@@ -96,6 +96,23 @@ export const useListBarangRusakStore = defineStore('list_barang_rusak', {
             delete item.loading
           })
       })
+    },
+    simpanPenerimaan (item, payload) {
+      item.loadingTrm = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/barangrusak/penerimaan', payload)
+          .then(resp => {
+            console.log('simpan penerimaan', resp)
+            delete item.loadingTrm
+            item.nopenerimaan = resp?.data?.data?.nopenerimaan
+            item.nobatch = resp?.data?.data?.nobatch
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingTrm
+          })
+      })
     }
   }
 })

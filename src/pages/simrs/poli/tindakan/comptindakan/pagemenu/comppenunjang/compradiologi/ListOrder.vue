@@ -13,7 +13,7 @@
           bg-color="white"
           dense
           :options="store.notas"
-          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'SEMUA' : store.form.nota}`"
+          :display-value="`NOTA: ${store.form.nota === null || store.form.nota === '' || store.form.nota === 'BARU' ? 'BARU' : store.form.nota}`"
           style="min-width: 200px;"
         />
       </div>

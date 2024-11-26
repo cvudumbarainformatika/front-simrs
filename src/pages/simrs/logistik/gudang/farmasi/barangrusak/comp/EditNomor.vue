@@ -42,7 +42,7 @@
             <app-input v-model="nobatch" class="col-12" label="Nomor Batch" outlined dense valid />
           </div>
           <div class="col-4 text-right">
-            {{ data?.no_batch_default }}
+            {{ data?.nobatch_default }}
           </div>
         </div>
         <div class="row q-my-sm">
@@ -51,7 +51,7 @@
           </div>
 
           <div class="col-4 text-right">
-            {{ data?.tgl_exp_default }}
+            {{ data?.tglexp_default }}
           </div>
         </div>
         <div class="row q-my-sm">
@@ -61,17 +61,6 @@
 
           <div class="col-4 text-right">
             {{ data?.harga_net_default }}
-          </div>
-        </div>
-        <div class="row q-my-sm text-weight-bold">
-          <div class="col-2">
-            Subtotal
-          </div>
-          <div class="col-6 text-right">
-            {{ parseFloat(harga) * data?.jumlah_retur }}
-          </div>
-          <div class="col-4 text-right">
-            {{ data?.subtotal_default }}
           </div>
         </div>
       </q-card-section>
@@ -86,7 +75,6 @@
               nopenerimaan:nopenerimaan,
               tglexp:tglexp,
               harga:harga,
-              subtotal:parseFloat(harga) * data?.jumlah_retur,
             }
           )"
         />
@@ -109,9 +97,9 @@ const tglexp = ref(null)
 const harga = ref(null)
 function show () {
   console.log('data', props.data)
-  nobatch.value = props.data?.no_batch
+  nobatch.value = props.data?.nobatch
   nopenerimaan.value = props.data?.nopenerimaan
-  tglexp.value = props.data?.tgl_exp
+  tglexp.value = props.data?.tglexp
   harga.value = props.data?.harga_net
 }
 function hide () {

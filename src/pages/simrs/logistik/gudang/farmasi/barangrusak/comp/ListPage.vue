@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%;">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -42,46 +42,50 @@
         <div>Nilai</div>
       </template>
       <template #cell-obat="{ row }">
-        <div
-          class="row no-wrap items-center q-mb-xs"
-          style="white-space: normal !important;"
-        >
-          <div class="box text-weight-bold">
-            {{ row?.masterobat?.nama_obat }}
+        <div style="width: 150px;">
+          <div
+            class="row no-wrap items-center q-mb-xs"
+            style="white-space: normal !important;"
+          >
+            <div class="box text-weight-bold">
+              {{ row?.masterobat?.nama_obat }}
+            </div>
           </div>
-        </div>
-        <div
-          class="row no-wrap q-col-gutter-sm items-center q-mb-xs"
-          style="white-space: normal !important;"
-        >
-          <div class="text-italic f-10">
-            {{ row?.masterobat?.kd_obat }}
+          <div
+            class="row no-wrap q-col-gutter-sm items-center q-mb-xs"
+            style="white-space: normal !important;"
+          >
+            <div class="text-italic f-10">
+              {{ row?.masterobat?.kd_obat }}
+            </div>
           </div>
         </div>
       </template>
       <template #cell-nomor="{ row }">
-        <div
-          v-if="!!row.nopenerimaan"
-          class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: normal;"
-        >
-          <div class="">
-            Nomor Penerimaan
+        <div style="width: 250px;">
+          <div
+            v-if="!!row.nopenerimaan"
+            class="row no-wrap justify-between items-center q-mb-xs"
+            style="white-space: normal;"
+          >
+            <div class="">
+              Nomor Penerimaan
+            </div>
+            <div class="box text-right text-italic ">
+              {{ row.nopenerimaan }}
+            </div>
           </div>
-          <div class="box text-right text-italic ">
-            {{ row.nopenerimaan }}
-          </div>
-        </div>
-        <div
-          v-if="!!row.nobatch"
-          class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: normal !important;"
-        >
-          <div class="">
-            Nomor Batch
-          </div>
-          <div class="text-right text-italic ">
-            {{ row.nobatch }}
+          <div
+            v-if="!!row.nobatch"
+            class="row no-wrap justify-between items-center q-mb-xs"
+            style="white-space: normal !important;"
+          >
+            <div class="">
+              Nomor Batch
+            </div>
+            <div class="text-right text-italic ">
+              {{ row.nobatch }}
+            </div>
           </div>
         </div>
       </template>
@@ -136,7 +140,9 @@
         </div>
       </template>
       <template #cell-penyedia="{ row }">
-        {{ row?.pihakketiga?.nama ?? 'Penyedia Tidak Ditemukan' }}
+        <div style="width: 150px; overflow-wrap: normal;">
+          {{ row?.pihakketiga?.nama ?? 'Penyedia Tidak Ditemukan' }}
+        </div>
       </template>
       <template #cell-jumlah="{ row }">
         <div class="row q-my-sm justify-end items-end q-col-gutter-sm">
@@ -215,6 +221,28 @@
                 :offset="[10, 10]"
               >
                 Retur sudah di kunci
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              v-if="!row.tgl_retur && !row?.tgl_penghapusan && !row?.tgl_pemusnahan"
+              flat
+              icon="icon-mat-edit"
+              dense
+              color="deep-orange"
+              :loading="row?.loadingTrm"
+              :disable="row?.loadingTrm"
+              @click="()=>{
+                openPenerimaan = true
+                dataPenerimaan = row
+                console.log('click', row);
+
+              }"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Buka Form Edit Penerimaan
               </q-tooltip>
             </q-btn>
           </div>
@@ -410,6 +438,13 @@
       store.simpanPenghapusan(dataPenghapusan,val)
     }"
   />
+  <pegePenerimaan
+    v-model="openPenerimaan" :data="dataPenerimaan" @simpan="(val)=>{
+      console.log('simpan pen', val);
+      openPenerimaan=false
+      store.simpanPenerimaan(dataPenerimaan,val)
+    }"
+  />
 </template>
 <script setup>
 // eslint-disable-next-line no-unused-vars
@@ -436,6 +471,15 @@ const openPenghapusan = ref(false)
 const dataPenghapusan = ref({})
 /**
  * section Penghapusan End
+ */
+/**
+ * section Penerimaan
+ */
+const pegePenerimaan = shallowRef(defineAsyncComponent(() => import('./EditNomor.vue')))
+const openPenerimaan = ref(false)
+const dataPenerimaan = ref({})
+/**
+ * section Penerimaan End
  */
 function kunci (val) {
   val.expand = !val.expand

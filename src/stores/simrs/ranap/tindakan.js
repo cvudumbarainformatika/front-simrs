@@ -213,7 +213,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       const arr = array.map(x => x.nota)
       this.notaTindakans = arr.length ? arr : []
       this.notaTindakans.push('BARU')
-      this.notaTindakans.push('SEMUA')
+      // this.notaTindakans.push('SEMUA')
       this.notaTindakan = this.notaTindakans[0]
     },
 
@@ -226,13 +226,13 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       }
 
       const resp = await api.get('v1/simrs/pelayanan/notatindakanranap', params)
-      // console.log('notas', resp)
+      console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
         this.notaTindakans = arr.length ? arr : []
         // this.notaTindakans.unshift('SEMUA')
         this.notaTindakans.push('BARU')
-        this.notaTindakans.push('SEMUA')
+        // this.notaTindakans.push('SEMUA')
         this.notaTindakan = this.notaTindakans[0]
       }
     },

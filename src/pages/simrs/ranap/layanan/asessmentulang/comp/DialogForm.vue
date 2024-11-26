@@ -61,7 +61,7 @@
         </q-card-section>
       </div>
 
-      <q-card-section class="col full-height scroll">
+      <q-card-section class="col full-height scroll q-pa-none">
         <FormSoap :pasien="pasien" :kasus="kasus" :nakes="nakes" @exit="emits('exit')" />
       </q-card-section>
     </q-card>

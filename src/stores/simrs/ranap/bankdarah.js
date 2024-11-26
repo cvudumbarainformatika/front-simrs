@@ -15,6 +15,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       rhesus: '',
       sifatpermintaan: 'Biasa',
       jumlah: 1,
+      // keterangan: '',
       transfusike: 0,
       reaksi: '',
       pengirim: '',
@@ -25,7 +26,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
     loadingHapus: false,
 
     optionsJenis: [],
-    optionsGol: [],
+    optionsGol: ['Tidak Diketahui', 'A', 'B', 'AB', 'O'],
     optionsRhesus: ['+', '-'],
     permintaans: [],
     reaksis: [
@@ -59,8 +60,8 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
           const data = resp.data
           const jenis = data?.filter(x => x?.group === 'jenis')
           this.optionsJenis = jenis
-          const gol = data?.filter(x => x?.group === 'gol')
-          this.optionsGol = gol
+          // const gol = data?.filter(x => x?.group === 'gol')
+          // this.optionsGol = gol
           const permintaan = data?.filter(x => x?.group === 'permintaan')
           this.permintaans = permintaan
         }
@@ -134,7 +135,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
-      this.notas.unshift('SEMUA')
+      // this.notas.unshift('SEMUA')
       this.form.nota = this.notas[0]
     },
 

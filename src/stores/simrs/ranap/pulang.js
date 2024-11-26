@@ -4,6 +4,7 @@ import { usePengunjungRanapStore } from './pengunjung'
 // eslint-disable-next-line no-unused-vars
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { date } from 'quasar'
+import { useDischargePlanningRanapStore } from './dischargeplanning'
 
 export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store', {
   state: () => ({
@@ -42,12 +43,12 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
   // },
   actions: {
 
-    async getmasterprognosis () {
-      const resp = await api.get('v1/simrs/ranap/layanan/dischargeplanning/getmasterprognosis')
-      console.log('prognosis', resp)
+    // async getmasterprognosis () {
+    //   const resp = await api.get('v1/simrs/ranap/layanan/dischargeplanning/getmasterprognosis')
+    //   console.log('prognosis', resp)
 
-      this.prognosis = resp.data
-    },
+    //   this.prognosis = resp.data
+    // },
     async getmastercarakeluar () {
       const resp = await api.get('v1/simrs/ranap/layanan/pulang/getmastercarakeluar')
       console.log('getmastercarakeluar', resp)
@@ -127,6 +128,8 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
       this.search2 = null
 
       const pengunjung = usePengunjungRanapStore()
+      const dischargeplanning = useDischargePlanningRanapStore()
+      this.prognosis = dischargeplanning.prognosis
       this.dokters = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
       this.perawats = pengunjung?.nakes?.filter(x => x?.kdgroupnakes === '2' || x?.kdgroupnakes === '3') ?? []
 

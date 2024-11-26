@@ -33,7 +33,10 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
     ],
     barjas: [
       { kode: '5.1.01', uraian: 'Belanja Pegawai' },
-      { kode: '5.1.02', uraian: 'Belanja Barang dan Jasa' },
+      { kode: '5.1.02', uraian: 'Belanja Barang dan Jasa' }
+
+    ],
+    lainlain: [
       { kode: '5.1.03', uraian: 'Belanja Bunga' },
       { kode: '5.1.04', uraian: 'Belanja Subsidi' },
       { kode: '5.1.05', uraian: 'Belanja Hibah' },
@@ -439,10 +442,10 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       const a = this.psappagubarjas
       const b = this.psaprealisasibarjas
       const databarjas = a.concat(b)
-      // const filkode = this.barjas?.map((x) => x.kode)
-      // const filbarjas = belanja.filter(x => filkode.includes(x.kode3)).map((x) => x.kode3)
-      const filbarjas = databarjas.map((x) => x.kode)
-      // console.log('xklxxlx', filbarjas)
+      const filkode = this.barjas?.map((x) => x.kode)
+      const filbarjas = databarjas.filter(x => filkode.includes(x.kode)).map((x) => x.kode)
+      // const filbarjas = databarjas.map((x) => x.kode)
+
       const unikbarjas = filbarjas.length ? [...new Set(filbarjas)] : []
       for (let i = 0; i < unikbarjas.length; i++) {
         const el = unikbarjas[i]
@@ -464,14 +467,23 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         }
         psapbarjas.push(obj)
       }
+      // const barjaslain = []
+      const fillain = this.lainlain?.map((x) => x.kode)
+      const filbarjaslain = databarjas.filter(x => fillain.includes(x.kode)).map((x) => x.kode)
+      const pagulainlain = a.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)
+      const realisasilainlain = b.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)
+      const persentase = ((b.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0) /
+      a.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2)
+      const unikbarjaslain = filbarjaslain.length ? [...new Set(filbarjaslain)] : []
       const barjaslain = {
-        kode: '5.1.03, 5.1.04, 5.1.05, 5.1.06',
+        kode: unikbarjaslain,
         uraian: 'Belanja Lain-lain',
-        pagu: parseFloat(0),
-        nilaisemua: parseFloat(0),
-        persen: parseFloat(0)
+        pagu: pagulainlain,
+        nilaisemua: realisasilainlain,
+        persen: isNaN(persentase) ? parseFloat(0).toFixed(2) : persentase
       }
       psapbarjas.push(barjaslain)
+      console.log('barjaslain xx', barjaslain)
 
       const psapmodal = []
       const c = this.psappagumodal

@@ -516,23 +516,24 @@ td {
 
 @media print {
   .print-page{
-    padding: 0px;
+    padding: 0px !important;
   }
 
   @page {
     // size: 8.5in 9in;
-    size: A4;
+    size: letter;
     // margin-top: 4in !important;
-    margin-left: 4in !important;
-    margin-right: 4in !important;
+    // margin-left: 4in !important;
+    // margin-right: 4in !important;
 
     // page-break-inside: auto;
+    page-break-inside: avoid;
     @bottom-right {
-      content: counter(page) " of " counter(pages);
+      content: "Hal " counter(page) "-- dari " counter(pages) " hal";
     }
-    @top-right {
-      content: "Page " counter(pageNumber);
-    }
+    // @top-right {
+    //   content: "Page " counter(pageNumber);
+    // }
   }
 
   .contentx {
@@ -545,14 +546,14 @@ td {
   // }
 
   // /* Menargetkan semua halaman bernomor genap */
-  @page :left {
-    margin-top: 4in !important;
-    margin-bottom: 4in !important;
-  }
-  @page :right {
-    margin-top: 4in !important;
-    margin-bottom: 4in !important;
-  }
+  // @page :left {
+  //   // margin-top: 4in !important;
+  //   // margin-bottom: 4in !important;
+  // }
+  // @page :right {
+  //   // margin-top: 4in !important;
+  //   // margin-bottom: 4in !important;
+  // }
   // /* Menargetkan semua halaman bernomor ganjil */
   // @page :right {
   //   size: 11in;

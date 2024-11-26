@@ -86,7 +86,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
-      this.notas.unshift('SEMUA')
+      // this.notas.unshift('SEMUA')
       this.form.nota = this.notas[0]
     },
 
@@ -115,7 +115,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
     initReset () {
       this.form = {
         noreg: '', // rs1
-        nota: this.notas?.length ? this.notas[0] : 'SEMUA', // rs2
+        nota: this.notas?.length ? this.notas[0] : 'BARU', // rs2
         kodepoli: '', // rs10
         permintaan: '', // rs4
         kodesistembayar: '',

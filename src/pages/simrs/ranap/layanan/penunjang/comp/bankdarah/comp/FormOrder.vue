@@ -17,7 +17,7 @@
             Golongan Darah
           </div>
           <div class="col-9 q-gutter-sm q-mb-sm">
-            <q-radio dense size="sm" v-model="store.form.gol" v-for="item in store.optionsGol" :key="item" :val="item?.nama" :label="item?.nama" />
+            <q-radio dense size="sm" v-model="store.form.gol" v-for="item in store.optionsGol" :key="item" :val="item" :label="item" />
           </div>
           <div class="col-3">
             Rhesus
@@ -48,6 +48,11 @@
                 style="width: 30%;"
                 :valid="{ required: true, number: true }"
               />
+              <!-- <app-input-simrs
+                v-model="store.form.keterangan"
+                label="Ket"
+                style="width: 30%;"
+              /> -->
               <div>Bag</div>
             </div>
           </div>

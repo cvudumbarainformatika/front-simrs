@@ -21,19 +21,19 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
     penerimaan: {}
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    resetForm() {
+    resetForm () {
       const gudang = this.form.kd_ruang
       this.form = {}
       this.penerimaan = {}
       this.setForm('kd_ruang', gudang)
     },
-    obatSelected(val) {
+    obatSelected (val) {
       this.setParams('kdobat', val)
       this.setParams('nobatch', null)
       this.resetForm()
@@ -45,11 +45,11 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
       }
       this.cariNoBatch()
     },
-    batchSelected(val) {
+    batchSelected (val) {
       this.setParams('nobatch', val)
       this.cariPenerimaan()
     },
-    penerimaanSelected(val) {
+    penerimaanSelected (val) {
       console.log('penerimaan terpilih', val)
       this.setParams('penerimaan', val)
       this.setForm('nopenerimaan', val)
@@ -66,17 +66,18 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
         this.setForm('isi', trm?.penerimaan?.penerimaanrinci[0]?.isi ?? 0)
         this.setForm('harga_net', trm?.harga?.harga)
         this.setForm('kdpbf', trm?.penerimaan?.kdpbf)
+        this.setForm('tglexp', trm?.penerimaan?.tglexp)
         this.setForm('nopenerimaan', trm?.nopenerimaan)
         this.setForm('stok', parseFloat(trm.total))
       }
       // this.cariPenerimaan()
     },
 
-    getInitialData() {
+    getInitialData () {
       this.cariObat()
       this.listBelum()
     },
-    async listBelum() {
+    async listBelum () {
       this.items = []
       this.loading = true
       await api.get('v1/simrs/penunjang/farmasinew/barangrusak/list-belum')
@@ -88,7 +89,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           this.loading = false
         })
     },
-    async cariObat() {
+    async cariObat () {
       this.obats = []
       const param = { params: this.params }
       this.loadingObat = true
@@ -101,7 +102,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           this.loadingObat = false
         })
     },
-    async cariNoBatch() {
+    async cariNoBatch () {
       this.batchs = []
       const param = { params: this.params }
       this.loadingBatch = true
@@ -114,7 +115,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           this.loadingBatch = false
         })
     },
-    async cariPenerimaan() {
+    async cariPenerimaan () {
       this.penerimaans = []
       const param = { params: this.params }
       this.loadingPenerimaan = true
@@ -133,6 +134,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
             this.setForm('kdpbf', this.penerimaans[0]?.penerimaan?.kdpbf)
             this.setForm('nopenerimaan', this.penerimaans[0]?.nopenerimaan)
             this.setForm('stok', parseFloat(this.penerimaans[0]?.total))
+            this.setForm('tglexp', this.penerimaans[0]?.tglexp)
             this.setParams('penerimaan', this.penerimaans[0]?.nopenerimaan)
             this.penerimaan = this.penerimaans[0]
           }
@@ -141,7 +143,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           this.loadingPenerimaan = false
         })
     },
-    simpan() {
+    simpan () {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/barangrusak/simpan', this.form)
@@ -159,7 +161,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           .catch(() => { this.loading = false })
       })
     },
-    async deleteRinci(item) {
+    async deleteRinci (item) {
       item.loading = true
       await api.post('v1/simrs/penunjang/farmasinew/barangrusak/hapus', item)
         .then(resp => {
@@ -172,7 +174,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
           item.loading = false
         })
     },
-    async kunci(item) {
+    async kunci (item) {
       item.loadingKunci = true
       item.kd_ruang = this.form.kd_ruang
       await api.post('v1/simrs/penunjang/farmasinew/barangrusak/kunci', item)
