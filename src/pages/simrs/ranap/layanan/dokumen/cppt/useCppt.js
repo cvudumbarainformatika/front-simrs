@@ -61,7 +61,7 @@ export default function useCppt (pasien) {
 
   function aturCppt (pasien) {
     const cppt = pasien?.cppt
-    data.cppt = cppt?.sort((a, b) => a?.id - b?.id) ?? []
+    data.cppt = cppt?.sort((a, b) => b?.id - a?.id) ?? []
   }
 
   function ambilEws (pasien) {
