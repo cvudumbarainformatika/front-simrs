@@ -59,7 +59,7 @@ export default function useLayanan (pasien) {
       name: 'konsulspesialis',
       label: 'Konsul Spesialis',
       icon: 'icon-mat-textsms',
-      nakes: ['1'],
+      nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./konsul/IndexPage.vue')))
     },
     {

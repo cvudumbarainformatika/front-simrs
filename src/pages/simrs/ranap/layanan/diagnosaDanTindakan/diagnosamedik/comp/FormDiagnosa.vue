@@ -10,6 +10,7 @@
         class="q-pa-none full-width"
         flat
         dense
+        no-caps
       >
         MEMO : {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
         <!-- <q-menu
@@ -37,8 +38,6 @@
           :cover="false"
           :offset="[0, 10]"
           v-slot="scope"
-          :validate="validInput"
-          @hide="validInput"
           @save="(val)=> {
             gantiMemo(val)
           }"
@@ -232,18 +231,18 @@ const optionsDiagutama = ref([
   { label: 'Sekunder', value: 'Sekunder', color: 'negative' }
 ])
 
-const isErrInput = ref(false)
-const errMsg = ref('')
-const validInput = (val) => {
-  if (val?.trim().length === 0) {
-    isErrInput.value = true
-    errMsg.value = 'Tidak boleh kosong'
-    return false
-  }
-  isErrInput.value = false
-  errMsg.value = ''
-  return true
-}
+// const isErrInput = ref(false)
+// const errMsg = ref('')
+// const validInput = (val) => {
+//   if (val?.trim().length === 0) {
+//     isErrInput.value = true
+//     errMsg.value = 'Tidak boleh kosong'
+//     return false
+//   }
+//   isErrInput.value = false
+//   errMsg.value = ''
+//   return true
+// }
 
 function onSubmit () {
   if (store.formdiagnosa.kasus === null || store.formdiagnosa.kasus === '') {
@@ -280,6 +279,8 @@ onMounted(() => {
   store.initReset(props.pasien).then(() => {
     resetValidation()
   })
+
+  memoDokter.value = props.pasien?.memodiagnosa
   // console.log('onMounted', options.value)
 })
 
@@ -370,17 +371,17 @@ function diagnosaUtamaDiubah (val) {
 function gantiMemo (val) {
   // console.log('okkk')
   const form = {
-    memo: val,
+    memo: val ?? '',
     noreg: props.pasien?.noreg
   }
-  console.log('form', form)
+  // console.log('form', form)
 
-  // pengunjung.gantiMemo(form, props.pasien)
+  pengunjung.gantiMemo(form, props.pasien)
 }
 
-// watch(() => props.pasien?.diagnosamedis, (obj) => {
-//   console.log('watch pilihan kasus', obj)
-//   ganti(store.formdiagnosa.kasus)
-// }, { deep: true })
+watch(() => props.pasien?.memodiagnosa, (obj) => {
+  console.log('watch ganti memo', obj)
+  memoDokter.value = obj
+}, { deep: true })
 
 </script>
