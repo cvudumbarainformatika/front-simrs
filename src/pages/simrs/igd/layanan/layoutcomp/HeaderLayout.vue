@@ -124,7 +124,7 @@
             </q-menu>
           </q-btn>
         </div>
-        <q-separator vertical color="orange" class="q-ml-sm q-mr-sm" />
+        <q-separator vertical color="orange" class="q-ml-sm" />
         <div class="col-3">
           <q-btn
             color="primary"
@@ -145,33 +145,37 @@
                     Ganti Sistem Bayar ?
                   </div>
                   <q-separator class="q-my-sm" />
-                  <q-form @submit="gantiSistemBayar">
+                  <q-form @submit="gantiSistemBayar()">
                     <q-select
                       v-model="search"
                       dense
                       outlined
                       style="width: 200px;"
+                      class="q-mb-sm"
                       standout="bg-yellow-3"
-                      label="Cari Sistem Bayar"
+                      label="Cari Group Sistem Bayar"
                       clearable
                       option-value="kode"
                       option-label="groupsistembayar"
                       :options="storePengunjung.sistembayar"
                       @update:model-value="(val)=> caririnci(val)"
+                      :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                     >
                       <!-- @update:model-value="(val)=>$emit('updated', val)" -->
                     </q-select>
                     <q-select
-                      v-model="search"
+                      v-model="storePengunjung.form.namasistembayar"
                       dense
                       outlined
-                      style="width: 200px;"
+                      style="width: 300px;"
                       standout="bg-yellow-3"
                       label="Cari Sistem Bayar"
                       clearable
                       option-value="kode"
-                      option-label="groupsistembayar"
-                      :options="storePengunjung.sistembayar"
+                      option-label="sistembayar"
+                      :options="storePengunjung.sistembayarhasil"
+                      :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                      @update:model-value="(val)=> selectsistembayar(val)"
                     />
                     <q-separator class="q-my-sm" />
                     <div class="text-right">
@@ -181,8 +185,8 @@
                         push
                         size="sm"
                         type="submit"
-                        :loading="loadingSaveDpjp"
-                        :disable="loadingSaveDpjp"
+                        :loading="storePengunjung.loadingSaveSistembayar"
+                        :disable="storePengunjung.loadingSaveSistembayar"
                       />
                     </div>
                   </q-form>
@@ -272,8 +276,17 @@ function updateKodeDpjp (val) {
 }
 
 function caririnci (val) {
-  const allsistembayar = store.sistembayarrinci
-  console.log('sasasasasa', allsistembayar)
+  console.log('val', val)
+  storePengunjung.form.kodesistembayar = []
+  const allsistembayar = storePengunjung?.sistembayarrinci
+  storePengunjung.sistembayarhasil = allsistembayar.filter(ft => ft.groups === val?.kode)
+  //  console.log('xxxxxxxxxxxxxx', storePengunjung.sistembayarhasil)
+}
+
+function selectsistembayar (val) {
+  console.log('val', val)
+  storePengunjung.form.kodesistembayar = val?.kode
+  storePengunjung.form.namasistembayar = val?.sistembayar
 }
 
 function gantiDpjp () {
@@ -337,5 +350,9 @@ async function filterOptions (val, update) {
 function selesaikanLayanan () {
   // console.log('ok')
   emits('layananSelesai')
+}
+
+function gantiSistemBayar () {
+  storePengunjung.gantiSistemBayar(props.pasien)
 }
 </script>

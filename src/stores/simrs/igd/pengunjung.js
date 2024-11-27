@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
   state: () => ({
@@ -11,6 +11,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     ruangranaps: [],
     loading: false,
     loadingSaveGantiDpjp: false,
+    loadingSaveSistembayar: false,
     listkhasusdiagnosa: [],
     pasiens: [],
     meta: null,
@@ -35,7 +36,13 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     pageLayanan: false,
     nakes: null,
     sistembayar: [],
-    sistembayarrinci: []
+    sistembayarrinci: [],
+    sistembayarhasil: [],
+    form: {
+      noreg: '',
+      kodesistembayar: '',
+      namasistembayar: ''
+    }
   }),
   actions: {
     setParams (key, val) {
@@ -486,6 +493,29 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
 
       if (resp.status === 200) {
         this.nakes = resp.data
+      }
+    },
+    async gantiSistemBayar (pasien) {
+      this.loadingSaveSistembayar = true
+      this.form.noreg = pasien?.noreg
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/igd/updatesistembayar', this.form)
+        // console.log('rsp ', form, resp)
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x === pasien)
+          if (findPasien.length) {
+            findPasien[0].sistembayar = resp.data.result
+
+            notifSuccess(resp)
+          }
+          this.loadingSaveSistembayar = false
+        }
+        this.loadingSaveSistembayar = false
+      }
+      catch (error) {
+        console.log(error)
+        this.loadingSaveSistembayar = false
+        // this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     }
   }
