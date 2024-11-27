@@ -340,6 +340,32 @@ export default function useForm (pasien) {
         })
     })
   }
+  const updateSsambung = (item, val, kode) => {
+    const target = store.items.find(x => x?.id === item.id)
+
+    let payload = null
+    if (target) {
+      target[kode] = val
+      payload = {
+        id: item?.id,
+        s_sambung: target?.s_sambung
+      }
+    }
+    // console.log('updateOsambung', payload)
+    // console.log('target', target)
+    settings.isChildForm = false
+
+    return new Promise((resolve, reject) => {
+      api.post('v1/simrs/ranap/layanan/cppt/updatessambung', payload)
+        .then(resp => {
+          // console.log('resp update', resp)
+          resolve(resp)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
 
   watch(() => pasien?.cppt, (val, old) => {
     // console.log('watch cppt new', val)
@@ -374,6 +400,7 @@ export default function useForm (pasien) {
     updateToServerAsessment,
     updateToServerPlan,
     updateAsPlanInst,
-    updateOsambung
+    updateOsambung,
+    updateSsambung
   }
 }

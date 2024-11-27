@@ -58,6 +58,7 @@ import { useHaisRanapStore } from 'src/stores/simrs/ranap/hais'
 import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagnosakebidanan'
 import { useAnatommyRanapStore } from 'src/stores/simrs/ranap/anatomy'
 import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
+import { useDiagnosaGiziStore } from 'src/stores/simrs/ranap/diagnosagizi'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 
@@ -65,6 +66,7 @@ const penilaian = usePenilaianRanapStore()
 const diagnosa = useDiagnosaStore()
 const diagnosakeperawatan = useDiagnosaKeperawatan()
 const diagnosakebidanan = useDiagnosaKebidananStore()
+const diagnosagizi = useDiagnosaGiziStore()
 const tindakan = useTindakanRanapStore()
 const lab = useLaboratPoli()
 const radiologi = useRadiologiPoli()
@@ -72,6 +74,7 @@ const bankdarah = usePermintaanBankDarahStore()
 const apheresis = usePermintaanApheresisStore()
 const ambulan = usePermintaanAmbulanStore()
 const penunjanglain = usePenunjangLainPoliStore()
+// eslint-disable-next-line no-unused-vars
 const oksigen = usePermintaanOksigenStore()
 const hais = useHaisRanapStore()
 const anatomy = useAnatommyRanapStore()
@@ -83,6 +86,7 @@ onMounted(() => {
     diagnosa.getDiagnosaDropdown(),
     diagnosakeperawatan.getData(),
     diagnosakebidanan.getData(),
+    diagnosagizi.getData(),
     tindakan.getTindakanDropdown(),
     tindakan.getAllPetugas(),
 
@@ -94,7 +98,7 @@ onMounted(() => {
     bankdarah.getMaster(),
     apheresis.getMaster(),
     ambulan.getTujuanAmbulance(),
-    oksigen.getMaster(),
+    // oksigen.getMaster(),
     hais.getMaster(),
 
     penunjanglain.getPenunjangLain(),

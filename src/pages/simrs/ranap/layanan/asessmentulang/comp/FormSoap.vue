@@ -68,9 +68,11 @@ const validate = () => {
 
   myForm.value.validate().then(success => {
     if (success) {
-      if (storePemeriksaanUmum.form.keadaanUmum === null) {
-        notifErrVue('Harap isi form Objective Terlebih dahulu!')
-        return
+      if (!settings?.ppaTambahan?.includes(props.nakes)) { // jika bukan nakes 4, 5, dan 6
+        if (storePemeriksaanUmum.form.keadaanUmum === null) {
+          notifErrVue('Harap isi form Objective Terlebih dahulu!')
+          return
+        }
       }
       store.saveCppt(props.pasien, props.kasus)
         .then((res) => {
@@ -176,14 +178,18 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
 <template>
   <q-form ref="myForm" class="fit q-pa-md scroll">
     <div class="row q-col-gutter-md ">
-      <!-- subjective -->
+      <!-- subjective / adime(asessment)-->
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; ">
           <q-card-section class="col-auto flex justify-between items-center">
-            <div class="f-20">
+            <div v-if="nakes !== '5'" class="f-20">
               Subjective
             </div>
+            <div v-else class="f-20">
+              Assessment
+            </div>
             <q-btn
+              v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
               bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                 settings.formOpen = 'anamnesis'
                 settings.isChildForm = true
@@ -195,10 +201,13 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
 
           <q-card-section class="col full-height scroll">
             <div class="column q-mb-sm">
-              <div><b>Keluhan Utama : </b></div>
+              <div v-if="nakes !== '5'">
+                <b>Keluhan Utama : </b>
+              </div>
               <div class="q-mt-sm">
                 <!-- <q-input v-model="storeAnamnesis.form.keluhanUtama" type="textarea" class="full-width" /> -->
                 <q-input
+                  v-if="!settings?.ppaTambahan?.includes(nakes)"
                   ref="refInputKeluhanUtama"
                   v-model="storeAnamnesis.form.keluhanUtama"
                   outlined
@@ -211,7 +220,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                   hide-bottom-space
                 />
                 <q-input
-                  v-if="settings?.ppaTambahan?.includes(nakes)"
+                  v-else
                   ref="refSsambung"
                   v-model="store.form.s_sambung"
                   outlined
@@ -219,7 +228,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                   stack-label
                   standout="bg-yellow-3"
                   :lazy-rules="true"
-                  rows="5"
+                  rows="8"
                   hide-bottom-space
                 />
               </div>
@@ -235,14 +244,18 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
         </q-card>
       </div>
 
-      <!-- objective -->
+      <!-- objective / adime(diagnosa) -->
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px;">
           <q-card-section class="col-auto flex justify-between items-center">
-            <div class="f-20">
+            <div v-if="nakes !== '5'" class="f-20">
               Objective
             </div>
+            <div v-else class="f-20">
+              Diagnosa
+            </div>
             <q-btn
+              v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
               bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                 settings.formOpen = 'pemeriksaan'
                 settings.isChildForm = true
@@ -316,20 +329,38 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                 hide-bottom-space
               />
             </div>
+            <div v-if="nakes === '5' || nakes === '6' || nakes === '4'">
+              <q-input
+                ref="refInputOsambung"
+                v-model="store.form.o_sambung"
+                outlined
+                type="textarea"
+                stack-label
+                standout="bg-yellow-3"
+                :lazy-rules="true"
+                rows="8"
+                hide-bottom-space
+              />
+            </div>
           </q-card-section>
         </q-card>
       </div>
 
-      <!-- assessment -->
+      <!-- assessment / adime(intervensi) -->
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
             <div class="flex justify-between items-center">
-              <div class="f-20">
+              <div v-if="nakes !== '5'" class="f-20">
                 Assessment
+              </div>
+              <div v-else class="f-20">
+                Intervensi
               </div>
               <div class="">
                 <q-btn
+                  v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
+
                   bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                     if (nakes === '2') {
                       settings.formOpen = 'asessment'
@@ -363,27 +394,29 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               stack-label
               type="textarea"
               standout="bg-yellow-3"
-              label="Asessment"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
               :lazy-rules="true"
-              rows="5"
+              rows="8"
               hide-bottom-space
             />
           </q-card-section>
         </q-card>
       </div>
 
-      <!-- planning -->
+      <!-- planning / adime(monitoring) -->
       <div class="col-3">
         <q-card flat bordered rounded class="column full-height" style="min-height: 350px; max-height: 350px;">
           <q-card-section class="col-quto">
             <div class="flex justify-between items-center">
-              <div class="f-20">
-                Plan
+              <div v-if="nakes !== '5'" class="f-20">
+                Plann
+              </div>
+              <div v-else class="f-20">
+                Monitoring
               </div>
               <div class="">
                 <q-btn
-                  v-if="nakes !== '1'"
+                  v-if="nakes !== '4' && nakes !== '5' && nakes !== '6' && nakes !== '1'"
                   bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                     // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
                     settings.isChildForm = true
@@ -408,10 +441,9 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               v-model="store.form.plann"
               outlined
               type="textarea"
-              rows="5"
+              rows="8"
               stack-label
               standout="bg-yellow-3"
-              label="Plann"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
               :lazy-rules="true"
               hide-bottom-space
@@ -420,17 +452,20 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
         </q-card>
       </div>
 
-      <!-- instruksi -->
+      <!-- instruksi / adime(evaluasi) -->
       <div class="col-8">
         <q-card flat bordered class="col-12">
           <q-card-section>
             <div class="flex justify-between items-center">
-              <div class="f-20">
+              <div v-if="nakes !== '5'" class="f-20">
                 Instruksi PPA
+              </div>
+              <div v-else class="f-20">
+                Evaluasi
               </div>
               <div class="">
                 <q-btn
-                  v-if="nakes !== '1'"
+                  v-if="nakes !== '4' && nakes !== '5' && nakes !== '6' && nakes !== '1'"
                   bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                     // settings.formOpen = nakes==='2'?'diagnosaKeperawatan': (nakes==='3'?'diagnosaKebidanan':'diagnosaMedik')
                     settings.isChildForm = true
@@ -458,7 +493,6 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               rows="5"
               stack-label
               standout="bg-yellow-3"
-              label="Instruksi"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
               :lazy-rules="true"
               hide-bottom-space
@@ -475,7 +509,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
       </div> -->
     </div>
 
-    <div style="margin-bottom: 150px;" />
+    <div style="margin-bottom: 250px;" />
 
     <div class="fixed-bottom full-width">
       <!-- <div class="col-12"> -->

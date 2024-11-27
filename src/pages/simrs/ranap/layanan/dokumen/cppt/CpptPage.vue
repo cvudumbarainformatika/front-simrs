@@ -82,7 +82,7 @@
             </th>
             <th class="text-left" width="40%">
               <div class="text-bold">
-                Instruksi PPA
+                Instruksi PPA / Evaluasi
               </div>
             </th>
             <th class="text-center" width="15%">
@@ -93,6 +93,120 @@
           </tr>
         </thead>
         <tbody>
+          <!-- lanjut -->
+          <template v-for="(row, index) in listFilterredByDate" :key="index">
+            <tr v-for="(cppt, i) in data?.cppt?.filter(x => dateCppt(x?.tgl) === row)" :key="i">
+              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
+                <div>{{ dateCppt(cppt?.tgl) }}</div>
+                <div>{{ jamTnpDetik(cppt?.tgl) }}</div>
+              </td>
+              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
+                <div class="text-bold">
+                  [{{ jenisPPA(cppt?.nakes) }}]
+                </div>
+                <div>{{ cppt?.petugas?.nama ?? '-' }}</div>
+              </td>
+              <td class="text-left f-12" style="vertical-align:top">
+                <q-list dense separator :padding="false">
+                  <q-item :padding="false">
+                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
+                      <div v-if="cppt?.nakes !== '5'" class="text-bold">
+                        S
+                      </div>
+                      <div v-else class="text-bold">
+                        A
+                      </div>
+                    </q-item-section>
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label v-if="cppt?.nakes !== '5'" lines="5" class="f-12">
+                        {{ cppt?.anamnesis?.keluhanUtama }}
+                      </q-item-label>
+                      <q-item-label v-else lines="5" class="f-12">
+                        {{ cppt?.s_sambung }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item no-padding>
+                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
+                      <div v-if="cppt?.nakes !== '5'" class="text-bold">
+                        O
+                      </div>
+                      <div v-else class="text-bold">
+                        D
+                      </div>
+                    </q-item-section>
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label v-if="cppt?.nakes !== '5'" class="f-12">
+                        <div>N : {{ cppt?.pemeriksaan?.nadi }}  x/mnt</div>
+                        <div>Sis: {{ cppt?.pemeriksaan?.sistole }} mmHg</div>
+                        <div>Dia: {{ cppt?.pemeriksaan?.diastole }} mmHg</div>
+                        <div>RR: {{ cppt?.pemeriksaan?.pernapasan }} x/mnt</div>
+                        <div>SpO2: {{ cppt?.pemeriksaan?.spo }} %</div>
+                        <div>Suhu: {{ cppt?.pemeriksaan?.suhu }} C</div>
+                        <div>T/k: {{ cppt?.pemeriksaan?.tkKesadaran }} </div>
+                        <div>BB: {{ cppt?.pemeriksaan?.bb }} Kg</div>
+                        <div>TB: {{ cppt?.pemeriksaan?.tb }} Cm</div>
+                        <div>Nyeri:  {{ cppt?.anamnesis?.keluhannyeri?.skor }}</div>
+                        <div>Jatuh: {{ lihatSkorJatuh(cppt?.penilaian) }}</div>
+                        <div v-html="getNewLine(cppt?.o_sambung)" />
+                      </q-item-label>
+                      <q-item-label v-else lines="10" class="f-12">
+                        <div v-html="getNewLine(cppt?.o_sambung)" />
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item no-padding>
+                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
+                      <div v-if="cppt?.nakes !== '5'" class="text-bold">
+                        A
+                      </div>
+                      <div v-else class="text-bold">
+                        I
+                      </div>
+                    </q-item-section>
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label class="">
+                        <span v-html="getNewLine(cppt?.asessment ?? '-')" />
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item no-padding>
+                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
+                      <div v-if="cppt?.nakes !== '5'" class="text-bold">
+                        P
+                      </div>
+                      <div v-else class="text-bold">
+                        M
+                      </div>
+                    </q-item-section>
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label class="">
+                        <span v-html="getNewLine(cppt?.plann ?? '-')" />
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </td>
+              <td class="text-left f-12" style="vertical-align: top;">
+                <span v-html="getNewLine(cppt?.instruksi ?? '-')" />
+              </td>
+              <td v-if="i === 0" :rowspan="cariRowspan(dateCppt(cppt?.tgl))" class="text-center f-12">
+                <vue-qrcode
+                  :value="qrUrl"
+                  tag="svg"
+                  :options="{
+                    errorCorrectionLevel: 'Q',
+                    color: {
+                      dark: '#000000',
+                      light: '#ffffff',
+                    },
+                    margin:0
+                  }"
+                />
+              </td>
+            </tr>
+          </template>
+
           <!-- Awal -->
           <template v-for="awal in data?.awal" :key="awal">
             <tr v-if="awal?.anamnesis !== null">
@@ -153,9 +267,16 @@
                     </q-item-section>
                     <q-item-section class="q-pa-xs">
                       <q-item-label class="">
-                        <div v-if="awal?.nakes === '2'">
-                          <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
-                            - {{ item?.nama }}
+                        <div v-if="awal?.nakes !== '1'">
+                          <div v-if="awal?.diagnosakeperawatan?.length > 0">
+                            <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
+                              - {{ item?.nama }}
+                            </div>
+                          </div>
+                          <div v-if="awal?.diagnosakebidanan?.length > 0">
+                            <div v-for="(item, n) in awal?.diagnosakebidanan" :key="n">
+                              - {{ item?.nama }}
+                            </div>
                           </div>
                         </div>
                         <div v-else-if="awal?.nakes === '1'">
@@ -175,12 +296,22 @@
                     </q-item-section>
                     <q-item-section class="q-pa-xs">
                       <q-item-label class="">
-                        <div v-if="awal?.nakes === '2'">
-                          <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
-                            <!-- {{ item?.intervensi[0].masterintervensi }} -->
-                            <div v-for="(int, m) in item?.intervensi" :key="m">
-                              <div v-if="int?.masterintervensi?.group === 'plann'">
-                                - {{ int?.masterintervensi?.nama }}
+                        <div v-if="awal?.nakes !== '1'">
+                          <div v-if="awal?.diagnosakeperawatan?.length > 0">
+                            <div v-for="(item, n) in awal?.diagnosakeperawatan" :key="n">
+                              <div v-for="(int, m) in item?.intervensi" :key="m">
+                                <div v-if="int?.masterintervensi?.group === 'plann'">
+                                  - {{ int?.masterintervensi?.nama }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="awal?.diagnosakebidanan?.length > 0">
+                            <div v-for="(item, n) in awal?.diagnosakebidanan" :key="n">
+                              <div v-for="(int, m) in item?.intervensi" :key="m">
+                                <div v-if="int?.masterintervensi?.group === 'plann'">
+                                  - {{ int?.masterintervensi?.nama }}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -222,102 +353,6 @@
                     }"
                   />
                 </div>
-              </td>
-            </tr>
-          </template>
-
-          <!-- lanjut -->
-          <template v-for="(row, index) in listFilterredByDate" :key="index">
-            <tr v-for="(cppt, i) in data?.cppt?.filter(x => dateCppt(x?.tgl) === row)" :key="i">
-              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
-                <div>{{ dateCppt(cppt?.tgl) }}</div>
-                <div>{{ jamTnpDetik(cppt?.tgl) }}</div>
-              </td>
-              <td class="text-left f-12 q-py-xs" style="vertical-align:top">
-                <div class="text-bold">
-                  [{{ jenisPPA(cppt?.nakes) }}]
-                </div>
-                <div>{{ cppt?.petugas?.nama ?? '-' }}</div>
-              </td>
-              <td class="text-left f-12" style="vertical-align:top">
-                <q-list dense separator :padding="false">
-                  <q-item :padding="false">
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        S
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label lines="5" class="f-12">
-                        {{ cppt?.anamnesis?.keluhanUtama }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        O
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="f-12">
-                        <div>N : {{ cppt?.pemeriksaan?.nadi }}  x/mnt</div>
-                        <div>Sis: {{ cppt?.pemeriksaan?.sistole }} mmHg</div>
-                        <div>Dia: {{ cppt?.pemeriksaan?.diastole }} mmHg</div>
-                        <div>RR: {{ cppt?.pemeriksaan?.pernapasan }} x/mnt</div>
-                        <div>SpO2: {{ cppt?.pemeriksaan?.spo }} %</div>
-                        <div>Suhu: {{ cppt?.pemeriksaan?.suhu }} C</div>
-                        <div>T/k: {{ cppt?.pemeriksaan?.tkKesadaran }} </div>
-                        <div>BB: {{ cppt?.pemeriksaan?.bb }} Kg</div>
-                        <div>TB: {{ cppt?.pemeriksaan?.tb }} Cm</div>
-                        <div>Nyeri:  {{ cppt?.anamnesis?.keluhannyeri?.skor }}</div>
-                        <div>Jatuh: {{ lihatSkorJatuh(cppt?.penilaian) }}</div>
-                        <div v-html="getNewLine(cppt?.o_sambung)" />
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        A
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="">
-                        <span v-html="getNewLine(cppt?.asessment ?? '-')" />
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item no-padding>
-                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
-                      <div class="text-bold">
-                        P
-                      </div>
-                    </q-item-section>
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label class="">
-                        <span v-html="getNewLine(cppt?.plann ?? '-')" />
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </td>
-              <td class="text-left f-12" style="vertical-align: top;">
-                <span v-html="getNewLine(cppt?.instruksi ?? '-')" />
-              </td>
-              <td v-if="i === 0" :rowspan="cariRowspan(dateCppt(cppt?.tgl))" class="text-center f-12">
-                <vue-qrcode
-                  :value="qrUrl"
-                  tag="svg"
-                  :options="{
-                    errorCorrectionLevel: 'Q',
-                    color: {
-                      dark: '#000000',
-                      light: '#ffffff',
-                    },
-                    margin:0
-                  }"
-                />
               </td>
             </tr>
           </template>

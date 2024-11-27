@@ -1,6 +1,6 @@
 <script setup>
 import { useQuasar } from 'quasar'
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { formatRp, dateFullFormat } from 'src/modules/formatter'
 import { computed, onMounted } from 'vue'
 import { useTindakanRanapStore } from 'src/stores/simrs/ranap/tindakan'
 
@@ -23,6 +23,7 @@ const props = defineProps({
   }
 })
 
+// eslint-disable-next-line no-unused-vars
 const filterredTable = computed(() => {
   const val = store.notaTindakan
   const arr = props?.pasien?.tindakan
@@ -32,8 +33,19 @@ const filterredTable = computed(() => {
   return (val === 'SEMUA' || val === null || val === '') ? arr : arr?.filter(x => x?.rs2 === val)
 })
 
+const filterredTableByTgl = computed(() => {
+  const val = store.tanggal
+  const arr = props?.pasien?.tindakan
+  const filterred = arr?.filter(x => x?.rs3?.includes(val))
+  console.log('hr ini ', filterred)
+
+  // return arr
+  return filterred
+})
+
 onMounted(() => {
   // log
+  // console.log('filterredTableByTgl', filterredTableByTgl?.value)
 })
 
 function hapusItem (id) {
@@ -86,7 +98,7 @@ function namaPetugas (item) {
         v-for="(item, i) in filterredTable"
         :key="i"
       > -->
-      <q-card flat bordered class="q-mb-xs" v-for="(item, i) in filterredTable" :key="i">
+      <q-card flat bordered class="q-mb-xs" v-for="(item, i) in filterredTableByTgl" :key="i">
         <q-item class="list-move">
           <q-item-section>
             <q-item-label

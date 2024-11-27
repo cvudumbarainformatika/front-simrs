@@ -33,7 +33,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseLayout :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :split="50" nota>
+  <BaseLayout :pasien="props.pasien" :kasus="props.kasus" :nakes="props.nakes" :split="45" nota>
     <template #form>
       <FormTindakan :pasien="props.pasien" :kasus="props.kasus" />
     </template>
@@ -44,16 +44,17 @@ onMounted(() => {
     </template>
 
     <template #nota>
-      <q-select
-        v-model="store.notaTindakan"
-        outlined
-        standout="bg-yellow-3"
-        bg-color="white"
-        dense
-        :options="store.notaTindakans"
-        :display-value="`NOTA: ${store.notaTindakan==='' || store.notaTindakan === 'BARU'? 'BARU': store.notaTindakan}`"
-        style="min-width: 200px;"
-      />
+      <div class="flex q-gutter-x-sm">
+        <app-input-date
+          :model="store.tanggal"
+          label="By Tanggal"
+          icon="icon-mat-event"
+          dark
+          outlined
+          @set-model="val=>store.tanggal=val"
+          style="width: 140px;"
+        />
+      </div>
     </template>
   </BaseLayout>
 </template>

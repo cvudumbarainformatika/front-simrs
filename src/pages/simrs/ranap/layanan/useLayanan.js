@@ -31,7 +31,7 @@ export default function useLayanan (pasien) {
       name: 'DiagTindPage',
       label: 'Diagnosa & Tindakan',
       icon: 'icon-mat-health_and_safety',
-      nakes: ['1', '2', '3'],
+      nakes: ['1', '2', '3', '4', '5', '6'],
       comp: shallowRef(defineAsyncComponent(() => import('./diagnosaDanTindakan/IndexPage.vue')))
     },
     {
@@ -45,7 +45,7 @@ export default function useLayanan (pasien) {
       name: 'AsessmentUlang',
       label: 'Asessment Ulang',
       icon: 'icon-fa-book-medical-solid',
-      nakes: ['1', '2', '3'],
+      nakes: ['1', '2', '3', '4', '5', '6'],
       comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
     },
     {
@@ -94,14 +94,14 @@ export default function useLayanan (pasien) {
       name: 'upload-page',
       label: 'Upload Dokumen Luar',
       icon: 'icon-mat-cloud_upload',
-      nakes: ['1', '2', '3'],
+      nakes: ['1', '2', '3', '4', '5', '6'],
       comp: shallowRef(defineAsyncComponent(() => import('./upload/IndexPage.vue')))
     },
     {
       name: 'catatan-dan-dokumen',
       label: 'Catatan / Dokumen',
       icon: 'icon-my-file_sign',
-      nakes: ['1', '2', '3'],
+      nakes: ['1', '2', '3', '4', '5', '6'],
       comp: shallowRef(defineAsyncComponent(() => import('./dokumen/IndexPage.vue')))
     },
     {

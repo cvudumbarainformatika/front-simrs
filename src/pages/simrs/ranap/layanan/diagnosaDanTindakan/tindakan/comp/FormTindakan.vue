@@ -104,6 +104,21 @@ function filterFn (val, update, abort) {
         >
           <q-card-section class="row q-pa-lg q-col-gutter-sm">
             <div class="col-12 q-mb-sm">
+              <div class="flex q-gutter-x-md items-center">
+                <div>Nota Tindakan :</div>
+                <q-select
+                  v-model="store.notaTindakan"
+                  outlined
+                  standout="bg-yellow-3"
+                  bg-color="white"
+                  dense
+                  :options="store.notaTindakans"
+                  :display-value="`${store.notaTindakan==='' || store.notaTindakan === 'BARU'? 'BARU': store.notaTindakan}`"
+                  style="min-width: 200px;"
+                />
+              </div>
+            </div>
+            <div class="col-12 q-mb-sm">
               <q-select
                 v-model="store.searchtindakan"
                 use-input
@@ -132,7 +147,7 @@ function filterFn (val, update, abort) {
               </q-select>
             </div>
             <div class="col-12">
-              <q-input
+              <!-- <q-input
                 v-model="store.formtindakan.tindakan"
                 label="Tindakan (Otomatis)"
                 dense
@@ -141,7 +156,14 @@ function filterFn (val, update, abort) {
                 :rules="[val => !!val || 'Harus diisi']"
                 hide-bottom-space
                 readonly
-              />
+              /> -->
+              <div class="flex no-wrap q-gutter-x-sm">
+                <div>Tindakan </div>
+                <div>: </div>
+                <div class="text-accent">
+                  {{ store.formtindakan?.tindakan }}
+                </div>
+              </div>
             </div>
 
             <div class="col-9">

@@ -109,6 +109,9 @@ const dateHalfFormat = (val) => {
 const dateCppt = (val) => {
   return val ? date.formatDate(val, 'DD/MM/YYYY') : null
 }
+const dateFilter = (val) => {
+  return val ? date.formatDate(val, 'YYYY-MM-DD') : null
+}
 const dateFull = (val) => {
   return date.formatDate(val, 'DD MMM YYYY HH:mm:ss')
 }
@@ -160,7 +163,7 @@ const getNewLine = (text) => {
 }
 
 export {
-  dateFull,
+  dateFull, dateFilter,
   dateHalfFormat, dateCppt,
   dateDbFormat,
   humanDate,

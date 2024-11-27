@@ -5,6 +5,7 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { useInacbgPoli } from '../pelayanan/poli/inacbg'
+import { dateFilter } from 'src/modules/formatter'
 // import { api } from 'src/boot/axios'
 
 export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
@@ -34,6 +35,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     searchtindakan: '',
     notaTindakans: [],
     notaTindakan: 'BARU',
+    tanggal: dateFilter(Date.now()),
     formtindakan: {
       kdtindakan: '',
       tindakan: '',
@@ -218,6 +220,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
     },
 
     async getNota (pasien) {
+      this.tanggal = dateFilter(Date.now())
       const params = {
         params: {
           noreg: pasien?.noreg,
@@ -314,6 +317,7 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       // return new Promise((resolve, reject) => {
       // tindakan
       this.searchtindakan = ''
+      this.tanggal = dateFilter(Date.now())
       this.formtindakan = {
         kdtindakan: '',
         tindakan: '',

@@ -8,8 +8,8 @@
         <q-expansion-item>
           <template #header>
             <q-item-section avatar>
-              <q-avatar :color="item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal')" text-color="white">
-                {{ item?.nakes==='2'? 'Ns' : (item?.nakes==='1'? 'Dr' : 'Bd') }}
+              <q-avatar :color="warnaAvatar(item?.nakes)" text-color="white">
+                {{ titleAvatar(item?.nakes) }}
               </q-avatar>
             </q-item-section>
 
@@ -51,14 +51,18 @@
           <q-card bordered flat class="bg-grey-4">
             <div class="q-pa-md">
               <div class="row q-col-gutter-sm">
-                <!-- subjective -->
+                <!-- subjective adime(asessment)-->
                 <div class="col-3">
                   <q-card flat bordered class="column full-height full-width" style="min-height: 300px; max-width: 100%;">
                     <q-card-section class="col-auto flex justify-between items-center">
-                      <div class="f-20">
+                      <div v-if="nakes !== '5'" class="f-20">
                         Subjective
                       </div>
+                      <div v-else class="f-20">
+                        Assessment
+                      </div>
                       <q-btn
+                        v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                           if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
                             notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
@@ -73,7 +77,7 @@
                     <q-separator inset />
 
                     <q-card-section class="col full-height scroll">
-                      <div class="column q-mb-sm">
+                      <div v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'" class="column q-mb-sm">
                         <div><b>Keluhan Utama : </b></div>
                         <div class="q-ml-sm">
                           <span v-html="getNewLine(item?.anamnesis?.keluhanUtama)" />
@@ -88,18 +92,40 @@
                           <item-nyeri :item="item?.anamnesis?.keluhannyeri?.dewasa" v-else :key="item" />
                         </div>
                       </div>
+                      <q-input
+                        v-else
+                        ref="refInputSsambung"
+                        v-model="item.s_sambung"
+                        outlined
+                        type="textarea"
+                        stack-label
+                        standout="bg-yellow-3"
+                        :lazy-rules="true"
+                        rows="5"
+                        hide-bottom-space
+                        @blur="(val) => {
+                          // console.log('val', val?.target?.value);
+                          const valuex = val?.target?.value
+                          updateSsambung(item,valuex,'s_sambung')
+                        }"
+                      />
                     </q-card-section>
                   </q-card>
                 </div>
 
-                <!-- objective -->
+                <!-- objective adime(diagnosa)-->
                 <div class="col-3">
                   <q-card flat bordered class="column full-height full-width" style="min-height: 300px; max-width: 100%;">
                     <q-card-section class="col-auto flex justify-between items-center">
-                      <div class="f-20">
+                      <div v-if="nakes !== '5'" class="f-20">
                         Objective
                       </div>
+                      <div v-else class="f-20">
+                        Diagnosa
+                      </div>
                       <q-btn
+
+                        v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
                           if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
                             notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
@@ -113,7 +139,7 @@
                     <q-separator inset />
 
                     <q-card-section class="col full-height scroll">
-                      <div class="column">
+                      <div v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'" class="column">
                         <div><b>Ku : </b> <span>{{ item?.pemeriksaan?.keadaanUmum }}</span></div>
                         <div><b>BB : </b> <span>{{ item?.pemeriksaan?.bb }} Kg</span></div>
                         <div><b>TB : </b> <span>{{ item?.pemeriksaan?.tb }} Cm</span></div>
@@ -153,36 +179,41 @@
                             </div>
                           </div>
                         </div>
-                        <q-input
-                          ref="refInputOsambung"
-                          v-model="item.o_sambung"
-                          outlined
-                          type="textarea"
-                          stack-label
-                          standout="bg-yellow-3"
-                          :lazy-rules="true"
-                          rows="5"
-                          hide-bottom-space
-                          @blur="(val) => {
-                            // console.log('val', val?.target?.value);
-                            const valuex = val?.target?.value
-                            updateOsambung(item,valuex,'o_sambung')
-                          }"
-                        />
                       </div>
+                      <q-input
+
+                        ref="refInputOsambung"
+                        v-model="item.o_sambung"
+                        outlined
+                        type="textarea"
+                        stack-label
+                        standout="bg-yellow-3"
+                        :lazy-rules="true"
+                        rows="5"
+                        hide-bottom-space
+                        @blur="(val) => {
+                          // console.log('val', val?.target?.value);
+                          const valuex = val?.target?.value
+                          updateOsambung(item,valuex,'o_sambung')
+                        }"
+                      />
                     </q-card-section>
                   </q-card>
                 </div>
 
-                <!-- asessment -->
+                <!-- asessment adime(intervensi) -->
                 <div class="col-3">
                   <q-card flat bordered class="column full-height full-width" style="min-height: 300px; max-width: 100%;">
                     <q-card-section class="col-auto flex justify-between items-center">
-                      <div class="f-20">
+                      <div v-if="nakes !== '5'" class="f-20">
                         Asessment
+                      </div>
+                      <div v-else class="f-20">
+                        Intervensi
                       </div>
                       <q-btn
 
+                        v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
 
                           if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
@@ -236,14 +267,19 @@
                   </q-card>
                 </div>
 
-                <!-- plann -->
+                <!-- plann adime(monitoring) -->
                 <div class="col-3">
                   <q-card flat bordered class="column full-height full-width" style="min-height: 300px; max-width: 100%;">
                     <q-card-section class="col-auto flex justify-between items-center">
-                      <div class="f-20">
+                      <div v-if="nakes !== '5'" class="f-20">
                         Plan
                       </div>
+                      <div v-else class="f-20">
+                        Monitoring
+                      </div>
                       <q-btn
+
+                        v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
 
                           if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
@@ -296,13 +332,14 @@
                     </q-card-section>
                   </q-card>
                 </div>
-                <!-- ooo -->
+                <!-- instruksi / adime(evaluasi) -->
                 <div class="col-12">
                   <q-card flat bordered class="col-12">
                     <q-card-section class="col-auto flex justify-between items-center">
                       <div class="text-h6">
-                        Instruksi PPA
+                        {{ nakes !== '5' ? 'Instruksi PPA' : 'Evaluasi' }}
                       </div>
+
                       <q-btn
                         v-if="nakes==='2' || nakes==='3'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
@@ -440,6 +477,7 @@ const {
   updateToServerPlan,
   updateAsPlanInst,
   updateOsambung,
+  updateSsambung,
   // eslint-disable-next-line no-unused-vars
   store, storePenilaian, storeDiagnosaKeperawatan
 } = useForm(props?.pasien)
@@ -457,6 +495,49 @@ function getNewLine (text) {
   // console.log('text', text)
 
   return text?.replace(/\n/g, '<br/>')
+}
+
+const warnaAvatar = (kat) => {
+  // item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal'
+  if (kat === '2') {
+    return 'accent'
+  }
+  else if (kat === '1') {
+    return 'primary'
+  }
+  else if (kat === '3') {
+    return 'teal'
+  }
+  else if (kat === '4') {
+    return 'cokelat'
+  }
+  else if (kat === '5') {
+    return 'accent'
+  }
+  else {
+    return 'dark'
+  }
+}
+const titleAvatar = (kat) => {
+  // item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal'
+  if (kat === '2') {
+    return 'Ns'
+  }
+  else if (kat === '1') {
+    return 'Dr'
+  }
+  else if (kat === '3') {
+    return 'Bd'
+  }
+  else if (kat === '4') {
+    return 'Ap'
+  }
+  else if (kat === '5') {
+    return 'Gz'
+  }
+  else {
+    return 'Fs'
+  }
 }
 
 const isErrInput = ref(false)

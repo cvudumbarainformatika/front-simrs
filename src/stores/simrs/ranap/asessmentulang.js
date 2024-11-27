@@ -53,9 +53,21 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
 
     getPreviousForm (pasien, nakes) {
       const dataAwal = {
-        anamnesis: pasien?.anamnesis.length ? pasien.anamnesis[0] : null,
-        pemeriksaan: pasien?.pemeriksaan.length ? pasien.pemeriksaan[0] : null,
-        penilaian: pasien?.penilaian?.length ? pasien.penilaian[0] : null
+        anamnesis: pasien?.anamnesis.length
+          ? pasien.anamnesis?.filter((a) => a?.kdruang !== 'POL014')?.length
+            ? pasien.anamnesis?.filter((a) => a?.kdruang !== 'POL014')[0]
+            : null
+          : null,
+        pemeriksaan: pasien?.pemeriksaan.length
+          ? pasien.pemeriksaan?.filter((a) => a?.kdruang !== 'POL014')?.length
+            ? pasien.pemeriksaan?.filter((a) => a?.kdruang !== 'POL014')[0]
+            : null
+          : null,
+        penilaian: pasien?.penilaian?.length
+          ? pasien.penilaian?.filter((a) => a?.kdruang !== 'POL014')?.length
+            ? pasien.penilaian?.filter((a) => a?.kdruang !== 'POL014')[0]
+            : null
+          : null
 
       }
       const storeAnamnesis = useAnamnesisRanapStore()
@@ -77,26 +89,36 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       }
       this.previousData = dataSebelumnya
 
+      console.log('data sebelumnya', dataSebelumnya)
+
       // untuk diagnosa keperawatan
       if (nakes === '2') {
         this.initDiagnosaKeperawatan(dataSebelumnya)
         this.form.asessment = dataSebelumnya?.asessment
         this.form.plann = dataSebelumnya?.plann
         this.form.instruksi = dataSebelumnya?.instruksi
+        this.form.o_sambung = dataSebelumnya?.o_sambung
       }
       else if (nakes === '1') {
         this.initDiagnosaMedisToText(pasien?.diagnosamedis)
+        this.form.o_sambung = dataSebelumnya?.o_sambung
         this.form.plann = null
         this.form.instruksi = null
+      }
+      else if (nakes === '3') {
+        this.initDiagnosaKebidanan(dataSebelumnya)
+        this.form.asessment = dataSebelumnya?.asessment
+        this.form.plann = dataSebelumnya?.plann
+        this.form.instruksi = dataSebelumnya?.instruksi
+        this.form.o_sambung = dataSebelumnya?.s_sambung
       }
       else {
         this.form.asessment = null
         this.form.plann = null
         this.form.instruksi = null
+        this.form.o_sambung = null
+        this.form.s_sambung = null
       }
-
-      this.form.o_sambung = dataSebelumnya?.o_sambung
-      this.form.s_sambung = null
 
       // if (cekTerbaru) dataSebelumnya = cekTerbaru
       // console.log('data terbaru', dataSebelumnya)

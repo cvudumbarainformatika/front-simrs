@@ -86,6 +86,13 @@ const tabsxx = [
     comp: defineAsyncComponent(() => import('./diagnosakebidanan/IndexPage.vue'))
   },
   {
+    label: 'Diagnosa Gizi',
+    name: 'diagnosaGizi',
+    icon: 'icon-mat-health_and_safety',
+    nakes: ['5'],
+    comp: defineAsyncComponent(() => import('./diagnosagizi/IndexPage.vue'))
+  },
+  {
     label: 'Tindakan',
     name: 'tindakan',
     icon: 'icon-mat-description',

@@ -23,14 +23,16 @@ export default function useCppt (pasien) {
     const pemeriksaan = pasien?.pemeriksaan?.find((a) => a?.awal === '1' && a?.kdruang !== 'POL014' && a?.nakes !== '1') ?? null
     const penilaian = pasien?.penilaian?.find((a) => a?.awal === '1' && a?.kdruang !== 'POL014' && a?.group_nakes !== '1') ?? null
     const diagnosakeperawatan = pasien?.diagnosakeperawatan?.filter((a) => a?.kdruang !== 'POL014') ?? []
+    const diagnosakebidanan = pasien?.diagnosakebidanan?.filter((a) => a?.kdruang !== 'POL014') ?? []
     const diagnosamedis = []
     const isDokter = false
-    const nakes = '2'
+    const nakes = '2|3'
     const obj = {
       anamnesis,
       pemeriksaan,
       penilaian,
       diagnosakeperawatan,
+      diagnosakebidanan,
       diagnosamedis,
       isDokter,
       nakes
@@ -43,6 +45,7 @@ export default function useCppt (pasien) {
     const pemeriksaan = pasien?.pemeriksaan?.find((a) => a?.awal === '1' && a?.kdruang !== 'POL014' && a?.nakes === '1') ?? null
     const penilaian = pasien?.penilaian?.find((a) => a?.awal === '1' && a?.kdruang !== 'POL014' && a?.group_nakes === '1') ?? null
     const diagnosakeperawatan = []
+    const diagnosakebidanan = []
     const diagnosamedis = pasien?.diagnosamedis?.filter((a) => a?.kdruang !== 'POL014') ?? []
     const isDokter = true
     const nakes = '1'
@@ -51,6 +54,7 @@ export default function useCppt (pasien) {
       pemeriksaan,
       penilaian,
       diagnosakeperawatan,
+      diagnosakebidanan,
       diagnosamedis,
       isDokter,
       nakes
