@@ -9,7 +9,6 @@
           v-for="item in store.pasiens"
           :key="item"
           v-ripple
-          clickable
         >
           <q-item-section avatar top>
             <app-avatar-pasien

@@ -89,7 +89,7 @@ export const useRuangKonsulDokterStore = defineStore('ruang-konsul-store', {
       this.form.kodesistembayar = val?.kunjunganranap?.kodesistembayar
 
       this.loadingSave = true
-      // console.log('this.form', this.form, val)
+      console.log('this.form', this.form, val)
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/ranap/layanan/konsultasi/updateJawaban', this.form)
@@ -112,23 +112,6 @@ export const useRuangKonsulDokterStore = defineStore('ruang-konsul-store', {
             reject(err)
           })
       })
-
-      // try {
-      //   const resp = await api.post('v1/simrs/ranap/layanan/konsultasi/updateJawaban', this.form)
-
-      //   if (resp.status === 200) {
-      //     if (target > -1) {
-      //       this.items[target].jawaban = resp.data.result?.jawaban
-      //     }
-      //     this.initReset(resp.data.result)
-      //     notifSuccess(resp)
-      //   }
-      // }
-      // catch (error) {
-      //   if (target > -1) {
-      //     this.items[target].jawaban = null
-      //   }
-      // }
     }
   }
 })
