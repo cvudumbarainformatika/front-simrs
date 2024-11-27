@@ -63,7 +63,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       }
     },
     async getTindakanDropdown () {
-      const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
+      const resp = await api.get('v1/simrs/pelayanan/dialogtindakanIgd')
       // console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
@@ -241,7 +241,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       form.kdsistembayar = pasien?.kodesistembayar
       form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
+        const resp = await api.post('v1/simrs/pelayanan/simpantindakanIgd', form)
         // console.log('simpan tindakan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
@@ -267,7 +267,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
         }
       }
 
-      const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
+      const resp = await api.get('v1/simrs/pelayanan/notatindakanIgd', params)
       // console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
@@ -350,7 +350,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       const payload = { id, noreg: pasien?.noreg }
 
       try {
-        const resp = await api.post('v1/simrs/pelayanan/hapustindakanpoli', payload)
+        const resp = await api.post('v1/simrs/pelayanan/hapustindakanIgd', payload)
         // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()

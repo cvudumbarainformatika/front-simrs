@@ -74,7 +74,8 @@
                       lines="2"
                       class="f-10 text-italic"
                     >
-                      <span class="">oleh</span> : <span class="">{{ setPelaksana(item) }} </span>
+                      <span class="">oleh</span> : <span class="">{{ setPelaksana(item) }} </span> ||
+                      <span class="">Ruangan</span> : <span class="text-red">{{ item?.mpoli?.rs2 }} </span>
                     </q-item-label>
                   </q-item-section>
 

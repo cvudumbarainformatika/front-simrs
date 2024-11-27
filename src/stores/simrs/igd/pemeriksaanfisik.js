@@ -80,7 +80,7 @@ export const usePemeriksaanfisikStore = defineStore('pemeriksaan-fisik-store', {
         // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
-          storePasien.hapusDataAnamnesis(pasien, id)
+          storePasien.hapusDataPemeriksaanFisik(pasien, id)
           notifSuccess(resp)
           this.loadingForm = false
         }

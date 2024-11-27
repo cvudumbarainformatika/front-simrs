@@ -134,7 +134,9 @@
             <div class="row items-center no-wrap q-gutter-sm text-white">
               <div class="column f-12">
                 <div>
-                  Sistem Bayar | {{ pasien?.sistembayar }}
+                  <q-badge color="lime-12" text-color="dark" class="text-bold">
+                    Sistem Bayar : {{ pasien?.sistembayar }}
+                  </q-badge>
                 </div>
               </div>
             </div>

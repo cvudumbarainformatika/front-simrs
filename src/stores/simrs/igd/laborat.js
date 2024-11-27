@@ -112,7 +112,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
 
     async getNota (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
-      const resp = await api.get('v1/simrs/penunjang/laborat/getnota', payload)
+      const resp = await api.get('v1/simrs/penunjang/laborat/getnotaIgd', payload)
       console.log('notalaborat', resp)
       if (resp.status === 200) {
         // this.setNotas(resp?.data)
@@ -125,7 +125,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
 
     async getNotaold (pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
-      const resp = await api.get('v1/simrs/penunjang/laborat/getnotaold', payload)
+      const resp = await api.get('v1/simrs/penunjang/laborat/getnotaoldIgd', payload)
       console.log('notalaboratx', resp)
       if (resp.status === 200) {
         this.setNotasold(resp?.data)
@@ -247,7 +247,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
       // console.log('payload', formbaru)
 
       try {
-        const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
+        const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaruIgd', formbaru)
         // console.log('save resp', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
@@ -298,7 +298,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
     async hapusLaboratBaru (pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
       try {
-        const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaru', payload)
+        const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaruIgd', payload)
         // console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()

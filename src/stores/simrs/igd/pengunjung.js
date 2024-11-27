@@ -366,6 +366,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataPemeriksaanFisik (pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].pemeriksaanfisikpsikologidll
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
     getDataIcare (pasien) {
       this.loadingIcare = true
       // console.log('get data icare', pasien)
