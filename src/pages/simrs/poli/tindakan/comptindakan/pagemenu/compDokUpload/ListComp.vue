@@ -13,7 +13,7 @@
         class="q-mb-md"
       >
         <q-img
-          :src="pathImg + file.url" :key="file.url"
+          :src="getImg(file?.url)" :key="file.url"
         >
           <div class="absolute-bottom">
             <div class="row items-center justify-between">
@@ -48,6 +48,7 @@
 
 <script setup>
 import { pathImg } from 'src/boot/axios'
+// import { get } from 'src/modules/wacom/newFile';
 
 defineProps({
   items: {
@@ -57,6 +58,19 @@ defineProps({
 })
 
 const emits = defineEmits(['hapus', 'edit', 'preview'])
+
+const getImg = (file) => {
+  const spl = file.split('.')
+  const ext = spl[spl.length - 1]
+  // console.log(ext)
+
+  if (ext === 'pdf') {
+    return new URL('../../../../../../../assets/images/PDF_file_icon.png', import.meta.url).href
+  }
+  else {
+    return pathImg + file
+  }
+}
 
 </script>
 

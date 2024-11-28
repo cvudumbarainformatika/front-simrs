@@ -43,7 +43,7 @@ export const useUploadDokStore = defineStore('upload-dok-poli', {
         const images = files[i]
         this.form.dokumen.push(images)
       }
-      // console.log(this.form)
+      console.log('masukkan ke form', this.form)
     },
 
     saveData (pasien, isRanap) {

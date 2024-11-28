@@ -39,6 +39,7 @@ export const useKonsulRanapStore = defineStore('konsul-ranap-store', {
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
       this.form.kodepoli = pasien?.kodepoli
+      this.form.kdruang = pasien?.kodepoli
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.kdgroup_ruangan = pasien?.kdgroup_ruangan
       this.form.kelas_ruangan = pasien?.kelas_ruangan
