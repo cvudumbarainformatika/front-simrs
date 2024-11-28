@@ -1,9 +1,13 @@
+// import { useTriageIgd } from 'src/stores/simrs/igd/triage'
 import { useDiagnosaStore } from 'src/stores/simrs/ranap/diagnosa'
 import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
+import { usePemeriksaanUmumRanapStore } from 'src/stores/simrs/ranap/pemeriksaanumum'
 // import { usePasienPulangRanapStore } from 'src/stores/simrs/ranap/pulang'
 import { computed, onMounted, reactive } from 'vue'
 
 export default function useResume (pasien) {
+  // const triage = useTriageIgd()
+
   const data = reactive({
     usiaTh: 0,
     anamnesis_igd: [],
@@ -12,7 +16,11 @@ export default function useResume (pasien) {
     pemeriksaan: [],
     laborats: [],
     diagnosis: [],
-    cppt: []
+    cppt: [],
+    triageIgd: null,
+
+    // master
+    masterTingkatKesadaran: []
   })
 
   const usiaTh = computed(() => {
@@ -115,8 +123,18 @@ export default function useResume (pasien) {
     data.cppt = sorting
     // console.log('data cppt', data.cppt)
   }
+  function cariTriageIgd (pasien) {
+    const triage = pasien?.triageIgd?.length ? pasien?.triageIgd[0] : null
+    data.triageIgd = triage
+    // console.log('data cppt', data.cppt)
+  }
 
   onMounted(() => {
+    // triage?.getDataTriage(pasien.noreg)
+    //   .then(() => {
+    //     console.log('triage', triage.items)
+    //   })
+
     cariAnamnesisIgd(pasien)
     cariPemeriksaanIgd(pasien)
     cariAnamnesis(pasien)
@@ -125,6 +143,10 @@ export default function useResume (pasien) {
     cariDiagnosis(pasien)
     cariResep(pasien)
     cariCppt(pasien)
+    cariTriageIgd(pasien)
+
+    const storePemeriksaan = usePemeriksaanUmumRanapStore()
+    data.masterTingkatKesadaran = storePemeriksaan?.optionsTingkatkesadaran
   })
 
   const resume = computed(() => {
@@ -165,13 +187,18 @@ export default function useResume (pasien) {
               <div> - Kaki : ${data?.pemeriksaan_igd[0]?.rs11 ?? ''}</div>
               <div> - Status Neurologis : ${data?.pemeriksaan_igd[0]?.rs12 ?? ''}</div>
               <div> - Genital : ${data?.pemeriksaan_igd[0]?.rs13 ?? ''}</div>
-              <div> - Sax : ${data?.pemeriksaan_igd[0]?.sax ? data?.pemeriksaan_igd[0]?.sax + ' Celcius' : ''} | - Srec : ${data?.pemeriksaan_igd[0]?.srec ? data?.pemeriksaan_igd[0]?.srec + ' Celcius' : ''}</div>
-              <div> - Pernapasan  : ${data?.pemeriksaan_igd[0]?.pernapasanigd}  /mnt | - Nadi : ${data?.pemeriksaan_igd[0]?.nadiigd}  x/mnt </div>
-              <div> - Tensi  : ${data?.pemeriksaan_igd[0]?.tensiigd}  mmHg | - BB : ${data?.pemeriksaan_igd[0]?.beratbadan}  Kg </div>
-              <div> - Tinggi Badan  : ${data?.pemeriksaan_igd[0]?.tinggibadan}  Cm </div>
+              <div> - Pernapasan  : ${data?.triageIgd?.pernapasanx ?? ''}  x/mnt | - Nadi : ${data?.triageIgd?.nadi}  x/mnt </div>
+              <div> - Sis / Dias  : ${data?.triageIgd?.sistole ?? ''}  / ${data?.triageIgd?.diastole}  mmHg </div>
+              <div> - Spo2  : ${data?.triageIgd?.spo2 ?? ''}  % </div>
+              <div> - BB  : ${data?.triageIgd?.bb ?? ''}  kg | - TB : ${data?.triageIgd?.tb}  cm </div>
               `
           : ''
       },
+
+      // <div> - Sax : ${data?.pemeriksaan_igd[0]?.sax ? data?.pemeriksaan_igd[0]?.sax + ' Celcius' : ''} | - Srec : ${data?.pemeriksaan_igd[0]?.srec ? data?.pemeriksaan_igd[0]?.srec + ' Celcius' : ''}</div>
+      //         <div> - Pernapasan  : ${data?.pemeriksaan_igd[0]?.pernapasanigd}  /mnt | - Nadi : ${data?.pemeriksaan_igd[0]?.nadiigd}  x/mnt </div>
+      //         <div> - Tensi  : ${data?.pemeriksaan_igd[0]?.tensiigd}  mmHg | - BB : ${data?.pemeriksaan_igd[0]?.beratbadan}  Kg </div>
+      //         <div> - Tinggi Badan  : ${data?.pemeriksaan_igd[0]?.tinggibadan}  Cm </div>
       { // 4
         title: 'ANAMNESE RAWAT INAP',
         type: '1',
@@ -192,15 +219,11 @@ export default function useResume (pasien) {
         isian: data?.pemeriksaan?.length
           ? ` 
             <div> - Keadaan Umum : ${data?.pemeriksaan[0]?.keadaanUmum ?? ''} </div>
-            <div> - Tingkat Kesadaran : ${data?.pemeriksaan[0]?.tkKesadaran} </div>
-            <div> - Berat Badan : ${data?.pemeriksaan[0]?.bb} </div>
-            <div> - Tinggi Badan : ${data?.pemeriksaan[0]?.tb} </div>
-            <div> - Suhu Tubuh : ${data?.pemeriksaan[0]?.suhu} </div>
-            <div> - Pernapasan : ${data?.pemeriksaan[0].pernapasan} </div>
-            <div> - SPo2 :  ${data?.pemeriksaan[0].spo} </div>
-            <div> - Nadi  : ${data?.pemeriksaan[0]?.nadi ?? ''} </div>
-            <div> - Sistole  : ${data?.pemeriksaan[0]?.sistole} </div>
-            <div> - Diastole  : ${data?.pemeriksaan[0]?.diastole} </div>
+            <div> - Tingkat Kesadaran : ${data?.masterTingkatKesadaran?.find((item) => item.value === data?.pemeriksaan[0]?.tkKesadaran)?.label} </div>
+            <div> - BB : ${data?.pemeriksaan[0]?.bb} kg | TB : ${data?.pemeriksaan[0]?.tb} cm </div>
+            <div> - Suhu : ${data?.pemeriksaan[0]?.suhu} Celcius | Pernapasan : ${data?.pemeriksaan[0]?.pernapasan} x/mnt  | SPo2 : ${data?.pemeriksaan[0]?.spo} % </div>
+            <div> - Nadi  : ${data?.pemeriksaan[0]?.nadi ?? ''} x/mnt  |  Sis / Dias : ${data?.pemeriksaan[0]?.sistole} / ${data?.pemeriksaan[0]?.diastole} mmHg</div>
+
 
             <div> - Bagian Kepala : ${data?.pemeriksaan[0]?.rs5 ?? ''} . </div>
             <div> - Bagian Leher : ${data?.pemeriksaan[0]?.rs6 ?? ''}.</div>
@@ -324,7 +347,7 @@ export default function useResume (pasien) {
             RR : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.pernapasan ?? '-'} |
             Sis/Dias : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.sistole ?? '-'} / ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.diastole ?? '-'} |
             Spo2 : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.spo ?? '-'} |
-            Suhu : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.suhu ?? '-'} 
+            Suhu : ${data?.cppt[data?.cppt.length - 1]?.pemeriksaan?.suhu ?? '-'} | ${data?.cppt[data?.cppt.length - 1]?.o_sambung ?? '-'}</div>
             </div>
             <div> - ${data?.cppt[data?.cppt.length - 1]?.instruksi ?? '-'}</div>
           `
@@ -358,7 +381,7 @@ export default function useResume (pasien) {
 
     ]
 
-    console.log('resume', res)
+    console.log('resume', res, data)
     // console.log('prognosis', prognosis)
     if (pasien?.prognosis !== '9') { // MALAM / Meninggal
       return res?.filter(x => x?.title !== 'SEBAB KEMATIAN')

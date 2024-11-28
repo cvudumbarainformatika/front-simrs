@@ -94,6 +94,7 @@
 <script setup>
 import PageLayananRanap from '../layanan/PageLayananRanap.vue'
 import { calcDate } from 'src/modules/formatter'
+import { useTriageIgd } from 'src/stores/simrs/igd/triage'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { onBeforeUnmount, ref } from 'vue'
 
@@ -136,6 +137,14 @@ function bukaLayananPage (item) {
     .then((val) => {
       pasien.value = val
       store.pasien = val
+
+      // ambil data igd (triage)
+      const dataIgd = useTriageIgd()
+      Promise.all([
+        dataIgd.getDataTriage(val?.noreg).then(() => {
+          store.pasien.triageIgd = dataIgd?.items
+        })
+      ])
     })
 }
 

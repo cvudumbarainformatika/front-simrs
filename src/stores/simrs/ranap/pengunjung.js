@@ -100,25 +100,6 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       })
     },
 
-    // persiapanInjectPasien (pasien) {
-    //   const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
-    //   if (findPasien.length) {
-    //     // const datax = findPasien[0]
-
-    //     // datax.diagnosamedis = []
-    //     // datax.anamnesis = []
-    //     // datax.pemeriksaan = []
-    //     // datax.penilaian = []
-    //     // datax.tindakan = []
-    //     // datax.diagnosakeperawatan = []
-    //     // datax.cppt = []
-    //     // datax.laborats = []
-    //     // datax.radiologi = []
-    //     // datax.fisio = []
-    //     // datax.operasi = []
-    //   }
-    // },
-
     setPasien (pasien, data) {
       const findPasien = this.pasiens.filter(x => x?.noreg === pasien?.noreg)
       // this.pasiens[indexPasien] = data
@@ -168,7 +149,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/ranap/ruangan/listruanganranap')
           .then(resp => {
-            // console.log('ruangan ranap', resp)
+            console.log('ruangan ranap', resp)
             if (resp.status === 200) {
               const ruangs = resp.data
               this.ruangans = []

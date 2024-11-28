@@ -59,6 +59,7 @@ import { useDiagnosaKebidananStore } from 'src/stores/simrs/pelayanan/poli/diagn
 import { useAnatommyRanapStore } from 'src/stores/simrs/ranap/anatomy'
 import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
 import { useDiagnosaGiziStore } from 'src/stores/simrs/ranap/diagnosagizi'
+// import { useTriageIgd } from 'src/stores/simrs/igd/triage'
 const style = useStyledStore()
 const store = usePengunjungRanapStore()
 

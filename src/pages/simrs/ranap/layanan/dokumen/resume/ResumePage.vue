@@ -474,7 +474,7 @@ const exportPdf = () => {
 
   const pdfConfig = {
     margin: 0,
-    filename: 'resume-medis-' + props?.pasien?.nama_panggil + '.pdf',
+    filename: 'resume-medis-' + props?.pasien?.noreg + '.pdf',
     image: {
       type: 'jpeg',
       quality: 0.98

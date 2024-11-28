@@ -49,7 +49,7 @@
           >
             <q-img
               :src="getImg(file?.__img?.src)"
-              style="border-radius: 10px; border: 2px solid grey; overflow: hidden; "
+              style="border-radius: 10px; border: 2px solid grey; overflow: hidden;"
             >
               <div class="absolute-top f-12">
                 <div class="row items-center justify-between">
