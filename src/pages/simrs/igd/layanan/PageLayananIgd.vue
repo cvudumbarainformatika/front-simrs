@@ -170,6 +170,13 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./konsul/IndexPage.vue')))
   },
   {
+    name: 'tinjauanulang',
+    label: 'Tinjauan Ulang',
+    icon: 'icon-mat-transfer_within_a_station',
+    nakes: ['1'],
+    comp: shallowRef(defineAsyncComponent(() => import('./tinjauanulang/IndexPage.vue')))
+  },
+  {
     name: 'plann-page',
     label: 'Plan',
     icon: 'icon-mat-next_plan',
