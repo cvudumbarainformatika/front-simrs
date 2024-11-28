@@ -6,12 +6,11 @@
     bordered
     flat
     :label="`Upload Gambar dokumen`"
-    accept=".jpg, image/*"
+    accept=".jpg, .pdf, image/*"
     class="fit"
     multiple
     max-files="9"
     auto-upload
-
     @finish="finished"
     @rejected="onRejected"
   >
@@ -49,7 +48,7 @@
             class="col-3 q-pa-xs"
           >
             <q-img
-              :src="file.__img.src"
+              :src="getImg(file?.__img?.src)"
               style="border-radius: 10px; border: 2px solid grey; overflow: hidden; "
             >
               <div class="absolute-top f-12">
@@ -85,9 +84,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useUploadDokStore } from 'src/stores/simrs/pelayanan/poli/uploaddok'
+import { useQuasar } from 'quasar'
 // import { onMounted } from 'vue'
 // import { useQuasar } from 'quasar'
 const store = useUploadDokStore()
+const $q = useQuasar()
 
 const uploader = ref()
 
@@ -98,12 +99,29 @@ const uploader = ref()
 //   }
 // })
 
+const getImg = (file) => {
+  if (file) {
+    return file
+  }
+  else {
+    return new URL('../../../../../../../assets/images/PDF_file_icon.png', import.meta.url).href
+  }
+}
+
 function finished () {
   console.log('finished')
 }
 
-function onRejected () {
+// function checkFileSize (files) {
+//   return files.filter(file => file.size < 1024)
+// }
+
+function onRejected (rejectedEntries) {
   console.log('rejected')
+  $q.notify({
+    type: 'negative',
+    message: `${rejectedEntries.length} ... Maaf Besar Dokummen tidak boleh lebih dari 1024 KB / 1 MB`
+  })
 }
 
 // function simpan() {
