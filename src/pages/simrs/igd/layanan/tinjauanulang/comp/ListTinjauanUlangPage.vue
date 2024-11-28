@@ -77,12 +77,23 @@
       </q-timeline-entry>
     </q-timeline>
   </q-card>
-  <FormTinjauanUlangPage />
+  <FormTinjauanUlangPage :pasien="props.pasien" />
 </template>
 <script setup>
 import { useTinjauanUlangStore } from 'src/stores/simrs/igd/tinjauanulang'
 import { ref } from 'vue'
 import FormTinjauanUlangPage from './FormTinjauanUlangPage.vue'
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  },
+  loadingaja: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const layout = ref('loose')
 const store = useTinjauanUlangStore()
