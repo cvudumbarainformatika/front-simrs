@@ -11,7 +11,6 @@
     multiple
     max-files="9"
     auto-upload
-    :filter="checkFileSize"
     @finish="finished"
     @rejected="onRejected"
   >
@@ -113,9 +112,9 @@ function finished () {
   console.log('finished')
 }
 
-function checkFileSize (files) {
-  return files.filter(file => file.size < 1024)
-}
+// function checkFileSize (files) {
+//   return files.filter(file => file.size < 1024)
+// }
 
 function onRejected (rejectedEntries) {
   console.log('rejected')
