@@ -31,6 +31,23 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       { nama: 'Rincian Objek', value: '5' },
       { nama: 'SubRincian Objek', value: '6' }
     ],
+    pendjasalayanan: [
+      { kode: '4.1.04.16.02.0001', uraian: 'Pendapatan BLUD dari Jasa Layanan' }
+    ],
+    pendhasilkerjasama: [
+      { kode: '4.1.04.16.04.0001', uraian: 'Pendapatan BLUD dari Hasil Kerja Sama dengan Pihak Lain' }
+    ],
+    pendhibah: [
+      { kode: '4.1.04.16.03.0001', uraian: 'Pendapatan BLUD dari Hibah Terikat' },
+      { kode: '4.1.04.16.03.0002', uraian: 'Pendapatan BLUD dari Hibah Tidak Terikat' }
+    ],
+    pendjasagiro: [
+      { kode: '4.1.04.16.06.0001', uraian: 'Pendapatan BLUD dari Jasa Giro' },
+      { kode: '4.1.04.16.06.0002', uraian: 'Pendapatan BLUD dari Pendapatan Bunga' }
+    ],
+    pendusahalain: [
+      { kode: '4.1.04.16.06.0006', uraian: 'Pendapatan BLUD dari Pengembangan Usaha' }
+    ],
     barjas: [
       { kode: '5.1.01', uraian: 'Belanja Pegawai' },
       { kode: '5.1.02', uraian: 'Belanja Barang dan Jasa' }
@@ -52,6 +69,9 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
     silpasblm: [],
     silpaskg: [],
 
+    psappagupendapatan: [],
+    psaprealisasipendapatan: [],
+    psaprealisasipendapatanx: [],
     psappagubarjas: [],
     psappagumodal: [],
     psaprealisasibarjas: [],
@@ -101,6 +121,9 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
             this.silpasblm = resp.data.silpasblm
             this.silpaskg = resp.data.silpaskg
 
+            this.psappagupendapatan = resp.data.psappagupendapatan
+            this.psaprealisasipendapatan = resp.data.psaprealisasipendapatan
+            this.psaprealisasipendapatanx = resp.data.psaprealisasipendapatanx
             this.psappagubarjas = resp.data.psappagubarjas
             this.psappagumodal = resp.data.psappagumodal
             this.psaprealisasibarjas = resp.data.psaprealisasibarjas
@@ -376,7 +399,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         const obj5 = {
@@ -386,7 +409,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         const obj4 = {
@@ -396,7 +419,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         const obj3 = {
@@ -406,7 +429,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         const obj2 = {
@@ -416,7 +439,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         const obj1 = {
@@ -426,7 +449,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaisblm: sblm ? parseFloat(sblm?.nilaisblm) : 0,
           nilaiskg: skg ? parseFloat(skg?.nilaiskg) : 0,
           nilaisemua: (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
-          selisih: parseFloat(el?.pagu) - (sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0),
+          selisih: parseFloat(el?.pagu) - ((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)),
           persen: (((sblm ? parseFloat(sblm?.nilaisblm) : 0) + (skg ? parseFloat(skg?.nilaiskg) : 0)) / parseFloat(el?.pagu) * 100).toFixed(2)
         }
         silpa6.push(obj1, obj2, obj3, obj4, obj5, obj6)
@@ -437,6 +460,93 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         silpa1.push(obj1)
         psapsilpa.push(obj3)
       } console.log('SILPA', silpa6)
+
+      const psappendapatan = []
+      const pagup = this.psappagupendapatan
+      const realpostingotom = this.psaprealisasipendapatan
+      const realju = this.psaprealisasipendapatanx
+
+      // PSAP 13 DATA PENDAPATAN JASA LAYANAN //
+      const filterjs = this.pendjasalayanan?.map((x) => x.kode)
+      const filpagujs = pagup.filter(x => filterjs.includes(x.kode)).map((x) => x.kode)
+      const unikfilpagujs = filpagujs.length ? [...new Set(filpagujs)] : []
+      const pagujs = pagup.filter(x => filterjs.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)
+      const realisasi = realpostingotom.filter(x => filterjs.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0).toFixed(2)
+      const realisasix = realju.map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const prsenjs = (((realisasi - realisasix) / pagujs) * 100).toFixed(2)
+      const jasalayanan = {
+        kode: unikfilpagujs[0],
+        uraian: 'Pendapatan Jasa Layanan dari Masyarakat',
+        pagu: isNaN(pagujs) ? parseFloat(0).toFixed(2) : pagujs,
+        realisasi: isNaN(realisasi - realisasix) ? parseFloat(0).toFixed(2) : realisasi - realisasix,
+        selisih: isNaN(pagujs - (realisasi - realisasix)) ? parseFloat(0).toFixed(2) : pagujs - (realisasi - realisasix),
+        persen: isNaN(prsenjs) ? parseFloat(0).toFixed(2) : prsenjs
+      }
+
+      // PSAP 13 DATA PENDAPATAN KERJA SAMA //
+      const filterks = this.pendhasilkerjasama?.map((x) => x.kode)
+      const filks = pagup.filter(x => filterks.includes(x.kode)).map((x) => x.kode)
+      const unikfilks = filks.length ? [...new Set(filks)] : []
+      const paguks = pagup.filter(x => filks.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0).toFixed(2)
+      const realks = realju.filter(x => filks.includes(x.kode)).map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const persenks = ((realks / paguks) * 100).toFixed(2)
+      const hslkerjasama = {
+        kode: unikfilks[0],
+        uraian: 'Pendapatan Hasil Kerja Sama',
+        pagu: isNaN(paguks) ? parseFloat(0).toFixed(2) : paguks,
+        realisasi: isNaN(realks) ? parseFloat(0).toFixed(2) : realks,
+        selisih: isNaN(paguks - realks) ? parseFloat(0).toFixed(2) : paguks - realks,
+        persen: isNaN(persenks) ? parseFloat(0).toFixed(2) : persenks
+      }
+
+      // PSAP 13 DATA PENDAPATAN HIBAH //
+      const filterhb = this.pendhibah?.map((x) => x.kode)
+      const filhb = pagup.filter(x => filterhb.includes(x.kode)).map((x) => x.kode)
+      const unikfilhb = filhb.length ? [...new Set(filhb)] : []
+      const paguhb = pagup.filter(x => filhb.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0).toFixed(2)
+      const realhb = realju.filter(x => filhb.includes(x.kode)).map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const persenhb = ((realhb / paguhb) * 100).toFixed(2)
+      const hslhibah = {
+        kode: unikfilhb,
+        uraian: 'Pendapatan Hibah',
+        pagu: isNaN(paguhb) ? parseFloat(0).toFixed(2) : paguhb,
+        realisasi: isNaN(realhb) ? parseFloat(0).toFixed(2) : realhb,
+        selisih: isNaN(paguhb - realhb) ? parseFloat(0).toFixed(2) : (paguhb - realhb),
+        persen: isNaN(persenhb) ? parseFloat(0).toFixed(2) : persenhb
+      }
+
+      // PSAP 13 DATA PENDAPATAN JASA GIRO //
+      const filtergiro = this.pendjasagiro.map((x) => x.kode)
+      const filgiro = pagup.filter(x => filtergiro.includes(x.kode)).map((x) => x.kode)
+      const unikgiro = filgiro.length ? [...new Set(filgiro)] : []
+      const pagugiro = pagup.filter(x => filgiro.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0).toFixed(2)
+      const realgiro = realju.filter(x => filgiro.includes(x.kode)).map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const persengiro = ((realgiro / pagugiro) * 100).toFixed(2)
+      const hslgiro = {
+        kode: unikgiro,
+        uraian: 'Pendapatan Jasa Giro / Bunga Bank',
+        pagu: isNaN(pagugiro) ? parseFloat(0).toFixed(2) : pagugiro,
+        realisasi: isNaN(realgiro) ? parseFloat(0).toFixed(2) : realgiro,
+        selisih: isNaN(pagugiro - realgiro) ? parseFloat(0).toFixed(2) : pagugiro - realgiro,
+        persen: isNaN(persengiro) ? parseFloat(0).toFixed(2) : persengiro
+      }
+
+      // PSAP 13 DATA PENDAPATAN USAHA LAINNYA //
+      const filterlainya = this.pendusahalain.map((x) => x.kode)
+      const fillainnya = pagup.filter(x => filterlainya.includes(x.kode)).map((x) => x.kode)
+      const uniklainnya = fillainnya.length ? [...new Set(fillainnya)] : []
+      const pagulainnya = pagup.filter(x => fillainnya.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0).toFixed(2)
+      const reallainnya = realju.filter(x => fillainnya.includes(x.kode)).map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const persenlainnya = ((reallainnya / pagulainnya) * 100).toFixed(2)
+      const hsllainnya = {
+        kode: uniklainnya,
+        uraian: 'Pendapatan Usaha Lainnya',
+        pagu: isNaN(pagulainnya) ? parseFloat(0).toFixed(2) : pagulainnya,
+        realisasi: isNaN(reallainnya) ? parseFloat(0).toFixed(2) : reallainnya,
+        selisih: isNaN(pagulainnya - reallainnya) ? parseFloat(0).toFixed(2) : pagulainnya - reallainnya,
+        persen: isNaN(persenlainnya) ? parseFloat(0).toFixed(2) : persenlainnya
+      }
+      psappendapatan.push(jasalayanan, hslkerjasama, hslhibah, hslgiro, hsllainnya)
 
       const psapbarjas = []
       const a = this.psappagubarjas
@@ -461,6 +571,8 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           uraian: databarjas.filter((x) => x.kode === el).map((x) => x.kode3)[0]?.uraian,
           pagu: a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
           nilaisemua: b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
+          selisih: a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) -
+          b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
           persen: isNaN(((b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
             ? 0
             : (((b.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (a.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
@@ -472,6 +584,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       const filbarjaslain = databarjas.filter(x => fillain.includes(x.kode)).map((x) => x.kode)
       const pagulainlain = a.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)
       const realisasilainlain = b.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)
+      const selisihlain = pagulainlain - realisasilainlain
       const persentase = ((b.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0) /
       a.filter(x => fillain.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2)
       const unikbarjaslain = filbarjaslain.length ? [...new Set(filbarjaslain)] : []
@@ -480,10 +593,10 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         uraian: 'Belanja Lain-lain',
         pagu: pagulainlain,
         nilaisemua: realisasilainlain,
+        selisih: selisihlain,
         persen: isNaN(persentase) ? parseFloat(0).toFixed(2) : persentase
       }
       psapbarjas.push(barjaslain)
-      console.log('barjaslain xx', barjaslain)
 
       const psapmodal = []
       const c = this.psappagumodal
@@ -506,6 +619,8 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           uraian: datamodal.filter((x) => x.kode === el).map((x) => x.kode3)[0]?.uraian,
           pagu: c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0),
           nilaisemua: d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
+          selisih: c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0) -
+          d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0),
           persen: isNaN(((d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
             ? 0
             : (((d.filter((x) => x.kode === el)?.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) / (c.filter((x) => x.kode === el)?.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) * 100).toFixed(2))
@@ -545,11 +660,12 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
         this.hasilsilpa = silpa1
       }
       else if (this.reqs.jenislra === 2) {
-        this.psappendapatan = kode3
+        this.psappendapatan = psappendapatan
         this.psapbarjas = psapbarjas
         this.psapmodal = psapmodal
         this.psapsilpa = psapsilpa
-        console.log('paspbelanja', this.psapbarjas)
+        console.log('psappendapatan', this.psappendapatan)
+        console.log('psapbarjas', this.psapbarjas)
         console.log('psapmodal', this.psapmodal)
         console.log('psapsilpa', this.psapsilpa)
       }

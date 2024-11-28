@@ -2,16 +2,38 @@
   <div class="row full-width">
     <div class="q-pa-sm" style="width:25%">
       <app-autocomplete
-        v-model="berdasar"
+        v-model="refJenis"
+        label="Pilih Jenis LRA"
+        autocomplete="nama"
+        option-value="value"
+        option-label="nama"
+        outlined
+        :disable="store.loading"
+        :loading="store.loading"
+        :source="store.jenis"
+        @update:model-value="(val)=>{
+          const valx = parseInt(val)
+          store.reqs.jenislo = valx
+          refData = ''
+          store.reqs.levelberapa = ''
+        }"
+      />
+    </div>
+    <div class="q-pa-sm" style="width:25%">
+      <app-autocomplete
+        v-model="refData"
         label="Pilih Jenis LO"
         autocomplete="nama"
         option-value="value"
         option-label="nama"
         outlined
+        :disable="store.loading || store.reqs.jenislo === 2"
+        :loading="store.loading"
         :source="store.level"
         @update:model-value="(val)=>{
           const aa = parseInt(val)
           store.reqs.levelberapa = aa
+
           console.log('lvl', store.reqs.levelberapa)
         }"
       />
@@ -101,7 +123,8 @@ import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 const CetakLo = defineAsyncComponent(() => import('../printLO/PrintDataLo.vue'))
 const $q = useQuasar()
 const store = useLaporanOperasionalStore()
-const berdasar = ref('')
+const refJenis = ref('')
+const refData = ref('')
 onMounted(() => {
   Promise.all([
     store.getDataLap()
@@ -109,7 +132,11 @@ onMounted(() => {
   ])
 })
 function ambilData () {
-  store.getDataLap()
+  store.getDataLap().then(() => {
+    if (refData.value != null) {
+      refData.value.resetValidation()
+    }
+  })
   // store.hasillevel()
 }
 function tglDari (val) {

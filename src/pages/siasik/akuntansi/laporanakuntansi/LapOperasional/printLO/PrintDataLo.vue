@@ -56,7 +56,12 @@
             <div class="col-auto">
               <div class="row q-col-gutter-md full-width">
                 <div class="items-center full-width">
-                  <listData />
+                  <template v-if="store.reqs.jenislo === 1 && (store.hasilpendapatan.length > 0 && store.hasilbeban.length > 0)">
+                    <listData />
+                  </template>
+                  <template v-else-if="store.reqs.jenislo === 2 && (store.psappendapatan.length > 0 )">
+                    <listDataPsap />
+                  </template>
                 </div>
               </div>
             </div>
@@ -110,6 +115,7 @@ import { onMounted, ref } from 'vue'
 import { useLaporanOperasionalStore } from 'src/stores/siasik/laporan/laporanoperasional/lapoperasional'
 
 import listData from '../inpage/ListDataLo.vue'
+import listDataPsap from '../inpage/ListDataLoPsap.vue'
 const tt = useBukubesarStore()
 const store = useLaporanOperasionalStore()
 onMounted(() => {

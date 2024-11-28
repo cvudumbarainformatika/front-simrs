@@ -142,7 +142,7 @@
               </tr>
               <tr class="bg-grey-2">
                 <td class="text-right text-bold" colspan="2">
-                  SURPLUS / DEFISIT LO
+                  SURPLUS / DEFISIT LRA
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(surplusDefisit().totalpagu) }}
@@ -213,6 +213,29 @@
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(totalSilpa().totalpersen) }}
+                </td>
+              </tr>
+              <tr class="bg-grey-2">
+                <td class="text-right text-bold" colspan="2">
+                  SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpagu) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsblm) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalskg) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsemua) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalselisih) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpersen) }}
                 </td>
               </tr>
             </tbody>
@@ -323,7 +346,7 @@
               </tr>
               <tr class="bg-grey-2">
                 <td class="text-right text-bold" colspan="2">
-                  SURPLUS / DEFISIT LO
+                  SURPLUS / DEFISIT LRA
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(surplusDefisit().totalpagu) }}
@@ -394,6 +417,29 @@
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(totalSilpa().totalpersen) }}
+                </td>
+              </tr>
+              <tr class="bg-grey-2">
+                <td class="text-right text-bold" colspan="2">
+                  SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpagu) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsblm) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalskg) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsemua) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalselisih) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpersen) }}
                 </td>
               </tr>
             </tbody>
@@ -504,7 +550,7 @@
               </tr>
               <tr class="bg-grey-2">
                 <td class="text-right text-bold" colspan="2">
-                  SURPLUS / DEFISIT LO
+                  SURPLUS / DEFISIT LRA
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(surplusDefisit().totalpagu) }}
@@ -575,6 +621,29 @@
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(totalSilpa().totalpersen) }}
+                </td>
+              </tr>
+              <tr class="bg-grey-2">
+                <td class="text-right text-bold" colspan="2">
+                  SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpagu) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsblm) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalskg) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsemua) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalselisih) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpersen) }}
                 </td>
               </tr>
             </tbody>
@@ -685,7 +754,7 @@
               </tr>
               <tr class="bg-grey-2">
                 <td class="text-right text-bold" colspan="2">
-                  SURPLUS / DEFISIT LO
+                  SURPLUS / DEFISIT LRA
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(surplusDefisit().totalpagu) }}
@@ -756,6 +825,29 @@
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(totalSilpa().totalpersen) }}
+                </td>
+              </tr>
+              <tr class="bg-grey-2">
+                <td class="text-right text-bold" colspan="2">
+                  SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpagu) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsblm) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalskg) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsemua) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalselisih) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpersen) }}
                 </td>
               </tr>
             </tbody>
@@ -866,7 +958,7 @@
               </tr>
               <tr class="bg-grey-2">
                 <td class="text-right text-bold" colspan="2">
-                  SURPLUS / DEFISIT LO
+                  SURPLUS / DEFISIT LRA
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(surplusDefisit().totalpagu) }}
@@ -937,6 +1029,29 @@
                 </td>
                 <td class="text-right text-bold">
                   {{ formattanpaRp(totalSilpa().totalpersen) }}
+                </td>
+              </tr>
+              <tr class="bg-grey-2">
+                <td class="text-right text-bold" colspan="2">
+                  SISA LEBIH PEMBIAYAAN ANGGARAN (SILPA)
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpagu) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsblm) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalskg) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalsemua) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalselisih) }}
+                </td>
+                <td class="text-right text-bold">
+                  {{ formattanpaRp(sisaLebih().totalpersen) }}
                 </td>
               </tr>
             </tbody>
@@ -1019,6 +1134,22 @@ function surplusDefisit () {
   const totalsemua = store.hasilpendapatan.map((x) => x.nilaisemua)[0] - store.hasilbelanja.map((x) => x.nilaisemua)[0]
   const totalselisih = store.hasilpendapatan.map((x) => x.selisih)[0] - store.hasilbelanja.map((x) => x.selisih)[0]
   const totalpersen = store.hasilpendapatan.map((x) => x.persen)[0] - store.hasilbelanja.map((x) => x.persen)[0]
+  return {
+    totalpagu,
+    totalsblm,
+    totalskg,
+    totalsemua,
+    totalselisih,
+    totalpersen
+  }
+}
+function sisaLebih () {
+  const totalpagu = (store.hasilpendapatan.map((x) => x.pagupend)[0] - store.hasilbelanja.map((x) => x.pagu)[0]) + store.hasilsilpa.map((x) => x.pagu)[0]
+  const totalsblm = (store.hasilpendapatan.map((x) => x.nilaisblm)[0] - store.hasilbelanja.map((x) => x.nilaisblm)[0]) + store.hasilsilpa.map((x) => x.nilaisblm)[0]
+  const totalskg = (store.hasilpendapatan.map((x) => x.nilaiskg)[0] - store.hasilbelanja.map((x) => x.nilaiskg)[0]) + store.hasilsilpa.map((x) => x.nilaiskg)[0]
+  const totalsemua = (store.hasilpendapatan.map((x) => x.nilaisemua)[0] - store.hasilbelanja.map((x) => x.nilaisemua)[0]) + store.hasilsilpa.map((x) => x.nilaisemua)[0]
+  const totalselisih = (store.hasilpendapatan.map((x) => x.selisih)[0] - store.hasilbelanja.map((x) => x.selisih)[0]) + store.hasilsilpa.map((x) => x.selisih)[0]
+  const totalpersen = (store.hasilpendapatan.map((x) => parseFloat(x.persen))[0] - store.hasilbelanja.map((x) => parseFloat(x.persen))[0]) + store.hasilsilpa.map((x) => parseFloat(x.persen))[0]
   return {
     totalpagu,
     totalsblm,

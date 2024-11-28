@@ -14,6 +14,8 @@
         @update:model-value="(val)=>{
           const valx = parseInt(val)
           store.reqs.jenislra = valx
+          refData = ''
+          store.reqs.levelberapa = ''
         }"
       />
     </div>
