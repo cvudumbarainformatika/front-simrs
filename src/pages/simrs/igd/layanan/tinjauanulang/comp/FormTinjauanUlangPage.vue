@@ -94,9 +94,6 @@
             NIPS (Neonatus Infant Pain Scale)
           </div>
           <div class="col-6">
-            - Ekspresi Wajah
-          </div>
-          <div class="col-6">
             <q-select dense outlined v-model="store.form.ekspresiwajahnips" :options="ekspresiwajahnips" @update:model-value="(val) => nilaiekspresiwajahnips(val)" />
           </div>
           <div class="col-6">
