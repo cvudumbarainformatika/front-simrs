@@ -119,6 +119,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useLaporanOperasionalStore } from 'src/stores/siasik/laporan/laporanoperasional/lapoperasional'
+// eslint-disable-next-line no-unused-vars
 import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 
 const CetakLo = defineAsyncComponent(() => import('../printLO/PrintDataLo.vue'))
@@ -126,12 +127,12 @@ const $q = useQuasar()
 const store = useLaporanOperasionalStore()
 const refJenis = ref('')
 const refData = ref('')
-onMounted(() => {
-  Promise.all([
-    store.getDataLap()
-    // store.getDataBukubesar()
-  ])
-})
+// onMounted(() => {
+//   Promise.all([
+//     store.getDataLap()
+//     // store.getDataBukubesar()
+//   ])
+// })
 function ambilData () {
   store.getDataLap().then(() => {
     if (refData.value != null) {
