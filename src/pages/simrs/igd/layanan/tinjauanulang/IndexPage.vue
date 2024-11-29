@@ -15,7 +15,11 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import ListTinjauanUlangPage from './comp/ListTinjauanUlangPage.vue'
+import { useTinjauanUlangStore } from 'src/stores/simrs/igd/tinjauanulang'
+
+const store = useTinjauanUlangStore()
 
 const props = defineProps({
   pasien: {
@@ -26,6 +30,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
+})
+
+onMounted(() => {
+  store.ambiltriage(props.pasien?.noreg)
 })
 
 </script>

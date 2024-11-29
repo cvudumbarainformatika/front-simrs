@@ -120,7 +120,6 @@ export const useAnamnesis = defineStore('anamnesis', {
     },
 
     editForm (val) {
-      console.log('sasasa', this.form, val)
       this.form = {
         id: val?.id,
         keluhanutama: val?.rs4,
