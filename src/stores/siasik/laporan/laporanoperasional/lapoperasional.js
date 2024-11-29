@@ -115,12 +115,12 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
         api.get('v1/laporan/lapoperasional/getlo', params).then((resp) => {
           console.log('data LO', resp.data)
           if (resp.status === 200) {
-            this.hasilpendapatan = []
-            this.hasilbeban = []
-            this.psappendapatan = []
-            this.psapbeban = []
-            this.psapnonoperasional = []
-            this.psapbebanluarbiasa = []
+            // this.hasilpendapatan = []
+            // this.hasilbeban = []
+            // this.psappendapatan = []
+            // this.psapbeban = []
+            // this.psapnonoperasional = []
+            // this.psapbebanluarbiasa = []
 
             this.datapendapatans = resp.data.pendapatan
             this.databebans = resp.data.beban

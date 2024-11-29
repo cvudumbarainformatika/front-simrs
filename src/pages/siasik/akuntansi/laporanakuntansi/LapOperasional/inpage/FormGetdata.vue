@@ -60,32 +60,32 @@
         @set-display="setSampai"
       />
     </div>
-
-    <div class="q-pa-sm">
-      <app-btn
-        label="Ambil Data"
-        :disable="store.loading"
-        :loading="store.loading"
-        @click="ambilData()"
-      />
-    </div>
-    <div class="q-pa-sm">
-      <q-btn
-        icon="icon-mat-print"
-        color="orange"
-        round
-        size="sm"
-        :disable="store.loading"
-        :loading="store.loading"
-        @click="cetakData()"
-      >
-        <q-tooltip class="bg-orange" :offset="[10, 10]">
-          Cetak
-        </q-tooltip>
-      </q-btn>
-    </div>
-    <div class="q-pa-sm">
-      <!-- <download-excel
+    <div class="row full-width justify-center">
+      <div class="q-pa-sm">
+        <app-btn
+          label="Ambil Data"
+          :disable="store.loading"
+          :loading="store.loading"
+          @click="ambilData()"
+        />
+      </div>
+      <div class="q-pa-sm">
+        <q-btn
+          icon="icon-mat-print"
+          color="orange"
+          round
+          size="sm"
+          :disable="store.loading"
+          :loading="store.loading"
+          @click="cetakData()"
+        >
+          <q-tooltip class="bg-orange" :offset="[10, 10]">
+            Cetak
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="q-pa-sm">
+        <!-- <download-excel
         class="btn"
         :fields="store.fields"
         :fetch="store.getDataBukubesar"
@@ -93,21 +93,22 @@
         :before-finish="store.finishDownload"
         :name="'Buku Besar ' + store.reqs.tahun +'.xls'"
       > -->
-      <q-btn
-        icon="icon-mat-download"
-        color="green"
-        round
-        size="sm"
-        push
-        :disable="store.loading"
-        :loading="store.loading"
-        @click="store.exportExcel= !store.exportExcel"
-      >
-        <q-tooltip class="bg-green" :offset="[10, 10]">
-          Export to Excel
-        </q-tooltip>
-      </q-btn>
+        <q-btn
+          icon="icon-mat-download"
+          color="green"
+          round
+          size="sm"
+          push
+          :disable="store.loading"
+          :loading="store.loading"
+          @click="store.exportExcel= !store.exportExcel"
+        >
+          <q-tooltip class="bg-green" :offset="[10, 10]">
+            Export to Excel
+          </q-tooltip>
+        </q-btn>
       <!-- </download-excel> -->
+      </div>
     </div>
   </div>
   <cetak-lo
@@ -118,6 +119,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useLaporanOperasionalStore } from 'src/stores/siasik/laporan/laporanoperasional/lapoperasional'
+// eslint-disable-next-line no-unused-vars
 import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
 
 const CetakLo = defineAsyncComponent(() => import('../printLO/PrintDataLo.vue'))
@@ -125,12 +127,12 @@ const $q = useQuasar()
 const store = useLaporanOperasionalStore()
 const refJenis = ref('')
 const refData = ref('')
-onMounted(() => {
-  Promise.all([
-    store.getDataLap()
-    // store.getDataBukubesar()
-  ])
-})
+// onMounted(() => {
+//   Promise.all([
+//     store.getDataLap()
+//     // store.getDataBukubesar()
+//   ])
+// })
 function ambilData () {
   store.getDataLap().then(() => {
     if (refData.value != null) {

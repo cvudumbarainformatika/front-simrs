@@ -11,7 +11,7 @@
       <template v-if="store.reqs.jenislo === 1 && (store.hasilpendapatan.length > 0 && store.hasilbeban.length > 0)">
         <listData />
       </template>
-      <template v-else-if="store.reqs.jenislo === 2 && (store.psappendapatan.length > 0 )">
+      <template v-else-if="store.reqs.jenislo === 2 && (store.psappendapatan.length > 0 || store.psapbeban.length > 0 || store.psapnonoperasional > 0 || store.psapbebanluarbiasa > 0 )">
         <listDataPsap />
       </template>
       <template v-else>
