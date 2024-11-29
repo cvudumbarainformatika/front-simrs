@@ -70,7 +70,7 @@ export const useAnamnesis = defineStore('anamnesis', {
     nilairangsangan: 0,
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
-    selection: [],
+    selection: ['Tidak ada Alergi'],
     historys: [],
     historyMeta: null
   }),
