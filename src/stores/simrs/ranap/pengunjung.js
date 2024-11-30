@@ -361,7 +361,9 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       if (findPasien.length) {
         const data = findPasien[0]
         // data[kode] = val
-        if (kode === 'kd_jeniskasus' || kode === 'status') {
+        if (kode === 'kd_jeniskasus' ||
+          kode === 'status' || kode === 'carakeluar' || kode === 'prognosis' ||
+          kode === 'tindaklanjut' || kode === 'diagakhir' || kode === 'sebabkematian') {
           data[kode] = val
         }
         else {

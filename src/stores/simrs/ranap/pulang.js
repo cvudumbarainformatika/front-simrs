@@ -80,9 +80,14 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
           const isi = '3'
           // storePasien.injectDataPasien(pasien, isi, 'fisio')
           storeRanap.injectDataPasien(pasien?.noreg, isi, 'status')
+          storeRanap.injectDataPasien(pasien?.noreg, resp?.data?.result[0]?.rs24, 'prognosis')
+          storeRanap.injectDataPasien(pasien?.noreg, resp?.data?.result[0]?.rs25, 'sebabkematian')
+          storeRanap.injectDataPasien(pasien?.noreg, resp?.data?.result[0]?.rs26, 'diagakhir')
+          storeRanap.injectDataPasien(pasien?.noreg, resp?.data?.result[0]?.rs27, 'tindaklanjut')
+          storeRanap.injectDataPasien(pasien?.noreg, resp?.data?.result[0]?.rs23, 'carakeluar')
           notifSuccess(resp)
           this.loadingOrder = false
-          this.initReset()
+          this.initReset(pasien)
         }
         this.loadingOrder = false
       }
@@ -112,20 +117,20 @@ export const usePasienPulangRanapStore = defineStore('pasien-pulang-ranap-store'
     //   }
     // },
 
-    initReset () {
+    initReset (pasien) {
       this.form = {
 
-        prognosis: null,
-        caraKeluar: null,
-        tglKeluar: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        prognosis: pasien?.prognosis ?? null,
+        caraKeluar: pasien?.carakeluar ?? null,
+        tglKeluar: pasien?.tglKeluar ? date.formatDate(pasien?.tglKeluar, 'YYYY-MM-DD') : date.formatDate(Date.now(), 'YYYY-MM-DD'),
         noSuratMeninggal: null,
         noLp: null,
-        diagnosaAkhir: null,
-        diagnosaPenyebabMeninggal: null,
-        tindakLanjut: null
+        diagnosaAkhir: pasien?.diagakhir ?? null,
+        diagnosaPenyebabMeninggal: pasien?.sebabkematian ?? null,
+        tindakLanjut: pasien?.tindaklanjut ?? null
       }
-      this.search1 = null
-      this.search2 = null
+      this.search1 = pasien?.diagakhir ?? null
+      this.search2 = pasien?.sebabkematian ?? null
 
       const pengunjung = usePengunjungRanapStore()
       const dischargeplanning = useDischargePlanningRanapStore()
