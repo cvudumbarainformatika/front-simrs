@@ -1,5 +1,6 @@
 <script setup>
 import { useQuasar } from 'quasar'
+// eslint-disable-next-line no-unused-vars
 import { formatRp, tglJamFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
@@ -57,6 +58,26 @@ const PHOTO_USER = (item) => {
 
 const hoverredId = ref(null)
 
+function masihBisadiHapus (item) {
+  // (item?.jawaban === null || item?.jawaban === '') && (item?.kdminta === auth || item?.user === auth)
+  // console.log('item', item);
+
+  let hapus = false
+  if (item?.jawaban === null || item?.jawaban === '') {
+    hapus = true
+    if (item?.kdminta === props?.auth || item?.nakesminta?.kdgroupnakes === '2') {
+      hapus = true
+    }
+    else {
+      hapus = false
+    }
+  }
+  else {
+    hapus = false
+  }
+  return hapus
+}
+
 function hapusItem (id) {
   // console.log('id', id)
 
@@ -112,9 +133,9 @@ function hapusItem (id) {
                   <span v-if="item?.jawaban !== null && item?.jawaban !== ''" class="text-weight-bold">Jawaban</span>
                   -- {{ item?.jawaban ?? 'Belum Ada Jawaban' }}
                 </q-item-label>
-                <q-item-label v-if="item?.tarif" caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
+                <!-- <q-item-label v-if="item?.tarif" caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
                   <q-badge>Rp. {{ formatRp(item?.tarif?.subtotal) }}</q-badge>
-                </q-item-label>
+                </q-item-label> -->
               </q-item-section>
 
               <q-item-section side>
@@ -134,7 +155,7 @@ function hapusItem (id) {
           <div v-if="hoverredId === item?.id" class="absolute-top-right bg-white full-height column flex-center q-pa-md" style="border-left: 1px solid #ddd ;">
             <div class="flex q-gutter-md">
               <q-btn
-                v-if="(item?.jawaban === null || item?.jawaban === '') && (item?.kdminta === auth || item?.user === auth)"
+                v-if="masihBisadiHapus(item)"
                 flat
                 round
                 size="md"

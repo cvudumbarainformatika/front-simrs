@@ -100,6 +100,7 @@ function namaPetugas (item) {
 
 onMounted(() => {
   console.log('item', props?.item)
+  form.value.jawaban = props?.item?.jawaban ?? 'Dengan Hormat, ' + '\n' + 'Sesuai Permintaan konsultasi pada Pemeriksaan pasien, kami dapati saat ini' + '\n' + '\n' + '\n' + 'Saran Tindakan medik / Pengobatan : ' + '\n'
 
   if (props?.auth === props?.item?.kddokterkonsul) {
     Promise.all([
