@@ -34,7 +34,7 @@
             Terimakasih Atas Kerjasamanya
           </div>
 
-          <q-form v-if="item?.kddokterkonsul === auth" ref="formRef" class="q-mt-lg" @submit="onSubmit">
+          <q-form v-if="cekYgMenjawab(item)" ref="formRef" class="q-mt-lg" @submit="onSubmit">
             <q-input
               outlined standout="bg-yellow-3"
               v-model="form.jawaban"
@@ -64,6 +64,7 @@ import { onMounted, ref } from 'vue'
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { api } from 'src/boot/axios'
+// eslint-disable-next-line no-unused-vars
 import { notifSuccess } from 'src/modules/utils'
 
 const props = defineProps({
@@ -107,13 +108,28 @@ onMounted(() => {
   }
 })
 
+function cekYgMenjawab (item) {
+  let open = false
+  if (item?.kddokterkonsul === props?.auth) { // jika akun dokter konsulnya maka... jawaban terbuka
+    open = true
+  }
+  else if (item?.nakesminta?.kdgroupnakes === '2') { // jika yg konsultasi adalah perawat maka... jawaban terbuka
+    open = true
+  }
+  else {
+    open = false
+  }
+
+  return open
+}
+
 async function updateFlagRanap (item) {
   const findPasien = kunjunganRanap.pasiens?.find(x => x?.noreg === props?.pasien?.noreg) ?? null
   const konsultasis = findPasien?.konsultasi ?? []
   const target = konsultasis?.find(x => x?.id === item?.id) ?? null
-  const targetIndex = konsultasis?.findIndex(x => x?.id === item?.id)
+  // const targetIndex = konsultasis?.findIndex(x => x?.id === item?.id)
 
-  console.log('find pasien', targetIndex, target)
+  // console.log('find pasien', targetIndex, target)
   if (target) {
     if (target.flag === null || target.flag === '' || target.flag === undefined) {
       target.flag = '1'
@@ -145,13 +161,15 @@ function onSubmit () {
   form.value.kdgroup_ruangan = pasien?.kdgroup_ruangan
   form.value.kdruang = pasien?.kodepoli
   form.value.kodesistembayar = pasien?.kodesistembayar
+  form.value.kdgroupnakesminta = item?.nakesminta?.kdgroupnakes
 
-  // console.log('data', form.value)
+  console.log('data', form.value)
 
   loadingSave.value = true
   return new Promise((resolve, reject) => {
     api.post('v1/simrs/ranap/layanan/konsultasi/updateJawaban', form.value)
       .then(resp => {
+        console.log('resp', resp)
         if (resp.status === 200) {
           kunjunganRanap.injectUpdatean(pasien?.noreg, item?.id, resp.data.result, 'konsultasi')
           loadingSave.value = false

@@ -42,7 +42,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/master/penilaian')
           .then(resp => {
-            console.log('mster penilaian', resp)
+            // console.log('mster penilaian', resp)
 
             if (resp.status === 200) {
               const arr = resp.data

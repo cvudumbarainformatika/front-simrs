@@ -68,7 +68,7 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     async getRuanganRanap () {
       this.loading = true
       const resp = await api.get('v1/satusehat/listRuanganRanap')
-      console.log('ruangan ranap', resp)
+      // console.log('ruangan ranap', resp)
 
       if (resp.status === 200) {
         this.ruanganRanaps = resp.data
