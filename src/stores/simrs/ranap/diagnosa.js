@@ -60,7 +60,7 @@ export const useDiagnosaStore = defineStore('diagnosa-store', {
 
     async getDiagnosaDropdown () {
       const resp = await api.get('v1/simrs/pelayanan/listdiagnosa')
-      console.log('list diagnosa', resp)
+      // console.log('list diagnosa', resp)
 
       if (resp.status === 200) {
         this.listDiagnosa = resp.data

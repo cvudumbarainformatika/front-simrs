@@ -589,7 +589,7 @@ const store = useAnamnesis()
 const emits = defineEmits(['openHistory'])
 
 const refForm = ref()
-console.log('sa', store.form)
+// console.log('sa', store.form)
 // const metode = ref('nrt')
 
 const optionSkreening = ref([
@@ -924,7 +924,7 @@ const iconNyeri = computed(() => {
 })
 
 function chagngereset (val) {
-  console.log('sasasa', val)
+  // console.log('sasasa', val)
   if (val === 'bps') {
     resetnrt()
     resetnips()

@@ -149,7 +149,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/ranap/ruangan/listruanganranap')
           .then(resp => {
-            console.log('ruangan ranap', resp)
+            // console.log('ruangan ranap', resp)
             if (resp.status === 200) {
               const ruangs = resp.data
               this.ruangans = []
@@ -361,7 +361,9 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       if (findPasien.length) {
         const data = findPasien[0]
         // data[kode] = val
-        if (kode === 'kd_jeniskasus' || kode === 'status') {
+        if (kode === 'kd_jeniskasus' ||
+          kode === 'status' || kode === 'carakeluar' || kode === 'prognosis' ||
+          kode === 'tindaklanjut' || kode === 'diagakhir' || kode === 'sebabkematian') {
           data[kode] = val
         }
         else {
@@ -438,7 +440,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
 
     async getNakes () {
       const resp = await api.get('/v1/simrs/master/pegawai/listnakes')
-      console.log('nakes', resp)
+      // console.log('nakes', resp)
 
       if (resp.status === 200) {
         this.nakes = resp.data
@@ -446,7 +448,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     },
     async getNonNakes () {
       const resp = await api.get('/v1/simrs/master/pegawai/listnonnakes')
-      console.log('non nakes', resp)
+      // console.log('non nakes', resp)
 
       if (resp.status === 200) {
         this.nonNakes = resp.data

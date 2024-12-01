@@ -54,7 +54,7 @@ export const usePermintaanBankDarahStore = defineStore('permintaan-bank-darah-st
     async getMaster () {
       try {
         const resp = await api.get('v1/simrs/penunjang/bankdarah/getmaster')
-        console.log('master bank darah', resp)
+        // console.log('master bank darah', resp)
 
         if (resp.status === 200) {
           const data = resp.data

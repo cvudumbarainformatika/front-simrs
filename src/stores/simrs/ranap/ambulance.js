@@ -38,7 +38,7 @@ export const usePermintaanAmbulanStore = defineStore('permintaan-ambulance-store
     async getTujuanAmbulance () {
       try {
         const resp = await api.get('v1/simrs/penunjang/permintaanambulan/gettujuanambulan')
-        console.log('tujuan ambulance', resp)
+        // console.log('tujuan ambulance', resp)
 
         if (resp.status === 200) {
           const data = resp.data

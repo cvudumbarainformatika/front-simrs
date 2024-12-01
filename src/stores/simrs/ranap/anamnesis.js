@@ -1036,7 +1036,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/pelayanan/kandungan/riwayat-obsetri', params)
           .then((resp) => {
-            console.log('rwyt kehamilan', resp)
+            // console.log('rwyt kehamilan', resp)
             if (resp.status === 200) {
               this.riwayatKehamilans = resp.data
               this.initFormRiwayatKehamilan()

@@ -73,8 +73,15 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
       const storeAnamnesis = useAnamnesisRanapStore()
       const storePemeriksaan = usePemeriksaanUmumRanapStore()
       const storePenilaian = usePenilaianRanapStore()
-      const cekTerbaru = this.items?.length ? this.items[0] : null
+      const cekTerbaru = this.items?.length
+        ? this.items?.filter((a) => a?.nakes === nakes)?.length
+          ? this.items?.filter((a) => a?.nakes === nakes)[0]
+          : null
+        : null
       let dataSebelumnya = null
+
+      console.log('cek asessment terbaru', cekTerbaru)
+
       if (!cekTerbaru) {
         dataSebelumnya = dataAwal
         storeAnamnesis.initReset(dataAwal?.anamnesis)
@@ -98,6 +105,7 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         this.form.plann = dataSebelumnya?.plann
         this.form.instruksi = dataSebelumnya?.instruksi
         this.form.o_sambung = dataSebelumnya?.o_sambung
+        this.form.s_sambung = dataSebelumnya?.s_sambung
       }
       else if (nakes === '1') {
         this.initDiagnosaMedisToText(pasien?.diagnosamedis)

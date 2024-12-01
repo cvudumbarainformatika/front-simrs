@@ -1,8 +1,8 @@
-<!-- eslint-disable no-unused-vars -->
 <script setup>
 import { useQuasar } from 'quasar'
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
-import { computed, onMounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { formatRp, tglJamFormat } from 'src/modules/formatter'
+import { computed, ref } from 'vue'
 import { useKonsulRanapStore } from 'src/stores/simrs/ranap/konsul'
 
 const store = useKonsulRanapStore()
@@ -30,6 +30,8 @@ const emits = defineEmits(['detail'])
 
 const filterredTable = computed(() => {
   const arr = props?.pasien?.konsultasi ?? []
+  console.log('arr ', arr)
+
   return arr
 })
 
@@ -55,6 +57,26 @@ const PHOTO_USER = (item) => {
 }
 
 const hoverredId = ref(null)
+
+function masihBisadiHapus (item) {
+  // (item?.jawaban === null || item?.jawaban === '') && (item?.kdminta === auth || item?.user === auth)
+  // console.log('item', item);
+
+  let hapus = false
+  if (item?.jawaban === null || item?.jawaban === '') {
+    hapus = true
+    if (item?.kdminta === props?.auth || item?.nakesminta?.kdgroupnakes === '2') {
+      hapus = true
+    }
+    else {
+      hapus = false
+    }
+  }
+  else {
+    hapus = false
+  }
+  return hapus
+}
 
 function hapusItem (id) {
   // console.log('id', id)
@@ -84,69 +106,76 @@ function hapusItem (id) {
     > -->
     <transition-group name="list">
       <q-card
-        flat bordered class="q-mb-xs cursor-pointer" v-for="(item, i) in filterredTable" :key="i"
+        flat bordered v-for="(item, i) in filterredTable" :key="i"
+        class="q-mb-xs cursor-pointer"
+        :class="{ 'bg-yellow-1': item?.nakesminta?.kdgroupnakes === '2' }"
         @mouseover="hoverredId = item?.id"
         @mouseleave="hoverredId = null"
       >
-        <q-card-section>
-          <q-item class="list-move q-pa-none">
-            <q-item-section avatar>
-              <q-avatar size="50px">
-                <img :src="PHOTO_USER(item?.kddokterkonsul)">
-              </q-avatar>
-            </q-item-section>
+        <div class="full-width">
+          <q-card-section>
+            <q-item class="list-move q-pa-none">
+              <q-item-section avatar>
+                <q-avatar size="50px">
+                  <img :src="PHOTO_USER(item?.kddokterkonsul)">
+                </q-avatar>
+              </q-item-section>
 
-            <q-item-section>
-              <q-item-label lines="1">
-                {{ namaPetugas(item?.kddokterkonsul) }}
-              </q-item-label>
-              <q-item-label caption lines="1">
-                <span class="text-weight-bold">Konsul</span>
-                -- {{ item?.permintaan }}
-              </q-item-label>
-              <q-item-label caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
-                <span v-if="item?.jawaban !== null && item?.jawaban !== ''" class="text-weight-bold">Jawaban</span>
-                -- {{ item?.jawaban ?? 'Belum Ada Jawaban' }}
-              </q-item-label>
-            </q-item-section>
+              <q-item-section>
+                <q-item-label caption lines="1">
+                  From : {{ item?.nakesminta?.nama }}
+                </q-item-label>
+                <q-item-label lines="1">
+                  To : {{ namaPetugas(item?.kddokterkonsul) }}
+                </q-item-label>
 
-            <q-item-section side>
-              <div class="absolute-top-right">
-                1 menit yg lalu
-              </div>
-              <div class="absolute-bottom-right">
-                <q-icon
-                  :name="!item?.id ? 'icon-mat-done' : 'icon-mat-done_all'"
-                  :color="!item?.flag ? 'grey-5' : 'primary'"
-                  size="sm"
-                />
-              </div>
-            </q-item-section>
-          </q-item>
-        </q-card-section>
-        <div v-if="hoverredId === item?.id" class="absolute-top-right bg-white full-height column flex-center q-pa-md" style="border-left: 1px solid #ddd ;">
-          <div class="flex q-gutter-md">
-            <q-btn
-              v-if="(item?.jawaban === null || item?.jawaban === '') && (item?.kdminta === auth || item?.user === auth)"
-              flat
-              round
-              size="md"
-              icon="icon-mat-delete"
-              color="negative"
-              @click="hapusItem(item.id)"
-            >
-              <q-tooltip>Hapus </q-tooltip>
-            </q-btn>
-            <q-btn
-              flat
-              round
-              size="md"
-              icon="icon-mat-sms_black"
-              color="primary"
-              @click="emits('detail', item)"
-            >
-              <q-tooltip>Lihat / Input Jawaban & Detail</q-tooltip>
-            </q-btn>
+                <q-item-label caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
+                  <span v-if="item?.jawaban !== null && item?.jawaban !== ''" class="text-weight-bold">Jawaban</span>
+                  -- {{ item?.jawaban ?? 'Belum Ada Jawaban' }}
+                </q-item-label>
+                <!-- <q-item-label v-if="item?.tarif" caption lines="1" :class="{ 'text-red': item?.jawaban === null || item?.jawaban === ''}">
+                  <q-badge>Rp. {{ formatRp(item?.tarif?.subtotal) }}</q-badge>
+                </q-item-label> -->
+              </q-item-section>
+
+              <q-item-section side>
+                <div class="absolute-top-right">
+                  {{ tglJamFormat(item?.created_at) }}
+                </div>
+                <div class="absolute-bottom-right">
+                  <q-icon
+                    :name="!item?.id ? 'icon-mat-done' : 'icon-mat-done_all'"
+                    :color="!item?.flag ? 'grey-5' : 'primary'"
+                    size="sm"
+                  />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-card-section>
+          <div v-if="hoverredId === item?.id" class="absolute-top-right bg-white full-height column flex-center q-pa-md" style="border-left: 1px solid #ddd ;">
+            <div class="flex q-gutter-md">
+              <q-btn
+                v-if="masihBisadiHapus(item)"
+                flat
+                round
+                size="md"
+                icon="icon-mat-delete"
+                color="negative"
+                @click="hapusItem(item.id)"
+              >
+                <q-tooltip>Hapus </q-tooltip>
+              </q-btn>
+              <q-btn
+                flat
+                round
+                size="md"
+                icon="icon-mat-sms_black"
+                color="primary"
+                @click="emits('detail', item)"
+              >
+                <q-tooltip>Lihat / Input Jawaban & Detail</q-tooltip>
+              </q-btn>
+            </div>
           </div>
         </div>
       </q-card>

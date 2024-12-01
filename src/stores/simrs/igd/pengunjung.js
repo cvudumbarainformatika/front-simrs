@@ -189,6 +189,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].laboratold = resp?.data?.laboratold
             findPasien[0].pemeriksaanfisikpsikologidll = resp?.data?.pemeriksaanfisikpsikologidll
             findPasien[0].konsultasi = resp?.data?.konsuldokterspesialis
+            findPasien[0].tinjauanulang = resp?.data?.tinjauanulang
             // BARU
             // findPasien[0].laporantindakan = resp?.data?.laporantindakan
             // findPasien[0].psikiatri = resp?.data?.psikiatri
@@ -215,8 +216,8 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     },
     injectDataPasien (pasien, val, kode, arr) {
       // console.log('a', pasien)
-      // console.log('b', val)
-      // console.log('kode', this.items)
+      // console.log('b', val.id)
+      // console.log('kode', kode)
       const findPasien = this.items.filter(x => x === pasien)
       // console.log('findPasien', findPasien)
       if (findPasien.length) {
