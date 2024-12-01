@@ -129,8 +129,8 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
             })
           }
           if (this.penerimaans?.length === 1) {
-            this.setForm('isi', this.penerimaans[0]?.penerimaan?.penerimaanrinci[0]?.isi)
-            this.setForm('harga_net', this.penerimaans[0]?.harga?.harga)
+            this.setForm('isi', this.penerimaans[0]?.penerimaan?.penerimaanrinci[0]?.isi ?? 0)
+            this.setForm('harga_net', this.penerimaans[0]?.harga?.harga ?? this.penerimaans[0]?.hargastok)
             this.setForm('kdpbf', this.penerimaans[0]?.penerimaan?.kdpbf)
             this.setForm('nopenerimaan', this.penerimaans[0]?.nopenerimaan)
             this.setForm('stok', parseFloat(this.penerimaans[0]?.total))
