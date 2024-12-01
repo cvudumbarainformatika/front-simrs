@@ -1,36 +1,5 @@
 <template>
   <div class="row full-width justify-center">
-    <div class="q-pa-sm" style="width:50%">
-      <q-input
-        v-model="store.reqs.q"
-        outlined
-        color="warning"
-        dense
-        placeholder="Cari Transaksi..."
-        debounce="0"
-        style="min-width: 300px;"
-        @keyup.enter.stop="store.getDataBukubesar()"
-        @update:model-value="cariData"
-      >
-        <template
-          v-if="store.reqs.q"
-          #append
-        >
-          <q-icon
-            name="icon-mat-close"
-            size="xs"
-            class="cursor-pointer"
-            @click.stop.prevent="clearSearch"
-          />
-        </template>
-        <template #prepend>
-          <q-icon
-            size="sm"
-            name="icon-mat-search"
-          />
-        </template>
-      </q-input>
-    </div>
     <div class="q-pa-sm" style="width:25%">
       <app-input-date-human
         :model="store.reqs.tgl"
@@ -53,147 +22,71 @@
         @set-display="setSampai"
       />
     </div>
-    <div class="q-pa-sm" style="width:50%">
-      <app-autocomplete
-        v-model="berdasar"
-        label="Pilih Jenis Akun"
-        autocomplete="nama"
-        option-value="value"
-        option-label="nama"
-        outlined
+    <div class="q-pa-sm">
+      <app-btn
+        label="Ambil Data"
         :disable="store.loading"
         :loading="store.loading"
-        :source="store.level"
-        @update:model-value="(val)=>{
-          store.reqs.levelberapa = parseInt(val)
-          const arrBaru = store.alllevel?.filter(x=> x?.kodeall3?.length === parseInt(val))
-          console.log('arrBaru', arrBaru)
-          store.optionrekening = arrBaru
-        }"
+        @click="ambilData()"
       />
     </div>
-    <div class="q-pa-sm" style="width:50%">
-      <q-select
-        v-model="store.form.kode"
-        label="Pilih Rekening"
-        autocomplete="uraian"
-        option-value="kodeall3"
-        standout="bg-yellow-3"
-        class="ellipsis-2-lines"
-        use-input
-        outlined
-        dense
-        emit-value
-        map-options
-        input-debounce="0"
-        :option-label="opt => Object(opt) === opt && 'kodeall3' in opt ? opt.kodeall3 + ' - ' + opt.uraian : ''"
-        :disable="store.loading || !store.optionrekening.length"
+    <div class="q-pa-sm">
+      <q-btn
+        icon="icon-mat-print"
+        color="orange"
+        round
+        size="sm"
+        :disable="store.loading"
         :loading="store.loading"
-        :options="store.optionrekening"
-        :key="berdasar"
-        @set-row="store.setPerPage"
-        @filter="filterFn"
-        @clear="store.setFormRekening('kode', null)"
-        @update:model-value="(val)=>{
-          console.log('val cari', val)
-          store.reqs.rekenings = val
-          const arr = store.optionrekening
-          const cari = arr.find(x => x.uraian === val)
-          store.form.uraian = cari.uraian
-
-        }"
+        @click="cetakData()"
       >
-        <template
-          v-if="store.form.kode"
-          #append
-        >
-          <q-icon
-            name="icon-mat-cancel"
-            class="cursor-pointer"
-            @click.stop.prevent="store.setFormRekening('kode', null)"
-          />
-        </template>
-        <template v-else #no-option>
-          <q-item>
-            <q-item-section class="text-grey">
-              Tidak ditemukan
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-select>
+        <q-tooltip class="bg-orange" :offset="[10, 10]">
+          Cetak
+        </q-tooltip>
+      </q-btn>
+    </div>
+    <div class="q-pa-sm">
+      <!-- <download-excel
+      class="btn"
+      :fields="store.fields"
+      :fetch="store.getDataBukubesar"
+      :before-generate="store.startDownload"
+      :before-finish="store.finishDownload"
+      :name="'Buku Besar ' + store.reqs.tahun +'.xls'"
+    > -->
+      <q-btn
+        icon="icon-mat-download"
+        color="green"
+        round
+        size="sm"
+        push
+        :disable="store.loading"
+        :loading="store.loading"
+        @click="store.exportExcel= !store.exportExcel"
+      >
+        <q-tooltip class="bg-green" :offset="[10, 10]">
+          Export to Excel
+        </q-tooltip>
+      </q-btn>
+    <!-- </download-excel> -->
     </div>
   </div>
-  <div class="row full-width justify-center">
-    <div class="row q-pa-sm">
-      <div class="q-pa-sm">
-        <app-btn
-          label="Ambil Data"
-          :disable="store.loading"
-          :loading="store.loading"
-          @click="ambilData()"
-        />
-      </div>
-      <div class="q-pa-sm">
-        <q-btn
-          icon="icon-mat-print"
-          color="orange"
-          round
-          size="sm"
-          :disable="store.loading"
-          :loading="store.loading"
-          @click="cetakData()"
-        >
-          <q-tooltip class="bg-orange" :offset="[10, 10]">
-            Cetak
-          </q-tooltip>
-        </q-btn>
-      </div>
-      <div class="q-pa-sm">
-        <!-- <download-excel
-          class="btn"
-          :fields="store.fields"
-          :fetch="store.getDataBukubesar"
-          :before-generate="store.startDownload"
-          :before-finish="store.finishDownload"
-          :name="'Buku Besar ' + store.reqs.tahun +'.xls'"
-        > -->
-        <q-btn
-          icon="icon-mat-download"
-          color="green"
-          round
-          size="sm"
-          push
-          :disable="store.loading"
-          :loading="store.loading"
-          @click="store.exportExcel= !store.exportExcel"
-        >
-          <q-tooltip class="bg-green" :offset="[10, 10]">
-            Export to Excel
-          </q-tooltip>
-        </q-btn>
-        <!-- </download-excel> -->
-      </div>
-    </div>
-  </div>
-  <cetak-bukubesar
+  <cetak-lpsal
     v-model="store.dialogCetak"
-    :printbb="printbb"
+    :printlpsal="printlpsal"
   />
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
-import { useBukubesarStore } from 'src/stores/siasik/akuntansi/bukubesar/bukubesar'
-// eslint-disable-next-line no-unused-vars
-import { defineAsyncComponent, onMounted, ref, watchEffect } from 'vue'
+import { useLPSALStore } from 'src/stores/siasik/laporan/lpsal/lpsal'
+import { ref, defineAsyncComponent, watchEffect } from 'vue'
 
-const CetakBukubesar = defineAsyncComponent(() => import('../printbukubesar/PrintBukubesar.vue'))
-// eslint-disable-next-line no-unused-vars
+const CetakLpsal = defineAsyncComponent(() => import('../printLPSAL/PrintDataLpsal.vue'))
+const store = useLPSALStore()
 const $q = useQuasar()
-const store = useBukubesarStore()
-const berdasar = ref('')
-const options = ref([])
-// const inpRek = ref(null)
-// const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
+// Model berdasarkan ref agar tidak updte
+// const berdasar = ref('')
+
 function tglDari (val) {
   store.setParameter('tgl', val)
 }
@@ -206,55 +99,28 @@ function tglSampai (val) {
 function setSampai (val) {
   store.display.sampai = val
 }
-
-function cariData (val) {
-  // console.log('ada Hasil Cari', val)
-  store.reqs.q = val
-  if (!store.loading) store.getDataBukubesar(val)
-}
-const clearSearch = () => {
-  store.reqs.q = ''
-  store.getDataBukubesar()
-}
 function ambilData () {
-  store.getDataBukubesar()
-  // store.hasillevel()
+  store.getDataLap()
 }
-
-const printbb = ref(null)
+const printlpsal = ref(null)
 function cetakData () {
   store.dialogCetak = true
 }
-onMounted(() => {
-  Promise.all([
-    options.value = store.optionrekening,
-    store.getAkun()
-    // store.getDataBukubesar()
-  ])
-})
 
-function filterFn (val, update) {
-  console.log('val filter', val)
-  if (val === '') {
-    update(() => {
-      options.value = store.optionrekening
-    })
-    return
-  }
-  if (val === null) {
-    update(() => {
-      options.value = store.optionrekening
-    })
-    return
-  }
-  update(() => {
-    const needle = val.toLowerCase()
-
-    options.value = store.optionrekening.filter(
-      (v) => v.uraian.toLowerCase().indexOf(needle) > -1 || v.kodeall3.toLowerCase().indexOf(needle) > -1
-    )
-  })
-}
+// const jenisData = (val) => {
+//   console.log('jenisData', val)
+//   if (val === '1') {
+//     return store.kodeakun
+//   }
+//   else if (val === '2') {
+//     console.log('kode2', store.kodekelompok)
+//     return store.kodekelompok
+//   }
+//   else if (val === '3') {
+//     console.log('kode3', store.kodejenis)
+//     return store.kodejenis
+//   }
+// }
 function exportToExcel (tableId, filename) {
   // const el = document.getElementById(tableId)
   // const filenames = filename ? filename + '.xls' : 'KartuStokFarmasi.xls'
@@ -288,5 +154,4 @@ watchEffect(() => {
     exportToExcel('tableItem', 'KartuStokFarmasi')
   }
 })
-
 </script>
