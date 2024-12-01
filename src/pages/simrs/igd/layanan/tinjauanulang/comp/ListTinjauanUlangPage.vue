@@ -37,7 +37,7 @@
     </div>
   </div>
   <div v-else class="q-px-xl full-height scroll">
-    <q-timeline :layout="layout" color="secondary">
+    <q-timeline :layout="layout" color="orange">
       <q-timeline-entry heading>
         <q-item-label> Tinjauan Ulang</q-item-label>
         <q-badge text-color="dark" color="indigo" outline>
@@ -54,7 +54,7 @@
         :side="carinjilnap(n++)"
       >
         <div>
-          <q-card dark bordered class="bg-grey-9 my-card">
+          <q-card dark bordered class="bg-cyan-9 my-card">
             <q-card-section>
               <div class="row">
                 <div class="col-12">
@@ -158,10 +158,10 @@
                   Keadaan Pupil : {{ item?.keadaan_pupil ?? '-' }}
                 </div>
                 <div class="col-6">
-                  Mata Kiri :  {{ item?.matakiri }}
+                  Mata Kiri :  {{ item?.reflekcahaya_matakiri }}
                 </div>
                 <div class="col-6">
-                  Mata Kanan : {{ item?.matakanan ?? '-' }}
+                  Mata Kanan : {{ item?.reflekcahaya_matakanan ?? '-' }}
                 </div>
               </div>
               <div class="row">
