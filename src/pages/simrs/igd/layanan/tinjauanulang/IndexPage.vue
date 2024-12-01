@@ -1,15 +1,18 @@
 <template>
-  <div
-    class="full-height q-pa-sm"
-  >
-    <div class="row q-col-gutter-x-xs full-height">
-      <div class="col-12 full-height">
+  <div class="full-height full-width">
+    <div class="row full-height ">
+      <q-card
+        flat
+        bordered
+        square
+        class="col-12 full-height"
+      >
         <ListTinjauanUlangPage
           :key="props.pasien"
           :pasien="props.pasien"
           :loadingaja="loadingaja"
         />
-      </div>
+      </q-card>
     </div>
   </div>
 </template>
@@ -34,6 +37,7 @@ const props = defineProps({
 
 onMounted(() => {
   store.ambiltriage(props.pasien?.noreg)
+  store.ambilanamnese(props.pasien?.noreg)
 })
 
 </script>
