@@ -161,7 +161,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -171,7 +171,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -181,7 +181,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -191,7 +191,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -201,7 +201,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -211,7 +211,7 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
           nilaiskg: parseFloat(el?.subtotal) + parseFloat(nilaip),
           pagupend: parseFloat(pagup?.pagupendapatan),
           nilaisblm: (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
-          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0),
+          nilaisemua: parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm ? parseFloat(sblm?.pendpsebelumnya) : 0) + parseFloat(nilaipseblm),
           selisih: parseFloat(pagup?.pagupendapatan) - (parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)),
           persen: ((parseFloat(el?.subtotal) + parseFloat(nilaip) + (sblm.length ? parseFloat(sblm?.pendpsebelumnya) : 0)) / parseFloat(pagup?.pagupendapatan) * 100).toFixed(2)
         }
@@ -473,6 +473,8 @@ export const useLRAjurnalStore = defineStore('lap_realisasi_anggaran', {
       const pagujs = pagup.filter(x => filterjs.includes(x.kode)).map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)
       const realisasi = realpostingotom.filter(x => filterjs.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0).toFixed(2)
       const realisasix = realju.map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      console.log('real', realisasi)
+      console.log('realxxx', realisasix)
       const prsenjs = (((realisasi - realisasix) / pagujs) * 100).toFixed(2)
       const jasalayanan = {
         kode: unikfilpagujs[0],

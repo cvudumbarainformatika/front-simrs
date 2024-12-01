@@ -233,11 +233,9 @@ const props = defineProps({
 
 onMounted(() => {
   options.value = diag.listDiagnosa
-  Promise.all([
-    // store.getmasterprognosis(),
-    store.getmastercarakeluar(),
-    store.initReset()
-  ])
+  store.getmastercarakeluar().then(() => {
+    store.initReset(props?.pasien)
+  })
 })
 
 const options = ref([])

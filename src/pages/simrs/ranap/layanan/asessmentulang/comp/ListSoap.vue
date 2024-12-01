@@ -22,7 +22,7 @@
             <q-item-section side>
               <div class="flex q-gutter-lg items-center">
                 <div
-                  v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user || auth?.user?.pegawai?.kdpegsimrs === 'sa'"
+                  v-if="auth?.user?.pegawai?.kdpegsimrs === item?.user"
                 >
                   <q-btn round flat size="sm" icon="icon-mat-delete" color="negative" @click="deleteItem(item)">
                     <q-tooltip> Hapus </q-tooltip>
@@ -64,7 +64,7 @@
                       <q-btn
                         v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'"
                         dense bordered outline round icon="icon-mat-edit" size="sm" color="primary" @click="()=> {
-                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user && auth?.user?.pegawai?.kdpegsimrs !== 'sa') {
+                          if (auth?.user?.pegawai?.kdpegsimrs !== item?.user) {
                             notifBottomVue('Maaf ... anda bukan USER Peng-input CPPT ini, Harap Edit Punya Sendiri...');
                             return
                           }
@@ -89,7 +89,7 @@
                           <!-- neonatal -->
                           <item-nyeri :item="item?.anamnesis?.keluhannyeri?.neonatal" v-else-if="item?.anamnesis?.keluhannyeri?.neonatal" />
                           <item-nyeri :item="item?.anamnesis?.keluhannyeri?.kebidanan" v-else-if="item?.anamnesis?.keluhannyeri?.kebidanan" />
-                          <item-nyeri :item="item?.anamnesis?.keluhannyeri?.dewasa" v-else :key="item" />
+                          <item-nyeri :item="item?.anamnesis?.keluhannyeri?.dewasa" v-else />
                         </div>
                       </div>
                       <q-input
@@ -101,7 +101,7 @@
                         stack-label
                         standout="bg-yellow-3"
                         :lazy-rules="true"
-                        rows="5"
+                        rows="8"
                         hide-bottom-space
                         @blur="(val) => {
                           // console.log('val', val?.target?.value);
@@ -139,7 +139,7 @@
                     <q-separator inset />
 
                     <q-card-section class="col full-height scroll">
-                      <div v-if="nakes !== '4' && nakes !== '5' && nakes !== '6'" class="column">
+                      <div v-if="nakes === '1' || nakes === '2' || nakes === '3'" class="column">
                         <div><b>Ku : </b> <span>{{ item?.pemeriksaan?.keadaanUmum }}</span></div>
                         <div><b>BB : </b> <span>{{ item?.pemeriksaan?.bb }} Kg</span></div>
                         <div><b>TB : </b> <span>{{ item?.pemeriksaan?.tb }} Cm</span></div>
@@ -499,45 +499,51 @@ function getNewLine (text) {
 
 const warnaAvatar = (kat) => {
   // item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal'
+  let r = 'accent'
   if (kat === '2') {
-    return 'accent'
+    r = 'accent'
   }
   else if (kat === '1') {
-    return 'primary'
+    r = 'primary'
   }
   else if (kat === '3') {
-    return 'teal'
+    r = 'teal'
   }
   else if (kat === '4') {
-    return 'cokelat'
+    r = 'cokelat'
   }
   else if (kat === '5') {
-    return 'accent'
+    r = 'orange'
   }
   else {
-    return 'dark'
+    r = 'dark'
   }
+
+  return r
 }
 const titleAvatar = (kat) => {
   // item?.nakes==='2'? 'accent' : (item?.nakes==='1'? 'primary' : 'teal'
+  let r = 'Ns'
   if (kat === '2') {
-    return 'Ns'
+    r = 'Ns'
   }
   else if (kat === '1') {
-    return 'Dr'
+    r = 'Dr'
   }
   else if (kat === '3') {
-    return 'Bd'
+    r = 'Bd'
   }
   else if (kat === '4') {
-    return 'Ap'
+    r = 'Ap'
   }
   else if (kat === '5') {
-    return 'Gz'
+    r = 'Gz'
   }
   else {
-    return 'Fs'
+    r = 'Fs'
   }
+
+  return r
 }
 
 const isErrInput = ref(false)

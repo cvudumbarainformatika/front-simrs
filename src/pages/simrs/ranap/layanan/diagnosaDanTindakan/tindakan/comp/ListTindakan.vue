@@ -37,7 +37,7 @@ const filterredTableByTgl = computed(() => {
   const val = store.tanggal
   const arr = props?.pasien?.tindakan
   const filterred = arr?.filter(x => x?.rs3?.includes(val))
-  console.log('hr ini ', filterred)
+  // console.log('hr ini ', filterred)
 
   // return arr
   return filterred

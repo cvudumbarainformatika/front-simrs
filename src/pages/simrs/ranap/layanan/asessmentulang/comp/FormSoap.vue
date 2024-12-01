@@ -216,7 +216,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                   standout="bg-yellow-3"
                   :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
                   :lazy-rules="true"
-                  rows="5"
+                  rows="10"
                   hide-bottom-space
                 />
                 <q-input
@@ -228,7 +228,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
                   stack-label
                   standout="bg-yellow-3"
                   :lazy-rules="true"
-                  rows="8"
+                  rows="10"
                   hide-bottom-space
                 />
               </div>
@@ -396,7 +396,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               standout="bg-yellow-3"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
               :lazy-rules="true"
-              rows="8"
+              rows="10"
               hide-bottom-space
             />
           </q-card-section>
@@ -441,7 +441,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               v-model="store.form.plann"
               outlined
               type="textarea"
-              rows="8"
+              rows="10"
               stack-label
               standout="bg-yellow-3"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
@@ -490,7 +490,7 @@ watch(() => props.pasien?.diagnosamedis, (val) => {
               v-model="store.form.instruksi"
               outlined
               type="textarea"
-              rows="5"
+              rows="10"
               stack-label
               standout="bg-yellow-3"
               :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"

@@ -39,7 +39,7 @@ export const useDischargePlanningRanapStore = defineStore('discharge-planning-ra
 
     async getmasterprognosis () {
       const resp = await api.get('v1/simrs/ranap/layanan/dischargeplanning/getmasterprognosis')
-      console.log('prognosis', resp)
+      // console.log('prognosis', resp)
 
       this.prognosis = resp.data
     },

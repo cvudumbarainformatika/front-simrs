@@ -359,7 +359,7 @@ function surplusDefisit () {
   const totalpagu = (store.psappendapatan.map((x) => parseFloat(x.pagu)).reduce((a, b) => a + b, 0)) - (store.psapbarjas.map((x) => x.pagu).reduce((a, b) => a + b, 0) + store.psapmodal.map((x) => x.pagu).reduce((a, b) => a + b, 0))
   const totalrealisasi = (store.psappendapatan.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) - (store.psapbarjas.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0) + store.psapmodal.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0))
   const totalselisih = totalpagu - totalrealisasi
-  const totalpersen = ((totalrealisasi / totalpagu) * 100).toFixed(2)
+  const totalpersen = (parseFloat(totalPendapatan().totalpersen) - parseFloat(totalBelanja().totalpersen)).toFixed(2)
   return {
     totalpagu,
     totalrealisasi,
@@ -373,8 +373,9 @@ function akhirSilpa () {
   (store.psapsilpa.map((x) => x.pagu).reduce((a, b) => a + b, 0))
   const totalrealisasi = ((store.psappendapatan.map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0)) - (store.psapbarjas.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0) + store.psapmodal.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0))) +
   (store.psapsilpa.map((x) => x.nilaisemua).reduce((a, b) => a + b, 0))
-  const totalselisih = totalpagu - totalrealisasi
-  const totalpersen = ((totalrealisasi / totalpagu) * 100).toFixed(2)
+
+  const totalselisih = parseFloat(totalpagu) - parseFloat(totalrealisasi)
+  const totalpersen = (parseFloat(surplusDefisit().totalpersen) + parseFloat(totalSilpa().totalpersen)).toFixed(2)
   return {
     totalpagu,
     totalrealisasi,

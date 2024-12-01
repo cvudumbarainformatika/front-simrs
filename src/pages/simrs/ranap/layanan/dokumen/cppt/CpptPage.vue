@@ -448,8 +448,14 @@ const jenisPPA = (val) => {
   else if (val === '3') {
     return 'Bidan'
   }
+  else if (val === '4') {
+    return 'Apoteker'
+  }
+  else if (val === '5') {
+    return 'Ahli Gizi'
+  }
   else {
-    return '-'
+    return 'Fisoterapis'
   }
 }
 

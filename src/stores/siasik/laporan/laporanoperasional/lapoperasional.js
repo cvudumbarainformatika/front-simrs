@@ -152,7 +152,7 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
       const kode1 = []
       for (let i = 0; i < pendapatan.length; i++) {
         const el = pendapatan[i]
-        const nilaip = el?.penyesuaian.map(x => parseFloat(x.totalpenyesuaian))
+        const nilaip = el?.penyesuaian.map(x => parseFloat(x.totalpenyesuaian)).reduce((a, b) => a + b, 0)
         // console.log('nilaip', nilaip)
         const obj6 = {
           kode: el?.kode6,
@@ -184,6 +184,7 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
           uraian: el?.lvl1?.uraian,
           nilai: parseFloat(el?.subtotal) + parseFloat(nilaip)
         }
+        // console.log('obj1', obj1)
         kode6.push(obj1, obj2, obj3, obj4, obj5, obj6)
         kode5.push(obj1, obj2, obj3, obj4, obj5)
         kode4.push(obj1, obj2, obj3, obj4)
