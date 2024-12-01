@@ -55,7 +55,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       { nama: 'APBD' },
       { nama: 'APBN' },
       { nama: 'penggantian barang' },
-      { nama: 'Hibah' }
+      { nama: 'Hibah' },
+      { nama: 'Sisa Pasien' }
 
     ],
     gudangs: [

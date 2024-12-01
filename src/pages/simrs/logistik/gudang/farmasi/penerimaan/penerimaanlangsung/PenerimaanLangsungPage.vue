@@ -272,6 +272,7 @@
           ref="refHarga"
           v-model="store.form.harga"
           label="Harga (satuan besar)"
+          :valid="store.form.jenispenerimaan==='Sisa Pasien'"
           outlined
           @update:model-value="setHarga($event)"
         />

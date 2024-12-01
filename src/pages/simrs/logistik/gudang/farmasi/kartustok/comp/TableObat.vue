@@ -370,6 +370,9 @@ function stokFisik (arr) {
 function hitungTotal (row) {
   // const total = hitungSaldoAwal(row?.saldoawal) + (hitungPenerimaan(row?.penerimaanrinci) ?? 0) + (hitungMutasiMasuk(row?.mutasimasuk) ?? 0) + (returResep(row?.resepkeluar) ?? 0) -
   // (hitungMutasiKeluar(row?.mutasikeluar) ?? 0) - hitungResepKeluar(row?.resepkeluar) - (hitungResepRacikanKeluar(row?.resepkeluarracikan) ?? 0)
+  // console.log('masuk', hitungReturDistribusi(row?.persiapanretur))
+  // console.log('keluar', hitungDistribusi(row?.distribusipersiapan))
+
   // eslint-disable-next-line no-unused-vars
   const awal = hitungSaldoAwal(row?.saldoawal)
   // eslint-disable-next-line no-unused-vars

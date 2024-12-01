@@ -18,8 +18,8 @@ export const usePenyesuaianFarmasiStore = defineStore('form_penyesuaian_farmasi'
       kdruang: ''
     },
     obats: [],
-    trans: {},
-    rinci: []
+    obat: null,
+    gudangs: ['Gd-05010100', 'Gd-03010100']
   }),
   actions: {
     setForm (key, val) {
@@ -27,6 +27,24 @@ export const usePenyesuaianFarmasiStore = defineStore('form_penyesuaian_farmasi'
     },
     setparams (key, val) {
       this.params[key] = val
+    },
+    setObat (val) {
+      if (val) {
+        this.obat = {
+          kd_obat: val.kd_obat,
+          nama_obat: val.nama_obat,
+          masuk: val.masuk,
+          keluar: val.keluar,
+          sAawal: val.sAawal,
+          sAkhir: val.sAkhir,
+          sSekarang: val.sSekarang,
+          satuan_b: val.satuan_b,
+          satuan_k: val.satuan_k
+        }
+      }
+      else {
+        this.obat = val
+      }
     },
     // hitung saldo awal
     hitungSaldoAwal (arr) { return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0) },
@@ -165,17 +183,20 @@ export const usePenyesuaianFarmasiStore = defineStore('form_penyesuaian_farmasi'
       const param = { params: this.params }
       this.loadingGetTr = true
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/penyesuaian/transaksi', param)
+        api.get('v1/simrs/farmasinew/penyesuaian/rincian-transaksi', param)
           .then(resp => {
             this.loadingGetTr = false
             console.log('tr', resp?.data)
+            this.obat.mutasiKeluar = resp?.data.mutasiKeluar
+            this.obat.mutasiMasuk = resp?.data.mutasiMasuk
+            this.obat.penerimaan = resp?.data.penerimaan
+            resolve(resp)
           })
           .catch(() => {
             this.loadingGetTr = false
           })
       })
     },
-    getRincianTransaksi () {},
     simpan () {
       this.loading = true
       return new Promise(resolve => {

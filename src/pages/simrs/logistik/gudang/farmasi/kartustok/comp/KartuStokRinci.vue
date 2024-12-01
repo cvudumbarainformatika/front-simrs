@@ -344,8 +344,8 @@ const bentukArrBaru = computed(() => {
     })
     : []
 
-  console.log('ret', app)
-  console.log('user', app?.user?.kdruangansim)
+  // console.log('masuk', returdistribusi?.reduce((a, b) => parseFloat(a) + parseFloat(b.masuk), 0))
+  // console.log('keluar', distribusi?.reduce((a, b) => parseFloat(a) + parseFloat(b.keluar), 0))
 
   const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk,
     resepkeluar, resepracikankeluar, returresep, penyesuaian,
