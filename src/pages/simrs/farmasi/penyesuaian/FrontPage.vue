@@ -273,33 +273,38 @@
                   <div v-for="(rinci,i2) in item?.penerimaanrinci" :key="i2">
                     <div :class="(i2%2===1?'bg-blue-grey-2':(i%2===1?'bg-grey-4':'bg-white')) +' row q-pa-xs'">
                       <div class="col-auto" style="width: 5%;">
-                        NO
+                        {{ i2+1 }}
                       </div>
                       <div class="col-auto" style="width: 10%;">
-                        Kode Obat
+                        {{ rinci?.kdobat }}
                       </div>
                       <div class="col-auto" style="width: 20%;">
-                        Nama Obat
+                        {{ rinci?.masterobat?.nama_obat }}
                       </div>
                       <div class="col-auto" style="width: calc(55%/5);">
-                        No Batch
+                        {{ rinci?.no_batch }}
                       </div>
                       <div class="col-auto" style="width: calc(55%/5);">
-                        Tgl Exp
+                        {{ dateFullFormat(rinci?.tgl_exp) }}
                       </div>
                       <div class="col-auto text-right" style="width: calc(55%/5);">
-                        <div q-mr-xs>
-                          Jumlah
+                        <div class="row q-mr-xs no-wrap items-end">
+                          <div class="col-grow q-mr-xs">
+                            {{ rinci?.jml_terima_k }}
+                          </div>
+                          <div class="col-shrink f-10 text-italic">
+                            ( {{ rinci?.masterobat?.satuan_k }} )
+                          </div>
                         </div>
                       </div>
                       <div class="col-auto text-right" style="width: calc(55%/5);">
                         <div q-mr-xs>
-                          Harga
+                          {{ formatDouble(rinci?.harga_netto,2) }}
                         </div>
                       </div>
                       <div class="col-auto text-right" style="width: calc(55%/5);">
                         <div q-mr-xs>
-                          Subtotal
+                          {{ formatDouble(rinci?.subtotal,2) }}
                         </div>
                       </div>
                       <div class="col-grow text-right" style="width: 10%;">

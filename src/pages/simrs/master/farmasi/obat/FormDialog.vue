@@ -591,6 +591,19 @@
                 inline
               />
             </div>
+            <!-- obat donasi -->
+            <div class="row q-mb-xs items-center">
+              Obat Donasi:
+              <q-option-group
+                v-model="store.form.obat_donasi"
+                :options="store.optionYN"
+                color="primary"
+                class="q-ml-sm"
+                dense
+                inline
+              />
+            </div>
+            <!-- obat Konsinyasi -->
             <div class="row q-mb-xs items-center">
               Status Konsinyasi:
               <q-option-group
@@ -602,6 +615,7 @@
                 inline
               />
             </div>
+
             <!-- Gudang -->
             <div class="row q-mb-xs items-center justify-between">
               di Gudang:

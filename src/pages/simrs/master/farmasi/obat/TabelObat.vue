@@ -372,6 +372,20 @@
                 </div>
               </div>
               <div
+                v-if="row.obat_donasi"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
+              >
+                <div class="">
+                  Obat Donasi
+                </div>
+                <div
+                  class="text-right text-weight-bold"
+                  :class="row.obat_donasi==='1'?'text-green':'text-negative'"
+                >
+                  {{ row.obat_donasi==='1'?'YA':'TIDAK' }}
+                </div>
+              </div>
+              <div
                 v-if="row.status_konsinyasi"
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
