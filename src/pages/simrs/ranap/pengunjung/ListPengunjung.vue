@@ -51,10 +51,14 @@
             <div><b>{{ item?.ruangan }}</b> | <b class="text-primary">{{ item?.ketruangan }}</b> | bed : <b>{{ item.nomorbed }}</b></div>
             <div>Penjamin : <span class="text-primary">{{ item?.sistembayar }}</span></div>
             <div>
-              Tgl Masuk | Lama : <span class="text-accent">{{ item?.tglmasuk }}</span> | <b
-                v-if="item.status===''"
-                class="text-teal"
-              >{{ rangeDate(item?.tglmasuk) }}</b>
+              Tgl Masuk : <span class="text-accent">{{ item?.tglmasuk }}</span>
+              <!-- <b v-else class="text-dark">Tgl Keluar : {{ item?.tglkeluar }}</b> -->
+            </div>
+            <div v-if="item.status===''">
+              <b>Lama : {{ rangeDate(item?.tglmasuk) }}</b>
+            </div>
+            <div v-if="item?.status === '2' || item?.status === '3'">
+              Tgl Keluar : <span class="text-primary">{{ item?.tglkeluar }}</span>
             </div>
             <div v-if="item?.dititipkanke !== null">
               <q-badge outline class="q-mt-sm q-px-sm" dense color="primary">
