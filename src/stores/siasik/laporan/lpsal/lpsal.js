@@ -47,17 +47,17 @@ export const useLPSALStore = defineStore('laporan_sal', {
     },
     setKoreksi () {
       return new Promise((resolve, reject) => {
-        if (this.inputkoreksi !== null || this.inputkoreksi !== '') {
-          this.koreksithnsblm.nilai.push(parseFloat(this.inputkoreksi))
-        }
+        // if (this.inputkoreksi !== null || this.inputkoreksi !== '') {
+        this.koreksithnsblm.nilai.push(parseFloat(this.inputkoreksi))
+        // }
         resolve()
       })
     },
     setLainlain () {
       return new Promise((resolve, reject) => {
-        if (this.inputlainlain !== null || this.inputlainlain !== '') {
-          this.lainlain.nilai.push(parseFloat(this.inputlainlain))
-        }
+        // if (this.inputlainlain !== null || this.inputlainlain !== '') {
+        this.lainlain.nilai.push(parseFloat(this.inputlainlain))
+        // }
         resolve()
       })
     },
@@ -88,9 +88,10 @@ export const useLPSALStore = defineStore('laporan_sal', {
 
             const pembiayaanthnjln = {
               uraian: 'Pembiayaan Tahun Berjalan',
-              nilai: parseFloat(0)
+              nilai: this.inputbiaya
             }
             this.biayatahunjln = pembiayaanthnjln
+            console.log('biayatahunjln', this.biayatahunjln)
 
             const pendp = this.pendapatan.map((x) => parseFloat(x.subtotal)).reduce((a, b) => a + b, 0)
             const blj = this.belanja.map((x) => parseFloat(x.subtotalx)).reduce((a, b) => a + b, 0)

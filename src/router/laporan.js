@@ -170,6 +170,12 @@ const laporan = {
           name: 'laporan.akuntansi.lpsal',
           component: () =>
             import('src/pages/siasik/akuntansi/laporanakuntansi/lpsal/IndexPage.vue')
+        },
+        {
+          path: '/laporan/akuntansi/neraca',
+          name: 'laporan.akuntansi.neraca',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/neraca/IndexPage.vue')
         }
 
       ]

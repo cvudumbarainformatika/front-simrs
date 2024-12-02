@@ -71,6 +71,9 @@ const title = computed(() => {
   else if (page.path === '/laporan/akuntansi/lo') {
     return 'LO'
   }
+  else if (page.path === '/laporan/akuntansi/neraca') {
+    return 'NERACA'
+  }
   else {
     return 'BUKU BESAR'
   }
@@ -85,6 +88,9 @@ const subtitle = computed(() => {
   }
   else if (page.path === '/laporan/akuntansi/lo') {
     return 'Laporan Operasional'
+  }
+  else if (page.path === '/laporan/akuntansi/neraca') {
+    return 'Neraca'
   }
   else {
     return 'Buku Besar Akuntansi'
