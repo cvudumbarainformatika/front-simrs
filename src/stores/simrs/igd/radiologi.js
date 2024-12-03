@@ -31,24 +31,24 @@ export const useRadiologiIgd = defineStore('igd-radiologi', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getRadiologi() {
+    async getRadiologi () {
       const resp = await api.get('v1/simrs/penunjang/radiologi/listpermintaanradiologirinci')
       // console.log('master radiologi', resp)
       if (resp.status === 200) {
         this.namaPemeriksaans = resp.data
       }
     },
-    async getJenisRadiologi() {
+    async getJenisRadiologi () {
       const resp = await api.get('v1/simrs/penunjang/radiologi/jenispermintaanradiologi')
       // console.log('jenis radiologi', resp)
       if (resp.status === 200) {
         this.jenisPemeriksaans = resp.data
       }
     },
-    setForm(key, value) {
+    setForm (key, value) {
       this.form[key] = value
     },
-    async saveRadiologi(pasien) {
+    async saveRadiologi (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -73,12 +73,13 @@ export const useRadiologiIgd = defineStore('igd-radiologi', {
           this.initReset()
         }
         this.loadingSave = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log(error)
         this.loadingSave = false
       }
     },
-    async getNota(pasien) {
+    async getNota (pasien) {
       const params = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/radiologi/getnota', params)
       // console.log('nota rad', resp)
@@ -86,14 +87,14 @@ export const useRadiologiIgd = defineStore('igd-radiologi', {
         this.setNotas(resp.data)
       }
     },
-    setNotas(array) {
+    setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notas = arr.length ? arr : []
       this.notas.push('BARU')
       this.form.nota = this.notas[0]
     },
 
-    async hapusRadiologi(pasien, id) {
+    async hapusRadiologi (pasien, id) {
       const payload = { noreg: pasien?.noreg, id }
       try {
         const resp = await api.post('v1/simrs/penunjang/radiologi/hapusradiologi', payload)
@@ -103,12 +104,13 @@ export const useRadiologiIgd = defineStore('igd-radiologi', {
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         // console.log('hpus rad', error)
       }
     },
 
-    initReset() {
+    initReset () {
       this.form = {
         noreg: '', // rs1
         nota: this.notas.length ? this.notas[0] : '', // rs2

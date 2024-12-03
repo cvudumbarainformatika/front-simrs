@@ -12,6 +12,11 @@ export const usePlannStore = defineStore('plann-store', {
     loadingHistory: false,
     loadingSavePlann: false,
     notas: [],
+    tab: 'SkalaTransfer',
+    tabs: [
+      { name: 'Skala Transfer', page: 'SkalaTransfer' },
+      { name: 'Plann', page: 'Plann' }
+    ],
     form: {
       panel: 'Rawat Inap'
     }

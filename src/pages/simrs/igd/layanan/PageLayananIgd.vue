@@ -180,7 +180,7 @@ const menus = ref([
     name: 'plann-page',
     label: 'Plan',
     icon: 'icon-mat-next_plan',
-    comp: shallowRef(defineAsyncComponent(() => import('../layanan/plann/PlannPage.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/plann/IndexPage.vue')))
   },
   {
     name: 'e-resep-page',
