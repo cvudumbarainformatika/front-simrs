@@ -7,6 +7,17 @@
       <div class="col-4 q-mr-sm q-my-sm ">
         <div class="row q-mb-xs">
           <div class="col-12">
+            <app-input
+              v-model="store.params.q" label="Cari Obat ..." valid outlined @keyup.enter.stop="(val)=>{
+                // console.log('val', val?.target?.value);
+                store.setParams('q', val?.target?.value)
+                if(store.params?.kdruang) store.getLists()
+              }"
+            />
+          </div>
+        </div>
+        <div class="row q-mb-xs">
+          <div class="col-12">
             <app-autocomplete-new
               v-model="store.params.kdruang"
               label="Pilih Gudang / Depo"

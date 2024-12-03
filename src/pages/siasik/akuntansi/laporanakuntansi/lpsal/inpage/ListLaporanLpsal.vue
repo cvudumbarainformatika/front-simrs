@@ -34,7 +34,11 @@
                 <td> - {{ store.biayatahunjln?.uraian }} </td>
                 <td class="text-right">
                   {{ formattanpaRp(isNaN(store.biayatahunjln?.nilai) ? 0 : store.biayatahunjln?.nilai) }}
-                  <q-popup-edit v-model="store.biayatahunjln.nilai" v-slot="scope" @update:model-value="biayaBerjalan">
+                  <q-popup-edit
+                    v-model="store.biayatahunjln.nilai" v-slot="scope" @update:model-value="(val) => {
+                      store.biayatahunjln.nilai = parseFloat(val)
+                    }"
+                  >
                     <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
                   </q-popup-edit>
                 </td>
@@ -51,6 +55,13 @@
                 <td> - {{ store.silpasikpa?.uraian }} </td>
                 <td class="text-right">
                   {{ formattanpaRp(isNaN(store.silpasikpa?.nilai) ? 0 : store.silpasikpa?.nilai) }}
+                  <q-popup-edit
+                    v-model="store.silpasikpa.nilai" v-slot="scope" @update:model-value="(val) => {
+                      store.silpasikpa.nilai = parseFloat(val)
+                    }"
+                  >
+                    <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
+                  </q-popup-edit>
                 </td>
               </tr>
               <tr class="text-bold">
@@ -65,7 +76,11 @@
                 <td> - {{ store.koreksithnsblm?.uraian }} </td>
                 <td class="text-right">
                   {{ formattanpaRp(isNaN(store.koreksithnsblm?.nilai) ? 0 : store.koreksithnsblm?.nilai) }}
-                  <q-popup-edit v-model="store.koreksithnsblm.nilai" v-slot="scope" @update:model-value="koreksi">
+                  <q-popup-edit
+                    v-model="store.koreksithnsblm.nilai" v-slot="scope" @update:model-value="(val) => {
+                      store.koreksithnsblm.nilai = parseFloat(val)
+                    }"
+                  >
                     <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
                   </q-popup-edit>
                 </td>
@@ -74,7 +89,11 @@
                 <td> - {{ store.lainlain?.uraian }} </td>
                 <td class="text-right">
                   {{ formattanpaRp(isNaN(store.lainlain?.nilai) ? 0 : store.lainlain?.nilai) }}
-                  <q-popup-edit v-model="store.lainlain.nilai" v-slot="scope" @update:model-value="lainlain">
+                  <q-popup-edit
+                    v-model="store.lainlain.nilai" v-slot="scope" @update:model-value="(val) => {
+                      store.lainlain.nilai = parseFloat(val)
+                    }"
+                  >
                     <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
                   </q-popup-edit>
                 </td>
@@ -110,6 +129,21 @@ import { ref } from 'vue'
 const separator = ref('cell')
 const store = useLPSALStore()
 
+// function biayaBerjalan (val) {
+//   store.setBiaya().then(() => {
+//     store.inputbiaya = null
+//   })
+// }
+// function koreksi () {
+//   store.setKoreksi().then(() => {
+//     store.inputkoreksi = 0
+//   })
+// }
+// function lainlain () {
+//   store.setLainlain().then(() => {
+//     store.inputlainlain = 0
+//   })
+// }
 function subJumlahPertama () {
   const penggunaansal = store.penggunaansal?.nilai
   const thnberjalan = store.biayatahunjln?.nilai
@@ -134,19 +168,4 @@ function nilaiAkhir () {
   return a + b + c
 }
 
-function biayaBerjalan () {
-  store.setBiaya().then(() => {
-    store.inputbiaya = 0
-  })
-}
-function koreksi () {
-  store.setKoreksi().then(() => {
-    store.inputkoreksi = 0
-  })
-}
-function lainlain () {
-  store.setLainlain().then(() => {
-    store.inputlainlain = 0
-  })
-}
 </script>

@@ -49,6 +49,13 @@ export default function useLayanan (pasien) {
       comp: shallowRef(defineAsyncComponent(() => import('./asessmentulang/IndexPage.vue')))
     },
     {
+      name: 'AsessmentPraBedah',
+      label: 'Asessment Pra Bedah',
+      icon: 'icon-fa-book-medical-solid',
+      nakes: ['1', '2', '3'],
+      comp: shallowRef(defineAsyncComponent(() => import('./prabedah/IndexPage.vue')))
+    },
+    {
       name: 'hais',
       label: 'HAIs',
       icon: 'icon-my-artboard',

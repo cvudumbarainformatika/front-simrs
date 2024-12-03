@@ -50,24 +50,14 @@
           label="LPSAL"
           @click="goTo('/laporan/akuntansi/lpsal')"
         />
-        <!-- <q-btn
-          :outline="path!=='/akuntansi/laporan/lo'"
-          glossy
-          push
-          color="teal"
-          label="LO"
-          size="md"
-          @click="goTo('/akuntansi/laporan/lo')"
-        />
         <q-btn
-          :outline="path!=='/pendaftaran/igd/kunjungan'"
+          :outline="path!=='/laporan/akuntansi/neraca'"
           glossy
-          push
-          color="deep-orange"
-          label="Master  Pasien"
           size="md"
-          @click="goTo('/pendaftaran/igd/kunjungan')"
-        /> -->
+          color="primary"
+          label="Neraca"
+          @click="goTo('/laporan/akuntansi/neraca')"
+        />
       </q-btn-group>
     </div>
   </div>

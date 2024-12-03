@@ -6,16 +6,29 @@
           <div class="col-auto">
             <q-input
               v-model="store.params.q"
-              placeholder="Cari Pasien ..."
+              placeholder="Cari Pasien ... Enter"
               dense
               outlined
               dark
               debounce="400"
               color="white"
-              style="min-width:200px"
-              @keyup.enter.stop="store.getData()"
-              @update:model-value="adaInput"
+              style="min-width:250px"
+              @keyup.enter.stop="adaInput"
             >
+              <template
+                v-if="store.params.q"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-close"
+                  size="xs"
+                  class="cursor-pointer"
+                  @click.stop.prevent="()=> {
+                    store.params.q = null
+                    adaInput()
+                  }"
+                />
+              </template>
               <template #prepend>
                 <q-icon name="icon-mat-search" />
               </template>
@@ -39,7 +52,7 @@
             />
           </div> -->
 
-          <div class="col-auto">
+          <div class="col-auto flex items-center">
             <q-select
               v-model="store.params.status"
               dense
@@ -52,8 +65,25 @@
               emit-value
               map-options
               style="min-width: 150px;"
-              @update:model-value="store.getData()"
+              @update:model-value="(val)=> {
+                // console.log('header status val ', val);
+                store.params.page = 1
+                store.getData()
+              }"
             />
+            <div class="q-ml-sm" v-if="store.params.status === 'Pulang'">
+              <app-input-date
+                :model="store.params.from"
+                label="Tanggal"
+                icon="icon-mat-event"
+                outlined
+                dark
+                @set-model="val=>{
+                  store.params.from=val
+                  store.getData()
+                }"
+              />
+            </div>
           </div>
           <div class="col-auto">
             <q-select
@@ -105,8 +135,9 @@ import { onMounted } from 'vue'
 const store = usePengunjungRanapStore()
 
 function adaInput (val) {
-  console.log('ada input ', val)
-  store.params.q = val
+  // console.log('ada input ', val)
+  // store.params.q = val
+  store.params.page = 1
   if (!store.loading) store.getData()
 }
 onMounted(() => {

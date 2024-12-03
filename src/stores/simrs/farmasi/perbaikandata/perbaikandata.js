@@ -14,6 +14,7 @@ export const usePerbaikanDataFarmasiStore = defineStore('perbaikan_data_farmasi'
     tidakBermasalahs: [],
     meta: { total: 2700 },
     params: {
+      q: '',
       page: 1,
       tahun: '2024',
       bulan: '06',

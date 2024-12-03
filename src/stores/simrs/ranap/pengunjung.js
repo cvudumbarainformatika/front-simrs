@@ -12,8 +12,8 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       page: 1,
       q: '',
       status: 'Belum Pulang',
-      to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
+      to: dateDbFormat(new Date()),
       per_page: 100,
       koderuangan: null
     },
@@ -45,10 +45,13 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const params = { params: this.params }
       try {
         const resp = await api.get('v1/simrs/ranap/ruangan/kunjunganpasien', params)
-        // console.log('ranap', resp)
+        console.log('kunjungan ranap', resp)
         if (resp.status === 200) {
-          this.meta = resp.data
-          this.pasiens = resp.data.data
+          // this.meta = resp.data
+          // this.pasiens = resp.data.data
+          this.meta = resp.data?.data
+          this.pasiens = resp.data?.data?.data
+          this.meta.total = resp?.data?.total
           this.loading = false
         }
         this.loading = false

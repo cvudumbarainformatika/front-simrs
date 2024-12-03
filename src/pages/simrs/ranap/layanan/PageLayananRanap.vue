@@ -43,6 +43,24 @@
             :menus="filterredMenus"
             :menu="menu"
             @click-menu="(val)=> menuDiganti(val)"
+            @history-pasien="historyPasien"
+          />
+        </q-drawer>
+
+        <!-- RIGHT DRAWER ======================================================================================-->
+        <q-drawer
+          v-model="drawerRight"
+          side="right"
+          show-if-above
+          overlay
+          bordered
+          :width="845"
+          :breakpoint="500"
+        >
+          <RightDrawer
+            :key="pasien"
+            :pasien="pasien"
+            @close="drawerRight = false"
           />
         </q-drawer>
 
@@ -112,9 +130,12 @@ import useLayanan from './useLayanan'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
+const RightDrawer = defineAsyncComponent(() => import('./layoutcomp/RightDrawer.vue'))
 const AppLoader = defineAsyncComponent(() => import('src/components/~global/AppLoader.vue'))
 
 const drawer = ref(false)
+const drawerRight = ref(false)
+
 const anamnesis = useAnamnesisRanapStore()
 
 const props = defineProps({
@@ -131,12 +152,24 @@ const props = defineProps({
 const { filterredMenus, menu, store, nakes, menuDiganti } = useLayanan()
 
 const onShow = () => {
-  console.log('pasien pageLayananRanap', props.pasien)
+  // console.log('pasien pageLayananRanap', props.pasien)
   Promise.all([
     anamnesis.getRiwayatKehamilan(props.pasien)
 
   ])
 }
+
+function historyPasien () {
+  drawerRight.value = !drawerRight.value
+}
+// function getIcare () {
+//   store.getDataIcare(props.pasien).then(resp => {
+//     if (resp) {
+//       console.log('anu', resp?.response?.url)
+//       window.open(resp?.response?.url, '_blank')
+//     }
+//   })
+// }
 </script>
 
 <style lang="scss">
