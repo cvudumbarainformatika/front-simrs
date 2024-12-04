@@ -381,7 +381,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const param = {
         params: {
           noka: pasien.noka,
-          dpjp: pasien.kodedokterdpjp
+          dpjp: pasien.datasimpeg?.kddpjp
         }
       }
       return new Promise(resolve => {
