@@ -54,7 +54,7 @@
         :side="carinjilnap(n++)"
       >
         <div>
-          <q-card dark bordered class="bg-cyan-9 my-card">
+          <q-card dark bordered class="bg-cyan-9 my-card full-width">
             <q-card-section>
               <div class="row">
                 <div class="col-12">
