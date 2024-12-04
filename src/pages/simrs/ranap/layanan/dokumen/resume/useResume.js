@@ -381,7 +381,7 @@ export default function useResume (pasien) {
 
     ]
 
-    console.log('resume', res, data)
+    // console.log('resume', res, data)
     // console.log('prognosis', prognosis)
     if (pasien?.prognosis !== '9') { // MALAM / Meninggal
       return res?.filter(x => x?.title !== 'SEBAB KEMATIAN')

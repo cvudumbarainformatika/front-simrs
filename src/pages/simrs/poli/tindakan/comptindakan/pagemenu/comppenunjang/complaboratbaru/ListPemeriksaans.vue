@@ -90,7 +90,7 @@
                       />
                       <q-skeleton v-else type="text" height="30px" width="80px" />
                     </q-item-label>
-                    <q-item-label>
+                    <q-item-label v-if="bisaHapus">
                       <div class="row q-my-xs">
                         <q-btn
                           v-if="!loading"
@@ -185,6 +185,14 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  unit: {
+    type: String,
+    default: null
+  },
+  bisaHapus: {
+    type: Boolean,
+    default: true
   }
 })
 

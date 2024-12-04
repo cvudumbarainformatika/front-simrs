@@ -50,7 +50,7 @@ export default function useLayanan (pasien) {
     },
     {
       name: 'AsessmentPraBedah',
-      label: 'Asessment Pra Bedah',
+      label: 'Asessment Pembedahan',
       icon: 'icon-fa-book-medical-solid',
       nakes: ['1', '2', '3'],
       comp: shallowRef(defineAsyncComponent(() => import('./prabedah/IndexPage.vue')))

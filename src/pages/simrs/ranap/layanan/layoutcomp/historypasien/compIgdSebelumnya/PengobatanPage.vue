@@ -46,7 +46,7 @@ const pengobatans = computed(() => {
     resep = det
   }
   // const f = resep.length ? resep?.map(x => x.mobat?.nama_obat) : []
-  console.log('resep', resep)
+  // console.log('resep', resep)
 
   return resep
 })

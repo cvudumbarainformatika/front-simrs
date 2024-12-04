@@ -43,7 +43,7 @@
         <q-tab-panels v-model="tab" animated class="fit q-pa-none">
           <q-tab-panel v-for="(item, i) in tabs" :key="i" :name="item?.name" class="q-pa-none">
             <app-loader v-if="store?.loading" />
-            <component v-else :is="item?.comp" :pasien="store?.pasienIgd" :no-header="true" />
+            <component v-else :is="item?.comp" :pasien="store?.pasienIgd" :no-header="true" :key="store?.pasienIgd" />
           </q-tab-panel>
         </q-tab-panels>
       </div>

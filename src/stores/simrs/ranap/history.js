@@ -37,7 +37,8 @@ export const useHistoryPasienRanapStore = defineStore('history-pasien-ranap-stor
       }
     },
 
-    setPasienIgd (pasien, hasil) {
+    setPasienIgd (pas, hasil) {
+      const pasien = { ...pas }
       pasien.triage = hasil?.triage
       pasien.anamnesis = hasil?.anamnesis
       pasien.penilaiananamnesis = hasil?.penilaiananamnesis
@@ -63,8 +64,7 @@ export const useHistoryPasienRanapStore = defineStore('history-pasien-ranap-stor
       pasien.pemeriksaanfisikpsikologidll = hasil?.pemeriksaanfisikpsikologidll
       pasien.konsultasi = hasil?.konsuldokterspesialis
       pasien.tinjauanulang = hasil?.tinjauanulang
-
-      this.pasienIgd = pasien
+      this.pasienIgd = { ...pasien }
 
       console.log('pasien igd', this.pasienIgd)
     }
