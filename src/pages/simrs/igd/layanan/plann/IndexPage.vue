@@ -42,6 +42,7 @@
               :is="cekPanel()"
               :key="props.pasien"
               :pasien="props.pasien"
+              :ruangranap="props.ruangranap"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -63,6 +64,10 @@ const store = usePlannStore()
 // const storeTriage = useTriageIgd()
 const props = defineProps({
   pasien: {
+    type: Object,
+    default: null
+  },
+  ruangranap: {
     type: Object,
     default: null
   },
