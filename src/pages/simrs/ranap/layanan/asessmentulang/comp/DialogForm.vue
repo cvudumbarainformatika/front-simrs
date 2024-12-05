@@ -40,23 +40,24 @@
               <span class="text-primary q-ml-sm">Inputan Sebelumnya</span>
             </q-btn> -->
 
-            <!-- <q-btn
+            <q-btn
               rounded
               outline
               color="primary"
               icon="icon-mat-dvr"
+              @click="openLaborat = true"
             >
               <span class="text-primary q-ml-sm">Hasil Laboratorium</span>
-            </q-btn> -->
+            </q-btn>
 
-            <!-- <q-btn
+            <q-btn
               rounded
               outline
               color="primary"
               icon="icon-my-human-hand-bones-svgrepo-com"
             >
               <span class="text-primary q-ml-sm">Hasil Radiologi</span>
-            </q-btn> -->
+            </q-btn>
           </div>
         </q-card-section>
       </div>
@@ -65,14 +66,18 @@
         <FormSoap :pasien="pasien" :kasus="kasus" :nakes="nakes" @exit="emits('exit')" />
       </q-card-section>
     </q-card>
+
+    <!-- dialog laborat -->
+    <DialogLaborat v-model="openLaborat" :pasien="pasien" :nakes="nakes" />
   </q-dialog>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import useForm from './useForm'
 
 const FormSoap = defineAsyncComponent(() => import('./FormSoap.vue'))
+const DialogLaborat = defineAsyncComponent(() => import('./dialogPenunjang/DialogLaborat.vue'))
 
 const props = defineProps({
   pasien: {
@@ -90,6 +95,7 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['exit'])
+const openLaborat = ref(false)
 
 const { store } = useForm(props?.pasien)
 

@@ -28,11 +28,11 @@ const props = defineProps({
 const store = useLaboratPoli()
 
 onMounted(() => {
-  console.log('mmounted index', store.loading)
-
+  // console.log('mmounted index', store.loading)
+  const isRanap = true
   Promise.all([
-    // store.getNota(props?.pasien),
-    store.getData(props?.pasien)
+    // store.getNota(props?.pasien, isRanap),
+    store.getData(props?.pasien, isRanap)
   ])
 })
 

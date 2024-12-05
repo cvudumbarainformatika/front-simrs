@@ -121,6 +121,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.diagnosagizi = data?.diagnosagizi ?? []
         datax.cppt = data?.cppt ?? []
         datax.laborats = data?.laborats ?? []
+        datax.laboratold = data?.laboratold ?? []
         datax.hasilradiologi = data?.hasilradiologi ?? []
         datax.radiologi = data?.radiologi ?? []
         datax.fisio = data?.fisio ?? []

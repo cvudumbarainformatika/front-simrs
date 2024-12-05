@@ -87,6 +87,7 @@
                   side
                   top
                   class="text-right q-py-sm"
+                  v-if="bisaEditHapus"
                 >
                   <q-btn
                     flat
@@ -128,6 +129,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  bisaEditHapus: {
+    type: Boolean,
+    default: true
   }
 })
 
