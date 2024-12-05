@@ -1,6 +1,6 @@
 <template>
   <div class="column full-height">
-    <div class="col-auto">
+    <div v-if="!noHeader" class="col-auto">
       <q-bar>
         <q-btn
           flat
@@ -3909,6 +3909,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  noHeader: {
+    type: Boolean,
+    default: false
   }
 })
 

@@ -69,6 +69,11 @@
           <q-page
             class="contain bg-grey-3"
           >
+            <!-- <div class="close-btn bg-dark text-white cursor-pointer q-pa-xs z-top">
+              <div class="vertical-xxx">
+                History
+              </div>
+            </div> -->
             <!-- <Suspense
               :key="menu.comp"
               timeout="0"
@@ -111,6 +116,14 @@
                 <AppLoader />
               </template>
             </Suspense> -->
+
+            <q-page-sticky position="bottom-right" :offset="[18, 18]">
+              <q-btn @click="historyPasien" padding="xs" icon="icon-mat-history" color="dark">
+                <q-tooltip class="bg-dark text-white">
+                  History Pasien
+                </q-tooltip>
+              </q-btn>
+            </q-page-sticky>
           </q-page>
           <!-- <q-page v-else>
             <AppLoader />
@@ -127,6 +140,7 @@ import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watchEffect
 
 import { useAnamnesisRanapStore } from 'src/stores/simrs/ranap/anamnesis'
 import useLayanan from './useLayanan'
+import { useHistoryPasienRanapStore } from 'src/stores/simrs/ranap/history'
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -137,6 +151,7 @@ const drawer = ref(false)
 const drawerRight = ref(false)
 
 const anamnesis = useAnamnesisRanapStore()
+const history = useHistoryPasienRanapStore()
 
 const props = defineProps({
   pasien: {
@@ -152,10 +167,10 @@ const props = defineProps({
 const { filterredMenus, menu, store, nakes, menuDiganti } = useLayanan()
 
 const onShow = () => {
-  // console.log('pasien pageLayananRanap', props.pasien)
+  console.log('pasien pageLayananRanap', props.pasien)
   Promise.all([
-    anamnesis.getRiwayatKehamilan(props.pasien)
-
+    anamnesis.getRiwayatKehamilan(props.pasien),
+    history.historyIgdBefore(props.pasien)
   ])
 }
 
@@ -178,5 +193,34 @@ function historyPasien () {
     flex-direction: column;
     height: calc(100vh - 50px);
     overflow: hidden;
+}
+
+.close-btn {
+  width: 25px;
+  // height: 64px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50%;
+  position: absolute;
+  right: 0;
+  z-index: 100000;
+  top: 50%;
+  margin-top: -10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+  .vertical-xxx{
+    // writing-mode:tb-rl;
+    // -webkit-transform:rotate(180deg);
+    // -moz-transform:rotate(180deg);
+    // -o-transform: rotate(180deg);
+    // -ms-transform:rotate(180deg);
+    // transform: rotate(180deg);
+    // white-space:nowrap;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+  }
+
 }
 </style>

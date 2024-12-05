@@ -76,7 +76,7 @@ onMounted(() => {
   console.log('qtabs', tabsRef.value.$el.classList.value)
 
   tab.value = tabs.value[0]?.name
-  lab.getNota(props.pasien)
+  lab.getNota(props.pasien, true)
 })
 
 const tabsxx = [

@@ -88,7 +88,8 @@ const cekPanel = () => {
 }
 
 onMounted(() => {
+  const isRanap = false
   lab.getMasterLaborat()
-  lab.getNota(props.pasien)
+  lab.getNota(props.pasien, isRanap)
 })
 </script>

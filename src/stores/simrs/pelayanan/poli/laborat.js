@@ -114,9 +114,9 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       return arr
     },
 
-    async getData (pasien, waiting) {
+    async getData (pasien, isRanap) {
       this.loading = false
-      const payload = { params: { noreg: pasien?.noreg } }
+      const payload = { params: { noreg: pasien?.noreg, isRanap } }
       try {
         const resp = await api.get('v1/simrs/penunjang/laborat/getdata', payload)
         // console.log('data permintaan laborat', resp)
@@ -139,8 +139,8 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       }
     },
 
-    async getNota (pasien) {
-      const payload = { params: { noreg: pasien?.noreg } }
+    async getNota (pasien, isRanap) {
+      const payload = { params: { noreg: pasien?.noreg, isRanap } }
       const resp = await api.get('v1/simrs/penunjang/laborat/getnota', payload)
       // console.log('notalaborat', resp)
       if (resp.status === 200) {

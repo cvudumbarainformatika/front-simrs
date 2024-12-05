@@ -4,7 +4,7 @@
       <q-layout view="lHh Lpr lFf" container class="shadow-2 rounded-borders">
         <q-header elevated>
           <q-bar class="bg-black text-white">
-            <div>Cetak LAPORAN PERUBAHAN SALDO ANGGARAN LEBIH</div>
+            <div>Cetak NERACA</div>
             <q-space />
 
             <q-btn dense flat icon="icon-mat-close" v-close-popup>
@@ -48,7 +48,7 @@
 
               <div class="col-12 q-pt-md">
                 <div class="row justify-center text-weight-bold q-py-xs">
-                  LAPORAN PERUBAHAN SALDO ANGGARAN LEBIH
+                  NERACA
                 </div>
                 <div class="row justify-center text-weight-bold q-py-xs">
                   Periode {{ store.display.dari + ' - ' + store.display.sampai }}
@@ -115,11 +115,11 @@
 import { useBukubesarStore } from 'src/stores/siasik/akuntansi/bukubesar/bukubesar'
 import { onMounted, ref } from 'vue'
 
-import listData from '../inpage/ListLaporanLpsal.vue'
-import { useLPSALStore } from 'src/stores/siasik/laporan/lpsal/lpsal'
+import listData from '../inpage/ListDataNeraca.vue'
+import { useNeracaStore } from 'src/stores/siasik/laporan/neraca/neraca'
 // import listDataPsap from '../inpage/ListDataLoPsap.vue'
 const tt = useBukubesarStore()
-const store = useLPSALStore()
+const store = useNeracaStore()
 onMounted(() => {
   tt.getTtd()
   // store.getDataBukubesar()
@@ -127,7 +127,7 @@ onMounted(() => {
 const printed = ref(false)
 const printObj = {
   id: 'printMe',
-  popTitle: 'Laporan Perubahan Saldo Anggaran Lebih | SIASIK',
+  popTitle: 'NERACA | SIASIK',
   beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...')

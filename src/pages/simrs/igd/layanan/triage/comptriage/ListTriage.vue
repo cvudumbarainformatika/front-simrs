@@ -324,6 +324,7 @@
 
               <q-item-section
                 side
+                v-if="bisaEditHapus"
               >
                 <div class="q-gutter-sm">
                   <q-btn
@@ -366,6 +367,10 @@ const props = defineProps({
   loadingaja: {
     type: Boolean,
     default: false
+  },
+  bisaEditHapus: {
+    type: Boolean,
+    default: true
   }
 })
 
