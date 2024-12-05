@@ -576,7 +576,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       }
       try {
         const resp = await api.get('v1/simrs/ranap/layanan/anamnesis/list', params)
-        console.log('resp anamnesis', resp)
+        // console.log('resp anamnesis', resp)
         if (resp.status === 200) {
           this.items = resp.data
           this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
@@ -1174,7 +1174,7 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
       this.items.ranap = ranap
 
       // const pengunjung = usePengunjungRanapStore()
-      console.log('items', this.items, ranap)
+      // console.log('items', this.items, ranap)
 
       // baru ada penyesuaian nakes
       let form = null

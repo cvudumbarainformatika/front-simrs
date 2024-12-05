@@ -66,7 +66,7 @@ export const useHistoryPasienRanapStore = defineStore('history-pasien-ranap-stor
       pasien.tinjauanulang = hasil?.tinjauanulang
       this.pasienIgd = { ...pasien }
 
-      console.log('pasien igd', this.pasienIgd)
+      // console.log('pasien igd', this.pasienIgd)
     }
   }
 })

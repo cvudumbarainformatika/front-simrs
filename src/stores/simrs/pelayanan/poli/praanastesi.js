@@ -309,7 +309,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       return new Promise((resolve, reject) => {
         api.get('/v1/simrs/pelayanan/praanastesi/getPraAnastesiKunjunganPoli', params)
           .then(resp => {
-            console.log('get pra', resp)
+            // console.log('get pra', resp)
             if (resp.status === 200) {
               this.resultPraAnastesi = resp.data
             }

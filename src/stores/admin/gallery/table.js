@@ -55,7 +55,7 @@ export const useGalleryTable = defineStore('gallery_table', {
       // console.log('columns', this.columns)
     },
 
-    refreshTable() {
+    refreshTable () {
       this.params.page = 1
       this.getDataTable()
     },
@@ -63,7 +63,7 @@ export const useGalleryTable = defineStore('gallery_table', {
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('/v1/galleries', params)
-      console.log('items', resp)
+      // console.log('items', resp)
       if (resp.status === 200) {
         this.items = resp.data.data
         this.meta = resp.data.meta
@@ -79,7 +79,8 @@ export const useGalleryTable = defineStore('gallery_table', {
           notifSuccess(resp)
           this.getDataTable()
         })
-      } catch (error) {
+      }
+      catch (error) {
         console.log('err gallery', error.response)
         notifErr(error.response)
       }
