@@ -38,8 +38,11 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  store.getRadiologi()
-  store.getJenisRadiologi()
-  store.getNota(props.pasien)
+  const iRanap = false
+  Promise.all([
+    store.getRadiologi(),
+    store.getJenisRadiologi(),
+    store.getNota(props.pasien, iRanap)
+  ])
 })
 </script>

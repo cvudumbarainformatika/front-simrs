@@ -18,7 +18,7 @@ export const useHistoryPasienRanapStore = defineStore('history-pasien-ranap-stor
       const params = { params: { noreg: pasien?.noreg } }
       try {
         const resp = await api.get('v1/simrs/ranap/ruangan/data-igd', params)
-        console.log('igd before', resp)
+        // console.log('igd before', resp)
         if (resp.status === 200) {
           let hasil = resp?.data ?? null
           if (JSON.stringify(hasil) === '{}') hasil = null

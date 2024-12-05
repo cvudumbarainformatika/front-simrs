@@ -160,7 +160,7 @@ const props = defineProps({
   }
 })
 
-function pilihPermintaan(val) {
+function pilihPermintaan (val) {
   const arr = val.length ? val.map(x => x.val) : []
   const arr2 = val.length ? val.map(x => x.kode) : []
   const implode = arr.length ? arr.join('-. ') : ''
@@ -171,7 +171,7 @@ function pilihPermintaan(val) {
   modalOpen.value = false
 }
 
-function saveOrderRadiologi() {
+function saveOrderRadiologi () {
   store.saveRadiologi(props.pasien).then(() => {
     formRef.value.resetValidation()
   })

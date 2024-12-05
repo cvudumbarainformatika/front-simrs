@@ -58,6 +58,7 @@
                   </q-item-label>
                 </q-item-section>
                 <q-item-section
+                  v-if="bisaEditHapus"
                   side
                 >
                   <q-btn
@@ -96,6 +97,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  bisaEditHapus: {
+    type: Boolean,
+    default: true
   }
 })
 

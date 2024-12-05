@@ -73,7 +73,7 @@ const tabsRef = ref(null)
 
 onMounted(() => {
   tabsRef?.value?.$el?.classList?.remove('no-wrap')
-  console.log('qtabs', tabsRef.value.$el.classList.value)
+  // console.log('qtabs', tabsRef.value.$el.classList.value)
 
   tab.value = tabs.value[0]?.name
   lab.getNota(props.pasien, true)
