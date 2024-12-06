@@ -108,6 +108,11 @@ const depo = {
           path: '/depo/farmasi/returgudang',
           // name: 'farmasi.stokmindepo',
           component: () => import('pages/simrs/logistik/depo/farmasi/returgudang/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/beritacaraso',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/farmasi/beritaacarastokopname/IndexPage.vue')
         }
       ]
     },

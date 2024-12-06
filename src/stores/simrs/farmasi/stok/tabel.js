@@ -87,6 +87,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
             this.now = resp.data?.now
+            console.log('params', this.params)
+            // 0001320
             if (this.items.length) {
               this.items.forEach(it => {
                 const tglInputFisik = it.tgl_input_fisik
@@ -101,10 +103,18 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
                   it.tgl_input_fisik = date.formatDate(Date.now(), 'YYYY-MM-DD')
                 }
                 it.total = 0
-                it.total = it?.oneopname?.total ?? it?.onestok?.total
                 it.kdruang = it?.oneopname?.kdruang ?? it?.onestok?.kdruang
-                it.harga = it?.oneopname?.harga ?? it?.onestok?.harga
-                it.tglexp = it?.oneopname?.tglexp ?? it?.onestok?.tglexp
+                // jika parameter bulan dan tahun itu sama dengan sekarang, ambil stokreal
+                if (date.formatDate(this.params.from, 'YYYY-MM') === date.formatDate(Date.now(), 'YYYY-MM')) {
+                  it.total = it?.onestok?.total ?? 0
+                  it.harga = it?.onestok?.harga ?? 0
+                  it.tglexp = it?.onestok?.tglexp ?? null
+                }
+                else {
+                  it.total = it?.oneopname?.total ?? 0
+                  it.harga = it?.oneopname?.harga ?? 0
+                  it.tglexp = it?.oneopname?.tglexp ?? null
+                }
                 it.fisik = it?.onefisik?.jumlah ?? null
               })
             }
