@@ -212,7 +212,7 @@
 
           <!-- Tanda Tangan -->
 
-          <div class="col-12">
+          <!-- <div class="col-12">
             <q-separator class="q-my-md" />
             <div class="row q-col-gutter-sm">
               <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
@@ -221,10 +221,9 @@
                     Ttd yg Menyatakan
                   </div>
                   <TtdWacom
-                    ref="wacomRef1"
                     uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'"
                     @signature:ttd-yg-menyatakan="(val)=> {
-                      console.log('ttd yg menyatakan',val);
+                      // console.log('ttd yg menyatakan',val);
                       store.form.ttdYgMenyatakan = val
                     }"
                   />
@@ -264,9 +263,71 @@
                     Ttd Saksi RS
                   </div>
                   <TtdWacom
-                    ref="wacomRef" uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
+                    uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
                     @signature:ttd-saksi-rs="(val)=> {
                       console.log('ttd-saksi-rs',val);
+                      store.form.ttdPetugas = val
+                    }"
+                  />
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="col-12">
+            <q-separator class="q-my-md" />
+            <div class="row q-col-gutter-sm">
+              <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
+                <div class="column full-height flex-center relative-position q-pa-sm">
+                  <div v-if="!store.form.ttdYgMenyatakan" class="absolute-center">
+                    Ttd yg Menyatakan
+                  </div>
+                  <TtdWacom
+                    uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'"
+                    @signature:ttd-yg-menyatakan="(val)=> {
+                      // console.log('ttd yg menyatakan',val);
+                      store.form.ttdYgMenyatakan = val
+                    }"
+                  />
+                </div>
+              </div>
+              <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
+                <div class="column full-height flex-center relative-position q-pa-sm">
+                  <div v-if="!store.form.ttdSaksiPasien" class="absolute-center">
+                    Ttd Saksi Pasien
+                  </div>
+                  <TtdWacom
+                    uuid="ttd-saksi-pasien" :ttd-name="store.form.saksiPasien ?? 'saksi pasien'"
+                    @signature:ttd-saksi-pasien="(val)=> {
+                      // console.log('ttd-saksi-pasien',val);
+                      store.form.ttdSaksiPasien = val
+                    }"
+                  />
+                </div>
+              </div>
+              <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
+                <div class="column full-height flex-center relative-position q-pa-sm">
+                  <div v-if="!store.form.ttdDokter" class="absolute-center">
+                    Ttd Dokter
+                  </div>
+                  <TtdWacom
+                    uuid="ttd-dokter" :ttd-name="store.form.pelaksana ?? 'nama dokter'"
+                    @signature:ttd-dokter="(val)=> {
+                      // console.log('ttd-dokter',val);
+                      store.form.ttdDokter = val
+                    }"
+                  />
+                </div>
+              </div>
+              <div class="col-6" bordered style="min-height: 150px; border: 1px solid #ccc;">
+                <div class="column full-height flex-center relative-position q-pa-sm">
+                  <div v-if="!store.form.ttdPetugas" class="absolute-center">
+                    Ttd Saksi RS
+                  </div>
+                  <TtdWacom
+                    uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
+                    @signature:ttd-saksi-rs="(val)=> {
+                      // console.log('ttd-saksi-rs',val);
                       store.form.ttdPetugas = val
                     }"
                   />
@@ -304,7 +365,7 @@ const TtdWacom = defineAsyncComponent(() => {
   return import('src/components/~static/TtdWacomStu540.vue')
 })
 
-const wacomRef = ref(null)
+// const wacomRef = ref(null)
 onMounted(() => {
   store.initReset(props?.pasien, 'Colonoscopy')
   cekHubunganPasien()

@@ -246,10 +246,9 @@
                     Ttd yg Menyatakan
                   </div>
                   <TtdWacom
-                    ref="wacomRef1"
                     uuid="ttd-yg-menyatakan" :ttd-name="store.form.nama ?? 'yg menyatakan'"
                     @signature:ttd-yg-menyatakan="(val)=> {
-                      console.log('ttd yg menyatakan',val);
+                      // console.log('ttd yg menyatakan',val);
                       store.form.ttdYgMenyatakan = val
                     }"
                   />
@@ -263,7 +262,7 @@
                   <TtdWacom
                     uuid="ttd-saksi-pasien" :ttd-name="store.form.saksiPasien ?? 'saksi pasien'"
                     @signature:ttd-saksi-pasien="(val)=> {
-                      console.log('ttd-saksi-pasien',val);
+                      // console.log('ttd-saksi-pasien',val);
                       store.form.ttdSaksiPasien = val
                     }"
                   />
@@ -277,7 +276,7 @@
                   <TtdWacom
                     uuid="ttd-dokter" :ttd-name="store.form.pelaksana ?? 'nama dokter'"
                     @signature:ttd-dokter="(val)=> {
-                      console.log('ttd-dokter',val);
+                      // console.log('ttd-dokter',val);
                       store.form.ttdDokter = val
                     }"
                   />
@@ -289,9 +288,9 @@
                     Ttd Saksi RS
                   </div>
                   <TtdWacom
-                    ref="wacomRef" uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
+                    uuid="ttd-saksi-rs" :ttd-name="store.form.pengedukasi ?? 'nama saksi rs'"
                     @signature:ttd-saksi-rs="(val)=> {
-                      console.log('ttd-saksi-rs',val);
+                      // console.log('ttd-saksi-rs',val);
                       store.form.ttdPetugas = val
                     }"
                   />
@@ -329,7 +328,7 @@ const TtdWacom = defineAsyncComponent(() => {
   return import('src/components/~static/TtdWacomStu540.vue')
 })
 
-const wacomRef = ref(null)
+// const wacomRef = ref(null)
 onMounted(() => {
   store.initReset(props?.pasien)
   cekHubunganPasien()
