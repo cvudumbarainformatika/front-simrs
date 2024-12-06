@@ -49,6 +49,20 @@
               Tanggal : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
             </q-item-label>
             <div>Penjamin : <span class="text-primary text-weight-bold">{{ item?.sistembayar }}</span></div>
+            <q-item-label v-if="item?.planheder?.length <= 0">
+              Plann : -
+            </q-item-label>
+            <q-item-label v-else>
+              <div v-if="item?.planheder[0]?.rs4 === 'Pulang'">
+                Plann :<i class="text-weight-bold text-cyan">{{ item?.planheder[0]?.rs4 }}</i> Dengan Kondisi: <span class="text-bold"> {{ item?.planheder[0]?.planpulang?.atas_dasar ?? '-' }} </span>
+              </div>
+              <div v-else-if="item?.planheder[0]?.rs4 === 'Rawat Inap'">
+                Plann :<i class="text-weight-bold text-cyan">{{ item?.planheder[0]?.rs4 }} </i> Diruang : <span class="text-bold"> {{ item?.planheder[0]?.planranap?.ruangranap?.rs2 ?? '-' }} </span>
+              </div>
+              <div v-else>
+                Plann :<i class="text-weight-bold text-cyan"> {{ item?.planheder[0]?.rs4 }} :</i> Dirujuk Ke : <span class="text-bold"> {{ item?.planheder[0]?.planrujukan?.di_rujuk_ke }} </span>
+              </div>
+            </q-item-label>
             <div class="text-primary">
               <q-badge
                 v-if="item?.sep"
@@ -62,6 +76,21 @@
                   class="cursor-pointer"
                 />
               </div>
+            </div>
+            <div v-if="item?.kategoritriage !== null && item?.doa === null">
+              <q-badge :color="colortriage(item?.kategoritriage)">
+                {{ item?.kategoritriage }}
+              </q-badge>
+            </div>
+            <div v-else-if="item.doa !== null && item.kategoritriage === null">
+              <q-badge color="black">
+                DOA
+              </q-badge>
+            </div>
+            <div v-else>
+              <q-badge color="primary">
+                {{ item?.kategoritriage ?? '-' }}
+              </q-badge>
             </div>
           </q-item-section>
           <q-item-section
@@ -165,4 +194,22 @@ defineProps({
     default: false
   }
 })
+
+function colortriage (val) {
+  if (val === 'Resusitasi') {
+    return 'red'
+  }
+  else if (val === 'P1') {
+    return 'deep-orange'
+  }
+  else if (val === 'P2') {
+    return 'yellow-7'
+  }
+  else if (val === 'P3') {
+    return 'green'
+  }
+  else {
+    return 'black'
+  }
+}
 </script>
