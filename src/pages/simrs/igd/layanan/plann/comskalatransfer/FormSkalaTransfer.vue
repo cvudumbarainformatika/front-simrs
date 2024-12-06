@@ -36,47 +36,135 @@
             <q-card class="q-px-md q-py-md">
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select v-model="store.form.haemodinamik" label="Haemodinamik" dense outlined :options="optionsHaemodinamik" @update:model-value="(val) => pilihhaemodinamik(val)" />
+                  <q-select
+                    v-model="store.form.haemodinamik"
+                    label="Haemodinamik"
+                    dense
+                    outlined
+                    :options="optionsHaemodinamik"
+                    @update:model-value="(val) => pilihhaemodinamik(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-select v-model="store.form.cardio" label="Cardio" dense outlined :options="optionscardio" @update:model-value="(val) => pilihcardio(val)" />
+                  <q-select
+                    v-model="store.form.cardio"
+                    label="Cardio"
+                    dense
+                    outlined
+                    :options="optionscardio"
+                    @update:model-value="(val) => pilihcardio(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
               </div>
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select v-model="store.form.ecgmonitor" label="ECG Monitor" dense outlined :options="optionsecgmonitor" @update:model-value="(val) => pilihecgmonitor(val)" />
+                  <q-select
+                    v-model="store.form.ecgmonitor"
+                    label="ECG Monitor"
+                    dense
+                    outlined
+                    :options="optionsecgmonitor"
+                    @update:model-value="(val) => pilihecgmonitor(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-select v-model="store.form.intravenusline" label="Intravenusline" dense outlined :options="optionintravenusline" @update:model-value="(val) => pilihintravenusline(val)" />
+                  <q-select
+                    v-model="store.form.intravenusline"
+                    label="Intravenusline"
+                    dense
+                    outlined
+                    :options="optionintravenusline"
+                    @update:model-value="(val) => pilihintravenusline(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
               </div>
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select v-model="store.form.provesionalpacemaker" label="Provesional Pacemaker" dense outlined :options="optionprovesionalpacameker" @update:model-value="(val) => pilihprovesionalpacemaker(val)" />
+                  <q-select
+                    v-model="store.form.provesionalpacemaker"
+                    label="Provesional Pacemaker"
+                    dense
+                    outlined
+                    :options="optionprovesionalpacameker"
+                    @update:model-value="(val) => pilihprovesionalpacemaker(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-select v-model="store.form.respirasi" label="Respirasi" dense outlined :options="optioninRespirasi" @update:model-value="(val) => pilihrespirasi(val)" />
+                  <q-select
+                    v-model="store.form.respirasi"
+                    label="Respirasi"
+                    dense
+                    outlined
+                    :options="optioninRespirasi"
+                    @update:model-value="(val) => pilihrespirasi(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
               </div>
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select label="Airways" v-model="store.form.airways" dense outlined :options="optionaitways" @update:model-value="(val) => pilihairways(val)" />
+                  <q-select
+                    label="Airways"
+                    v-model="store.form.airways"
+                    dense
+                    outlined
+                    :options="optionaitways"
+                    @update:model-value="(val) => pilihairways(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-select label="Respiratory Support" v-model="store.form.respritarorysupport" dense outlined :options="optioninRespiratory" @update:model-value="(val) => pilihrespiratory(val)" />
+                  <q-select
+                    label="Respiratory Support"
+                    v-model="store.form.respritarorysupport"
+                    dense
+                    outlined
+                    :options="optioninRespiratory"
+                    @update:model-value="(val) => pilihrespiratory(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
               </div>
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select label="Kesadaran" v-model="store.form.kesadaran" dense outlined :options="optionkesadaran" @update:model-value="(val) => pilihkesadaran(val)" />
+                  <q-select
+                    label="Kesadaran"
+                    v-model="store.form.kesadaran"
+                    dense
+                    outlined
+                    :options="optionkesadaran"
+                    @update:model-value="(val) => pilihkesadaran(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-select label="Prematuritas" v-model="store.form.prematurias" dense outlined :options="optioninprematuritas" @update:model-value="(val) => pilihprematurias(val)" />
+                  <q-select
+                    label="Prematuritas"
+                    v-model="store.form.prematurias"
+                    dense
+                    outlined
+                    :options="optioninprematuritas"
+                    @update:model-value="(val) => pilihprematurias(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
               </div>
               <div class="row q-mb-sm">
                 <div class="col-6 q-pr-sm">
-                  <q-select label="Lanjut Usia" v-model="store.form.lanjutusia" dense outlined :options="optionLanjutusia" @update:model-value="(val) => pilihlanjutusia(val)" />
+                  <q-select
+                    label="Lanjut Usia"
+                    v-model="store.form.lanjutusia"
+                    dense
+                    outlined
+                    :options="optionLanjutusia"
+                    @update:model-value="(val) => pilihlanjutusia(val)"
+                    :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
+                  />
                 </div>
                 <div class="col-6">
                   Total Score Skala Transfer = {{ store.form.scoretotal }} || Derajat Pasien = {{ store.form.drajattransfer }}

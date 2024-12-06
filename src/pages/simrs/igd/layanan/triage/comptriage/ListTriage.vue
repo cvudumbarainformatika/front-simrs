@@ -276,11 +276,11 @@
                             <span style="color: teal;">({{ item?.scoresistole }}/{{ item?.scorediastole }})</span></span></span>
                         </q-item-label>
                         <q-item-label avatar>
-                          <span class="">Eye : <span class="text-weight-bold">{{ item?.eye ?? '-' }}</span></span>
+                          <span class="">Eye/Verbal/Motorik : <span class="text-weight-bold">{{ item?.eye ?? '-' }}/{{ item?.verbal ?? '-' }}/{{ item?.motorik ?? '-' }}</span></span>
                         </q-item-label>
-                        <q-item-label avatar>
+                        <!-- <q-item-label avatar>
                           <span class="">Verbal : <span class="text-weight-bold">{{ item?.verbal ?? '-' }}</span></span>
-                        </q-item-label>
+                        </q-item-label> -->
                       </div>
                       <div class="col-6">
                         <q-item-label avatar>
@@ -294,9 +294,9 @@
                         <q-item-label avatar>
                           <span class="">Kesadaran  :<span class="text-weight-bold"> {{ item?.kesadaran ?? '-' }} <span style="color: teal;">({{ item?.scorekesadaran }})</span></span></span>
                         </q-item-label>
-                        <q-item-label avatar>
+                        <!-- <q-item-label avatar>
                           <span class="">Motorik : <span class="text-weight-bold">{{ item?.motorik ?? '-' }}</span></span>
-                        </q-item-label>
+                        </q-item-label> -->
                       </div>
                     </div>
                     <q-separator class="q-my-md" />

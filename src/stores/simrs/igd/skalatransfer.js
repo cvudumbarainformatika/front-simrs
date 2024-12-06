@@ -23,13 +23,13 @@ export const useSkalaTransfer = defineStore('igd-skalatransfer', {
     }
   }),
   actions: {
-    async saveData (pasien) {
+    async savePlan (pasien) {
       this.loadingForm = true
       this.form.noreg = pasien ? pasien.noreg : ''
       this.form.norm = pasien ? pasien.norm : ''
 
       try {
-        const resp = await api.post('v1/simrs/pelayanan/igd/simpan', this.form)
+        const resp = await api.post('v1/simrs/planing/igd/simpanskalatransfer', this.form)
         if (resp.status === 200) {
           const storePasien = usePengunjungIgdStore()
           const isi = resp.data.result
@@ -42,6 +42,24 @@ export const useSkalaTransfer = defineStore('igd-skalatransfer', {
       }
       catch (error) {
         this.loadingForm = false
+        notifErr(error)
+      }
+    },
+    initReset () {
+      this.form = {}
+    },
+    async deleteData (pasien, id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/planing/igd/hapusskalatransfer', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          storePasien.hapusDataSkalaTransfer(pasien, id)
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
         notifErr(error)
       }
     }

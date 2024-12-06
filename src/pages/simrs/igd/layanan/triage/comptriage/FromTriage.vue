@@ -543,9 +543,9 @@ const lochea = ref(['Normal', 'Abnormal', 'NA'])
 const proteinurin = ref(['+', '++>', 'NA'])
 const gangguanperilaku = ref(['Tidak Terganggu', 'Tidak Membahayakan', 'Ada Gangguan', 'Membahayakan Diri Sendiri/Orang Lain'])
 
-const eye = ref([1, 2, 3, 4])
-const verbal = ref([1, 2, 3, 4, 5])
-const motorik = ref([1, 2, 3, 4, 5, 6])
+const eye = ref([1, 2, 3, 4, 'x'])
+const verbal = ref([1, 2, 3, 4, 5, 'x'])
+const motorik = ref([1, 2, 3, 4, 5, 6, 'x'])
 const refpernapasan = ref(false)
 
 const optionhamil = ref([
