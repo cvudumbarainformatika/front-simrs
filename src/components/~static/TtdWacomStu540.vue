@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="base64">
     <div :id="uuid" class="boxed relative-position" style="height:35mm;width:60mm;" @click="displaySignatureDetails" title="Click a signature to display its details" />
     <div style="width:60mm;">
       <div class="row">
@@ -598,7 +598,7 @@ export default {
   },
   watch: {
     image: function (val) {
-      console.log('watch image', this.uuid)
+      // console.log('watch image', this.uuid)
 
       this.$emit(`signature:${this.uuid}`, val)
     }

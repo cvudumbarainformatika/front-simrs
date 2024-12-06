@@ -28,7 +28,7 @@ export const useAnatommyRanapStore = defineStore('anatomy-ranap-store', {
 
     async getmasteranatomys () {
       const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/getmasteranatomys')
-      console.log('anatomys', resp)
+      // console.log('anatomys', resp)
 
       this.anatomys = resp.data
     },

@@ -66,7 +66,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    getMaster() {
+    getMaster () {
       return new Promise((resolve, reject) => {
         api.get('/v1/simrs/pelayanan/praanastesi/master')
           .then(resp => {
@@ -84,7 +84,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       })
     },
 
-    reducerMaster(m) {
+    reducerMaster (m) {
       this.master = m
       const kaj = m.filter(x => x.group === 'kajian sistem')?.map(x => {
         return {
@@ -149,7 +149,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         }
       })
     },
-    setPenyulits() {
+    setPenyulits () {
       return new Promise((resolve, reject) => {
         if (this.penyulit !== null || this.penyulit !== '') {
           this.form.penyulitAnastesi.push(this.penyulit)
@@ -157,7 +157,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         resolve()
       })
     },
-    initForm(item) {
+    initForm (item) {
       delete this.form.id
       // ===================
       this.form.skorMallampati = item ? item?.skorMallampati : null
@@ -187,7 +187,8 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       if (!item || item === undefined || item === 'undefined') {
         const m = [...this.master]
         this.reducerMaster(m)
-      } else {
+      }
+      else {
         for (let i = 0; i < item.kajianSistem.length; i++) {
           const el = item.kajianSistem[i]
           this.masterKajian.filter(x => x.kajian === el).map(x => x.check = true)
@@ -246,10 +247,10 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         }
         this.form.id = item.id
 
-        console.log('oooi', this.regional)
+        // console.log('oooi', this.regional)
       }
     },
-    saveData(pasien) {
+    saveData (pasien) {
       this.waiting = true
       return new Promise((resolve, reject) => {
         this.form.noreg = pasien?.noreg
@@ -271,8 +272,9 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         this.form.teknikAnestesia = this.teknikAnestesia.filter(x => x.check) ?? []
         this.form.teknikKhusus = this.teknikKhusus.filter(x => x.check) ?? []
         this.form.pascaAnastesi = this.pascaAnastesi.filter(x => x.check) ?? []
+        this.form.kodepoli = pasien?.kodepoli
 
-        console.log('form', this.form)
+        // console.log('form', this.form)
 
         api.post('/v1/simrs/pelayanan/praanastesi/savedata', this.form)
           .then(resp => {
@@ -283,7 +285,8 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
               const target = this.resultPraAnastesi.find(x => x.id === resp?.data?.id)
               if (check.length) {
                 Object.assign(target, resp?.data)
-              } else {
+              }
+              else {
                 this.resultPraAnastesi.push(resp?.data)
               }
               delete this.form.id
@@ -301,12 +304,12 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           })
       })
     },
-    getData(pasien) {
+    getData (pasien) {
       const params = { params: { noreg: pasien?.noreg } }
       return new Promise((resolve, reject) => {
         api.get('/v1/simrs/pelayanan/praanastesi/getPraAnastesiKunjunganPoli', params)
           .then(resp => {
-            console.log('get pra', resp)
+            // console.log('get pra', resp)
             if (resp.status === 200) {
               this.resultPraAnastesi = resp.data
             }
@@ -318,7 +321,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           })
       })
     },
-    deleteData(id) {
+    deleteData (id) {
       const form = { id }
       return new Promise((resolve, reject) => {
         api.post('/v1/simrs/pelayanan/praanastesi/deletedata', form)

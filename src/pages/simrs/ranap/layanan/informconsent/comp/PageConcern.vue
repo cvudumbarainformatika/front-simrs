@@ -48,7 +48,6 @@
           <div class="col full-height">
             <div class="full-height scroll" v-if="pasien?.informconcern?.length > 0">
               <ListPage
-
                 :pasien="pasien" :menu="menu" @preview="(val) => {
                   store.menuTab = val.jenis
                   store.initReset(pasien)

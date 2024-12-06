@@ -55,6 +55,7 @@
               outline
               color="primary"
               icon="icon-my-human-hand-bones-svgrepo-com"
+              @click="openRadiologi = true"
             >
               <span class="text-primary q-ml-sm">Hasil Radiologi</span>
             </q-btn>
@@ -69,6 +70,7 @@
 
     <!-- dialog laborat -->
     <DialogLaborat v-model="openLaborat" :pasien="pasien" :nakes="nakes" />
+    <DialogRadiologi v-model="openRadiologi" :pasien="pasien" :nakes="nakes" />
   </q-dialog>
 </template>
 
@@ -78,6 +80,7 @@ import useForm from './useForm'
 
 const FormSoap = defineAsyncComponent(() => import('./FormSoap.vue'))
 const DialogLaborat = defineAsyncComponent(() => import('./dialogPenunjang/DialogLaborat.vue'))
+const DialogRadiologi = defineAsyncComponent(() => import('./dialogPenunjang/DialogRadiologi.vue'))
 
 const props = defineProps({
   pasien: {
@@ -96,6 +99,7 @@ const props = defineProps({
 
 const emits = defineEmits(['exit'])
 const openLaborat = ref(false)
+const openRadiologi = ref(false)
 
 const { store } = useForm(props?.pasien)
 

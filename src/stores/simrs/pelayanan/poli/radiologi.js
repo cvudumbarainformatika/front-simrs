@@ -87,16 +87,16 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
         this.loadingSave = false
       }
     },
-    async getNota (pasien) {
-      const params = { params: { noreg: pasien?.noreg } }
+    async getNota (pasien, isRanap) {
+      const params = { params: { noreg: pasien?.noreg, isRanap } }
       const resp = await api.get('v1/simrs/penunjang/radiologi/getnota', params)
       // console.log('nota rad', resp)
       if (resp.status === 200) {
         this.setNotas(resp.data)
       }
     },
-    async getData (pasien) {
-      const params = { params: { noreg: pasien?.noreg } }
+    async getData (pasien, isRanap) {
+      const params = { params: { noreg: pasien?.noreg, isRanap } }
       const resp = await api.get('v1/simrs/penunjang/radiologi/getdata', params)
       // console.log('nota rad', resp)
       if (resp.status === 200) {

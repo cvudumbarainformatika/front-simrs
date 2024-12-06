@@ -184,7 +184,7 @@ const props = defineProps({
   }
 })
 
-console.log('props', props?.pasien)
+// console.log('props', props?.pasien)
 
 function pilihPermintaan (val) {
   const arr = val.length ? val.map(x => x.val) : []

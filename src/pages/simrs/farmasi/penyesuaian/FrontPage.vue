@@ -85,7 +85,7 @@
           label="Ambil Transaksi"
           :loading="store.loadingGetTr"
           :disable="store.loadingGetTr || !store.params.kdobat || !model"
-          @click="store.getTransaksi()"
+          @click="store.getTransaksi();"
         />
       </div>
     </div>
@@ -148,174 +148,154 @@
       <div v-else>
         <!-- penerimaan Gudang -->
         <div v-if="store?.gudangs?.includes( store?.params.kdruang)">
-          <div class="bg-green text-white q-pa-xs f-18 q-mb-sm text-weight-bold">
-            Data Penerimaan
-          </div>
-          <div class="row bg-dark q-pa-xs text-white">
-            <div class="col-shrink" style="width: 5%;">
-              No
+          <div class="bg-green text-white q-pa-xs f-18 q-mb-sm text-weight-bold row items-center justify-between">
+            <div class="col-auto">
+              Data Penerimaan
             </div>
-            <div class="col-grow" style="width: 10%;">
-              <div class="q-mr-xs">
-                Tgl Penerimaan
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(35%/2);">
-              No penerimaan
-            </div>
-            <div class="col-grow" style="width: calc(35%/2);">
-              No Faktur
-            </div>
-            <div class="col-grow" style="width: 25%;">
-              PBF
-            </div>
-            <div class="col-grow text-right" style="width: 10%;">
-              <div class="q-mr-xs">
-                Nilai
-              </div>
-            </div>
-            <div class="col-grow text-center" style="width: 10%;">
-              <div class="q-mr-xs">
-                Status
-              </div>
-            </div>
-            <div class="col-grow text-right" style="width: 5%;">
-              <div class="q-mr-xs">
-                #
-              </div>
+            <div class="col-auto q-mr-md">
+              <app-btn
+                v-if="!store.obat.tampilPenerimaan"
+                label="Show"
+                icon-right="icon-mat-keyboard_arrow_down"
+                color="dark"
+                @click="store.obat.tampilPenerimaan=!store.obat.tampilPenerimaan"
+              />
+              <app-btn
+                v-if="store.obat.tampilPenerimaan"
+                label="Hide"
+                icon-right="icon-mat-keyboard_arrow_up"
+                color="dark"
+                @click="store.obat.tampilPenerimaan=!store.obat.tampilPenerimaan"
+              />
             </div>
           </div>
-          <div v-if="store?.obat?.penerimaan?.length > 0" class="q-pa-xs">
-            <div v-for="(item,i) in store?.obat?.penerimaan" :key="i">
-              <div
-                class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
-                @click="item.expand = !item.expand"
-              >
+          <transition
+            appear
+            enter-active-class="animated slideInUp slow"
+            leave-active-class="animated slideOutRight"
+          >
+            <div v-if="store.obat.tampilPenerimaan">
+              <div class="row bg-dark q-pa-xs text-white">
                 <div class="col-shrink" style="width: 5%;">
-                  {{ i +1 }}
+                  No
                 </div>
                 <div class="col-grow" style="width: 10%;">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tglpenerimaan) }}
+                    Tgl Penerimaan
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(35%/2);">
-                  {{ item?.nopenerimaan }}
+                  No penerimaan
                 </div>
                 <div class="col-grow" style="width: calc(35%/2);">
-                  {{ item?.faktur?.no_faktur ??item?.nomorsurat }}
+                  No Faktur
                 </div>
                 <div class="col-grow" style="width: 25%;">
-                  {{ item?.pihakketiga?.nama??'PBF tidak ditemukan' }}
+                  PBF
                 </div>
                 <div class="col-grow text-right" style="width: 10%;">
                   <div class="q-mr-xs">
-                    {{ formatDouble(parseFloat(item?.faktur?.total_faktur??item?.total_faktur_pbf),2) }}
+                    Nilai
                   </div>
                 </div>
                 <div class="col-grow text-center" style="width: 10%;">
-                  <div v-if="item?.tgl_pembayaran" class="q-mr-xs">
-                    <q-chip dense class="glossy" square color="negative" text-color="white">
-                      Dibayar
-                    </q-chip>
-                  </div>
-                  <div v-else-if="item?.tgl_bast" class="q-mr-xs">
-                    <q-chip dense class="glossy" square color="deep-orange" text-color="white">
-                      Sudah BAST
-                    </q-chip>
-                  </div>
-                  <div v-else class="q-mr-xs">
-                    <q-chip dense class="glossy" square color="orange" text-color="white">
-                      Di kunci
-                    </q-chip>
+                  <div class="q-mr-xs">
+                    Status
                   </div>
                 </div>
-                <div class="col-grow" style="width: 5%;">
-                  <div class="row no-wrap justify-end q-mr-xs">
-                    aksi
+                <div class="col-grow text-right" style="width: 5%;">
+                  <div class="q-mr-xs">
+                    #
                   </div>
                 </div>
               </div>
-              <transition
-                appear
-                enter-active-class="animated slideInUp slow"
-                leave-active-class="animated slideOutRight"
-              >
-                <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                  <div class="q-mx-sm">
-                    <div class="row bg-amber text-weight-bold q-pa-xs">
-                      <div class="col-auto" style="width: 5%;">
-                        NO
-                      </div>
-                      <div class="col-auto" style="width: 10%;">
-                        Kode Obat
-                      </div>
-                      <div class="col-auto" style="width: 20%;">
-                        Nama Obat
-                      </div>
-                      <div class="col-auto" style="width: calc(55%/5);">
-                        No Batch
-                      </div>
-                      <div class="col-auto" style="width: calc(55%/5);">
-                        Tgl Exp
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/5);">
-                        <div q-mr-xs>
-                          Jumlah
-                        </div>
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/5);">
-                        <div q-mr-xs>
-                          Harga
-                        </div>
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/5);">
-                        <div q-mr-xs>
-                          Subtotal
-                        </div>
-                      </div>
-                      <div class="col-grow text-right" style="width: 10%;">
-                        <div class="q-mr-xs">
-                          #
-                        </div>
+              <div v-if="store?.obat?.penerimaan?.length > 0 " class="q-pa-xs">
+                <div v-for="(item,i) in store?.obat?.penerimaan" :key="i">
+                  <div
+                    class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
+                    @click="item.expand = !item.expand"
+                  >
+                    <div class="col-shrink" style="width: 5%;">
+                      {{ i +1 }}
+                    </div>
+                    <div class="col-grow" style="width: 10%;">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tglpenerimaan) }}
                       </div>
                     </div>
-                    <div v-if="item?.penerimaanrinci?.length > 0">
-                      <div v-for="(rinci,i2) in item?.penerimaanrinci" :key="i2">
-                        <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs'">
+                    <div class="col-grow" style="width: calc(35%/2);">
+                      {{ item?.nopenerimaan }}
+                    </div>
+                    <div class="col-grow" style="width: calc(35%/2);">
+                      {{ item?.faktur?.no_faktur ??item?.nomorsurat }}
+                    </div>
+                    <div class="col-grow" style="width: 25%;">
+                      {{ item?.pihakketiga?.nama??'PBF tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow text-right" style="width: 10%;">
+                      <div class="q-mr-xs">
+                        {{ formatDouble(parseFloat(item?.faktur?.total_faktur??item?.total_faktur_pbf),2) }}
+                      </div>
+                    </div>
+                    <div class="col-grow text-center" style="width: 10%;">
+                      <div v-if="item?.tgl_pembayaran" class="q-mr-xs">
+                        <q-chip dense class="glossy" square color="negative" text-color="white">
+                          Dibayar
+                        </q-chip>
+                      </div>
+                      <div v-else-if="item?.tgl_bast" class="q-mr-xs">
+                        <q-chip dense class="glossy" square color="deep-orange" text-color="white">
+                          Sudah BAST
+                        </q-chip>
+                      </div>
+                      <div v-else class="q-mr-xs">
+                        <q-chip dense class="glossy" square color="orange" text-color="white">
+                          Di kunci
+                        </q-chip>
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: 5%;">
+                      <div class="row no-wrap justify-end q-mr-xs">
+                        aksi
+                      </div>
+                    </div>
+                  </div>
+                  <transition
+                    appear
+                    enter-active-class="animated slideInUp slow"
+                    leave-active-class="animated slideOutRight"
+                  >
+                    <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                      <div class="q-mx-sm">
+                        <div class="row bg-amber text-weight-bold q-pa-xs">
                           <div class="col-auto" style="width: 5%;">
-                            {{ i2+1 }}
+                            NO
                           </div>
                           <div class="col-auto" style="width: 10%;">
-                            {{ rinci?.kdobat }}
+                            Kode Obat
                           </div>
                           <div class="col-auto" style="width: 20%;">
-                            {{ rinci?.masterobat?.nama_obat }}
+                            Nama Obat
                           </div>
                           <div class="col-auto" style="width: calc(55%/5);">
-                            {{ rinci?.no_batch }}
+                            No Batch
                           </div>
                           <div class="col-auto" style="width: calc(55%/5);">
-                            {{ dateFullFormat(rinci?.tgl_exp) }}
+                            Tgl Exp
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/5);">
-                            <div class="row q-mr-xs no-wrap items-end">
-                              <div class="col-grow q-mr-xs">
-                                {{ rinci?.jml_terima_k }}
-                              </div>
-                              <div class="col-shrink f-10 text-italic">
-                                ( {{ rinci?.masterobat?.satuan_k }} )
-                              </div>
+                            <div q-mr-xs>
+                              Jumlah
                             </div>
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/5);">
                             <div q-mr-xs>
-                              {{ formatDouble(rinci?.harga_netto,2) }}
+                              Harga
                             </div>
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/5);">
                             <div q-mr-xs>
-                              {{ formatDouble(rinci?.subtotal,2) }}
+                              Subtotal
                             </div>
                           </div>
                           <div class="col-grow text-right" style="width: 10%;">
@@ -324,181 +304,210 @@
                             </div>
                           </div>
                         </div>
+                        <div v-if="item?.penerimaanrinci?.length > 0">
+                          <div v-for="(rinci,i2) in item?.penerimaanrinci" :key="i2">
+                            <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs'">
+                              <div class="col-auto" style="width: 5%;">
+                                {{ i2+1 }}
+                              </div>
+                              <div class="col-auto" style="width: 10%;">
+                                {{ rinci?.kdobat }}
+                              </div>
+                              <div class="col-auto" style="width: 20%;">
+                                {{ rinci?.masterobat?.nama_obat }}
+                              </div>
+                              <div class="col-auto" style="width: calc(55%/5);">
+                                {{ rinci?.no_batch }}
+                              </div>
+                              <div class="col-auto" style="width: calc(55%/5);">
+                                {{ dateFullFormat(rinci?.tgl_exp) }}
+                              </div>
+                              <div class="col-auto text-right" style="width: calc(55%/5);">
+                                <div class="row q-mr-xs no-wrap items-end">
+                                  <div class="col-grow q-mr-xs">
+                                    {{ rinci?.jml_terima_k }}
+                                  </div>
+                                  <div class="col-shrink f-10 text-italic">
+                                    ( {{ rinci?.masterobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-auto text-right" style="width: calc(55%/5);">
+                                <div q-mr-xs>
+                                  {{ formatDouble(rinci?.harga_netto,2) }}
+                                </div>
+                              </div>
+                              <div class="col-auto text-right" style="width: calc(55%/5);">
+                                <div q-mr-xs>
+                                  {{ formatDouble(rinci?.subtotal,2) }}
+                                </div>
+                              </div>
+                              <div class="col-grow text-right" style="width: 10%;">
+                                <div class="q-mr-xs">
+                                  #
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div v-else>
+                          <app-no-data-small />
+                        </div>
                       </div>
                     </div>
-                    <div v-else>
-                      <app-no-data-small />
-                    </div>
-                  </div>
+                  </transition>
                 </div>
-              </transition>
+              </div>
+              <div v-else>
+                <app-no-data-small />
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <app-no-data-small />
-          </div>
+          </transition>
         </div>
         <!-- penerimaan Depo (Mutasi Masuk) -->
         <div v-if="!store?.gudangs?.includes( store?.params.kdruang)">
-          <div class="bg-green text-white q-pa-xs f-18 q-mb-sm text-weight-bold">
-            Data Mutasi Masuk
-          </div>
-          <div class="row bg-dark q-pa-xs text-white">
-            <div class="col-shrink" style="width: 5%;">
-              No
+          <div class="bg-green text-white q-pa-xs f-18 q-mb-sm text-weight-bold row items-center justify-between">
+            <div class="col-auto">
+              Data Mutasi Masuk
             </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Kirim Permintaan
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Distribusi
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Sampai
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/2);">
-              Asal
-            </div>
-            <div class="col-grow" style="width: calc(40%/2);">
-              Tujuan
-            </div>
-            <div class="col-grow text-center" style="width: 10%;">
-              <div class="q-mr-xs">
-                Status
-              </div>
-            </div>
-            <div class="col-grow text-right" style="width: 5%;">
-              <div class="q-mr-xs">
-                #
-              </div>
+            <div class="col-auto q-mr-md">
+              <app-btn
+                v-if="!store.obat.tampilMutasiMasuk"
+                label="Show"
+                icon-right="icon-mat-keyboard_arrow_down"
+                color="dark"
+                @click="store.obat.tampilMutasiMasuk=!store.obat.tampilMutasiMasuk"
+              />
+              <app-btn
+                v-if="store.obat.tampilMutasiMasuk"
+                label="Hide"
+                icon-right="icon-mat-keyboard_arrow_up"
+                color="dark"
+                @click="store.obat.tampilMutasiMasuk=!store.obat.tampilMutasiMasuk"
+              />
             </div>
           </div>
-          <div v-if="store?.obat?.mutasiMasuk?.length > 0" class="q-pa-xs">
-            <div v-for="(item,i) in store?.obat?.mutasiMasuk" :key="i">
-              <div
-                class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
-                @click="()=>{
-                  item.expand = !item.expand
-                  const ada=item?.permintaanrinci.filter(ri=>ri?.expand)
-                  if(ada?.length>0){
-                    item.permintaanrinci.map(ri=>ri.expand=false)
-                  }
-                }"
-              >
+          <transition
+            appear
+            enter-active-class="animated slideInUp slow"
+            leave-active-class="animated slideOutRight"
+          >
+            <div v-if="store.obat.tampilMutasiMasuk">
+              <div class="row bg-dark q-pa-xs text-white">
                 <div class="col-shrink" style="width: 5%;">
-                  {{ i +1 }}
+                  No
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_kirim) }}
+                    Tgl Kirim Permintaan
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_kirim_depo) }}
+                    Tgl Distribusi
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_terima_depo) }}
+                    Tgl Sampai
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(40%/2);">
-                  {{ item?.menuju?.nama ??'Gudang / Depo Tujuan tidak ditemukan' }}
+                  Asal
                 </div>
                 <div class="col-grow" style="width: calc(40%/2);">
-                  {{ item?.asal?.nama ??'Depo Asal tidak ditemukan' }}
+                  Tujuan
                 </div>
                 <div class="col-grow text-center" style="width: 10%;">
-                  <q-chip
-                    dense class="glossy" square
-                    :color="warna(item?.flag)"
-                    :text-color="warnaText(item?.flag)"
-                  >
-                    {{ textNya(item?.flag) }}
-                  </q-chip>
+                  <div class="q-mr-xs">
+                    Status
+                  </div>
                 </div>
-                <div class="col-grow" style="width: 5%;">
-                  <div class="row no-wrap justify-end q-mr-xs">
-                    aksi
+                <div class="col-grow text-right" style="width: 5%;">
+                  <div class="q-mr-xs">
+                    #
                   </div>
                 </div>
               </div>
-              <transition
-                appear
-                enter-active-class="animated slideInUp slow"
-                leave-active-class="animated slideOutRight"
-              >
-                <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                  <div class="q-ml-sm q-my-sm">
-                    <div class="row bg-amber text-weight-bold q-pa-xs">
-                      <div class="col-auto" style="width: 5%;">
-                        NO
-                      </div>
-                      <div class="col-auto" style="width: 10%;">
-                        Kode Obat
-                      </div>
-                      <div class="col-auto" style="width: 20%;">
-                        Nama Obat
-                      </div>
-                      <div class="col-auto" style="width: calc(55%/3);">
-                        Tgl Distribusi
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/3);">
-                        <div q-mr-xs>
-                          Jumlah
-                        </div>
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/3);">
-                        <div q-mr-xs>
-                          Diverif
-                        </div>
-                      </div>
-                      <div class="col-grow text-right" style="width: 10%;">
-                        <div class="q-mr-xs">
-                          #
-                        </div>
+              <div v-if="store?.obat?.mutasiMasuk?.length > 0 " class="q-pa-xs">
+                <div v-for="(item,i) in store?.obat?.mutasiMasuk" :key="i">
+                  <div
+                    class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
+                    @click="()=>{
+                      item.expand = !item.expand
+                      const ada=item?.permintaanrinci.filter(ri=>ri?.expand)
+                      if(ada?.length>0){
+                        item.permintaanrinci.map(ri=>ri.expand=false)
+                      }
+                    }"
+                  >
+                    <div class="col-shrink" style="width: 5%;">
+                      {{ i +1 }}
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_kirim) }}
                       </div>
                     </div>
-                    <div v-if="item?.permintaanrinci?.length > 0">
-                      <div v-for="(rinci,i2) in item?.permintaanrinci" :key="i2">
-                        <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'" @click="rinci.expand = !rinci.expand">
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_kirim_depo) }}
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_terima_depo) }}
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/2);">
+                      {{ item?.menuju?.nama ??'Gudang / Depo Tujuan tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/2);">
+                      {{ item?.asal?.nama ??'Depo Asal tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow text-center" style="width: 10%;">
+                      <q-chip
+                        dense class="glossy" square
+                        :color="warna(item?.flag)"
+                        :text-color="warnaText(item?.flag)"
+                      >
+                        {{ textNya(item?.flag) }}
+                      </q-chip>
+                    </div>
+                    <div class="col-grow" style="width: 5%;">
+                      <div class="row no-wrap justify-end q-mr-xs">
+                        aksi
+                      </div>
+                    </div>
+                  </div>
+                  <transition
+                    appear
+                    enter-active-class="animated slideInUp slow"
+                    leave-active-class="animated slideOutRight"
+                  >
+                    <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                      <div class="q-ml-sm q-my-sm">
+                        <div class="row bg-amber text-weight-bold q-pa-xs">
                           <div class="col-auto" style="width: 5%;">
-                            {{ i2+1 }}
+                            NO
                           </div>
                           <div class="col-auto" style="width: 10%;">
-                            {{ rinci?.masterobat?.kd_obat }}
+                            Kode Obat
                           </div>
                           <div class="col-auto" style="width: 20%;">
-                            {{ rinci?.masterobat?.nama_obat }}
+                            Nama Obat
                           </div>
                           <div class="col-auto" style="width: calc(55%/3);">
-                            {{ dateFullFormat(rinci?.tgl_verif) }}
+                            Tgl Distribusi
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/3);">
-                            <div class="row q-mr-xs no-wrap items-end">
-                              <div class="col-grow q-mr-xs">
-                                {{ rinci?.jumlah_minta }}
-                              </div>
-                              <div class="col-shrink f-10 text-italic">
-                                ( {{ rinci?.masterobat?.satuan_k }} )
-                              </div>
+                            <div q-mr-xs>
+                              Jumlah
                             </div>
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/3);">
-                            <div class="row q-mr-xs no-wrap items-end">
-                              <div class="col-grow q-mr-xs">
-                                {{ rinci?.jumlah_diverif }}
-                              </div>
-                              <div class="col-shrink f-10 text-italic">
-                                ( {{ rinci?.masterobat?.satuan_k }} )
-                              </div>
+                            <div q-mr-xs>
+                              Diverif
                             </div>
                           </div>
                           <div class="col-grow text-right" style="width: 10%;">
@@ -507,82 +516,81 @@
                             </div>
                           </div>
                         </div>
-                        <transition
-                          appear
-                          enter-active-class="animated slideInUp slow"
-                          leave-active-class="animated slideOutRight"
-                        >
-                          <div v-if="rinci?.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                            <div class="q-ml-sm q-my-sm">
-                              <div class="row bg-deep-purple text-white text-weight-bold q-pa-xs">
-                                <div class="col-auto" style="width: 5%;">
-                                  NO
-                                </div>
-                                <div class="col-auto" style="width: 20%;">
-                                  Nama Obat
-                                </div>
-                                <div class="col-auto" style="width: 15%;">
-                                  Nomor Pemerimaan
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  No Batch
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  Tgl Penerimaan
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  Tgl Exp
-                                </div>
-                                <div class="col-auto text-right" style="width: calc(50%/5);">
-                                  <div q-mr-xs>
-                                    Jumlah
+                        <div v-if="item?.permintaanrinci?.length > 0">
+                          <div v-for="(rinci,i2) in item?.permintaanrinci" :key="i2">
+                            <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'" @click="rinci.expand = !rinci.expand">
+                              <div class="col-auto" style="width: 5%;">
+                                {{ i2+1 }}
+                              </div>
+                              <div class="col-auto" style="width: 10%;">
+                                {{ rinci?.masterobat?.kd_obat }}
+                              </div>
+                              <div class="col-auto" style="width: 20%;">
+                                {{ rinci?.masterobat?.nama_obat }}
+                              </div>
+                              <div class="col-auto" style="width: calc(55%/3);">
+                                {{ dateFullFormat(rinci?.tgl_verif) }}
+                              </div>
+                              <div class="col-auto text-right" style="width: calc(55%/3);">
+                                <div class="row q-mr-xs no-wrap items-end">
+                                  <div class="col-grow q-mr-xs">
+                                    {{ rinci?.jumlah_minta }}
                                   </div>
-                                </div>
-                                <div class="col-auto text-right" style="width: calc(50%/5);">
-                                  <div q-mr-xs>
-                                    Harga
-                                  </div>
-                                </div>
-                                <div class="col-grow text-right" style="width: 10%;">
-                                  <div class="q-mr-xs">
-                                    #
+                                  <div class="col-shrink f-10 text-italic">
+                                    ( {{ rinci?.masterobat?.satuan_k }} )
                                   </div>
                                 </div>
                               </div>
-                              <div v-if="rinci?.mutasi?.length > 0">
-                                <div v-for="(mut,i3) in rinci?.mutasi" :key="i3">
-                                  <div :class="(i3%2===1?'bg-purple-4':'bg-purple-2') +' row q-pa-xs'">
+                              <div class="col-auto text-right" style="width: calc(55%/3);">
+                                <div class="row q-mr-xs no-wrap items-end">
+                                  <div class="col-grow q-mr-xs">
+                                    {{ rinci?.jumlah_diverif }}
+                                  </div>
+                                  <div class="col-shrink f-10 text-italic">
+                                    ( {{ rinci?.masterobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-grow text-right" style="width: 10%;">
+                                <div class="q-mr-xs">
+                                  #
+                                </div>
+                              </div>
+                            </div>
+                            <transition
+                              appear
+                              enter-active-class="animated slideInUp slow"
+                              leave-active-class="animated slideOutRight"
+                            >
+                              <div v-if="rinci?.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                                <div class="q-ml-sm q-my-sm">
+                                  <div class="row bg-deep-purple text-white text-weight-bold q-pa-xs">
                                     <div class="col-auto" style="width: 5%;">
-                                      {{ i3+1 }}
+                                      NO
                                     </div>
                                     <div class="col-auto" style="width: 20%;">
-                                      {{ mut?.obat?.nama_obat }}
+                                      Nama Obat
                                     </div>
                                     <div class="col-auto" style="width: 15%;">
-                                      {{ mut?.nopenerimaan }}
+                                      Nomor Pemerimaan
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ mut?.nobatch }}
+                                      No Batch
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ dateFullFormat(mut?.tglpenerimaan) }}
+                                      Tgl Penerimaan
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ dateFullFormat(mut?.tglexp) }}
+                                      Tgl Exp
                                     </div>
                                     <div class="col-auto text-right" style="width: calc(50%/5);">
-                                      <div class="row q-mr-xs no-wrap items-end">
-                                        <div class="col-grow q-mr-xs">
-                                          {{ mut?.jml }}
-                                        </div>
-                                        <div class="col-shrink f-10 text-italic">
-                                          ( {{ mut?.obat?.satuan_k }} )
-                                        </div>
+                                      <div q-mr-xs>
+                                        Jumlah
                                       </div>
                                     </div>
                                     <div class="col-auto text-right" style="width: calc(50%/5);">
                                       <div q-mr-xs>
-                                        {{ formatDouble(mut?.harga,2) }}
+                                        Harga
                                       </div>
                                     </div>
                                     <div class="col-grow text-right" style="width: 10%;">
@@ -591,189 +599,216 @@
                                       </div>
                                     </div>
                                   </div>
+                                  <div v-if="rinci?.mutasi?.length > 0">
+                                    <div v-for="(mut,i3) in rinci?.mutasi" :key="i3">
+                                      <div :class="(i3%2===1?'bg-purple-4':'bg-purple-2') +' row q-pa-xs'">
+                                        <div class="col-auto" style="width: 5%;">
+                                          {{ i3+1 }}
+                                        </div>
+                                        <div class="col-auto" style="width: 20%;">
+                                          {{ mut?.obat?.nama_obat }}
+                                        </div>
+                                        <div class="col-auto" style="width: 15%;">
+                                          {{ mut?.nopenerimaan }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ mut?.nobatch }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ dateFullFormat(mut?.tglpenerimaan) }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ dateFullFormat(mut?.tglexp) }}
+                                        </div>
+                                        <div class="col-auto text-right" style="width: calc(50%/5);">
+                                          <div class="row q-mr-xs no-wrap items-end">
+                                            <div class="col-grow q-mr-xs">
+                                              {{ mut?.jml }}
+                                            </div>
+                                            <div class="col-shrink f-10 text-italic">
+                                              ( {{ mut?.obat?.satuan_k }} )
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-auto text-right" style="width: calc(50%/5);">
+                                          <div q-mr-xs>
+                                            {{ formatDouble(mut?.harga,2) }}
+                                          </div>
+                                        </div>
+                                        <div class="col-grow text-right" style="width: 10%;">
+                                          <div class="q-mr-xs">
+                                            #
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div v-else>
+                                    <app-no-data-small />
+                                  </div>
                                 </div>
                               </div>
-                              <div v-else>
-                                <app-no-data-small />
-                              </div>
-                            </div>
+                            </transition>
                           </div>
-                        </transition>
+                        </div>
+                        <div v-else>
+                          <app-no-data-small />
+                        </div>
                       </div>
                     </div>
-                    <div v-else>
-                      <app-no-data-small />
-                    </div>
-                  </div>
+                  </transition>
                 </div>
-              </transition>
+              </div>
+              <div v-else>
+                <app-no-data-small />
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <app-no-data-small />
-          </div>
+          </transition>
         </div>
         <!-- Mutasi Keluar -->
         <div>
-          <div class="bg-orange text-white q-pa-xs f-18 q-mb-sm text-weight-bold">
-            Data Mutasi Keluar
-          </div>
-          <div class="row bg-dark q-pa-xs text-white">
-            <div class="col-shrink" style="width: 5%;">
-              No
+          <div class="bg-orange text-white q-pa-xs f-18 q-mb-sm text-weight-bold row items-center justify-between">
+            <div class="col-auto">
+              Data Mutasi Keluar
             </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Kirim Permintaan
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Distribusi
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/3);">
-              <div class="q-mr-xs">
-                Tgl Sampai
-              </div>
-            </div>
-            <div class="col-grow" style="width: calc(40%/2);">
-              Asal
-            </div>
-            <div class="col-grow" style="width: calc(40%/2);">
-              Tujuan
-            </div>
-            <div class="col-grow text-center" style="width: 10%;">
-              <div class="q-mr-xs">
-                Status
-              </div>
-            </div>
-            <div class="col-grow text-right" style="width: 5%;">
-              <div class="q-mr-xs">
-                #
-              </div>
+            <div class="col-auto q-mr-md">
+              <app-btn
+                v-if="!store.obat.tampilMutasiKeluar"
+                label="Show"
+                icon-right="icon-mat-keyboard_arrow_down"
+                color="dark"
+                @click="store.obat.tampilMutasiKeluar=!store.obat.tampilMutasiKeluar"
+              />
+              <app-btn
+                v-if="store.obat.tampilMutasiKeluar"
+                label="Hide"
+                icon-right="icon-mat-keyboard_arrow_up"
+                color="dark"
+                @click="store.obat.tampilMutasiKeluar=!store.obat.tampilMutasiKeluar"
+              />
             </div>
           </div>
-          <div v-if="store?.obat?.mutasiKeluar?.length > 0" class="q-pa-xs">
-            <div v-for="(item,i) in store?.obat?.mutasiKeluar" :key="i">
-              <div
-                class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
-                @click="()=>{
-                  item.expand = !item.expand
-                  const ada=item?.permintaanrinci.filter(ri=>ri?.expand)
-                  if(ada?.length>0){
-                    item.permintaanrinci.map(ri=>ri.expand=false)
-                  }
-                }"
-              >
+          <transition
+            appear
+            enter-active-class="animated slideInUp slow"
+            leave-active-class="animated slideOutRight"
+          >
+            <div v-if="store.obat.tampilMutasiKeluar">
+              <div class="row bg-dark q-pa-xs text-white">
                 <div class="col-shrink" style="width: 5%;">
-                  {{ i +1 }}
+                  No
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_kirim) }}
+                    Tgl Kirim Permintaan
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_kirim_depo) }}
+                    Tgl Distribusi
                   </div>
                 </div>
                 <div class="col-grow" style="width: calc(40%/3);">
                   <div class="q-mr-xs">
-                    {{ dateFullFormat(item?.tgl_terima_depo) }}
+                    Tgl Sampai
                   </div>
-                </div>
-                <div class="col-grow \" style="width: calc(40%/2);">
-                  {{ item?.menuju?.nama ??'Gudang / Depo Asal tidak ditemukan' }}
                 </div>
                 <div class="col-grow" style="width: calc(40%/2);">
-                  {{ item?.asal?.nama ??'Depo Tujuan tidak ditemukan' }}
+                  Asal
+                </div>
+                <div class="col-grow" style="width: calc(40%/2);">
+                  Tujuan
                 </div>
                 <div class="col-grow text-center" style="width: 10%;">
-                  <q-chip
-                    dense class="glossy" square
-                    :color="warna(item?.flag)"
-                    :text-color="warnaText(item?.flag)"
-                  >
-                    {{ textNya(item?.flag) }}
-                  </q-chip>
+                  <div class="q-mr-xs">
+                    Status
+                  </div>
                 </div>
-                <div class="col-grow" style="width: 5%;">
-                  <div class="row no-wrap justify-end q-mr-xs">
-                    aksi
+                <div class="col-grow text-right" style="width: 5%;">
+                  <div class="q-mr-xs">
+                    #
                   </div>
                 </div>
               </div>
-              <transition
-                appear
-                enter-active-class="animated slideInUp slow"
-                leave-active-class="animated slideOutRight"
-              >
-                <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                  <div class="q-ml-sm q-my-sm">
-                    <div class="row bg-amber text-weight-bold q-pa-xs">
-                      <div class="col-auto" style="width: 5%;">
-                        NO
-                      </div>
-                      <div class="col-auto" style="width: 10%;">
-                        Kode Obat
-                      </div>
-                      <div class="col-auto" style="width: 20%;">
-                        Nama Obat
-                      </div>
-                      <div class="col-auto" style="width: calc(55%/3);">
-                        Tgl Distribusi
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/3);">
-                        <div q-mr-xs>
-                          Jumlah
-                        </div>
-                      </div>
-                      <div class="col-auto text-right" style="width: calc(55%/3);">
-                        <div q-mr-xs>
-                          Diverif
-                        </div>
-                      </div>
-                      <div class="col-grow text-right" style="width: 10%;">
-                        <div class="q-mr-xs">
-                          #
-                        </div>
+              <div v-if="store?.obat?.mutasiKeluar?.length > 0" class="q-pa-xs">
+                <div v-for="(item,i) in store?.obat?.mutasiKeluar" :key="i">
+                  <div
+                    class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
+                    @click="()=>{
+                      item.expand = !item.expand
+                      const ada=item?.permintaanrinci.filter(ri=>ri?.expand)
+                      if(ada?.length>0){
+                        item.permintaanrinci.map(ri=>ri.expand=false)
+                      }
+                    }"
+                  >
+                    <div class="col-shrink" style="width: 5%;">
+                      {{ i +1 }}
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_kirim) }}
                       </div>
                     </div>
-                    <div v-if="item?.permintaanrinci?.length > 0">
-                      <div v-for="(rinci,i2) in item?.permintaanrinci" :key="i2">
-                        <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'" @click="rinci.expand = !rinci.expand">
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_kirim_depo) }}
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/3);">
+                      <div class="q-mr-xs">
+                        {{ dateFullFormat(item?.tgl_terima_depo) }}
+                      </div>
+                    </div>
+                    <div class="col-grow \" style="width: calc(40%/2);">
+                      {{ item?.menuju?.nama ??'Gudang / Depo Asal tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow" style="width: calc(40%/2);">
+                      {{ item?.asal?.nama ??'Depo Tujuan tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow text-center" style="width: 10%;">
+                      <q-chip
+                        dense class="glossy" square
+                        :color="warna(item?.flag)"
+                        :text-color="warnaText(item?.flag)"
+                      >
+                        {{ textNya(item?.flag) }}
+                      </q-chip>
+                    </div>
+                    <div class="col-grow" style="width: 5%;">
+                      <div class="row no-wrap justify-end q-mr-xs">
+                        aksi
+                      </div>
+                    </div>
+                  </div>
+                  <transition
+                    appear
+                    enter-active-class="animated slideInUp slow"
+                    leave-active-class="animated slideOutRight"
+                  >
+                    <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                      <div class="q-ml-sm q-my-sm">
+                        <div class="row bg-amber text-weight-bold q-pa-xs">
                           <div class="col-auto" style="width: 5%;">
-                            {{ i2+1 }}
+                            NO
                           </div>
                           <div class="col-auto" style="width: 10%;">
-                            {{ rinci?.masterobat?.kd_obat }}
+                            Kode Obat
                           </div>
                           <div class="col-auto" style="width: 20%;">
-                            {{ rinci?.masterobat?.nama_obat }}
+                            Nama Obat
                           </div>
                           <div class="col-auto" style="width: calc(55%/3);">
-                            {{ dateFullFormat(rinci?.tgl_verif) }}
+                            Tgl Distribusi
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/3);">
-                            <div class="row q-mr-xs no-wrap items-end">
-                              <div class="col-grow q-mr-xs">
-                                {{ rinci?.jumlah_minta }}
-                              </div>
-                              <div class="col-shrink f-10 text-italic">
-                                ( {{ rinci?.masterobat?.satuan_k }} )
-                              </div>
+                            <div q-mr-xs>
+                              Jumlah
                             </div>
                           </div>
                           <div class="col-auto text-right" style="width: calc(55%/3);">
-                            <div class="row q-mr-xs no-wrap items-end">
-                              <div class="col-grow q-mr-xs">
-                                {{ rinci?.jumlah_diverif }}
-                              </div>
-                              <div class="col-shrink f-10 text-italic">
-                                ( {{ rinci?.masterobat?.satuan_k }} )
-                              </div>
+                            <div q-mr-xs>
+                              Diverif
                             </div>
                           </div>
                           <div class="col-grow text-right" style="width: 10%;">
@@ -782,82 +817,81 @@
                             </div>
                           </div>
                         </div>
-                        <transition
-                          appear
-                          enter-active-class="animated slideInUp slow"
-                          leave-active-class="animated slideOutRight"
-                        >
-                          <div v-if="rinci?.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                            <div class="q-ml-sm q-my-sm">
-                              <div class="row bg-deep-purple text-white text-weight-bold q-pa-xs">
-                                <div class="col-auto" style="width: 5%;">
-                                  NO
-                                </div>
-                                <div class="col-auto" style="width: 20%;">
-                                  Nama Obat
-                                </div>
-                                <div class="col-auto" style="width: 15%;">
-                                  Nomor Pemerimaan
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  No Batch
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  Tgl Penerimaan
-                                </div>
-                                <div class="col-auto" style="width: calc(50%/5);">
-                                  Tgl Exp
-                                </div>
-                                <div class="col-auto text-right" style="width: calc(50%/5);">
-                                  <div q-mr-xs>
-                                    Jumlah
+                        <div v-if="item?.permintaanrinci?.length > 0">
+                          <div v-for="(rinci,i2) in item?.permintaanrinci" :key="i2">
+                            <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'" @click="rinci.expand = !rinci.expand">
+                              <div class="col-auto" style="width: 5%;">
+                                {{ i2+1 }}
+                              </div>
+                              <div class="col-auto" style="width: 10%;">
+                                {{ rinci?.masterobat?.kd_obat }}
+                              </div>
+                              <div class="col-auto" style="width: 20%;">
+                                {{ rinci?.masterobat?.nama_obat }}
+                              </div>
+                              <div class="col-auto" style="width: calc(55%/3);">
+                                {{ dateFullFormat(rinci?.tgl_verif) }}
+                              </div>
+                              <div class="col-auto text-right" style="width: calc(55%/3);">
+                                <div class="row q-mr-xs no-wrap items-end">
+                                  <div class="col-grow q-mr-xs">
+                                    {{ rinci?.jumlah_minta }}
                                   </div>
-                                </div>
-                                <div class="col-auto text-right" style="width: calc(50%/5);">
-                                  <div q-mr-xs>
-                                    Harga
-                                  </div>
-                                </div>
-                                <div class="col-grow text-right" style="width: 10%;">
-                                  <div class="q-mr-xs">
-                                    #
+                                  <div class="col-shrink f-10 text-italic">
+                                    ( {{ rinci?.masterobat?.satuan_k }} )
                                   </div>
                                 </div>
                               </div>
-                              <div v-if="rinci?.mutasi?.length > 0">
-                                <div v-for="(mut,i3) in rinci?.mutasi" :key="i3">
-                                  <div :class="(i3%2===1?'bg-purple-4':'bg-purple-2') +' row q-pa-xs'">
+                              <div class="col-auto text-right" style="width: calc(55%/3);">
+                                <div class="row q-mr-xs no-wrap items-end">
+                                  <div class="col-grow q-mr-xs">
+                                    {{ rinci?.jumlah_diverif }}
+                                  </div>
+                                  <div class="col-shrink f-10 text-italic">
+                                    ( {{ rinci?.masterobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-grow text-right" style="width: 10%;">
+                                <div class="q-mr-xs">
+                                  #
+                                </div>
+                              </div>
+                            </div>
+                            <transition
+                              appear
+                              enter-active-class="animated slideInUp slow"
+                              leave-active-class="animated slideOutRight"
+                            >
+                              <div v-if="rinci?.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                                <div class="q-ml-sm q-my-sm">
+                                  <div class="row bg-deep-purple text-white text-weight-bold q-pa-xs">
                                     <div class="col-auto" style="width: 5%;">
-                                      {{ i3+1 }}
+                                      NO
                                     </div>
                                     <div class="col-auto" style="width: 20%;">
-                                      {{ mut?.obat?.nama_obat }}
+                                      Nama Obat
                                     </div>
                                     <div class="col-auto" style="width: 15%;">
-                                      {{ mut?.nopenerimaan }}
+                                      Nomor Pemerimaan
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ mut?.nobatch }}
+                                      No Batch
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ dateFullFormat(mut?.tglpenerimaan) }}
+                                      Tgl Penerimaan
                                     </div>
                                     <div class="col-auto" style="width: calc(50%/5);">
-                                      {{ dateFullFormat(mut?.tglexp) }}
+                                      Tgl Exp
                                     </div>
                                     <div class="col-auto text-right" style="width: calc(50%/5);">
-                                      <div class="row q-mr-xs no-wrap items-end">
-                                        <div class="col-grow q-mr-xs">
-                                          {{ mut?.jml }}
-                                        </div>
-                                        <div class="col-shrink f-10 text-italic">
-                                          ( {{ mut?.obat?.satuan_k }} )
-                                        </div>
+                                      <div q-mr-xs>
+                                        Jumlah
                                       </div>
                                     </div>
                                     <div class="col-auto text-right" style="width: calc(50%/5);">
                                       <div q-mr-xs>
-                                        {{ formatDouble(mut?.harga,2) }}
+                                        Harga
                                       </div>
                                     </div>
                                     <div class="col-grow text-right" style="width: 10%;">
@@ -866,376 +900,823 @@
                                       </div>
                                     </div>
                                   </div>
+                                  <div v-if="rinci?.mutasi?.length > 0">
+                                    <div v-for="(mut,i3) in rinci?.mutasi" :key="i3">
+                                      <div :class="(i3%2===1?'bg-purple-4':'bg-purple-2') +' row q-pa-xs'">
+                                        <div class="col-auto" style="width: 5%;">
+                                          {{ i3+1 }}
+                                        </div>
+                                        <div class="col-auto" style="width: 20%;">
+                                          {{ mut?.obat?.nama_obat }}
+                                        </div>
+                                        <div class="col-auto" style="width: 15%;">
+                                          {{ mut?.nopenerimaan }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ mut?.nobatch }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ dateFullFormat(mut?.tglpenerimaan) }}
+                                        </div>
+                                        <div class="col-auto" style="width: calc(50%/5);">
+                                          {{ dateFullFormat(mut?.tglexp) }}
+                                        </div>
+                                        <div class="col-auto text-right" style="width: calc(50%/5);">
+                                          <div class="row q-mr-xs no-wrap items-end">
+                                            <div class="col-grow q-mr-xs">
+                                              {{ mut?.jml }}
+                                            </div>
+                                            <div class="col-shrink f-10 text-italic">
+                                              ( {{ mut?.obat?.satuan_k }} )
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-auto text-right" style="width: calc(50%/5);">
+                                          <div q-mr-xs>
+                                            {{ formatDouble(mut?.harga,2) }}
+                                          </div>
+                                        </div>
+                                        <div class="col-grow text-right" style="width: 10%;">
+                                          <div class="q-mr-xs">
+                                            #
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div v-else>
+                                    <app-no-data-small />
+                                  </div>
                                 </div>
                               </div>
-                              <div v-else>
-                                <app-no-data-small />
-                              </div>
-                            </div>
+                            </transition>
                           </div>
-                        </transition>
+                        </div>
+                        <div v-else>
+                          <app-no-data-small />
+                        </div>
                       </div>
                     </div>
-                    <div v-else>
-                      <app-no-data-small />
-                    </div>
-                  </div>
+                  </transition>
                 </div>
-              </transition>
+              </div>
+              <div v-else>
+                <app-no-data-small />
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <app-no-data-small />
-          </div>
+          </transition>
         </div>
         <!-- Resep -->
         <div v-if="!store?.gudangs?.includes( store?.params.kdruang)">
-          <div class="bg-orange text-white q-pa-xs f-18 q-mb-sm text-weight-bold">
-            Data Resep
-          </div>
-          <div class="row bg-dark q-pa-xs text-white">
-            <div class="col-shrink" style="width: 5%;">
-              No
+          <div class="bg-orange text-white q-pa-xs f-18 q-mb-sm text-weight-bold row items-center justify-between">
+            <div class="col-auto">
+              Data Resep
             </div>
-            <div class="col-shrink" style="width: 15%;">
-              Resep
-            </div>
-            <div class="col-grow" style="width: calc(45%/2);">
-              Pasien
-            </div>
-            <div class="col-grow" style="width: calc(45%/2);">
-              {{ store?.params?.kdruang==='Gd-05010101'?'Poli':'Ruangan' }}
-            </div>
-            <div class="col-grow text-center" style="width: calc(20%/2);">
-              <div class="q-mr-xs">
-                jumlah Resep
-              </div>
-            </div>
-            <div class="col-grow text-center" style="width: calc(20%/2);">
-              <div class="q-mr-xs">
-                jumlah Keluar
-              </div>
-            </div>
-            <div class="col-grow text-center" style="width: 10%;">
-              <div class="q-mr-xs">
-                Status
-              </div>
-            </div>
-            <div class="col-grow text-right" style="width: 5%;">
-              <div class="q-mr-xs">
-                #
-              </div>
+            <div class="col-auto q-mr-md">
+              <app-btn
+                v-if="!store.obat.tampilResep"
+                label="Show"
+                icon-right="icon-mat-keyboard_arrow_down"
+                color="dark"
+                @click="store.obat.tampilResep=!store.obat.tampilResep"
+              />
+              <app-btn
+                v-if="store.obat.tampilResep"
+                label="Hide"
+                icon-right="icon-mat-keyboard_arrow_up"
+                color="dark"
+                @click="store.obat.tampilResep=!store.obat.tampilResep"
+              />
             </div>
           </div>
-          <div v-if="store?.obat?.resep?.length > 0" class="q-pa-xs">
-            <div v-for="(item,i) in store?.obat?.resep" :key="i">
-              <div
-                class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
-                @click="item.expand = !item.expand"
-              >
+          <transition
+            appear
+            enter-active-class="animated slideInUp slow"
+            leave-active-class="animated slideOutRight"
+          >
+            <div v-if="store.obat.tampilResep">
+              <div class="row bg-dark q-pa-xs text-white">
                 <div class="col-shrink" style="width: 5%;">
-                  {{ i +1 }}
+                  No
                 </div>
                 <div class="col-shrink" style="width: 15%;">
-                  <div class="q-mr-xs">
-                    <div class="row">
-                      {{ item?.noresep }}
-                    </div>
-                    <div class="row justify-between items-end f-10 ">
-                      <div class="col-auto">
-                        dibuat
-                      </div>
-                      <div class="col-auto">
-                        {{ dateFull(item?.tgl_permintaan) }}
-                      </div>
-                    </div>
-                    <div class="row justify-between items-end f-10">
-                      <div class="col-auto">
-                        dikirim
-                      </div>
-                      <div class="col-auto">
-                        {{ dateFull(item?.tgl_kirim) }}
-                      </div>
-                    </div>
-                    <div class="row justify-between items-end f-10">
-                      <div class="col-auto">
-                        selesai
-                      </div>
-                      <div class="col-auto">
-                        {{ dateFull(item?.tgl_selesai) }}
-                      </div>
-                    </div>
-                  </div>
+                  Resep
                 </div>
                 <div class="col-grow" style="width: calc(45%/2);">
-                  <div class="row">
-                    {{ item?.datapasien?.rs2 ??'Pasien tidak ditemukan' }}
-                  </div>
-                  <div class="row text-italic f-10">
-                    {{ item?.norm }} || {{ item?.noreg }}
-                  </div>
+                  Pasien
                 </div>
                 <div class="col-grow" style="width: calc(45%/2);">
-                  {{ item?.poli?.rs2 ??item?.ruanganranap?.rs2 ?? 'Ruangan tidak ditemukan' }}
+                  {{ store?.params?.kdruang==='Gd-05010101'?'Poli':'Ruangan' }}
                 </div>
                 <div class="col-grow text-center" style="width: calc(20%/2);">
                   <div class="q-mr-xs">
-                    {{ hitungPermintaan(item) }}
+                    jumlah Resep
                   </div>
                 </div>
                 <div class="col-grow text-center" style="width: calc(20%/2);">
                   <div class="q-mr-xs">
-                    {{ hitungKeluar(item) }}
+                    jumlah Keluar
                   </div>
                 </div>
                 <div class="col-grow text-center" style="width: 10%;">
-                  <q-chip
-                    dense class="glossy" square
-                    :color="warna(item?.flag)"
-                    :text-color="warnaText(item?.flag)"
-                  >
-                    {{ textResep(item?.flag) }}
-                  </q-chip>
+                  <div class="q-mr-xs">
+                    Status
+                  </div>
                 </div>
-                <div class="col-grow" style="width: 5%;">
-                  <div class="row no-wrap justify-end q-mr-xs">
-                    aksi
+                <div class="col-grow text-right" style="width: 5%;">
+                  <div class="q-mr-xs">
+                    #
                   </div>
                 </div>
               </div>
-              <transition
-                appear
-                enter-active-class="animated slideInUp slow"
-                leave-active-class="animated slideOutRight"
-              >
-                <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
-                  <div class="q-ml-sm q-my-sm">
-                    <div v-if="item?.permintaanresep?.length>0">
-                      <div class="q-my-xs bg-blue text-white text-weight-bold">
-                        Resep Non Racikan
-                      </div>
-                      <div class="row text-weight-bold q-ma-xs">
-                        <div class="col-auto bg-amber" style="width: 5%;">
-                          NO
+              <div v-if="store?.obat?.resep?.length > 0" class="q-pa-xs">
+                <div v-for="(item,i) in store?.obat?.resep" :key="i">
+                  <div
+                    class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
+                    @click="item.expand = !item.expand"
+                  >
+                    <div class="col-shrink" style="width: 5%;">
+                      {{ i +1 }}
+                    </div>
+                    <div class="col-shrink" style="width: 15%;">
+                      <div class="q-mr-xs">
+                        <div class="row">
+                          {{ item?.noresep }}
                         </div>
-                        <div class="col-auto bg-amber" style="width: 10%;">
-                          Kode Obat
-                        </div>
-                        <div class="col-auto bg-amber" style="width: 20%;">
-                          Nama Obat
-                        </div>
-                        <div class="col-auto text-right bg-amber" style="width: 10%;">
-                          <div class="q-mr-xs">
-                            Jumlah Resep
+                        <div class="row justify-between items-end f-10 ">
+                          <div class="col-auto">
+                            dibuat
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_permintaan) }}
                           </div>
                         </div>
-                        <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
-                          <div class="row">
-                            <div class="col-auto text-right" style="width: 40%;">
-                              <div class="q-mr-xs">
-                                No Penerimaan
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Jml Keluar
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Harga Beli
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Harga Jual
-                              </div>
-                            </div>
+                        <div class="row justify-between items-end f-10">
+                          <div class="col-auto">
+                            dikirim
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_kirim) }}
                           </div>
                         </div>
-                        <div class="col-grow text-right bg-amber" style="width: 10%;">
-                          <div class="q-mr-xs">
-                            #
+                        <div class="row justify-between items-end f-10">
+                          <div class="col-auto">
+                            selesai
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_selesai) }}
                           </div>
                         </div>
-                      </div>
-                      <div v-if="item?.permintaanresep?.length > 0">
-                        <div v-for="(rinci,i2) in item?.permintaanresep" :key="i2">
-                          <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
-                            <div class="col-auto" style="width: 5%;">
-                              {{ i2+1 }}
-                            </div>
-                            <div class="col-auto" style="width: 10%;">
-                              <div class="row">
-                                {{ rinci?.mobat?.kd_obat }}
-                              </div>
-                              <div class="row text-italic f-10">
-                                ( {{ rinci?.mobat?.satuan_k }} )
-                              </div>
-                            </div>
-                            <div class="col-auto" style="width: 20%;">
-                              {{ rinci?.mobat?.nama_obat }}
-                            </div>
-                            <div class="col-auto text-right" style="width: 10%;">
-                              <div class="q-mr-xs">
-                                {{ formatDouble(rinci?.jumlah??0,2) }}
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: 45%;">
-                              <div v-for="(keluar) in item?.rincian" :key="keluar">
-                                <div class="row">
-                                  <div class="col-auto text-right" style="width: 40%;">
-                                    <div class="q-mr-xs">
-                                      {{ keluar?.nopenerimaan??' - ' }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.jumlah??0,2) }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.harga_beli??0,2) }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.harga_jual??0,2) }}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-grow text-right" style="width: 10%;">
-                              <div class="q-mr-xs">
-                                #
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div v-else>
-                        <app-no-data-small />
                       </div>
                     </div>
-                    <div v-if="item?.permintaanracikan?.length>0">
-                      <div class="q-my-xs bg-teal text-white text-weight-bold">
-                        Resep Racikan
+                    <div class="col-grow" style="width: calc(45%/2);">
+                      <div class="row">
+                        {{ item?.datapasien?.rs2 ??'Pasien tidak ditemukan' }}
                       </div>
-                      <div class="row text-weight-bold q-ma-xs">
-                        <div class="col-auto bg-amber" style="width: 5%;">
-                          NO
-                        </div>
-                        <div class="col-auto bg-amber" style="width: 10%;">
-                          Kode Obat
-                        </div>
-                        <div class="col-auto bg-amber" style="width: 20%;">
-                          Nama Obat
-                        </div>
-                        <div class="col-auto text-right bg-amber" style="width: 10%;">
-                          <div class="q-mr-xs">
-                            Jumlah Resep
-                          </div>
-                        </div>
-                        <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
-                          <div class="row">
-                            <div class="col-auto text-right" style="width: 40%;">
-                              <div class="q-mr-xs">
-                                No Penerimaan
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Jml Keluar
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Harga Beli
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: calc(60%/3);">
-                              <div class="q-mr-xs">
-                                Harga Jual
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-grow text-right bg-amber" style="width: 10%;">
-                          <div class="q-mr-xs">
-                            #
-                          </div>
-                        </div>
+                      <div class="row text-italic f-10">
+                        {{ item?.norm }} || {{ item?.noreg }}
                       </div>
-                      <div v-if="item?.permintaanracikan?.length > 0">
-                        <div v-for="(rinci,i2) in item?.permintaanracikan" :key="i2">
-                          <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
-                            <div class="col-auto" style="width: 5%;">
-                              {{ i2+1 }}
-                            </div>
-                            <div class="col-auto" style="width: 10%;">
-                              <div class="row">
-                                {{ rinci?.mobat?.kd_obat }}
-                              </div>
-                              <div class="row text-italic f-10">
-                                ( {{ rinci?.mobat?.satuan_k }} )
-                              </div>
-                            </div>
-                            <div class="col-auto" style="width: 20%;">
-                              {{ rinci?.mobat?.nama_obat }}
-                            </div>
-                            <div class="col-auto text-right" style="width: 10%;">
-                              <div class="q-mr-xs">
-                                {{ formatDouble(rinci?.jumlah??0,2) }}
-                              </div>
-                            </div>
-                            <div class="col-auto text-right" style="width: 45%;">
-                              <div v-for="(keluar) in item?.rincianracik" :key="keluar">
-                                <div class="row">
-                                  <div class="col-auto text-right" style="width: 40%;">
-                                    <div class="q-mr-xs">
-                                      {{ keluar?.nopenerimaan??' - ' }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.jumlah??0,2) }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.harga_beli??0,2) }}
-                                    </div>
-                                  </div>
-                                  <div class="col-auto text-right" style="width: calc(60%/3);">
-                                    <div class="q-mr-xs">
-                                      {{ formatDouble(keluar?.harga_jual??0,2) }}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-grow text-right" style="width: 10%;">
-                              <div class="q-mr-xs">
-                                #
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(45%/2);">
+                      {{ item?.poli?.rs2 ??item?.ruanganranap?.rs2 ?? 'Ruangan tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow text-center" style="width: calc(20%/2);">
+                      <div class="q-mr-xs">
+                        {{ hitungPermintaan(item) }}
                       </div>
-                      <div v-else>
-                        <app-no-data-small />
+                    </div>
+                    <div class="col-grow text-center" style="width: calc(20%/2);">
+                      <div class="q-mr-xs">
+                        {{ hitungKeluar(item) }}
+                      </div>
+                    </div>
+                    <div class="col-grow text-center" style="width: 10%;">
+                      <q-chip
+                        dense class="glossy" square
+                        :color="warna(item?.flag)"
+                        :text-color="warnaText(item?.flag)"
+                      >
+                        {{ textResep(item?.flag) }}
+                      </q-chip>
+                    </div>
+                    <div class="col-grow" style="width: 5%;">
+                      <div class="row no-wrap justify-end q-mr-xs">
+                        aksi
                       </div>
                     </div>
                   </div>
+                  <transition
+                    appear
+                    enter-active-class="animated slideInUp slow"
+                    leave-active-class="animated slideOutRight"
+                  >
+                    <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                      <div class="q-ml-sm q-my-sm">
+                        <div v-if="item?.permintaanresep?.length>0">
+                          <div class="q-my-xs bg-blue text-white text-weight-bold">
+                            Resep Non Racikan
+                          </div>
+                          <div class="row text-weight-bold q-ma-xs">
+                            <div class="col-auto bg-amber" style="width: 5%;">
+                              NO
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 10%;">
+                              Kode Obat
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 20%;">
+                              Nama Obat
+                            </div>
+                            <div class="col-auto text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                Jumlah Resep
+                              </div>
+                            </div>
+                            <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
+                              <div class="row">
+                                <div class="col-auto text-right" style="width: 40%;">
+                                  <div class="q-mr-xs">
+                                    No Penerimaan
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Jml Keluar
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Beli
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Jual
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-grow text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                #
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="item?.permintaanresep?.length > 0">
+                            <div v-for="(rinci,i2) in item?.permintaanresep" :key="i2">
+                              <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
+                                <div class="col-auto" style="width: 5%;">
+                                  {{ i2+1 }}
+                                </div>
+                                <div class="col-auto" style="width: 10%;">
+                                  <div class="row">
+                                    {{ rinci?.mobat?.kd_obat }}
+                                  </div>
+                                  <div class="row text-italic f-10">
+                                    ( {{ rinci?.mobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                                <div class="col-auto" style="width: 20%;">
+                                  {{ rinci?.mobat?.nama_obat }}
+                                </div>
+                                <div class="col-auto text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    {{ formatDouble(rinci?.jumlah??0,2) }}
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: 45%;">
+                                  <div v-for="(keluar) in item?.rincian" :key="keluar">
+                                    <div class="row">
+                                      <div class="col-auto text-right" style="width: 40%;">
+                                        <div class="q-mr-xs">
+                                          {{ keluar?.nopenerimaan??' - ' }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.jumlah??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_beli??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_jual??0,2) }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-grow text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    #
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <app-no-data-small />
+                          </div>
+                        </div>
+                        <div v-if="item?.permintaanracikan?.length>0">
+                          <div class="q-my-xs bg-teal text-white text-weight-bold">
+                            Resep Racikan
+                          </div>
+                          <div class="row text-weight-bold q-ma-xs">
+                            <div class="col-auto bg-amber" style="width: 5%;">
+                              NO
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 10%;">
+                              Kode Obat
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 20%;">
+                              Nama Obat
+                            </div>
+                            <div class="col-auto text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                Jumlah Resep
+                              </div>
+                            </div>
+                            <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
+                              <div class="row">
+                                <div class="col-auto text-right" style="width: 40%;">
+                                  <div class="q-mr-xs">
+                                    No Penerimaan
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Jml Keluar
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Beli
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Jual
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-grow text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                #
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="item?.permintaanracikan?.length > 0">
+                            <div v-for="(rinci,i2) in item?.permintaanracikan" :key="i2">
+                              <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
+                                <div class="col-auto" style="width: 5%;">
+                                  {{ i2+1 }}
+                                </div>
+                                <div class="col-auto" style="width: 10%;">
+                                  <div class="row">
+                                    {{ rinci?.mobat?.kd_obat }}
+                                  </div>
+                                  <div class="row text-italic f-10">
+                                    ( {{ rinci?.mobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                                <div class="col-auto" style="width: 20%;">
+                                  {{ rinci?.mobat?.nama_obat }}
+                                </div>
+                                <div class="col-auto text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    {{ formatDouble(rinci?.jumlah??0,2) }}
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: 45%;">
+                                  <div v-for="(keluar) in item?.rincianracik" :key="keluar">
+                                    <div class="row">
+                                      <div class="col-auto text-right" style="width: 40%;">
+                                        <div class="q-mr-xs">
+                                          {{ keluar?.nopenerimaan??' - ' }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.jumlah??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_beli??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_jual??0,2) }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-grow text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    #
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <app-no-data-small />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </transition>
                 </div>
-              </transition>
+              </div>
+              <div v-else>
+                <app-no-data-small />
+              </div>
+            </div>
+          </transition>
+        </div>
+        <!-- Operasi -->
+        <div v-if="store?.params.kdruang === 'Gd-04010103'">
+          <div class="bg-orange text-white q-pa-xs f-18 q-mb-sm text-weight-bold row items-center justify-between">
+            <div class="col-auto">
+              Data Persiapan Operasi
+            </div>
+            <div class="col-auto q-mr-md">
+              <app-btn
+                v-if="!store.obat.tampilOperasi"
+                label="Show"
+                icon-right="icon-mat-keyboard_arrow_down"
+                color="dark"
+                @click="store.obat.tampilOperasi=!store.obat.tampilOperasi"
+              />
+              <app-btn
+                v-if="store.obat.tampilOperasi"
+                label="Hide"
+                icon-right="icon-mat-keyboard_arrow_up"
+                color="dark"
+                @click="store.obat.tampilOperasi=!store.obat.tampilOperasi"
+              />
             </div>
           </div>
-          <div v-else>
-            <app-no-data-small />
-          </div>
+          <transition
+            appear
+            enter-active-class="animated slideInUp slow"
+            leave-active-class="animated slideOutRight"
+          >
+            <div v-if="store.obat.tampilOperasi">
+              <div class="row bg-dark q-pa-xs text-white">
+                <div class="col-shrink" style="width: 5%;">
+                  No
+                </div>
+                <div class="col-shrink" style="width: 15%;">
+                  Pemintaan
+                </div>
+                <div class="col-grow" style="width: 20%;">
+                  Pasien
+                </div>
+                <div class="col-grow text-right" style="width: calc(45%/3);">
+                  <div class="q-mr-xs">
+                    jumlah Distribusi
+                  </div>
+                </div>
+                <div class="col-grow text-right" style="width: calc(45%/3);">
+                  <div class="q-mr-xs">
+                    jumlah Resep
+                  </div>
+                </div>
+                <div class="col-grow text-right" style="width: calc(45%/3);">
+                  <div class="q-mr-xs">
+                    jumlah Kembali
+                  </div>
+                </div>
+                <div class="col-grow" style="width: 10%;">
+                  <div class="q-mr-xs">
+                    Status
+                  </div>
+                </div>
+                <div class="col-grow text-right" style="width: 5%;">
+                  <div class="q-mr-xs">
+                    #
+                  </div>
+                </div>
+              </div>
+              <div v-if="store?.obat?.operasi?.length > 0" class="q-pa-xs">
+                <div v-for="(item,i) in store?.obat?.operasi" :key="i">
+                  <div
+                    class="row q-pa-xs cursor-pointer" :class="i%2===1?'bg-grey-4':'bg-white'"
+                    @click="item.expand = !item.expand"
+                  >
+                    <div class="col-shrink" style="width: 5%;">
+                      {{ i +1 }}
+                    </div>
+                    <div class="col-shrink" style="width: 15%;">
+                      <div class="q-mr-xs">
+                        <div class="row">
+                          {{ item?.noresep }}
+                        </div>
+                        <div class="row justify-between items-end f-10 ">
+                          <div class="col-auto">
+                            dibuat
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_permintaan) }}
+                          </div>
+                        </div>
+                        <div class="row justify-between items-end f-10">
+                          <div class="col-auto">
+                            dikirim
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_kirim) }}
+                          </div>
+                        </div>
+                        <div class="row justify-between items-end f-10">
+                          <div class="col-auto">
+                            selesai
+                          </div>
+                          <div class="col-auto">
+                            {{ dateFull(item?.tgl_selesai) }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(45%/2);">
+                      <div class="row">
+                        {{ item?.datapasien?.rs2 ??'Pasien tidak ditemukan' }}
+                      </div>
+                      <div class="row text-italic f-10">
+                        {{ item?.norm }} || {{ item?.noreg }}
+                      </div>
+                    </div>
+                    <div class="col-grow" style="width: calc(45%/2);">
+                      {{ item?.poli?.rs2 ??item?.ruanganranap?.rs2 ?? 'Ruangan tidak ditemukan' }}
+                    </div>
+                    <div class="col-grow text-center" style="width: calc(20%/2);">
+                      <div class="q-mr-xs">
+                        {{ hitungPermintaan(item) }}
+                      </div>
+                    </div>
+                    <div class="col-grow text-center" style="width: calc(20%/2);">
+                      <div class="q-mr-xs">
+                        {{ hitungKeluar(item) }}
+                      </div>
+                    </div>
+                    <div class="col-grow text-center" style="width: 10%;">
+                      <q-chip
+                        dense class="glossy" square
+                        :color="warna(item?.flag)"
+                        :text-color="warnaText(item?.flag)"
+                      >
+                        {{ textOperasi(item?.flag) }}
+                      </q-chip>
+                    </div>
+                    <div class="col-grow" style="width: 5%;">
+                      <div class="row no-wrap justify-end q-mr-xs">
+                        aksi
+                      </div>
+                    </div>
+                  </div>
+                  <transition
+                    appear
+                    enter-active-class="animated slideInUp slow"
+                    leave-active-class="animated slideOutRight"
+                  >
+                    <div v-if="item.expand" :class="i%2===1?'bg-grey-4':'bg-white'">
+                      <div class="q-ml-sm q-my-sm">
+                        <div v-if="item?.permintaanresep?.length>0">
+                          <div class="q-my-xs bg-blue text-white text-weight-bold">
+                            Resep Non Racikan
+                          </div>
+                          <div class="row text-weight-bold q-ma-xs">
+                            <div class="col-auto bg-amber" style="width: 5%;">
+                              NO
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 10%;">
+                              Kode Obat
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 20%;">
+                              Nama Obat
+                            </div>
+                            <div class="col-auto text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                Jumlah Resep
+                              </div>
+                            </div>
+                            <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
+                              <div class="row">
+                                <div class="col-auto text-right" style="width: 40%;">
+                                  <div class="q-mr-xs">
+                                    No Penerimaan
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Jml Keluar
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Beli
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Jual
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-grow text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                #
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="item?.permintaanresep?.length > 0">
+                            <div v-for="(rinci,i2) in item?.permintaanresep" :key="i2">
+                              <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
+                                <div class="col-auto" style="width: 5%;">
+                                  {{ i2+1 }}
+                                </div>
+                                <div class="col-auto" style="width: 10%;">
+                                  <div class="row">
+                                    {{ rinci?.mobat?.kd_obat }}
+                                  </div>
+                                  <div class="row text-italic f-10">
+                                    ( {{ rinci?.mobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                                <div class="col-auto" style="width: 20%;">
+                                  {{ rinci?.mobat?.nama_obat }}
+                                </div>
+                                <div class="col-auto text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    {{ formatDouble(rinci?.jumlah??0,2) }}
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: 45%;">
+                                  <div v-for="(keluar) in item?.rincian" :key="keluar">
+                                    <div class="row">
+                                      <div class="col-auto text-right" style="width: 40%;">
+                                        <div class="q-mr-xs">
+                                          {{ keluar?.nopenerimaan??' - ' }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.jumlah??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_beli??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_jual??0,2) }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-grow text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    #
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <app-no-data-small />
+                          </div>
+                        </div>
+                        <div v-if="item?.permintaanracikan?.length>0">
+                          <div class="q-my-xs bg-teal text-white text-weight-bold">
+                            Resep Racikan
+                          </div>
+                          <div class="row text-weight-bold q-ma-xs">
+                            <div class="col-auto bg-amber" style="width: 5%;">
+                              NO
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 10%;">
+                              Kode Obat
+                            </div>
+                            <div class="col-auto bg-amber" style="width: 20%;">
+                              Nama Obat
+                            </div>
+                            <div class="col-auto text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                Jumlah Resep
+                              </div>
+                            </div>
+                            <div class="col-auto text-right bg-purple text-white" style="width: 45%;">
+                              <div class="row">
+                                <div class="col-auto text-right" style="width: 40%;">
+                                  <div class="q-mr-xs">
+                                    No Penerimaan
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Jml Keluar
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Beli
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: calc(60%/3);">
+                                  <div class="q-mr-xs">
+                                    Harga Jual
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-grow text-right bg-amber" style="width: 10%;">
+                              <div class="q-mr-xs">
+                                #
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="item?.permintaanracikan?.length > 0">
+                            <div v-for="(rinci,i2) in item?.permintaanracikan" :key="i2">
+                              <div :class="(i2%2===1?'bg-yellow-4':'bg-yellow-2') +' row q-pa-xs cursor-pointer'">
+                                <div class="col-auto" style="width: 5%;">
+                                  {{ i2+1 }}
+                                </div>
+                                <div class="col-auto" style="width: 10%;">
+                                  <div class="row">
+                                    {{ rinci?.mobat?.kd_obat }}
+                                  </div>
+                                  <div class="row text-italic f-10">
+                                    ( {{ rinci?.mobat?.satuan_k }} )
+                                  </div>
+                                </div>
+                                <div class="col-auto" style="width: 20%;">
+                                  {{ rinci?.mobat?.nama_obat }}
+                                </div>
+                                <div class="col-auto text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    {{ formatDouble(rinci?.jumlah??0,2) }}
+                                  </div>
+                                </div>
+                                <div class="col-auto text-right" style="width: 45%;">
+                                  <div v-for="(keluar) in item?.rincianracik" :key="keluar">
+                                    <div class="row">
+                                      <div class="col-auto text-right" style="width: 40%;">
+                                        <div class="q-mr-xs">
+                                          {{ keluar?.nopenerimaan??' - ' }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.jumlah??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_beli??0,2) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-auto text-right" style="width: calc(60%/3);">
+                                        <div class="q-mr-xs">
+                                          {{ formatDouble(keluar?.harga_jual??0,2) }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-grow text-right" style="width: 10%;">
+                                  <div class="q-mr-xs">
+                                    #
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <app-no-data-small />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </transition>
+                </div>
+              </div>
+              <div v-else>
+                <app-no-data-small />
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -1326,6 +1807,25 @@ function textResep (val) {
       return 'Ada Retur'
     case '5':
       return 'Ditolak'
+    default:
+      return 'Belum di definisikan'
+  }
+}
+// eslint-disable-next-line no-unused-vars
+function textOperasi (val) {
+  switch (val) {
+    case '0':
+      return 'Draft'
+    case '1':
+      return 'Dikirim'
+    case '2':
+      return 'Didistribusikan'
+    case '3':
+      return 'Ada Resep'
+    case '4':
+      return 'Selesai'
+    case '5':
+      return 'Batal'
     default:
       return 'Belum di definisikan'
   }

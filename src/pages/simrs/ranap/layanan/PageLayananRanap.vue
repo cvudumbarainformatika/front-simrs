@@ -167,7 +167,7 @@ const props = defineProps({
 const { filterredMenus, menu, store, nakes, menuDiganti } = useLayanan()
 
 const onShow = () => {
-  console.log('pasien pageLayananRanap', props.pasien)
+  // console.log('pasien pageLayananRanap', props.pasien)
   Promise.all([
     anamnesis.getRiwayatKehamilan(props.pasien),
     history.historyIgdBefore(props.pasien)

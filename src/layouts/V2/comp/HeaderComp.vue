@@ -166,7 +166,7 @@ const props = defineProps({
   }
 })
 
-console.log('props', props?.user)
+// console.log('props', props?.user)
 
 const PHOTO_USER = computed(() => {
   const kelamin = props.user?.pegawai?.kelamin

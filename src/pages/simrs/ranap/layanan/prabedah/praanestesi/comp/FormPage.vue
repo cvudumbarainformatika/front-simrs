@@ -1,10 +1,10 @@
 <template>
   <div class="column fit bg-orange">
-    <div class="col-auto bg-dark text-white">
+    <!-- <div class="col-auto bg-dark text-white">
       <div class="q-pa-md text-weight-bold f-12">
         FORM PRA - ANESTESIA (Diisi oleh Dokter)
       </div>
-    </div>
+    </div> -->
     <div class="col full-height bg-white relative-position">
       <q-scroll-area style="height:calc( 100% - 1px );">
         <div class="q-pa-md">

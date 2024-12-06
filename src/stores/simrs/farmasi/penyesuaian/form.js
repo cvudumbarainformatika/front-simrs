@@ -191,6 +191,7 @@ export const usePenyesuaianFarmasiStore = defineStore('form_penyesuaian_farmasi'
             this.obat.mutasiMasuk = resp?.data.mutasiMasuk
             this.obat.penerimaan = resp?.data.penerimaan
             this.obat.resep = resp?.data.resep
+            this.obat.operasi = resp?.data.operasi
             resolve(resp)
           })
           .catch(() => {
