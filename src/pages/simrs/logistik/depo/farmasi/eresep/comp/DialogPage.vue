@@ -39,7 +39,7 @@
                 <div class="text-weight-bold f-12 q-mt-sm">
                   {{ store.resep?.datapasien?.nama ?? '-' }}
                 </div>
-                <div class="text-teal">
+                <div class="text-amber">
                   {{ store.resep ? store.resep.noreg : '-' }} || {{ store.resep?.norm??'-' }}
                 </div>
                 <div class="text-italic f-10">
