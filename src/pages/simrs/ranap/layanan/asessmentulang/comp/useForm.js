@@ -122,7 +122,7 @@ export default function useForm (pasien) {
             if (indx > -1) {
               console.log('indx', indx)
               store.items[indx].anamnesis = res?.anamnesis
-              console.log('items wes d oprek', store.items)
+              // console.log('items wes d oprek', store.items)
             }
           }
           settings.isLoadingSave = false

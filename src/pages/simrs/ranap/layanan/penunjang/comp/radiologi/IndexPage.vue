@@ -30,9 +30,10 @@ const store = useRadiologiPoli()
 onMounted(() => {
   const storeRanap = usePengunjungRanapStore()
   store.dokters = storeRanap?.nakes?.filter(x => x?.kdgroupnakes === '1') ?? []
+  const isRanap = true
   Promise.all([
-    store.getNota(props?.pasien),
-    store.getData(props?.pasien)
+    store.getNota(props?.pasien, isRanap),
+    store.getData(props?.pasien, isRanap)
   ])
 })
 

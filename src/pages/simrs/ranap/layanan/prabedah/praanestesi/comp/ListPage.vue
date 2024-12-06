@@ -1,12 +1,12 @@
 <template>
   <div class="column full-height full-width">
-    <div class="col-auto bg-teal text-white">
+    <!-- <div class="col-auto bg-teal text-white">
       <div class="row q-pa-md">
         <div class="text-weight-bold f-12">
           Pra Anatesi Tersimpan ({{ pasien?.nama }})
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="col full-height bg-transparent">
       <q-scroll-area
         v-if="items.length"
@@ -217,20 +217,18 @@
                   Perawatan Pasca Anestesia
                 </div>
                 <table class="column full-width">
-                  <tbody>
-                    <tr class="column full-width">
-                      <td>
-                        <div
-                          v-for="(pa, x) in item?.pascaAnastesi"
-                          :key="x"
-                          class="flex"
-                        >
-                          <div> <b>{{ pa.nama }}</b> </div>
-                          <div> : {{ pa.keterangan }}</div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        v-for="(pa, x) in item?.pascaAnastesi"
+                        :key="x"
+                        class="flex"
+                      >
+                        <div> <b>{{ pa.nama }}</b> </div>
+                        <div> : {{ pa.keterangan }}</div>
+                      </div>
+                    </td>
+                  </tr>
                 </table>
               </div>
             </div>
@@ -242,40 +240,38 @@
                   Persiapan Pasca Anestesia
                 </div>
                 <table class="column full-width">
-                  <tbody>
-                    <tr class="column full-width">
-                      <td>
-                        <div
-                          class="flex"
-                        >
-                          <div> <b>Puasa Mulai Jam</b> </div>
-                          <div> : {{ item.puasaMulaiJam }}</div>
-                          <div> <b>Tanggal</b> : {{ item.puasaMulaiTgl }}</div>
-                        </div>
-                        <div
-                          class="flex"
-                        >
-                          <div> <b>Pre Medikasi Jam</b> </div>
-                          <div> : {{ item.preMedikasiJam }}</div>
-                          <div> <b>Tanggal</b> : {{ item.preMedikasiTgl }}</div>
-                        </div>
-                        <div
-                          class="flex"
-                        >
-                          <div> <b>Trans ke Km Bedah  Jam</b> </div>
-                          <div> : {{ item.transKeKamarBedahJam }}</div>
-                          <div> <b>Tanggal</b> : {{ item.transKeKamarBedahTgl }}</div>
-                        </div>
-                        <div
-                          class="flex"
-                        >
-                          <div> <b>Rencana Operasi  Jam</b> </div>
-                          <div> : {{ item.rencanaOperasiJam }}</div>
-                          <div> <b>Tanggal</b> : {{ item.rencanaOperasiTgl }}</div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Puasa Mulai Jam</b> </div>
+                        <div> : {{ item.puasaMulaiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.puasaMulaiTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Pre Medikasi Jam</b> </div>
+                        <div> : {{ item.preMedikasiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.preMedikasiTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Trans ke Km Bedah  Jam</b> </div>
+                        <div> : {{ item.transKeKamarBedahJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.transKeKamarBedahTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Rencana Operasi  Jam</b> </div>
+                        <div> : {{ item.rencanaOperasiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.rencanaOperasiTgl }}</div>
+                      </div>
+                    </td>
+                  </tr>
                 </table>
               </div>
             </div>

@@ -45,7 +45,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       const params = { params: this.params }
       try {
         const resp = await api.get('v1/simrs/ranap/ruangan/kunjunganpasien', params)
-        console.log('kunjungan ranap', resp)
+        // console.log('kunjungan ranap', resp)
         if (resp.status === 200) {
           // this.meta = resp.data
           // this.pasiens = resp.data.data
@@ -290,7 +290,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
     },
     async getJenisKasus () {
       const resp = await api.get('v1/simrs/ranap/ruangan/listjeniskasus')
-      console.log('jns kasus', resp.data)
+      // console.log('jns kasus', resp.data)
       if (resp.status === 200) {
         this.jeniskasus = resp.data
       }
