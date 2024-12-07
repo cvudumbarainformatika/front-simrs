@@ -55,7 +55,7 @@ export const useGallerySimrsTable = defineStore('gallery_simrs_table', {
       // console.log('columns', this.columns)
     },
 
-    refreshTable() {
+    refreshTable () {
       this.params.page = 1
       this.getDataTable()
     },
@@ -79,7 +79,8 @@ export const useGallerySimrsTable = defineStore('gallery_simrs_table', {
           notifSuccess(resp)
           this.getDataTable()
         })
-      } catch (error) {
+      }
+      catch (error) {
         console.log('err gallery', error.response)
         notifErr(error.response)
       }
