@@ -116,15 +116,17 @@
         Demikian berita acara ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagaimana mestinya.
       </p>
       <div class="row q-mt-xl justify-end q-mr-lg print-hide">
-        <app-autocomplete
-          v-model="store.form.user_pj_so"
-          label="Penanggung Jawab"
-          :source="store.pegawaies"
-          option-label="nama"
-          option-value="id"
-          outlined
-          clearable
-        />
+        <div class="col-6">
+          <app-autocomplete
+            v-model="store.form.peg_id_pj_so"
+            label="Pilih Penanggung Jawab"
+            :source="store.pegawaies"
+            option-label="nama"
+            option-value="id"
+            outlined
+            clearable
+          />
+        </div>
       </div>
       <div class="row q-mt-xl justify-end q-mr-lg">
         <div class="col-4 text-center">
@@ -151,7 +153,7 @@
         </div>
 
         <div class="col-4 text-center">
-          {{ store.pegawaies.find(f=>f.id===store.form.user_pj_so)?.nama??'Penanggung Jawab Belum dipilih' }}
+          {{ store.pegawaies.find(f=>f.id===store.form.peg_id_pj_so)?.nama??'Penanggung Jawab Belum dipilih' }}
         </div>
       </div>
     </div>

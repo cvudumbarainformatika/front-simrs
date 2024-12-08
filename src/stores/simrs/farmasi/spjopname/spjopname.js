@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useSPJOPNameStore = defineStore('spjopname', {
   state: () => ({
@@ -26,9 +27,9 @@ export const useSPJOPNameStore = defineStore('spjopname', {
       tgl_mulai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tgl_selesai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglopname: null,
-      user_uang: '',
-      user_farmasi: '',
-      user_pj_so: '',
+      peg_id_ka_keuangan: '',
+      peg_id_ka_farmasi: '',
+      peg_id_pj_so: '',
       pelaksanas: []
     },
     formSp: {
@@ -85,7 +86,11 @@ export const useSPJOPNameStore = defineStore('spjopname', {
             this.loading = false
             // console.log('resp', resp)
             this.items = resp?.data?.data
-            if (resp?.data?.tglopname) this.form.tglopname = resp?.data?.tglopname
+            if (resp?.data?.tglopname) {
+              const tgl = date.formatDate(resp?.data?.tglopname, 'YYYY-MM-DD')
+              this.form.tglopname = tgl
+              this.getSpj(tgl)
+            }
             else this.form.tglopname = null
             if (this.items?.length > 0) {
               this.gudangs.forEach(gd => {
@@ -98,6 +103,41 @@ export const useSPJOPNameStore = defineStore('spjopname', {
               })
             }
             console.log('gud', this.gudangs, this.items)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    getSpj (val) {
+      const param = {
+        params: {
+          tglopname: val
+        }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/spj/get-spj', param)
+          .then(resp => {
+            this.loading = false
+            console.log('resp spj', resp)
+            this.form.no_sp = ''
+            this.form.no_ba = ''
+            this.form.tgl_ba = date.formatDate(Date.now(), 'YYYY-MM-DD')
+            this.form.tgl_mulai = date.formatDate(Date.now(), 'YYYY-MM-DD')
+            this.form.tgl_selesai = date.formatDate(Date.now(), 'YYYY-MM-DD')
+            this.form.peg_id_ka_keuangan = ''
+            this.form.peg_id_ka_farmasi = ''
+            this.form.peg_id_pj_so = ''
+
+            if (resp?.data?.no_ba) this.form.no_ba = resp?.data?.no_ba
+            if (resp?.data?.no_sp) this.form.no_sp = resp?.data?.no_sp
+            if (resp?.data?.peg_id_ka_farmasi) this.form.peg_id_ka_farmasi = resp?.data?.peg_id_ka_farmasi
+            if (resp?.data?.peg_id_ka_keuangan) this.form.peg_id_ka_keuangan = resp?.data?.peg_id_ka_keuangan
+            if (resp?.data?.peg_id_pj_so) this.form.peg_id_pj_so = resp?.data?.peg_id_pj_so
+            if (resp?.data?.tgl_ba) this.form.tgl_ba = resp?.data?.tgl_ba
+            if (resp?.data?.tgl_mulai) this.form.tgl_mulai = resp?.data?.tgl_mulai
+            if (resp?.data?.tgl_selesai) this.form.tgl_selesai = resp?.data?.tgl_selesai
+            if (resp?.data?.pelaksanas?.length > 0) this.form.pelaksanas = resp?.data?.pelaksanas
+            // this.formSp.no_surat = resp?.data?.data?.no_surat
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -135,10 +175,10 @@ export const useSPJOPNameStore = defineStore('spjopname', {
               })
             }
             if (this.KaFarmasi) {
-              this.form.user_farmasi = this.KaFarmasi?.id
+              this.form.peg_id_ka_farmasi = this.KaFarmasi?.id
             }
             if (this.KaUang) {
-              this.form.user_uang = this.KaUang?.id
+              this.form.peg_id_ka_keuangan = this.KaUang?.id
             }
             console.log('pel', this.pelaksanas, this.form.pelaksanas)
 
@@ -153,17 +193,21 @@ export const useSPJOPNameStore = defineStore('spjopname', {
         api.post('v1/simrs/farmasinew/spj/simpan-pernyataan', this.form)
           .then(resp => {
             this.loadingSp = false
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => { this.loadingSp = false })
       })
     },
     simpanBA () {
+      if (!this.form.peg_id_pj_so) return notifErrVue('Pegawai Penanggung Jawab Belum di isi')
+      if (this.form.pelaksanas?.length <= 0) return notifErrVue('Pelaksana Opname tidak boleh kosong')
       this.loadingBa = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/spj/simpan-ba', this.form)
           .then(resp => {
             this.loadingBa = false
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => { this.loadingBa = false })
