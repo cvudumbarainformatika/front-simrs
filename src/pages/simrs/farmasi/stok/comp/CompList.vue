@@ -34,6 +34,9 @@
       <template #col-fisik>
         <div>Fisik</div>
       </template>
+      <template #col-keterangan>
+        <div>Keterangan</div>
+      </template>
       <template #col-selisih>
         <div>Selisih</div>
       </template>
@@ -160,7 +163,7 @@
               :loading="row.loadingSimpan"
               :disable="row.loadingSimpan"
               valid
-              @keyup.enter.stop="simpanFisik(row)"
+              @keyup.enter.stop="simpanFisik(row,'fisik')"
             >
               <q-tooltip class="bg-white text-weight-bold" anchor="center right" self="center left" :offset="[15,0]">
                 <div class="row text-orange f-12">
@@ -182,6 +185,30 @@
           {{ getSelisih(row) }}
         </div>
       </template>
+      <template #cell-keterangan="{row}">
+        <!-- label="Keterangan" -->
+        <div class="q-px-none" style="min-width: 200px; ">
+          <q-input
+            v-model="row.keterangan"
+            outlined
+            dense
+            standout="bg-yellow-3"
+            type="textarea"
+            :loading="row.loadingSimpan"
+            :disable="row.loadingSimpan"
+            valid
+          >
+            <q-tooltip class="bg-white text-weight-bold" anchor="center right" self="center left" :offset="[15,0]">
+              <div class="row text-orange f-12">
+                Keterangan
+              </div>
+              <div class="row text-primary f-12">
+                Tekan Enter Untuk Simpan
+              </div>
+            </q-tooltip>
+          </q-input>
+        </div>
+      </template>
       <template #left-acttion="{row}">
         <div>
           <div class="row q-mr-md q-my-sm">
@@ -193,7 +220,7 @@
               label="Simpan"
               no-caps
               :loading="row?.loadingSimpan"
-              :disable="row?.loadingSimpan"
+              :disable="row?.loadingSimpan || row?.loadingSimpanKet"
               @click="simpanFisik(row)"
             >
               <q-tooltip
@@ -201,6 +228,25 @@
                 self="center middle"
               >
                 Simpan Fisik
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="row q-mr-md q-my-sm">
+            <q-btn
+              class=""
+              size="sm"
+              color="orange"
+              label="Simpan Keterangan saja"
+              no-caps
+              :loading="row?.loadingSimpanKet"
+              :disable="row?.loadingSimpan || row?.loadingSimpanKet"
+              @click="simpanKeterangan(row)"
+            >
+              <q-tooltip
+                anchor="top middle"
+                self="center middle"
+              >
+                Simpan Keterangan
               </q-tooltip>
             </q-btn>
           </div>
@@ -266,9 +312,9 @@ function cariGudang (val) {
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
 // })
-function simpanFisik (row) {
+function simpanFisik (row, key) {
   console.log('simpan fisik', row, parseFloat(row?.fisik))
-  if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Di Isi Nomor')
+  if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Jumlah Fisik belum di isi')
   const date1 = new Date(table.now)
   const date2 = new Date(table.params.to + ' 23:59:59')
   const diff = date.getDateDiff(date1, date2, 'days')
@@ -281,6 +327,12 @@ function simpanFisik (row) {
 function editData (val) {
   // store.editData(val)
   console.log('edit', val)
+}
+function simpanKeterangan (row, key) {
+  console.log('simpan fisik', row, parseFloat(row?.fisik))
+  if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Jumlah Fisik Kosong')
+  if (!row?.keterangan) return notifErrVue('Keterangan belum di isi')
+  store.simpanKet(row)
 }
 // function setData (key, evt, row) {
 //   row[key] = evt

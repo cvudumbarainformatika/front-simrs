@@ -21,7 +21,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
       // 'penerimaan',
       'stok',
       'fisik',
-      'selisih'
+      'selisih',
+      'keterangan'
     ],
     columnHide: [],
     keterangan: 'keterangan',
@@ -116,6 +117,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
                   it.tglexp = it?.oneopname?.tglexp ?? null
                 }
                 it.fisik = it?.onefisik?.jumlah ?? null
+                it.keterangan = it?.onefisik?.keterangan ?? null
+                it.idfisik = it?.onefisik?.id ?? null
               })
             }
             resolve(resp)

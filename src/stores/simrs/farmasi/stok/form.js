@@ -167,6 +167,21 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
           })
           .catch(() => { val.loadingSimpan = false })
       })
+    },
+    simpanKet (val) {
+      val.loadingSimpanKet = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/simpan-keterangan', val)
+          .then(resp => {
+            val.loadingSimpanKet = false
+            console.log('simpan', resp.data)
+            notifSuccess(resp)
+            const table = UseFarmasiStokTable()
+            table.getDataTable(true)
+            resolve(resp)
+          })
+          .catch(() => { val.loadingSimpanKet = false })
+      })
     }
 
   }
