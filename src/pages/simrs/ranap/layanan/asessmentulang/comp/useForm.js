@@ -271,6 +271,7 @@ export default function useForm (pasien) {
               console.log('indx', indx)
               store.items[indx].pemeriksaan = res?.pemeriksaan
               store.items[indx].penilaian = res?.penilaian
+              store.items[indx] = res
               console.log('items wes d oprek', store.items)
             }
           }
