@@ -569,14 +569,14 @@ function setPpn (val) {
   }, 100)
 }
 function setTanggal (val) {
-  store.setForm('tanggal', val)
+  store.setForm('tglpenerimaan', val)
 }
 function dispTanggal (val) {
   store.setDisp('tanggal', val)
 }
 
 function setSurat (val) {
-  store.setForm('surat', val)
+  store.setForm('tglsurat', val)
 }
 function dispSurat (val) {
   store.setDisp('surat', val)
