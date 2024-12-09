@@ -176,10 +176,10 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masuk[ada].sub = sub
             }
             else if (adaH >= 0) {
-              const jum = parseFloat(masuk[ada].jumlah) + parseFloat(per.jumlah)
-              const sub = parseFloat(masuk[ada].sub) + parseFloat(per.sub)
-              masuk[ada].jumlah = jum
-              masuk[ada].sub = sub
+              const jum = parseFloat(masuk[adaH].jumlah) + parseFloat(per.jumlah)
+              const sub = parseFloat(masuk[adaH].sub) + parseFloat(per.sub)
+              masuk[adaH].jumlah = jum
+              masuk[adaH].sub = sub
             }
             else masuk.push(per)
           })
@@ -820,6 +820,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       return isNaN(parseFloat(val)) ? '' : val
     },
     async fetch () {
+      // laravel throttle 180 ms
       this.setField()
       const param = { params: this.params }
       // console.log('param', param)
