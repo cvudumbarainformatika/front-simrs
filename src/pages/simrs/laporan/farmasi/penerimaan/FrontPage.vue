@@ -5,6 +5,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('src/pages/simrs/logistik/gudang/farmasi/penerimaan/listpenerimaan/ListPenerimaanPage.vue')
+  import('./comp/PenerimaanObatPage.vue')
 )
 </script>
