@@ -80,8 +80,59 @@ export const useTindakanRanapStore = defineStore('tindakan-ranap-store', {
       // console.log('list pegawai', resp)
       if (resp.status === 200) {
         this.listPetugas = resp.data
+        // this.setPetugasBayang(resp.data)
       }
     },
+
+    // setPetugasBayang (arr) {
+    //   const byg = [
+    //     {
+    //       id: null,
+    //       nik: null,
+    //       nip: null,
+    //       nama: 'Perawat Kemuning',
+    //       jabatan: null,
+    //       kdpegsimrs: 'D912',
+    //       aktif: 'AKTIF',
+    //       kddpjp: null,
+    //       kdgroupnakes: '2'
+    //     },
+    //     {
+    //       id: null,
+    //       nik: null,
+    //       nip: null,
+    //       nama: 'Perawat Mawar',
+    //       jabatan: null,
+    //       kdpegsimrs: 'D913',
+    //       aktif: 'AKTIF',
+    //       kddpjp: null,
+    //       kdgroupnakes: '2'
+    //     },
+    //     {
+    //       id: null,
+    //       nik: null,
+    //       nip: null,
+    //       nama: 'Perawat Dahlia',
+    //       jabatan: null,
+    //       kdpegsimrs: 'D914',
+    //       aktif: 'AKTIF',
+    //       kddpjp: null,
+    //       kdgroupnakes: '2'
+    //     },
+    //     {
+    //       id: null,
+    //       nik: null,
+    //       nip: null,
+    //       nama: 'Perawat Dahlia',
+    //       jabatan: null,
+    //       kdpegsimrs: 'D914',
+    //       aktif: 'AKTIF',
+    //       kddpjp: null,
+    //       kdgroupnakes: '2'
+    //     },
+
+    //   ]
+    // },
 
     //= ===
     async cariIcd9 (val) {
