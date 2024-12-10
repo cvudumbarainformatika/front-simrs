@@ -1163,40 +1163,39 @@ export const useAnamnesisRanapStore = defineStore('anamnesis-ranap-store', {
     PISAH_DATA_RANAP_IGD (arr, pasien) {
       const auth = useAplikasiStore()
       const jns = auth?.user?.pegawai?.kdgroupnakes
-      // console.log('auth', jns)
+      // console.groupCollapsed('[setForm : PISAH_DATA_RANAP_IGD]')
+      // console.log('jns auth', jns)
 
       const igd = arr?.filter(x => x?.kdruang === 'POL014') ?? []
-      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.awal === '1') ?? []
+      const ranap = arr?.filter(x => x?.kdruang !== 'POL014' && x?.awal === '1' && x?.jns === '1') ?? []
+      // console.log('ranap isianDokter:', ranap)
+      // console.log('igd :', igd)
 
-      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.nake !== '1' && x?.awal === '1') ?? []
-
-      this.items.igd = igd
-      this.items.ranap = ranap
-
-      // const pengunjung = usePengunjungRanapStore()
-      // console.log('items', this.items, ranap)
+      const isianKeperawatan = arr?.filter(x => x?.kdruang !== 'POL014' && x?.jns !== '1' && x?.awal === '1') ?? []
+      // console.log('isianKeperawatan :', isianKeperawatan)
 
       // baru ada penyesuaian nakes
       let form = null
       const dokter = (jns === '1' || jns === 1)
+      // console.log('dokter', dokter)
+
+      this.items.igd = igd
+      this.items.ranap = dokter ? ranap : isianKeperawatan
+
+      // jika dokter
       if (dokter) {
-        if (ranap.length) { form = ranap[0] }
-        else { form = isianKeperawatan.length ? isianKeperawatan[0] : null }
+        if (ranap.length) { form = ranap[0] } // form = ranap isianDokter jika ada
+        else { form = isianKeperawatan.length ? isianKeperawatan[0] : null } // form = isianKeperawatan jika blm ada isianDokter
       }
       else {
-        form = ranap.length ? ranap[0] : null
+        form = isianKeperawatan.length ? isianKeperawatan[0] : null
       }
 
-      if (form) ranap.length ? form.id = ranap[0].id : form.id = null
-      // const isianList = ranap.length ? ranap[0] : null
-
-      // if (isianList) {
-      //   pengunjung.injectDataPasien(pasien?.noreg, isianList, 'anamnesis')
-      //   pengunjung.deleteInjectanNull(pasien?.noreg, 'anamnesis')
-      // }
+      // console.log('form', form)
       this.initReset(form)
       if (dokter) this.form.keluhannyeri = null
       if (dokter) this.form.skreeninggizi = null
+      // console.groupEnd()
     },
     SPLICE_ITEMS_RANAP (arr) {
       const idx = arr?.findIndex(x => x.id === null)
