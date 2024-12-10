@@ -20,29 +20,38 @@
           <q-item-section class="q-col-gutter-xs relative-position">
             <div><b>{{ item?.nama }}</b></div>
             <div><b>NIK : {{ item?.nktp }}</b></div>
+            <div><b>NOKA : {{ item?.noka }}</b></div>
             <div>Norm|Reg : <span class="text-primary">{{ item?.norm }}</span> | <span class="text-orange">{{ item.noreg }}</span></div>
             <div>Usia : {{ item?.usia }} | <em class="text-grey">{{ item.kelamin }}</em></div>
             <div class="f-10">
               {{ item?.alamat }}
             </div>
-            <div v-if="item?.groups !=='2'">
-              <q-badge outline class="q-mt-sm q-px-sm" dense :color="!item?.sep ? 'red' : 'primary'">
+            <div class="full-width row justify-between items-center">
+              <!-- <div v-if="item?.groups !=='2'"> -->
+              <q-badge v-if="item?.groups !=='2'" outline class="q-mt-sm q-px-sm" dense :color="!item?.sep ? 'red' : 'primary'">
                 <div class="f-12">
                   {{ !item?.sep ? 'SEP RANAP BELUM TERBIT' : 'SEP RANAP : ' + item?.sep }}
                 </div>
               </q-badge>
-            </div>
-            <div v-else>
-              <q-badge outline class="q-mt-sm q-px-sm" dense color="teal">
+              <!-- </div> -->
+              <!-- <div v-else> -->
+              <q-badge v-else outline class="q-mt-sm q-px-sm" dense color="teal">
                 <div class="f-12">
                   PASIEN UMUM
                 </div>
               </q-badge>
+              <!-- </div> -->
+
+              <q-badge outline :color="item?.status === '2' || item?.status === '3' ? 'green' : 'orange'">
+                {{ (item?.status === '2' || item?.status === '3') ? 'Pulang' : 'Belum Pulang' }}  <span class="text-dark q-mx-sm">{{ item?.prognosa }}</span>
+              </q-badge>
             </div>
 
-            <div class="absolute-bottom-right q-pa-sm">
-              {{ (item?.status === '2' || item?.status === '3') ? 'Pulang' : 'Belum Pulang' }}
-            </div>
+            <!-- <div class="absolute-bottom-right q-pa-sm">
+              <q-badge outline :color="item?.status === '2' || item?.status === '3' ? 'green' : 'orange'">
+                {{ (item?.status === '2' || item?.status === '3') ? 'Pulang' : 'Belum Pulang' }} : {{ item?.prognosis }}
+              </q-badge>
+            </div> -->
           </q-item-section>
           <q-item-section class="q-col-gutter-xs">
             <div class="text-pink">
