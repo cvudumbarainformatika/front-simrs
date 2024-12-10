@@ -70,9 +70,9 @@
       <div v-if="store.params.jenisreport === '1'">
         <PenerimaanRekapObat :pihakketiga="props.pihakketiga" />
       </div>
-      <div v-else-if="store.params.jenisreport === '2'">
+      <!-- <div v-else-if="store.params.jenisreport === '2'">
         <HutangpertanggalByBAST />
-      </div>
+      </div> -->
     </q-card>
   </q-page>
 </template>

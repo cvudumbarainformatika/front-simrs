@@ -23,7 +23,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
       jenisreport: '1',
       gudang: 'all',
       jenispenerimaan: 'all',
-      pihakketiga: ''
+      pihakketiga: 'all'
       // ruangan: ''
     }
   }),
@@ -33,7 +33,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
         api.get('v1/transaksi/belanja_ls/perusahaan')
           .then(resp => {
             this.pihakTigas = resp.data
-            // this.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
+            this.pihakTigas.push({ kode: 'all', nama: 'Semua Pbf' })
             resolve(resp)
           })
       })
@@ -76,7 +76,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
         }
         hasilglobal.push(hasil)
       })
-      this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
+      this.items = hasilglobal.sort(({ TglPenerimaan: a }, { TglPenerimaan: b }) => b - a)
       this.totalall = this.items.reduce((a, b) => parseFloat(a) + parseFloat(b.Total), 0)
     }
   }

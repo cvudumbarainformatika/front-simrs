@@ -10,7 +10,6 @@
       :loading="store.loading"
       row-no
       click-able
-      @on-click="click"
       @refresh="store.refreshTable"
     >
       <template #header-left-after-search>
