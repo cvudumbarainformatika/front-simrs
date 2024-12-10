@@ -618,7 +618,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           }
           if (it?.penyesuaian?.length) {
             it?.penyesuaian.forEach(p => {
-              const index = masuk.findIndex(f => f.nopenerimaan === p.nopenerimaan)
+              const index = masuk.findIndex(f => f.kd_obat === p.kd_obat)
               if (index >= 0) {
                 // console.log('penye', masuk[index], p)
 
@@ -627,16 +627,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
                 masuk[index].jumlah = jumM
                 masuk[index].sub = subM
-              }
-              else {
-                const index2 = masuk.findIndex(f => f.harga === p.harga)
-                // console.log('else'[masuk[index2]], p)
-
-                const jumEl = masuk[index2].jumlah + p.jumlah
-                const subEl = masuk[index2].sub + p.sub
-
-                masuk[index2].jumlah = jumEl
-                masuk[index2].sub = subEl
               }
               // console.log('masuk', masuk[indexMAsuk])
             })
