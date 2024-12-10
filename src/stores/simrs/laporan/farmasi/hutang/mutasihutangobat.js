@@ -44,7 +44,7 @@ export const useLapMutasiHutangObatStore = defineStore('lap-mutasi-hutang-obat',
     },
     async sethasil (val) {
       this.items = []
-      console.log('asil', val)
+      // console.log('asil', val)
       const tsaldoawal = []
       const tsaldoawalkonsi = []
       const tutangsekarang = []

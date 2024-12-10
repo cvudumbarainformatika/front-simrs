@@ -45,6 +45,7 @@
                 dense
                 outlined
                 :options="pilihgudang"
+                style="width: 200px;"
               />
             </div>
             <div>
@@ -53,7 +54,25 @@
                 label="Jenis Penerimaan"
                 dense
                 outlined
-                :options="pilihgudang"
+                :options="pilihpenerimaan"
+                style="width: 200px;"
+              />
+            </div>
+            <div>
+              <q-select
+                v-model="store.params.pihakketiga"
+                label="PBF"
+                dense
+                outlined
+                :options="options"
+                emit-value
+                map-options
+                option-label="nama"
+                option-value="kode"
+                style="width: 300px;"
+                clearable
+                use-input
+                @filter="filterFn"
               />
             </div>
             <div>
@@ -68,6 +87,56 @@
           </div>
         </q-form>
       </template>
+      <template #cell-NoPenerimaan="{row}">
+        <div class="row justify-center">
+          {{ row?.NoPenerimaan }}
+        </div>
+      </template>
+      <template #cell-TglPenerimaan="{row}">
+        <div class="row justify-center">
+          {{ row?.TglPenerimaan }}
+        </div>
+      </template>
+      <template #cell-Suplier="{row}">
+        <div class="row justify-center">
+          {{ row?.Suplier }}
+        </div>
+      </template>
+      <template #cell-NoPemesanan="{row}">
+        <div class="row justify-center">
+          {{ row?.NoPemesanan }}
+        </div>
+      </template>
+      <template #cell-TglPemesanan="{row}">
+        <div class="row justify-center">
+          {{ row?.TglPemesanan }}
+        </div>
+      </template>
+      <template #cell-NoDokumen="{row}">
+        <div class="row justify-center">
+          {{ row?.NoDokumen }}
+        </div>
+      </template>
+      <template #cell-JenisDokumen="{row}">
+        <div class="row justify-center">
+          {{ row?.JenisDokumen }}
+        </div>
+      </template>
+      <template #cell-TglSurat="{row}">
+        <div class="row justify-center">
+          {{ row?.TglSurat }}
+        </div>
+      </template>
+      <template #cell-TglJatuhTempo="{row}">
+        <div class="row justify-center">
+          {{ row?.TglJatuhTempo }}
+        </div>
+      </template>
+      <template #cell-Total="{row}">
+        <div class="row justify-end">
+          {{ formatDouble(row?.Total) }}
+        </div>
+      </template>
     </TablePage>
   </q-card-section>
 </template>
@@ -79,6 +148,24 @@ import { useLaporanPenerimaanObatStore } from 'src/stores/simrs/laporan/farmasi/
 const store = useLaporanPenerimaanObatStore()
 
 const pilihgudang = ref(['Gudang KO', 'Gudang Flor Stok', 'Semua Gudang'])
+const pilihpenerimaan = ref(['Semua Penerimaan', 'Pembelian Langsung', 'Pesanan', 'Pinjaman', 'Konsinyasi', 'APBD', 'APBN', 'Penggantian Barang', 'Hibah', 'Sisa Pasien'])
+const options = ref([store.pihakTigas])
+
+function filterFn (val, update) {
+  if (val === '') {
+    update(() => {
+      options.value = []
+    })
+    return
+  }
+  update(() => {
+    const needle = val.toLowerCase()
+
+    options.value = store.pihakTigas.filter(
+      (v) => v.nama.toLowerCase().indexOf(needle) > -1 || v.kode.toLowerCase().indexOf(needle) > -1
+    )
+  })
+}
 
 function setToDisp (vaal) {
   store.tanggal.to = vaal
@@ -95,4 +182,11 @@ function setTo (val) {
 function setFrom (val) {
   store.params.tgldari = val
 }
+
+// const props = defineProps({
+//   pihakketiga: {
+//     type: Object,
+//     default: null
+//   }
+// })
 </script>

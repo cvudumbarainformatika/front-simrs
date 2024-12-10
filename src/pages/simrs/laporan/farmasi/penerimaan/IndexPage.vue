@@ -2,7 +2,7 @@
   <q-page>
     <Suspense>
       <!-- main content -->
-      <AsyncComp />
+      <AsyncComp :pihakketiga="store.pihakTigas" />
       <!-- loading state -->
       <template #fallback>
         <app-loading />
@@ -11,9 +11,15 @@
   </q-page>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+
+import { useLaporanPenerimaanObatStore } from 'src/stores/simrs/laporan/farmasi/penerimaanobat/penerimaanobat'
+import { defineAsyncComponent, onMounted } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
   import('./FrontPage.vue')
 )
+const store = useLaporanPenerimaanObatStore()
+onMounted(() => {
+  store.getPihakKetiga()
+})
 </script>

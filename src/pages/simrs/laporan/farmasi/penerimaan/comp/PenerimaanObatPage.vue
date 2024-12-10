@@ -68,7 +68,7 @@
         </div> -->
       </q-card-section>
       <div v-if="store.params.jenisreport === '1'">
-        <PenerimaanRekapObat />
+        <PenerimaanRekapObat :pihakketiga="props.pihakketiga" />
       </div>
       <div v-else-if="store.params.jenisreport === '2'">
         <HutangpertanggalByBAST />
@@ -104,6 +104,13 @@ function pilihjenislaporan (val) {
     store.judulreport = 'Laporan Rinci Penerimaan Obat'
   }
 }
+
+const props = defineProps({
+  pihakketiga: {
+    type: Object,
+    default: null
+  }
+})
 
 // function setToDisp (vaal) {
 //   store.tanggal.from = vaal
