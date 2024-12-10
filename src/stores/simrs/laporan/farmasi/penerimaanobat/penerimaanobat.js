@@ -8,6 +8,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     loadingDownload: true,
     items: [],
     pihakTigas: [],
+    pihakTigasx: [],
     meta: {},
     detail: [],
     kolom: ['NoPenerimaan', 'NoPemesanan', 'Jenis Penerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'NoFaktur', 'Suplier', 'Total'],
@@ -20,9 +21,9 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       jenisreport: '1',
-      gudang: 'Semua Gudang',
-      jenispenerimaan: 'Semua Penerimaan',
-      pihakketiga: 'Semua PBF'
+      gudang: 'all',
+      jenispenerimaan: 'all',
+      pihakketiga: ''
       // ruangan: ''
     }
   }),
@@ -31,8 +32,8 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
       return new Promise(resolve => {
         api.get('v1/transaksi/belanja_ls/perusahaan')
           .then(resp => {
-            console.log('pihak tiga', resp.data)
             this.pihakTigas = resp.data
+            // this.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
             resolve(resp)
           })
       })
