@@ -3,7 +3,7 @@
     <!-- barthel -->
     <q-card v-if="store?.barthels?.grupings?.includes(jnsKasusKep) && !ulang" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
-        <strong>{{ store?.barthels?.desc }}</strong>
+        <strong>{{ store?.barthels?.desc }} </strong>
       </q-card-section>
       <q-separator />
       <q-card-section v-if="store.formBarthel" class="q-pa-sm row q-col-gutter-xs">
@@ -132,7 +132,7 @@
     </q-card> -->
 
     <!-- humpty untuk usia < 18 tahun -->
-    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18)" flat bordered class="col-12">
+    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia >= 0 && store.usia < 18)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
@@ -265,7 +265,7 @@
     </q-card> -->
 
     <!-- Resiko Jatuh Morse Fall Scale (18 - 59 tahun) -->
-    <q-card v-if="store?.morses?.grupings?.includes(jnsKasusKep) && (store.usia >= 18 && store.usia < 60)" flat bordered class="col-12">
+    <q-card v-else-if="store?.morses?.grupings?.includes(jnsKasusKep) && (store.usia >= 18 && store.usia < 60)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.morses?.desc }}</strong>
       </q-card-section>
@@ -296,7 +296,7 @@
     </q-card>
 
     <!-- Resiko Jatuh Ontario / Sidney Scoring (geriatric dg usia >=60 tahun) -->
-    <q-card v-if="store?.ontarios?.grupings?.includes(jnsKasusKep) && (store.usia >= 60)" flat bordered class="col-12">
+    <q-card v-else-if="store?.ontarios?.grupings?.includes(jnsKasusKep) && (store.usia >= 60)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.ontarios?.desc }}</strong>
       </q-card-section>
@@ -381,6 +381,8 @@ const jnsKasusKep = computed(() => {
   if (props.kasus) {
     return props.kasus?.gruping
   }
+  console.log('jnsKasusKep', props.kasus?.gruping)
+
   return null
 })
 

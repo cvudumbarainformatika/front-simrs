@@ -8,6 +8,7 @@ import { usePemeriksaanUmumRanapStore } from './pemeriksaanumum'
 import { usePenilaianRanapStore } from './penilaian'
 import { useDiagnosaKeperawatan } from '../pelayanan/poli/diagnosakeperawatan'
 import { useDiagnosaKebidananStore } from '../pelayanan/poli/diagnosakebidanan'
+import { getNewLine } from 'src/modules/formatter'
 
 export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-store', {
   state: () => ({
@@ -108,7 +109,8 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
         this.form.s_sambung = dataSebelumnya?.s_sambung
       }
       else if (nakes === '1') {
-        this.initDiagnosaMedisToText(pasien?.diagnosamedis)
+        // this.initDiagnosaMedisToText(pasien?.diagnosamedis)
+        this.initMemoDiagnosaToText(pasien?.memodiagnosa)
         this.form.o_sambung = dataSebelumnya?.o_sambung
         this.form.plann = null
         this.form.instruksi = null
@@ -136,6 +138,13 @@ export const useAsessmentUlangRanapStore = defineStore('asesment-ulang-ranap-sto
     initDiagnosaMedisToText (diag) {
       const diagnosa = diag?.length ? diag?.filter(x => x?.rs13 !== 'POL014') : []
       const text = diagnosa.length ? diagnosa.map(x => '* ' + x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4).join('\n') : null
+      // console.log('diagnosa', diagnosa)
+
+      this.form.asessment = text
+    },
+    initMemoDiagnosaToText (diag) {
+      // const diagnosa = diag?.length ? diag?.filter(x => x?.rs13 !== 'POL014') : []
+      const text = getNewLine(diag)
       // console.log('diagnosa', diagnosa)
 
       this.form.asessment = text
