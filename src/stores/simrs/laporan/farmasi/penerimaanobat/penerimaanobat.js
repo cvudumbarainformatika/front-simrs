@@ -23,9 +23,10 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
       jenisreport: '1',
       gudang: 'all',
       jenispenerimaan: 'all',
-      pihakketiga: 'all'
+      pihakketiga: ''
       // ruangan: ''
-    }
+    },
+    pihakketiga: 'Semua Pbf'
   }),
   actions: {
     async getPihakKetiga () {
@@ -33,7 +34,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
         api.get('v1/transaksi/belanja_ls/perusahaan')
           .then(resp => {
             this.pihakTigas = resp.data
-            this.pihakTigas.push({ kode: 'all', nama: 'Semua Pbf' })
+            this.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
             resolve(resp)
           })
       })
@@ -44,6 +45,12 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     async laporanRekapPenerimaanObat () {
       this.loading = true
       this.kolom = ['NoPenerimaan', 'NoPemesanan', 'JenisPenerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'Suplier', 'Total']
+      if (this.params.pihakketiga === '') {
+        this.params.pihakketiga = 'all'
+      }
+      else {
+        this.params.pihakketiga = this.pihakketiga
+      }
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/hutang/caripenerimaanobat', params)
         .then((resp) => {

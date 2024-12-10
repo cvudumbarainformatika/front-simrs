@@ -67,7 +67,7 @@
             </div>
             <div>
               <q-select
-                v-model="store.params.pihakketiga"
+                v-model="store.pihakketiga"
                 label="PBF"
                 dense
                 outlined
@@ -179,8 +179,8 @@ const pilihpenerimaan = ref([
   { label: 'Penggantian Barang', value: 'Penggantian Barang' },
   { label: 'Hibah', value: 'Hibah' },
   { label: 'Sisa Pasien', value: 'Sisa Pasien' }])
-
-const options = ref([store.pihakTigas])
+const optionsx = store.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
+const options = ref([optionsx])
 
 function filterFn (val, update) {
   if (val === '') {
@@ -214,10 +214,4 @@ function setFrom (val) {
   store.params.tgldari = val
 }
 
-// const props = defineProps({
-//   pihakketiga: {
-//     type: Object,
-//     default: null
-//   }
-// })
 </script>
