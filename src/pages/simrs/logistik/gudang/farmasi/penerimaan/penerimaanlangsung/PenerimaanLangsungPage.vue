@@ -617,7 +617,7 @@ function simpan () {
   }
 }
 function kunci () {
-  store.selesaiDanKunci().then(() => { resetValidation() })
+  store.kunci(store.form.nopenerimaan).then(() => { resetValidation() })
 }
 
 // head
