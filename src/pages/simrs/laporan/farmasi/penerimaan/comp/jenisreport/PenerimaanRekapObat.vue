@@ -137,12 +137,21 @@
           {{ formatDouble(row?.Total) }}
         </div>
       </template>
+      <template #bottom-row>
+        <td style="color: red;" colspan="10" class="col-1 text-right text-bold">
+          Total
+        </td>
+        <td style="color: red;" class="col-1 text-right text-bold">
+          {{ formatDouble(store.totalall) }}
+        </td>
+      </template>
     </TablePage>
   </q-card-section>
 </template>
 <script setup>
 import { ref } from 'vue'
 import TablePage from './TablePage.vue'
+import { formatDouble } from 'src/modules/formatter'
 import { useLaporanPenerimaanObatStore } from 'src/stores/simrs/laporan/farmasi/penerimaanobat/penerimaanobat'
 
 const store = useLaporanPenerimaanObatStore()

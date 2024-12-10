@@ -10,6 +10,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     pihakTigas: [],
     meta: {},
     detail: [],
+    kolom: ['NoPenerimaan', 'NoPemesanan', 'Jenis Penerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'NoFaktur', 'Suplier', 'Total'],
     totalall: 0,
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -41,7 +42,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     },
     async laporanRekapPenerimaanObat () {
       this.loading = true
-      this.kolom = ['NoPenerimaan', 'NoPemesanan', 'Jenis Penerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'NoFaktur', 'Suplier', 'Total']
+      this.kolom = ['NoPenerimaan', 'NoPemesanan', 'JenisPenerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'Suplier', 'Total']
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/hutang/caripenerimaanobat', params)
         .then((resp) => {
@@ -59,15 +60,23 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     sethasil (val) {
       const hasilglobal = []
       val.forEach(x => {
-        const nopenerimaan = x?.nopenerimaan
-        const total = x.reduce((x, y) => parseFloat(x) + parseFloat(y.subtotal), 0)
         const hasil = {
-          NoPenerimaan: nopenerimaan,
-          Total: total
+          NoPenerimaan: x?.nopenerimaan,
+          NoPemesanan: x?.nopemesanan,
+          JenisPenerimaan: x?.jenis_penerimaan,
+          Gudang: x?.gudang?.nama,
+          TglPenerimaan: x?.tglpenerimaan,
+          TglSurat: x?.tglsurat,
+          BatasBayar: x?.batasbayar ?? '-',
+          NoSurat: x?.nomorsurat,
+          JenisSurat: x?.jenissurat,
+          Suplier: x?.pihakketiga?.nama,
+          Total: x?.total_faktur_pbf
         }
         hasilglobal.push(hasil)
       })
       this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
+      this.totalall = this.items.reduce((a, b) => parseFloat(a) + parseFloat(b.Total), 0)
     }
   }
 })
