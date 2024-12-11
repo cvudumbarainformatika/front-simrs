@@ -20,6 +20,7 @@
             option-label="nama"
             outlined
             :source="store.dokters"
+            @clear="store.form.kodedokter = null"
             @on-select="(val)=> {
               store.form.kodedokter = val
               const ceck = store.dokters.find(item => item.kdpegsimrs === val) ?? null

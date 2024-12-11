@@ -52,6 +52,12 @@
               Jawaban :
             </div>
             <span v-html="getNewLine(item?.jawaban) || 'Belum Ada Jawaban'" />
+
+            <div class="q-mt-lg">
+              <q-badge class="q-px-md">
+                Jawaban Sudah Terverif Oleh Dokter Konsulan
+              </q-badge>
+            </div>
           </div>
         </div>
       </div>
@@ -112,10 +118,24 @@ onMounted(() => {
 function cekYgMenjawab (item) {
   let open = false
   if (item?.kddokterkonsul === props?.auth) { // jika akun dokter konsulnya maka... jawaban terbuka
+    // tapi jika dokter sudah memverif
+
     open = true
   }
   else if (item?.nakesminta?.kdgroupnakes === '2') { // jika yg konsultasi adalah perawat maka... jawaban terbuka
-    open = true
+    if (item?.nakesminta?.kdgroupnakes === '2') { // jika yg konsultasi adalah perawat maka... jawaban terbuka
+      const ygJwbPerawat = (item?.kdminta === item?.user_jawab) && item?.user_jawab !== null
+      console.log('ygJwbPerawat', ygJwbPerawat)
+
+      if (ygJwbPerawat) {
+        open = true
+      }
+      else {
+        open = false
+      }
+    }
+
+    // open = true
   }
   else {
     open = false
