@@ -75,7 +75,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       this.setParams('page', 1)
       this.getDataTable()
     },
-    mapingItem (val, array) {
+    mapingItem (val, array, type) {
       val.forEach(it => {
         it.data = []
         // --- harga dan sub dg bawa penerimaan rinci start ---
@@ -146,6 +146,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         })
         // --- harga dan sub dg bawa penerimaan rinci start ---
         const masuk = []
+        const masukx = []
+        const keluar = []
         const resep = it.resepkeluar
         const pak = it.pemakaian
         if (this.params.jenis === 'detail') {
@@ -558,10 +560,12 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.saldoawal?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.saldoawal?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
+
             const temp = {
+              kd_obat: it?.kd_obat,
               tgl: this.params.tahun + '-' + this.params.bulan + '-01 00:00:00',
               saldoawal: sala,
-              ket: 'Saldo Awal'
+              ket: type === 'download' ? '' : 'Saldo Awal'
             }
             it.data.push(temp)
 
@@ -570,7 +574,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               kd_obat: it?.kd_obat,
               jumlah: it?.saldo?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.saldo?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0),
-              ket: 'Saldo Awal'
+              ket: type === 'download' ? '' : 'Saldo Awal'
             }
 
             masuk.push(salJ)
@@ -581,7 +585,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               kd_obat: it?.kd_obat,
               jumlah: it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0),
-              ket: 'Penerimaan'
+              ket: type === 'download' ? '' : 'Penerimaan'
             }
 
             const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
@@ -593,6 +597,17 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masuk[index].sub = subM
             }
             else masuk.push(ms)
+            if (type === 'download') {
+              const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index1 >= 0) {
+                const jumM = masukx[index1].jumlah + ms.jumlah
+                const subM = masukx[index1].sub + ms.sub
+
+                masukx[index1].jumlah = jumM
+                masukx[index1].sub = subM
+              }
+              else masukx.push(ms)
+            }
           }
           if (it?.returpenjualan?.length) {
             const raw = {
@@ -609,12 +624,23 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masuk[index].jumlah = jumM
               masuk[index].sub = subM
             }
+            if (type === 'download') {
+              const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index1 >= 0) {
+                const jumM = masukx[index1].jumlah + raw.jumlah
+                const subM = masukx[index1].sub + raw.sub
 
-            it.data.push({
-              tgl: raw?.tgl,
-              masuk: raw,
-              ket: 'Retur Penjualan'
-            })
+                masukx[index1].jumlah = jumM
+                masukx[index1].sub = subM
+              }
+            }
+            if (type !== 'download') {
+              it.data.push({
+                tgl: raw?.tgl,
+                masuk: raw,
+                ket: 'Retur Penjualan'
+              })
+            }
           }
           if (it?.penyesuaian?.length) {
             it?.penyesuaian.forEach(p => {
@@ -628,7 +654,17 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 masuk[index].jumlah = jumM
                 masuk[index].sub = subM
               }
-              // console.log('masuk', masuk[indexMAsuk])
+              if (type === 'download') {
+                const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
+                if (index1 >= 0) {
+                  const jumM = masukx[index1].jumlah + p.jumlah
+                  const subM = masukx[index1].sub + p.sub
+
+                  masukx[index1].jumlah = jumM
+                  masukx[index1].sub = subM
+                }
+              }
+              console.log('Ada penyesuanag', masukx)
             })
             // console.log('penyesuaian', it?.penyesuaian, akhir)
           }
@@ -639,11 +675,27 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            it.data.push({
-              tgl: raw?.tgl,
-              keluar: raw,
-              ket: 'Resep'
-            })
+            if (type !== 'download') {
+              it.data.push({
+                tgl: raw?.tgl,
+                keluar: raw,
+                ket: 'Resep'
+              })
+            }
+            if (type === 'download') {
+              const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = keluar[index].jumlah + raw.jumlah
+                const subM = keluar[index].sub + raw.sub
+
+                keluar[index].jumlah = jumM
+                keluar[index].sub = subM
+              }
+              else {
+                keluar.push(raw)
+              }
+            }
+
             const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index >= 0) {
               const jumM = masuk[index].jumlah - raw.jumlah
@@ -665,6 +717,20 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               keluar: raw,
               ket: 'Ruangan'
             })
+            if (type === 'download') {
+              const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = keluar[index].jumlah + raw.jumlah
+                const subM = keluar[index].sub + raw.sub
+
+                keluar[index].jumlah = jumM
+                keluar[index].sub = subM
+              }
+              else {
+                keluar.push(raw)
+              }
+            }
+
             const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index >= 0) {
               const jumM = masuk[index].jumlah - raw.jumlah
@@ -686,32 +752,78 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masuk: ms,
               ket: 'Penerimaan'
             }
-            it.data.push(temp)
+            if (type !== 'download') it.data.push(temp)
+            // else {
+            //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
+            //   if (index >= 0) {
+            //     const jumM = masuk[index].jumlah + ms.jumlah
+            //     const subM = masuk[index].sub + ms.sub
+
+            //     masuk[index].jumlah = jumM
+            //     masuk[index].sub = subM
+            //   }
+            // }
           }
         }
-
-        const akhir = masuk.filter(f => f.jumlah !== 0)
-        it.akhir = akhir.filter(f => f.jumlah !== 0)
-        it.akhir.forEach(s => {
-          s.tgl = this.params.tahun + '-' + this.params.bulan + '-31 23:59:50'
-          const temp = {
-            tgl: s.tgl,
-            ket: 'Saldo Akhir'
-          }
-          if (this.params.jenis === 'rekap' && it.data.filter(f => f.masuk)?.map(m => m.masuk)?.length > 1) {
-            temp.akhir = s
-            temp.masuk = {
-              jumlah: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
-              sub: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+        if (type === 'download') {
+          if (masukx?.length) {
+            const mas = {
+              kd_obat: it?.kd_obat,
+              jumlah: masukx?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+              sub: masukx?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
+            it.data[0].masuk = mas
           }
-          else {
-            temp.akhir = s
+          if (keluar?.length) {
+            const kel = {
+              kd_obat: it?.kd_obat,
+              jumlah: keluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+              sub: keluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+            }
+            it.data[0].keluar = kel
           }
-          // console.log('temp akhir', temp)
+          const jAw = it.data[0]?.saldoawal?.jumlah ?? 0
+          const sAw = it.data[0]?.saldoawal?.sub ?? 0
 
-          it.data.push(temp)
-        })
+          const jMa = it.data[0]?.masuk?.jumlah ?? 0
+          const sMa = it.data[0]?.masuk?.sub ?? 0
+
+          const jKe = it.data[0]?.keluar?.jumlah ?? 0
+          const sKe = it.data[0]?.keluar?.sub ?? 0
+          const akh = {
+            kd_obat: it?.kd_obat,
+            jumlah: jAw + jMa - jKe,
+            sub: sAw + sMa - sKe
+          }
+          if (it.data?.length > 0)it.data[0].akhir = akh
+
+          it.masuk = masukx
+          it.keluar = keluar
+        }
+        else {
+          const akhir = masuk.filter(f => f.jumlah !== 0)
+          it.akhir = akhir.filter(f => f.jumlah !== 0)
+          it.akhir.forEach(s => {
+            s.tgl = this.params.tahun + '-' + this.params.bulan + '-31 23:59:50'
+            const temp = {
+              tgl: s.tgl,
+              ket: 'Saldo Akhir'
+            }
+            if (this.params.jenis === 'rekap' && it.data.filter(f => f.masuk)?.map(m => m.masuk)?.length > 1) {
+              temp.akhir = s
+              temp.masuk = {
+                jumlah: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+                sub: it.data.filter(f => f.masuk)?.map(m => m.masuk)?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+              }
+            }
+            else {
+              temp.akhir = s
+            }
+            // console.log('temp akhir', temp)
+
+            if (type !== 'download') it.data.push(temp)
+          })
+        }
         const jumAk = it?.akhir?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0)
         const subAk = it?.akhir?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
         const jumAw = it?.saldoawal?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0)
@@ -738,9 +850,10 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             jumlah: jumKel,
             sub: subKel
           },
-          ket: 'Subtotal Saldo Akhir'
+          ket: type === 'download' ? '' : 'Subtotal Saldo Akhir'
         }
         if (this.params.jenis === 'detail' && (jumAk > 0 || jumAw > 0 || jumMs > 0 || jumKel > 0)) it?.data.push(subt)
+        // if (this.params.jenis === 'rekap' && type === 'download') it?.data.push(subt)
 
         it?.data?.sort(function (a, b) {
           const dateA = new Date(a.tgl)
@@ -823,7 +936,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       // await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
       // .then(resp => {
       if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
-      this.mapingItem(resp?.data?.data, items)
+      this.mapingItem(resp?.data?.data, items, 'download')
       items.forEach((item, i) => {
         // console.log('item', item)
         if (item?.data?.length) {
@@ -881,13 +994,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           })
         }
         else {
+          console.log('ada tidak')
           const temp = {}
-
           temp.no = i + 1
           temp.kd_obat = item?.kd_obat
           temp.nama_obat = item?.nama_obat
           temp.satuan_k = item?.satuan_k
           if (this.params.jenis === 'rekap') temp.uraian50 = item?.uraian50
+
           data.push(temp)
         }
       })

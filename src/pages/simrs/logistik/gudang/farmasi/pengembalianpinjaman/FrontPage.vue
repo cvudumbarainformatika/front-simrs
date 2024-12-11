@@ -43,7 +43,7 @@ import { usePengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembal
 import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 
 const store = usePengembalianPinjamanStore()
-const tab = ref('pengembalian')
+const tab = ref('list')
 const tabs = ref([
   {
     label: 'Form Pengembalian',
