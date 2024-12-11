@@ -80,7 +80,7 @@ const validate = () => {
       // oh no, user has filled in
       // at least one invalid value
       notifErrVue('Mohon Lengkapi Data Terlebih Dahulu')
-      console.log('failed')
+      // console.log('failed')
       formRef.value?.refKeadaanUmum.focus()
       scrollToElement(formRef.value?.refKeadaanUmum.$el)
     }

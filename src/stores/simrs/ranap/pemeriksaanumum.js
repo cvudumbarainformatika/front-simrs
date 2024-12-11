@@ -415,7 +415,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
       }
       try {
         const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/pemeriksaanumum', params)
-        console.log('resp right pemeriksaan', resp)
+        // console.log('resp right pemeriksaan', resp)
         if (resp.status === 200) {
         // store.items = resp.data
           this.PISAH_DATA_RANAP_IGD(resp.data, pasien)

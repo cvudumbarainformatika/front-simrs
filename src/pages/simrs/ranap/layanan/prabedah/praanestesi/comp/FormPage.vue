@@ -124,8 +124,11 @@
           <q-separator class="q-my-md" />
 
           <!-- Laboratorium -->
-          <div class="text-weight-bold f-14">
-            LABORATORIUM (bila tersedia)
+          <div class="row justify-between items-center">
+            <div class="text-weight-bold f-14">
+              LABORATORIUM (bila tersedia)
+            </div>
+            <q-btn dense outline color="primary" label="Lihat laboratorium" @click="openLaborat = true" />
           </div>
           <q-separator class="q-mb-md q-mt-xs" />
           <div class="row q-col-gutter-sm">
@@ -561,20 +564,24 @@
         </div>
       </q-card>
     </div>
+
+    <DialogLaborat v-model="openLaborat" :pasien="pasien" nakes="1" />
   </div>
 </template>
 
 <script setup>
 import { usePraAnastesiStore } from 'src/stores/simrs/pelayanan/poli/praanastesi'
 // eslint-disable-next-line no-unused-vars
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, defineAsyncComponent } from 'vue'
 
 const store = usePraAnastesiStore()
+const DialogLaborat = defineAsyncComponent(() => import('../../../asessmentulang/comp/dialogPenunjang/DialogLaborat.vue'))
 
 // const regional = ref([])
 // eslint-disable-next-line no-unused-vars
 const rawatkhusus = ref([])
 const rawatkhususLainlain = ref(false)
+const openLaborat = ref(false)
 
 const props = defineProps({
   pasien: {

@@ -63,7 +63,7 @@ export default function useResume (pasien) {
     let xx = []
     const anamnesis = pasien?.anamnesis
     if (anamnesis?.length > 0) {
-      xx = anamnesis?.filter(el => el?.kdruang !== 'POL014' || el?.awal === '1') ?? []
+      xx = anamnesis?.filter(el => el?.kdruang !== 'POL014' && el?.awal === '1') ?? []
     }
 
     data.anamnesis = xx

@@ -10,7 +10,6 @@
       :loading="store.loading"
       row-no
       click-able
-      @on-click="click"
       @refresh="store.refreshTable"
     >
       <template #header-left-after-search>
@@ -44,6 +43,10 @@
                 label="Gudang"
                 dense
                 outlined
+                emit-value
+                map-options
+                option-label="label"
+                option-value="value"
                 :options="pilihgudang"
                 style="width: 200px;"
               />
@@ -56,11 +59,15 @@
                 outlined
                 :options="pilihpenerimaan"
                 style="width: 200px;"
+                emit-value
+                map-options
+                option-label="label"
+                option-value="value"
               />
             </div>
             <div>
               <q-select
-                v-model="store.params.pihakketiga"
+                v-model="store.pihakketiga"
                 label="PBF"
                 dense
                 outlined
@@ -156,9 +163,24 @@ import { useLaporanPenerimaanObatStore } from 'src/stores/simrs/laporan/farmasi/
 
 const store = useLaporanPenerimaanObatStore()
 
-const pilihgudang = ref(['Gudang KO', 'Gudang Flor Stok', 'Semua Gudang'])
-const pilihpenerimaan = ref(['Semua Penerimaan', 'Pembelian Langsung', 'Pesanan', 'Pinjaman', 'Konsinyasi', 'APBD', 'APBN', 'Penggantian Barang', 'Hibah', 'Sisa Pasien'])
-const options = ref([store.pihakTigas])
+const pilihgudang = ref([
+  { label: 'Semua Gudang', value: 'all' },
+  { label: 'Gudang KO', value: 'Gd-05010100' },
+  { label: 'Gudang Flor Stok', value: 'Gd-03010100' }
+])
+const pilihpenerimaan = ref([
+  { label: 'Semua Penerimaan', value: 'all' },
+  { label: 'Pembelian Langsung', value: 'Pembelian Langsung' },
+  { label: 'Pesanan', value: 'Pesanan' },
+  { label: 'Pinjaman', value: 'Pinjaman' },
+  { label: 'Konsinyasi', value: 'Konsinyasi' },
+  { label: 'APBD', value: 'APBD' },
+  { label: 'APBN', value: 'APBN' },
+  { label: 'Penggantian Barang', value: 'Penggantian Barang' },
+  { label: 'Hibah', value: 'Hibah' },
+  { label: 'Sisa Pasien', value: 'Sisa Pasien' }])
+const optionsx = store.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
+const options = ref([optionsx])
 
 function filterFn (val, update) {
   if (val === '') {
@@ -192,10 +214,4 @@ function setFrom (val) {
   store.params.tgldari = val
 }
 
-// const props = defineProps({
-//   pihakketiga: {
-//     type: Object,
-//     default: null
-//   }
-// })
 </script>

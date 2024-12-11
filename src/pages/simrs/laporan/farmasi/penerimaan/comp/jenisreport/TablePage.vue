@@ -427,7 +427,7 @@
       />
     </div>
     <!-- Pagination -->
-    <AppPaginationTable
+    <!-- <AppPaginationTable
       v-if="items.length > 0"
       class="print-hide"
       :meta="meta"
@@ -435,7 +435,7 @@
       @last="emits('goto', meta.last_page)"
       @next="emits('goto', meta.current_page + 1)"
       @prev="emits('goto', meta.current_page - 1)"
-    />
+    /> -->
   </div>
 </template>
 

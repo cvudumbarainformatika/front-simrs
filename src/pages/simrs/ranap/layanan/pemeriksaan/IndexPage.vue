@@ -80,7 +80,7 @@ const tabsxx = [
   //   label: 'Anatomi',
   //   name: 'fisik',
   //   icon: 'icon-my-human-back-svgrepo-com',
-  //   nakes: ['1', '2', '3'],
+  //   nakes: ['1'],
   //   comp: defineAsyncComponent(() => import('./comp/PemeriksaanFisikPage.vue'))
   // }
 ]

@@ -965,13 +965,13 @@ const gruping = computed(() => {
   const dokter = nakes === '1' || nakes === 1
   const perawat = nakes === '2' || nakes === '3'
 
-  console.log('nakes', nakes, dokter, perawat)
+  // console.log('nakes', nakes, dokter, perawat)
 
   let gruping = null
   if (dokter) gruping = props?.kasus?.medis
   else if (perawat) gruping = props?.kasus?.gruping
 
-  console.log('gruping', gruping, nakes)
+  // console.log('gruping', gruping, nakes)
 
   return gruping
 })
@@ -990,7 +990,7 @@ defineExpose({
 const store = usePemeriksaanUmumRanapStore()
 
 onMounted(() => {
-  console.log('moun', store.form)
+  // console.log('moun', store.form)
 
   // store.initReset()
 })

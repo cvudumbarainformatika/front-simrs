@@ -8,6 +8,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     loadingDownload: true,
     items: [],
     pihakTigas: [],
+    pihakTigasx: [],
     meta: {},
     detail: [],
     kolom: ['NoPenerimaan', 'NoPemesanan', 'Jenis Penerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'NoFaktur', 'Suplier', 'Total'],
@@ -20,19 +21,20 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       jenisreport: '1',
-      gudang: 'Semua Gudang',
-      jenispenerimaan: 'Semua Penerimaan',
-      pihakketiga: 'Semua PBF'
+      gudang: 'all',
+      jenispenerimaan: 'all',
+      pihakketiga: ''
       // ruangan: ''
-    }
+    },
+    pihakketiga: 'Semua Pbf'
   }),
   actions: {
     async getPihakKetiga () {
       return new Promise(resolve => {
         api.get('v1/transaksi/belanja_ls/perusahaan')
           .then(resp => {
-            console.log('pihak tiga', resp.data)
             this.pihakTigas = resp.data
+            this.pihakTigas.unshift({ kode: 'all', nama: 'Semua Pbf' })
             resolve(resp)
           })
       })
@@ -43,6 +45,12 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
     async laporanRekapPenerimaanObat () {
       this.loading = true
       this.kolom = ['NoPenerimaan', 'NoPemesanan', 'JenisPenerimaan', 'Gudang', 'TglPenerimaan', 'TglSurat', 'BatasBayar', 'NoSurat', 'JenisSurat', 'Suplier', 'Total']
+      if (this.params.pihakketiga === '') {
+        this.params.pihakketiga = 'all'
+      }
+      else {
+        this.params.pihakketiga = this.pihakketiga
+      }
       const params = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/hutang/caripenerimaanobat', params)
         .then((resp) => {
@@ -75,7 +83,7 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_pemakaian_obat
         }
         hasilglobal.push(hasil)
       })
-      this.items = hasilglobal.sort(({ tglpenerimaan: a }, { tglpenerimaan: b }) => b - a)
+      this.items = hasilglobal.sort(({ TglPenerimaan: a }, { TglPenerimaan: b }) => b - a)
       this.totalall = this.items.reduce((a, b) => parseFloat(a) + parseFloat(b.Total), 0)
     }
   }
