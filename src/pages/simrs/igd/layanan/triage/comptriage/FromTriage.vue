@@ -1370,7 +1370,7 @@ function scorenadi () {
     else if (store.form.nadi >= 111 && store.form.nadi <= 130) {
       store.form.scorenadi = 2
     }
-    else if (store.form.nadi > 131) {
+    else if (store.form.nadi >= 131) {
       store.form.scorenadi = 3
     }
   }

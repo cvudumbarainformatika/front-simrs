@@ -2,7 +2,7 @@
   <q-page>
     <Suspense>
       <!-- main content -->
-      <AsyncComp :pihakketiga="store.pihakTigas" />
+      <AsyncComp :pihakketiga="store.pihakTigas" :rekeningbelanja="store.rekeningbelanja" />
       <!-- loading state -->
       <template #fallback>
         <app-loading />
@@ -21,5 +21,6 @@ const AsyncComp = defineAsyncComponent(() =>
 const store = useLaporanPenerimaanObatStore()
 onMounted(() => {
   store.getPihakKetiga()
+  store.getKodeBelanja()
 })
 </script>
