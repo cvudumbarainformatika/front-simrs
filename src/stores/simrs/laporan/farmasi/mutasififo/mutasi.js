@@ -554,6 +554,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           })
         }
         else {
+          if (type === 'download') {
+            const temp = {
+              kd_obat: it?.kd_obat,
+              tgl: this.params.tahun + '-' + this.params.bulan + '-01 00:00:00',
+              ket: ''
+            }
+            it.data.push(temp)
+          }
           if (it?.saldoawal.length) {
             const sala = {
               kd_obat: it?.kd_obat,
@@ -567,7 +575,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               saldoawal: sala,
               ket: type === 'download' ? '' : 'Saldo Awal'
             }
-            it.data.push(temp)
+            if (type === 'download')it.data[0].saldoawal = sala
+            else it.data.push(temp)
 
             const salJ = {
               tgl: this.params.tahun + '-' + this.params.bulan + '-01 00:00:00',

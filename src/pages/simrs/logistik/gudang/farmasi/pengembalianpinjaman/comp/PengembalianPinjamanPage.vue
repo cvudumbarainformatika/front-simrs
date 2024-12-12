@@ -46,6 +46,7 @@
           v-model="store.form.nopengembalian"
           label="Nomor Pengembalian"
           outlined
+          valid
           readonly
         />
       </div>
@@ -132,6 +133,8 @@
                   class="full-width"
                   outlined
                   valid
+                  :loading="item?.loading"
+                  :disable="item?.loading || (item?.pengembalian_rinci?.reduce((a, b) => a + parseFloat(b?.jml_dikembalikan), 0)===item?.jml_terima_k)"
                   @update:model-value="(evt)=>{
                     const inc = evt.includes('.')
                     const ind = evt.indexOf('.')
