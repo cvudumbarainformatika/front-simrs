@@ -721,11 +721,13 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.pemakaian?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.pemakaian?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            it.data.push({
-              tgl: raw?.tgl,
-              keluar: raw,
-              ket: 'Ruangan'
-            })
+            if (type !== 'download') {
+              it.data.push({
+                tgl: raw?.tgl,
+                keluar: raw,
+                ket: 'Ruangan'
+              })
+            }
             if (type === 'download') {
               const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
               if (index >= 0) {
