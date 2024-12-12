@@ -70,9 +70,9 @@
       <div v-if="store.params.jenisreport === '1'">
         <PenerimaanRekapObat :pihakketiga="props.pihakketiga" />
       </div>
-      <!-- <div v-else-if="store.params.jenisreport === '2'">
-        <HutangpertanggalByBAST />
-      </div> -->
+      <div v-else-if="store.params.jenisreport === '2'">
+        <PenerimaanRinciObat :rekeningbelanja="props.rekeningbelanja" />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -80,6 +80,7 @@
 import { ref } from 'vue'
 import { usehutangObatPerTanggalStore } from 'src/stores/simrs/laporan/farmasi/hutang/hutangobatpertanggal'
 import PenerimaanRekapObat from './jenisreport/PenerimaanRekapObat.vue'
+import PenerimaanRinciObat from './jenisreport/PenerimaanRinciObat.vue'
 
 const store = usehutangObatPerTanggalStore()
 // const storebast = usehutangObatPerTanggalBastStore()
@@ -107,6 +108,10 @@ function pilihjenislaporan (val) {
 
 const props = defineProps({
   pihakketiga: {
+    type: Object,
+    default: null
+  },
+  rekeningbelanja: {
     type: Object,
     default: null
   }
