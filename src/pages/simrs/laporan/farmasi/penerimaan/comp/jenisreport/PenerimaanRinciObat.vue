@@ -21,7 +21,7 @@
           <div class="row q-col-gutter-sm">
             <div>
               <app-input-date-human
-                :model="store.tanggal.from"
+                :model="store.tanggal_rinci.from"
                 label="dari tanggal"
                 outlined
                 @db-model="setFrom"
@@ -30,7 +30,7 @@
             </div>
             <div>
               <app-input-date-human
-                :model="store.tanggal.to"
+                :model="store.tanggal_rinci.to"
                 label="sampai tanggal"
                 outlined
                 @db-model="setTo"
@@ -180,11 +180,11 @@ function filterFn (val, update) {
 }
 
 function setToDisp (vaal) {
-  store.tanggal.to = vaal
+  store.tanggal_rinci.to = vaal
 }
 
 function setToFromDisp (vaal) {
-  store.tanggal.from = vaal
+  store.tanggal_rinci.from = vaal
 }
 
 function setTo (val) {
@@ -194,6 +194,8 @@ function setTo (val) {
 function setFrom (val) {
   store.params_rinci.tgldari = val
 }
+
+// store.refreshrinci()
 
 const props = defineProps({
   pihakketiga: {

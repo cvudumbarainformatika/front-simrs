@@ -96,6 +96,7 @@ const jenisreport = ref([
 ])
 
 function pilihjenislaporan (val) {
+  console.log('val', val)
   if (val === '1') {
     store.params.jenisreport = '1'
     store.judulreport = 'Laporan Rekap Penerimaan Obat'
