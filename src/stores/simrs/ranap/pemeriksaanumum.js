@@ -443,7 +443,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
         pernapasan: 0,
         spo: 0,
         tkKesadaran: 0,
-        tkKesadaranKet: 'Sadar Baik/Alert',
+        tkKesadaranKet: 'Compos Mentis',
 
         sosial: null,
         spiritual: null,

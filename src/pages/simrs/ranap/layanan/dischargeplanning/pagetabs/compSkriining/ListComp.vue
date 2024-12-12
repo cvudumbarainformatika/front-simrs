@@ -3,21 +3,11 @@
     <q-card v-for="(item, n) in items" :key="n" flat bordered class="q-mb-sm">
       <q-card-section>
         <q-item-section>
-          <q-item-label>Tgl Rencana Pulang : <b>{{ item?.tglRencanaPlg }}</b></q-item-label>
+          <q-item-label>Pasien Telah di Skrining </q-item-label>
         </q-item-section>
         <q-item-section>
           <q-item-label line="5">
-            Perawatan Lanjutan : <b>{{ item?.pldiRumah }}</b>
-          </q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label line="5">
-            Anjuran :{{ item?.rs4 }}
-          </q-item-label>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label line="5">
-            Prognosis : <b>{{ store.prognosis?.find(x => x.rs1 == item?.prognosis)?.rs2 }}</b>
+            Oleh : <b>{{ store?.perawats?.find(x => x?.kdpegsimrs === item?.user_input)?.nama }}</b>
           </q-item-label>
         </q-item-section>
       </q-card-section>
@@ -30,9 +20,10 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
+// import { useDischargePlanningRanapStore } from 'src/stores/simrs/ranap/dischargeplanning'
+import { useSkriiningDischargePlanningRanapStore } from 'src/stores/simrs/ranap/skriingdischargeplanning'
 
-const store = useDischargePlanningRanapStore()
+const store = useSkriiningDischargePlanningRanapStore()
 
 const props = defineProps({
   items: {

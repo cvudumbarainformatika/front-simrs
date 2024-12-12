@@ -82,7 +82,7 @@
             </th>
             <th class="text-left" width="40%">
               <div class="text-bold">
-                Instruksi PPA / Evaluasi
+                Instruksi PPA
               </div>
             </th>
             <th class="text-center" width="15%">
@@ -185,10 +185,22 @@
                       </q-item-label>
                     </q-item-section>
                   </q-item>
+                  <q-item v-if="cppt?.nakes === '5'" no-padding>
+                    <q-item-section avatar thumbnail style="border-right: 1px solid #ccc;">
+                      <div class="text-bold">
+                        E
+                      </div>
+                    </q-item-section>
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label class="">
+                        <span v-html="getNewLine(cppt?.instruksi ?? '-')" />
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
                 </q-list>
               </td>
               <td class="text-left f-12" style="vertical-align: top;">
-                <span v-html="getNewLine(cppt?.instruksi ?? '-')" />
+                <span v-if="cppt?.nakes !== '5'" v-html="getNewLine(cppt?.instruksi ?? '-')" />
               </td>
               <td v-if="i === 0" :rowspan="cariRowspan(dateCppt(cppt?.tgl))" class="text-center f-12">
                 <vue-qrcode

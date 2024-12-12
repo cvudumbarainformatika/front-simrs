@@ -182,6 +182,48 @@ const laporan = {
 
     },
 
+    // ANGGARAN
+    {
+      path: '/laporan/anggaran',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/anggaran/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/laporan/anggaran/rka' },
+        {
+          path: '/laporan/anggaran/rka',
+          name: 'laporan.anggaran.rka',
+          component: () =>
+            import('src/pages/siasik/anggaran/rka/IndexPage.vue')
+        }
+        // {
+        //   path: '/laporan/akuntansi/lra',
+        //   name: 'laporan.akuntansi.lra',
+        //   component: () =>
+        //     import('src/pages/siasik/akuntansi/laporanakuntansi/lralevel3/IndexPage.vue')
+        // },
+        // {
+        //   path: '/laporan/akuntansi/lo',
+        //   name: 'laporan.akuntansi.l0',
+        //   component: () =>
+        //     import('src/pages/siasik/akuntansi/laporanakuntansi/LapOperasional/IndexPage.vue')
+        // },
+        // {
+        //   path: '/laporan/akuntansi/lpsal',
+        //   name: 'laporan.akuntansi.lpsal',
+        //   component: () =>
+        //     import('src/pages/siasik/akuntansi/laporanakuntansi/lpsal/IndexPage.vue')
+        // },
+        // {
+        //   path: '/laporan/akuntansi/neraca',
+        //   name: 'laporan.akuntansi.neraca',
+        //   component: () =>
+        //     import('src/pages/siasik/akuntansi/laporanakuntansi/neraca/IndexPage.vue')
+        // }
+
+      ]
+
+    },
+
     // farmasi
     {
       path: '/laporan/farmasi/stok',
