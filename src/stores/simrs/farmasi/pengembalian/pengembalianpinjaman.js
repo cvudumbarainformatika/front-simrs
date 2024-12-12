@@ -3,7 +3,7 @@ import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
-export const usePengembalianPinjamanStore = defineStore('spjopname', {
+export const usePengembalianPinjamanStore = defineStore('pengembalian_pinjaman', {
   state: () => ({
     loading: false,
     loadingNoper: false,
