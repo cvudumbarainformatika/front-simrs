@@ -123,10 +123,12 @@ function cekYgMenjawab (item) {
     open = true
   }
   else if (item?.nakesminta?.kdgroupnakes === '2') { // jika yg konsultasi adalah perawat maka... jawaban terbuka
-    if (item?.nakesminta?.kdgroupnakes === '2') { // jika yg konsultasi adalah perawat maka... jawaban terbuka
-      const ygJwbPerawat = (item?.kdminta === item?.user_jawab) && item?.user_jawab !== null
-      console.log('ygJwbPerawat', ygJwbPerawat)
-
+    const ygJwbPerawat = (item?.kdminta === item?.user_jawab)
+    // console.log('ygJwbPerawat', ygJwbPerawat)
+    if (item?.user_jawab === null || item?.user_jawab === '') {
+      open = true
+    }
+    else {
       if (ygJwbPerawat) {
         open = true
       }
@@ -134,8 +136,6 @@ function cekYgMenjawab (item) {
         open = false
       }
     }
-
-    // open = true
   }
   else {
     open = false
