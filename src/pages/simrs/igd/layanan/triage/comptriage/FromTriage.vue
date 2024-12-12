@@ -983,7 +983,7 @@ function scorespo2 () {
       }
     }
     else if (umur === 0 && umurbln >= 4 && umurbln <= 11) {
-      if (store.form.spo2 >= 1 && store.form.spo2 <= 85) {
+      if (store.form.spo2 >= 0 && store.form.spo2 <= 85) {
         store.form.scorespo2 = 3
       }
       else if (store.form.spo2 >= 86 && store.form.spo2 <= 89) {

@@ -20,11 +20,14 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_penerimaan_oba
     params: {
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      jenisreport: '1',
       gudang: 'all',
       jenispenerimaan: 'all',
       pihakketiga: ''
       // ruangan: ''
+    },
+    tanggal_rinci: {
+      from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      to: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     pihakketiga: 'Semua Pbf',
     rekeningbelanja: [],
@@ -33,7 +36,6 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_penerimaan_oba
     params_rinci: {
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      jenisreport: '1',
       gudang: 'all',
       rekeningbelanja: 'all',
       pihakketiga: ''
@@ -166,5 +168,9 @@ export const useLaporanPenerimaanObatStore = defineStore('laporan_penerimaan_oba
       this.items_rinci = hasilglobal.sort(({ TglPenerimaan: a }, { TglPenerimaan: b }) => b - a)
       this.totalall_rinci = this.items_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.Total), 0)
     }
+    // refreshrinci () {
+    //   this.tanggal.from = date.formatDate(Date.now(), 'DD MMMM YYYY')
+    //   this.tanggal.to = date.formatDate(Date.now(), 'DD MMMM YYYY')
+    // }
   }
 })
