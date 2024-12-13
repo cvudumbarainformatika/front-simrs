@@ -71,12 +71,12 @@ const dark = computed(() => {
   return $q.dark.isActive
 })
 
-function setDark(val) {
+function setDark (val) {
   const x = !val
   $q.dark.set(x)
 }
 
-function toggleLeftDrawer() {
+function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 

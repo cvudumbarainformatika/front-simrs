@@ -78,7 +78,7 @@ watch(
     }
   }
 )
-function goTo(url) {
+function goTo (url) {
   router.replace({ path: url })
   deleteCurrentApp()
 }
@@ -96,11 +96,12 @@ const menus = ref([
   // { id: 3, name: 'pelayanan', icon: 'icon-mat-medical_information' }
 ])
 
-function activated(val) {
+function activated (val) {
   if (val) {
     if (props.dark) {
       return 'page-dark text-white'
-    } else {
+    }
+    else {
       return 'bg-grey-4 text-primary'
     }
   }

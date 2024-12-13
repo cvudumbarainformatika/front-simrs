@@ -141,6 +141,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         datax.informconcern = data?.informconcern ?? []
         datax.dischargeplanning = data?.dischargeplanning ?? []
         datax.skriningdischargeplannings = data?.skriningdischargeplannings ?? []
+        datax.summarydischargeplannings = data?.summarydischargeplannings ?? []
         datax.statuscovid = data?.statuscovid ?? []
         datax.procedure = data?.procedure ?? []
         datax.keterangantindakan = data?.keterangantindakan ?? []

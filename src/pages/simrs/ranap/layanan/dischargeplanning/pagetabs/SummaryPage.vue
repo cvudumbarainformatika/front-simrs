@@ -15,11 +15,11 @@
 
       <template #after>
         <div class="column full-height">
-          <div v-if="!pasien?.skriningdischargeplannings?.length" class="column full-height flex-center">
+          <div v-if="!pasien?.summarydischargeplannings?.length" class="column full-height flex-center">
             <div>Belum Ada Data</div>
           </div>
           <div v-else class="full-height scroll">
-            <LisComp :items="pasien?.skriningdischargeplannings" :pasien="pasien" />
+            <LisComp :items="pasien?.summarydischargeplannings" :pasien="pasien" />
           </div>
         </div>
       </template>

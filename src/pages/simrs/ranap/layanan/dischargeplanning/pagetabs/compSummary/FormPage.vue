@@ -14,6 +14,7 @@
         Lanjutan Perawatan dirumah :
       </div>
       <q-input
+        v-model="store.form.rs4"
         type="textarea"
         outlined
         standout="bg-yellow-3"
@@ -23,6 +24,7 @@
         ATURAN DIET/NUTRISI :
       </div>
       <q-input
+        v-model="store.form.rs5"
         type="textarea"
         outlined
         standout="bg-yellow-3"
@@ -32,6 +34,7 @@
         OBAT-OBATAN YANG DIBAWA PULANG, JUMLAH DAN DOSIS :
       </div>
       <q-input
+        v-model="store.form.rs6"
         type="textarea"
         outlined
         standout="bg-yellow-3"
@@ -41,6 +44,7 @@
         RENCANA AKTIFITAS :
       </div>
       <q-input
+        v-model="store.form.rs7"
         type="textarea"
         outlined
         standout="bg-yellow-3"
@@ -50,6 +54,17 @@
         ISTIRAHAT :
       </div>
       <q-input
+        v-model="store.form.rs8"
+        type="textarea"
+        outlined
+        standout="bg-yellow-3"
+        rows="2"
+      />
+      <div class="q-mt-md q-mb-xs">
+        HASIL PEMERIKSAAN YANG DIBAWA PULANG :
+      </div>
+      <q-input
+        v-model="store.form.rs9"
         type="textarea"
         outlined
         standout="bg-yellow-3"
@@ -59,10 +74,21 @@
         INFORMASI DAN EDUKASI YANG DIBERIKAN :
       </div>
       <q-input
+        v-model="store.form.rs10"
         type="textarea"
         outlined
         standout="bg-yellow-3"
         rows="2"
+      />
+      <div class="q-mt-md q-mb-xs">
+        TTD PASIEN / KELUARGA :
+      </div>
+      <TtdWacom
+        uuid="ttd-pasien-summary-discharge" :ttd-name="store.form.pengedukasi ?? 'nama pasien / keluarga'"
+        @signature:ttd-pasien-summary-discharge="(val)=> {
+          // console.log('ttd-saksi-rs',val);
+          store.form.ttdPasien = val
+        }"
       />
 
       <div style="margin-bottom:100px;" />
@@ -76,14 +102,31 @@
 </template>
 
 <script setup>
-defineProps({
+import { useSummaryDischargePlanningRanapStore } from 'src/stores/simrs/ranap/summarydischargeplanning'
+import { defineAsyncComponent, onMounted } from 'vue'
+
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
 
+const TtdWacom = defineAsyncComponent(() => {
+  return import('src/components/~static/TtdWacomStu540.vue')
+})
+
+const store = useSummaryDischargePlanningRanapStore()
+
+onMounted(() => {
+  Promise.all([
+    // store.getmasterprognosis(),
+    store.initReset()
+  ])
+})
+
 function onSubmit () {
-  console.log('onSubmit')
+  // console.log('onSubmit')
+  store.simpandata(props.pasien)
 }
 </script>

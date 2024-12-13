@@ -385,7 +385,7 @@ export const usePemeriksaanUmumRanapStore = defineStore('pemeriksaan-umum-ranap-
     oesofagus: ['Tidak Ada Kelainan'],
     abdomensAnatomy: ['Supel', 'Asites', 'Tegang', 'Bising Usus ... x/menit'],
     babs: ['Normal', 'Konstipasi', 'Melena', 'Colostomy', 'Diare', 'Frekuensi:..../hari', 'Meco pertama, tgl/jam......'],
-    warnaFeses: ['Kuning', 'Dempul', 'Coklat', 'Hijau'],
+    warnaFeses: ['Kuning', 'Dempul', 'Coklat', 'Hijau', 'Meconium'],
     warnaUrines: ['Jernih', 'Kuning', 'Kuning Pekat'],
     baks: ['Normal', 'Hematuri', 'Urin Menetes', 'Sakit', 'Tidak Sakit', 'Oliguri', 'BAK Pertama, tgl/jam......'],
     lakilakis: ['Normal', 'Hipospedia', 'Epispedia', 'Fimosis', 'Hidrokel'],
