@@ -433,7 +433,7 @@
               />
             </td>
           </tr>
-          <tr v-if="item.expand">
+          <!-- <tr v-if="item.expand">
             <td>
               {{ isChecked && rowNo && !defaultBtn }}
             </td>
@@ -443,7 +443,7 @@
             <td>
               {{ filterColumn.length }}
             </td>
-          </tr>
+          </tr> -->
         </template>
         <tr v-if="bottomRow">
           <slot name="bottom-row" />

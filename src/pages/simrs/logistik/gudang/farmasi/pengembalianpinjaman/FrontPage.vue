@@ -39,8 +39,11 @@
 </template>
 
 <script setup>
+import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useListPengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembalian/listpengembalian'
 import { usePengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembalian/pengembalianpinjaman'
-import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 
 const store = usePengembalianPinjamanStore()
 const tab = ref('list')
@@ -69,6 +72,22 @@ const menu = computed(() => {
   return tabs.value.find(i => i.name === by)
 })
 
+const list = useListPengembalianPinjamanStore()
+const apps = useAplikasiStore()
+
+watch(() => apps?.user?.kdruangansim, (kod) => {
+  const gud = store.gudangs.find(a => a.value === kod)
+  if (gud) {
+    list.setParams('kdruang', kod)
+    store.setForm('kdruang', kod)
+  }
+  else {
+    notifErrVue('Hanya boleh Menampilkan Stok gudang')
+    list.setParams('kdruang', null)
+  }
+  // console.log('kode', gud)
+})
+
 const refPage = ref(null)
 const refTabs = ref(null)
 const he = ref(500)
@@ -77,7 +96,8 @@ onMounted(() => {
   const tab = refTabs.value.clientHeight ?? 55
   if (page > 0) he.value = page - tab
   // console.log('he', refPage.value?.$el.clientHeight, page, he.value)
-
+  list.setParams('kdruang', apps?.user?.kdruangansim)
+  store.setForm('kdruang', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 </script>

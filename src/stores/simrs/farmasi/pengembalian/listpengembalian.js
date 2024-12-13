@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListPengembalianPinjamanStore = defineStore('list_pengembalian_pinjaman', {
   state: () => ({
@@ -19,15 +20,20 @@ export const useListPengembalianPinjamanStore = defineStore('list_pengembalian_p
       from: dateDbFormat(new Date())
     },
     columns: [
-      'nomor',
+      'nopem',
+      'noperkem',
       'pbf',
       'tgl',
       'status'
     ],
-    columnHide: []
+    columnHide: [],
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ]
   }),
   actions: {
-    setParame (key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
     setPage (val) {
@@ -94,9 +100,83 @@ export const useListPengembalianPinjamanStore = defineStore('list_pengembalian_p
             console.log('resp list', resp?.data)
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp?.data?.meta ?? resp?.data
+            if (this.items?.length > 0) {
+              this.items.forEach(item => {
+                if (item?.rincian?.length > 0) {
+                  item.rincian.forEach(rincian => {
+                    rincian.jmlstok = rincian?.stok?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0)
+                  })
+                }
+              })
+            }
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    kunciPengembalian (item) {
+      item.loadingKunci = true
+      const form = {
+        id: item.id
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/pengembalian/kunci', form)
+          .then(resp => {
+            console.log('kunci', resp?.data)
+            item.loadingKunci = false
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            item.loadingKunci = false
+          })
+      })
+    },
+    hapusHeader (item) {
+      item.loadingHapus = true
+      const form = {
+        id: item.id
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/pengembalian/hapus-header', form)
+          .then(resp => {
+            console.log('hapus head', resp?.data)
+            item.loadingHapus = false
+
+            const indexRow = this.items?.findIndex(x => x.id === item?.id)
+            if (indexRow >= 0) this.items.splice(indexRow, 1)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            item.loadingHapus = false
+          })
+      })
+    },
+    hapusRinci (item, rowId) {
+      item.loadingHapus = true
+
+      const form = {
+        id: item.id
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/pengembalian/hapus-rinci', form)
+          .then(resp => {
+            item.loadingHapus = false
+            const indexRow = this.items?.findIndex(x => x.id === rowId)
+
+            if (indexRow >= 0) {
+              const indexRinci = this.items[indexRow]?.rincian?.findIndex(x => x.id === item.id)
+
+              if (indexRinci >= 0) this.items[indexRow]?.rincian?.splice(indexRinci, 1)
+              if (resp?.data?.hapusHead === 'ya') this.items.splice(indexRow, 1)
+            }
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            item.loadingHapus = false
+          })
       })
     }
   }

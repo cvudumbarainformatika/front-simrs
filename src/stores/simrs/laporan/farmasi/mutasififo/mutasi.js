@@ -587,36 +587,45 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
 
             masuk.push(salJ)
+            // console.log('sal awal ', masukx)
           }
           if (it?.terima?.length) {
+            const jumlah = it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0)
+            const subt = it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             const ms = {
               tgl: it?.terima[0].tgl,
               kd_obat: it?.kd_obat,
-              jumlah: it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
-              sub: it?.terima?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0),
+              jumlah,
+              sub: subt,
               ket: type === 'download' ? '' : 'Penerimaan'
             }
 
-            const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            if (index >= 0) {
-              const jumM = masuk[index].jumlah + ms.jumlah
-              const subM = masuk[index].sub + ms.sub
+            console.log('terima nya ', jumlah, subt, ms)
 
-              masuk[index].jumlah = jumM
-              masuk[index].sub = subM
-            }
-            else masuk.push(ms)
             if (type === 'download') {
               const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
+              console.log('terima nya index', index1)
               if (index1 >= 0) {
-                const jumM = masukx[index1].jumlah + ms.jumlah
-                const subM = masukx[index1].sub + ms.sub
+                const jumM = masukx[index1].jumlah + jumlah
+                const subM = masukx[index1].sub + subt
 
                 masukx[index1].jumlah = jumM
                 masukx[index1].sub = subM
               }
               else masukx.push(ms)
             }
+            else {
+              const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = masuk[index].jumlah + ms.jumlah
+                const subM = masuk[index].sub + ms.sub
+
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
+              else masuk.push(ms)
+            }
+            // console.log('terima ', masukx)
           }
           if (it?.returpenjualan?.length) {
             const raw = {
@@ -625,24 +634,28 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            if (index >= 0) {
-              const jumM = masuk[index].jumlah + raw.jumlah
-              const subM = masuk[index].sub + raw.sub
-
-              masuk[index].jumlah = jumM
-              masuk[index].sub = subM
-            }
             if (type === 'download') {
               const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
               if (index1 >= 0) {
                 const jumM = masukx[index1].jumlah + raw.jumlah
                 const subM = masukx[index1].sub + raw.sub
+                console.log('ret ', masukx[index1].jumlah)
 
                 masukx[index1].jumlah = jumM
                 masukx[index1].sub = subM
               }
             }
+            else {
+              const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = masuk[index].jumlah + raw.jumlah
+                const subM = masuk[index].sub + raw.sub
+
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
+            }
+            // console.log('ret jual ', masukx)
             if (type !== 'download') {
               it.data.push({
                 tgl: raw?.tgl,
@@ -653,16 +666,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           }
           if (it?.penyesuaian?.length) {
             it?.penyesuaian.forEach(p => {
-              const index = masuk.findIndex(f => f.kd_obat === p.kd_obat)
-              if (index >= 0) {
-                // console.log('penye', masuk[index], p)
-
-                const jumM = masuk[index].jumlah + p.jumlah
-                const subM = masuk[index].sub + p.sub
-
-                masuk[index].jumlah = jumM
-                masuk[index].sub = subM
-              }
               if (type === 'download') {
                 const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
                 if (index1 >= 0) {
@@ -671,6 +674,16 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
                   masukx[index1].jumlah = jumM
                   masukx[index1].sub = subM
+                }
+              }
+              else {
+                const index = masuk.findIndex(f => f.kd_obat === p.kd_obat)
+                if (index >= 0) {
+                  const jumM = masuk[index].jumlah + p.jumlah
+                  const subM = masuk[index].sub + p.sub
+
+                  masuk[index].jumlah = jumM
+                  masuk[index].sub = subM
                 }
               }
               console.log('Ada penyesuanag', masukx)
@@ -704,14 +717,15 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 keluar.push(raw)
               }
             }
+            else {
+              const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = masuk[index].jumlah - raw.jumlah
+                const subM = masuk[index].sub - raw.sub
 
-            const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            if (index >= 0) {
-              const jumM = masuk[index].jumlah - raw.jumlah
-              const subM = masuk[index].sub - raw.sub
-
-              masuk[index].jumlah = jumM
-              masuk[index].sub = subM
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
             }
           }
           if (it?.pemakaian?.length) {
@@ -741,14 +755,15 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 keluar.push(raw)
               }
             }
+            else {
+              const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
+              if (index >= 0) {
+                const jumM = masuk[index].jumlah - raw.jumlah
+                const subM = masuk[index].sub - raw.sub
 
-            const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            if (index >= 0) {
-              const jumM = masuk[index].jumlah - raw.jumlah
-              const subM = masuk[index].sub - raw.sub
-
-              masuk[index].jumlah = jumM
-              masuk[index].sub = subM
+                masuk[index].jumlah = jumM
+                masuk[index].sub = subM
+              }
             }
           }
 
@@ -774,6 +789,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             //     masuk[index].sub = subM
             //   }
             // }
+            // console.log('pen rinc ', masukx)
           }
         }
         if (type === 'download') {

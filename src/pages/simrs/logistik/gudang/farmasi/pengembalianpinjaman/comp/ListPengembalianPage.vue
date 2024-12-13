@@ -7,7 +7,7 @@
       :meta="store.meta"
       :per-page="store.params.per_page"
       :loading="store.loading"
-      :to-search="store.params.cari"
+      :to-search="store.params.q"
       :click-able="true"
       :default-btn="false"
       :ada-tambah="false"
@@ -111,15 +111,217 @@
           </div>
         </div>
       </template>
+      <template #col-nopem>
+        <div>Nomor Pengembalian</div>
+      </template>
+      <template #col-noperkem>
+        <div>Nomor Penerimaan Asal</div>
+      </template>
+      <template #col-pbf>
+        <div>Penyedia</div>
+      </template>
+      <template #col-tgl>
+        <div>Tanggal</div>
+      </template>
+      <template #col-status>
+        <div>Status</div>
+      </template>
+      <template #cell-nopem="{ row }">
+        {{ row.nopengembalian ?? '-' }}
+      </template>
+      <template #cell-noperkem="{ row }">
+        {{ row.nopenerimaan_asal ?? '-' }}
+      </template>
+      <template #cell-pbf="{ row }">
+        {{ row.pihakketiga?.nama ?? '-' }}
+      </template>
+      <template #cell-tgl="{ row }">
+        <div class="row justify-between no-wrap">
+          <div class="col-auto q-mr-sm">
+            Pengembalian
+          </div>
+          <div class="col-auto text-italic">
+            {{ dateFullFormat(row.tgl_pengembalian) ?? '-' }}
+          </div>
+        </div>
+        <div v-if="row.tgl_kunci" class="row justify-between no-wrap">
+          <div class="col-auto q-mr-sm">
+            Kuci
+          </div>
+          <div class="col-auto text-italic">
+            {{ dateFullFormat(row.tgl_kunci) ?? '-' }}
+          </div>
+        </div>
+      </template>
+      <template #left-acttion="{ row }">
+        <div
+          v-if="row.kunci<=0"
+          class="row items-center"
+        >
+          <q-btn
+            class="q-mr-md"
+            flat
+            icon="icon-mat-add_circle"
+            dense
+            color="primary"
+            :loading="row?.loading"
+            :disable="row?.loadingHapus || row?.loading || row?.loadingKunci"
+          >
+            <!-- @click="tambahPenerimaan(row)" -->
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tambah Penerimaan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            icon="icon-mat-delete"
+            dense
+            size="sm"
+            color="negative"
+            :loading="row?.loadingHapus"
+            :disable="row?.loadingHapus || row?.loading || row?.loadingKunci"
+            @click="()=>{
+              row.expand = !row.expand
+              row.highlight = !row.highlight
+              store.hapusHeader(row)
+            }"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Hapus
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            icon="icon-mat-lock_open"
+            dense
+            color="green"
+            :loading="row?.loadingKunci"
+            :disable="row?.loading || row?.loadingHapus || row?.loadingKunci"
+            @click="()=>{
+              row.expand = !row.expand
+              row.highlight = !row.highlight
+              store.kunciPengembalian(row)
+            }"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Kunci Pengembalian dan Keluarkan Stok
+            </q-tooltip>
+          </q-btn>
+        </div>
+      </template>
+
+      <!-- eslint-disable-next-line vue/no-unused-vars -->
+      <template #expand="{ row }">
+        <div class="row bg-amber-10 text-white text-weight-bold q-pa-sm f-14 q-mb-sm">
+          Rincian Item Dikembalikan
+        </div>
+        <div class="row bg-dark text-white text-weight-bold q-pa-sm">
+          <div class="col-auto" style="width: 5%">
+            No
+          </div>
+          <div class="col-auto" style="width: 10%">
+            Kode
+          </div>
+          <div class="col-auto" style="width: 25%">
+            Nama Obat
+          </div>
+          <div class="col-auto" style="width: 10%">
+            Satuan
+          </div>
+          <div class="col-auto text-right" style="width: calc(40%/3)">
+            <div class="q-mr-xs">
+              Jumlah Dikembalikan
+            </div>
+          </div>
+          <div class="col-auto text-right" style="width: calc(40%/3)">
+            <div class="q-mr-xs">
+              Jumlah Stok
+            </div>
+          </div>
+          <div class="col-auto  text-right" style="width: calc(40%/3)">
+            <div class="q-mr-xs">
+              Harga
+            </div>
+          </div>
+          <div class="col-auto  text-right" style="width: 10%">
+            <div class="q-mr-xs">
+              #
+            </div>
+          </div>
+        </div>
+        <div v-for="(item, i) in row.rincian" :key="i">
+          <div class="row q-pa-sm" :class="i%2===1?'bg-amber-4':'bg-amber-2'">
+            <div class="col-auto" style="width: 5%">
+              {{ i+1 }}
+            </div>
+            <div class="col-auto" style="width: 10%">
+              {{ item?.masterobat?.kd_obat }}
+            </div>
+            <div class="col-auto" style="width: 25%">
+              {{ item?.masterobat?.nama_obat }}
+            </div>
+            <div class="col-auto" style="width: 10%">
+              {{ item?.masterobat?.satuan_k }}
+            </div>
+            <div class="col-auto text-right" style="width: calc(40%/3)">
+              <div class="q-mr-xs">
+                {{ formatDouble(parseFloat(item?.jml_dikembalikan),2) }}
+              </div>
+            </div>
+            <div class="col-auto text-right" style="width: calc(40%/3)">
+              <div class="q-mr-xs">
+                {{ formatDouble(parseFloat(item?.jmlstok),2) }}
+              </div>
+            </div>
+            <div class="col-auto  text-right" style="width: calc(40%/3)">
+              <div class="q-mr-xs">
+                {{ formatDouble(parseFloat(item?.harga),2) }}
+              </div>
+            </div>
+            <div class="col-auto  text-right" style="width: 10%">
+              <div class="q-mr-xs">
+                <q-btn
+                  flat
+                  icon="icon-mat-delete"
+                  dense
+                  size="sm"
+                  color="negative"
+                  :loading="item.loadingHapus"
+                  :disable="item.loadingHapus"
+                  @click="store.hapusRinci(item, row?.id)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Hapus
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- {{ row }} -->
+      </template>
     </app-table-extend>
   </div>
 </template>
 <script setup>
+import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembalian/listpengembalian'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useListPengembalianPinjamanStore()
-
+const showMenuPeriode = ref(false)
 // click
 function onClick (val) {
   // console.log('click', val)
