@@ -149,6 +149,7 @@
                     }
 
                   }"
+                  @keyup.prevent.enter="store.simpanDetail(item)"
                 />
               </div>
             </div>
