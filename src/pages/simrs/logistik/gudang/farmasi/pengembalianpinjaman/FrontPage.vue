@@ -31,6 +31,7 @@
         <q-scroll-area :style="`height: ${he}px;`">
           <component
             :is="menu?.comp"
+            @tambah="tambahRinciPengembalian"
           />
         </q-scroll-area>
       </q-tab-panel>
@@ -74,7 +75,23 @@ const menu = computed(() => {
 
 const list = useListPengembalianPinjamanStore()
 const apps = useAplikasiStore()
+function tambahRinciPengembalian (val) {
+  store.setParams('kdpbf', val?.kdpbf)
+  store.setParams('nopenerimaan', val?.nopenerimaan)
 
+  store.setForm('kdpbf', val?.kdpbf)
+  store.setForm('nopenerimaan', val?.nopenerimaan)
+  store.setForm('nopengembalian', val?.nopengembalian)
+  store.setForm('tgl_pengembalian', val?.tgl_pengembalian)
+
+  tab.value = 'pengembalian'
+
+  store.getNopenerimaans().then(() => {
+    if (val)store.penerimaanRinci = store.nopenerimaans.find(item => item.nopenerimaan === val?.nopenerimaan) ?? []
+    else store.penerimaanRinci = {}
+  })
+  console.log('tambah', val)
+}
 watch(() => apps?.user?.kdruangansim, (kod) => {
   const gud = store.gudangs.find(a => a.value === kod)
   if (gud) {
@@ -98,6 +115,7 @@ onMounted(() => {
   // console.log('he', refPage.value?.$el.clientHeight, page, he.value)
   list.setParams('kdruang', apps?.user?.kdruangansim)
   store.setForm('kdruang', apps?.user?.kdruangansim)
+
   store.getInitialData()
 })
 </script>

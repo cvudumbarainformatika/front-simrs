@@ -29,6 +29,24 @@ export const usePengembalianPinjamanStore = defineStore('pengembalian_pinjaman',
     setForm (key, val) {
       this.form[key] = val
     },
+    resetForm () {
+      const kdruang = this.form.kdruang
+      this.form = {
+        kdpbf: '',
+        nopenerimaan: '',
+        nopengembalian: '',
+        kdruang,
+        tgl_pengembalian: date.formatDate(new Date(), 'YYYY-MM-DD')
+      }
+      this.penerimaanRinci = {}
+    },
+    resetParams () {
+      this.params = {
+        q: '',
+        page: 1,
+        per_page: 10
+      }
+    },
     getInitialData () {
       this.getPenyedias()
     },

@@ -166,8 +166,19 @@
             color="primary"
             :loading="row?.loading"
             :disable="row?.loadingHapus || row?.loading || row?.loadingKunci"
+            @click="()=>{
+              row.expand = !row.expand
+              row.highlight = !row.highlight
+              // tambahPenerimaan(row)
+              emits('tambah', {
+                nopenerimaan:row?.nopenerimaan_asal,
+                nopengembalian:row?.nopengembalian,
+                kdpbf:row?.kdpbf,
+                rincian:row?.rincian,
+                tgl_pengembalian:row?.tgl_pengembalian
+              })
+            }"
           >
-            <!-- @click="tambahPenerimaan(row)" -->
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
@@ -186,7 +197,22 @@
             @click="()=>{
               row.expand = !row.expand
               row.highlight = !row.highlight
-              store.hapusHeader(row)
+              Dialog.create({
+                title: 'Konfirmasi',
+                message: 'Apakah anda yakin ingin menghapus data ini ?',
+                ok: {
+                  push: true,
+                  color: 'negative',
+                  label: 'Hapus'
+                },
+                cancel: {
+                  push: true,
+                  color: 'dark',
+                  label: 'Batal'
+                }
+              }).onOk(() => {
+                store.hapusHeader(row)
+              })
             }"
           >
             <q-tooltip
@@ -297,7 +323,25 @@
                   color="negative"
                   :loading="item.loadingHapus"
                   :disable="item.loadingHapus"
-                  @click="store.hapusRinci(item, row?.id)"
+                  @click="()=>{
+                    Dialog.create({
+                      title: 'Konfirmasi',
+                      message: 'Apakah anda yakin ingin menghapus data ini ?',
+                      ok: {
+                        push: true,
+                        color: 'negative',
+                        label: 'Hapus'
+                      },
+                      cancel: {
+                        push: true,
+                        color: 'dark',
+                        label: 'Batal'
+                      }
+                    })
+                      .onOk(() => {
+                        store.hapusRinci(item, row?.id)
+                      })
+                  }"
                 >
                   <q-tooltip
                     class="primary"
@@ -316,18 +360,21 @@
   </div>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembalian/listpengembalian'
 import { onMounted, ref } from 'vue'
 
 const store = useListPengembalianPinjamanStore()
 const showMenuPeriode = ref(false)
+const emits = defineEmits(['tambah'])
 // click
 function onClick (val) {
   // console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
+
 onMounted(() => {
   store.getInitialData()
 })

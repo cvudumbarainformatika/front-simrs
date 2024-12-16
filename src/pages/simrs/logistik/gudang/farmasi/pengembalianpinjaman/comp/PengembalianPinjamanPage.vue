@@ -186,7 +186,13 @@
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePengembalianPinjamanStore } from 'src/stores/simrs/farmasi/pengembalian/pengembalianpinjaman'
+import { onUnmounted } from 'vue'
 const store = usePengembalianPinjamanStore()
+
+// eslint-disable-next-line no-unused-vars
+const emits = defineEmits([
+  'tambah' // tambah ini hanya agar tidak keluar warning karena di front komponen nya dinamis
+])
 function pbfSelected (val) {
   store.setParams('kdpbf', val)
   store.setForm('kdpbf', val)
@@ -201,7 +207,12 @@ function penerimaanSelected (val) {
   console.log(val)
   store.setForm('nopenerimaan', val)
   if (val)store.penerimaanRinci = store.nopenerimaans.find(item => item.nopenerimaan === val) ?? []
-  else store.penerimaanRinci = []
+  else store.penerimaanRinci = {}
   console.log(store.penerimaanRinci)
 }
+
+onUnmounted(() => {
+  store.resetForm()
+  store.resetParams()
+})
 </script>
