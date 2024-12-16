@@ -792,7 +792,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             // console.log('pen rinc ', masukx)
           }
         }
-        if (type === 'download') {
+        if (type === 'download' && this.params.jenis === 'rekap') {
           if (masukx?.length) {
             const mas = {
               kd_obat: it?.kd_obat,
