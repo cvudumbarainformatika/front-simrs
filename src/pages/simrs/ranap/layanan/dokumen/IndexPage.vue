@@ -84,6 +84,15 @@ const menus = ref([
     icon: 'icon-my-file_sign',
     nakes: ['1', '2', '3'],
     comp: shallowRef(defineAsyncComponent(() => import('./resume/IndexPage.vue')))
+  },
+  {
+    name: 'summary-page',
+    label: 'Discharge Summary',
+    title: 'DISCHARGE SUMMARY',
+    desc: 'Ringkasan Pulang Pasien',
+    icon: 'icon-my-file_sign',
+    nakes: ['1', '2', '3'],
+    comp: shallowRef(defineAsyncComponent(() => import('./dischargeplanning/IndexPage.vue')))
   }
 
 ])
