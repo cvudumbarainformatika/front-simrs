@@ -496,7 +496,7 @@ const lihatSkorJatuh = (val) => {
 
 const qrUrl = computed(() => {
   const noreg = props?.pasien?.noreg// noreg
-  const dok = 'INFORMED-CONSENT.png'
+  const dok = 'CPPT.png'
   const asal = 'RANAP'
   const enc = btoa(`${noreg}|${dok}|${asal}`)
   return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`

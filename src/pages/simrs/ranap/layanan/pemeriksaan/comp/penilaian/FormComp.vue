@@ -56,6 +56,34 @@
       </q-card-section>
     </q-card>
 
+    <!-- Resiko Ulkus Dekubitus Skala Norton -->
+    <q-card v-if="store?.downscores?.grupings?.includes(jnsKasusKep) && !ulang" flat bordered class="col-12">
+      <q-card-section class="q-pa-sm bg-grey-4">
+        <strong>{{ store?.downscores?.desc }}</strong>
+      </q-card-section>
+      <q-separator />
+      <q-card-section v-if="store.formDownScore" class="q-pa-sm row q-col-gutter-xs">
+        <div v-for="obj in store.downscores.form" :key="obj.kode" class="col-12">
+          <div class="row">
+            <div class="col-3">
+              {{ obj?.label }} :
+            </div>
+            <div class="col-9 q-gutter-sm">
+              <q-radio
+                v-for="(item, i) in obj?.categories" :key="i" dense size="sm" v-model="store.formDownScore[obj.kode]" :val="item" :label="item?.label"
+                @update:model-value="store.hitungSkorDownscore"
+              />
+            </div>
+          </div>
+          <q-separator class="q-my-sm" />
+        </div>
+        <div v-if="store.formDownScore.skorDownscore" class="full-width flex justify-end q-gutter-sm f-14 text-accent">
+          <div>NILAI SKOR : {{ store.formDownScore.skorDownscore?.skor }} </div>
+          <div>KET : {{ store.formDownScore.skorDownscore?.label }}</div>
+        </div>
+      </q-card-section>
+    </q-card>
+
     <!-- <q-card flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>Resiko Ulkus Dekubitus Skala Norton</strong>
@@ -132,7 +160,7 @@
     </q-card> -->
 
     <!-- humpty untuk usia < 18 tahun -->
-    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia >= 0 && store.usia < 18)" flat bordered class="col-12">
+    <q-card v-if="store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18)" flat bordered class="col-12">
       <q-card-section class="q-pa-sm bg-grey-4">
         <strong>{{ store?.humptys?.desc }}</strong>
       </q-card-section>
@@ -159,7 +187,7 @@
           <div>NILAI SKOR : {{ store.formHumpty.skorHumpty?.skor }} </div>
           <div>KET : {{ store.formHumpty.skorHumpty?.label }}</div>
         </div>
-        <div v-if="store.formHumpty.skorHumpty.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
+        <div v-if="store?.formHumpty?.skorHumpty?.kuning === true" class="full-width flex justify-end q-gutter-sm f-14 text-yellow-8 q-mt-xs">
           PASIEN DIHARAP PAKAI STICKER KUNING
         </div>
       </q-card-section>
@@ -377,11 +405,14 @@ const props = defineProps({
   }
 })
 
+// eslint-disable-next-line no-unused-vars
+const store = usePenilaianRanapStore()
+
 const jnsKasusKep = computed(() => {
   if (props.kasus) {
     return props.kasus?.gruping
   }
-  console.log('jnsKasusKep', props.kasus?.gruping)
+  // console.log('jnsKasusKep', props.kasus?.gruping)
 
   return null
 })
@@ -390,11 +421,11 @@ const jnsKasusKep = computed(() => {
 //   return (store?.humptys?.grupings?.includes(jnsKasusKep) && (store.usia < 18))
 // })
 
+// eslint-disable-next-line no-unused-vars
+// console.log('humppp', store.humptys)
+
 onMounted(async () => {
   store.initReset(props?.pasien)
 })
-
-// eslint-disable-next-line no-unused-vars
-const store = usePenilaianRanapStore()
 
 </script>
