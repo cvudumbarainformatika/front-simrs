@@ -79,77 +79,11 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       val.forEach(it => {
         it.data = []
         // --- harga dan sub dg bawa penerimaan rinci start ---
-        // it?.saldoawal.forEach(s => {
-        //   const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
-        //   const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
-        //   console.log('har', harTr, harga)
-        //   s.harga = harga
-        //   s.sub = harga * s.jumlah
-        // })
-        // it?.saldo.forEach(s => {
-        //   const harTr = s?.rincipenerimaan?.find(trm => trm.kdobat === s.kdobat && trm.nopenerimaan === s.nopenerimaan)
-        //   const harga = harTr?.harga ? harTr?.harga : (s?.harga ?? 0)
-        //   s.harga = harga
-        //   s.sub = harga * s.jumlah
-        // })
-        // if (it?.resepkeluar.length) {
-        //   it?.resepkeluar.forEach(res => {
-        //     const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //     const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
-        //     res.harga = harga
-        //     res.sub = harga * res.jumlah
-        //   })
-        // }
-        // if (it?.returpenjualan.length) {
-        //   it?.returpenjualan.forEach(res => {
-        //     const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //     const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? res?.harga)
-        //     res.harga = harga
-        //     res.sub = harga * res.jumlah
-        //   })
-        // }
-        // if (it?.resepkeluarracikan.length) {
-        //   it?.resepkeluarracikan.forEach(rac => {
-        //     const harTr = rac?.rincipenerimaan?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
-        //     const harSt = rac?.opname?.find(trm => trm.kdobat === rac.kdobat && trm.nopenerimaan === rac.nopenerimaan)
-        //     const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? rac?.herga)
-        //     rac.harga = harga
-        //     rac.sub = harga * rac.jumlah
-
-        //     const index = this.params.jenis === 'rekap' ? it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat) : it.resepkeluar.findIndex(a => a.kdobat === rac.kdobat && a.nopenerimaan === rac.nopenerimaan)
-        //     if (index >= 0) {
-        //       const jum = parseFloat(it.resepkeluar[index].jumlah) + parseFloat(rac.jumlah)
-        //       const sub = parseFloat(it.resepkeluar[index].sub) + parseFloat(rac.sub)
-        //       it.resepkeluar[index].jumlah = jum
-        //       it.resepkeluar[index].sub = sub
-        //     }
-        //     else it.resepkeluar.push(rac)
-        //   })
-        // }
-
-        // it?.retur?.forEach(per => {
-        //   const harTr = per?.rincipenerimaan?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
-        //   const harSt = per?.opname?.find(trm => trm.kdobat === per.kdobat && trm.nopenerimaan === per.nopenerimaan)
-        //   const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? per?.harga)
-        //   per.harga = harga
-        //   per.sub = harga * per.jumlah
-        // })
-        // di pemakaian memang tidak ada harga beli
-        // it?.pemakaian?.forEach(res => {
-        //   const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //   const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-        //   const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
-        //   res.harga = harga
-        //   res.sub = harga * res.jumlah
-        // })
-        // --- harga dan sub dg bawa penerimaan rinci start ---
         const masuk = []
         const masukx = []
         const keluar = []
-        const resep = it.resepkeluar
-        const pak = it.mutasikeluar
+        const resep = it?.resepkeluar ?? []
+        const pak = it?.mutasikeluar ?? []
         if (this.params.jenis === 'detail') {
           if (it?.saldoawal.length) {
             it?.saldoawal.forEach(s => {
@@ -556,11 +490,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             // }
           })
           it?.returpenjualan?.forEach(res => {
-            // const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            // const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-            // const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
-            // res.harga = harga
-            // res.sub = harga * res.jumlah
             const temp = {
               tgl: res.tgl,
               masuk: res,
