@@ -228,18 +228,18 @@
                   </td>
                 </tr>
                 <tr>
-                  <th colspan="4">
+                  <td colspan="4">
                     TOTAL
-                  </th>
-                  <th class="text-right text-weight-bolder q-pr-sm">
+                  </td>
+                  <td class="text-right text-weight-bolder q-pr-sm">
                     {{ formattanpaRp(totaldebit()) }}
-                  </th>
-                  <th class="text-right text-weight-bolder q-pr-sm">
+                  </td>
+                  <td class="text-right text-weight-bolder q-pr-sm">
                     {{ formattanpaRp(totalkredit()) }}
-                  </th>
-                  <th class="text-right text-weight-bolder q-pr-sm">
+                  </td>
+                  <td class="text-right text-weight-bolder q-pr-sm">
                     {{ formattanpaRp(totalsaldo()) }}
-                  </th>
+                  </td>
                 </tr>
               </tbody>
             </table>

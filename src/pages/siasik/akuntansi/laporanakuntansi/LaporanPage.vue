@@ -65,6 +65,9 @@ const title = computed(() => {
   if (page.path === '/laporan/akuntansi/lpsal') {
     return 'LPSAL'
   }
+  else if (page.path === '/laporan/akuntansi/lpe') {
+    return 'LPE'
+  }
   else if (page.path === '/laporan/akuntansi/lra') {
     return 'LRA'
   }
@@ -82,6 +85,9 @@ const title = computed(() => {
 const subtitle = computed(() => {
   if (page.path === '/laporan/akuntansi/lpsal') {
     return 'Laporan Perubahan Saldo Anggaran Lebih'
+  }
+  else if (page.path === '/laporan/akuntansi/lpe') {
+    return 'Laporan Perubahan Ekuitas'
   }
   else if (page.path === '/laporan/akuntansi/lra') {
     return 'Laporan Realisasi Anggaran'
