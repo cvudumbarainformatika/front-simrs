@@ -127,6 +127,7 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
 
             this.psaprealisasipendapatan = resp.data.psaprealisasipendapatan
             this.psaprealisasipendapatanx = resp.data.psaprealisasipendapatanx
+            this.psappenyesuaianpendp = resp.data.psappenyesuaianpendp
             this.psapbebanpegawai = resp.data.psapbebanpegawai
             this.psapbebanlain = resp.data.psapbebanlain
             this.psappenjualanaset = resp.data.psappenjualanaset
@@ -312,6 +313,7 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
       console.log('level2', level2)
 
       const psappendapatan = []
+      const penyspendpatan = this.psappenyesuaianpendp
       const realpostingotom = this.psaprealisasipendapatan
       const realju = this.psaprealisasipendapatanx
       const gabung = realpostingotom.concat(realju)
@@ -322,10 +324,12 @@ export const useLaporanOperasionalStore = defineStore('Laporan_Operasional', {
       const unikfilpagujs = filpagujs.length ? [...new Set(filpagujs)] : []
       const realisasi = realpostingotom.filter(x => filterjs.includes(x.kode)).map((x) => parseFloat(x.realisasi)).reduce((a, b) => a + b, 0).toFixed(2)
       const realisasix = realju.map((x) => parseFloat(x.realisasix)).reduce((a, b) => a + b, 0).toFixed(2)
+      const penyesuaianpend = penyspendpatan.map((x) => parseFloat(x.nilaix)).reduce((a, b) => a + b, 0).toFixed(2)
+      console.log('penyesuaian pendapatan', penyesuaianpend)
       const jasalayanan = {
         kode: unikfilpagujs[0],
         uraian: 'Pendapatan Jasa Layanan dari Masyarakat',
-        realisasi: isNaN(parseFloat(realisasi - realisasix)) ? parseFloat(0).toFixed(2) : parseFloat(realisasi - realisasix)
+        realisasi: isNaN(parseFloat(realisasi - realisasix - penyesuaianpend)) ? parseFloat(0).toFixed(2) : parseFloat(realisasi - realisasix - penyesuaianpend)
       }
 
       // PSAP 13 DATA PENDAPATAN KERJA SAMA //

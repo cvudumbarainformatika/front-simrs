@@ -172,6 +172,12 @@ const laporan = {
             import('src/pages/siasik/akuntansi/laporanakuntansi/lpsal/IndexPage.vue')
         },
         {
+          path: '/laporan/akuntansi/lpe',
+          name: 'laporan.akuntansi.lpe',
+          component: () =>
+            import('src/pages/siasik/akuntansi/laporanakuntansi/lpe/IndexLpe.vue')
+        },
+        {
           path: '/laporan/akuntansi/neraca',
           name: 'laporan.akuntansi.neraca',
           component: () =>

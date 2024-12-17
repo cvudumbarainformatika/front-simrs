@@ -35,6 +35,16 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
     arrayTanggal: [],
     pegawais: [],
     saldoakhir: 0,
+
+    sebelumsaldo: [],
+    sebelumsilpa: [],
+    sebelumsetor: [],
+    sebelumkaskecil: [],
+    sebelumspm: [],
+    sebelumspmgu: [],
+    sebelumnihil: [],
+    sebelumnpkls: [],
+
     dialogCetak: false
   }),
 
@@ -57,6 +67,13 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
             this.hasilArray = []
             this.items = resp.data
             this.pegawais = resp.data?.pegawai
+            this.sebelumsaldo = resp.data?.saldosebelum
+            this.sebelumsilpa = resp.data?.silpasebelum
+            this.sebelumsetor = resp.data?.setorsebelum
+            this.sebelumspm = resp.data?.spmsebelum
+            this.sebelumspmgu = resp.data?.spmgusebelum
+            this.sebelumnihil = resp.data?.nihilsebelum
+            this.sebelumnpkls = resp.data?.npklssebelum
             this.hitungharidalamBulan()
             this.loading = false
           }
@@ -314,7 +331,9 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
         kurangikaskecil.push(obj)
       }
       // =====================================================
-
+      const gabungsebelumdebit = this.sebelumsilpa.concat(this.sebelumsetor, this.sebelumnihil)
+      const totaldebisebelum = gabungsebelumdebit.map(x => parseFloat(x.total))
+      console.log('GABUNG SEBELUM', totaldebisebelum)
       // console.log("spmgu", spmgu);
       // console.log("spm", spm);
       // console.log("npkls", npkls);

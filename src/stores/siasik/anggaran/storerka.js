@@ -25,8 +25,18 @@ export const useRkaStore = defineStore('store_rka_siasik', {
 
     kegiatanblud: '',
 
+    totalPagukegiatan: [],
     dataanggaran: [],
-    datarka: []
+    datarka: [],
+
+    capaiankegiatan: '',
+    targetcapaian: '',
+    masukan: '',
+    targetmasukan: '',
+    keluaran: '',
+    targetkeluaran: '',
+    hasil: '',
+    targethasil: ''
   }),
   actions: {
     setParameter (key, val) {
@@ -128,6 +138,7 @@ export const useRkaStore = defineStore('store_rka_siasik', {
     },
     mapingData () {
       const rka = []
+      const totalrka = []
       const uniq1 = this.dataanggaran.map((x) => x.kode1)
       const fils1 = uniq1.length ? [...new Set(uniq1)] : []
       for (let i = 0; i < fils1.length; i++) {
@@ -139,7 +150,9 @@ export const useRkaStore = defineStore('store_rka_siasik', {
           rincian: []
         }
         rka.push(obj)
+        totalrka.push(obj)
       }
+      console.log('totalpagukegiatan', totalrka)
       const uniq2 = this.dataanggaran.map((x) => x.kode2)
       const fils2 = uniq2.length ? [...new Set(uniq2)] : []
       for (let i = 0; i < fils2.length; i++) {
@@ -217,6 +230,8 @@ export const useRkaStore = defineStore('store_rka_siasik', {
       const dataRKA = sortAnggaran(rka)
       this.datarka = dataRKA
       console.log('DATA RKA', this.datarka)
+
+      this.totalPagukegiatan = totalrka
     }
   }
 })
