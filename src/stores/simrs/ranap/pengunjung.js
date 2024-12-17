@@ -109,6 +109,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       // // console.log('wew', this.pasiens[indexPasien])
       if (findPasien.length) {
         const datax = findPasien[0]
+        datax.dataigd = data?.dataigd ?? null
         datax.newapotekrajal = data?.newapotekrajal ?? []
         datax.diagnosa = data?.diagnosa ?? []
         datax.anamnesis = data?.anamnesis ?? [] // wes
