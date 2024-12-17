@@ -130,7 +130,7 @@ import { onMounted, ref } from 'vue'
 const store = useKartuStokFarmasiStore()
 const $q = useQuasar()
 const bulan = ref('Januari')
-const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
+const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
 const tahuns = ref([])
 const app = useAplikasiStore()
 const keteranganStok = ref('Stok Sekarang')

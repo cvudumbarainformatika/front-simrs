@@ -137,19 +137,19 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         //   per.sub = harga * per.jumlah
         // })
         // di pemakaian memang tidak ada harga beli
-        it?.pemakaian?.forEach(res => {
-          const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-          const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
-          const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
-          res.harga = harga
-          res.sub = harga * res.jumlah
-        })
+        // it?.pemakaian?.forEach(res => {
+        //   const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //   const harSt = res?.opname?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
+        //   const harga = harTr?.harga ? harTr?.harga : (harSt?.harga ?? 0)
+        //   res.harga = harga
+        //   res.sub = harga * res.jumlah
+        // })
         // --- harga dan sub dg bawa penerimaan rinci start ---
         const masuk = []
         const masukx = []
         const keluar = []
         const resep = it.resepkeluar
-        const pak = it.pemakaian
+        const pak = it.mutasikeluar
         if (this.params.jenis === 'detail') {
           if (it?.saldoawal.length) {
             it?.saldoawal.forEach(s => {
@@ -419,7 +419,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             const temp = {
               tgl: res?.tgl ?? this.params.tahun + '-' + this.params.bulan + '-31 23:00:00',
               keluar: res,
-              ket: (res?.ruangan?.uraian ?? '')
+              ket: (res?.ruangan?.uraian + ' ' + res?.no_permintaan ?? '')
             }
 
             it.data.push(temp)
@@ -785,12 +785,12 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               }
             }
           }
-          if (it?.pemakaian?.length) {
+          if (it?.mutasikeluar?.length) {
             const raw = {
-              tgl: it?.pemakaian[0]?.tgl,
+              tgl: it?.mutasikeluar[0]?.tgl,
               harga: 0,
-              jumlah: it?.pemakaian?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
-              sub: it?.pemakaian?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+              jumlah: it?.mutasikeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+              sub: it?.mutasikeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
             if (type !== 'download') {
               it.data.push({
