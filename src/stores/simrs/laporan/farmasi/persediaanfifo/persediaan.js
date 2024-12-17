@@ -106,7 +106,7 @@ export const useLaporanPersediaanFiFoFarmasiStore = defineStore('laporan_persedi
       this.items = []
       this.loading = true
       const param = { params: this.params }
-      await api.get('v1/simrs/laporan/farmasi/pemakaian/get-persediaan', param)
+      await api.get('v1/simrs/laporan/farmasi/persediaan/get-persediaan', param)
         .then(resp => {
           this.loading = false
           // console.log('data tabel', resp.data)

@@ -1016,8 +1016,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       const data = []
       const dataForTotal = []
       const items = []
-      const resp = await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
-      // await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
+      const resp = await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
+      // await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
       // .then(resp => {
       if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
       this.mapingItem(resp?.data?.data, items, 'download')
@@ -1114,7 +1114,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       if (this.params.page === 1) this.loading = true
       else this.loadingNext = true
       const param = { params: this.params }
-      await api.get('v1/simrs/laporan/farmasi/pemakaian/get-mutasi', param)
+      await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
         .then(resp => {
           this.loading = false
           this.loadingNext = false
