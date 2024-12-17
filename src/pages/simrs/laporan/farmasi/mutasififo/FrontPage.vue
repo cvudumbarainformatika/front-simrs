@@ -83,6 +83,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-auto q-mr-md">
           <div class="row items-center">
             <q-btn
@@ -123,18 +124,6 @@
                 </q-btn>
               </download-excel>
             </div>
-            <!-- test export langsung -->
-            <!-- <div class="q-ml-sm">
-              <app-btn
-                color="orange"
-                label="Download Excel"
-                icon="icon-mat-download"
-                push
-                :loading="store.loadingDownload"
-                :disable="store.loadingDownload"
-                @click="exportExcel"
-              />
-            </div> -->
           </div>
         </div>
       </div>
@@ -189,6 +178,7 @@
           <TableComp />
         </div>
       </div>
+
       <div class="q-mt-md" ref="refTt">
         <div class="q-my-md">
           <div class="row q-mb-md">

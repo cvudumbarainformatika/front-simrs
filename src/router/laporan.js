@@ -257,10 +257,14 @@ const laporan = {
     },
     {
       path: '/laporan/farmasi/barang-rusak',
-      // name: 'laporan.farmasi.barang-rusak',
       component: () => import('pages/simrs/laporan/farmasi/barangrusak/IndexPage.vue')
     },
+    {
+      path: '/laporan/farmasi/pembelian-per-item',
+      component: () => import('pages/simrs/laporan/farmasi/pembelianPerItem/IndexPage.vue')
+    },
 
+    // ini Harus ada
     {
       path: '/laporan/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
