@@ -463,15 +463,16 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       }
     },
     async setLayananSelesai (pasien) {
+      // console.log('asd', pasien)
       this.loadingTerima = true
       // '' : 'Belum Terlayanani'
       // '1': 'Terlayani'
       // '2': 'Sudah diterima'
       // '3': Batal
-      if (!pasien?.anamnesis.length) {
-        this.loadingTerima = false
-        return this.notifikasiError('Maaf, Anamnesis Harap Diisi Dahulu...')
-      }
+      // if (!pasien?.anamnesis.length) {
+      //   this.loadingTerima = false
+      //   return this.notifikasiError('Maaf, Anamnesis Harap Diisi Dahulu...')
+      // }
       if (!pasien?.diagnosa?.length) {
         this.loadingTerima = false
         return this.notifikasiError('Maaf, Diagnosa Harap Diisi Dahulu...')

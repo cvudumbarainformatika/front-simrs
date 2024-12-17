@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePengunjungRanapStore } from './pengunjung'
+// eslint-disable-next-line no-unused-vars
 import { notifSuccess } from 'src/modules/utils'
 
 export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
@@ -29,6 +30,9 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
     ontarios: [],
     formOntario: null,
 
+    downscores: [],
+    formDownScore: null,
+
     yaTidaks: ['Ya', 'Tidak'],
     adaTidaks: ['Ada', 'Tidak Ada']
 
@@ -42,7 +46,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/master/penilaian')
           .then(resp => {
-            // console.log('mster penilaian', resp)
+            console.log('mster penilaian', resp)
 
             if (resp.status === 200) {
               const arr = resp.data
@@ -64,7 +68,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
         }
       }
       const resp = await api.get('v1/simrs/ranap/layanan/pemeriksaan/penilaian', params)
-      console.log('resp right', resp)
+      // console.log('resp right', resp)
       if (resp.status === 200) {
         // store.items = resp.data
         this.PISAH_DATA_RANAP_IGD(resp.data, pasien)
@@ -77,6 +81,7 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       this.humptys = arr?.find(item => item.kode === 'humpty_dumpty') ?? null
       this.morses = arr?.find(item => item.kode === 'morse_fall') ?? null
       this.ontarios = arr?.find(item => item.kode === 'ontario') ?? null
+      this.downscores = arr?.find(item => item.kode === 'downscore') ?? null
     },
 
     calculateAgeInMonths (birthdate, day) {
@@ -189,13 +194,24 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       }
       this.formOntario = formOntario
 
-      // console.log('formOntario', this.formOntario)
+      // downscore
+      const formDownscore = {}
+      for (let i = 0; i < this.downscores?.form?.length; i++) {
+        const el = this.downscores.form[i]
+        formDownscore[el?.kode] = el?.categories?.find(x => x?.skor === 0)
+      }
+      this.formDownScore = formDownscore
+
+      console.log('formDownscore', this.formDownScore)
 
       this.hitungSkorBarthel()
       this.hitungSkorNorton()
       this.hitungSkorHumpty()
       this.hitungSkorMorse()
       this.hitungSkorOntario()
+      this.hitungSkorDownscore()
+
+      // console.log('form', this.formHumpty)
     },
 
     hitungSkorBarthel () {
@@ -398,11 +414,40 @@ export const usePenilaianRanapStore = defineStore('penilaian-ranap-store', {
       // console.log('result ontario', this.formOntario)
     },
 
+    hitungSkorDownscore () {
+      let ket = null
+      let result = {
+        skor: 0,
+        label: ket
+      }
+
+      this.formDownScore.skorDownscore = result
+      const arr = Object.keys(this.formDownScore).map(key => this.formDownScore[key])
+      const totalSkor = arr.reduce((a, b) => a + b?.skor, 0)
+
+      if (totalSkor <= 3) {
+        ket = 'Gawat Napas Ringan'
+      }
+      else if (totalSkor > 3 && totalSkor <= 5) {
+        ket = 'Gawat Napas Sedang'
+      }
+      else if (totalSkor > 5) {
+        ket = 'Gawat Napas Berat'
+      }
+
+      result = {
+        skor: totalSkor,
+        label: ket
+      }
+      this.formDownScore.skorDownscore = result
+    },
+
     async saveData (jnsKasus, pasien) {
       console.groupCollapsed('[setDataForm]')
       const frm = {
         barthel: (this.barthels.grupings?.includes(jnsKasus)) ? this.formBarthel : null,
         norton: (this.nortons.grupings?.includes(jnsKasus)) ? this.formNorton : null,
+        downscore: (this.downscores.grupings?.includes(jnsKasus)) ? this.formDownScore : null,
         humpty_dumpty: (this.humptys.grupings?.includes(jnsKasus) && (this.usia < 18)) ? this.formHumpty : null,
         morse_fall: (this.morses.grupings?.includes(jnsKasus) && (this.usia >= 18 && this.usia < 60)) ? this.formMorse : null,
         ontario: (this.ontarios.grupings?.includes(jnsKasus) && (this.usia >= 60)) ? this.formOntario : null,

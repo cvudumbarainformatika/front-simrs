@@ -68,7 +68,7 @@
         type="textarea"
         outlined
         standout="bg-yellow-3"
-        rows="2"
+        rows="5"
       />
       <div class="q-mt-md q-mb-xs">
         INFORMASI DAN EDUKASI YANG DIBERIKAN :
@@ -78,7 +78,7 @@
         type="textarea"
         outlined
         standout="bg-yellow-3"
-        rows="2"
+        rows="5"
       />
       <div class="q-mt-md q-mb-xs">
         TTD PASIEN / KELUARGA :
