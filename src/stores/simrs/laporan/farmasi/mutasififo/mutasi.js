@@ -507,14 +507,13 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
           })
         }
         else {
-          // if (type === 'download') {
           const temp = {
             kd_obat: it?.kd_obat,
             tgl: this.params.tahun + '-' + this.params.bulan + '-01 00:00:00',
             ket: ''
           }
           it.data.push(temp)
-          // }
+
           if (it?.saldoawal.length) {
             const sala = {
               kd_obat: it?.kd_obat,
@@ -523,20 +522,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
 
             it.data[0].saldoawal = sala
-
-            // if (type === 'download')it.data[0].saldoawal = sala
-            // else it.data.push(temp)
-
-            // const salJ = {
-            //   tgl: this.params.tahun + '-' + this.params.bulan + '-01 00:00:00',
-            //   kd_obat: it?.kd_obat,
-            //   jumlah: it?.saldo?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
-            //   sub: it?.saldo?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0),
-            //   ket: type === 'download' ? '' : 'Saldo Awal'
-            // }
-
-            // masuk.push(salJ)
-            // console.log('sal awal ', masukx)
           }
           if (it?.penyesuaian?.length) {
             const raw = {
@@ -580,51 +565,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
               else keluar.push(raw)
             }
-            // if (type === 'download') {
-            //   const index1 = masukx.findIndex(f => f.kd_obat === raw?.kdobat)
-            //   console.log('Ada Peny  index1', raw, index1, masukx)
-            //   if (index1 >= 0) {
-            //     const jumM = masukx[index1].jumlah + raw.jumlah
-            //     const subM = masukx[index1].sub + raw.sub
-
-            //     masukx[index1].jumlah = jumM
-            //     masukx[index1].sub = subM
-            //   }
-
-            //   else masukx.push(raw)
-            // }
-            // else {
-            //   const index = masuk.findIndex(f => f.kd_obat === raw.kdobat)
-            //   console.log('Ada Peny index', raw, index, masuk)
-            //   if (index >= 0) {
-            //     const jumM = masuk[index].jumlah + raw.jumlah
-            //     const subM = masuk[index].sub + raw.sub
-
-            //     masuk[index].jumlah = jumM
-            //     masuk[index].sub = subM
-            //   }
-
-            //   if (raw?.jumlah > 0) {
-            //     it.data.push({
-            //       tgl: raw?.tgl,
-            //       masuk: raw,
-            //       ket: 'Penngembalian sisa pasien'
-            //     })
-            //   }
-            //   else {
-            //     const raw2 = {
-            //       tgl: raw?.tgl,
-            //       harga: 0,
-            //       jumlah: -raw?.jumlah,
-            //       sub: -raw?.sub
-            //     }
-            //     it.data.push({
-            //       tgl: raw?.tgl,
-            //       keluar: raw2,
-            //       ket: 'Salah hitung stok opname'
-            //     })
-            //   }
-            // }
             console.log('Ada penyesuanag', masukx, masuk)
             // console.log('penyesuaian', it?.penyesuaian, akhir)
           }
@@ -640,9 +580,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               ket: type === 'download' ? '' : 'Penerimaan'
             }
 
-            console.log('terima nya ', jumlah, subt, ms)
+            // console.log('terima nya ', jumlah, subt, ms)
 
-            // if (type === 'download') {
             const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
             console.log('terima nya index', index1)
             if (index1 >= 0) {
@@ -653,18 +592,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masukx[index1].sub = subM
             }
             else masukx.push(ms)
-            // }
-            // else {
-            //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            //   if (index >= 0) {
-            //     const jumM = masuk[index].jumlah + ms.jumlah
-            //     const subM = masuk[index].sub + ms.sub
 
-            //     masuk[index].jumlah = jumM
-            //     masuk[index].sub = subM
-            //   }
-            //   else masuk.push(ms)
-            // }
             // console.log('terima ', masukx)
           }
           if (it?.returpenjualan?.length) {
@@ -674,7 +602,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.returpenjualan?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            // if (type === 'download') {
+
             const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index1 >= 0) {
               const jumM = masukx[index1].jumlah + raw.jumlah
@@ -685,25 +613,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               masukx[index1].sub = subM
             }
             else masukx.push(raw)
-            // }
-            // else {
-            //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            //   if (index >= 0) {
-            //     const jumM = masuk[index].jumlah + raw.jumlah
-            //     const subM = masuk[index].sub + raw.sub
-
-            //     masuk[index].jumlah = jumM
-            //     masuk[index].sub = subM
-            //   }
-            // }
-            // // console.log('ret jual ', masukx)
-            // if (type !== 'download') {
-            //   it.data.push({
-            //     tgl: raw?.tgl,
-            //     masuk: raw,
-            //     ket: 'Retur Penjualan'
-            //   })
-            // }
           }
 
           if (it?.resepkeluar?.length) {
@@ -713,14 +622,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            // if (type !== 'download') {
-            //   it.data.push({
-            //     tgl: raw?.tgl,
-            //     keluar: raw,
-            //     ket: 'Resep'
-            //   })
-            // }
-            // if (type === 'download') {
+
             const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index >= 0) {
               const jumM = keluar[index].jumlah + raw.jumlah
@@ -732,17 +634,6 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             else {
               keluar.push(raw)
             }
-            // }
-            // else {
-            //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            //   if (index >= 0) {
-            //     const jumM = masuk[index].jumlah - raw.jumlah
-            //     const subM = masuk[index].sub - raw.sub
-
-            //     masuk[index].jumlah = jumM
-            //     masuk[index].sub = subM
-            //   }
-            // }
           }
           if (it?.mutasikeluar?.length) {
             const raw = {
@@ -751,14 +642,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               jumlah: it?.mutasikeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.mutasikeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
-            // if (type !== 'download') {
-            //   it.data.push({
-            //     tgl: raw?.tgl,
-            //     keluar: raw,
-            //     ket: 'Ruangan'
-            //   })
-            // }
-            // if (type === 'download') {
+
             const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
             if (index >= 0) {
               const jumM = keluar[index].jumlah + raw.jumlah
@@ -770,43 +654,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             else {
               keluar.push(raw)
             }
-            // }
-            // else {
-            //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-            //   if (index >= 0) {
-            //     const jumM = masuk[index].jumlah - raw.jumlah
-            //     const subM = masuk[index].sub - raw.sub
-
-            //     masuk[index].jumlah = jumM
-            //     masuk[index].sub = subM
-            //   }
-            // }
           }
-
-          // if (it?.penerimaanrinci?.length) {
-          //   const ms = {
-          //     kd_obat: it?.kd_obat,
-          //     jumlah: it?.penerimaanrinci?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
-          //     sub: it?.penerimaanrinci?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
-          //   }
-          //   const temp = {
-          //     tgl: it?.penerimaanrinci[0].tgl,
-          //     masuk: ms,
-          //     ket: 'Penerimaan'
-          //   }
-          //   if (type !== 'download') it.data.push(temp)
-          //   // else {
-          //   //   const index = masuk.findIndex(f => f.kd_obat === it?.kd_obat)
-          //   //   if (index >= 0) {
-          //   //     const jumM = masuk[index].jumlah + ms.jumlah
-          //   //     const subM = masuk[index].sub + ms.sub
-
-          //   //     masuk[index].jumlah = jumM
-          //   //     masuk[index].sub = subM
-          //   //   }
-          //   // }
-          //   // console.log('pen rinc ', masukx)
-          // }
         }
         if (this.params.jenis === 'rekap') {
           if (masukx?.length) {
@@ -994,14 +842,14 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
             }
             // ini untuk menjmlah total
-            tmpForTot.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
-            tmpForTot.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
-            tmpForTot.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
-            tmpForTot.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
-            tmpForTot.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
-            tmpForTot.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
-            tmpForTot.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
-            tmpForTot.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
+            tmpForTot.jumlSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.jumlah), 2)
+            tmpForTot.nilaiSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.sub), 2)
+            tmpForTot.jumlMasuk = this.cekNan(parseFloat(dat?.masuk?.jumlah), 2)
+            tmpForTot.nilaiMasuk = this.cekNan(parseFloat(dat?.masuk?.sub), 2)
+            tmpForTot.jumlKeluar = this.cekNan(parseFloat(dat?.keluar?.jumlah), 2)
+            tmpForTot.nilaiKeluar = this.cekNan(parseFloat(dat?.keluar?.sub), 2)
+            tmpForTot.jumlSalAkhir = this.cekNan(parseFloat(dat?.akhir?.jumlah), 2)
+            tmpForTot.nilaiSalAkhir = this.cekNan(parseFloat(dat?.akhir?.sub), 2)
 
             if (this.params.jenis === 'rekap') {
               ada.ket = dat?.ket
