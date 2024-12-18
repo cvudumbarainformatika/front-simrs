@@ -687,7 +687,7 @@ function ceksirkulasi (val) {
   if (val === 'Henti Nafas' || val === 'Bradipnoe' || val === 'Sianosis') {
     store.form.hasilprimarysurve = 'Resusitasi'
   }
-  else if (val === 'Trakipnoe' || val === 'Sumbatan Parsial') {
+  else if (val === 'Trakipnone' || val === 'Sumbatan Parsial') {
     store.form.hasilprimarysurve = 'P1'
   }
   else {

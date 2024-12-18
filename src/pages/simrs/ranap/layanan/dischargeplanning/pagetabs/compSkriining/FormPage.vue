@@ -247,11 +247,12 @@
             :model="store.form.tglRencanaPulang"
             label=""
             outlined
+            valid
             @set-model="val=>store.form.tglRencanaPulang=val"
           />
         </div>
         <div class="col-4">
-          <app-input-simrs v-model="store.form.rs20" label="Berapa hari Rawat " class="q-mt-sm" />
+          <app-input-simrs v-model="store.form.rs20" label="Berapa hari Rawat " class="q-mt-sm" :valid="{ required: true}" />
         </div>
       </div>
       <q-separator class="q-my-xs" />

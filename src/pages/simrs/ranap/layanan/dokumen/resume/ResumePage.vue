@@ -75,7 +75,7 @@
                 <td />
                 <td>Tanggal Masuk IGD</td>
                 <td>:</td>
-                <td>{{ pasien?.tglmasuk_igd ?? '-' }}</td>
+                <td>{{ pasien?.dataigd?.tglmasuk_igd ?? '-' }}</td>
               </tr>
               <tr valign="top">
                 <td>Jenis Kelamin&nbsp;</td>
