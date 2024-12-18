@@ -86,6 +86,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         const masukx = []
         const keluar = []
         const resep = it?.resepkeluar ?? []
+        const racikan = it?.resepkeluarracikan ?? []
         const pak = it?.mutasikeluar ?? []
         if (this.params.jenis === 'detail') {
           if (it?.saldoawal.length) {
@@ -269,83 +270,94 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 }
               }
             }
-            // if (adaPen.length) {
-            //   let index = 0
-            //   while (diminta > 0 && index < adaPen.length) {
-            //     if (adaPen[index].jumlah >= diminta) {
-            //       const sisa = adaPen[index].jumlah - diminta
-            //       adaPen[index].jumlah = sisa
-            //       diminta = 0
+          })
+          racikan?.forEach(res => {
+            const temp = {
+              tgl: res?.tgl ?? this.params.tahun + '-' + this.params.bulan + '-31 23:00:00',
+              keluar: res,
+              ket: res?.header?.norm + ' ' + (res?.header?.datapasien?.rs2 ?? '')
+            }
 
-            //       const nilaiSisa = adaPen[index].sub - nilaiDiminta
-            //       adaPen[index].sub = nilaiSisa
-            //       nilaiDiminta = 0
-            //     }
-            //     else {
-            //       const sisa = diminta - adaPen[index].jumlah
-            //       diminta = sisa
-            //       adaPen[index].jumlah = 0
+            it.data.push(temp)
 
-            //       const nilaiSisa = adaPen[index].sub - nilaiDiminta
-            //       nilaiDiminta = nilaiSisa
-            //       adaPen[index].sub = 0
+            let diminta = res.jumlah
+            let nilaiDiminta = res.sub
+            while (diminta > 0) {
+              const index = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat && a.nopenerimaan === res.nopenerimaan)
+              if (index >= 0) {
+                if (masuk[index].jumlah >= diminta) {
+                  const sisa = masuk[index].jumlah - diminta
+                  masuk[index].jumlah = sisa
+                  diminta = 0
 
-            //       index += 1
-            //     }
-            //     // console.log('if', adaPen[index], diminta)
-            //   }
-            // }
-            // else if (adaPen1.length) {
-            //   let index = 0
-            //   while (diminta > 0 && index < adaPen1.length) {
-            //     if (adaPen1[index].jumlah >= diminta) {
-            //       const sisa = adaPen1[index].jumlah - diminta
-            //       adaPen1[index].jumlah = sisa
-            //       diminta = 0
+                  const nilaiSisa = masuk[index].sub > 0 ? masuk[index].sub - nilaiDiminta : nilaiDiminta
+                  masuk[index].sub = nilaiSisa
+                  nilaiDiminta = 0
+                }
+                else {
+                  const sisa = diminta - masuk[index].jumlah
+                  diminta = sisa
+                  masuk[index].jumlah = 0
 
-            //       const nilaiSisa = adaPen1[index].sub - nilaiDiminta
-            //       adaPen1[index].sub = nilaiSisa
-            //       nilaiDiminta = 0
-            //     }
-            //     else {
-            //       const sisa = diminta - adaPen1[index].jumlah
-            //       diminta = sisa
-            //       adaPen1[index].jumlah = 0
+                  const nilaiSisa = masuk[index].sub > 0 ? masuk[index].sub - nilaiDiminta : nilaiDiminta
+                  nilaiDiminta = nilaiSisa
+                  masuk[index].sub = 0
+                }
+              }
+              else {
+                const index1 = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat && a.harga === res.harga)
+                // console.log('index res 1', index1)
+                if (index1 >= 0) {
+                  if (masuk[index1].jumlah >= diminta) {
+                    const sisa = masuk[index1].jumlah - diminta
+                    masuk[index1].jumlah = sisa
+                    diminta = 0
 
-            //       const nilaiSisa = adaPen1[index].sub - nilaiDiminta
-            //       nilaiDiminta = nilaiSisa
-            //       adaPen1[index].sub = 0
+                    const nilaiSisa = masuk[index1].sub > 0 ? masuk[index1].sub - nilaiDiminta : nilaiDiminta
+                    masuk[index1].sub = nilaiSisa
+                    nilaiDiminta = 0
+                  }
+                  else {
+                    const sisa = diminta - masuk[index1].jumlah
+                    diminta = sisa
+                    masuk[index1].jumlah = 0
 
-            //       index += 1
-            //     }
-            //     // console.log('if', adaPen[index], diminta)
-            //   }
-            // }
-            // else {
-            //   let index = 0
-            //   while (diminta > 0 && index < masuk.length) {
-            //     if (masuk[index].jumlah >= diminta) {
-            //       const sisa = masuk[index].jumlah - diminta
-            //       masuk[index].jumlah = sisa
-            //       diminta = 0
-            //       const nilaiSisa = masuk[index].sub - nilaiDiminta
-            //       masuk[index].sub = nilaiSisa
-            //       nilaiDiminta = 0
-            //     }
-            //     else {
-            //       const sisa = diminta - masuk[index].jumlah
-            //       diminta = sisa
-            //       masuk[index].jumlah = 0
+                    const nilaiSisa = masuk[index1].sub > 0 ? masuk[index1].sub - nilaiDiminta : nilaiDiminta
+                    nilaiDiminta = nilaiSisa
+                    masuk[index1].sub = 0
+                  }
+                }
+                else {
+                  const index2 = masuk.findIndex(a => a.jumlah > 0 && a.sub > 0 && a.kdobat === res.kdobat)
+                  // console.log('index res 2', index2, masuk[index2], res)
+                  if (index2 >= 0) {
+                    if (masuk[index2].jumlah >= diminta) {
+                      const sisa = masuk[index2].jumlah - diminta
+                      masuk[index2].jumlah = sisa
+                      diminta = 0
 
-            //       const nilaiSisa = masuk[index].sub - nilaiDiminta
-            //       nilaiDiminta = nilaiSisa
-            //       masuk[index].sub = 0
+                      const nilaiSisa = masuk[index2].sub > 0 ? masuk[index2].sub - nilaiDiminta : nilaiDiminta
+                      masuk[index2].sub = nilaiSisa
+                      nilaiDiminta = 0
+                    }
+                    else {
+                      const sisa = diminta - masuk[index2].jumlah
+                      diminta = sisa
+                      masuk[index2].jumlah = 0
 
-            //       index += 1
-            //     }
-            //     // console.log('else', masuk[index])
-            //   }
-            // }
+                      const nilaiSisa = masuk[index2].sub > 0 ? masuk[index2].sub - nilaiDiminta : nilaiDiminta
+                      nilaiDiminta = nilaiSisa
+                      masuk[index2].sub = 0
+                    }
+                  }
+                  // kalo sampe else coba cek mana yang ga match
+                  else {
+                    // console.log('index res 2', index2, masuk[index2], res)
+                    diminta = 0
+                  }
+                }
+              }
+            }
           })
           pak?.forEach(res => {
             // const harTr = res?.rincipenerimaan?.find(trm => trm.kdobat === res.kdobat && trm.nopenerimaan === res.nopenerimaan)
@@ -624,6 +636,26 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               harga: 0,
               jumlah: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
               sub: it?.resepkeluar?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
+            }
+
+            const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
+            if (index >= 0) {
+              const jumM = keluar[index].jumlah + raw.jumlah
+              const subM = keluar[index].sub + raw.sub
+
+              keluar[index].jumlah = jumM
+              keluar[index].sub = subM
+            }
+            else {
+              keluar.push(raw)
+            }
+          }
+          if (it?.resepkeluarracikan?.length) {
+            const raw = {
+              tgl: it?.resepkeluarracikan[0]?.tgl,
+              harga: 0,
+              jumlah: it?.resepkeluarracikan?.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah), 0),
+              sub: it?.resepkeluarracikan?.reduce((a, b) => parseFloat(a) + parseFloat(b.sub), 0)
             }
 
             const index = keluar.findIndex(f => f.kd_obat === it?.kd_obat)
