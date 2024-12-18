@@ -4,12 +4,15 @@ import { api } from 'src/boot/axios'
 // eslint-disable-next-line no-unused-vars
 import { formatDoubleKoma } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
+import { watch } from 'vue'
 
 export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo_farmasi', {
   state: () => ({
     loading: false,
     loadingNext: false,
+    scrolling: false,
     loadingDownload: false,
+    ketProses: null,
     items: [],
     meta: {},
     params: {
@@ -123,7 +126,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             it?.penyesuaian.forEach(p => {
               const index = masuk.findIndex(f => f.nopenerimaan === p.nopenerimaan)
               if (index >= 0) {
-                console.log('penye', masuk[index], p)
+                // console.log('penye', masuk[index], p)
 
                 const jumM = masuk[index].jumlah + p.jumlah
                 const subM = masuk[index].sub + p.sub
@@ -134,7 +137,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               else {
                 const index2 = masuk.findIndex(f => parseFloat(f.harga) === parseFloat(p.harga))
                 if (index2 >= 0) {
-                  console.log('else 1', masuk[index2], p)
+                  // console.log('else 1', masuk[index2], p)
 
                   const jumEl = masuk[index2].jumlah + p.jumlah
                   const subEl = masuk[index2].sub + p.sub
@@ -171,7 +174,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                 it.data.push(temp)
               }
             })
-            console.log('masuk', masuk)
+            // console.log('masuk', masuk)
             // console.log('penyesuaian', it?.penyesuaian, akhir)
           }
           // console.log('masuk', masuk)
@@ -430,7 +433,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
                     }
                   }
                   else {
-                    console.log('kode obat tidak ada', res, masuk.filter(f => f.jumlah > 0))
+                    // console.log('kode obat tidak ada', res, masuk.filter(f => f.jumlah > 0))
                     diminta = 0
                   }
                 }
@@ -535,7 +538,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             }
             if (raw?.jumlah > 0) {
               const index1 = masukx.findIndex(f => f.kd_obat === raw?.kdobat)
-              console.log('Ada Peny  index1', raw, index1, masukx)
+              // console.log('Ada Peny  index1', raw, index1, masukx)
               if (index1 >= 0) {
                 const jumM = masukx[index1].jumlah + raw.jumlah
                 const subM = masukx[index1].sub + raw.sub
@@ -554,7 +557,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
               raw.sub = sub
 
               const index = keluar.findIndex(f => f.kd_obat === raw?.kdobat)
-              console.log('Ada Peny  index', raw, index, keluar)
+              // console.log('Ada Peny  index', raw, index, keluar)
               if (index >= 0) {
                 const jumM = keluar[index].jumlah + raw.jumlah
                 const subM = keluar[index].sub + raw.sub
@@ -565,7 +568,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
 
               else keluar.push(raw)
             }
-            console.log('Ada penyesuanag', masukx, masuk)
+            // console.log('Ada penyesuanag', masukx, masuk)
             // console.log('penyesuaian', it?.penyesuaian, akhir)
           }
           if (it?.terima?.length) {
@@ -583,7 +586,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             // console.log('terima nya ', jumlah, subt, ms)
 
             const index1 = masukx.findIndex(f => f.kd_obat === it?.kd_obat)
-            console.log('terima nya index', index1)
+            // console.log('terima nya index', index1)
             if (index1 >= 0) {
               const jumM = masukx[index1].jumlah + jumlah
               const subM = masukx[index1].sub + subt
@@ -607,7 +610,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
             if (index1 >= 0) {
               const jumM = masukx[index1].jumlah + raw.jumlah
               const subM = masukx[index1].sub + raw.sub
-              console.log('ret ', masukx[index1].jumlah)
+              // console.log('ret ', masukx[index1].jumlah)
 
               masukx[index1].jumlah = jumM
               masukx[index1].sub = subM
@@ -759,13 +762,56 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       })
 
       // array = val
-      console.log('metani items', array)
+      // console.log('metani items', array)
     },
     getInitialData (val) {
+      this.ketProses = null
       this.setParams('page', val)
       this.getDataTable()
       this.meta = {}
       this.items = []
+    },
+    getAllData () {
+      if (this.meta?.current_page > 0 && !this.ketProses) {
+        const cur = this.meta?.to / 5
+        this.setParams('page', cur + 1)
+        console.log('parameter', this.meta?.to, cur, this.params, this.meta)
+      }
+
+      this.setParams('per_page', 5)
+      this.ketProses = 'Mengambil data '
+      this.getDatanya()
+      console.log('this.meta?.current_page', this.meta?.current_page, !(this.ketProses))
+      watch(() => this.meta?.current_page, (obj) => {
+        console.log('obj', obj, !this.scrolling, this.meta?.current_page < this.meta?.last_page, !(this.ketProses), this.meta?.current_page < this.meta?.last_page && !this.scrolling && !(this.ketProses))
+        if (this.meta?.current_page < this.meta?.last_page && !this.scrolling && !(this.ketProses)) {
+          this.setParams('page', obj + 1)
+          this.ketProses = 'Mengambil data halaman ' + this.meta?.current_page + ' dari ' + this.meta?.last_page + ' halaman'
+        }
+        else {
+          this.ketProses = ''
+        }
+        this.getDatanya()
+      })
+    },
+    getDatanya () {
+      this.loadingNext = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
+          .then(resp => {
+            this.loadingNext = false
+            // console.log('data tabel', resp.data)
+            this.meta = resp.data?.meta
+            // this.items = resp?.data?.data
+            this.mapingItem(resp?.data?.data, this.items)
+            this.ketProses = ''
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     },
     setField () {
       if (this.params.jenis === 'rekap') {
@@ -819,7 +865,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       const param = { params: this.params }
       // console.log('param', param)
       param.params.action = 'download'
-
+      this.ketProses = null
       const data = []
       const dataForTotal = []
       const items = []
@@ -915,14 +961,19 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     },
     startDownload () { this.loadingDownload = true },
     finishDownload () { this.loadingDownload = false },
-    async getDataTable () {
-      this.setParams('action', '')
+    async getDataTable (val) {
+      this.ketProses = null
       this.setParams('per_page', 20)
       if (this.params.page === 1) this.loading = true
       else this.loadingNext = true
+      this.scrolling = true
       const param = { params: this.params }
       await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
         .then(resp => {
+          if (this.params.action === 'download') delete this.params.action
+          setTimeout(() => {
+            this.scrolling = false
+          }, 1000)
           this.loading = false
           this.loadingNext = false
           // console.log('data tabel', resp.data)

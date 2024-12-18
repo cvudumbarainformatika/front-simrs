@@ -65,7 +65,7 @@
                 :loading="store.loading"
               />
             </div>
-            <div class="col-2">
+            <div class="col-1">
               <app-input
                 v-model="store.params.tahun"
                 label="Tahun"
@@ -76,7 +76,7 @@
             <div class="col-2">
               <app-btn
                 label="Ambil Data"
-                :disable="store.loading"
+                :disable="store.loading || !!store.ketProses"
                 :loading="store.loading"
                 @click="store.getInitialData(1)"
               />
@@ -84,15 +84,34 @@
           </div>
         </div>
 
-        <div class="col-auto q-mr-md">
+        <div class="col-grow q-mr-md">
           <div class="row items-center">
             <q-btn
+              unelevated
+              color="primary"
+              round
+              size="sm"
+              icon="icon-mat-download"
+              :loading="!!store.ketProses"
+              :disable="!!store.ketProses"
+              @click="store.getAllData()"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Ambil Semua Data
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              class="q-ml-sm"
               ref="refPrint"
               v-print="printObj"
               unelevated
               color="dark"
               round
               size="sm"
+              :disable="!!store.ketProses"
               icon="icon-mat-print"
             >
               <q-tooltip
@@ -125,6 +144,14 @@
               </download-excel>
             </div>
           </div>
+        </div>
+      </div>
+      <div v-if="store.ketProses" class="row items-center print-hide">
+        <div class="col-2">
+          <q-spinner-pie color="negative" size="4em" />
+        </div>
+        <div class="col-grow q-ml-sm text-weight-bold f-14  ">
+          <p>{{ store.ketProses }}</p>
         </div>
       </div>
     </div>
@@ -435,7 +462,7 @@ function onScroll (pos) {
   const height = refScroll.value.clientHeight - (refTt.value.clientHeight + 30)
   const currPage = store.meta.current_page
   if ((store.meta.current_page < store.meta.last_page) && pos >= height) {
-    if (!store.loadingNext) store.setPage(currPage + 1)
+    if (!store.loadingNext && !store.ketProses) store.setPage(currPage + 1)
     // console.log('meta', store.meta)
     console.log('pos', pos, 'height', height, 'scroll client height', refScroll.value.clientHeight, 'tt height', refTt.value.clientHeight)
   }
