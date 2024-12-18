@@ -92,8 +92,8 @@
               round
               size="sm"
               icon="icon-mat-download"
-              :loading="!!store.ketProses"
-              :disable="!!store.ketProses"
+              :loading="!!store.ketProses || store?.loadingNext"
+              :disable="!!store.ketProses || store?.loadingNext"
               @click="store.getAllData()"
             >
               <q-tooltip
