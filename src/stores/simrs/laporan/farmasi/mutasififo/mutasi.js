@@ -20,8 +20,8 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       q: '',
       per_page: 20,
       page: 1,
-      bulan: '06',
-      // bulan: date.formatDate(Date.now(), 'MM'),
+      // bulan: '06',
+      bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       kode_ruang: 'all',
       jenis: 'detail'
