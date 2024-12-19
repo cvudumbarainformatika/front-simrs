@@ -552,8 +552,9 @@
         class="absolute-bottom full-width shadow-1"
         dark
       >
-        <div class="flex justify-between q-pa-md">
+        <div class="flex justify-between items-center q-pa-md">
           <q-btn
+            v-if="dataLaluRajal"
             color="orange-10"
             :loading="store.waiting"
             :disable="store.waiting"
@@ -561,6 +562,9 @@
           >
             Anastesi Rajal
           </q-btn>
+          <div v-else>
+            .
+          </div>
           <q-btn
             color="primary"
             :loading="store.waiting"
@@ -619,9 +623,9 @@ async function getKunjunganRajalLatest (norm) {
   const res = await api.get('/v1/simrs/pelayanan/praanastesi/getKunjunganRajalLatest', params)
 
   if (res.status === 200) {
-    console.log('resp', res)
+    console.log('resp', res?.data)
     const pas = res.data
-    dataLaluRajal.value = pas
+    dataLaluRajal.value = pas.length ? pas[0] : null
   }
 }
 
