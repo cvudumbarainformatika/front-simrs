@@ -195,9 +195,11 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
-                      <div>:</div>
-                      <div class="flex flex-wrap">
+                    <div class="flex no-wrap q-gutter-md">
+                      <div class="flex">
+                        :
+                      </div>
+                      <div class="flex">
                         {{ pasien?.memodiagnosa }}
                       </div>
                     </div>
@@ -210,7 +212,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div class="flex flex-wrap">
                         {{ PRMRJ }}
@@ -225,7 +227,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div class="flex flex-wrap">
                         {{ DIAG_KEP }}
@@ -240,7 +242,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-if="KRS" class="">
                         <div> {{ KRS?.anamnesis?.keluhanUtama }}</div>
@@ -263,7 +265,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div>
                         {{ pasien?.tindaklanjut }}
@@ -278,7 +280,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs4)" />
                     </div>
@@ -291,7 +293,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs5)" />
                     </div>
@@ -304,7 +306,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs6)" />
                     </div>
@@ -330,7 +332,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs8)" />
                     </div>
@@ -343,7 +345,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs9)" />
                     </div>
@@ -356,7 +358,7 @@
                     </div>
                   </td>
                   <td>
-                    <div class="flex q-gutter-md">
+                    <div class="flex no-wrap q-gutter-md">
                       <div>:</div>
                       <div v-html="getNewLine(SUMMARY?.rs10)" />
                     </div>

@@ -7,10 +7,11 @@
     >
       <div class="contentx">
         <my-kop-surat
+          v-if="!history"
           title1="ASSESMEN"
           title2="PRA - ANESTESIA"
         />
-        <div class="biodata-pasien q-my-md">
+        <div v-if="!history" class="biodata-pasien q-my-md">
           <div class="flex justify-between">
             <div class="flex q-gutter-md kiri">
               <div
@@ -62,7 +63,7 @@
         </div>
 
         <div class="diisi-dokter q-mb-md">
-          <div>
+          <div v-if="!history">
             <b>Diisi oleh Dokter</b>
           </div>
           <div
@@ -576,7 +577,7 @@
             <!-- </div> -->
           </div>
 
-          <div class="q-my-md">
+          <div v-if="!history" class="q-my-md">
             <div class="f-12">
               Tanda tangan Dokter Anestesia
             </div>
@@ -637,6 +638,7 @@
       </div>
     </div>
     <q-btn
+      v-if="!history"
       ref="refPrint"
       v-print="printObj"
       fab
@@ -658,6 +660,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  history: {
+    type: Boolean,
+    default: false
   }
 })
 

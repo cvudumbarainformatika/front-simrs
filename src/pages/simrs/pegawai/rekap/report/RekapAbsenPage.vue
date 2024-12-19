@@ -258,19 +258,24 @@
               />
             </div>
           </template>
+          <template #col-th="{right}">
+            <div :class="right">
+              TH
+            </div>
+          </template>
           <template #col-masuk="{right}">
             <div :class="right">
-              Masuk(Jam)
+              Msk (Jam)
             </div>
           </template>
           <template #col-hari="{right}">
             <div :class="right">
-              Masuk
+              MSK
             </div>
           </template>
           <template #col-kurang="{right}">
             <div :class="right">
-              Terlambat
+              TL
             </div>
           </template>
           <template #col-per-t="{right}">
@@ -450,8 +455,13 @@
             </div>
           </template>
           <template #cell-A="{row,right}">
-            <div :class="`${right}`">
+            <div :class="`${right} text-negative`">
               {{ getAlpha(row)===0? '-': getAlpha(row) }}
+            </div>
+          </template>
+          <template #cell-th="{row,right}">
+            <div :class="`${right}`">
+              {{ getTerlambatHari(row) }}
             </div>
           </template>
 
@@ -946,6 +956,39 @@ function getRekapTerlambat (row) {
   return ijin.reduce((x, y) => parseInt(x + y))
 }
 
+function getTerlambatHari (x) {
+  const trans = x?.transaksi_absen
+  let th = []
+  if (trans?.length) {
+    for (let i = 0; i < trans.length; i++) {
+      const el = trans[i]
+      const tgl = dateDbFormat(el?.created_at)
+      const jamMasukServer = formatJam(el?.created_at)
+      const kategoryMasuk = el?.kategory?.masuk
+      // console.log('kategoryMasuk', kategoryMasuk)
+
+      const jadwal = new Date(tgl + ' ' + kategoryMasuk)
+      const absen = new Date(tgl + ' ' + jamMasukServer)
+
+      // const absensi = { jadwal, absen }
+      const terlambat = absen > jadwal
+      // console.log('terlambat', terlambat)
+      // console.log('absensi', absensi)
+
+      if (terlambat) {
+        th.push(tgl)
+      }
+      // th += hitungTelat(el)
+    }
+    // th = 'x'
+  }
+  else {
+    th = []
+  }
+
+  return th?.length ? th?.length + ' hr' : ''
+}
+
 function getRekapTerlambatPercent (e) {
   if (e > 0 && e <= 60) {
     return 5
@@ -968,7 +1011,7 @@ function hitungTelat (x) {
   const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
 
   let created = new Date(x?.created_at)
-  created = date.subtractFromDate(created, { minutes: 15 }) // 15 menit kompensasi sdh di ganti 0 tgl 9 jul 2024 diganti lagi dengan 15 menit bln agustus 2024
+  created = date.subtractFromDate(created, { minutes: 0 }) // 15 menit kompensasi sdh di ganti 0 tgl 9 jul 2024 diganti lagi dengan 15 menit bln agustus 2024 diganti 0 lagi di desember 2024
 
   // const jamMasukServer = formatJam(created.setMinutes() + 15)
   const jamMasukServer = formatJam(created)

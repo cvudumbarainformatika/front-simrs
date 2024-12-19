@@ -20,10 +20,10 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       sort: 'desc'
     },
     defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A',
-      'masuk',
+      'masuk', 'th',
       'hari', 'kurang', 'per-t'],
     columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A',
-      'masuk',
+      'masuk', 'th',
       'hari', 'kurang', 'per-t'],
     columnHide: ['id', 'masuk'],
     jenis_pegawai: [
