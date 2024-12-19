@@ -552,7 +552,15 @@
         class="absolute-bottom full-width shadow-1"
         dark
       >
-        <div class="flex justify-end q-pa-md">
+        <div class="flex justify-between q-pa-md">
+          <q-btn
+            color="orange-10"
+            :loading="store.waiting"
+            :disable="store.waiting"
+            @click="openRajal = true"
+          >
+            Anastesi Rajal
+          </q-btn>
           <q-btn
             color="primary"
             :loading="store.waiting"
@@ -566,22 +574,27 @@
     </div>
 
     <DialogLaborat v-model="openLaborat" :pasien="pasien" nakes="1" />
+    <DialogRajal v-model="openRajal" :pasien="pasien" :data="dataLaluRajal" />
   </div>
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios'
 import { usePraAnastesiStore } from 'src/stores/simrs/pelayanan/poli/praanastesi'
 // eslint-disable-next-line no-unused-vars
 import { ref, onMounted, watchEffect, defineAsyncComponent } from 'vue'
 
 const store = usePraAnastesiStore()
 const DialogLaborat = defineAsyncComponent(() => import('../../../asessmentulang/comp/dialogPenunjang/DialogLaborat.vue'))
+const DialogRajal = defineAsyncComponent(() => import('./DialogRajal.vue'))
 
 // const regional = ref([])
 // eslint-disable-next-line no-unused-vars
 const rawatkhusus = ref([])
 const rawatkhususLainlain = ref(false)
 const openLaborat = ref(false)
+const openRajal = ref(false)
+const dataLaluRajal = ref(null)
 
 const props = defineProps({
   pasien: {
@@ -590,8 +603,27 @@ const props = defineProps({
   }
 })
 onMounted(() => {
-  store.getMaster()
+  Promise.all([
+    store.getMaster(),
+    getKunjunganRajalLatest(props.pasien.norm)
+  ])
 })
+
+async function getKunjunganRajalLatest (norm) {
+  const params = {
+    params: {
+      norm
+    }
+  }
+
+  const res = await api.get('/v1/simrs/pelayanan/praanastesi/getKunjunganRajalLatest', params)
+
+  if (res.status === 200) {
+    console.log('resp', res)
+    const pas = res.data
+    dataLaluRajal.value = pas
+  }
+}
 
 function addPenyulit () {
   store.setPenyulits().then(() => {

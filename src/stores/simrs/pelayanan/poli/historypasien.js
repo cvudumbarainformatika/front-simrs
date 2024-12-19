@@ -37,7 +37,7 @@ export const useHistoryPasien = defineStore('history-pasien', {
         this.params.norm = pasien?.norm
         const params = { params: this.params }
         const resp = await api.get('v1/simrs/historypasien/historypasienfull', params)
-        // console.log('history  ', resp)
+        console.log('history  ', resp)
         if (resp.status === 200) {
           this.items = resp?.data?.data
           this.meta = resp?.data
@@ -62,7 +62,7 @@ export const useHistoryPasien = defineStore('history-pasien', {
             this.loading = false
 
             this.metaEresep = resp?.data // or you can push specific data from resp
-            console.log(this.metaEresep)
+            // console.log(this.metaEresep)
           }
           this.loading = false
         }
