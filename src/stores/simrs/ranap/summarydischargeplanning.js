@@ -17,6 +17,8 @@ export const useSummaryDischargePlanningRanapStore = defineStore('summary-discha
       rs8: null,
       rs9: null,
       rs10: null,
+      operasi: null,
+      tglOperasi: null,
       ttdPasien: null
     },
 
@@ -101,6 +103,8 @@ export const useSummaryDischargePlanningRanapStore = defineStore('summary-discha
         rs8: null,
         rs9: 'LABORAT' + '\n' + 'RADIOLOGI' + '\n' + 'EKG' + '\n' + 'LAIN-LAIN.....',
         rs10: 'KONTROL SESUAI TANGGAL' + '\n' + 'MEMBAWA HASIL PEMERIKSAAN PENUNJANG JIKA KONTROL ' + '\n' + 'LAIN-LAIN.....',
+        operasi: null,
+        tglOperasi: null,
         ttdPasien: null
       }
 
