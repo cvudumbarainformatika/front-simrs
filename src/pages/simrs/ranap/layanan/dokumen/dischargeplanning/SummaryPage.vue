@@ -396,13 +396,13 @@
           <div class="flex justify-around q-mt-lg">
             <div class="column flex-center">
               <div>Pasien / Keluarga</div>
-              <div class="flex-center" style="width: 60px;">
+              <div v-if="ttdPasien" class="flex-center relative-position" style="width: 60px;">
                 <vue-qrcode
-                  v-if="ttdPasien"
-                  :value="ttdPasien"
+                  :value="qrPasien"
                   tag="svg"
                   :options="{
                     errorCorrectionLevel: 'Q',
+                    width: 60,
                     color: {
                       dark: '#000000',
                       light: '#ffffff',
@@ -410,15 +410,22 @@
                     margin:0
                   }"
                 />
-                <div v-else class="column flex-center" style="height: 60px;">
-                  ttd
-                </div>
+                <img
+                  class="qrcode__image"
+                  src="~assets/logos/logo-rsud.png"
+                  alt="RSUD DOKTER MOHAMAD SALEH"
+                >
               </div>
-              <div>{{ pasien?.nama_panggil }}</div>
+              <div v-else class="column flex-center" style="height: 60px;">
+                ttd
+              </div>
+              <div class="f-10">
+                {{ pasien?.nama_panggil }}
+              </div>
             </div>
             <div class="column flex-center">
               <div>Perawat</div>
-              <div class="flex-center" style="width: 60px;">
+              <div class="flex-center relative-position" style="width: 60px;">
                 <vue-qrcode
                   :value="qrPerawat"
                   tag="svg"
@@ -431,12 +438,19 @@
                     margin:0
                   }"
                 />
+                <img
+                  class="qrcode__image"
+                  src="~assets/logos/logo-rsud.png"
+                  alt="RSUD DOKTER MOHAMAD SALEH"
+                >
               </div>
-              <div>{{ perawat }}</div>
+              <div class="f-10">
+                {{ perawat }}
+              </div>
             </div>
             <div class="column flex-center">
               <div>Dokter</div>
-              <div class="flex-center" style="width: 60px;">
+              <div class="flex-center relative-position" style="width: 60px;">
                 <vue-qrcode
                   :value="qrDokter"
                   tag="svg"
@@ -449,8 +463,15 @@
                     margin:0
                   }"
                 />
+                <img
+                  class="qrcode__image"
+                  src="~assets/logos/logo-rsud.png"
+                  alt="RSUD DOKTER MOHAMAD SALEH"
+                >
               </div>
-              <div>{{ pasien?.dokter }}</div>
+              <div class="f-10">
+                {{ pasien?.dokter }}
+              </div>
             </div>
           </div>
         </div>
@@ -464,8 +485,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { humanDate, jamTnpDetik, getNewLine } from 'src/modules/formatter.js'
 import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
-import { pathImg } from 'src/boot/axios'
-import { imageToBase64 } from 'src/modules/imgBase64'
+// import { pathImg } from 'src/boot/axios'
+// import { imageToBase64 } from 'src/modules/imgBase64'
 
 const props = defineProps({
   pasien: {
@@ -483,7 +504,8 @@ const ttdPasien = ref(null)
 
 onMounted(() => {
   const summ = props?.pasien?.summarydischargeplannings?.length ? props?.pasien?.summarydischargeplannings[0] : null
-  initTtd(summ)
+  ttdPasien.value = summ?.ttdPasien
+  // initTtd(summ)
 })
 
 const PRMRJ = computed(() => {
@@ -529,28 +551,28 @@ const KRS = computed(() => {
   return diag
 })
 
-function initTtd (item) {
-  const ttdPas = pathImg + item?.ttdPasien
+// function initTtd (item) {
+//   const ttdPas = pathImg + item?.ttdPasien
 
-  Promise.all([
-    imageToBase64(ttdPas, (base64Image) => {
-      ttdPasien.value = base64Image ?? null
-    })
+//   Promise.all([
+//     imageToBase64(ttdPas, (base64Image) => {
+//       ttdPasien.value = base64Image ?? null
+//     })
 
-  ])
+//   ])
 
-  console.log('ttdPasien', ttdPasien.value, ttdPas)
-}
+//   console.log('ttdPasien', ttdPasien.value, ttdPas)
+// }
 
-// const qrPasien = computed(() => {
-//   const noreg = props?.pasien?.noreg// noreg
-//   const dok = 'SUMMARY.png'
-//   const asal = 'RANAP'
-//   const petugas = SUMMARY?.value?.user_input ?? null
-//   const enc = btoa(`${noreg}|${dok}|${asal}|${petugas}`)
-//   return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
-//   // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
-// })
+const qrPasien = computed(() => {
+  const noreg = props?.pasien?.noreg// noreg
+  const dok = 'SUMMARY.png'
+  const asal = 'RANAP'
+  const pasien = SUMMARY?.value?.noreg ?? null
+  const enc = btoa(`${noreg}|${dok}|${asal}|${pasien}`)
+  return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
+})
 
 const qrPerawat = computed(() => {
   const noreg = props?.pasien?.noreg// noreg
@@ -573,6 +595,20 @@ const qrDokter = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+
+.qrcode__image {
+  // background-color: #fff;
+  border: 0.1rem solid #fff;
+  border-radius: 0.25rem;
+  // box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
+  height: 30%;
+  width: 30%;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .model-1 {
   tr, td {
