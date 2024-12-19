@@ -12,8 +12,10 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       page: 1,
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY')
+      // defaultEndDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth()}-${(new Date()).getDate()}`)
       // per_page: 10,
     },
+
     display: {
       sekarang: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
@@ -31,6 +33,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
     ],
+    npkls: [],
     hasilArray: [],
     arrayTanggal: [],
     pegawais: [],
@@ -52,7 +55,12 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
     setParams (key, val) {
       this.params[key] = val
     },
-
+    // defaultEndDate () {
+    //   console.log('defaultEndDate', this.reqs.defaultEndDate)
+    //   const now = new Date()
+    //   now.setMonth(now.getMonth() - 1)
+    //   return new Date(now.toJSON().slice(0, 10))
+    // },
     getInitialData () {
       this.getDataTable()
     },
@@ -66,15 +74,18 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
           if (resp.status === 200) {
             this.hasilArray = []
             this.items = resp.data
+            this.npkls = resp.data.npkls
             this.pegawais = resp.data?.pegawai
-            this.sebelumsaldo = resp.data?.saldosebelum
-            this.sebelumsilpa = resp.data?.silpasebelum
-            this.sebelumsetor = resp.data?.setorsebelum
-            this.sebelumspm = resp.data?.spmsebelum
-            this.sebelumspmgu = resp.data?.spmgusebelum
-            this.sebelumnihil = resp.data?.nihilsebelum
-            this.sebelumnpkls = resp.data?.npklssebelum
+            this.sebelumsaldo = resp.data?.saldosebelum ?? 0
+            this.sebelumsilpa = resp.data?.silpasebelum ?? 0
+            this.sebelumsetor = resp.data?.setorsebelum ?? 0
+            this.sebelumspm = resp.data?.spmsebelum ?? 0
+            this.sebelumspmgu = resp.data?.spmgusebelum ?? 0
+            this.sebelumnihil = resp.data?.nihilsebelum ?? 0
+            this.sebelumnpkls = resp.data?.npklssebelum ?? 0
+            this.sebelumkaskecil = resp.data?.kaskecilsebelum ?? 0
             this.hitungharidalamBulan()
+            // this.defaultEndDate()
             this.loading = false
           }
         })
@@ -95,7 +106,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
         tempTanggal.push(tgl)
       }
       this.mapingData(tempTanggal)
-      // console.log("cccc", tempTanggal);
+      // console.log('cccc', tempTanggal)
       this.loading = false
       // return cariBulan;
     },
@@ -109,22 +120,65 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       // console.log("www", tgl);
       // ===================================================Saldo
 
-      // const saldo = []
-      // for (let i = 0; i < this.items.saldo.length; i++) {
-      //   const el = this.items?.saldo
-      //   const obj = {
-      //     tgl: el[i].tanggal,
-      //     notrans: el[i].rekening,
-      //     nonpd: null,
-      //     category: 'sts',
-      //     uraian: 'Saldo Awal',
-      //     uraianNPD: null,
-      //     urutan: 1,
-      //     penerimaan: el[i].nilaisaldo,
-      //     pengeluaran: 0
-      //   }
-      //   saldo.push(obj)
-      // }
+      const saldo = []
+      const nilaisaldoKredit = []
+      const nilaisaldoDebit = []
+
+      const gabungsebelumdebitx = this.sebelumsaldo.concat(this.sebelumsetor, this.sebelumnihil)
+      const gabungsebelumkreditx = this.sebelumspm.concat(this.sebelumnpkls, this.sebelumkaskecil)
+      const gabungsebelumdebit = this.sebelumsetor.concat(this.sebelumnihil, this.sebelumsilpa)
+      const gabungsebelumkredit = this.sebelumspmgu.concat(this.sebelumnpkls, this.sebelumkaskecil)
+      if (this.params.bulan === '02') {
+        nilaisaldoDebit.push(...gabungsebelumdebitx)
+        nilaisaldoKredit.push(...gabungsebelumkreditx)
+        // console.log('spm aja', nilaisaldoKredit)
+      }
+      else {
+        nilaisaldoDebit.push(...gabungsebelumdebit)
+        nilaisaldoKredit.push(...gabungsebelumkredit)
+        console.log('spm guuuuu', nilaisaldoKredit)
+      }
+      const totaldebitsebelum = nilaisaldoDebit.map(x => parseFloat(x.nilai)).reduce((x, y) => x + y, 0)
+      const totalkreditsebelum = nilaisaldoKredit.map(x => parseFloat(x.nilai)).reduce((x, y) => x + y, 0)
+      const saldoAwal = totaldebitsebelum - totalkreditsebelum
+      console.log('totaldebitsebelum', totaldebitsebelum)
+      console.log('totalkreditsebelum', totalkreditsebelum)
+      console.log('saldoawal', saldoAwal)
+
+      if (this.params.bulan !== '01') {
+        const sal = {
+          tgl: '',
+          notrans: '',
+          nonpd: '',
+          category: 'Saldo Awal',
+          uraian: 'Saldo Awal',
+          uraianNPD: '',
+          urutan: 1,
+          penerimaan: 0,
+          pengeluaran: 0,
+          subtotal: saldoAwal
+        }
+        saldo.push(sal)
+      }
+      else {
+        for (let i = 0; i < this.items.saldo.length; i++) {
+          const el = this.items?.saldo
+          const obj = {
+            tgl: el[i].tanggal,
+            notrans: el[i].rekening,
+            nonpd: null,
+            category: 'sts',
+            uraian: 'Saldo Awal',
+            uraianNPD: null,
+            urutan: 1,
+            penerimaan: 0,
+            pengeluaran: 0,
+            subtotal: el[i].nilaisaldo
+          }
+          saldo.push(obj)
+        }
+      }
+      console.log('gggg', saldo)
       // =====================================================
       // ===================================================Nihil
       const silpa = []
@@ -247,51 +301,74 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
 
       // ===================================================NPKls
       const npkls = []
-      for (let i = 0; i < this.items.npkls.length; i++) {
-        const el = this.items?.npkls
-        const nonpd = el[i].npklsrinci?.length
-          ? this.ambilDataUnik(
-            el[i].npklsrinci?.map((x) => {
-              return {
-                nonpd: x.nonpdls,
-                uraianNPD: x.kegiatanblud,
-                rincian: x.npdlshead?.npdlsrinci?.length
-                  ? this.ambilDataUnik(
-                    x.npdlshead?.npdlsrinci?.map((z) => {
-                      return {
-                        koderek50: z.koderek50,
-                        rincianbelanja: z.rincianbelanja
-                      }
-                    }),
-                    (k) => k?.koderek50
-                  )
-                  : [],
-                totalRincian: x.npdlshead?.npdlsrinci?.length
-                  ? this.hitungTotalNpd(x.npdlshead?.npdlsrinci)
-                  : 0
-              }
-            }),
-            (k) => k?.nonpd
-          )
-          : []
+      // const setx = this.npkls.map((x) => x.nonpk)
+      // const setunikx = setx.length ? [...new Set(setx)] : []
+      for (let i = 0; i < this.npkls.length; i++) {
+        const el = this.npkls[i]
+
+        const rinci = el.npklsrinci
+        // const npdx = rinci.map((x) => x.npdlshead?.npdlsrinci.map((x) => parseFloat(x.nominalpembayaran)).reduce((a, b) => a + b, 0)).reduce((x, y) => x + y, 0)
+        // const npdrinci = npdx.length ? npdx.map((x) => x.nominalpembayaran) : []
+        // const setunikx = rinci.length ? [...new Set(rinci)] : []
         const obj = {
-          tgl: el[i].tglpindahbuku,
-          notrans: el[i].nonpk,
-          nonpd,
-          // nonpd: nonpd,
+          tgl: el.tglpindahbuku,
+          notrans: el.nonpk,
+          nonpd: rinci.map((x) => x.nonpdls),
           category: 'npkls',
           uraian: 'Pengeluaran Kegiatan Pelayanan dan Penunjang BLUD',
-          uraianNPD: el[i]?.npklsrinci?.npdlshead?.kegiatanblud,
-          // uraianrekening: null,
+          uraianNPD: rinci.map((x) => x.kegiatanblud),
           urutan: 4,
           penerimaan: 0,
-          pengeluaran: nonpd.length
-            ? nonpd.map((x) => x.totalRincian).reduce((x, y) => x + y, 0)
-            : 0
+          pengeluaran: rinci.map((x) => parseFloat(x.total)).reduce((a, b) => a + b, 0)
         }
-
         npkls.push(obj)
       }
+
+      // for (let i = 0; i < this.items.npkls.length; i++) {
+      //   const el = this.items?.npkls
+      //   const nonpd = el[i].npklsrinci?.length
+      //     ? this.ambilDataUnik(
+      //       el[i].npklsrinci?.map((x) => {
+      //         return {
+      //           nonpd: x.nonpdls,
+      //           uraianNPD: x.kegiatanblud,
+      //           rincian: x.npdlshead?.npdlsrinci?.length
+      //             ? this.ambilDataUnik(
+      //               x.npdlshead?.npdlsrinci?.map((z) => {
+      //                 return {
+      //                   koderek50: z.koderek50,
+      //                   rincianbelanja: z.rincianbelanja
+      //                 }
+      //               }),
+      //               (k) => k?.koderek50
+      //             )
+      //             : [],
+      //           totalRincian: x.npdlshead?.npdlsrinci?.length
+      //             ? this.hitungTotalNpd(x.npdlshead?.npdlsrinci)
+      //             : 0
+      //         }
+      //       }),
+      //       (k) => k?.nonpd
+      //     )
+      //     : []
+      //   const obj = {
+      //     tgl: el[i].tglpindahbuku,
+      //     notrans: el[i].nonpk,
+      //     nonpd,
+      //     // nonpd: nonpd,
+      //     category: 'npkls',
+      //     uraian: 'Pengeluaran Kegiatan Pelayanan dan Penunjang BLUD',
+      //     uraianNPD: el[i]?.npklsrinci?.npdlshead?.kegiatanblud,
+      //     // uraianrekening: null,
+      //     urutan: 4,
+      //     penerimaan: 0,
+      //     pengeluaran: nonpd.length
+      //       ? nonpd.map((x) => x.totalRincian).reduce((x, y) => x + y, 0)
+      //       : 0
+      //   }
+
+      //   npkls.push(obj)
+      // }
 
       // =====================================================
 
@@ -331,9 +408,8 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
         kurangikaskecil.push(obj)
       }
       // =====================================================
-      const gabungsebelumdebit = this.sebelumsilpa.concat(this.sebelumsetor, this.sebelumnihil)
-      const totaldebisebelum = gabungsebelumdebit.map(x => parseFloat(x.total))
-      console.log('GABUNG SEBELUM', totaldebisebelum)
+      // const setor = this.sebelumsetor.length
+
       // console.log("spmgu", spmgu);
       // console.log("spm", spm);
       // console.log("npkls", npkls);
@@ -342,7 +418,10 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       // this.hasilArray = temp;
 
       // menggabungkan array
-      const gabungArray = silpa?.concat(setor, spm, spmgu, npkls, nihil, kurangikaskecil)
+      const gabungArray = saldo?.concat(silpa, setor, spm, spmgu, npkls, nihil, kurangikaskecil)
+      const aaa = gabungArray.map((x) => parseFloat(x.penerimaan))
+      console.log('cek hasil debit', aaa)
+
       // urutan by tanggal
       const sortByDate = (gabungArray) =>
         gabungArray.sort(({ tgl: a }, { tgl: b }) =>
@@ -362,13 +441,13 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       if (arr.length) {
         for (let i = 0; i < arr.length; i++) {
           if (i === 0) {
-            total = arr[0]?.penerimaan - arr[0]?.pengeluaran
+            total = arr[0]?.subtotal + arr[0]?.penerimaan - arr[0]?.pengeluaran
             arr[0].total = total
           }
           else {
             const hinggaKeIndex = i + 1
             const arrBaru = arr.slice(1, hinggaKeIndex)
-            const awal = arr[0]?.penerimaan - arr[0]?.pengeluaran
+            const awal = arr[0]?.subtotal + arr[0]?.penerimaan - arr[0]?.pengeluaran
             // const subT = arr[i]?.penerimaan - arr[i]?.pengeluaran;
             const obj = arrBaru.map((x) => x.penerimaan - x.pengeluaran)
             const skrg = obj?.reduce((x, y) => x + y, 0)

@@ -652,96 +652,97 @@
           <div class="contaier q-pt-lg q-pl-xl">
             <q-card
               class="saldo bg-grey-3 q-pa-xs"
-              style="width: 500px; height: 120px"
+              style="width: 500px; height: 220px"
             >
               <div
-                class="row justify-center q-pt-sm"
+                class="row justify-center q-pt-sm q-py-xs q-px-xs"
                 style="font-size: 14px"
               >
                 <table
                   class="text-weight-bolder"
-                  style="width: 400px; height: 100px"
                 >
-                  <tr class="no-border">
-                    <td
-                      class="text-left no-border"
-                      width="120px"
-                    >
-                      Saldo Awal
-                    </td>
-                    <td
-                      width="50px"
-                      class="no-border"
-                    >
-                      :
-                    </td>
-                    <td
-                      class="text-right no-border"
-                      width="170px"
-                    >
-                      {{ formattanpaRp(0) }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      class="text-left no-border"
-                      width="120px"
-                    >
-                      Masuk
-                    </td>
-                    <td
-                      width="50px"
-                      class="no-border"
-                    >
-                      :
-                    </td>
-                    <td
-                      class="text-right no-border"
-                      width="170px"
-                    >
-                      {{ formattanpaRp(totaldebit()) }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      class="text-left no-border"
-                      width="120px"
-                    >
-                      Keluar
-                    </td>
-                    <td
-                      width="50px"
-                      class="no-border"
-                    >
-                      :
-                    </td>
-                    <td
-                      class="text-right no-border"
-                      width="170px"
-                    >
-                      {{ formattanpaRp(totalkredit()) }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      class="text-left no-border"
-                      width="120px"
-                    >
-                      Saldo Akhir
-                    </td>
-                    <td
-                      width="50px"
-                      class="no-border"
-                    >
-                      :
-                    </td>
-                    <td
-                      class="text-right no-border"
-                      width="170px"
-                    >
-                      {{ formattanpaRp(totalsaldo()) }}
-                    </td>
-                  </tr>
+                  <tbody style="width: 400px">
+                    <tr class="no-border">
+                      <td
+                        class="text-left no-border"
+                        width="120px"
+                      >
+                        Saldo Awal
+                      </td>
+                      <td
+                        width="50px"
+                        class="no-border"
+                      >
+                        :
+                      </td>
+                      <td
+                        class="text-right no-border"
+                        width="170px"
+                      >
+                        {{ formattanpaRp(0) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="text-left no-border"
+                        width="120px"
+                      >
+                        Masuk
+                      </td>
+                      <td
+                        width="50px"
+                        class="no-border"
+                      >
+                        :
+                      </td>
+                      <td
+                        class="text-right no-border"
+                        width="170px"
+                      >
+                        {{ formattanpaRp(totaldebit()) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="text-left no-border"
+                        width="120px"
+                      >
+                        Keluar
+                      </td>
+                      <td
+                        width="50px"
+                        class="no-border"
+                      >
+                        :
+                      </td>
+                      <td
+                        class="text-right no-border"
+                        width="170px"
+                      >
+                        {{ formattanpaRp(totalkredit()) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="text-left no-border"
+                        width="120px"
+                      >
+                        Saldo Akhir
+                      </td>
+                      <td
+                        width="50px"
+                        class="no-border"
+                      >
+                        :
+                      </td>
+                      <td
+                        class="text-right no-border"
+                        width="170px"
+                      >
+                        {{ formattanpaRp(totalsaldo()) }}
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </q-card>

@@ -15,7 +15,7 @@
         <q-page-container>
           <div id="printMe" class="f-12 q-py-md row justify-center">
             <q-card-section>
-              <div class="col-auto">
+              <div class="col-auto" style="font-size: 1.2em">
                 <div class="row  justify-between full-width full-height ">
                   <div class="row b1 justify-between full-width">
                     <div class="row b2" style="width:70%">
@@ -57,43 +57,43 @@
                     <div class="row q-pl-sm q-py-xs" style="width:100%">
                       <div class="row q-pl-sm q-py-xs flex-center">
                         <div class="col-auto" style="width:150px">
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             URUSAN PEMERINTAHAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             BIDANG URUSAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             PROGRAM
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             KEGIATAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             ORGANISASI
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             SUB ORGANISASI
                           </div>
                         </div>
                         <div class="q-px-md" />
                         <div class="col-auto">
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1 -  URUSAN PEMERINTAHAN WAJIB YANG BERKAITAN DENGAN PELAYANAN DASAR
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02 - URUSAN PEMERINTAHAN BIDANG KESEHATAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02.01 - PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH KABUPATEN/KOTA
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02.01.2.10 - PENINGKATAN PELAYANAN BLUD
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02.2.14.0.00.03.0000 - DINAS KESEHATAN, PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02.2.14.0.00.03.0301 - UOBK RSUD DOKTER MOHAMAD SALEH
                           </div>
                         </div>
@@ -114,7 +114,7 @@
                     <div class="row full-width" style="width:100%">
                       <table class="justify-center full-width">
                         <thead>
-                          <tr>
+                          <tr style="height: 25px">
                             <th rowspan="2" style="width:210px">
                               Indikator
                             </th>
@@ -122,7 +122,7 @@
                               Tolak Ukur Kerja
                             </th>
                           </tr>
-                          <tr>
+                          <tr style="height: 25px">
                             <th>
                               Uraian
                             </th>
@@ -132,7 +132,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
+                          <tr style="height: 25px">
                             <td>
                               Capaian Kegiatan
                             </td>
@@ -143,7 +143,7 @@
                               {{ store.targetcapaian }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr style="height: 25px">
                             <td>
                               Masukan
                             </td>
@@ -154,7 +154,7 @@
                               {{ formatRpDouble(store.totalPagukegiatan[0].pagu) }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr style="height: 25px">
                             <td>
                               Keluaran
                             </td>
@@ -165,7 +165,7 @@
                               {{ store.targetkeluaran }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr style="height: 25px">
                             <td>
                               Hasil
                             </td>
@@ -185,31 +185,31 @@
                     <div class="row q-pl-sm q-py-xs" style="width:100%">
                       <div class="row q-pl-sm q-py-xs flex-center">
                         <div class="col-auto" style="width:150px">
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             SUB KEGIATAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             KEGIATAN BLUD
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             SUMBER PENDANAAN
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             WAKTU PELAKSANAAN
                           </div>
                         </div>
                         <div class="q-px-md" />
                         <div class="col-auto">
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : 1.02.01.2.10.0001 - Pelayanan dan Penunjang Pelayanan BLUD
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : {{ store.kegiatanblud }}
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : Pendapatan dari BLUD
                           </div>
-                          <div class="q-py-xs">
+                          <div class="q-py-xs" style="height: 35px">
                             : Januari s/d Desember {{ store.reqs.tahun }}
                           </div>
                         </div>
@@ -234,44 +234,44 @@
                         <tbody>
                           <tr v-for="it in store.datarka" :key="it">
                             <td>
-                              <div class="text-bold q-py-sm" style="height: 20px">
+                              <div class="text-bold q-py-sm" style="height: 50px">
                                 {{ it.kode }}
                               </div>
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 {{ rinci.kode108 }}
                               </div>
                             </td>
                             <td>
-                              <div class="text-bold q-py-sm" style="height: 20px">
+                              <div class="text-bold q-py-sm" style="height: 50px">
                                 {{ it.uraian }}
                               </div>
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 - {{ rinci.usulan }}
                               </div>
                             </td>
-                            <td class="text-right" style="height: 20px">
-                              <div class="q-py-md" />
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                            <td class="text-right">
+                              <div class="q-py-md" style="height: 50px" />
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 {{ rinci.volume }}
                               </div>
                             </td>
                             <td>
-                              <div class="q-py-md" style="height: 20px" />
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                              <div class="q-py-md" style="height: 50px" />
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 {{ rinci.satuan }}
                               </div>
                             </td>
                             <td class="text-right">
-                              <div class="q-py-md" style="height: 20px" />
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                              <div class="q-py-md" style="height: 50px" />
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 {{ formattanpaRp(rinci.harga) }}
                               </div>
                             </td>
                             <td class="text-right">
-                              <div class="text-bold q-py-md" style="height: 20px">
+                              <div class="text-bold q-py-md" style="height: 50px">
                                 {{ formattanpaRp(it.pagu) }}
                               </div>
-                              <div class="q-pl-md q-py-sm" style="height: 40px" v-for="rinci in it?.rincian" :key="rinci">
+                              <div class="q-pl-md q-py-sm" style="height: 45px" v-for="rinci in it?.rincian" :key="rinci">
                                 {{ formattanpaRp(rinci.pagu) }}
                               </div>
                             </td>
