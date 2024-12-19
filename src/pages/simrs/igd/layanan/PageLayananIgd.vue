@@ -100,7 +100,9 @@
 import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
+import { usePemakaianObatStore } from 'src/stores/simrs/igd/pemakaianobat'
 const store = usePengunjungIgdStore()
+const storepemakaianobat = usePemakaianObatStore()
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
@@ -183,6 +185,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/plann/IndexPage.vue')))
   },
   {
+    name: 'pemakaianobat-page',
+    label: 'Pemaikaian Obat/Cairan',
+    icon: 'icon-fa-mortar-pestle-solid',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/pemakaianobat/PemakaianObatPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
@@ -213,6 +221,7 @@ onMounted(() => {
   store.getruangranap()
   store.getsistembayar()
   store.getsistembayarrinci()
+  storepemakaianobat.carisatuan()
 })
 
 watchEffect(() => {
