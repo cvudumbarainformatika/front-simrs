@@ -24,7 +24,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       kode_ruang: 'all',
-      jenis: 'detail'
+      jenis: 'rekap'
     },
     bulans: [
       { nama: 'January', value: '01' },
@@ -46,7 +46,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
     ],
     optionJenis: [
-      { nama: 'Detail', value: 'detail' },
+      // { nama: 'Detail', value: 'detail' },
       { nama: 'Rekap', value: 'rekap' }
     ],
     total: 0,
@@ -1083,6 +1083,7 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
     getInitialData (val) {
       this.ketProses = null
       this.setParams('page', val)
+      this.setParams('action', '')
       this.getDataTable()
       this.meta = {}
       this.items = []
@@ -1094,15 +1095,16 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
         console.log('parameter', this.meta?.to, cur, this.params, this.meta)
       }
 
-      this.setParams('per_page', 5)
-      this.ketProses = 'Mengambil data '
+      // this.setParams('per_page', 5)
+      this.ketProses = 'Mengambil data halaman '
       this.getDatanya()
       console.log('this.meta?.current_page', this.meta?.current_page, !(this.ketProses))
       watch(() => this.meta?.current_page, (obj) => {
         console.log('obj', obj, !this.scrolling, this.meta?.current_page < this.meta?.last_page, !(this.ketProses), this.meta?.current_page < this.meta?.last_page && !this.scrolling && !(this.ketProses))
         if (this.meta?.current_page < this.meta?.last_page && !this.scrolling && !(this.ketProses)) {
           this.setParams('page', obj + 1)
-          this.ketProses = 'Mengambil data halaman ' + this.meta?.current_page + ' dari ' + this.meta?.last_page + ' halaman'
+          // this.ketProses = 'Mengambil data halaman ' + this.meta?.current_page + ' dari ' + this.meta?.last_page + ' halaman'
+          this.ketProses = 'Mengambil data halaman '
         }
         else {
           this.ketProses = ''
@@ -1182,85 +1184,103 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       // laravel throttle 180 ms
       this.setField()
       const param = { params: this.params }
-      // console.log('param', param)
-      param.params.action = 'download'
-      this.ketProses = null
+      // param.params.action = 'download'
+
+      this.ketProses = 'Mengambil data halaman '
       const data = []
       const dataForTotal = []
       const items = []
-      const resp = await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
-      // await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
-      // .then(resp => {
-      if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
-      this.mapingItem(resp?.data?.data, items, 'download')
-      items.forEach((item, i) => {
-        // console.log('item', item)
-        if (item?.data?.length) {
-          item?.data.forEach((dat, d) => {
-            const ada = {}
-            const tmpForTot = {}
-            if (d === 0) {
-              ada.no = i + 1
-              ada.kd_obat = item?.kd_obat
-              ada.nama_obat = item?.nama_obat
-              ada.satuan_k = item?.satuan_k
-              if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
-            }
-            // ini untuk menjmlah total
-            tmpForTot.jumlSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.jumlah), 2)
-            tmpForTot.nilaiSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.sub), 2)
-            tmpForTot.jumlMasuk = this.cekNan(parseFloat(dat?.masuk?.jumlah), 2)
-            tmpForTot.nilaiMasuk = this.cekNan(parseFloat(dat?.masuk?.sub), 2)
-            tmpForTot.jumlKeluar = this.cekNan(parseFloat(dat?.keluar?.jumlah), 2)
-            tmpForTot.nilaiKeluar = this.cekNan(parseFloat(dat?.keluar?.sub), 2)
-            tmpForTot.jumlSalAkhir = this.cekNan(parseFloat(dat?.akhir?.jumlah), 2)
-            tmpForTot.nilaiSalAkhir = this.cekNan(parseFloat(dat?.akhir?.sub), 2)
 
-            if (this.params.jenis === 'rekap') {
-              ada.ket = dat?.ket
-              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
-              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
-              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
-              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
-              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
-              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
-              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
-              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
-            }
-            else {
-              ada.ket = dat?.ket
-              ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
-              ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
-              ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
-              ada.tglMasuk = dat?.masuk?.tgl ?? ''
-              ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
-              ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
-              ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
-              ada.tglKeluar = dat?.keluar?.tgl ?? ''
-              ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
-              ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
-              ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
-              ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
-              ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
-              ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
-            }
-            // console.log('ada', ada)
-            data.push(ada)
-            dataForTotal.push(tmpForTot)
-          })
-        }
-        else {
-          console.log('ada tidak')
-          const temp = {}
-          temp.no = i + 1
-          temp.kd_obat = item?.kd_obat
-          temp.nama_obat = item?.nama_obat
-          temp.satuan_k = item?.satuan_k
-          if (this.params.jenis === 'rekap') temp.uraian50 = item?.uraian50
+      // const resp = await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
 
-          data.push(temp)
+      // if (!resp?.data?.data?.length) return notifErrVue('Data tidak ditemukan')
+
+      let currentPage = 1
+      let totalPages = 1
+      do {
+        param.params.page = currentPage // Tambahkan parameter halaman
+        const resp = await api.get('v1/simrs/laporan/farmasi/persediaan/get-mutasi', param)
+        if (!resp?.data?.data?.length) {
+          if (currentPage === 1) {
+            this.ketProses = null
+            return notifErrVue('Data tidak ditemukan')
+          }
+          break
         }
-      })
+        this.ketProses = 'Mengambil data halaman '
+        totalPages = resp.data?.meta?.last_page || totalPages // Total halaman dari API
+        this.meta = resp.data?.meta
+        this.mapingItem(resp?.data?.data, items, 'download')
+        items.forEach((item, i) => {
+          if (item?.data?.length) {
+            item?.data.forEach((dat, d) => {
+              const ada = {}
+              const tmpForTot = {}
+              if (d === 0) {
+                ada.no = i + 1
+                ada.kd_obat = item?.kd_obat
+                ada.nama_obat = item?.nama_obat
+                ada.satuan_k = item?.satuan_k
+                if (this.params.jenis === 'rekap') ada.uraian50 = item?.uraian50
+              }
+              // ini untuk menjmlah total
+              tmpForTot.jumlSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.jumlah), 2)
+              tmpForTot.nilaiSalAwal = this.cekNan(parseFloat(dat?.saldoawal?.sub), 2)
+              tmpForTot.jumlMasuk = this.cekNan(parseFloat(dat?.masuk?.jumlah), 2)
+              tmpForTot.nilaiMasuk = this.cekNan(parseFloat(dat?.masuk?.sub), 2)
+              tmpForTot.jumlKeluar = this.cekNan(parseFloat(dat?.keluar?.jumlah), 2)
+              tmpForTot.nilaiKeluar = this.cekNan(parseFloat(dat?.keluar?.sub), 2)
+              tmpForTot.jumlSalAkhir = this.cekNan(parseFloat(dat?.akhir?.jumlah), 2)
+              tmpForTot.nilaiSalAkhir = this.cekNan(parseFloat(dat?.akhir?.sub), 2)
+
+              if (this.params.jenis === 'rekap') {
+                ada.ket = dat?.ket
+                ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah), 2))
+                ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub), 2))
+                ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah), 2))
+                ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub), 2))
+                ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah), 2))
+                ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub), 2))
+                ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah), 2))
+                ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub), 2))
+              }
+              else {
+                ada.ket = dat?.ket
+                ada.jumlSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.jumlah ?? dat?.subAw?.jumlah), 2))
+                ada.harSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.harga), 2))
+                ada.nilaiSalAwal = this.cekNan(formatDoubleKoma(parseFloat(dat?.saldoawal?.sub ?? dat?.subAw?.sub), 2))
+                ada.tglMasuk = dat?.masuk?.tgl ?? ''
+                ada.jumlMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.jumlah ?? dat?.subMs?.jumlah), 2))
+                ada.harMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.harga), 2))
+                ada.nilaiMasuk = this.cekNan(formatDoubleKoma(parseFloat(dat?.masuk?.sub ?? dat?.subMs?.sub), 2))
+                ada.tglKeluar = dat?.keluar?.tgl ?? ''
+                ada.jumlKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.jumlah ?? dat?.subKel?.jumlah), 2))
+                ada.harKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.harga), 2))
+                ada.nilaiKeluar = this.cekNan(formatDoubleKoma(parseFloat(dat?.keluar?.sub ?? dat?.subKel?.sub), 2))
+                ada.jumlSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.jumlah ?? dat?.subtotal?.jumlah), 2))
+                ada.harSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.harga), 2))
+                ada.nilaiSalAkhir = this.cekNan(formatDoubleKoma(parseFloat(dat?.akhir?.sub ?? dat?.subtotal?.sub), 2))
+              }
+
+              data.push(ada)
+              dataForTotal.push(tmpForTot)
+            })
+          }
+          else {
+            console.log('ada tidak')
+            const temp = {}
+            temp.no = i + 1
+            temp.kd_obat = item?.kd_obat
+            temp.nama_obat = item?.nama_obat
+            temp.satuan_k = item?.satuan_k
+            if (this.params.jenis === 'rekap') temp.uraian50 = item?.uraian50
+
+            data.push(temp)
+          }
+        })
+
+        currentPage++
+      } while (currentPage <= totalPages)
       // total
       const tot = {
         ket: 'Total',
@@ -1275,8 +1295,9 @@ export const useLaporanMutasiFiFoFarmasiStore = defineStore('laporan_mutasi_fifo
       }
       data.push(tot)
       console.log('items', data)
+      this.ketProses = null
+      this.items = items
       return data
-      // })
     },
     startDownload () { this.loadingDownload = true },
     finishDownload () { this.loadingDownload = false },
