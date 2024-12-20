@@ -10,7 +10,7 @@
       <q-separator class="" />
     </div>
     <div class="col full-height q-px-lg scroll">
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         Lanjutan Perawatan dirumah :
       </div>
       <q-input
@@ -20,7 +20,7 @@
         standout="bg-yellow-3"
         rows="2"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         ATURAN DIET/NUTRISI :
       </div>
       <q-input
@@ -30,7 +30,7 @@
         standout="bg-yellow-3"
         rows="2"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         OBAT-OBATAN YANG DIBAWA PULANG, JUMLAH DAN DOSIS :
       </div>
       <q-input
@@ -40,7 +40,7 @@
         standout="bg-yellow-3"
         rows="2"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         RENCANA AKTIFITAS :
       </div>
       <q-input
@@ -50,7 +50,7 @@
         standout="bg-yellow-3"
         rows="2"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         ISTIRAHAT :
       </div>
       <q-input
@@ -60,7 +60,7 @@
         standout="bg-yellow-3"
         rows="2"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         HASIL PEMERIKSAAN YANG DIBAWA PULANG :
       </div>
       <q-input
@@ -70,7 +70,7 @@
         standout="bg-yellow-3"
         rows="5"
       />
-      <div class="q-mt-md q-mb-xs">
+      <div class="q-mt-md q-mb-xs text-bold">
         INFORMASI DAN EDUKASI YANG DIBERIKAN :
       </div>
       <q-input
@@ -80,6 +80,34 @@
         standout="bg-yellow-3"
         rows="5"
       />
+      <div class="row q-col-gutter-sm">
+        <div class="col-8">
+          <div class="q-mt-md q-mb-xs">
+            <span class="text-weight-bold">JENIS OPERASI YG DILAKUKAN</span>  <span class="text-weight-normal">(Jika Ada)</span> :
+          </div>
+          <q-input
+            v-model="store.form.operasi"
+            type="textarea"
+            outlined
+            standout="bg-yellow-3"
+            rows="2"
+          />
+        </div>
+        <div v-if="store.form.operasi !== null" class="col-4">
+          <div class="q-mt-md q-mb-xs">
+            <span class="text-weight-bold">TGL OPERASI</span> :
+          </div>
+          <app-input-date
+            :model="store.form.tglOperasi"
+            label=""
+            outlined
+            valid
+            @set-model="val=>store.form.tglOperasi=val"
+          />
+        </div>
+      </div>
+
+      <!-- TTD -->
       <div class="q-mt-md q-mb-xs">
         TTD PASIEN / KELUARGA :
       </div>

@@ -26,7 +26,11 @@
                 align="left"
                 inline-label
               >
-                <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" :label="menu?.label" style="justify-content: left; border-bottom: 1px solid #e0e0e0; padding-left: 10px;" />
+                <q-tab v-for="menu in menus" :key="menu.name" :name="menu?.name" style="justify-content: left; border-bottom: 1px solid #e0e0e0; padding-left: 10px;">
+                  <div class="text-bold">
+                    {{ menu?.label }}
+                  </div>
+                </q-tab>
               </q-tabs>
             </div>
           </div>
@@ -104,7 +108,7 @@ const props = defineProps({
   }
 })
 
-const splitterModel = ref(15)
+const splitterModel = ref(18)
 
 const innerTab = ref(menus.value[0].name)
 
