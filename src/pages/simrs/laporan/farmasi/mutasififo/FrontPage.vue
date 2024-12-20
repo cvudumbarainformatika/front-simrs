@@ -137,7 +137,7 @@
                   icon="icon-mat-download"
                   push
                   :loading="store.loadingDownload"
-                  :disable="store.loadingDownload"
+                  :disable="store.loadingDownload || !!store.ketProses"
                 >
                   <q-tooltip>Download Excel</q-tooltip>
                 </q-btn>
@@ -146,12 +146,19 @@
           </div>
         </div>
       </div>
-      <div v-if="store.ketProses" class="row items-center print-hide">
-        <div class="col-2">
+      <div v-if="store.ketProses" class="row items-center justify-center print-hide">
+        <div class="col-1" />
+        <div class="col-1">
           <q-spinner-pie color="negative" size="4em" />
         </div>
-        <div class="col-grow q-ml-sm text-weight-bold f-14  ">
-          <p>{{ store.ketProses }}</p>
+        <div class="col-grow q-ml-sm text-weight-bold f-18">
+          <p>
+            {{ store.ketProses }}
+            <span v-if="store?.meta" class="q-mx-sm f-20 text-blue">{{ store.meta?.current_page ? store.meta?.current_page + 1 : 1 }}</span>
+            <span v-if="store?.meta" class="q-mx-sm">dari</span>
+            <span v-if="store?.meta" class="q-mx-sm f-20 text-orange">{{ store.meta?.last_page ?? 1 }}</span>
+            <span v-if="store?.meta" class="q-mx-sm">halaman</span>
+          </p>
         </div>
       </div>
     </div>
