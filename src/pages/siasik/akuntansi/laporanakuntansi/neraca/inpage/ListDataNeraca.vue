@@ -79,24 +79,14 @@
                   {{ formattanpaRp(it.nilai) }}
                 </td>
               </tr>
-              <tr>
+              <tr v-for="it in store.objpersediaan" :key="it">
                 <td>
                   <div class="q-pl-md">
-                    {{ store.objpenyisihan?.uraian }}
+                    {{ it?.uraian }}
                   </div>
                 </td>
                 <td class="text-right">
-                  {{ formattanpaRp(store.objpenyisihan?.nilai) }}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="q-pl-md">
-                    {{ store.objpersediaan?.uraian }}
-                  </div>
-                </td>
-                <td class="text-right">
-                  {{ formattanpaRp(store.objpersediaan?.nilai) }}
+                  {{ formattanpaRp(it?.nilai) }}
                 </td>
               </tr>
               <tr>
@@ -297,10 +287,9 @@ function totalAsetlancar () {
   const setarakas = store.objsetarakas.map((x) => parseFloat(x.nilai)).reduce((a, b) => a + b, 0)
   const retribusi = store.objretribusi.nilai
   const piutang = store.objpiutang.map((x) => parseFloat(x.nilai)).reduce((a, b) => a + b, 0)
-  const penyisihan = store.objpenyisihan.nilai
-  const persediaan = store.objpersediaan.nilai
+  const persediaan = store.objpersediaan.map((x) => parseFloat(x.nilai)).reduce((a, b) => a + b, 0)
   const investasi = store.objinvestasi.nilai
-  return setarakas + retribusi + piutang + penyisihan + persediaan + investasi
+  return setarakas + retribusi + piutang + persediaan + investasi
 }
 
 function totalAsettetap () {
