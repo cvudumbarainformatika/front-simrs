@@ -360,13 +360,13 @@
                 side
               >
                 <div class="q-gutter-sm">
-                  <q-btn
+                  <!-- <q-btn
                     flat
                     round
                     size="sm"
                     icon="icon-mat-edit"
                     @click="store.editForm(item)"
-                  />
+                  /> -->
                   <q-btn
                     flat
                     round
@@ -387,9 +387,11 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
+import { useAnamneseKebidananStore } from 'src/stores/simrs/igd/anamnesekebidanan'
 import { useAnamnesis } from 'src/stores/simrs/igd/anamnesis'
 import { computed } from 'vue'
 const store = useAnamnesis()
+const storekebidanan = useAnamneseKebidananStore()
 const $q = useQuasar()
 const props = defineProps({
   pasien: {
@@ -444,7 +446,7 @@ function hapusItem (id) {
     persistent: true
   }).onOk(() => {
     // console.log('OK')
-    store.deleteData(props.pasien, id)
+    storekebidanan.deleteData(props.pasien, id)
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {

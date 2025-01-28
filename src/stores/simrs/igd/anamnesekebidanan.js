@@ -125,6 +125,22 @@ export const useAnamneseKebidananStore = defineStore('anamnese-kebidanan-store',
       this.form.haid = val.haid
       this.form.partus = val.partus
       this.form.abortus = val.abortus
+    },
+    async deleteData (pasien, id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/igd/anamnesis/hapusanamnesiskebidanan', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungIgdStore()
+          storePasien.hapusDataAnamnesiskebidanan(pasien, id)
+          notifSuccess(resp)
+        }
+      }
+      catch (error) {
+        notifErr(error)
+      }
     }
+
   }
 })
