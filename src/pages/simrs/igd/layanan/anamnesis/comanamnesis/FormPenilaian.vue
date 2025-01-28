@@ -1,6 +1,6 @@
 <template>
-  <div class="row q-col-gutter-xs full-width">
-    <div class="col">
+  <div class="fit column absolute">
+    <div class="col full-height ">
       <!-- humpty untuk usia < 18 tahun -->
       <q-card v-if="store?.usia < 18 " flat bordered class="col-12">
         <q-card-section class="q-pa-sm bg-primary text-white">
